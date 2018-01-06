@@ -13,10 +13,10 @@ import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.TradeService;
-import com.movek.constant.DateFormat;
-import com.movek.model.Page;
-import com.movek.util.DateUtils;
-import com.movek.util.NumberUtils;
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.model.Page;
+import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.NumberUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

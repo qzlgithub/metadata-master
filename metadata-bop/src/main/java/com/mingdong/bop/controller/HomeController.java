@@ -5,7 +5,7 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ImageCode;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.util.CaptchaUtil;
-import com.movek.util.StringUtils;
+import com.mingdong.common.util.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

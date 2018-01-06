@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.movek.mis.domain.mapper.ProductClientInfoMapper">
+<mapper namespace="com.mingdong.bop.domain.mapper.ProductClientInfoMapper">
     <resultMap id="BaseResultMap" type="ProductClientInfo">
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />

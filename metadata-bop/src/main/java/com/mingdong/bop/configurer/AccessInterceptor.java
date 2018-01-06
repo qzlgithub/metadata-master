@@ -1,9 +1,9 @@
 package com.mingdong.bop.configurer;
 
 import com.mingdong.bop.component.RedisDao;
+import com.mingdong.bop.constant.PathModule;
+import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.core.model.RequestThread;
-import com.movek.mis.constant.PathModule;
-import com.movek.mis.model.ManagerSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;

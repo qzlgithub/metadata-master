@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
@@ -15,11 +16,10 @@ import com.mingdong.bop.domain.mapper.PrivilegeMapper;
 import com.mingdong.bop.domain.mapper.RoleMapper;
 import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.movek.model.Page;
-import com.movek.util.CollectionUtils;
-import com.movek.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -5,11 +5,11 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.domain.entity.ProductInfo;
 import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.ProductService;
+import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RequestThread;
-import com.movek.model.Page;
-import com.movek.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -130,13 +130,11 @@ public class ProductController
     @RequestMapping(value = "/initProductCategory", method = RequestMethod.GET)
     public Map<String, Object> initFormDat(@RequestParam("id") String id)
     {
-        System.out.println(id);
         BLResp resp = productService.getProductCategoryInfo(Long.valueOf(id));
         if(id == null)
         {
             resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        System.out.println(resp.getDataMap());
         return resp.getDataMap();
     }
 

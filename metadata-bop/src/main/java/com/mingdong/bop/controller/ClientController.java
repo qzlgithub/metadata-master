@@ -1,5 +1,6 @@
 package com.mingdong.bop.controller;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.BillPlan;
@@ -13,12 +14,11 @@ import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.bop.service.TradeService;
+import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RequestThread;
-import com.movek.model.Page;
-import com.movek.util.CollectionUtils;
-import com.movek.util.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

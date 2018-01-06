@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.bop.model.BLResp;
-import com.movek.model.Page;
+import com.mingdong.common.model.Page;
 
 import java.math.BigDecimal;
 import java.util.List;

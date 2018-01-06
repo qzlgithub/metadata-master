@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.configurer.Param;
@@ -20,14 +21,13 @@ import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.util.IDUtils;
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.model.Page;
+import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.Md5Utils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.movek.constant.DateFormat;
-import com.movek.model.Page;
-import com.movek.util.CollectionUtils;
-import com.movek.util.DateUtils;
-import com.movek.util.Md5Utils;
-import com.movek.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
