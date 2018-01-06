@@ -16,6 +16,6 @@ public class BOPApplication
     public static void main(String[] args)
     {
         SpringApplication.run(BOPApplication.class, args);
-        System.out.println("##### startup BOP service successfully ... #####");
+        System.out.println("##### startup BOP service successfully ...");
     }
 }

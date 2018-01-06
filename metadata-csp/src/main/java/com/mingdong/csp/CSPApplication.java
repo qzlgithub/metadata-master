@@ -14,6 +14,6 @@ public class CSPApplication
     public static void main(String[] args)
     {
         SpringApplication.run(CSPApplication.class, args);
-        System.out.println("##### startup CSP service successfully ... #####");
+        System.out.println("##### startup CSP service successfully ...");
     }
 }
