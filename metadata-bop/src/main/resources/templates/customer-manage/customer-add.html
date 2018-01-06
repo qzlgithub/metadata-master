@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>联系邮箱：</label>
+                    <label class="layui-form-label">联系邮箱：</label>
                     <div class="layui-input-block">
                         <input type="text" id="email" name="email" placeholder="请输入" autocomplete="off"
                                class="layui-input" onblur="checkEmail()"/>
@@ -235,6 +235,9 @@
         if(corpName == "") {
             $("#corpNameTip").text("公司名称不能为空！");
             $("#corpNameTip").show();
+        }else{
+            $("#corpNameTip").text("");
+            $("#corpNameTip").hide();
         }
     }
     function checkContact() {
@@ -242,6 +245,9 @@
         if(contact == "") {
             $("#contactTip").text("联系人不能为空！");
             $("#contactTip").show();
+        }else{
+            $("#contactTip").text("");
+            $("#contactTip").hide();
         }
     }
     function checkPhone() {
@@ -250,7 +256,8 @@
         var reg2 = new RegExp("^1[34578]\\d{9}$");//检测移动电话
         if(phone !== "") {
             if(reg1.test(phone)||reg2.test(phone)) {
-
+                $("#phoneTip").text("");
+                $("#phoneTip").hide();
             }
             else {
                 $("#phoneTip").text("联系电话格式错误！");
@@ -267,7 +274,8 @@
         var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
         if(email !== "") {
             if(reg.test(email)) {
-
+                $("#emailTip").text("");
+                $("#emailTip").hide();
             }
             else {
                 $("#emailTip").text("邮箱格式不正确！");
@@ -280,7 +288,8 @@
         var reg = new RegExp("^[0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}$");
         if(email !== "") {
             if(reg.test(email)) {
-
+                $("#licenseTip").text("");
+                $("#licenseTip").hide();
             }
             else {
                 $("#licenseTip").text("社会信用代码格式不正确！");
@@ -369,13 +378,14 @@
             }),
             success: function(data) {
                 if(data.errCode != '000000') {
-                    layer.msg("操作失败"+data.errMsg);
+                    layer.msg("操作失败:"+data.errMsg);
                 }
                 else {
-                    layer.msg("添加成功!",{
-                        time: 2000, //1s后自动关闭
+                    layer.msg("操作成功!",{
+                        time: 2000
+                    },function(){
+                        window.location.href = "/client/index.html";
                     });
-                    window.location.href = "/client/index.html";
                 }
             }
         });

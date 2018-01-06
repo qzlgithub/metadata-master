@@ -227,7 +227,7 @@
                     layer.msg("操作成功");
                 }
                 else {
-                    layer.msg("操作失败");
+                    layer.msg("操作失败：" + data.errMsg);
                 }
             }
         });
@@ -263,32 +263,38 @@
                 clientIds.push($(objs[o]).attr("data-id"));
             }
         }
-        var enabledVal = $("#accountEnabled" + clientIds[0]).text();
-        layer.confirm('是否确定批量' + enabledVal + '？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/changeStatus",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds, "enabled": enabled}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            goPage($("#pageNum").val());
+        if(clientIds.length == 0) {
+            layer.msg("请至少选择一项");
+        }
+        else {
+            var enabledVal = $("#accountEnabled" + clientIds[0]).text();
+            layer.confirm('是否确定批量' + enabledVal + '？', {
+                btn: ['确定', '取消'],
+                yes: function() {
+                    $(this).click();
+                    $.ajax({
+                        type: "POST",
+                        url: "/client/changeStatus",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({"id": clientIds, "enabled": enabled}),
+                        success: function(data) {
+                            if(data.errCode === '000000') {
+                                goPage($("#pageNum").val());
+                                layer.msg("操作成功");
+                            }
+                            else {
+                                layer.msg("操作失败：" + data.errMsg);
+                            }
                         }
-                        else {
-                            alert(data.errMsg);
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
-        });
+                    });
+                    layer.closeAll();
+                },
+                no: function() {
+                    layer.closeAll();
+                }
+            });
+        }
     }
 
     function batchDeleted() {
@@ -299,32 +305,38 @@
                 clientIds.push($(objs[o]).attr("data-id"));
             }
         }
-        layer.confirm('是否确定批量删除？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/deletion",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            goPage($("#pageNum").val());
-                            // $("#allChoose").removeAttr("checked");
+        if(clientIds.length == 0) {
+            layer.msg("请至少选择一项");
+        }
+        else {
+            layer.confirm('是否确定批量删除？', {
+                btn: ['确定', '取消'],
+                yes: function() {
+                    $(this).click();
+                    $.ajax({
+                        type: "POST",
+                        url: "/client/deletion",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({"id": clientIds}),
+                        success: function(data) {
+                            if(data.errCode === '000000') {
+                                goPage($("#pageNum").val());
+                                // $("#allChoose").removeAttr("checked");
+                                layer.msg("操作成功");
+                            }
+                            else {
+                                layer.msg("操作失败：" + data.errMsg);
+                            }
                         }
-                        else {
-                            alert(data.errMsg);
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
-        });
+                    });
+                    layer.closeAll();
+                },
+                no: function() {
+                    layer.closeAll();
+                }
+            });
+        }
     }
 
     function batchResetPwd() {
@@ -335,31 +347,36 @@
                 clientIds.push($(objs[o]).attr("data-id"));
             }
         }
-        layer.confirm('是否确定批量重置密码？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/resetPwd",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            alert("操作成功");
+        if(clientIds.length == 0) {
+            layer.msg("请至少选择一项");
+        }
+        else {
+            layer.confirm('是否确定批量重置密码？', {
+                btn: ['确定', '取消'],
+                yes: function() {
+                    $(this).click();
+                    $.ajax({
+                        type: "POST",
+                        url: "/client/resetPwd",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({"id": clientIds}),
+                        success: function(data) {
+                            if(data.errCode === '000000') {
+                                layer.msg("操作成功");
+                            }
+                            else {
+                                layer.msg("操作失败：" + data.errMsg);
+                            }
                         }
-                        else {
-                            alert(data.errMsg);
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
-        });
+                    });
+                    layer.closeAll();
+                },
+                no: function() {
+                    layer.closeAll();
+                }
+            });
+        }
     }
 
     function changeStatus(id) {
@@ -379,10 +396,15 @@
                             var obj = data.dataMap;
                             if(obj.accountEnabled === 1) {
                                 $("#accountEnabled" + id).text("冻结账户");
+                                layer.msg("操作成功");
                             }
                             else {
                                 $("#accountEnabled" + id).text("解冻账户");
+                                layer.msg("操作成功");
                             }
+                        }
+                        else {
+                            layer.msg("操作失败：" + data.errMsg);
                         }
                     }
                 });
@@ -399,7 +421,6 @@
             btn: ['确定', '取消'],
             yes: function() {
                 $(this).click();
-
                 $.ajax({
                     type: "POST",
                     url: "/client/deletion",
@@ -409,9 +430,10 @@
                     success: function(data) {
                         if(data.errCode === '000000') {
                             searchClientList();
+                            layer.msg("操作成功");
                         }
                         else {
-                            layer.msg("操作失败！");
+                            layer.msg("操作失败：" + data.errMsg);
                         }
                     }
                 });

@@ -41,13 +41,14 @@
                     <div class="layui-input-block">
                         <input type="text" id="corpName" name="corpName" placeholder="请输入"
                                autocomplete="off" class="layui-input" th:value="${corpName}" onblur="checkCorpName()"/>
+                        <i class="col3 pl10" id="corpNameTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>公司简称：</label>
                     <div class="layui-input-block">
                         <input type="text" id="shortName" name="shortName" placeholder="请输入" th:value="${shortName}"
-                               autocomplete="off" class="layui-input" onblur="checkShortName()"/>
+                               autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -74,6 +75,7 @@
                     <div class="layui-input-block">
                         <input type="text" id="name" name="name" autocomplete="off"
                                class="layui-input" th:value="${name}" onblur="checkContact()"/>
+                        <i class="col3 pl10" id="contactTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -81,6 +83,7 @@
                     <div class="layui-input-block">
                         <input type="text" id="phone" name="phone" placeholder="请输入"
                                autocomplete="off" class="layui-input" th:value="${phone}" onblur="checkPhone()"/>
+                        <i class="col3 pl10" id="phoneTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -88,6 +91,7 @@
                     <div class="layui-input-block">
                         <input type="text" id="email" name="email" placeholder="请输入"
                                autocomplete="off" class="layui-input" th:value="${email}" onblur="checkEmail()"/>
+                        <i class="col3 pl10" id="emailTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -95,6 +99,7 @@
                     <div class="layui-input-block">
                         <input type="text" id="license" name="license" placeholder="请输入"
                                autocomplete="off" class="layui-input" th:value="${license}" onblur="checkLicense()"/>
+                        <i class="col3 pl10" id="licenseTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -139,7 +144,7 @@
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
                     <input type="hidden" id="clientId" th:value="${clientId}"/>
-                    <button class="layui-btn" onclick="editClient()">保存</button>
+                    <button class="layui-btn" onclick="editClient()" style="display: block">保存</button>
                 </div>
             </div>
             <!--</form>-->
@@ -295,13 +300,14 @@
             }),
             success: function(data) {
                 if(data.errCode != '000000') {
-                    layer.msg("操作失败"+data.errMsg);
+                    layer.msg("操作失败:"+data.errMsg);
                 }
                 else {
-                    layer.msg("编辑成功！", {
-                        time: 10000, //2s后自动关闭
+                    layer.msg("操作成功", {
+                        time: 2000
+                    }, function(){
+                        window.location.href = "/client/index.html";
                     });
-                    window.location.href = "/client/index.html";
                 }
             }
         });
@@ -326,6 +332,9 @@
         if(corpName == "") {
             $("#corpNameTip").text("公司名称不能为空！");
             $("#corpNameTip").show();
+        }else{
+            $("#corpNameTip").text("");
+            $("#corpNameTip").hide();
         }
     }
     function checkContact() {
@@ -333,6 +342,9 @@
         if(contact == "") {
             $("#contactTip").text("联系人不能为空！");
             $("#contactTip").show();
+        }else{
+            $("#contactTip").text("");
+            $("#contactTip").hide();
         }
     }
     function checkPhone() {
@@ -341,7 +353,8 @@
         var reg2 = new RegExp("^1[34578]\\d{9}$");//检测移动电话
         if(phone !== "") {
             if(reg1.test(phone)||reg2.test(phone)) {
-
+                $("#phoneTip").text("");
+                $("#phoneTip").hide();
             }
             else {
                 $("#phoneTip").text("联系电话格式错误！");
@@ -358,7 +371,8 @@
         var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
         if(email !== "") {
             if(reg.test(email)) {
-
+                $("#emailTip").text("");
+                $("#emailTip").hide();
             }
             else {
                 $("#emailTip").text("邮箱格式不正确！");
@@ -371,7 +385,8 @@
         var reg = new RegExp("^[0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}$");
         if(email !== "") {
             if(reg.test(email)) {
-
+                $("#licenseTip").text("");
+                $("#licenseTip").hide();
             }
             else {
                 $("#licenseTip").text("社会信用代码格式不正确！");
