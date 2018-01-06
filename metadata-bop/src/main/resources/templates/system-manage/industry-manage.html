@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
+            <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
+            <a><cite>行业分类</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--搜索-->
+            <!--搜索 end-->
+            <!--功能操作-->
+            <div class="clearfix mt20"><span class="fr add-button cp" id="addindustry">添加一级行业</span></div>
+            <!--功能操作 end-->
+            <!--table-->
+            <dl class="jurisdiction-list">
+                <dt class="clearfix">
+                    <span class="w5">&nbsp;</span>
+                    <span class="w20 tl">行业名称</span>
+                    <span class="w20">编号</span>
+                    <span class="w10">是否显示</span>
+                    <span class="w30">操作</span>
+                    <span class="w15">排序</span>
+                </dt>
+                <!-- TODO data here -->
+                <dd th:each="parent: ${list}">
+                    <!-- 父级 -->
+                    <div class="clearfix jurisdiction-list-div">
+                        <a href="#accordion1" class="accordion-title accordionTitle js-accordionTrigger w5"></a>
+                        <a class="w20 tl important"><i class="pl20" th:text="${parent.name}"></i></a>
+                        <a class="w20" th:text="${parent.code}"></a>
+                        <a class="w10 pt0 important">
+                            <div class="layui-form">
+                                <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest"
+                                       lay-text="ON|OFF"/>
+                            </div>
+                        </a>
+                        <a class="w30">
+                            <!--<span class="edit cp mr30 add-child" data-id="${parent.id}">新增子行业</span>-->
+                            <span class="edit cp mr30 add-child" th:attr="data-id=${parent.id}">新增子行业</span>
+                            <span class="mr30 edit cp edit-industry" th:attr="data-id=${parent.id}">编辑</span>
+                            <!--<span href="#" class="del cp">删除</span>-->
+                        </a>
+                        <a class="w15"><i class="icon sort-icon"></i></a>
+                    </div>
+                    <!-- 子集 -->
+                    <ul class="accordion-content accordionItem is-collapsed jurisdiction-list-li" id="accordion1"
+                        aria-hidden="true">
+                        <li class="clearfix" th:each="child: ${parent.subList}">
+                            <em class="w5">&nbsp;</em>
+                            <em class="w20 tl important"><i class="pl35" th:text="${child.name}"></i></em>
+                            <em class="w20" th:text="${child.code}"></em>
+                            <em class="w10 pt0 important">
+                                <div class="layui-form">
+                                    <input type="checkbox" checked="" name="open" lay-skin="switch"
+                                           lay-filter="switchTest" lay-text="ON|OFF"/>
+                                </div>
+                            </em>
+                            <em class="w30">
+                                <a class="mr30 edit cp edit-industry" th:attr="data-id=${child.id}">编辑</a>
+                            </em>
+                            <em class="w15"><i class="icon sort-icon"></i></em>
+                        </li>
+                    </ul>
+                </dd>
+                <!-- TODO data here -->
+            </dl>
+            <!--table end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--添加一级行业 提示层-->
+<div id="add-industry" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">添加一级行业</div>
+    <div class="mb30">
+        <!--<form class="layui-form" id="industryForm" action="">-->
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="new-code" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input" onblur="checkNewCode()"/>
+                    <p class="col3 mt5" id="tip-new-code"></p><!--当前编号已被占用-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">行业名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="new-name" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                    <p class="col3 mt5" id="tip-new-name"></p><!--当前名称已存在-->
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="addIndustry(1)">保存</button>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+    <!--form end-->
+</div>
+<!--提示层 end-->
+
+<!--编辑行业 提示层-->
+<div id="edit-industry" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">编辑行业</div>
+    <div class="mb30">
+        <form class="layui-form" action="">
+            <div class="m30">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">编号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="edit-code" lay-verify="required" placeholder="请输入"
+                               autocomplete="off" class="layui-input"/>
+                        <p class="col3 mt5" id="tip-edit-code"></p><!--当前编号已被占用-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">行业名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="edit-name" lay-verify="required" placeholder="请输入"
+                               autocomplete="off" class="layui-input"/>
+                        <p class="col3 mt5" id="tip-edit-name"></p><!--当前名称已存在-->
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" id="edit-id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="editIndustry()">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--form end-->
+</div>
+<!--提示层 end-->
+
+<!--添加二级行业 提示层-->
+<div id="child-industry" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">添加子行业</div>
+    <div class="mb30">
+        <!--<form class="layui-form" action="">-->
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="l2-code" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                    <p class="col3 mt5" id="tip-l2-code"></p><!--当前编号已被占用-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">行业名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="l2-name" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                    <p class="col3 mt5" id="tip-l2-name"></p><!--当前名称已存在-->
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="l2-parent-id"/>
+                <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="addIndustry(2)">保存</button>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+    <!--form end-->
+</div>
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/modernizr.js}"></script>
+<script type="text/javascript" th:src="@{/js/industry.manage.js}"></script>
+
+<script>
+    //<![CDATA[
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        /*  app.set({
+              type: 'iframe'
+          }).init();*/
+        $('#addindustry').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#add-industry'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });
+    });
+    //展开合起
+    (function() {
+        var d = document,
+            accordionToggles = d.querySelectorAll('.js-accordionTrigger'),
+            setAria,
+            setAccordionAria,
+            switchAccordion,
+            touchSupported = ('ontouchstart' in window),
+            pointerSupported = ('pointerdown' in window);
+        skipClickDelay = function(e) {
+            e.preventDefault();
+            e.target.click();
+        }
+        setAriaAttr = function(el, ariaType, newProperty) {
+            el.setAttribute(ariaType, newProperty);
+        };
+        setAccordionAria = function(el1, el2, expanded) {
+            switch(expanded) {
+                case "true":
+                    setAriaAttr(el1, 'aria-expanded', 'true');
+                    setAriaAttr(el2, 'aria-hidden', 'false');
+                    break;
+                case "false":
+                    setAriaAttr(el1, 'aria-expanded', 'false');
+                    setAriaAttr(el2, 'aria-hidden', 'true');
+                    break;
+                default:
+                    break;
+            }
+        };
+        //function
+        switchAccordion = function(e) {
+            console.log("triggered");
+            e.preventDefault();
+            var thisAnswer = e.target.parentNode.nextElementSibling;
+            var thisQuestion = e.target;
+            if(thisAnswer.classList.contains('is-collapsed')) {
+                setAccordionAria(thisQuestion, thisAnswer, 'true');
+            }
+            else {
+                setAccordionAria(thisQuestion, thisAnswer, 'false');
+            }
+            thisQuestion.classList.toggle('is-collapsed');
+            thisQuestion.classList.toggle('is-expanded');
+            thisAnswer.classList.toggle('is-collapsed');
+            thisAnswer.classList.toggle('is-expanded');
+            thisAnswer.classList.toggle('animateIn');
+        };
+        for(var i = 0, len = accordionToggles.length; i < len; i++) {
+            if(touchSupported) {
+                accordionToggles[i].addEventListener('touchstart', skipClickDelay, false);
+            }
+            if(pointerSupported) {
+                accordionToggles[i].addEventListener('pointerdown', skipClickDelay, false);
+            }
+            accordionToggles[i].addEventListener('click', switchAccordion, false);
+        }
+    })();
+    //]]>
+</script>
+
+
+</body>
+</html>

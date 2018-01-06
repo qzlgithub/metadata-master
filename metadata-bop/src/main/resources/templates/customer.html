@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<!--left-->
+<div th:fragment="left">
+    <div class="layui-side-scroll">
+        <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
+            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'31000')}">
+                <a class="" href="javascript:;"><i class="icon icon5" aria-hidden="true"></i><em>客户管理</em></a>
+                <dl class="layui-nav-child">
+                    <dd th:class="${i_module eq 'client_index'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'31100')}">
+                        <a th:href="@{/client/index.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 客户管理</span></a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

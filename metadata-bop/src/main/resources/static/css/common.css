@@ -1,0 +1,357 @@
+@charset "utf-8";
+/**
+* Description: Base style
+* Developers: chenjiwei
+**/
+body {
+    padding-top: 0px;
+}
+
+/**header**/
+.kit-layout-admin .layui-header {
+    height: 118px;
+}
+
+.layui-layout-left {
+    right: 0px;
+    left: inherit;
+}
+
+.kit-layout-admin .layui-body {
+    top: 118px;
+}
+
+.kit-layout-admin .kit-side {
+    top: 118px;
+}
+
+.layui-layout-admin .layui-header {
+    background: #3c9fe2
+}
+
+.kit-nav .layui-this, .layui-layout-left .layui-nav-item:hover {
+    background-color: #2f92d5 !important
+}
+
+.layui-layout-left .layui-nav-item:hover {
+    background-color: #2f92d5 !important
+}
+
+.kit-nav .layui-nav-item {
+    height: 118px;
+}
+
+.layui-menu li {
+    border-left: solid 1px #0e80cd;
+    border-right: solid 1px #87c9f5;
+    text-align: center;
+}
+
+.layui-menu li:first-child {
+    border-left: 0px;
+}
+
+.layui-menu li:last-child {
+    border-right: 0px !important;
+}
+
+.kit-nav .layui-nav-item .layui-nav-child {
+    top: 118px;
+}
+
+.layui-nav .layui-nav-more {
+    display: none;
+}
+
+.layui-nav .layui-nav-item > a {
+    color: #fff;
+    margin-top: 10px;
+}
+
+.kit-nav * {
+    font-size: 16px;
+}
+
+.layui-nav {
+    padding: 0px 2px;
+}
+
+.layui-nav .layui-nav-child a {
+    font-size: 12px;
+}
+
+.layui-nav-img {
+    width: 60px;
+    height: 60px;
+    margin-right: 0px;
+}
+
+.layui-layout-admin .layui-logo {
+    color: #fff;
+    font-size: 20px;
+}
+
+/******菜单*****/
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-this > a:hover {
+    background-color: #3c9fe2
+}
+
+.layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a {
+    background-color: rgba(255, 255, 255, .0)
+}
+
+/*.layui-laypage a:hover{border-left:solid 5px #3c9fe2;}*/
+.layui-body {
+    left: 260px;
+}
+
+.layui-nav-bar {
+    width: 5px;
+    height: 0;
+    background-color: #3c9fe2 !important
+}
+
+.layui-bg-black {
+    background-color: #283142 !important
+}
+
+.layui-nav {
+    background-color: #131313;
+}
+
+.layui-nav-child dd {
+    border-bottom: solid 1px #3b3b43;
+    padding: 6px 5px;
+    padding-left: 15px;
+}
+
+.layui-nav-child dd:last-child {
+    border-bottom: 0px;
+}
+
+.layui-nav-itemed .layui-nav-child {
+    background-color: #283142 !important
+}
+
+.layui-nav em {
+    font-size: 16px;
+}
+
+.layui-nav-child-new dd {
+    border-bottom: solid 1px #3b3b43;
+}
+
+/******icon********/
+.icon {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.icon1 {
+    background: url(../images/icon/icon1.png) no-repeat;
+    background-size: 100%;
+}
+
+.icon2 {
+    background: url(../images/icon/icon2.png) no-repeat;
+    background-size: 100%;
+}
+
+.icon3 {
+    background: url(../images/icon/icon3.png) no-repeat;
+    background-size: 100%;
+}
+
+.icon4 {
+    background: url(../images/icon/icon4.png) no-repeat;
+    background-size: 100%;
+}
+
+.icon5 {
+    background: url(../images/icon/icon5.png) no-repeat;
+    background-size: 100%;
+}
+
+.sort-icon {
+    background: url(../images/icon/sort-icon.png) no-repeat;
+    background-size: 100%;
+    height: 21px;
+    width: 17px;
+}
+
+/*****面包屑*****/
+.breadcrumb-bg {
+    background: #f2f2f2;
+    border-bottom: solid 1px #c1daec;
+    padding: 12px 17px;
+}
+
+/***下拉***/
+.select-list {
+    border: solid #d3d3d3 1px;
+    padding: 6px 15px 6px 5px;
+    color: #2e2e2e;
+}
+
+/****button****/
+.check-button {
+    border: 0px;
+    border-radius: 3px;
+    background: #3c9fe2;
+    padding: 7px 17px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add-button {
+    border: 0px;
+    border-radius: 3px;
+    background: #3c9fe2;
+    padding: 11px 25px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.key-button {
+    border: 0px;
+    border-radius: 3px;
+    background: #087e16;
+    padding: 11px 25px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cz-button {
+    border: 1px #3c9fe2 solid;
+    border-radius: 3px;
+    background: #fff;
+    padding: 8px 20px;
+    color: #3c9fe2;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a:hover.key-button, a:hover.add-button {
+    color: #fff
+}
+
+.edit {
+    color: #3c9fe2
+}
+
+.del {
+    color: #ff0000;
+}
+
+.layui-btn {
+    background-color: #3c9fe2;
+    padding: 0px 35px;
+    font-size: 16px;
+}
+
+/****table****/
+.layui-table td, .layui-table th {
+    text-align: center;
+}
+
+/*****page*******/
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    background-color: #3c9fe2;
+}
+
+/*******radio  checkbox*******/
+.layui-form-radio i:hover, .layui-form-radioed i {
+    color: #3c9fe2;
+}
+
+.layui-form-select dl dd.layui-this {
+    background-color: #3c9fe2;
+}
+
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #3c9fe2;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+    background-color: #3c9fe2;
+    border-color: #3c9fe2;
+}
+
+/*******file*******/
+.file {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.file input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+
+.search-input {
+    border: solid 1px #D2D2D2;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 5px;
+    border-radius: 2px;
+}
+
+.layui-input-block {
+    line-height: 36px;
+}
+
+.layui-nav-tree .layui-nav-child {
+    display: block;
+}
+
+.layui-nav-tree .layui-nav-child, .layui-nav-tree .layui-nav-child a:hover {
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+/****data***/
+.ui-widget-header {
+    background: none !important;
+    border: none !important;
+    border-bottom: 1px solid #e2e2e2 !important;
+    border-radius: 0px !important;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+    background: none !important;
+    border: 0px !important;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    background: #009688 !important;
+    border: 0px !important;
+    color: #fff!important;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #009688 !important;
+    border: 0px !important;
+    color: #fff!important;
+}
+.ui-datepicker td span, .ui-datepicker td a{text-align: center!important;}

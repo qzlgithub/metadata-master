@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
+            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
+            <a><cite>消费明细</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--搜索-->
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>产品名称：
+                    <select name="modules" lay-verify="required" lay-search="" class="select-list" id="product">
+                        <option value="">全部</option>
+                        <option th:each="p : ${productDict}" th:value="${p.id}" th:text="${p.name}"
+                                th:selected="${p.id eq productId}"></option>
+                    </select>
+                </li>
+                <li>时间：
+                    <input type="hidden" id="client-id" th:value="${clientId}"/>
+                    <em class="fr"><input type="text" name="date" id="date1" lay-verify="date" placeholder="yyyy-MM-dd"
+                                          autocomplete="off" class="layui-input search-input"/></em>
+                </li>
+                <li>
+                    <button class="check-button" onclick="searchProdConsumeList();">查询</button>
+                </li>
+            </ul>
+            <!--搜索 end-->
+            <!--功能操作-->
+            <div class="clearfix mt30 mb40">
+                    <span class="fr">
+                        一次最多导出1000条
+                        <a href="customer-add.html" class="add-button" id="exportProdCons">导出</a>
+                    </span>
+            </div>
+            <!--功能操作 end-->
+            <!--table-->
+            <div class="layui-form">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>消费单号</th>
+                        <th>公司</th>
+                        <th>公司简称</th>
+                        <th>账号</th>
+                        <th>产品服务</th>
+                        <th>计费方式</th>
+                        <th>是否成功</th>
+                        <th>单价(元/次)</th>
+                        <th>金额(元)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataBody">
+                    <!-- <tr>
+                         <td>001</td>
+                         <td>admin</td>
+                         <td>阿里巴巴</td>
+                         <td>阿里巴巴</td>
+                         <td>购物/网上商超</td>
+                         <td>张三</td>
+                         <td>18733035161</td>
+                         <td>孙权</td>
+                         <td>3个</td>
+                         <td>2017-2-1</td>
+                     </tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <!--table end-->
+            <!--page-->
+            <div class="layui-table-tool mt20">
+                <div class="layui-inline layui-table-page" id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled">
+                            <i class="layui-icon">&#xe603;</i>
+                        </a>
+                        <span id="frontPages"></span>
+                        <span class="layui-laypage-curr">
+                            <em class="layui-laypage-em"></em>
+                            <em id="currentPage">1</em>
+                        </span>
+                        <span id="nextPages"></span>
+                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next layui-disabled">
+                            <i class="layui-icon">&#xe602;</i>
+                        </a>
+                        <span id="total" class="layui-laypage-count">共 0 条</span>
+                        <span id="pages" class="layui-laypage-count">共 0 页</span>
+                        <input type="hidden" id="pageNum" value="1"/>
+                        <input type="hidden" id="totalPage" value="0"/>
+                        <span class="layui-laypage-limits">
+                            <select id="pageSize" lay-ignore="" onchange="searchProdConsumeList()">
+                                <option value="15" selected="selected">15 条/页</option>
+                                <option value="30">30 条/页</option>
+                                <option value="50">50 条/页</option>
+                            </select>
+                        </span>
+                        <span class="layui-laypage-skip">
+                            到第<input type="text" id="userPageNum" min="1" value="1" class="layui-input"/>页
+                        </span>
+                        <span class="layui-laypage-skip">
+                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!--page end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+    <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        var message;
+        layui.config({
+            base: '../../static/build/js/'
+        }).use(['app', 'message', 'laydate'], function() {
+            var app = layui.app,
+                $ = layui.jquery,
+                layer = layui.layer;
+            laydate = layui.laydate;
+            //将message设置为全局以便子页面调用
+            message = layui.message;
+            //主入口
+            app.set({
+                type: 'iframe'
+            }).init();
+            $('#pay').on('click', function() {
+                layer.open({
+                    title: false,
+                    type: 1,
+                    content: '<img src="../../static/build/images/pay.png" />',
+                    area: ['500px', '250px'],
+                    shadeClose: true
+                });
+            });
+            //日期
+            laydate.render({
+                elem: '#date'
+            });
+            laydate.render({
+                elem: '#date1'
+            });
+        });
+
+    </script>
+<script type="text/javascript">
+
+    $(function() {
+        getProdConsumeList(null, $("#client-id").val(), null, 1, $("#pageSize").val());
+    });
+    /*  function searchProdConsumeList() {
+          var productId = $("#product").val();
+          var clientId = $("#client-id").val();
+          var createTime = $("#date1").val();
+          var pageNumVal = 1;
+          var pageSizeVal = 15;
+          alert(productId + "..." + clientId + "..." + createTime);
+          getProdConsumeList(productId, clientId, createTime, pageNumVal, pageSizeVal);
+      }*/
+    var
+        rowTr =
+            "<tr>&lt;!&ndash;<td>#{createTime}</td><td>#{tradeNo}</td><td>#{clientName}</td><td>#{shortName}</td><td>#{username}</td><td>#{productName}</td><td>#{pillBlan}</td><td>#{enabled}</td><td>#{unitAmt}</td><td>#{amount}</td>&ndash;&gt;</tr>";
+
+    function getProdConsumeList(productId, clientId, createTime, pageNumVal, pageSizeVal) {
+        $.get("/client/consumeList",
+            {
+                "productId": productId,
+                "clientId": clientId,
+                "createTime": createTime,
+                "pageNum": pageNumVal,
+                "pageSize": pageSizeVal
+            }
+            , function(data) {
+                var list = data.list;
+                $("#dataBody").empty();
+                for(var d in list) {
+                    //alert(list[d].username);
+                    var tr = rowTr.replace("#{createTime}", list[d].createTime)
+                    .replace("#{tradeNo}", list[d].tradeNo)
+                    .replace("#{clientName}", list[d].clientName)
+                    .replace("#{shortName}", list[d].shortName)
+                    .replace("#{username}", list[d].username)
+                    .replace("#{productName}", list[d].productName)
+                    .replace("#{pillBlan}", list[d].pillBlan)
+                    .replace("#{enabled}", list[d].enabled === '0' ? "是" : "否")
+                    .replace("#{unitAmt}", list[d].unitAmt)
+                    .replace("#{amount}", list[d].amount)
+                    $("#dataBody").append(tr);
+                }
+                $("#total").text("共 " + data.total + " 条");
+                $("#pages").text("共 " + data.pages + " 页");
+                $("#totalPage").val(data.pages);
+                $("#currentPage").text(data.pageNum);
+                if(data.pageNum === 1) {
+                    $("#prevPage").addClass("layui-disabled");
+                }
+                else {
+                    $("#prevPage").removeClass("layui-disabled");
+                }
+                if(data.pageNum === data.pages) {
+                    $("#nextPage").addClass("layui-disabled");
+                }
+                else {
+                    $("#nextPage").removeClass("layui-disabled");
+                }
+                refreshPageInfo($("#frontPages"), $("#nextPages"), data.pageNum, data.pages);
+            });
+    }
+
+    //<![CDATA[
+    function refreshPageInfo(front, next, pageNum, totalPage) {
+        var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
+        front.empty();
+        next.empty();
+        if(pageNum > 1) {
+            front.append(pageLink.replace(/#{pageNum}/g, 1));
+        }
+        if(pageNum === 3) {
+            front.append(pageLink.replace(/#{pageNum}/g, 2));
+        }
+        else if(pageNum > 3) {
+            front.append("...");
+            front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
+        }
+        if(totalPage === pageNum + 2) {
+            next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
+        }
+        else if(totalPage > pageNum + 2) {
+            next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
+            next.append("...");
+        }
+        if(pageNum < totalPage) {
+            next.append(pageLink.replace(/#{pageNum}/g, totalPage));
+        }
+    }
+
+    function gotoPrev() {
+        var pageNum = $("#pageNum").val();
+        if(pageNum > 1) {
+            var productId = $("#product").val();
+            var clientId = $("#client-id").val();
+            var createTime = $("#date1").val();
+            var pageNumVal = pageNum - 1;
+            var pageSizeVal = $("#pageSize").val();
+            getProdConsumeList(productId, clientId, createTime,
+                pageNumVal, pageSizeVal);
+        }
+    }
+
+    function gotoNext() {
+        var pageNum = $("#pageNum").val();
+        var totalPage = $("#totalPage").val();
+        if(pageNum !== totalPage) {
+            var productId = $("#product").val();
+            var clientId = $("#client-id").val();
+            var createTime = $("#date1").val();
+            var pageNumVal = parseInt(pageNum) + 1;
+            var pageSizeVal = $("#pageSize").val();
+            getProdConsumeList(productId, clientId, createTime,
+                pageNumVal, pageSizeVal);
+        }
+    }
+
+    function searchProdConsumeList() {
+        var productId = $("#product").val();
+        var clientId = $("#client-id").val();
+        var createTime = $("#date1").val();
+        var pageNumVal = 1;
+        var pageSizeVal = $("#pageSize").val();
+        getProdConsumeList(productId, clientId, createTime,
+            pageNumVal, pageSizeVal);
+    }
+
+    function goPage(pageNum) {
+        var productId = $("#product").val();
+        var clientId = $("#client-id").val();
+        var createTime = $("#date1").val();
+        var pageNumVal = pageNum;
+        var pageSizeVal = $("#pageSize").val();
+        getProdConsumeList(productId, clientId, createTime,
+            pageNumVal, pageSizeVal);
+    }
+
+    function gotoPage() {
+        var productId = $("#product").val();
+        var clientId = $("#client-id").val();
+        var createTime = $("#date1").val();
+        var pageNumVal = $("#userPageNum").val();
+        var pageSizeVal = $("#pageSize").val();
+        getProdConsumeList(productId, clientId, createTime,
+            pageNumVal, pageSizeVal);
+    }
+    //]]>
+</script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

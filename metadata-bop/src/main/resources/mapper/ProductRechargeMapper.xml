@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movek.mis.domain.mapper.ProductRechargeMapper">
+    <resultMap id="BaseResultMap" type="ProductRecharge">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="client_product_id" property="clientProductId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+        <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="recharge_type" property="rechargeType" jdbcType="TINYINT" />
+        <result column="amount" property="amount" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="manager_id" property="managerId" jdbcType="BIGINT" />
+    </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_product_id`, `client_id`, `product_id`, `trade_no`,
+            `contract_no`, `bill_plan`, `recharge_type`, `amount`, `balance`, `start_date`, `end_date`, `unit_amt`,
+            `remark`, `manager_id`
+        from `product_recharge`
+    </sql>
+
+    <insert id="add" parameterType="ProductRecharge">
+        insert into `product_recharge`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="clientProductId != null">`client_product_id`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="productId != null">`product_id`,</if>
+            <if test="tradeNo != null">`trade_no`,</if>
+            <if test="contractNo != null">`contract_no`,</if>
+            <if test="billPlan != null">`bill_plan`,</if>
+            <if test="rechargeType != null">`recharge_type`,</if>
+            <if test="amount != null">`amount`,</if>
+            <if test="balance != null">`balance`,</if>
+            <if test="startDate != null">`start_date`,</if>
+            <if test="endDate != null">`end_date`,</if>
+            <if test="unitAmt != null">`unit_amt`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="managerId != null">`manager_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="clientProductId != null">#{clientProductId},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="tradeNo != null">#{tradeNo},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="billPlan != null">#{billPlan},</if>
+            <if test="rechargeType != null">#{rechargeType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="balance != null">#{balance},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="unitAmt != null">#{unitAmt},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="managerId != null">#{managerId},</if>
+        </trim>
+    </insert>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
+
+    <select id="sumAmountByClientProduct" parameterType="Long" resultType="BigDecimal">
+        select sum(`amount`)
+        from `product_recharge`
+        where `client_product_id` = #{clientProductId}
+    </select>
+
+    <select id="countBy" resultType="int">
+        select count(*)
+        from `product_recharge`
+        <where>
+            <if test="clientId != null">`client_id` = #{clientId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+            <if test="startTime != null">and `create_time` >= #{startTime}</if>
+            <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
+        </where>
+    </select>
+</mapper>

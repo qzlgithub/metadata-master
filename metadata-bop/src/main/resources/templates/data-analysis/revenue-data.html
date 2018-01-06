@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <!--<script src="../../static/js/jquery-1.11.1.min.js"></script>-->
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="data::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
+            <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
+            <a><cite>营收数据</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--运营汇总-->
+            <dl class="public-data">
+                <dt class="mt0 important">营收数据</dt>
+                <dd>
+                    <ul class="public-data-list layui-row public-data-list1">
+                        <li class="layui-col-md2 layui-col-list">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">今日收入(元)</p>
+                                <p class="col4 mt20 tc fz-24">500000 </p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md2 layui-col-list ml30 mr30">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">昨日收入(元)</p>
+                                <p class="col4 mt20 tc fz-24">500000 </p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md2 layui-col-list mr30">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">当月收入(元)</p>
+                                <p class="col4 mt20 tc fz-24">500000 </p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md2 layui-col-list">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">收入总额(元)</p>
+                                <p class="col4 mt20 tc fz-24">500000 </p>
+                            </div>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <!--运营汇总 end-->
+            <!--客户数据统计-->
+            <dl class="public-data">
+                <dt>客户数据统计</dt>
+                <dd class="layui-row">
+                    <ul class="clearfix p10 product-fx-warp">
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">今天</span>
+                            <span>昨天</span>
+                            <span>近7天</span>
+                            <span>近30天</span>
+                        </li>
+                        <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date" id="date1"
+                                                                                    autocomplete="off"
+                                                                                    class="layui-input"/></em><i
+                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>
+                            对比时间
+                        </li>
+                        <li class="position-r timeinput time-input2"><em class="inline-block"><input type="text"
+                                                                                                     name="date"
+                                                                                                     id="date1"
+                                                                                                     autocomplete="off"
+                                                                                                     class="layui-input"/></em><i
+                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">按月</span>
+                            <span>按时</span>
+                            <span>按日</span>
+                            <span>按周</span>
+                        </li>
+                    </ul>
+                    <div class="layui-row w60 margin-auto mt20 fb fz-16">
+                        <span class="layui-col-md4 tc lh25">收入（元）<br/>1,6599,00</span>
+                        <span class="layui-col-md4 tc lh25">收益（元）<br/>1,6599,00</span>
+                        <span class="layui-col-md4 tc lh25">成本（元）<br/>1,6599,00</span>
+                    </div>
+                    <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
+                    <div class="tc mt20 mb20" id="panel">
+                        <p class="tc"><img src="../../static/images/data-img3.png"/></p>
+                    </div>
+                    <p class="slide"><a href="javascript:;" class="btn-slide active">统计图</a></p>
+                </dd>
+            </dl>
+            <!--客户数据统计 end-->
+
+            <!--客户数据统计-->
+            <dl class="public-data">
+                <dt class="clearfix">
+                    <em class="col5">2017/11/1-2017/11/30</em>
+                    <em class="col2 fz-14 pl40">共50,000条</em>
+                    <span class="fr mb10">
+                            <a href="customer-add.html" class="add-button">导出</a>
+                        </span>
+                </dt>
+                <dd class="layui-row">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>公司名称</th>
+                            <th>公司简称</th>
+                            <th>账号</th>
+                            <th>产品</th>
+                            <th>请求次数</th>
+                            <th>消费(元)</th>
+                            <th>成本(元)</th>
+                            <th>利润(元)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>阿里巴巴</td>
+                            <td>阿里巴巴</td>
+                            <td>购物/网上商超</td>
+                            <td>购物/网上商超</td>
+                            <td>张三</td>
+                            <td>18733035161</td>
+                            <td>孙权</td>
+                            <td>3个</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--page-->
+                    <div class="layui-table-tool mt20">
+                        <div class="layui-inline layui-table-page" id="layui-table-page1">
+                            <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                                <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
+                                    <i class="layui-icon"></i>
+                                </a>
+                                <span class="layui-laypage-curr">
+                                        <em class="layui-laypage-em"></em>
+                                        <em>1</em>
+                                    </span>
+                                <a href="javascript:;" data-page="2">2</a>
+                                <a href="javascript:;" data-page="3">3</a>
+                                <span class="layui-laypage-spr">…</span>
+                                <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
+                                <a href="javascript:;" class="layui-laypage-next" data-page="2">
+                                    <i class="layui-icon"></i>
+                                </a>
+                                <span class="layui-laypage-skip">到第<input type="text" min="1" value="1"
+                                                                          class="layui-input"/>页<button type="button"
+                                                                                                        class="layui-laypage-btn">确定</button></span>
+                                <span class="layui-laypage-count">共 1000 条</span>
+                                <span class="layui-laypage-limits">
+                                        <select lay-ignore="">
+                                            <option value="10">10 条/页</option>
+                                            <option value="20">20 条/页</option>
+                                            <option value="30" selected="">30 条/页</option>
+                                            <option value="40">40 条/页</option>
+                                            <option value="50">50 条/页</option>
+                                            <option value="60">60 条/页</option>
+                                            <option value="70">70 条/页</option>
+                                            <option value="80">80 条/页</option>
+                                            <option value="90">90 条/页</option>
+                                        </select>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--page end-->
+                </dd>
+            </dl>
+            <!--客户数据统计 end-->
+        </div>
+    </div>
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message', 'laydate'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+    });
+    //对比时间
+    $(document).ready(function() {
+        $(".contrast-time2").click(function() {
+            $(".time-input2").toggle();
+        });
+    });
+    //点击展开
+    $(document).ready(function() {
+        $(".btn-slide").click(function() {
+            $("#panel").slideToggle("slow");
+            $(this).toggleClass("active");
+            return false;
+        });
+    });
+</script>
+</body>
+
+</html>

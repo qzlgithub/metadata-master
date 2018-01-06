@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="product::top"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/">首页<span class="layui-box">&gt;</span></a>
+            <a href="/demo/">演示<span class="layui-box">&gt;</span></a>
+            <a><cite>导航元素</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--form-->
+            <!--<form class="layui-form" action="">-->
+            <div class="w60 m30">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品类别：</label>
+                    <div class="layui-input-block w40">
+                        <select name="modules" id="selectId" lay-verify="required" class="select-list">
+                            <option th:each="dict:${productTypeDict}" th:value="${dict.id}"
+                                    th:text="${dict.name}" th:selected="${type} == ${dict.id}"></option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="productId" th:value="${id}"/>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品编号：</label>
+                    <div class="layui-input-block w40">
+                        <input type="text" id="codeId" name="code" placeholder="请输入"
+                               autocomplete="off" class="layui-input" th:value="${code}"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品名称：</label>
+                    <div class="layui-input-block w40">
+                        <input type="text" id="nameId" name="name" autocomplete="off"
+                               class="layui-input" th:value="${name}"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">成本价格：</label>
+                    <div class="layui-input-block w40">
+                        <input type="text" id="costAmtId" th:value="${costAmt}" name="costAmt"
+                               lay-verify="required" placeholder="请输入"
+                               autocomplete="off" class="layui-input" style="width: 80%; display: inline-block;"/>
+                        <i class="col3">元</i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否关闭：</label>
+                    <div class="layui-input-block layui-form">
+                        <input type="radio" name="prodEnabled" value="1" title="开启" th:checked="${enabled} == 1"/>
+                        <div
+                                class="layui-unselect layui-form-radio layui-form-radioed"><i
+                                class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>开启</span></div>
+                        <input type="radio" name="prodEnabled" value="0" title="关闭" th:checked="${enabled} == 0"/>
+                        <div
+                                class="layui-unselect layui-form-radio"><i
+                                class="layui-anim layui-icon"></i><span>关闭</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">编辑器：</label>
+                    <div class="layui-input-block">
+                            <textarea class="layui-textarea layui-hide" id="contentId" name="content"
+                                      lay-verify="content"
+                            ></textarea>
+                        <div class="layui-layedit">
+                            <div class="layui-unselect layui-layedit-tool">
+                                <i class="layui-icon layedit-tool-b" title="加粗" lay-command="Bold"
+                                   layedit-event="b"></i>
+                                <i class="layui-icon layedit-tool-i" title="斜体" lay-command="italic"
+                                   layedit-event="i"></i>
+                                <i class="layui-icon layedit-tool-u" title="下划线" lay-command="underline"
+                                   layedit-event="u"></i>
+                                <i class="layui-icon layedit-tool-d" title="删除线" lay-command="strikeThrough"
+                                   layedit-event="d"></i>
+                                <span class="layedit-tool-mid"></span>
+                                <i class="layui-icon layedit-tool-left" title="左对齐" lay-command="justifyLeft"
+                                   layedit-event="left"></i>
+                                <i class="layui-icon layedit-tool-center" title="居中对齐" lay-command="justifyCenter"
+                                   layedit-event="center"></i>
+                                <i class="layui-icon layedit-tool-right" title="右对齐" lay-command="justifyRight"
+                                   layedit-event="right"></i>
+                                <span class="layedit-tool-mid"></span><i class="layui-icon layedit-tool-link"
+                                                                         title="插入链接" layedit-event="link"></i>
+                                <i class="layui-icon layedit-tool-unlink layui-disabled" title="清除链接"
+                                   lay-command="unlink" layedit-event="unlink"></i>
+                                <i class="layui-icon layedit-tool-face" title="表情" layedit-event="face"></i>
+                                <i class="layui-icon layedit-tool-image" title="图片" layedit-event="image"><input
+                                        type="file" corpName="file"/></i>
+                            </div>
+                            <div class="layui-layedit-iframe">
+                                <iframe id="LAY_layedit_1" name="LAY_layedit_1" textarea="LAY_demo_editor"
+                                        frameborder="0" style="height: 280px;">
+
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注：</label>
+                    <div class="layui-input-block w40">
+                            <textarea name="desc" id="remarkId" value="remark" th:text="${remark}" placeholder="请输入内容"
+                                      class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item mt40">
+                <div class="layui-input-block">
+                    <button class="layui-btn" onclick="editProduct();" lay-filter="demo1">保存</button>
+                </div>
+            </div>
+            <!--</form>-->
+            <!--form end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/product.edit.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        $('#pay').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: '<img src="../../static/build/images/pay.png" />',
+                area: ['500px', '250px'],
+                shadeClose: true
+            });
+        });
+    });
+</script>
+
+</body>
+
+</html>

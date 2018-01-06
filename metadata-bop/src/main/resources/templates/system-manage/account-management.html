@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta corpName="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
+            <a href="/manager/index.html">账户管理<span class="layui-box">&gt;</span></a>
+            <a><cite>账户管理</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--搜索-->
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    角色：
+                    <select id="roleId" name="modules" lay-verify="required" lay-search="" class="select-list">
+                        <option value="">全部</option>
+                        <option th:each="role:${roleList}" th:value="${role.roleId}"
+                                th:text="${role.roleName}"></option>
+                    </select>
+                </li>
+                <li>
+                    状态：
+                    <select id="enabled" name="modules" lay-verify="required" lay-search="" class="select-list">
+                        <option value="">全部</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </li>
+                <li>
+                    <button class="check-button" onclick="search()">查询</button>
+                </li>
+            </ul>
+            <!--搜索 end-->
+            <!--功能操作-->
+            <div class="clearfix mt20"><a th:href="@{/manager/addition.html}" class="fr add-button">添加账号</a></div>
+            <!--功能操作 end-->
+            <!--table-->
+            <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>用户账号</th>
+                    <th>姓名</th>
+                    <th>联系电话</th>
+                    <th>角色</th>
+                    <th>状态</th>
+                    <th>注册日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="dataBody"></tbody>
+            </table>
+            <!--table end-->
+            <!--page-->
+            <div class="layui-table-tool mt20">
+                <div class="layui-inline layui-table-page" id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+
+                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled"
+                           data-page="0">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <span id="front"></span>
+                        <span class="layui-laypage-curr">
+                            <em class="layui-laypage-em"></em>
+                            <em id="currentPage"></em>
+                        </span>
+                        <span id="next"></span>
+                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next" data-page="2">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <span id="totalTxt" class="layui-laypage-count">共 0 条</span>
+                        <span id="pagesTxt" class="layui-laypage-count">共 0 页</span>
+                        <span class="layui-laypage-limits">
+                            <input type="hidden" id="pageNum" value="1"/>
+                            <input type="hidden" id="pages" value="1"/>
+                            <select id="pageSize" lay-ignore="" onchange="resetPageSize()">
+                                <option value="15" selected="selected">15 条/页</option>
+                                <option value="30">30 条/页</option>
+                                <option value="50">50 条/页</option>
+                            </select>
+
+                        </span>
+                        <span class="layui-laypage-skip">
+                            到第<input type="text" id="userPageNum" min="1" value="1" class="layui-input"/>页
+                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button></span>
+
+                    </div>
+                </div>
+            </div>
+            <!--page end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/account.management.js}"></script>
+<script type="text/javascript">
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    });
+
+
+</script>
+</body>
+
+</html>

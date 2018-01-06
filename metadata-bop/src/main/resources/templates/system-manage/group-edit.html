@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
+            <a href="/manager/index.html">账户管理<span class="layui-box">&gt;</span></a>
+            <a><cite>编辑分组</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--form-->
+            <!--<form class="layui-form" action="">-->
+            <div class="form-title mb20">分组名称</div>
+            <div class="w40 m30">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分组名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="roleName" autocomplete="off" class="layui-input" th:value="${roleName}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-title mb20">设置权限</div>
+            <div class="m30">
+                <!--table-->
+                <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                    <thead>
+                    <tr>
+                        <th>一级栏目</th>
+                        <th>二级栏目</th>
+                        <th>三级栏目</th>
+                        <th>具体权限</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataBody">
+                    <tr>
+                        <td rowspan="6">系统管理</td>
+                        <td rowspan="2">账户管理</td>
+                        <td>后台账号管理</td>
+                        <td>
+                            <!-- 具体权限 -->
+                            <input type="checkbox" id="11101" th:checked="${#lists.contains(privilege,'11101')}"/>添加
+                            <input type="checkbox" id="11102" th:checked="${#lists.contains(privilege,'11102')}"/>编辑
+                            <input type="checkbox" id="11103" th:checked="${#lists.contains(privilege,'11103')}"/>停用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>分组管理</td>
+                        <td>
+                            <!-- 具体权限 -->
+                            <input type="checkbox" id="11201" th:checked="${#lists.contains(privilege,'11201')}"/>添加
+                            <input type="checkbox" id="11202" th:checked="${#lists.contains(privilege,'11202')}"/>编辑
+                            <input type="checkbox" id="11203" th:checked="${#lists.contains(privilege,'11203')}"/>停用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">系统设置</td>
+                        <td>栏目管理</td>
+                        <td>
+                            <!-- 具体权限 -->
+                            <input type="checkbox" id="12101" th:checked="${#lists.contains(privilege,'12101')}"/>修改图标
+                            <input type="checkbox" id="12102" th:checked="${#lists.contains(privilege,'12102')}"/>是否显示
+                            <input type="checkbox" id="12103" th:checked="${#lists.contains(privilege,'12103')}"/>编辑
+                            <input type="checkbox" id="12104" th:checked="${#lists.contains(privilege,'12104')}"/>删除
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>充值类型</td>
+                        <td>
+                            <!-- 具体权限 -->
+                            <input type="checkbox" id="12201" th:checked="${#lists.contains(privilege,'12201')}"/>添加类型
+                            <input type="checkbox" id="12202" th:checked="${#lists.contains(privilege,'12202')}"/>是否显示
+                            <input type="checkbox" id="12203" th:checked="${#lists.contains(privilege,'12203')}"/>编辑
+                            <input type="checkbox" id="12204" th:checked="${#lists.contains(privilege,'12204')}"/>删除
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>行业分类</td>
+                        <td>
+                            <!-- 具体权限 -->
+                            <input type="checkbox" id="12301" th:checked="${#lists.contains(privilege,'12301')}"/>添加行业
+                            <input type="checkbox" id="12302" th:checked="${#lists.contains(privilege,'12302')}"/>是否显示
+                            <input type="checkbox" id="12303" th:checked="${#lists.contains(privilege,'12303')}"/>编辑
+                            <input type="checkbox" id="12304" th:checked="${#lists.contains(privilege,'12304')}"/>删除
+                            <input type="checkbox" id="12305" th:checked="${#lists.contains(privilege,'12305')}"/>增加子行业
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>其他设置</td>
+                        <td>
+                            <input type="checkbox" id="12401" th:checked="${#lists.contains(privilege,'12401')}"/>设置客服
+                            <input type="checkbox" id="12402" th:checked="${#lists.contains(privilege,'12402')}"/>设置子账号数量
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">产品管理</td>
+                        <td rowspan="2">产品管理</td>
+                        <td>产品类别管理</td>
+                        <td>
+                            <input type="checkbox" id="21101" th:checked="${#lists.contains(privilege,'21101')}"/>添加
+                            <input type="checkbox" id="21102" th:checked="${#lists.contains(privilege,'21102')}"/>编辑
+                            <input type="checkbox" id="21103" th:checked="${#lists.contains(privilege,'21103')}"/>停用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>产品列表</td>
+                        <td>
+                            <input type="checkbox" id="21201" th:checked="${#lists.contains(privilege,'21201')}"/>添加
+                            <input type="checkbox" id="21202" th:checked="${#lists.contains(privilege,'21202')}"/>编辑
+                            <input type="checkbox" id="21203" th:checked="${#lists.contains(privilege,'21203')}"/>停用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            客户管理
+                        </td>
+                        <td>客户管理</td>
+                        <td>客户管理
+                        </td>
+                        <td>
+                            <input type="checkbox" id="31101" th:checked="${#lists.contains(privilege,'31101')}"/>查看
+                            <input type="checkbox" id="31102" th:checked="${#lists.contains(privilege,'31102')}"/>添加
+                            <input type="checkbox" id="31103" th:checked="${#lists.contains(privilege,'31103')}"/>编辑
+                            <input type="checkbox" id="31104" th:checked="${#lists.contains(privilege,'31104')}"/>冻结
+                            <input type="checkbox" id="31105" th:checked="${#lists.contains(privilege,'31105')}"/>解冻
+                            <input type="checkbox" id="31106" th:checked="${#lists.contains(privilege,'31106')}"/>删除
+                            <input type="checkbox" id="31107" th:checked="${#lists.contains(privilege,'31107')}"/>重置
+                            <input type="checkbox" id="31108" th:checked="${#lists.contains(privilege,'31108')}"/>开通服务
+                            <input type="checkbox" id="31109" th:checked="${#lists.contains(privilege,'31109')}"/>续签
+                            <input type="checkbox" id="31110" th:checked="${#lists.contains(privilege,'31110')}"/>账户充值
+                            <input type="checkbox" id="31111" th:checked="${#lists.contains(privilege,'31111')}"/>产品历史充值记录导出
+                            <input type="checkbox" id="31112" th:checked="${#lists.contains(privilege,'31112')}"/>产品消费明细导出
+                            <input type="checkbox" id="31113" th:checked="${#lists.contains(privilege,'31113')}"/>子账号消费明细导出
+                            <input type="checkbox" id="31114" th:checked="${#lists.contains(privilege,'31114')}"/>重置密钥
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5">运营数据管理</td>
+                        <td rowspan="5">运营数据管理</td>
+                        <td>运营数据汇总</td>
+                        <td>
+                            <input type="checkbox" id="41101" th:checked="${#lists.contains(privilege,'41101')}"/>查看
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>客户数据</td>
+                        <td>
+                            <input type="checkbox" id="41201" th:checked="${#lists.contains(privilege,'41201')}"/>查看
+                            <input type="checkbox" id="41202" th:checked="${#lists.contains(privilege,'41202')}"/>导出
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>充值数据</td>
+                        <td>
+                            <input type="checkbox" id="41301" th:checked="${#lists.contains(privilege,'41301')}"/>查看
+                            <input type="checkbox" id="41302" th:checked="${#lists.contains(privilege,'41302')}"/>导出
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>营收列表</td>
+                        <td>
+                            <input type="checkbox" id="41401" th:checked="${#lists.contains(privilege,'41401')}"/>查看
+                            <input type="checkbox" id="41402" th:checked="${#lists.contains(privilege,'41402')}"/>导出
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>产品请求数据</td>
+                        <td>
+                            <input type="checkbox" id="41501" th:checked="${#lists.contains(privilege,'41501')}"/>查看
+                            <input type="checkbox" id="41502" th:checked="${#lists.contains(privilege,'41502')}"/>导出
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--table end-->
+            </div>
+            <div class="layui-form-item mt40">
+                <div class="layui-input-block">
+                    <input type="hidden" id="roleId" th:value="${roleId}"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="saveRole()">保存</button>
+                </div>
+            </div>
+            <!--</form>-->
+            <!--form end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/group.edit.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        $('#pay').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: '<img src="../../static/build/images/pay.png" />',
+                area: ['500px', '250px'],
+                shadeClose: true
+            });
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

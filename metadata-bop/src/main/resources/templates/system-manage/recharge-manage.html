@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
+            <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
+            <a><cite>充值类型</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--功能操作-->
+            <div class="clearfix mt20"><span href="account-add.html" class="fr add-button cp" id="addclass">添加类型</span>
+            </div>
+            <!--功能操作 end-->
+            <!--table-->
+            <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>类型名称</th>
+                    <th>备注说明</th>
+                    <th>是否显示</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="dataBody"><!-- TODO data here --></tbody>
+            </table>
+            <!--table end-->
+            <!--page-->
+            <div class="layui-table-tool mt20">
+                <div class="layui-inline layui-table-page" id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                        <span id="totalTxt" class="layui-laypage-count">共 0 条</span>
+                    </div>
+                </div>
+            </div>
+            <!--page end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--新增 提示层-->
+<div id="add-manage" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">新增类型</div>
+    <div class="mb30 layui-form">
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="newName" name="username" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明：</label>
+                <div class="layui-input-block">
+                    <textarea name="desc" id="newRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="saveNewRechargeType()">添加</button>
+            </div>
+        </div>
+    </div>
+    <!--form end-->
+</div>
+
+<!--提示层 end-->
+<!--编辑 提示层-->
+<div id="edit-manage" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">编辑类型</div>
+    <div class="mb30">
+        <!--<form class="layui-form" action="">-->
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="editName" name="username" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明：</label>
+                <div class="layui-input-block">
+                    <textarea name="desc" id="editRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="editId"/>
+                <button class="layui-btn" onclick="updateRechargeType()">保存</button>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+    <!--form end-->
+</div>
+
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/recharge.list.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        $('#addclass').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#add-manage'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });
+        /*$('#editclass').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#edit-manage'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });*/
+    });
+
+    function showEditBlock() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#edit-manage'),
+            area: ['500px'],
+            shadeClose: true
+        });
+    }
+</script>
+</body>
+
+</html>

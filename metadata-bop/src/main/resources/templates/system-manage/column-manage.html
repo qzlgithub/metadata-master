@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
+            <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
+            <a><cite>栏目管理</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--搜索-->
+            <!--搜索 end-->
+            <!--table-->
+            <div class="clearfix mt20"><span class="fr add-button">后台栏目管理</span></div>
+
+            <dl class="jurisdiction-list">
+                <dt class="clearfix">
+                    <span class="w5">&nbsp;</span>
+                    <span class="w20 tl">栏目名称</span>
+                    <span class="w20">编号</span>
+                    <span class="w10">图片</span>
+                    <span class="w10">是否显示</span>
+                    <span class="w20">操作</span>
+                    <span class="w15">排序</span>
+                </dt>
+                <dd class="st_tree">
+                    <!--一级 warp-->
+                    <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 important">
+                        <block th:each="parent: ${list}">
+                            <li class="clearfix jurisdiction-list-div">
+                                <em class="js-accordionTrigger w5"></em>
+                                <a class="w20 tl important" th:text="${parent.name}">52424254</a>
+                                <a class="w20" th:text="${parent.id}">111111</a>
+                                <a class="w10">
+                                    <div class="file">
+                                        <img src="../../static/images/add-img.png"/>
+                                        <input type="file" name=""/>
+                                    </div>
+                                </a>
+                                <a class="w10 pt0 important">
+                                    <div class="layui-form">
+                                        <input type="checkbox" checked="" name="open" lay-skin="switch"
+                                               lay-filter="switchTest"
+                                               lay-text="ON|OFF"/>
+                                    </div>
+                                </a>
+                                <a class="w20">
+                                    <span class="mr20 edit cp edit-manage" th:attr="data-id=${parent.id}">编辑</span>
+                                    <!--<span href="#" class="del cp">删除</span>-->
+                                </a>
+                                <a class="w15"><i class="icon sort-icon"></i></a>
+                            </li>
+                            <!--二级-->
+                            <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 important">
+                                <block th:each="child: ${parent.subList}">
+                                    <li class="clearfix pb20 pl30 important">
+                                        <em class="js-accordionTrigger w5"></em>
+                                        <a class="w20 tl important" th:text="${child.name}">52424254</a>
+                                        <a class="w20" th:text="${child.id}">111111</a>
+                                        <a class="w10">&nbsp;</a>
+                                        <a class="w10 pt0 important">
+                                            <div class="layui-form">
+                                                <input type="checkbox" checked="" name="open" lay-skin="switch"
+                                                       lay-filter="switchTest" lay-text="ON|OFF"/>
+                                            </div>
+                                        </a>
+                                        <a class="w20">
+                                            <span class="mr20 edit cp edit-manage"
+                                                  th:attr="data-id=${child.id}">编辑</span>
+                                            <!--<span href="#" class="del cp">删除</span>-->
+                                        </a>
+                                        <a class="w15"><i class="icon sort-icon"></i></a>
+                                    </li>
+                                    <!--三级-->
+                                    <ul class="jurisdiction-list-div jurisdiction-list-li colum-list-li">
+                                        <block th:each="tChild: ${child.thrList}">
+                                            <li class="clearfix pb20 pl45 important">
+                                                <em class="js-accordionTrigger w5"></em>
+                                                <a class="w20 tl important" th:text="${tChild.name}">52424254</a>
+                                                <a class="w20" th:text="${tChild.id}">111111</a>
+                                                <a class="w10">&nbsp;</a>
+                                                <a class="w10 pt0 important">
+                                                    <div class="layui-form">
+                                                        <input type="checkbox" checked="" name="open" lay-skin="switch"
+                                                               lay-filter="switchTest" lay-text="ON|OFF"/>
+                                                    </div>
+                                                </a>
+                                                <a class="w20">
+                                            <span class="mr20 edit cp edit-manage"
+                                                  th:attr="data-id=${tChild.id}">编辑</span>
+                                                    <!--<span href="#" class="del cp">删除</span>-->
+                                                </a>
+                                                <a class="w15"><i class="icon sort-icon"></i></a>
+                                            </li>
+                                        </block>
+                                    </ul>
+                                    <!--三级 end-->
+                                </block>
+                            </ul>
+                            <!--二级 end-->
+                        </block>
+                    </ul>
+                    <!--一级 warp end-->
+                </dd>
+            </dl>
+            <!--table end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--提示层-->
+<div id="edit-manage" class="modal">
+    <!--form-->
+    <div class="layui-layer-title">修改栏目名称</div>
+    <div class="mb30">
+        <form class="layui-form" action="">
+            <div class="m30">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">栏目名称</label>
+                    <input type="hidden" id="editId"/>
+                    <div class="layui-input-block">
+                        <input type="text" id="editNameId" name="username" lay-verify="required" placeholder="请输入"
+                               autocomplete="off" class="layui-input"/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="editColumn();">确定修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--form end-->
+</div>
+
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/column.manage.js}"></script>
+<script type="text/javascript" src="../../static/js/SimpleTree.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $(".st_tree").SimpleTree({
+            /* 可无视代码部分*/
+            click: function(a) {
+                if(!$(a).attr("hasChild")) {
+                    alert($(a).attr("ref"));
+                }
+            }
+        });
+    });
+</script>
+<script>
+    //<![CDATA[
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        $('.edit-manage').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#edit-manage'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });
+    });
+    //]]>
+</script>
+</body>
+
+</html>

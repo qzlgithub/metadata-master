@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<!--left-->
+<div th:fragment="left">
+    <div class="layui-side-scroll">
+        <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
+            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'11000')}">
+                <a class="" href="javascript:;"><i class="icon icon2" aria-hidden="true"></i><em>账户管理</em></a>
+                <dl class="layui-nav-child">
+                    <dd th:class="${i_module eq 'manager_index'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'11100')}">
+                        <a th:href="@{/manager/index.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 账户管理</span></a>
+                    </dd>
+                    <dd  th:class="${i_module eq 'role_index'} ? 'layui-this':''"
+                         th:if="${#lists.contains(i_privilege,'11200')}">
+                        <a th:href="@{/role/index.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 分组管理</span></a>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'12000')}">
+                <a class="" href="javascript:;"><i class="icon icon3" aria-hidden="true"></i><em>系统配置</em></a>
+                <dl class="layui-nav-child">
+                    <dd th:class="${i_module eq 'privilege_index'} ? 'layui-this':''"
+                            th:if="${#lists.contains(i_privilege,'12100')}">
+                        <a th:href="@{/privilege/index.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 栏目管理</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'config_recharge'} ? 'layui-this':''"
+                            th:if="${#lists.contains(i_privilege,'12200')}">
+                        <a th:href="@{/config/recharge.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 充值类型</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'config_industry'} ? 'layui-this':''"
+                            th:if="${#lists.contains(i_privilege,'12300')}">
+                        <a th:href="@{/config/industry.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 行业分类</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'config_other'} ? 'layui-this':''"
+                            th:if="${#lists.contains(i_privilege,'12400')}">
+                        <a th:href="@{/config/industry.html}">
+                            <i class="layui-icon">&#xe602;</i><span> 其他设置</span></a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

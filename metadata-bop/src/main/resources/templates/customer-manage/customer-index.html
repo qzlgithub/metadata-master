@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
+            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
+            <a><cite>客户管理</cite></a>
+        </div>
+        <!-- 面包屑 end -->
+        <div class="p20">
+            <!--搜索-->
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    公司名称：<input type="text" id="corpName" name="corpName" placeholder="请输入" class="search-input"/>
+                </li>
+                <li>
+                    账号：<input type="text" id="username" name="username" placeholder="请输入" class="search-input"/>
+                </li>
+                <li>账号状态：
+                    <select id="enabled" name="enabled" class="select-list">
+                        <option value="" selectd="selected">全部</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </li>
+                <li>
+                    所在行业：
+                    <select id="parentIndustryId" name="parentIndustryId" class="select-list"
+                            onchange="getSubIndustry()">
+                        <option value="">全部</option>
+                        <option th:each="industry:${industryList}" th:value="${industry.id}"
+                                th:text="${industry.name}"></option>
+                    </select>
+                    <select id="industryId" name="industryId" class="select-list">
+                        <option value="">全部</option>
+                    </select>
+                </li>
+                <li>
+                    公司简称：
+                    <input type="text" id="shortName" name="shortName" placeholder="请输入" class="search-input"/>
+                </li>
+                <li>
+                    <button type="button" class="check-button" onclick="searchClientList()">查询</button>
+                </li>
+            </ul>
+            <!--搜索 end-->
+            <!--功能操作-->
+            <!--<span>批量操作:</span>-->
+            <div class="clearfix mt20">
+                <!--<select name="modules" lay-verify="required" lay-search="" class="select-list">
+                    <option value="">批量冻结</option>
+                    <option value="1">批量解冻</option>
+                    <option value="2">批量删除</option>
+                    <option value="3">批量重置</option>
+                </select>-->
+                批量操作
+                <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)">冻结账号</a>
+                <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)">解冻账号</a>
+                <a href="#" class="cz-button mr10" onclick="batchDeleted()">删除</a>
+                <a href="#" class="cz-button" onclick="batchResetPwd()">重置密码</a>
+                <a th:href="@{/client/addition.html}" class="fr add-button">添加客户</a>
+            </div>
+            <!--功能操作 end-->
+            <!--table-->
+            <div class="layui-form">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"/>
+                        </th>
+                        <th>编号</th>
+                        <th>客户账号</th>
+                        <th>公司名称</th>
+                        <th>公司简称</th>
+                        <th>所在行业</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>商务经理</th>
+                        <th>子账号(个)</th>
+                        <th>注册日期</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataBody"><!-- TODO data here --></tbody>
+                </table>
+            </div>
+            <!--table end-->
+            <!--page-->
+            <div class="layui-table-tool mt20">
+                <div class="layui-inline layui-table-page" id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled">
+                            <i class="layui-icon">&#xe603;</i>
+                        </a>
+                        <span id="frontPages"></span>
+                        <span class="layui-laypage-curr">
+                            <em class="layui-laypage-em"></em>
+                            <em id="currentPage">1</em>
+                        </span>
+                        <span id="nextPages"></span>
+                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next layui-disabled">
+                            <i class="layui-icon">&#xe602;</i>
+                        </a>
+                        <span id="total" class="layui-laypage-count">共 0 条</span>
+                        <span id="pages" class="layui-laypage-count">共 0 页</span>
+                        <input type="hidden" id="pageNum" value="1"/>
+                        <input type="hidden" id="totalPage" value="0"/>
+                        <span class="layui-laypage-limits">
+                            <select id="pageSize" lay-ignore="" onchange="searchClientList()">
+                                <option value="15" selected="selected">15 条/页</option>
+                                <option value="30">30 条/页</option>
+                                <option value="50">50 条/页</option>
+                            </select>
+                        </span>
+                        <span class="layui-laypage-skip">
+                            到第<input type="text" id="userPageNum" min="1" value="1" class="layui-input"/>页
+                        </span>
+                        <span class="layui-laypage-skip">
+                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!--page end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--子账号  提示层-->
+<div id="child-account" class="modal">
+    <!--form-->
+    <div class="layui-layer-title" id="child-account-title">子账号列表</div>
+    <div class="mb30">
+        <!--<form class="layui-form" action="">-->
+        <div class="m30">
+            <div class="tc fz-14" id="thisCorpName"></div>
+            <div class="col2 mt20" id="sameTotal"></div>
+            <!--table-->
+            <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                <thead>
+                <tr>
+                    <th>账号</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="child-account-body">
+                <tr>
+                    <td>sdfds</td>
+                    <td>dfdfd</td>
+                    <td>5454154</td>
+                    <td>
+                        <span class="mr30">
+                            <a href="/client/edit.html?clientId=#{id}" class="edit">重置密码</a>
+                        </span>
+                        <a href="/client/edit.html?clientId=#{id}" class="edit">查看消费</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--table end-->
+        </div>
+        <div class="layui-form-item tc">
+            <button class="layui-btn" lay-submit="" onclick="submit()" lay-filter="demo1">关闭</button>
+        </div>
+        <!--</form>-->
+    </div>
+    <!--form end-->
+</div>
+
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/logout.js}"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script>
+    var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
+    var childTr =
+        '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td><td><span class="mr30"><a href="javascript:resetChildPwd(\'#{id}\')" class="edit">重置密码</a></span><a href="/client/edit.html?clientId=#{id}" class="edit">查看消费</a></td></tr>';
+    $(function() {
+        getClientList(null, null, null, null, null, null, 1, $("#pageSize").val());
+    });
+
+    function resetChildPwd(id) {
+        $.ajax({
+            type: "post",
+            url: "/client/user/resetPwd",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({"id": id}),
+            success: function(data) {
+                if(data.errCode === '000000') {
+                    layer.msg("操作成功");
+                }
+                else {
+                    layer.msg("操作失败");
+                }
+            }
+        });
+    }
+
+    function showChild(id) {
+        $.get(
+            "/client/subAccount/list",
+            {"id": id},
+            function(data) {
+                $("#child-account-body").empty();
+                for(var d in data) {
+                    var tr = childTr.replace(/#{id}/g, data[d].id).replace(/#{username}/g, data[d].username)
+                    .replace(/#{name}/g, data[d].name).replace(/#{phone}/g, data[d].phone);
+                    $("#child-account-body").append(tr);
+                }
+                layer.open({
+                    title: false,
+                    type: 1,
+                    content: $('#child-account'),
+                    area: ['700px'],
+                    shadeClose: true
+                });
+            }
+        );
+    }
+
+    function batchChangeStatus(enabled) {
+        var objs = $(".obj-checkbox");
+        var clientIds = [];
+        for(var o in objs) {
+            if(objs[o].checked) {
+                clientIds.push($(objs[o]).attr("data-id"));
+            }
+        }
+        var enabledVal = $("#accountEnabled" + clientIds[0]).text();
+        layer.confirm('是否确定批量' + enabledVal + '？', {
+            btn: ['确定', '取消'],
+            yes: function() {
+                $(this).click();
+                $.ajax({
+                    type: "POST",
+                    url: "/client/changeStatus",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({"id": clientIds, "enabled": enabled}),
+                    success: function(data) {
+                        if(data.errCode === '000000') {
+                            goPage($("#pageNum").val());
+                        }
+                        else {
+                            alert(data.errMsg);
+                        }
+                    }
+                });
+                layer.closeAll();
+            },
+            no: function() {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function batchDeleted() {
+        var objs = $(".obj-checkbox");
+        var clientIds = [];
+        for(var o in objs) {
+            if(objs[o].checked) {
+                clientIds.push($(objs[o]).attr("data-id"));
+            }
+        }
+        layer.confirm('是否确定批量删除？', {
+            btn: ['确定', '取消'],
+            yes: function() {
+                $(this).click();
+                $.ajax({
+                    type: "POST",
+                    url: "/client/deletion",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({"id": clientIds}),
+                    success: function(data) {
+                        if(data.errCode === '000000') {
+                            goPage($("#pageNum").val());
+                            // $("#allChoose").removeAttr("checked");
+                        }
+                        else {
+                            alert(data.errMsg);
+                        }
+                    }
+                });
+                layer.closeAll();
+            },
+            no: function() {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function batchResetPwd() {
+        var objs = $(".obj-checkbox");
+        var clientIds = [];
+        for(var o in objs) {
+            if(objs[o].checked) {
+                clientIds.push($(objs[o]).attr("data-id"));
+            }
+        }
+        layer.confirm('是否确定批量重置密码？', {
+            btn: ['确定', '取消'],
+            yes: function() {
+                $(this).click();
+                $.ajax({
+                    type: "POST",
+                    url: "/client/resetPwd",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({"id": clientIds}),
+                    success: function(data) {
+                        if(data.errCode === '000000') {
+                            alert("操作成功");
+                        }
+                        else {
+                            alert(data.errMsg);
+                        }
+                    }
+                });
+                layer.closeAll();
+            },
+            no: function() {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function changeStatus(id) {
+        var enabledVal = $("#accountEnabled" + id).text();
+        layer.confirm('是否确定' + enabledVal + '？', {
+            btn: ['确定', '取消'],
+            yes: function() {
+                $(this).click();
+                $.ajax({
+                    type: "POST",
+                    url: "/client/changeStatus",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({"id": [id]}),
+                    success: function(data) {
+                        if(data.errCode === '000000') {
+                            var obj = data.dataMap;
+                            if(obj.accountEnabled === 1) {
+                                $("#accountEnabled" + id).text("冻结账户");
+                            }
+                            else {
+                                $("#accountEnabled" + id).text("解冻账户");
+                            }
+                        }
+                    }
+                });
+                layer.closeAll();
+            },
+            no: function() {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function dropClient(id) {
+        layer.confirm('是否确定删除账户？', {
+            btn: ['确定', '取消'],
+            yes: function() {
+                $(this).click();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/client/deletion",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({"id": [id]}),
+                    success: function(data) {
+                        if(data.errCode === '000000') {
+                            searchClientList();
+                        }
+                        else {
+                            layer.msg("操作失败！");
+                        }
+                    }
+                });
+                layer.closeAll();
+            },
+            no: function() {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function getSubIndustry() {
+        var parentId = $("#parentIndustryId").val();
+        if(parentId !== "") {
+            $.get(
+                "/system/industry/childList",
+                {"industryId": parentId},
+                function(data) {
+                    $("#industryId").empty();
+                    $("#industryId").append('<option value="">全部</option>');
+                    for(var d in data) {
+                        $("#industryId").append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
+                    }
+                }
+            )
+        }
+        else {
+            $("#industryId").empty();
+            $("#industryId").append('<option value="">全部</option>');
+        }
+    }
+
+    function gotoPrev() {
+        var pageNum = $("#pageNum").val();
+        if(pageNum > 1) {
+            var enabledVal = $("#enabled").val();
+            var usernameVal = $("#username").val();
+            var corpNameVal = $("#corpName").val();
+            var shortNameVal = $("#shortName").val();
+            var parentIndustryId = $("#parentIndustryId").val();
+            var industryIdVal = $("#industryId").val();
+            var pageNumVal = pageNum - 1;
+            var pageSizeVal = $("#pageSize").val();
+            getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal,
+                pageNumVal, pageSizeVal);
+        }
+    }
+
+    function gotoNext() {
+        var pageNum = $("#pageNum").val();
+        var totalPage = $("#totalPage").val();
+        if(pageNum !== totalPage) {
+            var enabledVal = $("#enabled").val();
+            var usernameVal = $("#username").val();
+            var corpNameVal = $("#corpName").val();
+            var shortNameVal = $("#shortName").val();
+            var parentIndustryId = $("#parentIndustryId").val();
+            var industryIdVal = $("#industryId").val();
+            var pageNumVal = parseInt(pageNum) + 1;
+            var pageSizeVal = $("#pageSize").val();
+            getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal,
+                pageNumVal, pageSizeVal);
+        }
+    }
+
+    function searchClientList() {
+        var enabledVal = $("#enabled").val();
+        var usernameVal = $("#username").val();
+        var corpNameVal = $("#corpName").val();
+        var shortNameVal = $("#shortName").val();
+        var parentIndustryId = $("#parentIndustryId").val();
+        var industryIdVal = $("#industryId").val();
+        var pageNumVal = 1;
+        var pageSizeVal = $("#pageSize").val();
+        getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal, pageNumVal,
+            pageSizeVal);
+    }
+
+    function goPage(pageNum) {
+        var enabledVal = $("#enabled").val();
+        var usernameVal = $("#username").val();
+        var corpNameVal = $("#corpName").val();
+        var shortNameVal = $("#shortName").val();
+        var parentIndustryId = $("#parentIndustryId").val();
+        var industryIdVal = $("#industryId").val();
+        var pageNumVal = pageNum;
+        var pageSizeVal = $("#pageSize").val();
+        getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal, pageNumVal,
+            pageSizeVal);
+    }
+
+    function gotoPage() {
+        var enabledVal = $("#enabled").val();
+        var usernameVal = $("#username").val();
+        var corpNameVal = $("#corpName").val();
+        var shortNameVal = $("#shortName").val();
+        var parentIndustryId = $("#parentIndustryId").val();
+        var industryIdVal = $("#industryId").val();
+        var pageNumVal = $("#userPageNum").val();
+        var pageSizeVal = $("#pageSize").val();
+        getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal, pageNumVal,
+            pageSizeVal);
+    }
+
+    // <![CDATA[
+    var tr1
+        =
+        '<tr><td><div class="layui-form"><input class="obj-checkbox" type="checkbox" name="checked" lay-skin="primary" lay-filter="choose" data-id="#{id}"/><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>' +
+        '<td>#{id}</td>' +
+        '<td>#{username}</td>' +
+        '<td>#{corpName}</td>' +
+        '<td>#{shortName}</td>' +
+        '<td>#{industry}</td>' +
+        '<td>#{contact}</td>' +
+        '<td>#{phone}</td>' +
+        '<td>#{managerName}</td>';
+    var tr21 = '<td><span class="cp col3" onclick="showChild(\'#{id}\')">#{accountQty}</span></td>';
+    var tr22 = '<td>0</td>';
+    var tr3 = '<td>#{registerDate}</td>' +
+        '<td><span class="mr30">' +
+        '<a href="/client/edit.html?clientId=#{id}" class="edit">编辑</a></span>' +
+        '<span class="mr30"><a href="/client/detail.html?clientId=#{id}" class="edit">查看</a></span>' +
+        '<span class="mr30"><a id="accountEnabled#{id}" href="#" class="edit" onclick="changeStatus(\'#{id}\')">#{accountEnabled}</a></span>' +
+        '<a href="#" class="del" onclick="dropClient(\'#{id}\')">删除</a>' +
+        '</td></tr>';
+
+    function getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, parentIndustryId, industryIdVal,
+                           pageNumVal, pageSizeVal) {
+        $("#pageNum").val(pageNumVal);
+        $.get(
+            "/client/list",
+            {
+                enabled: enabledVal,
+                username: usernameVal,
+                corpName: corpNameVal,
+                shortName: shortNameVal,
+                industryId: industryIdVal,
+                parentIndustryId: parentIndustryId,
+                pageNum: pageNumVal,
+                pageSize: pageSizeVal
+            },
+            function(data) {
+                var list = data.list;
+                $("#dataBody").empty();
+                for(var d in list) {
+                    var dataTr = tr1.replace(/#{id}/g, list[d].id).replace("#{username}", list[d].username)
+                    .replace("#{corpName}", list[d].corpName).replace("#{shortName}", list[d].shortName)
+                    .replace("#{industry}", list[d].industry).replace("#{contact}", list[d].name)
+                    .replace("#{phone}", list[d].phone).replace("#{managerName}", list[d].managerName);
+                    if(list[d].accountQty > 0) {
+                        dataTr = dataTr + tr21.replace(/#{id}/g, list[d].id).replace("#{accountQty}", list[d].accountQty);
+                    }
+                    else {
+                        dataTr = dataTr + tr22;
+                    }
+                    dataTr = dataTr + tr3.replace(/#{id}/g, list[d].id).replace("#{registerDate}", list[d].registerDate)
+                    .replace("#{accountEnabled}", list[d].accountEnabled === 1 ? "冻结账户" : "解冻账户");
+                    $("#dataBody").append(dataTr);
+                }
+                $("#total").text("共 " + data.total + " 条");
+                $("#pages").text("共 " + data.pages + " 页");
+                $("#totalPage").val(data.pages);
+                $("#currentPage").text(data.pageNum);
+                if(data.pageNum === 1) {
+                    $("#prevPage").addClass("layui-disabled");
+                }
+                else {
+                    $("#prevPage").removeClass("layui-disabled");
+                }
+                if(data.pageNum === data.pages) {
+                    $("#nextPage").addClass("layui-disabled");
+                }
+                else {
+                    $("#nextPage").removeClass("layui-disabled");
+                }
+                refreshPageInfo($("#frontPages"), $("#nextPages"), data.pageNum, data.pages);
+            }
+        );
+    }
+
+    function refreshPageInfo(front, next, pageNum, totalPage) {
+        front.empty();
+        next.empty();
+        if(pageNum > 1) {
+            front.append(pageLink.replace(/#{pageNum}/g, 1));
+        }
+        if(pageNum === 3) {
+            front.append(pageLink.replace(/#{pageNum}/g, 2));
+        }
+        else if(pageNum > 3) {
+            front.append("...");
+            front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
+        }
+        if(totalPage === pageNum + 2) {
+            next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
+        }
+        else if(totalPage > pageNum + 2) {
+            next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
+            next.append("...");
+        }
+        if(pageNum < totalPage) {
+            next.append(pageLink.replace(/#{pageNum}/g, totalPage));
+        }
+    }
+
+    // ]]>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        $('#chridAccount').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#chrid-account'),
+                area: ['700px'],
+                shadeClose: true
+            });
+        });
+    });
+    layui.use(['form', 'layer', 'jquery', 'laypage'], function() {
+        var form = layui.form,
+            layer = parent.layer === undefined ? layui.layer : parent.layer,
+            laypage = layui.laypage,
+            $ = layui.jquery;
+        //全选
+        form.on('checkbox(allChoose)', function(data) {
+            console.log(13213213123);
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
+            child.each(function(index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //通过判断文章是否全部选中来确定全选按钮是否选中
+        form.on("checkbox(choose)", function(data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
+            var childChecked = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"]):checked')
+            if(childChecked.length === child.length) {
+                $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = true;
+            }
+            else {
+                $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = false;
+            }
+            form.render('checkbox');
+        })
+    });
+</script>
+</body>
+</html>

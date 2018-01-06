@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movek.mis.domain.mapper.ClientUserMapper">
+    <resultMap id="BaseResultMap" type="ClientUser">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="primary" property="primary" jdbcType="TINYINT" />
+        <result column="enabled" property="enabled" jdbcType="TINYINT" />
+        <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    </resultMap>
+
+    <insert id="add" parameterType="ClientUser">
+        insert into `client_user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="phone != null">`phone`,</if>
+            <if test="email != null">`email`,</if>
+            <if test="username != null">`username`,</if>
+            <if test="password != null">`password`,</if>
+            <if test="primary != null">`primary`,</if>
+            <if test="enabled != null">`enabled`,</if>
+            <if test="deleted != null">`deleted`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="primary != null">#{primary},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="deleted != null">#{deleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="ClientUser">
+        update `client_user`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `client_id`   = #{clientId},
+            `name`        = #{name},
+            `phone`       = #{phone},
+            `email`       = #{email},
+            `username`    = #{username},
+            `password`    = #{password},
+            `primary`     = #{primary},
+            `enabled`     = #{enabled},
+            `deleted`     = #{deleted}
+        where `id` = #{id}
+    </update>
+
+    <update id="updateSkipNull" parameterType="ClientUser">
+        update `client_user`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="primary != null">`primary` = #{primary},</if>
+            <if test="enabled != null">`enabled` = #{enabled},</if>
+            <if test="deleted != null">`deleted` = #{deleted},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `primary`, `enabled`, `deleted`
+        from client_user
+    </select>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `primary`, `enabled`, `deleted`
+        from client_user
+        where `id` = #{id}
+    </select>
+
+    <select id="findByUsername" parameterType="String" resultMap="BaseResultMap">
+        select `id`
+        from client_user
+        where `username` = #{username}
+    </select>
+
+    <select id="findMasterUser" parameterType="Long" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `primary`, `enabled`, `deleted`
+        from `client_user`
+        where `client_id` = #{clientId} and `primary` = 1
+    </select>
+
+    <select id="getListByClientAndStatus" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `primary`, `enabled`, `deleted`
+        from `client_user`
+            where `deleted` = 0
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        <if test="enabled != null">and `enabled` = #{enabled}</if>
+    </select>
+
+    <update id="resetMasterPasswordByClient">
+        update `client_user`
+        set `password` = #{password},
+            `update_time` = #{date}
+        where `primary` = 1
+          and `client_id` in
+        <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

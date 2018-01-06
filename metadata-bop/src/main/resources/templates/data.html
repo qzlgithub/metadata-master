@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<!--left-->
+<div th:fragment="left">
+    <div class="layui-side-scroll">
+        <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
+            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'41000')}">
+                <a class="" href="javascript:;"><i class="icon icon1" aria-hidden="true"></i><em>运营数据管理</em></a>
+                <dl class="layui-nav-child">
+                    <dd th:class="${i_module eq 'stats_index'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'41000')}">
+                        <a th:href="@{/stats/index.html}">
+                            <i class="layui-icon">&#xe602;</i><span>运营数据汇总</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'stats_customer'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'41100')}">
+                        <a th:href="@{/stats/customer.html}">
+                            <i class="layui-icon">&#xe602;</i><span>客户数据</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'stats_recharge'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'41200')}">
+                        <a th:href="@{/stats/recharge.html}">
+                            <i class="layui-icon">&#xe602;</i><span>充值数据</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'stats_revenue'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'41300')}">
+                        <a th:href="@{/stats/revenue.html}">
+                            <i class="layui-icon">&#xe602;</i><span>营收数据</span></a>
+                    </dd>
+                    <dd th:class="${i_module eq 'stats_request'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'41400')}">
+                        <a th:href="@{/stats/request.html}">
+                            <i class="layui-icon">&#xe602;</i><span>产品请求数据</span></a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

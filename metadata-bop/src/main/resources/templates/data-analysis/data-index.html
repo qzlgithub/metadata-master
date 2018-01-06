@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <!--<script src="../../static/js/jquery-1.11.1.min.js"></script>-->
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="data::left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
+            <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
+            <a><cite>运营数据统计</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--运营汇总-->
+            <dl class="public-data">
+                <dt class="mt0 important">运营数据汇总</dt>
+                <dd>
+                    <ul class="public-data-list layui-row">
+                        <li class="layui-col-md3">
+                            <span class="layui-col-md3 mt25"><img src="../../static/images/img1.png"/></span>
+                            <div class="layui-col-md9 fz-14">
+                                <p class="fz-16 mt10">新增客户</p>
+                                <p class="col4 mt10">近30天： 6381个 </p>
+                                <p class="mt10 col2">总客户： 872000 个</p>
+                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3 mr40 ml40">
+                            <span class="layui-col-md3 mt25"><img src="../../static/images/img2.png"/></span>
+                            <div class="layui-col-md9 fz-14">
+                                <p class="fz-16 mt10">客户充值</p>
+                                <p class="col4 mt10">近7天充值： 6381元 </p>
+                                <p class="mt10 col2">近30天充值： 872000 个</p>
+                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3">
+                            <span class="layui-col-md3 mt25"><img src="../../static/images/img3.png"/></span>
+                            <div class="layui-col-md9 fz-14">
+                                <p class="fz-16 mt10">平台收入</p>
+                                <p class="col4 mt10">今日收入： 6381元/8000次</p>
+                                <p class="mt10 col2">昨日收入： 6381元/8000次</p>
+                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                            </div>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <!--运营汇总 end-->
+            <!--产品查询-->
+            <dl class="public-data">
+                <dt>产品查询</dt>
+                <dd class="product-check m20 layui-row">
+                    <div class="layui-col-xs6 product-data-br">
+                        <table width="80%" class="lh50 tc margin-auto">
+                            <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th class="tc">今日</th>
+                                <th class="tc">昨日</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>查询次数</td>
+                                <td>100000次</td>
+                                <td>100000次</td>
+                            </tr>
+                            <tr>
+                                <td>失败次数</td>
+                                <td>100000次</td>
+                                <td>100000次</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <table width="60%" class="lh50 tc margin-auto">
+                            <thead>
+                            <tr>
+                                <th class="tc">本月</th>
+                                <th class="tc">累计</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>100000次</td>
+                                <td>100000次</td>
+                            </tr>
+                            <tr>
+                                <td>100000次</td>
+                                <td>100000次</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </dd>
+            </dl>
+            <!--产品查询 end-->
+            <!--产品分析-->
+            <dl class="public-data">
+                <dt>产品分析</dt>
+                <dd class="layui-row">
+                    <ul class="clearfix p10 product-fx-warp">
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">今天</span>
+                            <span>昨天</span>
+                            <span>近7天</span>
+                            <span>近30天</span>
+                        </li>
+                        <li class="position-r">统计时间：<em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="mt10"><label class="contrast-time"><input type="checkbox" name=""/></label>对比时间</li>
+                        <li class="position-r time-input timeinput">
+                            <em class="inline-block">
+                                <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/>
+                            </em>
+                            <i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li>
+                            <div class="product-tjnav">
+                                <h3 class="pl10 pr10 product-title">统计产品 <i class="layui-icon fr">&#xe61a;</i></h3>
+                                <div class="p10 product-tjlist">
+                                    <p class="pb10">最多选择5项</p>
+                                    <a href="#"><label><input type="checkbox" name=""/>建议</label></a>
+                                    <a href="#"><label><input type="checkbox" name=""/>链接</label></a>
+                                    <a href="#"><label><input type="checkbox" name=""/>联系</label></a>
+                                    <p class="add-button pt5 pb5 important mt10 tc nav-close cp">确定</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="product-fx mt10 clearfix">
+                            统计项
+                            <span class="active">收入</span>
+                            <span>成本</span>
+                            <span>请求次数</span>
+                        </li>
+                        <li class="mt10"><span class="add-button pt10 pb10 important mt10 cp">导出</span></li>
+                    </ul>
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <p class="tc mt20 mb40">
+                                <select class="select-list">
+                                    <option value="1">收入-产品占比</option>
+                                    <option value="2">收入-产品占比</option>
+                                </select>
+                            </p>
+                            <!--<p class="tc"><img src="../../static/images/data-img1.png"/></p>-->
+                            <!--产品分析统计图-->
+                            <div id="productAnalysis" style="height:300px;width: 600px"></div>
+                            <!-- ECharts单文件引入 -->
+
+                            <script type="text/javascript" th:src="@{/statisticalChart/productAnalysis.js}"></script>
+
+                            <!--统计图end-->
+
+                        </div>
+                        <div class="layui-col-md8 p30 tc">
+                            <!-- <p class="tc"><img src="../../static/images/data-img2.png"/></p>-->
+                            <!--产品统计柱状图-->
+                            <div id="productBar" style="height:400px;width: 700px"></div>
+                            <!-- ECharts单文件引入 -->
+                            <script type="text/javascript" th:src="@{/statisticalChart/productBar.js}"></script>
+                            <!--统计图end-->
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+            <!--产品分析 end-->
+            <!--收入统计-->
+            <dl class="public-data">
+                <dt>收入统计</dt>
+                <dd class="layui-row">
+                    <ul class="clearfix p10 product-fx-warp">
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">今天</span>
+                            <span>昨天</span>
+                            <span>近7天</span>
+                            <span>近30天</span>
+                        </li>
+                        <li class="position-r">统计时间：<em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
+                        </li>
+                        <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>对比时间</li>
+                        <li class="position-r timeinput time-input2"><em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
+                        </li>
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">按月</span>
+                            <span>按时</span>
+                            <span>按日</span>
+                            <span>按周</span>
+                        </li>
+                        <li class="mt10"><span class="add-button pt10 pb10 important mt10 cp">导出</span></li>
+                    </ul>
+                    <div class="layui-row w60 margin-auto mt20 fb fz-16">
+                        <span class="layui-col-md4 tc lh25">收入（元）<br/>1,6599,00</span>
+                        <span class="layui-col-md4 tc lh25">收益（元）<br/>1,6599,00</span>
+                        <span class="layui-col-md4 tc lh25">成本（元）<br/>1,6599,00</span>
+                    </div>
+                    <div class="product-tjnav pl40 mt10">
+                        <h3 class="pl10 pr10 product-title2">统计指标 <i class="layui-icon fr">&#xe61a;</i></h3>
+                        <div class="p10 product-tjlist2">
+                            <p class="pb10">最多选择2项</p>
+                            <a href="#"><label><input type="checkbox" name=""/>建议</label></a>
+                            <a href="#"><label><input type="checkbox" name=""/>链接</label></a>
+                            <a href="#"><label><input type="checkbox" name=""/>联系</label></a>
+                            <p class="add-button pt5 pb5 important mt10 tc nav-close2 cp">确定</p>
+                        </div>
+                    </div>
+                    <!--<div class="tc mt20 mb20"><img src="../../static/images/data-img3.png"/></div>-->
+                    <!--收入统计图-->
+                    <div id="incomeLine" class="tc mt20 mb20" style="height:270px;width: 850px;margin: 0 auto"></div>
+                    <!-- ECharts单文件引入 -->
+                    <script type="text/javascript" th:src="@{/statisticalChart/incomeLine.js}"></script>
+                    <!--统计图end-->
+                    <p class="tc pt20 pb20">217/10/1-2017/11/1 总收入:1,989,900元</p>
+                </dd>
+            </dl>
+            <!--收入统计 end-->
+            <!--充值统计-->
+            <dl class="public-data">
+                <dt>充值统计</dt>
+                <dd class="layui-row">
+                    <ul class="clearfix p10 product-fx-warp">
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">近7天</span>
+                            <span>近15天</span>
+                            <span>近30天</span>
+                            <span>近一年</span>
+                        </li>
+                        <li class="position-r">统计时间：<em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="mt10"><label class="contrast-time"><input type="checkbox" name=""/></label>对比时间</li>
+                        <li class="position-r time-input timeinput"><em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li>
+                            <div class="product-tjnav">
+                                <h3 class="pl10 pr10 product-title">统计产品 <i class="layui-icon fr">&#xe61a;</i></h3>
+                                <div class="p10 product-tjlist">
+                                    <p class="pb10">最多选择5项</p>
+                                    <a href="#"><label><input type="checkbox" name=""/>建议</label></a>
+                                    <a href="#"><label><input type="checkbox" name=""/>链接</label></a>
+                                    <a href="#"><label><input type="checkbox" name=""/>联系</label></a>
+                                    <p class="add-button pt5 pb5 important mt10 tc nav-close cp">确定</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">按时</span>
+                            <span>按日</span>
+                            <span>按周</span>
+                            <span>按月</span>
+                        </li>
+                        <li class="mt10"><span class="add-button pt10 pb10 important mt10 cp">导出</span></li>
+                    </ul>
+                    <div class="tc col4 pt20 pb20 fz-16">2017/10/1-2017/11/1总充值：20030 元</div>
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <!-- <p class="tc"><img src="../../static/images/data-img1.png"/></p>-->
+                            <!--充值统计图-->
+                            <div id="rechargePie" style="height:300px;width: 600px"></div>
+                            <!-- ECharts单文件引入 -->
+                            <script type="text/javascript" th:src="@{/statisticalChart/rechargePie.js}"></script>
+                            <!--充值统计图end-->
+                        </div>
+                        <div class="layui-col-md8 p30 tc">
+                            <!--<p class="tc"><img src="../../static/images/data-img4.png"/></p>-->
+                            <!--充值柱状图-->
+                            <div id="rechargeBar" style="height:400px;width: 700px"></div>
+                            <!-- ECharts单文件引入 -->
+                            <script type="text/javascript" th:src="@{/statisticalChart/rechargeBar.js}"></script>
+                            <!--充值柱状图end-->
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+            <!--充值统计 end-->
+            <!--客户数据统计-->
+            <dl class="public-data">
+                <dt>客户数据统计</dt>
+                <dd class="layui-row">
+                    <ul class="clearfix p10 product-fx-warp">
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">近30天</span>
+                            <span>本季度</span>
+                            <span>近一年</span>
+                        </li>
+                        <li class="position-r">统计时间：<em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>对比时间</li>
+                        <li class="position-r timeinput time-input2"><em class="inline-block">
+                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                        <li class="product-fx mt10 clearfix">
+                            <span class="active">按月</span>
+                            <span>按时</span>
+                            <span>按日</span>
+                            <span>按周</span>
+                        </li>
+                        <li class="mt10"><span class="add-button pt10 pb10 important mt10 cp">导出</span></li>
+                    </ul>
+                    <!--客户数据统计图-->
+                    <!--<div class="tc mt20 mb20"><img src="../../static/images/data-img3.png"/></div>-->
+                    <div id="customerLine" class="tc mt20 mb20" style="height:270px;width: 850px;margin: 0 auto"></div>
+                    <!-- ECharts单文件引入 -->
+                    <script type="text/javascript" th:src="@{/statisticalChart/customerLine.js}"></script>
+                    <!--客户数据统计图end-->
+
+                    <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
+                </dd>
+            </dl>
+            <!--客户数据统计 end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message', 'laydate'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        laydate = layui.laydate;
+        //主入口
+        //修改密码
+        $('#editpwd').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#editpwd-manage'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+    });
+    //统计产品 点击下拉
+    $(document).ready(function() {
+        $(".product-title").click(function() {
+            $(".product-tjlist").toggle();
+        });
+        $(".nav-close").click(function() {
+            $(".product-tjlist").hide();
+        })
+    });
+    $(document).ready(function() {
+        $(".product-title2").click(function() {
+            $(".product-tjlist2").toggle();
+        });
+        $(".nav-close2").click(function() {
+            $(".product-tjlist2").hide();
+        })
+    });
+    //对比时间
+    $(document).ready(function() {
+        $(".contrast-time").click(function() {
+            $(".time-input").toggle();
+        });
+    });
+    //对比时间
+    $(document).ready(function() {
+        $(".contrast-time2").click(function() {
+            $(".time-input2").toggle();
+        });
+    });
+</script>
+</body>
+
+</html>

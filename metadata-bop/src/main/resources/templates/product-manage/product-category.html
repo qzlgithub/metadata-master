@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="./../../build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="./../../css/style.css" media="all"/>
+    <link rel="stylesheet" href="./../../css/base.css" media="all"/>
+    <link rel="stylesheet" href="./../../css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="product::top"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--面包屑-->
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/product/index.html">产品管理<span class="layui-box">&gt;</span></a>
+            <a href="/product/index.html">产品管理<span class="layui-box">&gt;</span></a>
+            <a><cite>产品类别管理</cite></a>
+        </div>
+        <!--面包屑 end-->
+        <div class="p20">
+            <!--功能操作-->
+            <div class="clearfix mt20"><span id="productclass" class="fr add-button cp">产品类别添加</span></div>
+            <!--功能操作 end-->
+            <!--table-->
+            <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                <thead>
+                <tr>
+                    <th>类别编号</th>
+                    <th>产品类别名称</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody id="dataBody">
+                <!--<tr>
+                    <td>12312</td>
+                    <td>admin</td>
+                    <td>超级管理员</td>
+                    <td>
+                        <span class="mr30"><a href="#" class="edit">编辑</a></span>
+                        <a href="#" class="del">停用</a>
+                    </td>
+                </tr> TODO row-->
+
+                <!--    <tr th:each="row:${list}">
+                        <input type="hidden" th:value="${row.id}"/>
+                        <td th:text="${row.code}"></td>
+                        <td th:text="${row.name}">admin</td>
+                        <td th:text="${row.remark}">超级管理员</td>
+                        <td>
+                            <span class="mr30 edit cp editclass" th:id="'editclass'+${row.id}"
+                                  onclick="findProductCategeoryById(this);">
+                                编辑
+                            </span>
+                            <a th:text="${row.enabled==0?'停用':'启用'}" href="#" id="enabledId" onclick="updateStatus(this);"
+                               class="del"></a>
+                        </td>
+                    </tr>-->
+                </tbody>
+            </table>
+            <!--table end-->
+            <!--page-->
+            <div class="layui-table-tool mt20">
+                <div class="layui-inline layui-table-page" id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+
+                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled"
+                           data-page="0">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <span id="front"></span>
+                        <span class="layui-laypage-curr">
+                            <em class="layui-laypage-em"></em>
+                            <em id="currentPage"></em>
+                        </span>
+                        <span id="next"></span>
+                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next" data-page="2">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <span id="totalTxt" class="layui-laypage-count">共 1000 条</span>
+                        <span id="pagesTxt" class="layui-laypage-count">共 1000 页</span>
+                        <span class="layui-laypage-limits">
+                            <input type="hidden" id="pageNum" value="1"/>
+                            <input type="hidden" id="pages" value="1"/>
+                            <select id="pageSize" lay-ignore="" onchange="refreshPageSize()">
+                                <option value="15" selected="selected">15 条/页</option>
+                                <option value="30">30 条/页</option>
+                                <option value="50">50 条/页</option>
+                            </select>
+                        </span>
+                        <span class="layui-laypage-skip">
+                            到第<input type="text" id="customPageNum" min="1" value="1" class="layui-input"/>页
+                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button></span>
+
+                    </div>
+                </div>
+            </div>
+            <!--page end-->
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<!--提示层-->
+<div id="product-class" class="modal">
+    <!--//<form>-->
+    <div class="layui-layer-title">类别添加</div>
+    <div class="mb30">
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>类型编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="code" lay-verify="required" id="productCode" placeholder="请输入"
+                           autocomplete="off"
+                           class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>类型名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" id="productName" placeholder="请输入"
+                           autocomplete="off"
+                           class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明：</label>
+                <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入内容" id="productRemark"
+                                  class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="addProductCategory()">添加</button>
+            </div>
+        </div>
+    </div>
+    <!--</form>-->
+</div>
+<!--编辑 提示层-->
+<div id="edit-class" class="modal">
+    <!--//<form>-->
+    <div class="layui-layer-title">类别编辑</div>
+    <div class="mb30">
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>类型编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="code" value="" id="productCodeU" placeholder="请输入"
+                           autocomplete="off"
+                           class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>类型名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id="productNameU" placeholder="请输入"
+                           autocomplete="off"
+                           class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明：</label>
+                <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入内容" id="productRemarkU"
+                                  class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="editId"/>
+                <button class="layui-btn" onclick="updateProductCategory();">保存</button>
+            </div>
+        </div>
+    </div>
+    <!--</form>-->
+</div>
+
+
+<!--提示层 end-->
+
+<!--修改密码  提示层-->
+<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/product.category.js}"></script>
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        $('#productclass').on('click', function() {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#product-class'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        });
+        /* $('.editclass').on('click', function() {
+             layer.open({
+                 title: false,
+                 type: 1,
+                 content: $('#edit-class'),
+                 area: ['500px'],
+                 shadeClose: true
+             });
+         });*/
+    });
+    var $ = layui.jquery, form = layui.form();
+</script>
+
+</body>
+</html>

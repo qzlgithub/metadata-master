@@ -1,0 +1,6 @@
+server:
+  port: 8888
+
+dubbo:
+  registry:
+    address: 47.96.154.110:2181
