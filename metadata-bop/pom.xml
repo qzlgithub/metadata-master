@@ -18,8 +18,8 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.movek</groupId>
-            <artifactId>mingyao-common</artifactId>
+            <groupId>com.mingdong</groupId>
+            <artifactId>mingdong-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
