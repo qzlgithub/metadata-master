@@ -140,7 +140,6 @@ public class ClientController
     public ModelAndView gotoAccountRecharge(@RequestParam(value = Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("customer-manage/account-recharge");
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + id);
         view.addObject("clientId", id);
         view.addAllObjects(RequestThread.getMap());
         return view;
@@ -154,7 +153,6 @@ public class ClientController
     public ModelAndView gotoAccountConsumption(@RequestParam(value = Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("customer-manage/account-consume");
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" + id);
         view.addObject("clientId", id);
         view.addAllObjects(RequestThread.getMap());
         return view;
@@ -215,11 +213,9 @@ public class ClientController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         // TODO FIX...
-        System.out.println(productId + "......." + clientId + "......." + time);
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
         BLResp resp = tradeService.testList2(productId, clientId, time, page);
-        System.out.println(resp);
         return resp.getDataMap();
 
     }
@@ -236,11 +232,9 @@ public class ClientController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        System.out.println(clientId + "......." + time);
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
         BLResp resp = tradeService.testList3(clientId, time, page);
-        System.out.println(resp);
         return resp.getDataMap();
     }
 
@@ -256,11 +250,9 @@ public class ClientController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        System.out.println(clientId + "......." + time);
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
         BLResp resp = tradeService.testList4(clientId, time, page);
-        System.out.println(resp);
         return resp.getDataMap();
     }
 

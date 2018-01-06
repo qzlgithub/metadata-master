@@ -33,37 +33,38 @@
             <!--<form class="layui-form" action="">-->
             <div class="w60 m30">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品类别：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品类别：</label>
                     <div class="layui-input-block w40">
-                        <select name="modules" id="selectId" lay-verify="required" class="select-list"
-                        >
-                            <option value="-1">请选择</option>
-                            <!--<option th:value="${typeId}" th:text="${typeName}">分控产品</option>-->
+                        <select name="modules" id="selectId" lay-verify="required" class="select-list">
+
                         </select>
                     </div>
                     <input type="hidden" id="productId" th:value="${id}"/>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品编号：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品编号：</label>
                     <div class="layui-input-block w40">
                         <input type="text" id="codeId" onblur="checkProdNo();" name="code" placeholder="请输入"
                                autocomplete="off" class="layui-input"/>
+                        <i class="col3 pl10" id="prodNoTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品名称：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="nameId" placeholder="请输入" name="name" autocomplete="off"
+                        <input type="text" id="nameId" onblur="checkProdName();" placeholder="请输入" name="name" autocomplete="off"
                                class="layui-input"/>
+                        <i class="col3 pl10" id="prodNameTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">成本价格：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>成本价格：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="costAmtId" name="costAmt"
+                        <input type="text" onblur="checkCostAmt();" id="costAmtId" name="costAmt"
                                lay-verify="required"
                                placeholder="请输入"
                                autocomplete="off" class="layui-input" style="width: 80%; display: inline-block;"/>
+                        <i class="col3 pl10" id="costAmtTip" style="display: none"></i>
                         <i class="col3">元</i>
                     </div>
                 </div>
@@ -115,7 +116,6 @@
                             <div class="layui-layedit-iframe">
                                 <iframe id="LAY_layedit_1" name="LAY_layedit_1" textarea="LAY_demo_editor"
                                         frameborder="0" style="height: 280px;">
-
                                 </iframe>
                             </div>
                         </div>
@@ -138,7 +138,6 @@
             <!--form end-->
         </div>
     </div>
-
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
