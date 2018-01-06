@@ -161,7 +161,6 @@ public class ProductController
         Page page = new Page(pageNum, pageSize);
         // TODO FIX...
         BLResp resp = productService.getProductInfoList(page);
-        System.out.println(resp.getDataMap());
         return resp.getDataMap();
     }
 
@@ -170,7 +169,6 @@ public class ProductController
     {
 
         BLResp resp = BLResp.build();
-        System.out.println(productInfo.getTypeId() + "--------" + productInfo.getTypeName());
         Long typeId = productInfo.getTypeId();
         String code = productInfo.getCode();
         String name = productInfo.getName();
@@ -186,7 +184,6 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        System.out.println(typeId + "|||||" + code + "" + name);
         resp = productService.addProduct(typeId, code, name, costAmt, enabled, content, remark);
         return resp;
     }
@@ -195,7 +192,6 @@ public class ProductController
     @ResponseBody
     public BLResp editClient(@RequestBody ProductInfo productInfo)
     {
-        System.out.println(productInfo.getTypeId() + "|" + productInfo.getEnabled() + "|" + productInfo.getId());
         BLResp resp = BLResp.build();
         if(productInfo.getId() == null || productInfo.getTypeId() == null || productInfo.getEnabled() == null)
         {
