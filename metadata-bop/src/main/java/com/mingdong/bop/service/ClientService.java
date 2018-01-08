@@ -52,4 +52,6 @@ public interface ClientService
 
     void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
             BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp);
+
+    void getClientOperateLog(Long clientId, Page page, BLResp resp);
 }

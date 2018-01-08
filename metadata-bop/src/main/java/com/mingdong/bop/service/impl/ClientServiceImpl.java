@@ -11,6 +11,7 @@ import com.mingdong.bop.constant.Trade;
 import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientAccount;
 import com.mingdong.bop.domain.entity.ClientInfo;
+import com.mingdong.bop.domain.entity.ClientOperateInfo;
 import com.mingdong.bop.domain.entity.ClientProduct;
 import com.mingdong.bop.domain.entity.ClientUser;
 import com.mingdong.bop.domain.entity.DictIndustry;
@@ -20,6 +21,8 @@ import com.mingdong.bop.domain.entity.ProductRecharge;
 import com.mingdong.bop.domain.mapper.ClientAccountMapper;
 import com.mingdong.bop.domain.mapper.ClientInfoMapper;
 import com.mingdong.bop.domain.mapper.ClientMapper;
+import com.mingdong.bop.domain.mapper.ClientOperateInfoMapper;
+import com.mingdong.bop.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.bop.domain.mapper.ClientProductMapper;
 import com.mingdong.bop.domain.mapper.ClientUserMapper;
 import com.mingdong.bop.domain.mapper.DictIndustryMapper;
@@ -77,6 +80,10 @@ public class ClientServiceImpl implements ClientService
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
+    @Resource
+    private ClientOperateLogMapper clientOperateLogMapper;
+    @Resource
+    private ClientOperateInfoMapper clientOperateInfoMapper;
 
     @Override
     public void checkIfUsernameExist(String username, BLResp resp)
@@ -691,5 +698,36 @@ public class ClientServiceImpl implements ClientService
         cpUpd.setBalance(amount.add(cp.getBalance()));
         cpUpd.setLatestRechargeId(productRechargeId);
         clientProductMapper.updateSkipNull(cpUpd);
+    }
+
+    @Override
+    public void getClientOperateLog(Long clientId, Page page, BLResp resp)
+    {
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            resp.result(RestResult.OBJECT_NOT_FOUND);
+            return;
+        }
+        int total = clientOperateLogMapper.countByClientUser(client.getPrimaryUserId());
+        int pages = page.getTotalPage(total);
+        resp.addData(Field.TOTAL, total).addData(Field.PAGES, pages).addData(Field.PAGE_NUM, page.getPageNum()).addData(
+                Field.PAGE_SIZE, page.getPageSize());
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientOperateInfo> dataList = clientOperateInfoMapper.getListByClientUser(client.getPrimaryUserId());
+            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
+            for(ClientOperateInfo info : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.OPERATE_TIME, DateUtils.format(info.getOperateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TYPE, info.getType());
+                map.put(Field.MANAGER_NAME, info.getManagerName());
+                map.put(Field.REASON, info.getReason());
+                list.add(map);
+            }
+            resp.addData(Field.LIST, list);
+        }
     }
 }

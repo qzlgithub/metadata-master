@@ -2,7 +2,6 @@ package com.mingdong.bop.constant;
 
 public interface Field
 {
-    String TOKEN = "token";
     String ID = "id";
     String CODE = "code";
     String NAME = "name";
@@ -21,28 +20,21 @@ public interface Field
     String PHONE = "phone";
     String REGISTER_DATE = "registerDate";
     String PRIVILEGE = "privilege";
-
     String AMOUNT = "amount";
     String TRADE_NO = "tradeNo";
     String BALANCE = "balance";
-    String USER_ID = "userId";
-    String CREATE_AT = "createAt";
     String SHORT_NAME = "shortName";
     String PRODUCT_NAME = "productName";
     String CONTRACT_NO = "contractNo";
-    String SUC = "suc";
     String UNIT_AMT = "unitAmt";
     String INDUSTRY_ID = "industryId";
-    String CONTACT = "contact";
     String MANAGER_NAME = "managerName";
     String ACCOUNT_QTY = "accountQty";
     String CORP_NAME = "corpName";
-    String USER_NAME = "userName";
     String RECHARGE_TYPE = "rechargeType";
     String BILL_PLAN = "billPlan";
     String LICENSE = "license";
     String EMAIL = "email";
-
     String TYPE_NAME = "typeName";
     String SUB_LIST = "subList";
     String SUB_MODULE = "subModule";
@@ -60,7 +52,6 @@ public interface Field
     String INDUSTRY = "industry";
     String ROLE_ID = "roleId";
     String ROLE_LIST = "roleList";
-    String CLIENT_ENABLED = "clientEnabled";
     String ACCOUNT_ENABLED = "accountEnabled";
     String INDUSTRY_LIST = "industryList";
     String PARENT_INDUSTRY_ID = "parentIndustryId";
@@ -74,14 +65,12 @@ public interface Field
     String USER_ENABLED = "userEnabled";
     String USER_LIST = "userList";
     String PARENT_INDUSTRY = "parentIndustry";
-    String RECHARGE_ID = "rechargeId";
     String RECHARGE_TYPE_ID = "rechargeTypeId";
     String OLD_PWD = "oldPwd";
     String NEW_PWD = "newPwd";
     String EXIST = "exist";
     String PRODUCT_TYPE_DICT = "productTypeDict";
     String THR_LIST = "thrList";
-    String ACCESS_KEY = "accessKey";
     String CLIENT_PRODUCT_ID = "clientProductId";
     String OPENED = "opened";
     String TO_OPEN = "toOpen";
@@ -97,4 +86,6 @@ public interface Field
     String START_TIME = "startTime";
     String END_TIME = "endTime";
     String QQ = "qq";
+    String OPERATE_TIME = "operateTime";
+    String REASON = "reason";
 }

@@ -57,4 +57,10 @@
         </set>
         where `id` = #{id}
     </update>
+
+    <select id="countByClientUser" parameterType="Long" resultType="int">
+        select count(*)
+        from `client_operate_log`
+        where `client_user_id` = #{clientUserId}
+    </select>
 </mapper>

@@ -456,4 +456,15 @@ public class ClientController
         clientService.getProductRenewInfo(clientProductId, resp);
         return resp.getDataMap();
     }
+
+    @GetMapping(value = "operateLog")
+    @ResponseBody
+    public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
+            @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
+    {
+        BLResp resp = BLResp.build();
+        clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
+        return resp;
+    }
 }

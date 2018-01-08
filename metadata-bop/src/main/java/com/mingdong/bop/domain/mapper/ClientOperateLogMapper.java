@@ -9,4 +9,6 @@ public interface ClientOperateLogMapper
     void updateById(ClientOperateLog obj);
 
     void updateSkipNull(ClientOperateLog obj);
+
+    int countByClientUser(Long clientUserId);
 }
