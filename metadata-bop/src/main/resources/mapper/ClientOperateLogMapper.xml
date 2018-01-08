@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.bop.domain.mapper.ClientOperateLogMapper">
+    <resultMap id="BaseResultMap" type="ClientOperateLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="client_user_id" property="clientUserId" jdbcType="BIGINT" />
+        <result column="manager_id" property="managerId" jdbcType="BIGINT" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_user_id`, `manager_id`, `reason`
+        from `client_operate_log`
+    </sql>
+
+    <insert id="add" parameterType="ClientOperateLog">
+        insert into `client`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="clientUserId != null">`client_user_id`,</if>
+            <if test="managerId != null">`manager_id`,</if>
+            <if test="reason != null">`reason`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="clientUserId != null">#{clientUserId},</if>
+            <if test="managerId != null">#{managerId},</if>
+            <if test="reason != null">#{reason},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="ClientOperateLog">
+        update `client_operate_log`
+        set `create_time`    = #{createTime},
+            `update_time`    = #{updateTime},
+            `client_user_id` = #{clientUserId},
+            `manager_id`     = #{managerId},
+            `reason`         = #{reason}
+        where `id` = #{id}
+    </update>
+
+    <update id="updateSkipNull" parameterType="ClientOperateLog">
+        update `client_operate_log`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="clientUserId != null">`client_user_id` = #{clientUserId},</if>
+            <if test="managerId != null">`manager_id` = #{managerId},</if>
+            <if test="reason != null">`reason` = #{reason},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+</mapper>

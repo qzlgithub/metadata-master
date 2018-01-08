@@ -42,20 +42,6 @@ public class ManagerController
         return view;
     }
 
-    /*@RequestMapping(value = "role/management")
-    public ModelAndView gotoManagerRoleManagement()
-    {
-        ModelAndView view = new ModelAndView("system-manage/group-manage");
-        return view;
-    }
-
-    @RequestMapping(value = "role/addition")
-    public ModelAndView gotoManagerRoleAddition()
-    {
-        ModelAndView view = new ModelAndView("system-manage/group-add");
-        return view;
-    }*/
-
     @RequestMapping(value = "addition.html")
     public ModelAndView gotoManagerAdditionPage()
     {
