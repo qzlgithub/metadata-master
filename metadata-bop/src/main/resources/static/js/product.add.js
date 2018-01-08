@@ -59,15 +59,21 @@ function checkProdName() {
 }
 
 function checkCostAmt() {
-    var reg=new RegExp("/^(([1-9][0-9]*)|(([0]\\.\\d{1,2}|[1-9][0-9]*\\.\\d{1,2})))$/");
-    var price=$("#costAmtId").val();
-    if(!reg.test(price)) {
-        $("#costAmtTip").text("价格不正确");
-        $("#costAmtTip").show();
+    var unitPrice = $("#costAmtId").val();
+    var reg1 = new RegExp("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$"); // 匹配任意浮点型数据
+    var reg2 = new RegExp("^[1-9]\\d*$"); // 匹配任意正整数
+    if(unitPrice !== "") {
+        if(reg1.test(unitPrice) || reg2.test(unitPrice)) {
+            $("#costAmtTip").text("");
+            $("#costAmtTip").hide();
+        }
+        else {
+            $("#costAmtTip").text("单价格式错误！");
+            $("#costAmtTip").show();
+        }
     }
     else {
-        $("#costAmtTip").text("");
-        $("#costAmtTip").hide();
+        $("#costAmtTip").text("请填写单价！");
+        $("#costAmtTip").show();
     }
-
 }

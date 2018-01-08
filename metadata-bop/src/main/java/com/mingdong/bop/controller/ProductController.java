@@ -122,7 +122,6 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        System.out.println(id + "|" + enabled);
         productService.updateProdStatus(id, enabled, resp);
         return resp;
     }
@@ -159,7 +158,6 @@ public class ProductController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         Page page = new Page(pageNum, pageSize);
-        // TODO FIX...
         BLResp resp = productService.getProductInfoList(page);
         return resp.getDataMap();
     }
