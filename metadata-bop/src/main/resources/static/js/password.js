@@ -17,32 +17,7 @@ $("#savePwd").click(function() {
         return;
     }
     if(newPwd !== repPwd) {
-        //layer.msg("新密码不一致");
-        layer.msg('大部分参数都是可以公用的<br/>合理搭配，展示不一样的风格', {
-            btn: ['明白了', '知道了'],
-            yes: function(){
-                $(that).click();
-            },
-            btn2: function(){
-                layer.closeAll();
-            }
-        });
-        layer.open({
-            type: 2, //此处以iframe举例
-            title: '提示',
-            area: ['290px', '160px'],
-            shade: 0,
-            maxmin: true,
-            layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
-                btn: ['明白了', '知道了'],
-                yes: function(){
-                    $(that).click();
-                },
-                btn2: function(){
-                    layer.closeAll();
-                }
-            });
-        });
+        layer.msg("新密码不一致");
         return;
     }
     $.ajax({
@@ -60,7 +35,6 @@ $("#savePwd").click(function() {
             }
             else {
                 layer.closeAll();
-                //layer.msg("密码修改成功！");
                 layer.msg('密码修改成功', {
                     time: 1000, //1s后自动关闭
                 });
