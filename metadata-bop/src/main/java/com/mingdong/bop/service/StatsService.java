@@ -1,6 +1,6 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.BLResp;
+import com.mingdong.core.model.BLResp;
 
 public interface StatsService
 {

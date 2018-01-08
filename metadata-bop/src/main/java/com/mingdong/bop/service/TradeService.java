@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.BLResp;
 
 import java.util.Date;
 
