@@ -42,11 +42,14 @@ function saveManager() {
         }),
         success: function(data) {
             if(data.errCode !== "000000") {
-                //alert("失败：" + data.errMsg);
-                layer.msg(data.errMsg);
+                layer.msg("操作失败:" + data.errMsg);
             }
             else {
-                window.location.href = "/manager/index.html";
+                layer.msg("操作成功", {
+                    time: 2000,
+                }, function(){
+                    window.location.href = "/manager/index.html";
+                });
             }
         }
     });
