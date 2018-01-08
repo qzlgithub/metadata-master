@@ -1,7 +1,7 @@
 package com.mingdong.bop.controller;
 
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.StatsService;
+import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.RequestThread;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

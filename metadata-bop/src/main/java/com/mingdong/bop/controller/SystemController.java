@@ -1,10 +1,10 @@
 package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

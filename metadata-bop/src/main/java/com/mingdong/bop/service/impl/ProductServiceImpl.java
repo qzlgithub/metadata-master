@@ -11,12 +11,12 @@ import com.mingdong.bop.domain.mapper.DictProductTypeMapper;
 import com.mingdong.bop.domain.mapper.ProductInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductMapper;
 import com.mingdong.bop.domain.mapper.ProductTxtMapper;
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

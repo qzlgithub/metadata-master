@@ -2,8 +2,8 @@ package com.mingdong.bop.service.impl;
 
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.domain.mapper.StatsClientMapper;
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.StatsService;
+import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

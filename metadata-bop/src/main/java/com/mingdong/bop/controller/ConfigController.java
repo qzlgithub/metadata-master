@@ -2,11 +2,11 @@ package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.BLResp;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.RequestThread;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
