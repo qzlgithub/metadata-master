@@ -30,8 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +51,8 @@ public class ClientController
      * 页面：客户列表
      */
     @RequestMapping(value = "index.html")
-    public ModelAndView clientIndexPage(HttpServletRequest request)
+    public ModelAndView clientIndexPage()
     {
-        HttpSession session = request.getSession();
-        System.out.println(session.getId());
         ModelAndView view = new ModelAndView("customer-manage/customer-index");
         List<Map<String, Object>> industryList = systemService.getIndustryList(0L, TrueOrFalse.TRUE);
         view.addObject(Field.INDUSTRY_LIST, industryList);
@@ -68,10 +64,8 @@ public class ClientController
      * 页面：客户添加页面
      */
     @RequestMapping(value = "addition.html")
-    public ModelAndView gotoClientAddition(HttpServletRequest request)
+    public ModelAndView gotoClientAddition()
     {
-        HttpSession session = request.getSession();
-        System.out.println(session.getId());
         ModelAndView view = new ModelAndView("customer-manage/customer-add");
         view.addAllObjects(systemService.getInitIndustryMap());
         view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
@@ -116,7 +110,6 @@ public class ClientController
         view.addAllObjects(clientService.getClientProductInfo(clientProductId));
         view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
         view.addAllObjects(RequestThread.getMap());
-        System.out.println("----------------------" + clientProductId);
         return view;
     }
 
@@ -268,7 +261,6 @@ public class ClientController
     public BLResp addNewClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
-        System.out.println(JSONObject.toJSONString(vo));
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
                 StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()) ||

@@ -96,4 +96,5 @@ public interface Field
     String TOTAL_AMT = "totalAmt";
     String START_TIME = "startTime";
     String END_TIME = "endTime";
+    String QQ = "qq";
 }

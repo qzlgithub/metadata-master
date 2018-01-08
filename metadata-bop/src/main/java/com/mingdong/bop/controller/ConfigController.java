@@ -64,7 +64,6 @@ public class ConfigController
     @ResponseBody
     public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id)
     {
-        System.out.println(id);
         return systemService.getPrivilegeInfo(id);
     }
 
@@ -73,13 +72,13 @@ public class ConfigController
     public BLResp editColumnInfo(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        Long id = jsonReq.getLong(Field.ID);
+        Long privilegeId = jsonReq.getLong(Field.ID);
         String name = jsonReq.getString(Field.NAME);
-        if(StringUtils.isNullBlank(name))
+        if(privilegeId == null || StringUtils.isNullBlank(name))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        systemService.editPrivilegeInfo(id, name, resp);
+        systemService.editPrivilegeInfo(privilegeId, name, resp);
         return resp;
     }
 

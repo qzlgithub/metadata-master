@@ -44,12 +44,6 @@
                     <label class="layui-form-label">账号：</label>
                     <div class="layui-input-block" th:text="${username}">账号</div>
                 </div>
-                <!--<div class="layui-form-item">
-                    <label class="layui-form-label">密码：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="password" name="password" autocomplete="off" class="layui-input"/>
-                    </div>
-                </div>-->
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
@@ -62,6 +56,13 @@
                     <div class="layui-input-block">
                         <input type="tel" id="phone" name="phone" th:value="${phone}" placeholder="请输入"
                                autocomplete="off" class="layui-input"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">QQ：</label>
+                    <div class="layui-input-block">
+                        <input type="tel" id="qq" name="qq" th:value="${qq}" placeholder="请输入" autocomplete="off"
+                               class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -292,14 +293,10 @@
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
-    <!--<div class="layui-footer">
-        &lt;!&ndash; 底部固定区域 &ndash;&gt;
-        2017 &copy;<a href="http://kit.zhengjinfan.cn/">kit.zhengjinfan.cn/</a> MIT license
-    </div>-->
 </div>
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");

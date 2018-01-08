@@ -8,28 +8,20 @@ import java.util.List;
 
 public interface ClientUserMapper
 {
-    void add(ClientUser corpUser);
+    void add(ClientUser obj);
 
-    void delete(Long id);
+    void updateById(ClientUser obj);
 
-    void updateById(ClientUser corpUser);
+    void updateSkipNull(ClientUser obj);
 
     ClientUser findById(Long id);
 
-    List<ClientUser> findBy(Long id, Integer primary);
-
-    List<ClientUser> getAll();
-
     ClientUser findByUsername(String username);
-
-    void updateSkipNull(ClientUser corpUser);
-
-    ClientUser findMasterUser(Long clientId);
-
-    boolean isPrimAccoNo();
 
     List<ClientUser> getListByClientAndStatus(@Param("clientId") Long clientId, @Param("enabled") Integer enabled);
 
-    void resetMasterPasswordByClient(@Param("clientIdList") List<Long> clientIdList, @Param("password") String password,
-            @Param("date") Date date);
+    void resetPasswordByIds(@Param("password") String password, @Param("date") Date date,
+            @Param("idList") List<Long> idList);
+
+    void updateStatusByIds(@Param("enabled") Integer enabled, @Param("idList") List<Long> idList);
 }

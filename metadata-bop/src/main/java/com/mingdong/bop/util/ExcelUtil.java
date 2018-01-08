@@ -394,7 +394,7 @@ public class ExcelUtil
         int count = 10000;
         JSONArray ja = new JSONArray();
 
-        Map<String, String> headMap = new LinkedHashMap<String, String>();
+        Map<String, String> headMap = new LinkedHashMap<>();
         headMap.put("name", "姓名");
         headMap.put("age", "年龄");
         headMap.put("birthday", "生日");

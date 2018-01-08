@@ -106,18 +106,6 @@ public class ManagerServiceImpl implements ManagerService
         ms.setPrivileges(privilegeList);
         ms.setAddAt(current.getTime());
         redisDao.saveManagerSession(sessionId, ms);
-        // 2. 获取账号权限列表
-        // List<String> privList = new ArrayList<>();
-        // 3. 生成登陆凭证
-        // String key = StringUtils.getRandomString(32);
-        // String token = manager.getUuid() + key;
-        // 4. 缓存凭证及权限
-        // SecInfo secInfo = new SecInfo();
-        // secInfo.setId(manager.getId());
-        // secInfo.setKey(key);
-        // secInfo.setPriv(privList);
-        // redisDao.saveUserSecInfo(manager.getUuid(), secInfo);
-        // resp.addData(Field.TOKEN, token);
     }
 
     @Override
@@ -149,6 +137,32 @@ public class ManagerServiceImpl implements ManagerService
     }*/
 
     @Override
+    @Transactional
+    public void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp)
+    {
+        Manager manager = managerMapper.findById(managerId);
+        if(manager == null)
+        {
+            resp.result(RestResult.OBJECT_NOT_FOUND);
+            return;
+        }
+        else if(!manager.getPassword().equals(Md5Utils.encrypt(oldPwd)))
+        {
+            resp.result(RestResult.INVALID_PASSCODE);
+            return;
+        }
+        String newPassword = Md5Utils.encrypt(newPwd);
+        if(!manager.getPassword().equals(newPassword))
+        {
+            manager = new Manager();
+            manager.setId(managerId);
+            manager.setUpdateTime(new Date());
+            manager.setPassword(newPassword);
+            managerMapper.updateSkipNull(manager);
+        }
+    }
+
+    @Override
     public void getRoleList(Page page, BLResp resp)
     {
         int total = roleMapper.countAll();
@@ -174,23 +188,6 @@ public class ManagerServiceImpl implements ManagerService
             resp.addData(Field.LIST, list);
         }
     }
-
-    /*@Override
-    public BLResp getRoleInfo(Long roleId)
-    {
-        BLResp resp = BLResp.build();
-        List<RolePrivilege> dataList = rolePrivilegeMapper.getByRole(roleId);
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            List<String> list = new ArrayList<>(dataList.size());
-            for(RolePrivilege priv : dataList)
-            {
-                list.add(priv.getPrivilegeId() + "");
-            }
-            resp.addData(Field.LIST, list);
-        }
-        return resp;
-    }*/
 
     @Override
     @Transactional
@@ -262,13 +259,8 @@ public class ManagerServiceImpl implements ManagerService
         roleMapper.updateSkipNull(roleUpd);
     }
 
-    /*@Override
-    public void editRoleInfo(Long roleId, String name, List<Long> privilege)
-    {
-    }*/
-
     @Override
-    public void getUserList(Long roleId, Integer enabled, Page page, BLResp resp)
+    public void getManagerList(Long roleId, Integer enabled, Page page, BLResp resp)
     {
         int total = managerMapper.countBy(roleId, enabled);
         int pages = page.getTotalPage(total);
@@ -295,52 +287,6 @@ public class ManagerServiceImpl implements ManagerService
             }
             resp.addData(Field.LIST, list);
         }
-    }
-
-    /*@Override
-    public BLResp getUserInfo(Long userId)
-    {
-        BLResp resp = BLResp.build();
-
-        return resp;
-    }*/
-
-    @Override
-    @Transactional
-    public void addManager(String username, String password, String name, String phone, Long roleId, Integer enabled,
-            List<Long> privilege, BLResp resp)
-    {
-        Manager manager = managerMapper.findByUsername(username);
-        if(manager != null)
-        {
-            resp.result(RestResult.USERNAME_EXIST);
-            return;
-        }
-        Date current = new Date();
-        Long managerId = IDUtils.getManagerId(param.getNodeId());
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        List<ManagerPrivilege> list = new ArrayList<>();
-        for(Long privilegeId : allPrivilegeIdList)
-        {
-            ManagerPrivilege mp = new ManagerPrivilege();
-            mp.setCreateTime(current);
-            mp.setUpdateTime(current);
-            mp.setManagerId(managerId);
-            mp.setPrivilegeId(privilegeId);
-            list.add(mp);
-        }
-        managerPrivilegeMapper.addList(list);
-        manager = new Manager();
-        manager.setId(managerId);
-        manager.setCreateTime(current);
-        manager.setUpdateTime(current);
-        manager.setUsername(username);
-        manager.setPassword(Md5Utils.encrypt(password));
-        manager.setName(name);
-        manager.setPhone(phone);
-        manager.setRoleId(roleId);
-        manager.setEnabled(enabled);
-        managerMapper.add(manager);
     }
 
     @Override
@@ -372,40 +318,54 @@ public class ManagerServiceImpl implements ManagerService
         resp.addData(Field.USERNAME, manager.getUsername());
         resp.addData(Field.NAME, manager.getName());
         resp.addData(Field.PHONE, manager.getPhone());
+        resp.addData(Field.QQ, manager.getQq());
         resp.addData(Field.ENABLED, manager.getEnabled());
         resp.addData(Field.PRIVILEGE, privilege);
         resp.addData(Field.ROLE_LIST, roleList);
     }
 
-    /*@Override
-    public BLResp editUser(Long userId, Long roleId, String username, String password, String name, String phone,
-            Integer enabled)
+    @Override
+    @Transactional
+    public void addManager(String username, String password, String name, String phone, String qq, Long roleId,
+            Integer enabled, List<Long> privilege, BLResp resp)
     {
-        BLResp resp = BLResp.build();
-        return resp;
-    }*/
-
-    /*@Override
-    public Map<String, Object> findManager(Long managerId)
-    {
-        Map<String, Object> map = new HashMap<>();
-        Manager manager = managerMapper.findById(managerId);
+        Manager manager = managerMapper.findByUsername(username);
         if(manager != null)
         {
-            map.put(Field.MANAGER_ID, managerId + "");
-            map.put(Field.ROLE_ID, manager.getRoleId() + "");
-            map.put(Field.USERNAME, manager.getUsername());
-            map.put(Field.PASSWORD, manager.getPassword());
-            map.put(Field.MANAGER_NAME, manager.getName());
-            map.put(Field.PHONE, manager.getPhone());
-
+            resp.result(RestResult.USERNAME_EXIST);
+            return;
         }
-        return map;
-    }*/
+        Date current = new Date();
+        Long managerId = IDUtils.getManagerId(param.getNodeId());
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
+        List<ManagerPrivilege> list = new ArrayList<>();
+        for(Long privilegeId : allPrivilegeIdList)
+        {
+            ManagerPrivilege mp = new ManagerPrivilege();
+            mp.setCreateTime(current);
+            mp.setUpdateTime(current);
+            mp.setManagerId(managerId);
+            mp.setPrivilegeId(privilegeId);
+            list.add(mp);
+        }
+        managerPrivilegeMapper.addList(list);
+        manager = new Manager();
+        manager.setId(managerId);
+        manager.setCreateTime(current);
+        manager.setUpdateTime(current);
+        manager.setUsername(username);
+        manager.setPassword(Md5Utils.encrypt(password));
+        manager.setName(name);
+        manager.setPhone(phone);
+        manager.setQq(qq);
+        manager.setRoleId(roleId);
+        manager.setEnabled(enabled);
+        managerMapper.add(manager);
+    }
 
     @Override
     @Transactional
-    public void editManager(Long managerId, Long roleId, String name, String phone, Integer enabled,
+    public void editManager(Long managerId, Long roleId, String name, String phone, String qq, Integer enabled,
             List<Long> privilege, BLResp resp)
     {
         Manager manager = managerMapper.findById(managerId);
@@ -433,6 +393,7 @@ public class ManagerServiceImpl implements ManagerService
         manager.setRoleId(roleId);
         manager.setName(name);
         manager.setPhone(phone);
+        manager.setQq(qq);
         manager.setEnabled(enabled);
         managerMapper.updateById(manager);
     }
@@ -511,32 +472,6 @@ public class ManagerServiceImpl implements ManagerService
         resp.addData(Field.ENABLED, enabled);
     }
 
-    @Override
-    @Transactional
-    public void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp)
-    {
-        Manager manager = managerMapper.findById(managerId);
-        if(manager == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        else if(!manager.getPassword().equals(Md5Utils.encrypt(oldPwd)))
-        {
-            resp.result(RestResult.INVALID_PASSCODE);
-            return;
-        }
-        String newPassword = Md5Utils.encrypt(newPwd);
-        if(!manager.getPassword().equals(newPassword))
-        {
-            manager = new Manager();
-            manager.setId(managerId);
-            manager.setUpdateTime(new Date());
-            manager.setPassword(newPassword);
-            managerMapper.updateSkipNull(manager);
-        }
-    }
-
     /**
      * 查询权限列表及其父级权限的ID
      */
@@ -575,13 +510,6 @@ public class ManagerServiceImpl implements ManagerService
             list.add(mp.getPrivilegeId() + "");
         }
         return list;
-    }
-
-    private List<ManagerPrivilege> buildUserPrivilege(Long managerId, List<Long> privList)
-    {
-        List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getByIdList(privList);
-        // TODO
-        return managerPrivilegeList;
     }
 
     private String getRoleTopPrivilege(Long roleId)

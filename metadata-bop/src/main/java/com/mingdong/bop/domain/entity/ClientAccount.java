@@ -9,6 +9,7 @@ public class ClientAccount
     private Date createTime;
     private Date updateTime;
     private BigDecimal balance;
+    private Integer enabled;
 
     public Long getId()
     {
@@ -48,6 +49,16 @@ public class ClientAccount
     public void setBalance(BigDecimal balance)
     {
         this.balance = balance;
+    }
+
+    public Integer getEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(Integer enabled)
+    {
+        this.enabled = enabled;
     }
 }
 

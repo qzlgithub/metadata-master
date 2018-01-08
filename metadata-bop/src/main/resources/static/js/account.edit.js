@@ -18,6 +18,7 @@ function saveManager() {
     var username = $("#username").val();
     var name = $("#name").val();
     var phone = $("#phone").val();
+    var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
     console.log("roleId: " + roleId + "\nusername: " + username + "\nname: " + name + "\nphone: " + phone
@@ -33,6 +34,7 @@ function saveManager() {
             "username": username,
             "name": name,
             "phone": phone,
+            "qq": qq,
             "enabled": enabled,
             "privilege": privilege
         }),

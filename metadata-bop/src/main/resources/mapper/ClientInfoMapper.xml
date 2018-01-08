@@ -22,10 +22,10 @@
     <select id="countBy" resultType="Integer">
         select count(*)
         from `client` c
-            left join `client_user` cu
-                on c.`id` = cu.`client_id` and cu.`primary` = 1
+            join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+                <if test="enabled != null">and cu.`enabled` = #{enabled}</if>
         where c.`deleted` = 0
-        <if test="enabled != null">and c.`enabled` = #{enabled}</if>
         <if test="cropName != null">and c.`corp_name` like '%${cropName}%'</if>
         <if test="shortName != null">and c.`short_name` like '%${shortName}%'</if>
         <if test="account != null">and cu.`username` like '%${account}%'</if>
@@ -37,25 +37,25 @@
 
     <select id="getListBy" resultMap="BaseResultMap">
         select
-            c.id          as client_id,
-            c.create_time as register_time,
-            c.corp_name   as corp_name,
-            c.short_name  as short_name,
-            c.industry_id as industry_id,
-            cu.username   as username,
-            cu.name       as name,
-            cu.phone      as phone,
-            m.name        as manager_name,
-            c.account_qty as account_qty,
-            c.enabled     as account_enabled
+            c.`id`          as client_id,
+            c.`create_time` as register_time,
+            c.`corp_name`   as corp_name,
+            c.`short_name`  as short_name,
+            c.`industry_id` as industry_id,
+            cu.`username`   as username,
+            cu.`name`       as name,
+            cu.`phone`      as phone,
+            m.`name`        as manager_name,
+            c.`account_qty` as account_qty,
+            cu.`enabled`    as user_enabled
         from
             `client` c
-            left join `client_user` cu
-                on c.`id` = cu.`client_id` and cu.`primary` = 1
+            join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+                <if test="enabled != null">and cu.`enabled` = #{enabled}</if>
             left join `manager` m
                 on c.`manager_id` = m.`id`
         where c.`deleted` = 0
-        <if test="enabled != null">and c.`enabled` = #{enabled}</if>
         <if test="cropName != null">and c.`corp_name` like '%${cropName}%'</if>
         <if test="shortName != null">and c.`short_name` like '%${shortName}%'</if>
         <if test="account != null">and cu.`username` like '%${account}%'</if>
@@ -65,84 +65,18 @@
         </if>
         order by c.`create_time` desc
     </select>
-
-    <select id="getCorpById" resultMap="BaseResultMap">
-        select
-            cu.username   as username,
-            c.corp_name   as corp_name,
-            c.short_name  as short_name,
-            c.industry_id as industry_id,
-            cu.name       as name,
-            cu.phone      as phone,
-            cu.email      as email,
-            c.license     as license,
-            c.enabled     as accounte_enabled,
-            cu.enabled    as user_enabled
-        from
-            `client` c
-            left join `client_user` cu
-                on c.`id` = cu.`client_id` and cu.`primary` = 1
-            left join `manager` m
-                on c.`manager_id` = m.`id`
-        where
-            c.`id` = #{clientId}
-    </select>
-
-    <select id="getDetailById" resultMap="BaseResultMap">
-        select
-            c.id          as client_id,
-            c.enabled     as enable,
-            cu.username   as username,
-            c.corp_name   as corp_name,
-            c.short_name  as short_name,
-            c.industry_id as industry_id,
-            c.license     as license,
-            cu.name       as name,
-            cu.phone      as phone,
-            cu.email      as email,
-            m.name        as manager_name,
-            c.create_time as register_time
-        from
-            `client` c
-            left join `client_user` cu
-                on c.`id` = cu.`client_id` and cu.`primary` = 1
-            left join `manager` m
-                on c.`manager_id` = m.`id`
-        where c.`id` = #{clientId}
-    </select>
     <!-- @formatter:on -->
 
-    <update id="deletedCorp" parameterType="ClientInfo">
-        update `client_user` set `update_time` = #{updateTime}, `deleted` = #{deleted} where `client_id` = #{clientId}
-    </update>
-
-    <update id="disableCorp" parameterType="ClientInfo">
-        update `client_user` set `update_time` = #{updateTime}, `enabled` = #{enabled} where `client_id` = #{clientId}
-    </update>
-
-    <select id="getBalanceById" resultMap="BaseResultMap">
-        select c.`enabled`, ca.`balance` from `client` c join `client_account` ca on c.`id` = ca.`id` where c.`id` =
-        #{clientId};
-    </select>
-
-    <select id="getAccountById" resultMap="BaseResultMap">
-        select cu.`username`, cu.`name`, cu.`phone` from `client` c left join `client_user` cu on cu.`client_id` =
-        c.`id` and cu.`primary` = 0 where c.id = #{clientId};
-    </select>
-
-    <select id="getProByTime" resultMap="BaseResultMap">
-        select pr.`start_date`, pr.`end_date`, pr.`amount`, cp.app_id from `product_recharge` pr left join
-        `client_product` cp on pr.`product_id` = cp.`product_id` WHERE cp.`corp_id` = #{clientId} and cp.`opened` = 1;
-    </select>
-
-    <select id="getProByNum" resultMap="BaseResultMap">
-        select ar.`balance`, ar.`unit_amt`, cp.app_id from `api_req` ar left join `client_product` cp on
-        cp.`product_id` = ar.`product_id` WHERE cp.`corp_id` = #{clientId} and cp.`opened` = 1;
-    </select>
-
     <select id="getSimilarCorpByName" resultMap="BaseResultMap">
-        select c.`corp_name` as corp_name, cu.`name` as name, cu.`phone` as phone, cu.`email` as email, c.`create_time`
-        as register_time from `client` c left join `client_user` cu on c.`id` = cu.`client_id` and cu.`primary` = 1
+        select
+            c.`corp_name`   as corp_name,
+            cu.`name`       as name,
+            cu.`phone`      as phone,
+            cu.`email`      as email,
+            c.`create_time` as register_time
+        from `client` c
+            left join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
         where (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
         <if test="clientId != null">and c.`id` != #{clientId}</if>
         limit 5

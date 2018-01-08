@@ -10,25 +10,25 @@
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'40000')}">
                 <a th:href="@{/stats/index.html}">
                     <img src="./../../images/icon/menu-icon4.png"/>
-                    <p>数据统计管理</p>
+                    <p th:text="${i_system.m40000}">数据统计管理mingdong.net</p>
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'30000')}">
                 <a th:href="@{/client/index.html}">
                     <img src="./../../images/icon/menu-icon3.png"/>
-                    <p>客户管理</p>
+                    <p th:text="${i_system.m30000}">客户管理mingdong.net</p>
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'20000')}">
                 <a th:href="@{/product/index.html}">
                     <img src="./../../images/icon/menu-icon2.png"/>
-                    <p>产品管理</p>
+                    <p th:text="${i_system.m20000}">产品管理mingdong.net</p>
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'10000')}">
                 <a th:href="@{/manager/index.html}">
                     <img src="./../../images/icon/menu-icon1.png"/>
-                    <p>系统管理</p>
+                    <p th:text="${i_system.m10000}">系统管理mingdong.net</p>
                 </a>
             </li>
             <li class="layui-nav-item bd-right-none important">

@@ -11,10 +11,16 @@
         <result column="email" property="email" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
-        <result column="primary" property="primary" jdbcType="TINYINT" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="TINYINT" />
     </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `enabled`, `deleted`
+        from `client_user`
+    </sql>
 
     <insert id="add" parameterType="ClientUser">
         insert into `client_user`
@@ -28,7 +34,6 @@
             <if test="email != null">`email`,</if>
             <if test="username != null">`username`,</if>
             <if test="password != null">`password`,</if>
-            <if test="primary != null">`primary`,</if>
             <if test="enabled != null">`enabled`,</if>
             <if test="deleted != null">`deleted`,</if>
         </trim>
@@ -42,7 +47,6 @@
             <if test="email != null">#{email},</if>
             <if test="username != null">#{username},</if>
             <if test="password != null">#{password},</if>
-            <if test="primary != null">#{primary},</if>
             <if test="enabled != null">#{enabled},</if>
             <if test="deleted != null">#{deleted},</if>
         </trim>
@@ -58,7 +62,6 @@
             `email`       = #{email},
             `username`    = #{username},
             `password`    = #{password},
-            `primary`     = #{primary},
             `enabled`     = #{enabled},
             `deleted`     = #{deleted}
         where `id` = #{id}
@@ -75,59 +78,42 @@
             <if test="email != null">`email` = #{email},</if>
             <if test="username != null">`username` = #{username},</if>
             <if test="password != null">`password` = #{password},</if>
-            <if test="primary != null">`primary` = #{primary},</if>
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="deleted != null">`deleted` = #{deleted},</if>
         </set>
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
-            `primary`, `enabled`, `deleted`
-        from client_user
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
-            `primary`, `enabled`, `deleted`
-        from client_user
+        <include refid="select_all" />
         where `id` = #{id}
     </select>
 
     <select id="findByUsername" parameterType="String" resultMap="BaseResultMap">
-        select `id`
-        from client_user
+        <include refid="select_all" />
         where `username` = #{username}
     </select>
 
-    <select id="findMasterUser" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
-            `primary`, `enabled`, `deleted`
-        from `client_user`
-        where `client_id` = #{clientId} and `primary` = 1
-    </select>
-
     <select id="getListByClientAndStatus" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
-            `primary`, `enabled`, `deleted`
-        from `client_user`
-            where `deleted` = 0
+        <include refid="select_all" />
+        where `deleted` = 0
         <if test="clientId != null">and `client_id` = #{clientId}</if>
         <if test="enabled != null">and `enabled` = #{enabled}</if>
     </select>
 
-    <update id="resetMasterPasswordByClient">
+    <update id="resetPasswordByIds">
         update `client_user`
         set `password` = #{password},
             `update_time` = #{date}
-        where `primary` = 1
-          and `client_id` in
-        <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">
+        where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateStatusByIds">
+        update `client_user` set `enabled` = #{enabled} where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>

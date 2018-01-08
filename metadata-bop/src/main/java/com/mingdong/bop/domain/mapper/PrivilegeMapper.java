@@ -25,7 +25,9 @@ public interface PrivilegeMapper
 
     int countAll();
 
-    List<Privilege> getByParentAndStatus(@Param("parentId") Long parengId, @Param("enabled") Integer enabled);
+    List<Privilege> getByParentAndStatus(@Param("parentId") Long parentId, @Param("enabled") Integer enabled);
 
     void updateSkipNull(Privilege privilege);
+
+    List<Privilege> getListByLevel(int level);
 }

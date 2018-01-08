@@ -171,9 +171,9 @@
                 </thead>
                 <tbody id="child-account-body">
                 <tr>
-                    <td>sdfds</td>
-                    <td>dfdfd</td>
-                    <td>5454154</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <span class="mr30">
                             <a href="/client/edit.html?clientId=#{id}" class="edit">重置密码</a>
@@ -395,11 +395,11 @@
                         if(data.errCode === '000000') {
                             var obj = data.dataMap;
                             if(obj.accountEnabled === 1) {
-                                $("#accountEnabled" + id).text("冻结账户");
+                                $("#accountEnabled" + id).text("冻结账号");
                                 layer.msg("操作成功");
                             }
                             else {
-                                $("#accountEnabled" + id).text("解冻账户");
+                                $("#accountEnabled" + id).text("解冻账号");
                                 layer.msg("操作成功");
                             }
                         }
@@ -590,7 +590,7 @@
                         dataTr = dataTr + tr22;
                     }
                     dataTr = dataTr + tr3.replace(/#{id}/g, list[d].id).replace("#{registerDate}", list[d].registerDate)
-                    .replace("#{accountEnabled}", list[d].accountEnabled === 1 ? "冻结账户" : "解冻账户");
+                    .replace("#{accountEnabled}", list[d].userEnabled === 1 ? "冻结账号" : "解冻账号");
                     $("#dataBody").append(dataTr);
                 }
                 $("#total").text("共 " + data.total + " 条");
@@ -670,7 +670,6 @@
             $ = layui.jquery;
         //全选
         form.on('checkbox(allChoose)', function(data) {
-            console.log(13213213123);
             var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
             child.each(function(index, item) {
                 item.checked = data.elem.checked;

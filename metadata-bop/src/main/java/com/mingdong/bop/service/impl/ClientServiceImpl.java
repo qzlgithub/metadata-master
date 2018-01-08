@@ -155,7 +155,7 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.MANAGER_NAME, clientInfo.getManagerName());
                 map.put(Field.ACCOUNT_QTY, clientInfo.getAccountQty());
                 map.put(Field.REGISTER_DATE, DateUtils.format(clientInfo.getRegisterTime(), "yyyy-MM-dd"));
-                map.put(Field.ACCOUNT_ENABLED, clientInfo.getAccountEnabled());
+                map.put(Field.USER_ENABLED, clientInfo.getUserEnabled());
                 list.add(map);
             }
             resp.addData(Field.LIST, list);
@@ -175,22 +175,9 @@ public class ClientServiceImpl implements ClientService
             resp.result(RestResult.ACCOUNT_IS_EXIST);
             return;
         }
-        // 创建客户
         Long clientId = IDUtils.getClientId(param.getNodeId());
-        Client client = new Client();
-        client.setId(clientId);
-        client.setCreateTime(curr);
-        client.setUpdateTime(curr);
-        client.setCorpName(corpName);
-        client.setShortName(shortName);
-        client.setIndustryId(industryId);
-        client.setLicense(license);
-        client.setAccountQty(1);
-        client.setManagerId(RequestThread.getOperatorId());
-        client.setEnabled(enabled);
-        client.setDeleted(TrueOrFalse.FALSE);
-        // 创建客户主账号
         Long clientUserId = IDUtils.getClientUser(param.getNodeId());
+        // 创建客户主账号
         clientUser = new ClientUser();
         clientUser.setId(clientUserId);
         clientUser.setCreateTime(curr);
@@ -201,9 +188,21 @@ public class ClientServiceImpl implements ClientService
         clientUser.setEmail(email);
         clientUser.setUsername(username);
         clientUser.setPassword(password);
-        clientUser.setPrimary(TrueOrFalse.TRUE);
         clientUser.setEnabled(enabled);
         clientUser.setDeleted(TrueOrFalse.FALSE);
+        // 创建客户
+        Client client = new Client();
+        client.setId(clientId);
+        client.setCreateTime(curr);
+        client.setUpdateTime(curr);
+        client.setCorpName(corpName);
+        client.setShortName(shortName);
+        client.setLicense(license);
+        client.setIndustryId(industryId);
+        client.setPrimaryUserId(clientUserId);
+        client.setManagerId(RequestThread.getOperatorId());
+        client.setAccountQty(1);
+        client.setDeleted(TrueOrFalse.FALSE);
         // 保存客户及其账号
         clientUserMapper.add(clientUser);
         clientMapper.add(client);
@@ -222,20 +221,37 @@ public class ClientServiceImpl implements ClientService
             return;
         }
         // 更新用户信息
-        ClientUser clientUser = clientUserMapper.findMasterUser(clientId);
+        ClientUser clientUser = clientUserMapper.findById(client.getPrimaryUserId());
         clientUser.setUpdateTime(current);
         clientUser.setName(name);
         clientUser.setPhone(phone);
         clientUser.setEmail(email);
         clientUser.setEnabled(userEnabled);
         clientUserMapper.updateById(clientUser);
+        // 更新客户账户状态
+        ClientAccount clientAccount = clientAccountMapper.findById(clientId);
+        if(clientAccount != null)
+        {
+            clientAccount.setUpdateTime(current);
+            clientAccount.setEnabled(accountEnabled);
+            clientAccountMapper.updateById(clientAccount);
+        }
+        else
+        {
+            clientAccount = new ClientAccount();
+            clientAccount.setId(clientId);
+            clientAccount.setCreateTime(current);
+            clientAccount.setUpdateTime(current);
+            clientAccount.setBalance(new BigDecimal(0));
+            clientAccount.setEnabled(accountEnabled);
+            clientAccountMapper.add(clientAccount);
+        }
         // 更新客户信息
         client.setUpdateTime(current);
         client.setCorpName(corpName);
         client.setShortName(shortName);
         client.setLicense(license);
         client.setIndustryId(industryId);
-        client.setEnabled(accountEnabled);
         clientMapper.updateById(client);
     }
 
@@ -246,7 +262,8 @@ public class ClientServiceImpl implements ClientService
         Client client = clientMapper.findById(clientId);
         if(client != null)
         {
-            ClientUser user = clientUserMapper.findMasterUser(clientId);
+            ClientUser user = clientUserMapper.findById(client.getPrimaryUserId());
+            ClientAccount clientAccount = clientAccountMapper.findById(clientId);
             DictIndustry industry = dictIndustryMapper.findById(client.getIndustryId());
             map.put(Field.CLIENT_ID, clientId + "");
             map.put(Field.USERNAME, user.getUsername());
@@ -259,7 +276,7 @@ public class ClientServiceImpl implements ClientService
             map.put(Field.EMAIL, user.getEmail());
             map.put(Field.LICENSE, client.getLicense());
             map.put(Field.USER_STATUS, user.getEnabled());
-            map.put(Field.ACCOUNT_STATUS, client.getEnabled());
+            map.put(Field.ACCOUNT_STATUS, clientAccount != null ? clientAccount.getEnabled() : TrueOrFalse.TRUE);
 
             List<Map<String, Object>> parentIndustryList = systemService.getIndustryMap(0L, TrueOrFalse.TRUE);
             map.put(Field.PARENT_INDUSTRY_LIST, parentIndustryList);
@@ -278,7 +295,7 @@ public class ClientServiceImpl implements ClientService
         if(client != null)
         {
             // 主账号
-            ClientUser masterUser = clientUserMapper.findMasterUser(clientId);
+            ClientUser masterUser = clientUserMapper.findById(client.getPrimaryUserId());
             map.put(Field.NAME, masterUser.getName());
             map.put(Field.PHONE, masterUser.getPhone());
             map.put(Field.EMAIL, masterUser.getEmail());
@@ -289,7 +306,7 @@ public class ClientServiceImpl implements ClientService
             List<Map<String, Object>> userList = new ArrayList<>();
             for(ClientUser user : subUserList)
             {
-                if(!TrueOrFalse.TRUE.equals(user.getPrimary()))
+                if(!client.getPrimaryUserId().equals(user.getId()))
                 {
                     Map<String, Object> m = new HashMap<>();
                     m.put(Field.ID, user.getId());
@@ -344,7 +361,7 @@ public class ClientServiceImpl implements ClientService
             map.put(Field.SHORT_NAME, client.getShortName());
             map.put(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(client.getIndustryId()));
             map.put(Field.LICENSE, client.getLicense());
-            map.put(Field.ACCOUNT_ENABLED, client.getEnabled());
+            map.put(Field.ACCOUNT_ENABLED, account != null ? account.getEnabled() : TrueOrFalse.TRUE);
             map.put(Field.REGISTER_DATE, DateUtils.format(client.getCreateTime(), DateFormat.YYYY_MM_DD));
             map.put(Field.MANAGER_NAME, manager != null ? manager.getName() : "");
             map.put(Field.USER_LIST, userList);
@@ -356,31 +373,36 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, BLResp resp)
     {
-        if(clientIdList.size() == 1 && enabled == null)
+        List<Client> clientList = clientMapper.getListByIdList(clientIdList);
+        if(CollectionUtils.isEmpty(clientList))
         {
-            Long clientId = clientIdList.get(0);
-            Client client = clientMapper.findById(clientId);
-            if(client == null)
+            return;
+        }
+        List<Long> clientUserIdList = new ArrayList<>(clientList.size());
+        for(Client client : clientList)
+        {
+            clientUserIdList.add(client.getPrimaryUserId());
+        }
+        if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
+        {
+            ClientUser clientUser = clientUserMapper.findById(clientUserIdList.get(0));
+            if(clientUser == null)
             {
                 resp.result(RestResult.OBJECT_NOT_FOUND);
                 return;
             }
-            Integer accountEnabled = TrueOrFalse.FALSE;
-            if(TrueOrFalse.FALSE.equals(client.getEnabled()))
+            if(TrueOrFalse.TRUE.equals(clientUser.getEnabled()))
             {
-                accountEnabled = TrueOrFalse.TRUE;
+                enabled = TrueOrFalse.FALSE;
             }
-            Client clientUpd = new Client();
-            clientUpd.setId(clientId);
-            clientUpd.setUpdateTime(new Date());
-            clientUpd.setEnabled(accountEnabled);
-            clientMapper.updateSkipNull(clientUpd);
-            resp.addData(Field.ACCOUNT_ENABLED, accountEnabled);
+            else
+            {
+                enabled = TrueOrFalse.TRUE;
+            }
+
         }
-        else
-        {
-            clientMapper.updateStatusByIds(clientIdList, enabled);
-        }
+        clientUserMapper.updateStatusByIds(enabled, clientUserIdList);
+        resp.addData(Field.ACCOUNT_ENABLED, enabled);
     }
 
     @Override
@@ -394,8 +416,17 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void resetClientPassword(List<Long> idList, BLResp resp)
     {
-        String pwd = Md5Utils.encrypt(Md5Utils.encrypt(Constant.DEFAULT_PASSWORD));
-        clientUserMapper.resetMasterPasswordByClient(idList, pwd, new Date());
+        String password = Md5Utils.encrypt(Md5Utils.encrypt(Constant.DEFAULT_PASSWORD));
+        List<Client> clientList = clientMapper.getListByIdList(idList);
+        if(!CollectionUtils.isEmpty(clientList))
+        {
+            List<Long> clientUserIdList = new ArrayList<>(clientList.size());
+            for(Client client : clientList)
+            {
+                clientUserIdList.add(client.getPrimaryUserId());
+            }
+            clientUserMapper.resetPasswordByIds(password, new Date(), clientUserIdList);
+        }
     }
 
     @Override
@@ -417,10 +448,15 @@ public class ClientServiceImpl implements ClientService
     public List<Map<String, Object>> getSubAccountList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            return list;
+        }
         List<ClientUser> cuList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE);
         for(ClientUser cu : cuList)
         {
-            if(!TrueOrFalse.TRUE.equals(cu.getPrimary()))
+            if(!client.getPrimaryUserId().equals(cu.getId()))
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, cu.getId() + "");

@@ -10,17 +10,13 @@ public interface ClientMapper
 {
     void add(Client client);
 
-    void delete(Long id);
-
     void updateById(Client client);
-
-    Client findById(Long id);
-
-    List<Client> getAll();
 
     void updateSkipNull(Client client);
 
-    void updateStatusByIds(@Param("idList") List<Long> idList, @Param("enabled") Integer enabled);
-
     void setClientDeleted(@Param("idList") List<Long> idList, @Param("date") Date date);
+
+    Client findById(Long id);
+
+    List<Client> getListByIdList(@Param("idList") List<Long> idList);
 }

@@ -28,13 +28,10 @@
     </insert>
 
     <insert id="addList" parameterType="List">
-        insert into
-            `manager_privilege`
-            (`create_time`, `update_time`, `manager_id`, `privilege_id`)
-        values
-            <foreach collection="list" item="item" separator=",">
-                (#{item.createTime}, #{item.updateTime}, #{item.managerId}, #{item.privilegeId})
-            </foreach>
+        insert into `manager_privilege` (`create_time`, `update_time`, `manager_id`, `privilege_id`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.createTime}, #{item.updateTime}, #{item.managerId}, #{item.privilegeId})
+        </foreach>
     </insert>
 
     <update id="updateById" parameterType="ManagerPrivilege">
@@ -65,14 +62,15 @@
         select
             `id`, `create_time`, `update_time`, `manager_id`, `privilege_id`
         from `manager_privilege`
-        where `id` =
-              #{id}
+        where `id` = #{id}
     </select>
 
     <select id="getPrivilegeIdListByManager" parameterType="Long" resultMap="BaseResultMap">
-        select `privilege_id`
-        from `manager_privilege`
-        where `manager_id` = #{managerId}
+        select mp.`privilege_id`
+        from `manager_privilege` mp
+            join `privilege` p
+                on mp.`privilege_id` = p.`id` and p.`enabled` = 1
+        where mp.`manager_id` = #{managerId}
     </select>
 
     <delete id="deleteByManager" parameterType="Long">

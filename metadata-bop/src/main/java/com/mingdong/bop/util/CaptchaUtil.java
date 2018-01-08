@@ -209,11 +209,4 @@ public class CaptchaUtil
             throw e;
         }
     }
-
-    public static void main(String[] args) throws IOException
-    {
-        ImageCode imageCode = buildImageCode();
-        System.out.println(imageCode.getCode());
-        System.out.println(imageCode.getBase64Code());
-    }
 }

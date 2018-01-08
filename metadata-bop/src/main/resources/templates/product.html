@@ -8,17 +8,21 @@
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
         <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'21000')}">
-                <a class="" href="javascript:;"><i class="icon icon2" aria-hidden="false"></i><em>产品管理</em></a>
+                <a class="" href="javascript:;">
+                    <i class="icon icon2" aria-hidden="false"></i>
+                    <em th:text="${i_system.m21000}">产品管理mingdong.net</em></a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'product_category_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'21100')}">
                         <a th:href="@{/product/category/index.html}">
-                            <i class="layui-icon">&#xe602;</i><span> 产品类别管理</span></a>
+                            <i class="layui-icon">&#xe602;</i>
+                            <span th:text="${i_system.m21100}">产品类别管理mingdong.net</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'product_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'21200')}">
                         <a th:href="@{/product/index.html}">
-                            <i class="layui-icon">&#xe602;</i><span> 产品管理</span></a>
+                            <i class="layui-icon">&#xe602;</i>
+                            <span th:text="${i_system.m21200}">产品管理mingdong.net</span></a>
                     </dd>
                 </dl>
             </li>

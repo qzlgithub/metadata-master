@@ -37,8 +37,10 @@
     </insert>
 
     <update id="updateById" parameterType="Privilege">
-        update privilege set `create_time` = #{createTime}, `update_time` = #{updateTime}, `name` = #{name}, `seq_no` =
-        #{seqNo}, `level` = #{level}, `parent_id` = #{parentId}, `enabled` = #{enabled} where `id` = #{id}
+        update privilege
+        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `name` = #{name}, `seq_no` =
+        #{seqNo}, `level` = #{level}, `parent_id` = #{parentId}, `enabled` = #{enabled}
+        where `id` = #{id}
     </update>
 
     <update id="updateSkipNull" parameterType="Privilege">
@@ -56,19 +58,27 @@
     </update>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled` from privilege
+        select
+            `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
+        from privilege
         where `id` = #{id}
     </select>
 
     <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled` from privilege
+        select
+            `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
+        from privilege
     </select>
     <select id="countAll" resultType="Integer">
-        select count(*) from privilege
+        select count(*)
+        from privilege
     </select>
 
     <select id="getByParent" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `name`, `seq_no`, `enabled` from privilege where `parent_id` = #{parentId}
+        select
+            `id`, `name`, `seq_no`, `enabled`
+        from privilege
+        where `parent_id` = #{parentId}
     </select>
 
     <select id="getParentIdByChildId" parameterType="List" resultMap="BaseResultMap">
@@ -79,9 +89,12 @@
     </select>
 
     <select id="getTopListByRole" parameterType="Long" resultMap="BaseResultMap">
-        select p.`id`, p.`create_time`, p.`update_time`, p.`name`, p.`seq_no`, p.`level`, p.`parent_id`, p.`enabled`
-        from `role_privilege` rp join `privilege` p on rp.`privilege_id` = p.`id` and p.`level` = 1 where rp.`role_id` =
-        #{roleId};
+        select
+            p.`id`, p.`create_time`, p.`update_time`, p.`name`, p.`seq_no`, p.`level`, p.`parent_id`, p.`enabled`
+        from `role_privilege` rp
+            join `privilege` p
+                on rp.`privilege_id` = p.`id` and p.`level` = 1
+        where rp.`role_id` = #{roleId};
     </select>
 
     <select id="getByParentAndStatus" resultMap="BaseResultMap">
@@ -91,5 +104,12 @@
             <if test="enabled != null">and `enabled` = #{enabled}</if>
         </where>
         order by `seq_no` asc
+    </select>
+
+    <select id="getListByLevel" parameterType="int" resultMap="BaseResultMap">
+        select
+            `id`, `name`
+        from `privilege`
+        where `level` &lt;= #{level}
     </select>
 </mapper>

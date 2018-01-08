@@ -22,10 +22,11 @@ function saveManager() {
     var password = $("#password").val();
     var name = $("#name").val();
     var phone = $("#phone").val();
+    var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
     console.log("roleId: " + roleId + "\nusername: " + username + "\npassword: " + password + "\nname: " + name
-        + "\nphone: " + phone + "\nenabled: " + enabled);
+        + "\nphone: " + phone + "\nqq: " + qq + "\nenabled: " + enabled);
     $.ajax({
         type: "POST",
         url: "/manager/addition",
@@ -37,6 +38,7 @@ function saveManager() {
             "password": MD5(password),
             "name": name,
             "phone": phone,
+            "qq": qq,
             "enabled": enabled,
             "privilege": privilege
         }),
@@ -47,7 +49,7 @@ function saveManager() {
             else {
                 layer.msg("操作成功", {
                     time: 2000,
-                }, function(){
+                }, function() {
                     window.location.href = "/manager/index.html";
                 });
             }

@@ -27,6 +27,11 @@ public class RequestThread
         get().setiModule(iModule);
     }
 
+    public static void setSystem(Map<String, String> iSystem)
+    {
+        get().setiSystem(iSystem);
+    }
+
     public static Map<String, Object> getMap()
     {
         Map<String, Object> m = new HashMap<>();
@@ -34,6 +39,7 @@ public class RequestThread
         m.put("i_name", get().getiName());
         m.put("i_privilege", get().getiPrivilege());
         m.put("i_module", get().getiModule());
+        m.put("i_system", get().getiSystem());
         return m;
     }
 

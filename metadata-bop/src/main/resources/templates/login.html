@@ -48,7 +48,8 @@
         </form>
     </div>
 </div>
-<script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript">
     $(document).keydown(function(e) {
         if(e.keyCode === 13) {
             login();
@@ -76,10 +77,10 @@
                 "imageCode": $("#code").val()
             }),
             success: function(data) {
-                if(data.errCode != '000000') {
+                if(data.errCode !== '000000') {
                     refImage();
                     $("#code").val("");
-                    alert(data.errMsg);
+                    layer.msg(data.errMsg);
                 }
                 else {
                     window.location.href = "/manager/index.html";

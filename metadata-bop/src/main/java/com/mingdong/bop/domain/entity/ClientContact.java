@@ -2,19 +2,17 @@ package com.mingdong.bop.domain.entity;
 
 import java.util.Date;
 
-public class ClientUser
+public class ClientContact
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
     private Long clientId;
     private String name;
+    private String position;
     private String phone;
     private String email;
-    private String username;
-    private String password;
-    private Integer enabled;
-    private Integer deleted;
+    private Integer primary;
 
     public Long getId()
     {
@@ -66,6 +64,16 @@ public class ClientUser
         this.name = name;
     }
 
+    public String getPosition()
+    {
+        return position;
+    }
+
+    public void setPosition(String position)
+    {
+        this.position = position;
+    }
+
     public String getPhone()
     {
         return phone;
@@ -86,45 +94,13 @@ public class ClientUser
         this.email = email;
     }
 
-    public String getUsername()
+    public Integer getPrimary()
     {
-        return username;
+        return primary;
     }
 
-    public void setUsername(String username)
+    public void setPrimary(Integer primary)
     {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public Integer getEnabled()
-    {
-        return enabled;
-    }
-
-    public void setEnabled(Integer enabled)
-    {
-        this.enabled = enabled;
-    }
-
-    public Integer getDeleted()
-    {
-        return deleted;
-    }
-
-    public void setDeleted(Integer deleted)
-    {
-        this.deleted = deleted;
+        this.primary = primary;
     }
 }
-
-

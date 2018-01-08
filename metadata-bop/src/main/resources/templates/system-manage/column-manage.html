@@ -29,11 +29,8 @@
         </div>
         <!--面包屑 end-->
         <div class="p20">
-            <!--搜索-->
-            <!--搜索 end-->
             <!--table-->
-            <div class="clearfix mt20"><span class="fr add-button">后台栏目管理</span></div>
-
+            <!--<div class="clearfix mt20"><span class="fr add-button">后台栏目管理</span></div>-->
             <dl class="jurisdiction-list">
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
@@ -50,8 +47,8 @@
                         <block th:each="parent: ${list}">
                             <li class="clearfix jurisdiction-list-div">
                                 <em class="js-accordionTrigger w5"></em>
-                                <a class="w20 tl important" th:text="${parent.name}">52424254</a>
-                                <a class="w20" th:text="${parent.id}">111111</a>
+                                <a class="w20 tl important" th:text="${parent.name}"></a>
+                                <a class="w20" th:text="${parent.id}"></a>
                                 <a class="w10">
                                     <div class="file">
                                         <img src="../../static/images/add-img.png"/>
@@ -76,8 +73,8 @@
                                 <block th:each="child: ${parent.subList}">
                                     <li class="clearfix pb20 pl30 important">
                                         <em class="js-accordionTrigger w5"></em>
-                                        <a class="w20 tl important" th:text="${child.name}">52424254</a>
-                                        <a class="w20" th:text="${child.id}">111111</a>
+                                        <a class="w20 tl important" th:text="${child.name}"></a>
+                                        <a class="w20" th:text="${child.id}"></a>
                                         <a class="w10">&nbsp;</a>
                                         <a class="w10 pt0 important">
                                             <div class="layui-form">
@@ -97,8 +94,8 @@
                                         <block th:each="tChild: ${child.thrList}">
                                             <li class="clearfix pb20 pl45 important">
                                                 <em class="js-accordionTrigger w5"></em>
-                                                <a class="w20 tl important" th:text="${tChild.name}">52424254</a>
-                                                <a class="w20" th:text="${tChild.id}">111111</a>
+                                                <a class="w20 tl important" th:text="${tChild.name}"></a>
+                                                <a class="w20" th:text="${tChild.id}"></a>
                                                 <a class="w10">&nbsp;</a>
                                                 <a class="w10 pt0 important">
                                                     <div class="layui-form">
@@ -171,7 +168,7 @@
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/column.manage.js}"></script>
-<script type="text/javascript" src="../../static/js/SimpleTree.js"></script>
+<script type="text/javascript" th:src="@{/js/SimpleTree.js}"></script>
 <script type="text/javascript">
     $(function() {
         $(".st_tree").SimpleTree({
@@ -209,5 +206,4 @@
     //]]>
 </script>
 </body>
-
 </html>

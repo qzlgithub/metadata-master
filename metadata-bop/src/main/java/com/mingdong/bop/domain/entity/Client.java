@@ -11,9 +11,9 @@ public class Client
     private String shortName;
     private String license;
     private Long industryId;
+    private Long primaryUserId;
     private Long managerId;
     private Integer accountQty;
-    private Integer enabled;
     private Integer deleted;
 
     public Long getId()
@@ -86,6 +86,16 @@ public class Client
         this.industryId = industryId;
     }
 
+    public Long getPrimaryUserId()
+    {
+        return primaryUserId;
+    }
+
+    public void setPrimaryUserId(Long primaryUserId)
+    {
+        this.primaryUserId = primaryUserId;
+    }
+
     public Long getManagerId()
     {
         return managerId;
@@ -104,16 +114,6 @@ public class Client
     public void setAccountQty(Integer accountQty)
     {
         this.accountQty = accountQty;
-    }
-
-    public Integer getEnabled()
-    {
-        return enabled;
-    }
-
-    public void setEnabled(Integer enabled)
-    {
-        this.enabled = enabled;
     }
 
     public Integer getDeleted()

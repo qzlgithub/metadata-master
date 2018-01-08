@@ -43,7 +43,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="username" name="username" placeholder="请输入" autocomplete="off" class="layui-input" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"/>
+                        <input type="text" id="username" name="username" placeholder="请输入" autocomplete="off"
+                               class="layui-input" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -62,7 +63,15 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系电话：</label>
                     <div class="layui-input-block">
-                        <input type="tel" id="phone" name="phone" placeholder="请输入" autocomplete="off"  class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
+                        <input type="tel" id="phone" name="phone" placeholder="请输入" autocomplete="off"
+                               class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">QQ：</label>
+                    <div class="layui-input-block">
+                        <input type="tel" id="qq" placeholder="请输入" autocomplete="off"
+                               class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -99,8 +108,8 @@
                         <td class="tl important">
                             <!-- 具体权限 -->
                             <input type="checkbox" class="privilege" id="checkall"/>全选
-                            <input type="checkbox" class="privilege" id="11101" />添加
-                            <input type="checkbox" class="privilege" id="11102" />编辑
+                            <input type="checkbox" class="privilege" id="11101"/>添加
+                            <input type="checkbox" class="privilege" id="11102"/>编辑
                             <input type="checkbox" class="privilege" id="11103"/>停用
                         </td>
                     </tr>
@@ -246,7 +255,7 @@
 </div>
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
@@ -284,18 +293,15 @@
     });
     //全选复选框
     $(document).ready(function() {
-        $('#checkall').click(function () { /*checkall是全选复选框的id名称*/
-            $('input:checkbox[id]').prop('checked', this.checked); /*设置复选框的动态属性*/
-
+        $('#checkall').click(function() { /*checkall是全选复选框的id名称*/
+            $('input:checkbox[id]').prop('checked', this.checked);
+            /*设置复选框的动态属性*/
         });
-
-        $('input:checkbox[id]').click(function () {
-            isall = $('input:checkbox[id]').length == $('input:checkbox[id]:checked').length;/*获取当前选中的个数，判断是否跟全部复选框的个数是否相等*/
+        $('input:checkbox[id]').click(function() {
+            isall = $('input:checkbox[id]').length == $('input:checkbox[id]:checked').length;
+            /*获取当前选中的个数，判断是否跟全部复选框的个数是否相等*/
             $('#checkall').prop('checked', isall);
-
         });
-
-
     });
 </script>
 

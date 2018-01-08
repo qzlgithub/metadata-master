@@ -9,11 +9,18 @@
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
         <result column="license" property="license" jdbcType="VARCHAR" />
         <result column="industry_id" property="industryId" jdbcType="BIGINT" />
+        <result column="primary_user_id" property="primaryUserId" jdbcType="BIGINT" />
         <result column="manager_id" property="managerId" jdbcType="BIGINT" />
         <result column="account_qty" property="accountQty" jdbcType="INTEGER" />
-        <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="TINYINT" />
     </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`, `primary_user_id`,
+            `manager_id`, `account_qty`, `deleted`
+        from `client`
+    </sql>
 
     <insert id="add" parameterType="Client">
         insert into `client`
@@ -25,9 +32,9 @@
             <if test="shortName != null">`short_name`,</if>
             <if test="license != null">`license`,</if>
             <if test="industryId != null">`industry_id`,</if>
+            <if test="primaryUserId != null">`primary_user_id`,</if>
             <if test="managerId != null">`manager_id`,</if>
             <if test="accountQty != null">`account_qty`,</if>
-            <if test="enabled != null">`enabled`,</if>
             <if test="deleted != null">`deleted`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -38,25 +45,25 @@
             <if test="shortName != null">#{shortName},</if>
             <if test="license != null">#{license},</if>
             <if test="industryId != null">#{industryId},</if>
+            <if test="primaryUserId != null">#{primaryUserId},</if>
             <if test="managerId != null">#{managerId},</if>
             <if test="accountQty != null">#{accountQty},</if>
-            <if test="enabled != null">#{enabled},</if>
             <if test="deleted != null">#{deleted},</if>
         </trim>
     </insert>
 
     <update id="updateById" parameterType="Client">
         update `client`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `corp_name`   = #{corpName},
-            `short_name`  = #{shortName},
-            `license`     = #{license},
-            `industry_id` = #{industryId},
-            `manager_id`  = #{managerId},
-            `account_qty` = #{accountQty},
-            `enabled`     = #{enabled},
-            `deleted`     = #{deleted}
+        set `create_time`     = #{createTime},
+            `update_time`     = #{updateTime},
+            `corp_name`       = #{corpName},
+            `short_name`      = #{shortName},
+            `license`         = #{license},
+            `industry_id`     = #{industryId},
+            `primary_user_id` = #{primaryUserId},
+            `manager_id`      = #{managerId},
+            `account_qty`     = #{accountQty},
+            `deleted`         = #{deleted}
         where `id` = #{id}
     </update>
 
@@ -69,19 +76,12 @@
             <if test="shortName != null">`short_name` = #{shortName},</if>
             <if test="license != null">`license` = #{license},</if>
             <if test="industryId != null">`industry_id` = #{industryId},</if>
+            <if test="primaryUserId != null">`primary_user_id` = #{primaryUserId},</if>
             <if test="managerId != null">`manager_id` = #{managerId},</if>
             <if test="accountQty != null">`account_qty` = #{accountQty},</if>
-            <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="deleted != null">`deleted` = #{deleted},</if>
         </set>
         where `id` = #{id}
-    </update>
-
-    <update id="updateStatusByIds">
-        update `client` set `enabled` = #{enabled} where `id` in
-        <foreach collection="idList" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
     </update>
 
     <update id="setClientDeleted">
@@ -91,18 +91,16 @@
         </foreach>
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`, `manager_id`,
-            `account_qty`, `enabled`, `deleted`
-        from `client`
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
     </select>
 
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`, `manager_id`,
-            `account_qty`, `enabled`, `deleted`
-        from `client`
-        where `id` = #{id}
+    <select id="getListByIdList" parameterType="List" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 </mapper>

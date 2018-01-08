@@ -1,9 +1,9 @@
 package com.mingdong.bop.component;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Trade;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.model.SecInfo;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
@@ -11,40 +11,12 @@ import com.mingdong.core.base.RedisBaseDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class RedisDao extends RedisBaseDao
 {
-    /**
-     * 缓存用户安全信息
-     */
-    public void saveUserSecInfo(String userId, SecInfo secInfo)
-    {
-        String str = JSON.toJSONString(secInfo);
-        set(DB.USER_SECURE, userId, str);
-    }
-
-    /**
-     * 获取用户安全信息
-     */
-    public SecInfo getUserSecInfo(String userId)
-    {
-        String str = get(DB.USER_SECURE, userId);
-        if(!StringUtils.isNullBlank(str))
-        {
-            return JSON.parseObject(str, SecInfo.class);
-        }
-        return null;
-    }
-
-    /**
-     * 删除用户安全信息
-     */
-    public void dropUserSecInfo(String userId)
-    {
-        del(DB.USER_SECURE, userId);
-    }
-
     public String getIndustryInfo(Long industryId)
     {
         return hGet(DB.SYSTEM, Key.INDUSTRY, industryId + "");
@@ -76,6 +48,28 @@ public class RedisDao extends RedisBaseDao
         del(DB.USER_SECURE, sessionId);
     }
 
+    public void setSystemModule(Map<String, String> systemModule)
+    {
+        String str = JSON.toJSONString(systemModule);
+        set(DB.SYSTEM, Key.SYSTEM_MODULE, str);
+    }
+
+    public Map<String, String> getSystemModule()
+    {
+        String str = get(DB.SYSTEM, Key.SYSTEM_MODULE);
+        if(StringUtils.isNullBlank(str))
+        {
+            return null;
+        }
+        Map<String, String> map = new HashMap<>();
+        JSONObject json = JSON.parseObject(str);
+        for(String key : json.keySet())
+        {
+            map.put(key, json.getString(key));
+        }
+        return map;
+    }
+
     /**
      * 生成交易流水号
      *
@@ -102,5 +96,6 @@ public class RedisDao extends RedisBaseDao
     interface Key
     {
         String INDUSTRY = "industry";
+        String SYSTEM_MODULE = "system_module";
     }
 }

@@ -35,7 +35,7 @@
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
-                on pr.`client_id` = cu.`client_id` and cu.`primary` = 1
+                on c.`primary_user_id` = cu.`id`
             left join `product` p
                 on pr.`product_id` = p.`id`
             left join `manager` m

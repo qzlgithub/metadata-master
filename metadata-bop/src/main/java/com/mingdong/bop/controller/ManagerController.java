@@ -103,8 +103,8 @@ public class ManagerController
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         // 保存管理账号
-        managerService.addManager(vo.getUsername(), vo.getPassword(), vo.getName(), vo.getPhone(), vo.getRoleId(),
-                vo.getEnabled(), vo.getPrivilege(), resp);
+        managerService.addManager(vo.getUsername(), vo.getPassword(), vo.getName(), vo.getPhone(), vo.getQq(),
+                vo.getRoleId(), vo.getEnabled(), vo.getPrivilege(), resp);
         return resp;
     }
 
@@ -129,7 +129,7 @@ public class ManagerController
             enabled = null;
         }
         Page page = new Page(pageNum, pageSize);
-        managerService.getUserList(roleId, enabled, page, resp);
+        managerService.getManagerList(roleId, enabled, page, resp);
         return resp.getDataMap();
     }
 
@@ -153,8 +153,8 @@ public class ManagerController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        managerService.editManager(vo.getManagerId(), vo.getRoleId(), vo.getName(), vo.getPhone(), vo.getEnabled(),
-                vo.getPrivilege(), resp);
+        managerService.editManager(vo.getManagerId(), vo.getRoleId(), vo.getName(), vo.getPhone(), vo.getQq(),
+                vo.getEnabled(), vo.getPrivilege(), resp);
         return resp;
     }
 

@@ -31,6 +31,6 @@ node:
   id: 1
 dubbo:
   protocol:
-    port: 33001
+    port: 33002
   registry:
     address: 47.96.154.110:2181

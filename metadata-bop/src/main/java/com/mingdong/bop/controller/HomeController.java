@@ -36,7 +36,6 @@ public class HomeController
         }
         ImageCode imageCode = CaptchaUtil.buildImageCode(); // 获取图片验证码
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
-        System.out.println("====================: " + imageCode.getCode());
         ModelAndView view = new ModelAndView("login");
         view.addObject(Field.IMAGE, "data:image/png;base64," + imageCode.getBase64Code());
         return view;

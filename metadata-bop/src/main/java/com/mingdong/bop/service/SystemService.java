@@ -34,7 +34,7 @@ public interface SystemService
 
     Map<String, Object> getPrivilegeInfo(Long id);
 
-    void editPrivilegeInfo(Long id, String name, BLResp resp);
+    void editPrivilegeInfo(Long privilegeId, String name, BLResp resp);
 
     List<Map<String, Object>> getRechargeDict();
 
@@ -58,4 +58,5 @@ public interface SystemService
 
     String getIndustryName(Long industryId);
 
+    Map<String,String> cacheSystemModule();
 }

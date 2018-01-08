@@ -274,9 +274,7 @@ public class SystemServiceImpl implements SystemService
             /*for(int i=0;i<subList.size();i++){
                 System.out.println(subList.get(i));
             }*/
-
         }
-
         return list;
     }
 
@@ -290,24 +288,29 @@ public class SystemServiceImpl implements SystemService
         {
             privilegeMap.put(Field.NAME, privilege.getName());
         }
-        System.out.println(privilegeMap);
         return privilegeMap;
     }
 
     @Override
-    public void editPrivilegeInfo(Long id, String name, BLResp resp)
+    @Transactional
+    public void editPrivilegeInfo(Long privilegeId, String name, BLResp resp)
     {
-        Privilege privilege = privilegeMapper.findById(id);
+        Privilege privilege = privilegeMapper.findById(privilegeId);
         if(privilege == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
+        if(name.equals(privilege.getName()))
+        {
+            return;
+        }
         privilege = new Privilege();
-        privilege.setName(name);
-        privilege.setId(id);
+        privilege.setId(privilegeId);
         privilege.setUpdateTime(new Date());
+        privilege.setName(name);
         privilegeMapper.updateSkipNull(privilege);
+        cacheSystemModule();
     }
 
     @Override
@@ -583,6 +586,19 @@ public class SystemServiceImpl implements SystemService
             industryName = redisDao.getIndustryInfo(industryId);
         }
         return industryName == null ? "" : industryName;
+    }
+
+    @Override
+    public Map<String, String> cacheSystemModule()
+    {
+        Map<String, String> map = new HashMap<>();
+        List<Privilege> privilegeList = privilegeMapper.getListByLevel(3);
+        for(Privilege p : privilegeList)
+        {
+            map.put("m" + p.getId(), p.getName());
+        }
+        redisDao.setSystemModule(map);
+        return map;
     }
 
     private void cacheAllIndustryData()

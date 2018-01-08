@@ -11,6 +11,7 @@ public class Manager
     private String password;
     private String name;
     private String phone;
+    private String qq;
     private Long roleId;
     private Integer enabled;
     private String sessionId;
@@ -83,6 +84,16 @@ public class Manager
     public void setPhone(String phone)
     {
         this.phone = phone;
+    }
+
+    public String getQq()
+    {
+        return qq;
+    }
+
+    public void setQq(String qq)
+    {
+        this.qq = qq;
     }
 
     public Long getRoleId()

@@ -1,13 +1,15 @@
 package com.mingdong.core.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class RequestHolder
 {
     private Long iId;
     private String iName;
-    private List<String> iPrivilege;
     private String iModule;
+    private List<String> iPrivilege;
+    private Map<String, String> iSystem;
 
     public Long getiId()
     {
@@ -29,6 +31,16 @@ public class RequestHolder
         this.iName = iName;
     }
 
+    public String getiModule()
+    {
+        return iModule;
+    }
+
+    public void setiModule(String iModule)
+    {
+        this.iModule = iModule;
+    }
+
     public List<String> getiPrivilege()
     {
         return iPrivilege;
@@ -39,13 +51,13 @@ public class RequestHolder
         this.iPrivilege = iPrivilege;
     }
 
-    public String getiModule()
+    public Map<String, String> getiSystem()
     {
-        return iModule;
+        return iSystem;
     }
 
-    public void setiModule(String iModule)
+    public void setiSystem(Map<String, String> iSystem)
     {
-        this.iModule = iModule;
+        this.iSystem = iSystem;
     }
 }
