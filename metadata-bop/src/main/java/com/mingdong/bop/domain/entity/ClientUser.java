@@ -13,6 +13,7 @@ public class ClientUser
     private String email;
     private String username;
     private String password;
+    private String appKey;
     private Integer enabled;
     private Integer deleted;
 
@@ -104,6 +105,16 @@ public class ClientUser
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public String getAppKey()
+    {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey)
+    {
+        this.appKey = appKey;
     }
 
     public Integer getEnabled()
