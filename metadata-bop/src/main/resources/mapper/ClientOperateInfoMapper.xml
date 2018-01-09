@@ -8,7 +8,7 @@
         <result column="reason" property="reason" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="getListByClientUser" parameterType="Long" resultMap="ClientOperateInfo">
+    <select id="getListByClientUser" parameterType="Long" resultMap="BaseResultMap">
         select
             col.`create_time` as operate_time,
             col.`type`        as type,
