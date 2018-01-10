@@ -34,10 +34,16 @@ function saveNewRechargeType() {
         }),
         success: function(data) {
             if(data.errCode === "000000") {
-                window.location.href = "/config/recharge.html";
+                layer.msg("添加成功!", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/config/recharge.html";
+                });
             }
             else {
-                alert(data.errMsg);
+                layer.msg("添加失败:" + data.errMsg, {
+                    time: 2000
+                });
             }
         }
     });
@@ -52,18 +58,19 @@ function dropRecharge(id) {
                 "/config/recharge/deletion",
                 {"rechargeTypeId": id},
                 function() {
-                    window.location.href = "/config/recharge.html";
+                    layer.msg("删除成功!", {
+                        time: 2000
+                    }, function() {
+                        window.location.href = "/config/recharge.html";
+                    });
                 }
             );
             layer.closeAll();
         },
-        btn2: function() {
+        no: function() {
             layer.closeAll();
         }
     });
-
-
-
 }
 
 function editRecharge(id) {
@@ -72,7 +79,9 @@ function editRecharge(id) {
         {"rechargeTypeId": id},
         function(data) {
             if(data.errCode !== "000000") {
-                alert(data.errMsg);
+                layer.msg(data.errMsg, {
+                    time: 2000
+                });
             }
             else {
                 var d = data.dataMap;
@@ -98,10 +107,16 @@ function updateRechargeType() {
         }),
         success: function(data) {
             if(data.errCode !== "000000") {
-                alert(data.errMsg);
+                layer.msg("修改失败:" + data.errMsg, {
+                    time: 2000
+                });
             }
             else {
-                window.location.href = "/config/recharge.html";
+                layer.msg("修改成功!", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/config/recharge.html";
+                });
             }
         }
     });

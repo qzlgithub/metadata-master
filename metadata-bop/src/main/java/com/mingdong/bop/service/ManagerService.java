@@ -37,4 +37,6 @@ public interface ManagerService
     void changeStatus(Long roleId, BLResp resp);
 
     void changeManagerStatus(Long managerId, BLResp resp);
+
+    void checkIfRoleNameExist(String username, BLResp resp);
 }

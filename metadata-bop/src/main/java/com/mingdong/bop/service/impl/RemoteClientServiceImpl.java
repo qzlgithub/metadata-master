@@ -64,6 +64,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         Manager managerUpd = new Manager();
         managerUpd.setId(manager.getId());
         managerUpd.setUpdateTime(current);
+//        managerUpd.setSessionId(sessionId);
         managerMapper.updateSkipNull(managerUpd);
         List<String> privilegeList = getManagerPrivilegeIdList(manager.getId());
         ManagerSession ms = new ManagerSession();
@@ -71,6 +72,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ms.setName(manager.getName());
         ms.setPrivileges(privilegeList);
         ms.setAddAt(current.getTime());
+//        redisDao.saveManagerSession(sessionId, ms);
     }
 
     @Override

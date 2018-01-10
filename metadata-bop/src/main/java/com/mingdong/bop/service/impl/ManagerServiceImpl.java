@@ -526,4 +526,11 @@ public class ManagerServiceImpl implements ManagerService
         }
         return "";
     }
+
+    @Override
+    public void checkIfRoleNameExist(String name, BLResp resp)
+    {
+        Role role = roleMapper.findByName(name);
+        resp.addData(Field.EXIST, role == null ? 0 : 1);
+    }
 }

@@ -161,12 +161,12 @@ function saveRole() {
         }),
         success: function(data) {
             if(data.errCode != '000000') {
-                layer.msg("修改失败:" + data.errMsg, {
+                layer.msg("添加失败:" + data.errMsg, {
                     time: 2000
                 });
             }
             else {
-                layer.msg("修改成功", {
+                layer.msg("添加成功", {
                     time: 2000
                 }, function() {
                     window.location.href = "/role/index.html";
@@ -174,4 +174,30 @@ function saveRole() {
             }
         }
     });
+}
+
+function checkName() {
+    var name = $("#name").val();
+    if(name !== "") {
+        $.get(
+            "/role/check",
+            {"name": name},
+            function(data) {
+                if(data.exist === 1) {
+                    $("#nameTip").text("该分组名已被存在！");
+                    $("#nameTip").show();
+                    return false;
+                }
+                else {
+                    $("#nameTip").text("该分组名可用！");
+                    $("#nameTip").show();
+                }
+            }
+        );
+    }
+    else {
+        $("#nameTip").text("分组名不能为空");
+        $("#nameTip").show();
+        return false;
+    }
 }

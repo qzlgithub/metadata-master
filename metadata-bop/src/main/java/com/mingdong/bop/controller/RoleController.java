@@ -130,4 +130,13 @@ public class RoleController
         managerService.getRoleList(page, resp);
         return resp.getDataMap();
     }
+
+    @RequestMapping(value = "check", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
+    {
+        BLResp resp = BLResp.build();
+        managerService.checkIfRoleNameExist(name, resp);
+        return resp.getDataMap();
+    }
 }
