@@ -129,12 +129,19 @@ function changeStatus(id) {
                             $("#enabledTxt" + id).text("禁用");
                             $("#enabledCheck" + id).text("否");
                             $("#enabled" + id).val(1);
+                            layer.msg("启用成功",{
+                                time: 2000
+                            });
                         }
                         else {
                             $(this).click();
                             $("#enabledTxt" + id).text("启用");
                             $("#enabledCheck" + id).text("是");
                             $("#enabled" + id).val(0);
+                            layer.msg("禁用成功",{
+                                time: 2000
+                            });
+
                         }
                     }
                 }

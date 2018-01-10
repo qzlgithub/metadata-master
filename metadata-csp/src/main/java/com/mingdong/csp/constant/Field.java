@@ -6,6 +6,9 @@ public interface Field
     String USERNAME = "username";
     String PASSWORD = "password";
 
-    String OLD_PWD="odlPwd";
-    String NEW_PWD="newPwd";
+    String OLD_PWD = "odlPwd";
+    String NEW_PWD = "newPwd";
+    String NAME = "name";
+    String PHONE = "phone";
+    String CLIENT_USER_ID="clientUserId";
 }

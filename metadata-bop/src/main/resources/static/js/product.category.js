@@ -8,14 +8,6 @@ function showEditDiv() {
     });
 }
 
-//全选
-/*form.on('checkbox(allChoose)', function(data) {
-    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
-    child.each(function(index, item) {
-        item.checked = data.elem.checked;
-    });
-    form.render('checkbox');
-});*/
 $(function() {
     productCategoryList(1, $("#pageSize").val());
 });
@@ -140,12 +132,9 @@ function addProductCategory() {
         success: function(data) {
             if(data.errCode !== '000000') {
                 alert(data.errMsg);
-                // $("#layui-layer-shade1").hide();
-                // $("#product-class").hide();
             }
             else {
                 window.location.href = "/product/category/index.html";
-                // productCategoryList(1, $("#pageSize").val());
             }
         }
     });
@@ -212,10 +201,16 @@ function updateStatus(id) {
                         if(enabled === "0") {
                             $("#enabledTxt" + id).text("禁用");
                             $("#enabled" + id).val(1);
+                            layer.msg("启用成功",{
+                                time: 2000
+                            });
                         }
                         else {
                             $("#enabledTxt" + id).text("启用");
                             $("#enabled" + id).val(0);
+                            layer.msg("禁用成功",{
+                                time: 2000
+                            });
                         }
                     }
                 }
