@@ -18,6 +18,7 @@ import com.mingdong.bop.domain.entity.DictIndustry;
 import com.mingdong.bop.domain.entity.Manager;
 import com.mingdong.bop.domain.entity.ProductClientInfo;
 import com.mingdong.bop.domain.entity.ProductRecharge;
+import com.mingdong.bop.domain.entity.ProductRechargeInfo;
 import com.mingdong.bop.domain.mapper.ClientAccountMapper;
 import com.mingdong.bop.domain.mapper.ClientInfoMapper;
 import com.mingdong.bop.domain.mapper.ClientMapper;
@@ -28,6 +29,7 @@ import com.mingdong.bop.domain.mapper.ClientUserMapper;
 import com.mingdong.bop.domain.mapper.DictIndustryMapper;
 import com.mingdong.bop.domain.mapper.ManagerMapper;
 import com.mingdong.bop.domain.mapper.ProductClientInfoMapper;
+import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -42,6 +44,11 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.RequestThread;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +91,8 @@ public class ClientServiceImpl implements ClientService
     private ClientOperateLogMapper clientOperateLogMapper;
     @Resource
     private ClientOperateInfoMapper clientOperateInfoMapper;
+    @Resource
+    private ProductRechargeInfoMapper productRechargeInfoMapper;
 
     @Override
     public void checkIfUsernameExist(String username, BLResp resp)
@@ -729,5 +738,51 @@ public class ClientServiceImpl implements ClientService
             }
             resp.addData(Field.LIST, list);
         }
+    }
+
+    @Override
+    public XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("充值记录");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("充值时间");
+        row.createCell(1).setCellValue("充值单号");
+        row.createCell(2).setCellValue("公司名称");
+        row.createCell(3).setCellValue("公司简称");
+        row.createCell(4).setCellValue("账号");
+        row.createCell(5).setCellValue("产品服务");
+        row.createCell(6).setCellValue("充值类型");
+        row.createCell(7).setCellValue("充值金额");
+        row.createCell(8).setCellValue("产品服务余额");
+        row.createCell(9).setCellValue("商务经理");
+        row.createCell(10).setCellValue("合同编号");
+        row.createCell(11).setCellValue("备注");
+
+        PageHelper.startPage(1, 1000, false);
+        List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, startTime,
+                endTime);
+        CellStyle timeStyle = wb.createCellStyle();
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            ProductRechargeInfo pri = dataList.get(i);
+            Row dataRow = sheet.createRow(i + 1);
+            Cell cell = dataRow.createCell(0);
+            cell.setCellValue(pri.getTradeTime());
+            cell.setCellStyle(timeStyle);
+            dataRow.createCell(1).setCellValue(pri.getTradeNo());
+            dataRow.createCell(2).setCellValue(pri.getCorpName());
+            dataRow.createCell(3).setCellValue(pri.getShortName());
+            dataRow.createCell(4).setCellValue(pri.getUsername());
+            dataRow.createCell(5).setCellValue(pri.getProductName());
+            dataRow.createCell(6).setCellValue(pri.getRechargeType());
+            dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(pri.getAmount()));
+            dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(pri.getBalance()));
+            dataRow.createCell(9).setCellValue(pri.getManagerName());
+            dataRow.createCell(10).setCellValue(pri.getContractNo());
+            dataRow.createCell(11).setCellValue(pri.getRemark());
+        }
+        return wb;
     }
 }

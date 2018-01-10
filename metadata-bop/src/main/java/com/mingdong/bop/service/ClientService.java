@@ -2,6 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -54,4 +55,6 @@ public interface ClientService
             BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp);
 
     void getClientOperateLog(Long clientId, Page page, BLResp resp);
+
+    XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime);
 }

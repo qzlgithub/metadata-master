@@ -1,4 +1,4 @@
- package com.mingdong.bop.controller;
+package com.mingdong.bop.controller;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
@@ -19,6 +19,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.RequestThread;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -466,5 +470,23 @@ public class ClientController
         BLResp resp = BLResp.build();
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
+    }
+
+    @GetMapping(value = "product/recharge/export")
+    public void exportProductRechargeRecord(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
+            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
+            throws IOException
+    {
+
+        XSSFWorkbook wb = clientService.createProductRechargeXlsx(clientId, productId, startTime, endTime);
+        String filename = new String("产品充值记录".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream outputStream = response.getOutputStream();
+        wb.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 }

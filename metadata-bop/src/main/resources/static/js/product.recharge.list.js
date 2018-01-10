@@ -1,14 +1,44 @@
-$(".date").datepicker({dateFormat: "yy-mm-dd"});
-var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
-$(function() {
-    getProdRechargeList($("#client-id").val(), null, null, null, 1, $("#pageSize").val());
-});
+// $(".date").datepicker({dateFormat: "yy-mm-dd"});
+var dateFormat = "yy-mm-dd",
+    from = $("#start-time").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: "+1w",
+        changeMonth: true
+    }).on("change", function() {
+        to.datepicker("option", "minDate", getDate(this));
+    }),
+    to = $("#end-time").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: "+1w",
+        changeMonth: true
+    })
+    .on("change", function() {
+        from.datepicker("option", "maxDate", getDate(this));
+    });
 
-var
-    rowTr = "<tr>&lt;!&ndash;<td>#{createTime}</td><td>#{tradeNo}</td><td>#{clientName}</td><td>#{shortName}</td><td>#{username}</td><td>#{productName}</td><td>#{rechargeType}</td><td>#{amount}</td><td>#{balance}</td><td>#{manager}</td><td>#{contractNo}</td><td>#{remark}</td>&ndash;&gt;</tr>";
+function getDate(element) {
+    var date;
+    try {
+        date = $.datepicker.parseDate(dateFormat, element.value);
+    }
+    catch(error) {
+        date = null;
+    }
+    return date;
+}
+
+$(function() {
+    getProdRechargeList($("#client-id").val(), $("#product").val(), null, null, 1, $("#pageSize").val());
+});
+var rowTr = "<tr>&lt;!&ndash;<td>#{createTime}</td><td>#{tradeNo}</td><td>#{clientName}</td><td>#{shortName}</td><td>#{username}</td><td>#{productName}</td><td>#{rechargeType}</td><td>#{amount}</td><td>#{balance}</td><td>#{manager}</td><td>#{contractNo}</td><td>#{remark}</td>&ndash;&gt;</tr>";
+var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
 
 function getProdRechargeList(clientId, productId, startTime, endTime, pageNumVal, pageSizeVal) {
     $("#pageNum").val(pageNumVal);
+    if(endTime !== null && endTime !== '')
+    {
+        endTime = endTime + " 23:59:59";
+    }
     $.get(
         "/client/rechargeList",
         {
@@ -23,7 +53,6 @@ function getProdRechargeList(clientId, productId, startTime, endTime, pageNumVal
             var list = data.list;
             $("#dataBody").empty();
             for(var d in list) {
-                //alert(list[d].username);
                 var tr = rowTr.replace("#{createTime}", list[d].tradeAt)
                 .replace("#{tradeNo}", list[d].tradeNo)
                 .replace("#{clientName}", list[d].corpName)
@@ -58,7 +87,6 @@ function getProdRechargeList(clientId, productId, startTime, endTime, pageNumVal
         });
 }
 
-//<![CDATA[
 function refreshPageInfo(front, next, pageNum, totalPage) {
     /*var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';*/
     front.empty();
@@ -142,4 +170,10 @@ function gotoPage() {
     getProdRechargeList(clientId, productId, startTime, endTime, pageNumVal, pageSizeVal);
 }
 
-//]]>
+function exportToExcel() {
+    var clientId = $("#client-id").val();
+    var productId = $("#product").val();
+    var startTime = $("#start-time").val();
+    var endTime = $("#end-time").val();
+    location.href = "/client/product/recharge/export?clientId=" + clientId + "&productId=" + productId + "&startTime=" + startTime + "&endTime=" + endTime;
+}
