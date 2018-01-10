@@ -12,8 +12,6 @@ public class UserServiceImpl implements UserService
 {
     @Resource
     private RemoteClientService clientApi;
-    @Resource
-    private RedisBaseDao redisBaseDao;
 
     @Override
     public void userLogin(String username, String password, BLResp resp)
@@ -23,6 +21,31 @@ public class UserServiceImpl implements UserService
 
     @Override
     public void userLogout(String sessionId)
+    {
+
+    }
+
+    @Override
+    public void addChildAccount(Long clientId, String username, String password, String name, String phone, BLResp resp)
+    {
+
+    }
+
+    @Override
+    public BLResp getChildAccountMap(Long id)
+    {
+        return null;
+    }
+
+    @Override
+    public void changeStatus(Long clientUserId, BLResp resp)
+    {
+
+    }
+
+    @Override
+    public void editChildAccount(Long clientUserId, String username, String password, String name, String phone,
+            BLResp resp)
     {
 
     }

@@ -140,7 +140,7 @@ public class UserController
      * 删除子账号
      */
     @PostMapping(value = "dropChildAccount")
-    public BLResp dropChildAccount(@RequestParam(value = Field.CLIENT_USER_ID) Long ClientUserId)
+    public BLResp dropChildAccount(@RequestParam(value = Field.CLIENT_USER_ID) Long clientUserId)
     {
         BLResp resp = BLResp.build();
         return resp;
