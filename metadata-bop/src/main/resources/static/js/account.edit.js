@@ -40,10 +40,16 @@ function saveManager() {
         }),
         success: function(data) {
             if(data.errCode !== "000000") {
-                alert("失败：" + data.errMsg);
+                layer.msg("修改失败:" + data.errMsg, {
+                    time: 2000
+                });
             }
             else {
-                window.location.href = "/manager/index.html";
+                layer.msg("修改成功", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/manager/index.html";
+                });
             }
         }
     });

@@ -97,10 +97,16 @@ function saveIndustry(id, code, name) {
         data: JSON.stringify({"id": id, "code": code, "name": name}),
         success: function(data) {
             if(data.errCode !== "000000") {
-                alert(data.errMsg);
+                layer.msg("添加失败" + data.errMsg,{
+                    time: 2000
+                });
             }
             else {
-                window.location.href = "/config/industry.html";
+                layer.msg("添加成功",{
+                    time: 2000
+                },function(){
+                    window.location.href = "/config/industry.html";
+                });
             }
         }
     });
@@ -116,11 +122,16 @@ $(document).on("click", ".js_addIndustry", function() {
         type: "post",
         url: "/industry/add",
         success: function(data) {
-            alert("添加成功");
-            window.location.href = "/industry/manage";
+            layer.msg("添加成功",{
+                time: 2000
+            },function(){
+                window.location.href = "/industry/manage";
+            });
         },
         error: function(data) {
-            alert("添加失败");
+            layer.msg("添加失败" + data.errMsg,{
+                time: 2000
+            });
         }
     })
 });
@@ -133,11 +144,16 @@ $(document).on("click", ".js_addChildIndustry", function() {
         type: "post",
         url: "/industry/add",
         success: function(data) {
-            alert("添加成功");
-            window.location.href = "/industry/manage";
+            layer.msg("添加成功",{
+                time: 2000
+            },function(){
+                window.location.href = "/industry/manage";
+            });
         },
         error: function(data) {
-            alert("添加失败");
+            layer.msg("添加失败" + data.errMsg,{
+                time: 2000
+            });
         }
     })
 })
@@ -154,9 +170,16 @@ function editIndustry() {
         data: JSON.stringify({"id": id, "code": code, "name": name}),
         success: function(data) {
             if(data.errCode !== "000000") {
-                alert(data.errMsg);
+                layer.msg("修改失败" + data.errMsg,{
+                    time: 2000
+                });
+            }else{
+                layer.msg("修改成功",{
+                    time: 2000
+                },function(){
+                    window.location.href = "/config/industry.html";
+                });
             }
-            window.location.href = "/config/industry.html";
         }
     });
 }

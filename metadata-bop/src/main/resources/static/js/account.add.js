@@ -44,11 +44,13 @@ function saveManager() {
         }),
         success: function(data) {
             if(data.errCode !== "000000") {
-                layer.msg("操作失败:" + data.errMsg);
+                layer.msg("保存失败:" + data.errMsg,{
+                    time: 2000
+                });
             }
             else {
-                layer.msg("操作成功", {
-                    time: 2000,
+                layer.msg("保存成功", {
+                    time: 2000
                 }, function() {
                     window.location.href = "/manager/index.html";
                 });

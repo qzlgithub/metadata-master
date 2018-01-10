@@ -122,9 +122,15 @@ function changeStatus(id) {
                 var obj = data.dataMap;
                 if(obj.enabled === 1) {
                     $("#enabled" + id).text("禁用");
+                    layer.msg("启用成功",{
+                        time: 2000
+                    });
                 }
                 else {
                     $("#enabled" + id).text("启用");
+                    layer.msg("禁用成功",{
+                        time: 2000
+                    });
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.mingdong.csp.service.impl;
 
+import com.mingdong.core.base.RedisBaseDao;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.csp.service.UserService;
@@ -12,9 +13,17 @@ public class UserServiceImpl implements UserService
 {
     @Resource
     private RemoteClientService clientApi;
+    @Resource
+    private RedisBaseDao redisBaseDao;
 
     @Override
     public void userLogin(String username, String password, BLResp resp)
+    {
+
+    }
+
+    @Override
+    public void userLogout(String sessionId)
     {
 
     }

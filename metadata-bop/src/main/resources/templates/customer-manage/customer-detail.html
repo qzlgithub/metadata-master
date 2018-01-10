@@ -300,26 +300,30 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>服务时间：</label>
                 <div class="layui-input-inline">
                     <input type="text" id="open-start" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date"/>
+                           autocomplete="off" class="layui-input date" onblur="checkOpenStart()"/>
+                    <i class="col3 pl10" id="openStartTip" style="display: none"></i>
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
                     <input type="text" id="open-end" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date"/>
+                           autocomplete="off" class="layui-input date" onblur="checkOpenEnd()"/>
+                    <i class="col3 pl10" id="openEndTip" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item" id="times-div" style="display: none;">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>单价：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="open-unit" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:50%; display:inline;"/> 元/次
+                           class="layui-input" style="width:50%; display:inline;" onblur="checkOpenUnit()"/> 元/次
+                    <i class="col3 pl10" id="openUnitTip" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="open-amt" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display:inline;"/> 元
+                           class="layui-input" style="width:70%; display:inline;" onblur="checkOpenAmt()"/> 元
+                    <i class="col3 pl10" id="openAmtTip" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -334,7 +338,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>合同编号：</label>
                 <div class="layui-input-block renew-input-block">
                     <input type="text" id="open-contract" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input"/>
+                           class="layui-input" onblur="checkOpenContract()"/>
+                    <i class="col3 pl10" id="openContractTip" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -360,38 +365,43 @@
 <!--账户充值  提示层-->
 <div id="recharge-modal" class="modal">
     <!--form-->
-    <div class="layui-layer-title">开通服务</div>
+    <div class="layui-layer-title">账户充值</div>
     <div class="m30">
         <form class="layui-form" action="">
             <div class="m30 mt0 mr40">
                 <div class="layui-form-item">
                     <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                     <div class="layui-input-block renew-input-block">
-                        <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
-                               class="layui-input" style="width:70%; display: inline;"/> 元
+                        <input type="text" id="account-recharge-amt" name="username" lay-verify="required"
+                               placeholder="请输入" autocomplete="off"
+                               class="layui-input" style="width:70%; display: inline;"
+                               onblur="checkRechargeAmt()"/> 元
+                        <i class="col3 pl10" id="rechargeAmtTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
                     <div class="layui-input-block renew-input-block">
-                        <select name="modules" lay-verify="required" lay-search="" class="select-list">
-                            <option value="">代客户充值</option>
-                            <option value="1">赔偿</option>
-                            <option value="2">借用</option>
-                            <option value="3">返还</option>
-                            <option value="3">活动赠送</option>
+                        <select name="modules" id="account-recharge-type" lay-verify="required" lay-search="" class="select-list">
+                            <option value="1">代客户充值</option>
+                            <option value="2">赔偿</option>
+                            <option value="3">借用</option>
+                            <option value="4">返还</option>
+                            <option value="5">活动赠送</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label renew-form-label">备注：</label>
                     <div class="layui-input-block renew-input-block">
-                        <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="desc" id="account-recharge-remark" placeholder="请输入内容"
+                                  class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+                        <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="accountRecharge()">保存
+                        </button>
                     </div>
                 </div>
             </div>
@@ -411,128 +421,8 @@
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript">
-    function openProduct() {
-        var clientId = $("#client-id").val();
-        var productId = $("#open-product-id").val();
-        var chargeType = $("#open-charge").val();
-        var start = $("#open-start").val();
-        var end = $("#open-end").val();
-        var unit = $("#open-unit").val();
-        var amount = $("#open-amt").val();
-        var rechargeType = $("#open-recharge-type").val();
-        var contract = $("#open-contract").val();
-        var remark = $("#open-remark").val();
-        $.ajax({
-            type: "post",
-            url: "/client/product/open",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "clientId": clientId,
-                "productId": productId,
-                "billPlan": chargeType,
-                "rechargeType": rechargeType,
-                "amount": amount,
-                "contractNo": contract,
-                "remark": remark,
-                "startDate": start,
-                "endDate": end,
-                "unitAmt": unit
-            }),
-            success: function(res) {
-                if(data.errCode != '000000') {
-                    layer.msg("开通失败:"+data.errMsg);
-                }
-                else {
-                    layer.msg("开通成功", {
-                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                    }, function(){
-                        window.location.href = "/client/detail.html?clientId=" + clientId;
-                    });
-                }
-            }
-        });
-    }
-
-    function renewProduct() {
-        var clientProductId = $("#renew-client-product-id").val();
-        var billPlan = $("#renew-bill-plan").val();
-        var startDate = $("#renew-start").val();
-        var endDate = $("#renew-end").val();
-        var unit = $("#renew-unit").val();
-        var amount = $("#renew-amt").val();
-        var rechargeType = $("#renew-recharge-type").val();
-        var contract = $("#renew-contract").val();
-        var remark = $("#renew-remark").val();
-        $.ajax({
-            type: "post",
-            url: "/client/product/renew",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "clientProductId": clientProductId,
-                "billPlan": billPlan,
-                "rechargeType": rechargeType,
-                "contractNo": contract,
-                "amount": amount,
-                "remark": remark,
-                "startDate": startDate,
-                "endDate": endDate,
-                "unitAmt": unit
-            }),
-            success: function(res) {
-                if(data.errCode != '000000') {
-                    layer.msg("开通失败:"+data.errMsg);
-                }
-                else {
-                    layer.msg("开通成功", {
-                        time: 2000
-                    }, function(){
-                        window.location.href = "/client/detail.html?clientId=" + $("#client-id").val();
-                    });
-                }
-            }
-        });
-    }
-</script>
+<script type="text/javascript" th:src="@{/js/customer.detail.js}"></script>
 <script>
-    //开通服务切换
-    $(document).ready(function(){
-        $("#open-charge").on("change",function(){
-            if ($("option:selected",this).val() == '1') {
-                $("#year-div").show();
-                $("#times-div").hide();
-            }
-            else if ($("option:selected",this).val() == '2') {
-                $("#times-div").show();
-                $("#year-div").hide();
-            }else if ($("option:selected",this).val() == '3') {
-                $("#times-div").show();
-                $("#year-div").hide();
-            }else{
-                $("#year-div").hide();
-                $("#times-div").hide();
-            }
-        });
-        //续费切换
-        $("#renew-bill-plan").on("change",function(){
-            if ($("option:selected",this).val() == '1') {
-                $("#serviceTime").show();
-                $("#priceIput").hide();
-            }
-            else if ($("option:selected",this).val() == '2') {
-                $("#priceIput").show();
-                $("#serviceTime").hide();
-            }else if ($("option:selected",this).val() == '3') {
-                $("#priceIput").show();
-                $("#serviceTime").hide();
-            }else{
-                $("#serviceTime").hide();
-                $("#priceIput").hide();
-            }
-        });
-    });
     $(".date").datepicker({dateFormat: "yy-mm-dd"});
     var message;
     layui.config({
@@ -629,125 +519,6 @@
             elem: '.date'
         });*/
     });
-
-    function checkSelectBill() {
-        var selectBill = $("#renew-bill-plan").val();
-        if(selectBill !== "") {
-            $("#selectBillTip").text("");
-            $("#selectBillTip").hide();
-        }
-        else {
-            $("#selectBillTip").text("请选择计费模式！");
-            $("#selectBillTip").show();
-        }
-    }
-
-    function checkStartTime() {
-        var startTime = $("#renew-start").val();
-        var reg = new RegExp(
-            "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-        if(startTime !== "") {
-            if(reg.test(startTime)) {
-                $("#startTimeTip").text("");
-                $("#startTimeTip").hide();
-            }
-            else {
-                $("#startTimeTip").text("时间格式错误！");
-                $("#startTimeTip").show();
-            }
-        }
-        else {
-            $("#startTimeTip").text("请选择服务开始时间！");
-            $("#startTimeTip").show();
-        }
-    }
-
-    function checkEndTime() {
-        var endTime = $("#renew-end").val();
-        var reg =
-            new
-            RegExp("^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-        if(endTime !== "") {
-            if(reg.test(endTime)) {
-                $("#endTimeTip").text("");
-                $("#endTimeTip").hide();
-            }
-            else {
-                $("#endTimeTip").text("时间格式错误");
-                $("#endTimeTip").show();
-            }
-        }
-        else {
-            $("#endTimeTip").text("请选择服务结束时间！");
-            $("#endTimeTip").show();
-        }
-    }
-
-    function checkUnitPrice() {
-        var unitPrice = $("#renew-unit").val();
-        var reg1 = new RegExp("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$"); // 匹配任意浮点型数据
-        var reg2 = new RegExp("^[1-9]\\d*$"); // 匹配任意正整数
-        if(unitPrice !== "") {
-            if(reg1.test(unitPrice) || reg2.test(unitPrice)) {
-                $("#unitPriceTip").text("");
-                $("#unitPriceTip").hide();
-            }
-            else {
-                $("#unitPriceTip").text("单价格式错误！");
-                $("#unitPriceTip").show();
-            }
-        }
-        else {
-            $("#unitPriceTip").text("请填写单价！");
-            $("#unitPriceTip").show();
-        }
-    }
-
-    function checkRecharge() {
-        var recharge = $("#renew-amt").val();
-        var reg1 = new RegExp("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$"); // 匹配任意浮点型数据
-        var reg2 = new RegExp("^[1-9]\\d*$"); // 匹配任意正整数
-        if(recharge !== "") {
-            if(reg1.test(recharge) || reg2.test(recharge)) {
-                $("#rechargeTip").text("");
-                $("#rechargeTip").hide();
-            }
-            else {
-                $("#rechargeTip").text("充值金额格式错误");
-                $("#rechargeTip").show();
-            }
-        }
-        else {
-            $("#rechargeTip").text("请填写充值金额！");
-            $("#rechargeTip").show();
-        }
-    }
-
-    function checkRechargeType() {
-        var rechargeType = $("#renew-recharge-type").val();
-        if(rechargeType !== "") {
-            $("#rechargeTypeTip").text("");
-            $("#rechargeTypeTip").hide();
-        }
-        else {
-            $("#rechargeTypeTip").text("请选择充值类型！");
-            $("#rechargeTypeTip").show();
-        }
-    }
-
-    function checkContNumber() {
-        var contNumber = $("#renew-contract").val();
-        if(contNumber !== "") {
-            $("#contNumberTip").text("");
-            $("#contNumberTip").hide();
-        }
-        else {
-            $("#contNumberTip").text("请填写合同编号！");
-            $("#contNumberTip").show();
-        }
-    }
-
 </script>
 </body>
-
 </html>

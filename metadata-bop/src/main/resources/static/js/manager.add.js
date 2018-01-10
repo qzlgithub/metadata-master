@@ -25,10 +25,14 @@ function submitManager() {
         }),
         success: function(data) {
             if(data.errCode === "000000") {
-                alert("成功");
+                layer.msg("添加成功", {
+                    time: 2000
+                });
             }
             else {
-                alert("失败：" + data.errMsg);
+                layer.msg("添加失败:" + data.errMsg, {
+                    time: 2000
+                });
             }
         }
     });

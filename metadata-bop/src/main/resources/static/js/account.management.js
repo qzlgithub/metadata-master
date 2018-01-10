@@ -132,10 +132,16 @@ function changeStatus(id) {
                         if(obj.enabled === 1) {
                             $("#statusAction" + id).text("禁用");
                             $("#enabled" + id).text("已启用");
+                            layer.msg("启用成功", {
+                                time: 2000
+                            });
                         }
                         else {
                             $("#statusAction" + id).text("启用");
                             $("#enabled" + id).text("已禁用");
+                            layer.msg("禁用成功", {
+                                time: 2000
+                            });
                         }
                     }
                 }
