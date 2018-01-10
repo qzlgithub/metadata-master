@@ -19,6 +19,7 @@ require(
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
+                selectedMode: false,
                 orient: 'vertical',
                 x: 'left',
                 data: ['代充', '垫付', '赔偿', '返还']

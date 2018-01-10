@@ -170,26 +170,26 @@ function findProductCategeoryById(id) {
 
 /*产品类别编辑*/
 function updateProductCategory() {
-    //var id = $("#edit-class").data("idKey");
-    var url = "/product/categoryUpdate";
-    //alert("div+" + id);
-    var param = {
-        "id": $("#editId").val(),
-        "code": $("#productCodeU").val(),
-        "name": $("#productNameU").val(),
-        "remark": $("#productRemarkU").val()
-    };
-    //alert(123456);
-    $.post(url, param, function(data) {
-        if(data.errCode !== '000000') {
-            alert(data.errMsg);
+    $.ajax({
+        type: "POST",
+        url: "/product/categoryUpdate",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+            "id": $("#editId").val(),
+            "code": $("#productCodeU").val(),
+            "name": $("#productNameU").val(),
+            "remark": $("#productRemarkU").val()
+        }),
+        success: function(data) {
+            // alert(data.name);
+            if(data.errCode !== '000000') {
+                alert(data.errMsg);
+            }
+            else {
+                window.location.href = "/product/category/index.html";
+            }
         }
-        else {
-            window.location.href = "/product/category/index.html";
-            // TODO zbb div 无法隐藏
-        }
-        /*
-         $("#edit-class").hide();*/
     });
 }
 

@@ -111,22 +111,35 @@ function getRoleList(pageNumVal, pageSizeVal) {
 }
 
 function changeStatus(id) {
-    $.ajax({
-        type: "POST",
-        url: "/role/changeStatus",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({"id": id}),
-        success: function(data) {
-            if(data.errCode === '000000') {
-                var obj = data.dataMap;
-                if(obj.enabled === 1) {
-                    $("#enabled" + id).text("禁用");
+    var txt = $("#enabled" + id).text();
+    layer.confirm('是否确定' + txt + '？', {
+        btn: ['确定', '取消'],
+        yes: function() {
+            $(this).click();
+
+            $.ajax({
+                type: "POST",
+                url: "/role/changeStatus",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({"id": id}),
+                success: function(data) {
+                    if(data.errCode === '000000') {
+                        var obj = data.dataMap;
+                        if(obj.enabled === 1) {
+                            $("#enabled" + id).text("禁用");
+                        }
+                        else {
+                            $("#enabled" + id).text("启用");
+                        }
+                    }
                 }
-                else {
-                    $("#enabled" + id).text("启用");
-                }
-            }
+            });
+
+            layer.closeAll();
+        },
+        btn2: function() {
+            layer.closeAll();
         }
     });
 }

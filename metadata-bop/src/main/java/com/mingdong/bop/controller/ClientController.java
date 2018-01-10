@@ -1,4 +1,4 @@
-package com.mingdong.bop.controller;
+ package com.mingdong.bop.controller;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;

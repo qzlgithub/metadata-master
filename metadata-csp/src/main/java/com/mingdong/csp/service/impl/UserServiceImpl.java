@@ -18,4 +18,11 @@ public class UserServiceImpl implements UserService
     {
 
     }
+
+    @Override
+    public void changePassword(Long userId, String oldPwd, String newPwd, BLResp resp)
+    {
+
+    }
+
 }

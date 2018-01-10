@@ -264,16 +264,12 @@ public class SystemServiceImpl implements SystemService
                     cc.put(Field.ENABLED, pleg.getEnabled());
                     thrList.add(cc);
                 }
-                //第三层写在这里
                 c.put(Field.THR_LIST, thrList);
                 subList.add(c);
 
             }
             p.put(Field.SUB_LIST, subList);
             list.add(p);
-            /*for(int i=0;i<subList.size();i++){
-                System.out.println(subList.get(i));
-            }*/
         }
         return list;
     }

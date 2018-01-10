@@ -25,7 +25,7 @@
                    t.id
             left join `product_txt` pt
                 on p.id = pt.id
-        order by create_time
+        order by create_time desc
     </select>
 
     <select id="countAll" resultType="Integer">

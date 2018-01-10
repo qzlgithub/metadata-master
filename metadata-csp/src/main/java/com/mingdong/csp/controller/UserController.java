@@ -1,9 +1,10 @@
 package com.mingdong.csp.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.dubbo.common.json.JSONObject;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RequestThread;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,4 +43,19 @@ public class UserController
         userService.userLogin(username, password, resp);
         return resp;
     }
+
+    @PostMapping(value = "changePwd")
+    public BLResp changePwd(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        String oldPwd = jsonReq.getString(Field.OLD_PWD);
+        String newPwd = jsonReq.getString(Field.NEW_PWD);
+        if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        userService.changePassword(RequestThread.getOperatorId(), oldPwd, newPwd, resp);
+        return resp;
+    }
+
 }
