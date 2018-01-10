@@ -4,11 +4,12 @@ import com.mingdong.core.model.BLResp;
 
 public interface UserService
 {
-    void userLogin(String username, String password, BLResp resp);
+    void userLogin(String username, String password, String sessionId, BLResp resp);
+
+    void userLogout(String sessionId);
 
     void changePassword(Long userId, String oldPwd, String newPwd, BLResp resp);
 
-    void userLogout(String sessionId);
 
     /**
      *添加子账号

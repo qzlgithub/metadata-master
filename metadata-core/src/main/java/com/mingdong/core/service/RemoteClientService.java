@@ -1,9 +1,11 @@
 package com.mingdong.core.service;
 
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.UserDTO;
 
 public interface RemoteClientService
 {
-    void userLogin(String username, String password, BLResp resp);
-    void userLogout(String sessionId);
+    UserDTO userLogin(String username, String password);
+
+    BaseDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
 }

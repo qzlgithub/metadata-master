@@ -11,4 +11,5 @@ public interface Field
     String NAME = "name";
     String PHONE = "phone";
     String CLIENT_USER_ID="clientUserId";
+    String FIRST_LOGIN = "firstLogin";
 }

@@ -43,8 +43,17 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.userLogin(username, password, resp);
+        userService.userLogin(username, password, session.getId(), resp);
         return resp;
+    }
+
+    @PostMapping(value = "logout")
+    public BLResp userLogout(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        String sessionId = session.getId();
+        userService.userLogout(sessionId);
+        return new BLResp();
     }
 
     @PostMapping(value = "changePwd")

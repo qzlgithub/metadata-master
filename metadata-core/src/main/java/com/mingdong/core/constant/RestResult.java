@@ -20,7 +20,8 @@ public enum RestResult
     KEY_FIELD_MISSING("100014", "关键字段不能为空"),
     ROLE_NAME_EXIST("100015", "角色名已存在"),
     INDUSTRY_CODE_EXIST("100016", "行业编号已被占用"),
-    PRODUCT_OPENED("100017", "该产品服务已开通");
+    PRODUCT_OPENED("100017", "该产品服务已开通"),
+    INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
 
     private final String code;
     private final String message;
@@ -29,6 +30,21 @@ public enum RestResult
     {
         this.code = code;
         this.message = message;
+    }
+
+    public static RestResult getByCode(String code)
+    {
+        if(code != null)
+        {
+            for(RestResult o : RestResult.values())
+            {
+                if(code.equals(o.code))
+                {
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 
     public String getCode()
