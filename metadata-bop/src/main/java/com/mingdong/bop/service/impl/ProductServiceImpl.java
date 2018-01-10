@@ -14,6 +14,7 @@ import com.mingdong.bop.domain.mapper.ProductTxtMapper;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -162,148 +163,89 @@ public class ProductServiceImpl implements ProductService
         return map;
     }
 
- /*   @Override
-    public BLResp getProductInfo(Long productId)
-    {
-        BLResp resp = BLResp.build();
-        Product product = productMapper.findById(productId);
-        if(product == null)
-        {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
-        }
-        ProductTxt productTxt = productTxtMapper.findById(productId);
-        return resp.addData(Field.ID, productId)
-                .addData(Field.TYPE, product.getTypeId())
-                .addData(Field.CODE, product.getCode())
-                .addData(Field.NAME, product.getName())
-                .addData(Field.COST_AMT, product.getCostAmt())
-                .addData(Field.CONTENT, productTxt == null ? "" : productTxt.getContent())
-                .addData(Field.REMARK, product.getRemark())
-                .addData(Field.ENABLED, product.getEnabled());
-    }*/
-
-    @Override
-    public BLResp getProductList(Page page)
-    {
-        BLResp resp = BLResp.build();
-        int total = productMapper.countAll();
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<Product> productList = productMapper.getAll();
-            List<Map<String, Object>> list = new ArrayList<>(productList.size());
-            for(Product product : productList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, product.getId() + "");
-                map.put(Field.TYPE, product.getTypeId());
-                map.put(Field.CODE, product.getCode());
-                map.put(Field.NAME, product.getName());
-                map.put(Field.REMARK, product.getRemark());
-                map.put(Field.ENABLED, product.getEnabled() + "");
-                list.add(map);
-            }
-            resp.addData(Field.LIST, list);
-        }
-        return resp;
-    }
-
     @Override
     @Transactional
-    public BLResp addProduct(Long typeId, String code, String name, BigDecimal costAmt, Integer enabled, String content,
-            String remark)
+    public void addProduct(Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            String remark, String content, BLResp resp)
     {
-        BLResp resp = BLResp.build();
         // 1. 校验产品类型是否有效
-        DictProductType type = dictProductTypeMapper.findById(typeId);
+        DictProductType type = dictProductTypeMapper.findById(productType);
         if(type == null)
         {
-            return resp.result(RestResult.INVALID_PRODUCT_TYPE);
+            resp.result(RestResult.INVALID_PRODUCT_TYPE);
+            return;
         }
-        // 2. 校验验证码是否重复
+        // 2. 校验产品编码是否重复
         Product product = productMapper.findByCode(code);
         if(product != null)
         {
-            return resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
+            resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
+            return;
         }
         Long productId = IDUtils.getProductId(param.getNodeId());
         Date curr = new Date();
+        if(!StringUtils.isNullBlank(content))
+        {
+            ProductTxt productTxt = new ProductTxt();
+            productTxt.setId(productId);
+            productTxt.setCreateTime(curr);
+            productTxt.setUpdateTime(curr);
+            productTxt.setContent(content);
+            productTxtMapper.add(productTxt);
+        }
         product = new Product();
         product.setId(productId);
         product.setCreateTime(curr);
         product.setUpdateTime(curr);
-        product.setTypeId(typeId);
+        product.setTypeId(productType);
         product.setCode(code);
         product.setName(name);
         product.setCostAmt(costAmt);
         product.setRemark(remark);
         product.setEnabled(enabled);
         productMapper.add(product);
-        ProductTxt productTxt = new ProductTxt();
-        productTxt.setId(productId);
-        productTxt.setCreateTime(curr);
-        productTxt.setUpdateTime(curr);
-        productTxt.setContent(content);
-        productTxtMapper.add(productTxt);
-        return resp;
     }
 
     @Override
     @Transactional
-    public BLResp editProduct(Long productId, Long typeId, String code, String name, BigDecimal costAmt, String content,
-            String remark, Integer enabled)
+    public void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            String remark, String content, BLResp resp)
     {
-        BLResp resp = BLResp.build();
-        Product product = productMapper.findById(productId);
+        Product product = productMapper.findById(id);
         if(product == null)
         {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.result(RestResult.OBJECT_NOT_FOUND);
+            return;
         }
-        Date curr = new Date();
-        product.setId(productId);
-        product.setUpdateTime(curr);
-        product.setTypeId(typeId);
+        Date current = new Date();
+        product.setId(id);
+        product.setUpdateTime(current);
+        product.setTypeId(productType);
         product.setCode(code);
-        product.setEnabled(enabled);
         product.setName(name);
         product.setCostAmt(costAmt);
+        product.setEnabled(enabled);
         product.setRemark(remark);
         productMapper.updateById(product);
-        ProductTxt productTxt = productTxtMapper.findById(productId);
+        ProductTxt productTxt = productTxtMapper.findById(id);
         if(productTxt == null)
         {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
+            if(!StringUtils.isNullBlank(content))
+            {
+                productTxt = new ProductTxt();
+                productTxt.setId(id);
+                productTxt.setCreateTime(current);
+                productTxt.setUpdateTime(current);
+                productTxt.setContent(content);
+                productTxtMapper.add(productTxt);
+            }
         }
-        productTxt.setUpdateTime(curr);
-        productTxt.setContent(content);
-        productTxtMapper.updateById(productTxt);
-        return resp;
-    }
-
-    @Override
-    @Transactional
-    public BLResp disableProduct(Long productId, Integer enabled)
-    {
-        BLResp resp = BLResp.build();
-        Product product = productMapper.findById(productId);
-        if(product == null)
+        else
         {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
+            productTxt.setUpdateTime(current);
+            productTxt.setContent(content);
+            productTxtMapper.updateById(productTxt);
         }
-        if(!enabled.equals(product.getEnabled()))
-        {
-            product = new Product();
-            product.setId(productId);
-            product.setUpdateTime(new Date());
-            product.setEnabled(enabled);
-            productMapper.updateSkipNull(product);
-        }
-        return resp;
     }
 
     @Override
@@ -335,7 +277,6 @@ public class ProductServiceImpl implements ProductService
         }
     }
 
-    //产品类别启用禁用
     @Override
     @Transactional
     public void updateProdStatus(Long id, Integer enabled, BLResp resp)
@@ -355,12 +296,6 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public BLResp getProdCategory()
-    {
-        return null;
-    }
-
-    @Override
     public List<Map<String, Object>> getProductDict()
     {
         List<Product> productList = productMapper.getListByStatus(TrueOrFalse.TRUE);
@@ -371,6 +306,21 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.ID, p.getId() + "");
             map.put(Field.NAME, p.getName());
             list.add(map);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> getProductTypeDict(Integer enabled)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
+        for(DictProductType o : dataList)
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, o.getId() + "");
+            m.put(Field.NAME, o.getName());
+            list.add(m);
         }
         return list;
     }

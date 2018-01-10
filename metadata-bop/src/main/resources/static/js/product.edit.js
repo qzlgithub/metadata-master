@@ -5,18 +5,18 @@ function editProduct() {
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify({
-            "typeId": $("#selectId").val(),
-            "id": $("#productId").val(),
-            "code": $("#codeId").val(),
-            "name": $("#nameId").val(),
-            "costAmt": $("#costAmtId").val(),
-            "enabled": $("input[name='prodEnabled']:checked").val(),
-            "remark": $("#remarkId").val(),
-            "content": $("#contentId").val()
+            "id": $("#product-id").val(),
+            "productType": $("#product-type").val(),
+            "code": $("#product-code").val(),
+            "name": $("#product-name").val(),
+            "costAmt": $("#product-cost").val(),
+            "enabled": $("input[name='product-enabled']:checked").val(),
+            "remark": $("#product-remark").val(),
+            "content": editor.html()
         }),
         success: function(data) {
             if(data.errCode !== '000000') {
-                alert(data.errMsg);
+                layer.msg(data.errMsg);
             }
             else {
                 window.location.href = "/product/index.html";

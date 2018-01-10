@@ -15,19 +15,13 @@ public interface ProductService
 
     BLResp editProdCategory(Long productId, String code, String name, String remark);
 
-    //BLResp getProductList(Page page);
-
     Map getProductInfo(Long productId);
 
-    BLResp getProductList(Page page);
+    void addProduct(Long productType, String code, String name, BigDecimal costAmt, Integer enabled, String remark,
+            String content, BLResp resp);
 
-    BLResp addProduct(Long typeId, String code, String name, BigDecimal costAmt, Integer enabled, String content,
-            String remark);
-
-    BLResp editProduct(Long productId, Long typeId, String code, String name, BigDecimal costAmt, String content,
-            String remark, Integer enabled);
-
-    BLResp disableProduct(Long productId, Integer enabled);
+    void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            String remark, String content, BLResp resp);
 
     BLResp getProductCategoryInfo(Long id);
 
@@ -35,10 +29,9 @@ public interface ProductService
 
     void updateProdStatus(Long id, Integer enabled, BLResp resp);
 
-    BLResp getProdCategory();
-
     List<Map<String, Object>> getProductDict();
+
+    List<Map<String, Object>> getProductTypeDict(Integer enabled);
 
     BLResp getProductInfoList(Page page);
 }
-

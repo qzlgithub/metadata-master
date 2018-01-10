@@ -11,6 +11,12 @@
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
+        from `dict_product_type`
+    </sql>
+
     <insert id="add" parameterType="DictProductType">
         insert into `dict_product_type`
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -34,8 +40,14 @@
     </insert>
 
     <update id="updateById" parameterType="DictProductType">
-        update `dict_product_type` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `code` = #{code},
-        `name` = #{name}, `remark` = #{remark}, `enabled` = #{enabled} where `id` = #{id}
+        update `dict_product_type`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `code`        = #{code},
+            `name`        = #{name},
+            `remark`      = #{remark},
+            `enabled`     = #{enabled}
+        where `id` = #{id}
     </update>
 
     <update id="updateSkipNull" parameterType="DictProductType">
@@ -52,22 +64,35 @@
     </update>
 
     <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled` from `dict_product_type` order by
-        `create_time` desc
+        select
+            `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
+        from `dict_product_type`
+        order by `create_time` desc
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled` from `dict_product_type` where
-        `id` = #{id}
+        select
+            `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
+        from `dict_product_type`
+        where `id` = #{id}
     </select>
 
     <select id="findByCode" resultType="DictProductType">
-        select `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled` from `dict_product_type` where
-        `code` = #{code}
+        select
+            `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
+        from `dict_product_type`
+        where `code` = #{code}
     </select>
 
     <select id="countAll" resultType="Integer">
-        select count(*) from dict_product_type
+        select count(*)
+        from dict_product_type
     </select>
 
+    <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        <where>
+            <if test="enabled != null">`enabled` = #{enabled}</if>
+        </where>
+    </select>
 </mapper>

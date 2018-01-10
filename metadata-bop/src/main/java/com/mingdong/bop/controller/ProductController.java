@@ -2,7 +2,7 @@ package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.domain.entity.ProductInfo;
+import com.mingdong.bop.model.ProductVO;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -10,26 +10,26 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.RequestThread;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping(value = "/product")
 public class ProductController
 {
     @Resource
     private ProductService productService;
 
-    @RequestMapping(value = "index.html")
+    @GetMapping(value = "index.html")
     public ModelAndView productIndex()
     {
         ModelAndView view = new ModelAndView("product-manage/product-index");
@@ -37,15 +37,16 @@ public class ProductController
         return view;
     }
 
-    @RequestMapping(value = "/addition.html")
+    @GetMapping(value = "/addition.html")
     public ModelAndView productAddition()
     {
         ModelAndView view = new ModelAndView("product-manage/product-add");
+        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
 
-    @RequestMapping(value = "/edit.html")
+    @GetMapping(value = "/edit.html")
     public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("product-manage/product-edit");
@@ -56,7 +57,7 @@ public class ProductController
         return view;
     }
 
-    @RequestMapping(value = "/category/index.html")
+    @GetMapping(value = "/category/index.html")
     public ModelAndView productCategoryIndex()
     {
         ModelAndView view = new ModelAndView("product-manage/product-category");
@@ -64,7 +65,8 @@ public class ProductController
         return view;
     }
 
-    @RequestMapping(value = "/productCategory/list", method = RequestMethod.GET)
+    @GetMapping(value = "/productCategory/list")
+    @ResponseBody
     public Map<String, Object> getRechargeList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
@@ -73,7 +75,8 @@ public class ProductController
         return resp.getDataMap();
     }
 
-    @RequestMapping(value = "/categoryAdd", method = RequestMethod.POST)
+    @PostMapping(value = "/categoryAdd")
+    @ResponseBody
     public BLResp addNewProductCategory(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -88,7 +91,8 @@ public class ProductController
         return resp;
     }
 
-    @RequestMapping(value = "/updateCateStatus", method = RequestMethod.POST)
+    @PostMapping(value = "/updateCateStatus")
+    @ResponseBody
     public BLResp updateStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -106,7 +110,8 @@ public class ProductController
         return resp;
     }
 
-    @RequestMapping(value = "/updateProdStatus", method = RequestMethod.POST)
+    @PostMapping(value = "/updateProdStatus")
+    @ResponseBody
     public BLResp updateProdStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -124,8 +129,9 @@ public class ProductController
         return resp;
     }
 
-    @RequestMapping(value = "/initProductCategory", method = RequestMethod.GET)
-    public Map<String, Object> initFormData(@RequestParam(Field.ID) Long id)
+    @GetMapping(value = "/initProductCategory")
+    @ResponseBody
+    public Map<String, Object> initFormDat(@RequestParam(Field.ID) Long id)
     {
         BLResp resp = productService.getProductCategoryInfo(id);
         if(id == null)
@@ -135,7 +141,8 @@ public class ProductController
         return resp.getDataMap();
     }
 
-    @RequestMapping(value = "/categoryUpdate", method = RequestMethod.POST)
+    @PostMapping(value = "/categoryUpdate")
+    @ResponseBody
     public BLResp categoryAdd(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -157,7 +164,8 @@ public class ProductController
 
     }
 
-    @RequestMapping(value = "/product/management", method = RequestMethod.GET)
+    @GetMapping(value = "/product/management")
+    @ResponseBody
     public Map<String, Object> gotoProductManagementPage(
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
@@ -167,47 +175,33 @@ public class ProductController
         return resp.getDataMap();
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public BLResp addNewProduct(@RequestBody ProductInfo productInfo)
+    @PostMapping(value = "/addition")
+    @ResponseBody
+    public BLResp addNewProduct(@RequestBody ProductVO vo)
     {
-
         BLResp resp = BLResp.build();
-        Long typeId = productInfo.getTypeId();
-        String code = productInfo.getCode();
-        String name = productInfo.getName();
-        BigDecimal costAmt = productInfo.getCostAmt();
-        Integer enabled = productInfo.getEnabled();
-        String content = productInfo.getContent();
-        String remark = productInfo.getRemark();
-        if(productInfo.getTypeId() == null || productInfo.getEnabled() == null)
+        if(vo.getProductType() == null || StringUtils.isNullBlank(vo.getCode()) || StringUtils.isNullBlank(
+                vo.getName()) || vo.getCostAmt() == null || vo.getEnabled() == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(StringUtils.isNullBlank(productInfo.getName()) || StringUtils.isNullBlank(productInfo.getCode()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        resp = productService.addProduct(typeId, code, name, costAmt, enabled, content, remark);
+        productService.addProduct(vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(), vo.getEnabled(),
+                vo.getRemark(), vo.getContent(), resp);
         return resp;
     }
 
-    @RequestMapping(value = "modification", method = RequestMethod.POST)
+    @PostMapping(value = "modification")
     @ResponseBody
-    public BLResp editClient(@RequestBody ProductInfo productInfo)
+    public BLResp editClient(@RequestBody ProductVO vo)
     {
         BLResp resp = BLResp.build();
-        if(productInfo.getId() == null || productInfo.getTypeId() == null || productInfo.getEnabled() == null)
+        if(vo.getId() == null || vo.getProductType() == null || StringUtils.isNullBlank(vo.getCode()) ||
+                StringUtils.isNullBlank(vo.getName()) || vo.getCostAmt() == null || vo.getEnabled() == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(StringUtils.isNullBlank(productInfo.getName()) || StringUtils.isNullBlank(productInfo.getCode()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-
-        productService.editProduct(productInfo.getId(), productInfo.getTypeId(), productInfo.getCode(),
-                productInfo.getName(), productInfo.getCostAmt(), productInfo.getContent(), productInfo.getRemark(),
-                productInfo.getEnabled());
+        productService.editProduct(vo.getId(), vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(),
+                vo.getEnabled(), vo.getRemark(), vo.getContent(), resp);
         return resp;
     }
 }

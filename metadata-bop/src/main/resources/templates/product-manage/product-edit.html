@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link rel="stylesheet" th:href="@{/kindeditor/themes/default/default.css}"/>
+    <link rel="stylesheet" th:href="@{/kindeditor/plugins/code/prettify.css}"/>
+    <script charset="utf-8" th:src="@{/kindeditor/kindeditor-all-min.js}"></script>
+    <script charset="utf-8" th:src="@{/kindeditor/lang/zh-CN.js}"></script>
+    <script charset="utf-8" th:src="@{/kindeditor/plugins/code/prettify.js}"></script>
 </head>
 
 <body>
@@ -29,111 +34,70 @@
         </div>
         <!--面包屑 end-->
         <div class="p20">
-            <!--form-->
-            <!--<form class="layui-form" action="">-->
             <div class="w60 m30">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品类别：</label>
                     <div class="layui-input-block w40">
-                        <select name="modules" id="selectId" lay-verify="required" class="select-list">
-                            <option th:each="dict:${productTypeDict}" th:value="${dict.id}"
-                                    th:text="${dict.name}" th:selected="${type} == ${dict.id}"></option>
+                        <select id="product-type" class="select-list">
+                            <option th:each="o : ${productTypeDict}" th:value="${o.id}"
+                                    th:text="${o.name}" th:selected="${type} == ${o.id}"></option>
                         </select>
                     </div>
-                    <input type="hidden" id="productId" th:value="${id}"/>
+                    <input type="hidden" id="product-id" th:value="${id}"/>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品编号：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="codeId" name="code" placeholder="请输入"
-                               autocomplete="off" class="layui-input" th:value="${code}"/>
+                        <input type="text" id="product-code" placeholder="请输入" autocomplete="off" class="layui-input"
+                               th:value="${code}"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="nameId" name="name" autocomplete="off"
-                               class="layui-input" th:value="${name}"/>
+                        <input type="text" id="product-name" autocomplete="off" class="layui-input" th:value="${name}"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>成本价格：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="costAmtId" th:value="${costAmt}" name="costAmt"
-                               lay-verify="required" placeholder="请输入"
-                               autocomplete="off" class="layui-input" style="width: 80%; display: inline-block;"/>
+                        <input type="text" id="product-cost" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
+                               class="layui-input" style="width: 80%; display: inline-block;"/>
                         <i class="col3">元</i>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">是否关闭：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>是否关闭：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="radio" name="prodEnabled" value="1" title="开启" th:checked="${enabled} == 1"/>
-                        <div
-                                class="layui-unselect layui-form-radio layui-form-radioed"><i
-                                class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>开启</span></div>
-                        <input type="radio" name="prodEnabled" value="0" title="关闭" th:checked="${enabled} == 0"/>
-                        <div
-                                class="layui-unselect layui-form-radio"><i
-                                class="layui-anim layui-icon"></i><span>关闭</span>
+                        <input type="radio" name="product-enabled" value="1" title="开启" th:checked="${enabled} == 1"/>
+                        <div class="layui-unselect layui-form-radio layui-form-radioed">
+                            <i class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>开启</span></div>
+                        <input type="radio" name="product-enabled" value="0" title="关闭" th:checked="${enabled} == 0"/>
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon"></i><span>关闭</span>
                         </div>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">编辑器：</label>
+                    <label class="layui-form-label">产品介绍：</label>
                     <div class="layui-input-block">
-                            <textarea class="layui-textarea layui-hide" id="contentId" name="content"
-                                      lay-verify="content"
-                            ></textarea>
-                        <div class="layui-layedit">
-                            <div class="layui-unselect layui-layedit-tool">
-                                <i class="layui-icon layedit-tool-b" title="加粗" lay-command="Bold"
-                                   layedit-event="b"></i>
-                                <i class="layui-icon layedit-tool-i" title="斜体" lay-command="italic"
-                                   layedit-event="i"></i>
-                                <i class="layui-icon layedit-tool-u" title="下划线" lay-command="underline"
-                                   layedit-event="u"></i>
-                                <i class="layui-icon layedit-tool-d" title="删除线" lay-command="strikeThrough"
-                                   layedit-event="d"></i>
-                                <span class="layedit-tool-mid"></span>
-                                <i class="layui-icon layedit-tool-left" title="左对齐" lay-command="justifyLeft"
-                                   layedit-event="left"></i>
-                                <i class="layui-icon layedit-tool-center" title="居中对齐" lay-command="justifyCenter"
-                                   layedit-event="center"></i>
-                                <i class="layui-icon layedit-tool-right" title="右对齐" lay-command="justifyRight"
-                                   layedit-event="right"></i>
-                                <span class="layedit-tool-mid"></span><i class="layui-icon layedit-tool-link"
-                                                                         title="插入链接" layedit-event="link"></i>
-                                <i class="layui-icon layedit-tool-unlink layui-disabled" title="清除链接"
-                                   lay-command="unlink" layedit-event="unlink"></i>
-                                <i class="layui-icon layedit-tool-face" title="表情" layedit-event="face"></i>
-                                <i class="layui-icon layedit-tool-image" title="图片" layedit-event="image"><input
-                                        type="file" corpName="file"/></i>
-                            </div>
-                            <div class="layui-layedit-iframe">
-                                <iframe id="LAY_layedit_1" name="LAY_layedit_1" textarea="LAY_demo_editor"
-                                        frameborder="0" style="height: 280px;">
-
-                                </iframe>
-                            </div>
-                        </div>
+                        <textarea id="product-txt" cols="100" rows="8" th:text="${content}"
+                                  style="width:700px;height:200px;visibility:hidden;" title="产品介绍"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">备注：</label>
                     <div class="layui-input-block w40">
-                            <textarea name="desc" id="remarkId" value="remark" th:text="${remark}" placeholder="请输入内容"
-                                      class="layui-textarea"></textarea>
+                        <textarea id="product-remark" th:text="${remark}" placeholder="请输入内容"
+                                  class="layui-textarea"></textarea>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
-                    <button class="layui-btn" onclick="editProduct();" lay-filter="demo1">保存</button>
+                    <button class="layui-btn" onclick="editProduct()">保存</button>
                 </div>
             </div>
-            <!--</form>-->
-            <!--form end-->
         </div>
     </div>
 
@@ -141,7 +105,7 @@
 </div>
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
@@ -153,6 +117,34 @@
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.edit.js}"></script>
 <script>
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('#product-txt', {
+            minWidth: 800,
+            minHeight: 350,
+            items: ['source', 'fullscreen', 'preview', 'print', '|', 'undo', 'redo', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
+                'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'lineheight', '|',
+                'formatblock', 'fontname', 'fontsize', '|',
+                'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                'image', 'table', 'hr', 'emoticons', 'link'],
+            uploadJson: '../jsp/upload_json.jsp',
+            fileManagerJson: '../jsp/file_manager_json.jsp',
+            allowFileManager: true,
+            afterCreate: function() {
+                var self = this;
+                K.ctrl(document, 13, function() {
+                    self.sync();
+                    document.forms['example'].submit();
+                });
+                K.ctrl(self.edit.doc, 13, function() {
+                    self.sync();
+                    document.forms['example'].submit();
+                });
+            }
+        });
+        prettyPrint();
+    });
     var message;
     layui.config({
         base: '../../static/build/js/'
@@ -177,7 +169,5 @@
         });
     });
 </script>
-
 </body>
-
 </html>

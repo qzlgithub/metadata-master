@@ -1,6 +1,7 @@
 package com.mingdong.bop.domain.mapper;
 
 import com.mingdong.bop.domain.entity.DictProductType;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface DictProductTypeMapper
     void updateSkipNull(DictProductType dictProductType);
 
     int countAll();
+
+    List<DictProductType> getListByStatus(@Param("enabled") Integer enabled);
 }
