@@ -57,14 +57,20 @@ function batchChangeStatus(enabled) {
             clientIds.push($(objs[o]).attr("data-id"));
         }
     }
-    if(clientIds.length == 0) {
+    if(clientIds.length === 0) {
         layer.msg("请至少选择一项", {
             time: 2000
         });
     }
     else {
-        var enabledVal = $("#accountEnabled" + clientIds[0]).text();
-        layer.confirm('是否确定批量' + enabledVal + '？', {
+        var enabledVal;
+        if(enabled === 1) {
+            enabledVal = "解冻";
+        }
+        else {
+            enabledVal = "冻结";
+        }
+        layer.confirm('确定' + enabledVal + '选中的客户账号？', {
             btn: ['确定', '取消'],
             yes: function() {
                 $(this).click();
@@ -82,7 +88,7 @@ function batchChangeStatus(enabled) {
                             });
                         }
                         else {
-                            layer.msg("操作失败:" + data.errMsg, {
+                            layer.msg("操作失败：" + data.errMsg, {
                                 time: 2000
                             });
                         }

@@ -11,6 +11,12 @@
         <result column="deleted" property="deleted" jdbcType="TINYINT" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
+        from `dict_recharge_type`
+    </sql>
+
     <insert id="add" parameterType="DictRechargeType">
         insert into `dict_recharge_type`
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -34,8 +40,14 @@
     </insert>
 
     <update id="updateById" parameterType="DictRechargeType">
-        update `dict_recharge_type` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `name` = #{name},
-        `remark` = #{remark}, `enabled` = #{enabled}, `deleted` = #{deleted} where `id` = #{id}
+        update `dict_recharge_type`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `name`        = #{name},
+            `remark`      = #{remark},
+            `enabled`     = #{enabled},
+            `deleted`     = #{deleted}
+        where `id` = #{id}
     </update>
 
     <update id="updateSkipNull" parameterType="DictRechargeType">
@@ -52,21 +64,35 @@
     </update>
 
     <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted` from `dict_recharge_type`
+        select
+            `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
+        from `dict_recharge_type`
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted` from `dict_recharge_type`
+        select
+            `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
+        from `dict_recharge_type`
         where `id` = #{id}
     </select>
 
     <select id="findByName" parameterType="String" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted` from `dict_recharge_type`
+        select
+            `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
+        from `dict_recharge_type`
         where `name` = #{name}
     </select>
 
     <select id="getByStatus" parameterType="Integer" resultMap="BaseResultMap">
         select `id`, `name`, `remark`, `enabled` from `dict_recharge_type` where `deleted` = 0
         <if test="enabled != null">and `enabled` = #{enabled}</if>
+    </select>
+
+    <select id="getListByStatus" resultMap="BaseResultMap">
+        <include refid="select_all"/>
+        <where>
+            <if test="enabled != null">`enabled` = #{enabled}</if>
+            <if test="deleted != null">and `deleted` = #{deleted}</if>
+        </where>
     </select>
 </mapper>

@@ -1,27 +1,19 @@
-// var rowTr = "<tr><td>${id}</td><td>${name}</td><td>${remark}</td><td><div class=\"layui-form\"><input type=\"checkbox\" checked=\"\" name=\"close\" lay-skin=\"switch\" lay-filter=\"switchTest\" lay-text=\"ON|OFF\"/><div class=\"layui-unselect layui-form-switch layui-form-onswitch\" lay-skin=\"_switch\"><em>ON</em><i></i></div></div></td><td><span class=\"mr30\"><em href=\"#\" class=\"edit cp\" id=\"editclass\">编辑</em></span><a href=\"#\" class=\"del\">删除</a></td></tr>";
-var rowTr = '<tr><td>#{id}</td><td>#{name}</td><td>#{remark}</td><td><div class="layui-form"><input type="checkbox" checked=#{enabled} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"></div></td><td><span class="mr30"><em href="#" class="edit cp" onclick="editRecharge(\'#{id}\')">编辑</em></span><a href="#" class="del" onclick="dropRecharge(\'#{id}\')">删除</a></td></tr>';
-$(function() {
-    searchRechargeList();
+$(".edit-recharge").click(function() {
+    var id = $(this).attr("recharge-id");
+    editRecharge(id);
 });
-
-function searchRechargeList() {
-    $.get(
-        "/config/recharge/list",
-        function(data) {
-            $("#dataBody").empty();
-            var list = data.list;
-            for(var d in list) {
-                var row = rowTr.replace(/#{id}/g, list[d].id).replace("#{name}", list[d].name)
-                .replace("#{remark}", list[d].remark).replace("#{enabled}", list[d].enabled === 1 ? "true" : "false");
-                $("#dataBody").append(row);
-            }
-            $("#totalTxt").text("共 " + data.total + " 条");
-        }
-    );
-}
+$(".drop-recharge").click(function() {
+    var id = $(this).attr("recharge-id");
+    dropRecharge(id);
+});
 
 function saveNewRechargeType() {
     var newName = $("#newName").val();
+    if(newName === '')
+    {
+        layer.msg("类型名称为必填项");
+        return;
+    }
     var newRemark = $("#newRemark").val();
     $.ajax({
         type: "POST",
@@ -41,7 +33,7 @@ function saveNewRechargeType() {
                 });
             }
             else {
-                layer.msg("添加失败:" + data.errMsg, {
+                layer.msg("添加失败：" + data.errMsg, {
                     time: 2000
                 });
             }
@@ -92,6 +84,16 @@ function editRecharge(id) {
             }
         }
     );
+}
+
+function showEditBlock() {
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#edit-manage'),
+        area: ['500px'],
+        shadeClose: true
+    });
 }
 
 function updateRechargeType() {

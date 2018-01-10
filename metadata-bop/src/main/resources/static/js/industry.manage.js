@@ -1,4 +1,3 @@
-//<![CDATA[
 $(".add-child").on('click', function() {
     var parentId = $(this).attr("data-id");
     $("#l2-parent-id").val(parentId);
@@ -97,21 +96,20 @@ function saveIndustry(id, code, name) {
         data: JSON.stringify({"id": id, "code": code, "name": name}),
         success: function(data) {
             if(data.errCode !== "000000") {
-                layer.msg("添加失败" + data.errMsg,{
+                layer.msg("添加失败" + data.errMsg, {
                     time: 2000
                 });
             }
             else {
-                layer.msg("添加成功",{
+                layer.msg("添加成功", {
                     time: 2000
-                },function(){
+                }, function() {
                     window.location.href = "/config/industry.html";
                 });
             }
         }
     });
 }
-
 
 //添加主行业和子行业
 $(document).on("click", ".js_addIndustry", function() {
@@ -122,14 +120,14 @@ $(document).on("click", ".js_addIndustry", function() {
         type: "post",
         url: "/industry/add",
         success: function(data) {
-            layer.msg("添加成功",{
+            layer.msg("添加成功", {
                 time: 2000
-            },function(){
+            }, function() {
                 window.location.href = "/industry/manage";
             });
         },
         error: function(data) {
-            layer.msg("添加失败" + data.errMsg,{
+            layer.msg("添加失败" + data.errMsg, {
                 time: 2000
             });
         }
@@ -144,19 +142,19 @@ $(document).on("click", ".js_addChildIndustry", function() {
         type: "post",
         url: "/industry/add",
         success: function(data) {
-            layer.msg("添加成功",{
+            layer.msg("添加成功", {
                 time: 2000
-            },function(){
+            }, function() {
                 window.location.href = "/industry/manage";
             });
         },
         error: function(data) {
-            layer.msg("添加失败" + data.errMsg,{
+            layer.msg("添加失败" + data.errMsg, {
                 time: 2000
             });
         }
     })
-})
+});
 
 function editIndustry() {
     var id = $("#edit-id").val();
@@ -170,18 +168,13 @@ function editIndustry() {
         data: JSON.stringify({"id": id, "code": code, "name": name}),
         success: function(data) {
             if(data.errCode !== "000000") {
-                layer.msg("修改失败" + data.errMsg,{
+                layer.msg("修改失败" + data.errMsg, {
                     time: 2000
                 });
-            }else{
-                layer.msg("修改成功",{
-                    time: 2000
-                },function(){
-                    window.location.href = "/config/industry.html";
-                });
+            }
+            else {
+                window.location.href = "/config/industry.html";
             }
         }
     });
 }
-//]]>
-

@@ -349,6 +349,24 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
+    public List<Map<String, Object>> getRechargeTypeList(Integer enabled, Integer deleted)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        List<DictRechargeType> dataList = dictRechargeTypeMapper.getListByStatus(enabled, deleted);
+
+        for(DictRechargeType o : dataList)
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, o.getId() + "");
+            m.put(Field.NAME, o.getName());
+            m.put(Field.ENABLED, o.getEnabled());
+            m.put(Field.REMARK, o.getRemark());
+            list.add(m);
+        }
+        return list;
+    }
+
+    @Override
     @Transactional
     public void addRechargeType(String name, String remark, BLResp resp)
     {

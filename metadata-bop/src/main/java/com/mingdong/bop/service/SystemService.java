@@ -40,6 +40,8 @@ public interface SystemService
 
     void getRechargeTypeList(Integer enabled, BLResp resp);
 
+    List<Map<String, Object>> getRechargeTypeList(Integer enabled, Integer deleted);
+
     void addRechargeType(String name, String remark, BLResp resp);
 
     BLResp editRechargeType(Long rechargeTypeId, String name, String remark, Integer enabled);
@@ -58,5 +60,5 @@ public interface SystemService
 
     String getIndustryName(Long industryId);
 
-    Map<String,String> cacheSystemModule();
+    Map<String, String> cacheSystemModule();
 }

@@ -44,14 +44,34 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody id="dataBody"><!-- TODO data here --></tbody>
+                <tbody id="dataBody">
+                <tr th:each="o : ${list}">
+                    <td th:text="${o.id}"></td>
+                    <td th:text="${o.name}"></td>
+                    <td th:text="${o.remark}"></td>
+                    <td>
+                        <div class="layui-form">
+                            <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
+                                   th:if="${o.enabled == 1}" checked="checked"/>
+                            <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
+                                   th:if="${o.enabled != 1}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="mr30">
+                            <em href="#" class="edit cp edit-recharge" th:attr="recharge-id=${o.id}">编辑</em>
+                        </span>
+                        <a href="#" class="del drop-recharge" th:attr="recharge-id=${o.id}">删除</a>
+                    </td>
+                </tr>
+                </tbody>
             </table>
             <!--table end-->
             <!--page-->
             <div class="layui-table-tool mt20">
                 <div class="layui-inline layui-table-page" id="layui-table-page1">
                     <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                        <span id="totalTxt" class="layui-laypage-count">共 0 条</span>
+                        <span id="totalTxt" class="layui-laypage-count" th:text="'共 ' + ${total} + '条'"></span>
                     </div>
                 </div>
             </div>
@@ -71,14 +91,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">类型名称：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="newName" name="username" placeholder="请输入"
-                           autocomplete="off" class="layui-input"/>
+                    <input type="text" id="newName" name="username" placeholder="请输入类型名称" autocomplete="off"
+                           class="layui-input"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">备注说明：</label>
                 <div class="layui-input-block">
-                    <textarea name="desc" id="newRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <textarea name="desc" id="newRemark" placeholder="请输入备注说明" class="layui-textarea"></textarea>
                 </div>
             </div>
         </div>
@@ -102,14 +122,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">类型名称：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="editName" name="username" lay-verify="required" placeholder="请输入"
-                           autocomplete="off" class="layui-input"/>
+                    <input type="text" id="editName" placeholder="请输入类型名称" autocomplete="off" class="layui-input"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">备注说明：</label>
                 <div class="layui-input-block">
-                    <textarea name="desc" id="editRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <textarea id="editRemark" placeholder="请输入备注说明" class="layui-textarea"></textarea>
                 </div>
             </div>
         </div>
@@ -127,7 +146,7 @@
 <!--提示层 end-->
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
@@ -161,26 +180,7 @@
                 shadeClose: true
             });
         });
-        /*$('#editclass').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#edit-manage'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });*/
     });
-
-    function showEditBlock() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: $('#edit-manage'),
-            area: ['500px'],
-            shadeClose: true
-        });
-    }
 </script>
 </body>
 

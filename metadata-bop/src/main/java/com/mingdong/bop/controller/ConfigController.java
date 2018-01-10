@@ -32,6 +32,9 @@ public class ConfigController
     public ModelAndView configRecharge()
     {
         ModelAndView view = new ModelAndView("system-manage/recharge-manage");
+        List<Map<String, Object>> list = systemService.getRechargeTypeList(null, TrueOrFalse.FALSE);
+        view.addObject(Field.LIST, list);
+        view.addObject(Field.TOTAL, list.size());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -139,6 +142,10 @@ public class ConfigController
     {
         BLResp resp = BLResp.build();
         String name = jsonReq.getString(Field.NAME);
+        if(StringUtils.isNullBlank(name))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
         String remark = jsonReq.getString(Field.REMARK);
         systemService.addRechargeType(name, remark, resp);
         return resp;
