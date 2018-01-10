@@ -78,7 +78,7 @@ public class RedisDao extends RedisBaseDao
      */
     public String createTradeNo(Trade trade)
     {
-        String dateStr = DateUtils.format(new Date(), DateFormat.YYYY_MM_DD);
+        String dateStr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
         Long num = incr(DB.SYSTEM, trade.getCode() + dateStr);
         if(num == 1)
         {
