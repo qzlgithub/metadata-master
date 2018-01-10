@@ -23,7 +23,6 @@ function addProduct() {
             "content": $("#contentId").val()
         }),
         success: function(data) {
-            //alert(data.name);
             if(data.errCode != '000000') {
                 alert(data.errMsg);
             }
@@ -68,7 +67,7 @@ function checkCostAmt() {
             $("#costAmtTip").hide();
         }
         else {
-            $("#costAmtTip").text("单价格式错误！");
+            $("#costAmtTip").text("价格格式错误！");
             $("#costAmtTip").show();
         }
     }

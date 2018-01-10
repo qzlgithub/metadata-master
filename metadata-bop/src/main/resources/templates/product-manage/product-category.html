@@ -44,30 +44,7 @@
                 </thead>
 
                 <tbody id="dataBody">
-                <!--<tr>
-                    <td>12312</td>
-                    <td>admin</td>
-                    <td>超级管理员</td>
-                    <td>
-                        <span class="mr30"><a href="#" class="edit">编辑</a></span>
-                        <a href="#" class="del">停用</a>
-                    </td>
-                </tr> TODO row-->
 
-                <!--    <tr th:each="row:${list}">
-                        <input type="hidden" th:value="${row.id}"/>
-                        <td th:text="${row.code}"></td>
-                        <td th:text="${row.name}">admin</td>
-                        <td th:text="${row.remark}">超级管理员</td>
-                        <td>
-                            <span class="mr30 edit cp editclass" th:id="'editclass'+${row.id}"
-                                  onclick="findProductCategeoryById(this);">
-                                编辑
-                            </span>
-                            <a th:text="${row.enabled==0?'停用':'启用'}" href="#" id="enabledId" onclick="updateStatus(this);"
-                               class="del"></a>
-                        </td>
-                    </tr>-->
                 </tbody>
             </table>
             <!--table end-->
@@ -103,7 +80,6 @@
                         <span class="layui-laypage-skip">
                             到第<input type="text" id="customPageNum" min="1" value="1" class="layui-input"/>页
                             <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button></span>
-
                     </div>
                 </div>
             </div>

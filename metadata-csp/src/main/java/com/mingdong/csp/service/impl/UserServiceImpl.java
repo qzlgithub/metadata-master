@@ -1,6 +1,5 @@
 package com.mingdong.csp.service.impl;
 
-import com.mingdong.core.base.RedisBaseDao;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.csp.service.UserService;
@@ -27,4 +26,11 @@ public class UserServiceImpl implements UserService
     {
 
     }
+
+    @Override
+    public void changePassword(Long userId, String oldPwd, String newPwd, BLResp resp)
+    {
+
+    }
+
 }

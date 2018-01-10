@@ -28,8 +28,6 @@ public class ProductController
 {
     @Resource
     private ProductService productService;
-    // @Resource
-    // private ProductInfoService productInfoService;
 
     @RequestMapping(value = "index.html")
     public ModelAndView productIndex()
@@ -127,9 +125,9 @@ public class ProductController
     }
 
     @RequestMapping(value = "/initProductCategory", method = RequestMethod.GET)
-    public Map<String, Object> initFormDat(@RequestParam("id") String id)
+    public Map<String, Object> initFormData(@RequestParam(Field.ID) Long id)
     {
-        BLResp resp = productService.getProductCategoryInfo(Long.valueOf(id));
+        BLResp resp = productService.getProductCategoryInfo(id);
         if(id == null)
         {
             resp.result(RestResult.KEY_FIELD_MISSING);
@@ -138,15 +136,22 @@ public class ProductController
     }
 
     @RequestMapping(value = "/categoryUpdate", method = RequestMethod.POST)
-    public BLResp categoryAdd(@RequestParam("id") String id, @RequestParam("code") String code,
-            @RequestParam("name") String name, @RequestParam("remark") String remark)
+    public BLResp categoryAdd(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        String code = jsonReq.getString(Field.CODE);
+        String name = jsonReq.getString(Field.NAME);
+        String remark = jsonReq.getString(Field.REMARK);
+        if(id == null || id <= 0)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
         if(StringUtils.isNullBlank(name) || StringUtils.isNullBlank(code))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        resp = productService.editProdCategory(Long.valueOf(id), code, name, remark);
+        resp = productService.editProdCategory(id, code, name, remark);
 
         return resp;
 
@@ -204,7 +209,5 @@ public class ProductController
                 productInfo.getName(), productInfo.getCostAmt(), productInfo.getContent(), productInfo.getRemark(),
                 productInfo.getEnabled());
         return resp;
-
     }
-
 }

@@ -19,6 +19,7 @@ require(
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
+                selectedMode: false,
                 orient: 'vertical',
                 x: 'left',
                 data: ['企业信用评级', '信用评分', '黑名单', '金融逾期']

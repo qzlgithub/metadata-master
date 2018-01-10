@@ -33,7 +33,7 @@
             <!--<form class="layui-form" action="">-->
             <div class="w60 m30">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品类别：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品类别：</label>
                     <div class="layui-input-block w40">
                         <select name="modules" id="selectId" lay-verify="required" class="select-list">
                             <option th:each="dict:${productTypeDict}" th:value="${dict.id}"
@@ -43,21 +43,21 @@
                     <input type="hidden" id="productId" th:value="${id}"/>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品编号：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品编号：</label>
                     <div class="layui-input-block w40">
                         <input type="text" id="codeId" name="code" placeholder="请输入"
                                autocomplete="off" class="layui-input" th:value="${code}"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">产品名称：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>
                     <div class="layui-input-block w40">
                         <input type="text" id="nameId" name="name" autocomplete="off"
                                class="layui-input" th:value="${name}"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">成本价格：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>成本价格：</label>
                     <div class="layui-input-block w40">
                         <input type="text" id="costAmtId" th:value="${costAmt}" name="costAmt"
                                lay-verify="required" placeholder="请输入"

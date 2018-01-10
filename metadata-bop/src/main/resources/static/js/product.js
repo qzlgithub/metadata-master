@@ -16,7 +16,6 @@ function getProductList(pageNum, pageSize) {
             var list = data.list;
             $("#dataBody").empty();
             for(var i in list) {
-                //$("#dataBody").data("enabled", list[i].enabled);
                 var row = rowTr.replace("#{code}", list[i].code)
                 .replace("#{enabledVal}", list[i].enabled)
                 .replace(/#{id}/g, list[i].id)

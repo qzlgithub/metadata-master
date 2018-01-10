@@ -15,7 +15,6 @@ function editProduct() {
             "content": $("#contentId").val()
         }),
         success: function(data) {
-            // alert(data.name);
             if(data.errCode !== '000000') {
                 alert(data.errMsg);
             }
