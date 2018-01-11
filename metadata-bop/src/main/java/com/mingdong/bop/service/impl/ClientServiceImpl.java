@@ -12,6 +12,7 @@ import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientAccount;
 import com.mingdong.bop.domain.entity.ClientInfo;
 import com.mingdong.bop.domain.entity.ClientOperateInfo;
+import com.mingdong.bop.domain.entity.ClientOperateLog;
 import com.mingdong.bop.domain.entity.ClientProduct;
 import com.mingdong.bop.domain.entity.ClientUser;
 import com.mingdong.bop.domain.entity.DictIndustry;
@@ -387,38 +388,32 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     @Transactional
-    public void changeClientStatus(List<Long> clientIdList, Integer enabled, BLResp resp)
+    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
     {
         List<Client> clientList = clientMapper.getListByIdList(clientIdList);
         if(CollectionUtils.isEmpty(clientList))
         {
+            resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
+        Date current = new Date();
         List<Long> clientUserIdList = new ArrayList<>(clientList.size());
+        List<ClientOperateLog> logList = new ArrayList<>();
         for(Client client : clientList)
         {
             clientUserIdList.add(client.getPrimaryUserId());
+            ClientOperateLog log = new ClientOperateLog();
+            log.setCreateTime(current);
+            log.setUpdateTime(current);
+            log.setClientId(client.getId());
+            log.setClientUserId(client.getPrimaryUserId());
+            log.setManagerId(managerId);
+            log.setType(enabled);
+            log.setReason(reason);
+            logList.add(log);
         }
-        if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
-        {
-            ClientUser clientUser = clientUserMapper.findById(clientUserIdList.get(0));
-            if(clientUser == null)
-            {
-                resp.result(RestResult.OBJECT_NOT_FOUND);
-                return;
-            }
-            if(TrueOrFalse.TRUE.equals(clientUser.getEnabled()))
-            {
-                enabled = TrueOrFalse.FALSE;
-            }
-            else
-            {
-                enabled = TrueOrFalse.TRUE;
-            }
-
-        }
+        clientOperateLogMapper.addList(logList);
         clientUserMapper.updateStatusByIds(enabled, clientUserIdList);
-        resp.addData(Field.ACCOUNT_ENABLED, enabled);
     }
 
     @Override

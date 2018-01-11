@@ -7,8 +7,10 @@ public class ClientOperateLog
     private Long id;
     private Date createTime;
     private Date updateTime;
+    private Long clientId;
     private Long clientUserId;
     private Long managerId;
+    private Integer type;
     private String reason;
 
     public Long getId()
@@ -41,6 +43,16 @@ public class ClientOperateLog
         this.updateTime = updateTime;
     }
 
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
+
     public Long getClientUserId()
     {
         return clientUserId;
@@ -59,6 +71,16 @@ public class ClientOperateLog
     public void setManagerId(Long managerId)
     {
         this.managerId = managerId;
+    }
+
+    public Integer getType()
+    {
+        return type;
+    }
+
+    public void setType(Integer type)
+    {
+        this.type = type;
     }
 
     public String getReason()

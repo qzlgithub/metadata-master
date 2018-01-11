@@ -49,6 +49,28 @@ function showChild(id) {
     );
 }
 
+function changeStatus(id) {
+    $("#ban-type").val("single");
+    var obj = $("#accountEnabled" + id);
+    var enabled = obj.attr("obj-enabled");
+    if(enabled === "1") {
+        $("#ban-title").text("冻结账号");
+        $("#ban-client-enabled").val(0);
+    }
+    else {
+        $("#ban-title").text("解冻账号");
+        $("#ban-client-enabled").val(1);
+    }
+    $("#ban-client-id").val(id);
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#ban-div'),
+        area: ['700px'],
+        shadeClose: true
+    });
+}
+
 function batchChangeStatus(enabled) {
     var objs = $(".obj-checkbox");
     var clientIds = [];
@@ -58,49 +80,74 @@ function batchChangeStatus(enabled) {
         }
     }
     if(clientIds.length === 0) {
-        layer.msg("请至少选择一项", {
+        layer.msg("请至少选择一个客户", {
             time: 2000
         });
     }
     else {
-        var enabledVal;
+        $("#ban-type").val("batch");
         if(enabled === 1) {
-            enabledVal = "解冻";
+            $("#ban-title").text("解冻账号");
+            $("#ban-client-enabled").val(1);
         }
         else {
-            enabledVal = "冻结";
+            $("#ban-title").text("冻结账号");
+            $("#ban-client-enabled").val(0);
         }
-        layer.confirm('确定' + enabledVal + '选中的客户账号？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/changeStatus",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds, "enabled": enabled}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            goPage($("#pageNum").val());
-                            layer.msg("账号已" + enabledVal, {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            layer.msg("操作失败：" + data.errMsg, {
-                                time: 2000
-                            });
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#ban-div'),
+            area: ['700px'],
+            shadeClose: true
         });
     }
+}
+
+function banClient() {
+    var reason = $("#ban-reason").val();
+    if(reason === '') {
+        layer.msg("原因不能为空", {time: 2000});
+        return;
+    }
+    var banType = $("#ban-type").val();
+    var clients = [];
+    if(banType === 'batch') {
+        var objs = $(".obj-checkbox");
+        for(var o in objs) {
+            if(objs[o].checked) {
+                clients.push($(objs[o]).attr("data-id"));
+            }
+        }
+    }
+    else if(banType === 'single') {
+        clients.push($("#ban-client-id").val());
+    }
+    else {
+        return;
+    }
+    var enabled = $("#ban-client-enabled").val();
+    $.ajax({
+        type: "POST",
+        url: "/client/changeStatus",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({"id": clients, "enabled": enabled, "reason": reason}),
+        success: function(res) {
+            if(res.errCode === '000000') {
+                layer.closeAll();
+                for(var o in clients) {
+                    var obj = $("#accountEnabled" + clients[o]);
+                    obj.attr("obj-enabled", enabled);
+                    obj.text(enabled === '1' ? "冻结账号" : "解冻账号");
+                }
+                layer.msg(enabled === '1' ? "账号已解冻" : "账号已冻结", {time: 2000});
+            }
+            else {
+                layer.msg("操作失败:" + res.errMsg, {time: 2000});
+            }
+        }
+    });
 }
 
 function batchDeleted() {
@@ -159,7 +206,7 @@ function batchResetPwd() {
             clientIds.push($(objs[o]).attr("data-id"));
         }
     }
-    if(clientIds.length == 0) {
+    if(clientIds.length === 0) {
         layer.msg("请至少选择一项", {
             time: 2000
         });
@@ -195,49 +242,6 @@ function batchResetPwd() {
             }
         });
     }
-}
-
-function changeStatus(id) {
-    var enabledVal = $("#accountEnabled" + id).text();
-    layer.confirm('是否确定' + enabledVal + '？', {
-        btn: ['确定', '取消'],
-        yes: function() {
-            $(this).click();
-            $.ajax({
-                type: "POST",
-                url: "/client/changeStatus",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({"id": [id]}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
-                        var obj = data.dataMap;
-                        if(obj.accountEnabled === 1) {
-                            $("#accountEnabled" + id).text("冻结账号");
-                            layer.msg("账号已解冻", {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            $("#accountEnabled" + id).text("解冻账号");
-                            layer.msg("账号已冻结", {
-                                time: 2000
-                            });
-                        }
-                    }
-                    else {
-                        layer.msg("操作失败:" + data.errMsg, {
-                            time: 2000
-                        });
-                    }
-                }
-            });
-            layer.closeAll();
-        },
-        no: function() {
-            layer.closeAll();
-        }
-    });
 }
 
 function dropClient(id) {
@@ -366,7 +370,6 @@ function gotoPage() {
         pageSizeVal);
 }
 
-// <![CDATA[
 var tr1
     =
     '<tr><td><div class="layui-form"><input class="obj-checkbox" type="checkbox" name="checked" lay-skin="primary" lay-filter="choose" data-id="#{id}"/><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>' +
@@ -384,7 +387,7 @@ var tr3 = '<td>#{registerDate}</td>' +
     '<td><span class="mr30">' +
     '<a href="/client/edit.html?clientId=#{id}" class="edit">编辑</a></span>' +
     '<span class="mr30"><a href="/client/detail.html?clientId=#{id}" class="edit">查看</a></span>' +
-    '<span class="mr30"><a id="accountEnabled#{id}" href="#" class="edit" onclick="changeStatus(\'#{id}\')">#{accountEnabled}</a></span>' +
+    '<span class="mr30"><a href="#" id="accountEnabled#{id}" obj-enabled="#{enabled}" class="edit" onclick="changeStatus(\'#{id}\')">#{accountEnabled}</a></span>' +
     '<a href="#" class="del" onclick="dropClient(\'#{id}\')">停用</a>' +
     '</td></tr>';
 
@@ -418,6 +421,7 @@ function getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, paren
                     dataTr = dataTr + tr22;
                 }
                 dataTr = dataTr + tr3.replace(/#{id}/g, list[d].id).replace("#{registerDate}", list[d].registerDate)
+                .replace("#{enabled}", list[d].userEnabled)
                 .replace("#{accountEnabled}", list[d].userEnabled === 1 ? "冻结账号" : "解冻账号");
                 $("#dataBody").append(dataTr);
             }
@@ -466,5 +470,3 @@ function refreshPageInfo(front, next, pageNum, totalPage) {
         next.append(pageLink.replace(/#{pageNum}/g, totalPage));
     }
 }
-
-// ]]>

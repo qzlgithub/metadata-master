@@ -28,7 +28,7 @@ public interface ClientService
 
     Map<String, Object> findClientDetail(Long clientId);
 
-    void changeClientStatus(List<Long> clientIdList, Integer enabled, BLResp resp);
+    void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp);
 
     void setClientDeleted(List<Long> idList, BLResp resp);
 

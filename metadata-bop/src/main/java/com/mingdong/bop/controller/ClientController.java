@@ -313,16 +313,14 @@ public class ClientController
         BLResp resp = BLResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
         List<Long> idList = idArr.toJavaList(Long.class);
-        if(CollectionUtils.isEmpty(idList))
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
+        String reason = jsonReq.getString(Field.REASON);
+        if(CollectionUtils.isEmpty(idList) || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(
+                enabled)) || StringUtils.isNullBlank(reason))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        Integer enabled = jsonReq.getInteger(Field.ENABLED);
-        if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
-        {
-            enabled = null;
-        }
-        clientService.changeClientStatus(idList, enabled, resp);
+        clientService.changeClientStatus(idList, enabled, reason, RequestThread.getOperatorId(), resp);
         return resp;
     }
 

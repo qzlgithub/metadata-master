@@ -66,15 +66,7 @@
             </ul>
             <!--搜索 end-->
             <!--功能操作-->
-            <!--<span>批量操作:</span>-->
             <div class="clearfix mt20">
-                <!--<select name="modules" lay-verify="required" lay-search="" class="select-list">
-                    <option value="">批量冻结</option>
-                    <option value="1">批量解冻</option>
-                    <option value="2">批量删除</option>
-                    <option value="3">批量重置</option>
-                </select>-->
-                批量操作
                 <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)">冻结账号</a>
                 <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)">解冻账号</a>
                 <a href="#" class="cz-button mr10" onclick="batchDeleted()">停用</a>
@@ -152,14 +144,11 @@
 
 <!--子账号  提示层-->
 <div id="child-account" class="modal">
-    <!--form-->
     <div class="layui-layer-title" id="child-account-title">子账号列表</div>
     <div class="mb30">
-        <!--<form class="layui-form" action="">-->
         <div class="m30">
             <div class="tc fz-14" id="thisCorpName"></div>
             <div class="col2 mt20" id="sameTotal"></div>
-            <!--table-->
             <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                 <thead>
                 <tr>
@@ -183,19 +172,39 @@
                 </tr>
                 </tbody>
             </table>
-            <!--table end-->
         </div>
         <div class="layui-form-item tc">
-            <button class="layui-btn" lay-submit="" onclick="submit()" lay-filter="demo1">关闭</button>
+            <button class="layui-btn" onclick="submit()">关闭</button>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
-
 <!--提示层 end-->
 
-<!--修改密码  提示层-->
+<!-- 冻结/解冻账号提示层 -->
+<div id="ban-div" class="modal">
+    <div class="layui-layer-title" id="ban-title">冻结/解冻账号</div>
+    <div class="mb30 layui-form">
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">原因：</label>
+                <div class="layui-input-block">
+                    <textarea id="ban-reason" placeholder="请输入原因" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="ban-client-id"/>
+                <input type="hidden" id="ban-client-enabled"/>
+                <input type="hidden" id="ban-type"/>
+                <button class="layui-btn" onclick="banClient()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 冻结/解冻账号提示层 -->
+
+<!-- 修改密码  提示层 -->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
