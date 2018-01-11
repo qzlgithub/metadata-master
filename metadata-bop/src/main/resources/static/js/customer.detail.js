@@ -320,23 +320,23 @@ function checkOpenEnd() {
     if(endTime !== "") {
         if(reg.test(endTime)) {
             if(getDate(startTime) - getDate(endTime) > 0) {
-                $("#endTimeTip").text("结束时间不能小于开始时间");
-                $("#endTimeTip").show();
+                $("#openEndTip").text("结束时间不能小于开始时间");
+                $("#openEndTip").show();
                 return false;
             }
             else {
-                $("#endTimeTip").text("");
-                $("#endTimeTip").hide();
+                $("#openEndTip").text("");
+                $("#openEndTip").hide();
             }
         }
         else {
-            $("#endTimeTip").text("时间格式错误");
-            $("#endTimeTip").show();
+            $("#openEndTip").text("时间格式错误");
+            $("#openEndTip").show();
         }
     }
     else {
-        $("#endTimeTip").text("请选择服务结束时间！");
-        $("#endTimeTip").show();
+        $("#openEndTip").text("请选择服务结束时间！");
+        $("#openEndTip").show();
     }
 }
 
