@@ -18,5 +18,6 @@
             left join `manager` m
                 on col.`manager_id` = m.`id`
         where col.`client_user_id` = #{clientUserId}
+        order by col.`create_time` desc
     </select>
 </mapper>

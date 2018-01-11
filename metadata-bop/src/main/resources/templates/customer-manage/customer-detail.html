@@ -63,7 +63,8 @@
                     <div class="w30 fl">
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">账号状态：</label>
-                            <div class="layui-input-block col2" th:text="${userEnabled} eq '1' ? '启用':'禁用'"></div>
+                            <div class="layui-input-block col2 show-log"
+                                 th:text="${userEnabled} eq '1' ? '启用':'禁用'"></div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">公司名称：</label>
@@ -175,6 +176,29 @@
 <!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
+<!-- 冻结解冻提示层 -->
+<div id="ban-div" class="modal">
+    <div class="layui-layer-title" id="child-account-title">账号操作记录</div>
+    <div class="mb30">
+        <div class="mb30 ml30 mr30" id="ban-data-body">
+            <ul class="log">
+                <li>
+                    <div class="title-log pt10 pb10 clearfix">
+                        <span class="w50 tl">#{type}</span>
+                        <span class="w25 tr">#{managerName}</span>
+                        <span class="w25 tr">#{operateTime}</span>
+                    </div>
+                    <div class="lh25 tl col2">#{reason}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="layui-form-item tc">
+            <button class="layui-btn">关闭</button>
+        </div>
+    </div>
+</div>
+<!-- 冻结解冻提示层 -->
+
 <!--app-id  提示层-->
 <div id="key-modal" class="modal">
     <!--form-->
@@ -204,7 +228,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
                 <div class="layui-input-block renew-input-block tl">
-                    <select name="modules" id="renew-bill-plan" onchange="change()" class="select-list" onblur="checkSelectBill()">
+                    <select name="modules" id="renew-bill-plan" onchange="change()" class="select-list"
+                            onblur="checkSelectBill()">
                         <option value="1">包年</option>
                         <option value="2">请求计费</option>
                         <option value="3">请求成功计费</option>
@@ -382,7 +407,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
                     <div class="layui-input-block renew-input-block">
-                        <select name="modules" id="account-recharge-type" lay-verify="required" lay-search="" class="select-list">
+                        <select name="modules" id="account-recharge-type" lay-verify="required" lay-search=""
+                                class="select-list">
                             <option value="1">代客户充值</option>
                             <option value="2">赔偿</option>
                             <option value="3">借用</option>

@@ -459,7 +459,7 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @GetMapping(value = "operateLog")
+    @GetMapping(value = "operate/log")
     @ResponseBody
     public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
