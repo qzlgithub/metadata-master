@@ -48,22 +48,26 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品编号：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-code" placeholder="请输入" autocomplete="off" class="layui-input"
+                        <input type="text" id="product-code" onblur="checkProdNo();" placeholder="请输入" autocomplete="off" class="layui-input"
                                th:value="${code}"/>
+                        <i class="col3 pl10" id="prodNoTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-name" autocomplete="off" class="layui-input" th:value="${name}"/>
+                        <input type="text" id="product-name" onblur="checkProdName();" autocomplete="off"
+                               class="layui-input" th:value="${name}"/>
+                        <i class="col3 pl10" id="prodNameTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>成本价格：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-cost" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
+                        <input type="text" id="product-cost" onblur="checkCostAmt();" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
                                class="layui-input" style="width: 80%; display: inline-block;"/>
                         <i class="col3">元</i>
+                        <i class="col3 pl10" id="costAmtTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">

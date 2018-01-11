@@ -20,7 +20,8 @@ require(
                     type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 }
             },
-            color: ['#45C1BD', '#2CC35A', '#6AA5FC'],
+            //color: ['#45C1BD', '#2CC35A', '#6AA5FC'],
+            color: ['#42a4ff', '#1dc327', '#fc3bd2'],
             grid: {
                 left: '3%',
                 right: '4%',
@@ -41,16 +42,19 @@ require(
             series: [
                 {
                     name: '请求次数',
+                    //barWidth:27,
                     type: 'bar',
                     data: [3200000, 3320000, 3010000, 3340000, 3900000, 3300000, 3200000]
                 },
                 {
                     name: '成本',
+                    //barWidth:27,
                     type: 'bar',
                     data: [1200000, 1320000, 1010000, 1340000, 900000, 2300000, 2100000]
                 },
                 {
                     name: '收入',
+                    //barWidth:27,
                     type: 'bar',
                     data: [2200000, 1820000, 1910000, 2340000, 2900000, 3300000, 3100000]
                 }
