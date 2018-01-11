@@ -15,10 +15,15 @@ function addProduct() {
         }),
         success: function(data) {
             if(data.errCode !== '000000') {
-                layer.msg(data.errMsg);
+                layer.msg(data.errMsg, {time: 2000});
             }
             else {
-                window.location.href = "/product/index.html";
+                layer.msg("添加成功", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/product/index.html";
+                });
+
             }
         }
     });
