@@ -158,8 +158,8 @@ function batchDeleted() {
             clientIds.push($(objs[o]).attr("data-id"));
         }
     }
-    if(clientIds.length == 0) {
-        layer.msg("请至少选择一项", {
+    if(clientIds.length === 0) {
+        layer.msg("请至少选择一个客户", {
             time: 2000
         });
     }
@@ -207,7 +207,7 @@ function batchResetPwd() {
         }
     }
     if(clientIds.length === 0) {
-        layer.msg("请至少选择一项", {
+        layer.msg("请至少选择一个客户", {
             time: 2000
         });
     }
