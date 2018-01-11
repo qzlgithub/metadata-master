@@ -131,10 +131,14 @@ function addProductCategory() {
         data: JSON.stringify(param),
         success: function(data) {
             if(data.errCode !== '000000') {
-                alert(data.errMsg);
+                layer.msg(data.errMsg, {time: 2000});
             }
             else {
-                window.location.href = "/product/category/index.html";
+                layer.msg("添加成功", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/product/category/index.html";
+                });
             }
         }
     });
@@ -173,10 +177,15 @@ function updateProductCategory() {
         success: function(data) {
             // alert(data.name);
             if(data.errCode !== '000000') {
-                alert(data.errMsg);
+                layer.msg(data.errMsg, {time: 2000});
             }
             else {
-                window.location.href = "/product/category/index.html";
+                layer.msg("修改成功", {
+                    time: 2000
+                }, function() {
+                    window.location.href = "/product/category/index.html";
+                });
+
             }
         }
     });

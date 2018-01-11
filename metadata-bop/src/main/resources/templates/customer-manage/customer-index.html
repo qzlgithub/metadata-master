@@ -67,6 +67,7 @@
             <!--搜索 end-->
             <!--功能操作-->
             <div class="clearfix mt20">
+                批量操作
                 <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)">冻结账号</a>
                 <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)">解冻账号</a>
                 <a href="#" class="cz-button mr10" onclick="batchDeleted()">停用</a>
@@ -165,7 +166,7 @@
                     <td></td>
                     <td>
                         <span class="mr30">
-                            <a href="/client/edit.html?clientId=#{id}" class="edit">重置密码</a>
+                            <a href="/client/edit.html?clientId=#{id}" class="edit" onclick="resetChildPwd()">重置密码</a>
                         </span>
                         <a href="/client/edit.html?clientId=#{id}" class="edit">查看消费</a>
                     </td>
@@ -174,7 +175,7 @@
             </table>
         </div>
         <div class="layui-form-item tc">
-            <button class="layui-btn" onclick="submit()">关闭</button>
+            <button class="layui-btn" onclick="layer.closeAll()">关闭</button>
         </div>
     </div>
 </div>
