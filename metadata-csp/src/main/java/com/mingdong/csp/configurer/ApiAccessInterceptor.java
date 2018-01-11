@@ -1,10 +1,8 @@
-package com.mingdong.bop.configurer;
+package com.mingdong.csp.configurer;
 
-import com.mingdong.bop.component.RedisDao;
-import com.mingdong.bop.constant.PathModule;
-import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.model.RequestThread;
-import com.mingdong.bop.service.SystemService;
+import com.mingdong.csp.component.RedisDao;
+import com.mingdong.csp.model.RequestThread;
+import com.mingdong.csp.model.UserSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -14,16 +12,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @Configuration
-public class AccessInterceptor extends HandlerInterceptorAdapter
+public class ApiAccessInterceptor extends HandlerInterceptorAdapter
 {
-    private static Logger logger = LoggerFactory.getLogger(AccessInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger(ApiAccessInterceptor.class);
     @Resource
     private RedisDao redisDao;
-    @Resource
-    private SystemService systemService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
@@ -32,21 +27,8 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
         logger.info("Request to {}", path);
         HttpSession session = request.getSession();
         String sessionId = session.getId();
-        ManagerSession ms = redisDao.getManagerSession(sessionId);
-        if(ms == null)
-        {
-            response.sendRedirect("/index.html");
-            return false;
-        }
-        RequestThread.set(ms.getManagerId(), ms.getName(), ms.getPrivileges());
-        String module = PathModule.getByPath(path);
-        RequestThread.setModule(module != null ? module : "");
-        Map<String, String> system = redisDao.getSystemModule();
-        if(system == null)
-        {
-            system = systemService.cacheSystemModule();
-        }
-        RequestThread.setSystem(system);
+        UserSession us = redisDao.getUserSession(sessionId);
+
         return true;
     }
 

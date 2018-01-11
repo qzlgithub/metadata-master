@@ -472,6 +472,13 @@ public class ManagerServiceImpl implements ManagerService
         resp.addData(Field.ENABLED, enabled);
     }
 
+    @Override
+    public void checkIfRoleNameExist(String name, BLResp resp)
+    {
+        Role role = roleMapper.findByName(name);
+        resp.addData(Field.EXIST, role == null ? 0 : 1);
+    }
+
     /**
      * 查询权限列表及其父级权限的ID
      */
@@ -525,12 +532,5 @@ public class ManagerServiceImpl implements ManagerService
             return sb.substring(1);
         }
         return "";
-    }
-
-    @Override
-    public void checkIfRoleNameExist(String name, BLResp resp)
-    {
-        Role role = roleMapper.findByName(name);
-        resp.addData(Field.EXIST, role == null ? 0 : 1);
     }
 }

@@ -15,4 +15,14 @@ public class RequestThread
     {
         return threadHolder.get();
     }
+
+    public static Long getUserId()
+    {
+        return get().getUserId();
+    }
+
+    public static void cleanup()
+    {
+        threadHolder.remove();
+    }
 }

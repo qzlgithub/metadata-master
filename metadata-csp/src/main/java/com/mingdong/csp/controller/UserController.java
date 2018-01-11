@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
-import com.mingdong.core.model.RequestThread;
 import com.mingdong.csp.constant.Field;
+import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +66,7 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.changePassword(RequestThread.getOperatorId(), oldPwd, newPwd, resp);
+        userService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, resp);
         return resp;
     }
 

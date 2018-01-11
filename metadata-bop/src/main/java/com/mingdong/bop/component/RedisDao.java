@@ -48,12 +48,6 @@ public class RedisDao extends RedisBaseDao
         del(DB.USER_SECURE, sessionId);
     }
 
-    public void setSystemModule(Map<String, String> systemModule)
-    {
-        String str = JSON.toJSONString(systemModule);
-        set(DB.SYSTEM, Key.SYSTEM_MODULE, str);
-    }
-
     public Map<String, String> getSystemModule()
     {
         String str = get(DB.SYSTEM, Key.SYSTEM_MODULE);
@@ -68,6 +62,12 @@ public class RedisDao extends RedisBaseDao
             map.put(key, json.getString(key));
         }
         return map;
+    }
+
+    public void setSystemModule(Map<String, String> systemModule)
+    {
+        String str = JSON.toJSONString(systemModule);
+        set(DB.SYSTEM, Key.SYSTEM_MODULE, str);
     }
 
     /**

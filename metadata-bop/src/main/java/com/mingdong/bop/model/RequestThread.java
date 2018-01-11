@@ -1,4 +1,4 @@
-package com.mingdong.core.model;
+package com.mingdong.bop.model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,5 +46,10 @@ public class RequestThread
     public static Long getOperatorId()
     {
         return get().getiId();
+    }
+
+    public static void cleanup()
+    {
+        threadHolder.remove();
     }
 }

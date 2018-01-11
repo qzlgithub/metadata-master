@@ -264,7 +264,7 @@ public class TradeServiceImpl implements TradeService
     }
 
     /**
-     *产品充值列表
+     * 产品充值列表
      */
     @Override
     public void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page,

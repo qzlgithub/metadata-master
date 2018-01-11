@@ -1,4 +1,4 @@
-package com.mingdong.core.model;
+package com.mingdong.csp.model;
 
 public class UserSession
 {

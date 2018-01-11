@@ -3,7 +3,7 @@ package com.mingdong.csp.component;
 import com.alibaba.fastjson.JSON;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
-import com.mingdong.core.model.UserSession;
+import com.mingdong.csp.model.UserSession;
 import org.springframework.stereotype.Repository;
 
 @Repository

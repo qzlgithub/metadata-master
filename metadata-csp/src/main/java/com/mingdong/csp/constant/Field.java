@@ -10,6 +10,6 @@ public interface Field
     String NEW_PWD = "newPwd";
     String NAME = "name";
     String PHONE = "phone";
-    String CLIENT_USER_ID="clientUserId";
+    String CLIENT_USER_ID = "clientUserId";
     String FIRST_LOGIN = "firstLogin";
 }
