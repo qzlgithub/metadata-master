@@ -114,9 +114,23 @@
     </update>
 
     <update id="updateStatusByIds">
-        update `client_user` set `enabled` = #{enabled} where `id` in
+        update `client_user`
+        set `enabled` = #{enabled},
+            `update_time` = #{date}
+        where `id` in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>
+
+    <select id="getListByClientsAndPrimary" parameterType="List" resultMap="BaseResultMap">
+        select
+            cu.`id`, cu.`create_time`, cu.`update_time`, cu.`client_id`, cu.`name`, cu.`phone`, cu.`email`,
+            cu.`username`, cu.`password`, cu.`app_key`, cu.`enabled`, cu.`deleted`
+        from `client` c
+            left join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+        where c.`id` in
+        <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </select>
 </mapper>

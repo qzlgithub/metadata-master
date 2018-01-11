@@ -390,30 +390,33 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
     {
-        List<Client> clientList = clientMapper.getListByIdList(clientIdList);
-        if(CollectionUtils.isEmpty(clientList))
+        List<ClientUser> userList = clientUserMapper.getListByClientsAndPrimary(clientIdList);
+        if(CollectionUtils.isEmpty(userList))
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         Date current = new Date();
-        List<Long> clientUserIdList = new ArrayList<>(clientList.size());
+        List<Long> clientUserIdList = new ArrayList<>();
         List<ClientOperateLog> logList = new ArrayList<>();
-        for(Client client : clientList)
+        for(ClientUser user : userList)
         {
-            clientUserIdList.add(client.getPrimaryUserId());
-            ClientOperateLog log = new ClientOperateLog();
-            log.setCreateTime(current);
-            log.setUpdateTime(current);
-            log.setClientId(client.getId());
-            log.setClientUserId(client.getPrimaryUserId());
-            log.setManagerId(managerId);
-            log.setType(enabled);
-            log.setReason(reason);
-            logList.add(log);
+            if(!enabled.equals(user.getEnabled()))
+            {
+                clientUserIdList.add(user.getId());
+                ClientOperateLog log = new ClientOperateLog();
+                log.setCreateTime(current);
+                log.setUpdateTime(current);
+                log.setClientId(user.getClientId());
+                log.setClientUserId(user.getId());
+                log.setManagerId(managerId);
+                log.setType(enabled);
+                log.setReason(reason);
+                logList.add(log);
+            }
         }
         clientOperateLogMapper.addList(logList);
-        clientUserMapper.updateStatusByIds(enabled, clientUserIdList);
+        clientUserMapper.updateStatusByIds(enabled, current, clientUserIdList);
     }
 
     @Override
@@ -427,7 +430,6 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void resetClientPassword(List<Long> idList, BLResp resp)
     {
-        String password = Md5Utils.encrypt(Md5Utils.encrypt(Constant.DEFAULT_PASSWORD));
         List<Client> clientList = clientMapper.getListByIdList(idList);
         if(!CollectionUtils.isEmpty(clientList))
         {
@@ -436,7 +438,7 @@ public class ClientServiceImpl implements ClientService
             {
                 clientUserIdList.add(client.getPrimaryUserId());
             }
-            clientUserMapper.resetPasswordByIds(password, new Date(), clientUserIdList);
+            clientUserMapper.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, new Date(), clientUserIdList);
         }
     }
 

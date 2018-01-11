@@ -23,5 +23,8 @@ public interface ClientUserMapper
     void resetPasswordByIds(@Param("password") String password, @Param("date") Date date,
             @Param("idList") List<Long> idList);
 
-    void updateStatusByIds(@Param("enabled") Integer enabled, @Param("idList") List<Long> idList);
+    void updateStatusByIds(@Param("enabled") Integer enabled, @Param("date") Date date,
+            @Param("idList") List<Long> idList);
+
+    List<ClientUser> getListByClientsAndPrimary(@Param("clientIdList") List<Long> clientIdList);
 }
