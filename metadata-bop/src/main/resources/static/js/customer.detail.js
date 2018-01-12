@@ -4,26 +4,15 @@ var logTr = '<ul class="log"><li><div class="title-log pt10 pb10 clearfix">' +
     '<span class="w25 tr">#{operateTime}</span></div>' +
     '<div class="lh25 tl col2">#{reason}</div></li></ul>';
 $(".show-log").click(function() {
-    if($("#ban-div").find(".havaText").length == 0) {
-        $("#ban-div").append('<input type="hidden" class="havaText">');
-        var obj={
-            clientId : $("#client-id").val(),
-            pageNum : 1,
-            pageSize : 5
-        };
-        getOperateLogListAndOpen(obj);
-    }else{
-        layer.open({
-            title: false,
-            type: 1,
-            content: $('#ban-div'),
-            area: ['700px'],
-            shadeClose: true
-        });
-    }
+    var obj = {
+        clientId: $("#client-id").val(),
+        pageNum: 1,
+        pageSize: 5
+    };
+    getOperateLogListAndOpen(obj);
 });
 
-function getOperateLogListAndOpen(obj){
+function getOperateLogListAndOpen(obj) {
     $.get(
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
@@ -45,13 +34,17 @@ function getOperateLogListAndOpen(obj){
                         .replace(/#{reason}/g, list[o].reason);
                         div.append(tr);
                     }
-                    $('.pagination').jqPagination({
-                        max_page	: pages,
-                        paged		: function(currentPage) {
-                            obj['pageNum']=currentPage;
+                    $('#pagination').paging({
+                        initPageNo: pageNum, // 初始页码
+                        totalPages: pages, //总页数
+                        totalCount: '合计' + total + '条数据', // 条目总数
+                        slideSpeed: 600, // 缓动速度。单位毫秒
+                        jump: false, //是否支持跳转
+                        callback: function(currentPage) { // 回调函数
+                            obj['pageNum'] = currentPage;
                             getOperateLogList(obj);
                         }
-                    });
+                    })
                 }
                 else {
                     div.append("<h3>暂无数据</h3>");
@@ -71,7 +64,7 @@ function getOperateLogListAndOpen(obj){
     );
 }
 
-function getOperateLogList(obj){
+function getOperateLogList(obj) {
     $.get(
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
