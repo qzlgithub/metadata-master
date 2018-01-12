@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
     <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="../../static/css/jqpagination.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
@@ -192,8 +193,12 @@
                 </li>
             </ul>
         </div>
-        <div class="layui-form-item tc">
-            <button class="layui-btn">关闭</button>
+        <div class="pagination">
+            <a href="javascript:" class="first" data-action="first">&laquo;</a>
+            <a href="javascript:" class="previous" data-action="previous">&lsaquo;</a>
+            <input type="text" readonly="readonly" />
+            <a href="javascript:" class="next" data-action="next">&rsaquo;</a>
+            <a href="javascript:" class="last" data-action="last">&raquo;</a>
         </div>
     </div>
 </div>
@@ -448,6 +453,7 @@
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/customer.detail.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.jqpagination.js}"></script>
 <script>
     $(".date").datepicker({dateFormat: "yy-mm-dd"});
     var message;

@@ -4,9 +4,29 @@ var logTr = '<ul class="log"><li><div class="title-log pt10 pb10 clearfix">' +
     '<span class="w25 tr">#{operateTime}</span></div>' +
     '<div class="lh25 tl col2">#{reason}</div></li></ul>';
 $(".show-log").click(function() {
+    if($("#ban-div").find(".havaText").length == 0) {
+        $("#ban-div").append('<input type="hidden" class="havaText">');
+        var obj={
+            clientId : $("#client-id").val(),
+            pageNum : 1,
+            pageSize : 5
+        };
+        getOperateLogListAndOpen(obj);
+    }else{
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#ban-div'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    }
+});
+
+function getOperateLogListAndOpen(obj){
     $.get(
         "/client/operate/log",
-        {"id": $("#client-id").val(), "pageNum": 1, "pageSize": 5},
+        {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(res) {
             if(res.errCode === '000000') {
                 var div = $("#ban-data-body");
@@ -25,6 +45,13 @@ $(".show-log").click(function() {
                         .replace(/#{reason}/g, list[o].reason);
                         div.append(tr);
                     }
+                    $('.pagination').jqPagination({
+                        max_page	: pages,
+                        paged		: function(currentPage) {
+                            obj['pageNum']=currentPage;
+                            getOperateLogList(obj);
+                        }
+                    });
                 }
                 else {
                     div.append("<h3>暂无数据</h3>");
@@ -42,7 +69,42 @@ $(".show-log").click(function() {
             }
         }
     );
-});
+}
+
+function getOperateLogList(obj){
+    $.get(
+        "/client/operate/log",
+        {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
+        function(res) {
+            if(res.errCode === '000000') {
+                var div = $("#ban-data-body");
+                div.empty();
+                div.append('<input type="hidden" class="havaText">')
+                var result = res.dataMap;
+                var total = result.total;
+                var pages = result.pages;
+                var pageNum = result.pageNum;
+                var pageSize = result.pageSize;
+                var list = result.list;
+                if(typeof(list) !== "undefined" && list.length > 0) {
+                    for(var o in list) {
+                        var tr = logTr.replace(/#{type}/g, list[o].type === 1 ? "解冻操作" : "冻结操作")
+                        .replace(/#{managerName}/g, list[o].managerName)
+                        .replace(/#{operateTime}/g, list[o].operateTime)
+                        .replace(/#{reason}/g, list[o].reason);
+                        div.append(tr);
+                    }
+                }
+                else {
+                    div.append("<h3>暂无数据</h3>");
+                }
+            }
+            else {
+                layer.msg(res.errMsg);
+            }
+        }
+    );
+}
 
 function openProduct() {
     var clientId = $("#client-id").val();
