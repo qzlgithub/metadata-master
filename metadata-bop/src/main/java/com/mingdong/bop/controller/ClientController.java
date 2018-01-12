@@ -477,7 +477,6 @@ public class ClientController
             @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
             throws IOException
     {
-
         XSSFWorkbook wb = clientService.createProductRechargeXlsx(clientId, productId, startTime, endTime);
         String filename = new String("产品充值记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");

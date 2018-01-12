@@ -1,8 +1,10 @@
 package com.mingdong.csp.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.csp.component.RedisDao;
@@ -73,4 +75,18 @@ public class UserServiceImpl implements UserService
 
     }
 
+    @Override
+    public void getHomeData(Long clientId, Long clientUserId, BLResp resp)
+    {
+        HomeDTO dto = clientApi.getUserHomeData(clientId, clientUserId);
+        if(RestResult.SUCCESS != dto.getResult())
+        {
+            resp.result(dto.getResult());
+            return;
+        }
+        int allowedQty = dto.getTotalAllowedQty() - (CollectionUtils.isEmpty(dto.getSubUsers()) ? 0 :
+                dto.getSubUsers().size());
+        resp.addData(Field.ALLOWED_QTY, allowedQty).addData(Field.SUB_USER_LIST, dto.getSubUsers()).addData(
+                Field.OPENED_LIST, dto.getOpened()).addData(Field.TO_OPEN_LIST, dto.getToOpen());
+    }
 }

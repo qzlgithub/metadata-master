@@ -26,6 +26,9 @@ public class UserController
     @Resource
     private UserService userService;
 
+    /**
+     * 用户登陆
+     */
     @PostMapping(value = "login")
     public BLResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
@@ -47,6 +50,9 @@ public class UserController
         return resp;
     }
 
+    /**
+     * 用户注销
+     */
     @PostMapping(value = "logout")
     public BLResp userLogout(HttpServletRequest request)
     {
@@ -56,8 +62,11 @@ public class UserController
         return new BLResp();
     }
 
-    @PostMapping(value = "changePwd")
-    public BLResp changePwd(@RequestBody JSONObject jsonReq)
+    /**
+     * 用户修改密码
+     */
+    @PostMapping(value = "password")
+    public BLResp changePassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         String oldPwd = jsonReq.getString(Field.OLD_PWD);

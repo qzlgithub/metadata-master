@@ -29,4 +29,6 @@ public interface UserService
      * 编辑子账号
      */
     void editChildAccount(Long clientUserId, String username, String password, String name, String phone, BLResp resp);
+
+    void getHomeData(Long clientId, Long clientUserId, BLResp resp);
 }

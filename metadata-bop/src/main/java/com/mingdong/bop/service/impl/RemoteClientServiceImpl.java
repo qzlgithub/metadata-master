@@ -9,6 +9,7 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import org.slf4j.Logger;
@@ -81,4 +82,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
         return new BaseDTO(RestResult.SUCCESS);
     }
 
+    @Override
+    public HomeDTO getUserHomeData(Long clientId, Long clientUserId)
+    {
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            return new HomeDTO(RestResult.OBJECT_NOT_FOUND);
+        }
+        return null;
+    }
 }
