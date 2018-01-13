@@ -23,7 +23,7 @@ public interface RemoteProductService
     List<ProductRechargeDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
 
     /**
-     * 获取客户消费明细
+     * 获取客户请求记录
      *
      * @param clientId
      * @param productId
