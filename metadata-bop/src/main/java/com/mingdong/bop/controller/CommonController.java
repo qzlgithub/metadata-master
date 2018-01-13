@@ -2,7 +2,7 @@ package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ImageCode;
-import com.mingdong.bop.util.CaptchaUtil;
+import com.mingdong.bop.util.CaptchaUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +20,7 @@ public class CommonController
     @RequestMapping(value = "imageCode")
     public Map<String, Object> getImageCode(HttpServletRequest request) throws IOException
     {
-        ImageCode imageCode = CaptchaUtil.buildImageCode();
+        ImageCode imageCode = CaptchaUtils.buildImageCode();
         Map<String, Object> map = new HashMap<>();
         map.put(Field.IMAGE, "data:image/png;base64," + imageCode.getBase64Code());
         HttpSession session = request.getSession();

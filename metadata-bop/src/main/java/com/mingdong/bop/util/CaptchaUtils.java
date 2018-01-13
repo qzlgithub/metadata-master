@@ -8,14 +8,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-public class CaptchaUtil
+public class CaptchaUtils
 {
     /**
      * 随机字典字符，不包括0、O、1、I这些难以辨认的字符
@@ -24,9 +22,6 @@ public class CaptchaUtil
             {'2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N',
                     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-    /**
-     * 随机数
-     */
     private static Random random = new Random();
 
     /**
@@ -34,13 +29,13 @@ public class CaptchaUtil
      */
     private static String getRandomString(int length)
     {
-        StringBuffer buffer = new StringBuffer();// 字符串缓存
+        StringBuilder sb = new StringBuilder();// 字符串缓存
         for(int i = 0; i < length; i++)
-        {// 循环length次
+        {
             // random.nextInt(n)方法调用返回介于0(含)和n(不含)伪随机，均匀分布的int值
-            buffer.append(CHARS[random.nextInt(CHARS.length)]);// 每次获取一个随机字符
+            sb.append(CHARS[random.nextInt(CHARS.length)]);// 每次获取一个随机字符
         }
-        return buffer.toString();
+        return sb.toString();
     }
 
     /**
@@ -62,25 +57,27 @@ public class CaptchaUtil
     /**
      * 创建验证码图片
      */
-    public static void outputImage(int width, int height, OutputStream os, String randomString) throws IOException
+    private static void outputImage(int width, int height, OutputStream os, String randomString) throws IOException
     {
         int verifySize = randomString.length(); // 验证码长度
-        Color color = getRandomColor();// 随机颜色，用于背景色
-        Color reverse = getReverseColor(color);// 反色，用于前景色
+        Color color = getRandomColor(); // 随机颜色，用于背景色
+        Color reverse = getReverseColor(color); // 反色，用于前景色
 
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);// 创建一个彩色图片
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // 创建一个彩色图片
 
         Graphics2D g = bi.createGraphics();// 获取绘图对象
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // 设置图像抗锯齿
-        g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, height -
-                4));// 设置字体: Serif的意思是，在字的笔划开始及结束的地方有额外的装饰，而且笔划的粗细会因直横的不同而有不同。相反的，Sans Serif则没有这些额外的装饰，笔划粗细大致差不多
-        g.setColor(color);// 设置颜色
-        g.fillRect(0, 0, width, height);// 绘制背景:用这个颜色填充这个区域
-        g.setColor(reverse);// 设置颜色
+        // 设置字体: Serif的意思是，在字的笔划开始及结束的地方有额外的装饰，而且笔划的粗细会因直横的不同而有不同。
+        // 相反的，Sans Serif则没有这些额外的装饰，笔划粗细大致差不多
+        g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, height - 4));
+        g.setColor(color); // 设置颜色
+        g.fillRect(0, 0, width, height); // 绘制背景:用这个颜色填充这个区域
+        g.setColor(reverse); // 设置颜色
 
         for(int i = 0; i < verifySize; i++)
-        { // 绘制验证码
+        {
+            // 绘制验证码
             g.drawChars(randomString.toCharArray(), i, 1, ((width - 10) / verifySize) * i + 5,
                     height / 2 + height / 2 - 10);
         }
@@ -89,9 +86,9 @@ public class CaptchaUtil
 
         drawInterferingLine(width, height, 10, g); // 产生30条干扰线
 
-        shear(width, height, g, color);// 使图片扭曲
+        shear(width, height, g, color); // 使图片扭曲
 
-        g.dispose();// 释放由此 Window、其子组件及其拥有的所有子组件所使用的所有本机屏幕资源
+        g.dispose(); // 释放由此 Window、其子组件及其拥有的所有子组件所使用的所有本机屏幕资源
 
         ImageIO.write(bi, "JPG", os);
     }
@@ -102,8 +99,9 @@ public class CaptchaUtil
     private static void drawNoisePoint(int width, int height, int num, Graphics2D g)
     {
         for(int i = 0, n = random.nextInt(num); i < n; i++)
-        {// 绘制最多num个噪音点
-            g.drawRect(random.nextInt(width), random.nextInt(height), 1, 1);// 随机噪音点
+        {
+            // 绘制最多num个噪音点
+            g.drawRect(random.nextInt(width), random.nextInt(height), 1, 1); // 随机噪音点
         }
     }
 
@@ -181,32 +179,5 @@ public class CaptchaUtil
         BASE64Encoder encoder = new BASE64Encoder();
         String base64Code = encoder.encode(data);
         return new ImageCode(code, base64Code);
-    }
-
-    /**
-     * 生成指定验证码图像文件
-     */
-    public static void outputImageFile(int width, int height, File file, String code) throws IOException
-    {
-        if(file == null)
-        {
-            return;
-        }
-        File dir = file.getParentFile();// 获得父目录
-        if(!dir.exists())
-        { // 如果父目录不存在，则创建一个
-            dir.mkdirs();
-        }
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            outputImage(width, height, fos, code); // 创建验证码图片
-            fos.close(); // 关闭流
-        }
-        catch(IOException e)
-        {
-            throw e;
-        }
     }
 }

@@ -4,7 +4,7 @@ import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ImageCode;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.util.CaptchaUtil;
+import com.mingdong.bop.util.CaptchaUtils;
 import com.mingdong.common.util.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +31,10 @@ public class HomeController
             ManagerSession ms = redisDao.getManagerSession(sessionId);
             if(ms != null)
             {
-                return new ModelAndView("redirect:/manager/index.html");
+                return new ModelAndView("redirect:/stats/index.html");
             }
         }
-        ImageCode imageCode = CaptchaUtil.buildImageCode(); // 获取图片验证码
+        ImageCode imageCode = CaptchaUtils.buildImageCode(); // 获取图片验证码
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
         ModelAndView view = new ModelAndView("login");
         view.addObject(Field.IMAGE, "data:image/png;base64," + imageCode.getBase64Code());
