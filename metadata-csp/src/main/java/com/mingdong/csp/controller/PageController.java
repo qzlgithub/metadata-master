@@ -6,6 +6,7 @@ import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ClientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,12 @@ public class PageController
 {
     @Resource
     private ClientService clientService;
+
+    @GetMapping(value = {"/", "index.html"})
+    public ModelAndView indexPage()
+    {
+        return new ModelAndView("index");
+    }
 
     /**
      * 用户首页
