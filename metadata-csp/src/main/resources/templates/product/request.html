@@ -24,7 +24,6 @@
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet">
 
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -42,12 +41,12 @@
 <div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
     <div class="container header-mt10">
         <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"
+            <a class="navbar-brand hidden-sm navbar-logo" href="../index.html"
                onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
         </div>
         <div class="navbar-collapse collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li><a href="index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
+                <li><a href="../index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
                 <li><a href="programme.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
                 </li>
                 <li><a href="case.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
@@ -71,7 +70,7 @@
 <!--advimg end-->
 <!--面包屑-->
 <div class="container mt45 mb20">
-    位置：<a href=""> 主页</a> > <span class="col2">设置中心</span>
+    位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <a href="">服务详情</a> > <span class="col2">历史充值</span>
 </div>
 <!--面包屑 end-->
 <!--内容-->
@@ -80,8 +79,9 @@
         <!--left-->
         <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important">
             <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked">
-                <li><a href="#mms1">多账号管理</a></li>
-                <li><a href="#mms2">消息通知</a></li>
+                <li><a href="">我的服务</a></li>
+                <li><a href="">服务提醒</a></li>
+                <li><a href="">回收站</a></li>
             </ul>
         </div>
         <!--left end-->
@@ -89,15 +89,96 @@
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
             <!--tab-->
             <div class="mt30 pl10 pr10 pb30">
-                <div class="border-title">安全设置</div>
-
-                <ul class="account-set-list mt20">
-                    <li class="clearfix row">
-                        <span class="w25">登录密码</span>
-                        <span class="w65">当前为初始密码，为确保安全，请修改</span>
-                        <span class="edit w10 cp" id="editpwd">修改</span>
+                <div class="border-title">服务充值记录</div>
+                <!--搜索-->
+                <ul class="search-list clearfix border-b2 pb15 mt20">
+                    <li>产品服务：
+                        <select name="modules" class="select-list">
+                            <option value="">全部</option>
+                            <option value="1">是</option>
+                            <option value="2">否</option>
+                        </select>
+                    </li>
+                    <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date" id="date1"
+                                                                                autocomplete="off" class="layui-input"></em><i
+                            class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                    <li>
+                        <button class="check-button">查询</button>
                     </li>
                 </ul>
+                <!--搜索 end-->
+                <div class="clearfix mt30">
+                    <em class="fz-14 pl15 col4 pt15">共50,000条</em>
+                    <span class="fr mb10">
+                一次最多导出1000条<a href="customer-add.html" class="add-button ml10">导出</a>
+            </span>
+                </div>
+                <table class="layui-table mt10">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>消费单号</th>
+                        <th>账号</th>
+                        <th>产品服务</th>
+                        <th>计费方式</th>
+                        <th>是否成功</th>
+                        <th>是否有结果</th>
+                        <th>单价(元/次)</th>
+                        <th>余额(元)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>admin</td>
+                        <td class="position-r">阿里巴巴<i class="child-icon">子</i></td>
+                        <td>阿里巴巴</td>
+                        <td>购物/网上商超</td>
+                        <td>张三</td>
+                        <td>18733035161</td>
+                        <td>张三</td>
+                        <td>18733035161</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--page-->
+                <div class="layui-table-tool mt20">
+                    <div class="layui-inline layui-table-page" id="layui-table-page1">
+                        <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                            <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
+                                <i class="layui-icon"></i>
+                            </a>
+                            <span class="layui-laypage-curr">
+                          <em class="layui-laypage-em"></em>
+                          <em>1</em>
+                      </span>
+                            <a href="javascript:;" data-page="2">2</a>
+                            <a href="javascript:;" data-page="3">3</a>
+                            <span class="layui-laypage-spr">…</span>
+                            <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
+                            <a href="javascript:;" class="layui-laypage-next" data-page="2">
+                                <i class="layui-icon"></i>
+                            </a>
+                            <span class="layui-laypage-skip">到第<input type="text" min="1" value="1" class="layui-input">页<button
+                                    type="button" class="layui-laypage-btn">确定</button></span>
+                            <span class="layui-laypage-count">共 1000 条</span>
+                            <span class="layui-laypage-limits">
+                          <select lay-ignore="">
+                              <option value="10">10 条/页</option>
+                              <option value="20">20 条/页</option>
+                              <option value="30" selected="">30 条/页</option>
+                              <option value="40">40 条/页</option>
+                              <option value="50">50 条/页</option>
+                              <option value="60">60 条/页</option>
+                              <option value="70">70 条/页</option>
+                              <option value="80">80 条/页</option>
+                              <option value="90">90 条/页</option>
+                          </select>
+                      </span>
+                        </div>
+                    </div>
+                </div>
+                <!--page end-->
             </div>
             <!--tab-->
         </div>
@@ -179,48 +260,6 @@
 </div>
 <!--在线客服 end-->
 
-<!--修改密码 提示层-->
-<div id="edit-pwd" style="display: none">
-    <!--form-->
-    <div class="layui-layer-title">修改密码</div>
-    <div class="mb30">
-        <form class="layui-form">
-            <div class="m30">
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
-                    <div class="layui-input-block" id="oldpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r">
-                        <i class="close-eye icon" id="oldpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="oldpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r">
-                        <i class="open-eye icon" id="oldpwd-open"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
-                    <div class="layui-input-block" id="newpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r">
-                        <i class="close-eye icon" id="newpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="newpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r">
-                        <i class="open-eye icon" id="newpwd-open"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn">保存</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!--form end-->
-</div>
-<!--修改密码 提示层 end-->
-
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -239,7 +278,7 @@
     var message;
     layui.config({
         base: '../build/js/'
-    }).use(['app', 'message'], function() {
+    }).use(['app', 'message', 'laydate'], function() {
         var app = layui.app,
             $ = layui.jquery,
             layer = layui.layer;
@@ -249,32 +288,13 @@
         app.set({
             type: 'iframe'
         }).init();
-        $('#editpwd').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#edit-pwd'),
-                area: ['500px'],
-                shadeClose: true
-            });
+        laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date'
         });
-    });
-    $(document).ready(function() {
-        $("#oldpwd-open").click(function() {
-            $("#oldpwd1").show();
-            $("#oldpwd2").hide();
-        });
-        $("#oldpwd-close").click(function() {
-            $("#oldpwd1").hide();
-            $("#oldpwd2").show();
-        });
-        $("#newpwd-open").click(function() {
-            $("#newpwd1").show();
-            $("#newpwd2").hide();
-        });
-        $("#newpwd-close").click(function() {
-            $("#newpwd1").hide();
-            $("#newpwd2").show();
+        laydate.render({
+            elem: '#date1'
         });
     });
 </script>

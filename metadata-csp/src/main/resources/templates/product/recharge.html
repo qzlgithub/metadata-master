@@ -41,12 +41,12 @@
 <div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
     <div class="container header-mt10">
         <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"
+            <a class="navbar-brand hidden-sm navbar-logo" href="../index.html"
                onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
         </div>
         <div class="navbar-collapse collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li><a href="index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
+                <li><a href="../index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
                 <li><a href="programme.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
                 </li>
                 <li><a href="case.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
@@ -77,8 +77,9 @@
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
         <!--left-->
-        <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important">
-            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked">
+        <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important" id="myScrollspy">
+            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked" data-spy="affix"
+                data-offset-top="125">
                 <li><a href="">我的服务</a></li>
                 <li><a href="">服务提醒</a></li>
                 <li><a href="">回收站</a></li>
@@ -92,7 +93,7 @@
                 <div class="border-title">服务充值记录</div>
                 <!--搜索-->
                 <ul class="search-list clearfix border-b2 pb15 mt20">
-                    <li>产品服务：
+                    <li>服务名称：
                         <select name="modules" class="select-list">
                             <option value="">全部</option>
                             <option value="1">是</option>
@@ -117,25 +118,21 @@
                     <thead>
                     <tr>
                         <th>时间</th>
-                        <th>消费单号</th>
-                        <th>账号</th>
+                        <th>充值单号</th>
                         <th>产品服务</th>
-                        <th>计费方式</th>
-                        <th>是否成功</th>
-                        <th>是否有结果</th>
-                        <th>单价(元/次)</th>
-                        <th>余额(元)</th>
+                        <th>充值类型</th>
+                        <th>充值金额</th>
+                        <th>产品服务余额</th>
+                        <th>合同编号</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>001</td>
                         <td>admin</td>
-                        <td class="position-r">阿里巴巴<i class="child-icon">子</i></td>
+                        <td>阿里巴巴</td>
                         <td>阿里巴巴</td>
                         <td>购物/网上商超</td>
-                        <td>张三</td>
-                        <td>18733035161</td>
                         <td>张三</td>
                         <td>18733035161</td>
                     </tr>

@@ -42,12 +42,12 @@
 <div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
     <div class="container header-mt10">
         <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"
+            <a class="navbar-brand hidden-sm navbar-logo" href="../index.html"
                onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
         </div>
         <div class="navbar-collapse collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li><a href="index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
+                <li><a href="../index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
                 <li><a href="programme.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
                 </li>
                 <li><a href="case.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
@@ -71,45 +71,91 @@
 <!--advimg end-->
 <!--面包屑-->
 <div class="container mt45 mb20">
-    位置：<a href=""> 主页</a> > <span class="col2">设置中心</span>
+    位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <span class="col2">服务详情</span>
 </div>
 <!--面包屑 end-->
 <!--内容-->
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--left-->
-        <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important">
-            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked">
-                <li><a href="#mms1">多账号管理</a></li>
-                <li><a href="#mms2">消息通知</a></li>
-            </ul>
-        </div>
-        <!--left end-->
-        <!--right-->
-        <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
-            <!--tab-->
-            <div class="mt30 pl10 pr10 pb30">
-                <div class="border-title">消息通知</div>
-                <table class="layui-table mt20">
-                    <thead>
-                    <tr>
-                        <th>时间</th>
-                        <th>类型</th>
-                        <th>内容</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>001</td>
-                        <td>admin</td>
-                        <td>阿里巴巴</td>
-                    </tr>
-                    </tbody>
-                </table>
+        <!--tab-->
+        <div class="pl40 pr40 pb40">
+            <div class="row mt15 ml5 mr15">
+                <ul class="clearfix checkbox-list mt15 pl10 col-md-10">
+                    <em class="fl mt5">服务分类：</em>
+                    <li class="active">不限</li>
+                    <li>金融借贷</li>
+                    <li>国企银行</li>
+                    <li>电商消费类</li>
+                </ul>
+                <div class="col-md-2 mt15 tr checkbox" style="left: 92px;">
+                    <input type='checkbox' id='checkbox1' name='checkboox[]'>
+                    <label for='checkbox1'>已开通</label>
+                </div>
             </div>
-            <!--tab-->
+            <!--list-->
+            <dl class="serve-list development-nav p0 important">
+                <dd>
+                    <ul class="row mr0 ml0">
+                        <li>
+                            <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
+                            <p class="col2 tc fz-14 important">余额 600元</p>
+                            <p class="fz-20 col5 tc important">0.8元/次</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>
+                            </p>
+
+                        </li>
+                        <li>
+                            <div class="serve-list-title">金融逾期常欠客<span class="fr">服务中</span></div>
+                            <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
+                            <p class="fz-20 col5 tc important">剩365天</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>
+                            </p>
+                        </li>
+                        <li>
+                            <div class="serve-list-title">金融逾期常欠客<i class="jjgq-icon icon"></i></div>
+                            <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
+                            <p class="fz-20 col5 tc important">剩365天</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>
+                            </p>
+                        </li>
+                        <li>
+                            <div class="serve-list-title">金融逾期常欠客<i class="yebz-icon icon"></i></div>
+                            <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
+                            <p class="fz-20 col5 tc important">剩365天</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>
+                            </p>
+                        </li>
+                    </ul>
+                    <ul class="row mr0 ml0">
+                        <li>
+                            <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
+                            <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a>
+                            </p>
+                        </li>
+                        <li>
+                            <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
+                            <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a>
+                            </p>
+                        </li>
+                        <li>
+                            <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
+                            <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a>
+                            </p>
+                        </li>
+                        <li>
+                            <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
+                            <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
+                            <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a>
+                            </p>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
             <!--page-->
-            <div class="layui-table-tool mb20 tc">
+            <div class="layui-table-tool mt20 tc">
                 <div class="layui-inline layui-table-page" id="layui-table-page1">
                     <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
                         <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
@@ -146,8 +192,10 @@
                 </div>
             </div>
             <!--page end-->
+            <!--list end-->
+
         </div>
-        <!--right end-->
+        <!--tab-->
 
     </div>
 
@@ -225,7 +273,6 @@
 </div>
 <!--在线客服 end-->
 
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -240,6 +287,18 @@
 <script src="../js/public.js"></script>
 <script src="../js/toc.min.js"></script>
 <script src="../plugins/layui/layui.js"></script>
+<script>
+    $("li").click(function() {
+        if($(this).hasClass('active')) {
+            $(this).removeClass('active');
+        }
+        else {
+            $(this).addClass('active');
+        }
+        ;
+    });
+</script>
+
 </body>
 </html>
   
