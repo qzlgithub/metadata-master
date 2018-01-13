@@ -55,10 +55,9 @@ function checkProdName() {
 
 function checkCostAmt() {
     var unitPrice = $("#product-cost").val();
-    var reg1 = new RegExp("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$"); // 匹配任意浮点型数据
-    var reg2 = new RegExp("^[1-9]\\d*$"); // 匹配任意正整数
+    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$");
     if(unitPrice !== "") {
-        if(reg1.test(unitPrice) || reg2.test(unitPrice)) {
+        if(reg.test(unitPrice)) {
             $("#costAmtTip").text("");
             $("#costAmtTip").hide();
         }

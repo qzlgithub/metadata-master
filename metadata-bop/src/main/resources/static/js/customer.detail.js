@@ -204,6 +204,7 @@ function accountRecharge() {
             "remark": remark
         }),
         success: function(data) {
+
             if(data.errCode !== '000000') {
                 layer.msg("充值失败:" + data.errMsg, {
                     time: 2000

@@ -136,6 +136,7 @@ public class ClientController
         String password = jsonReq.getString(Field.PASSWORD);
         String name = jsonReq.getString(Field.NAME);
         String phone = jsonReq.getString(Field.PHONE);
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(clientUserId == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
@@ -145,7 +146,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.editChildAccount(clientUserId, username, password, name, phone, resp);
+        clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
         return resp;
     }
 

@@ -88,6 +88,13 @@
         where `code` = #{code}
     </select>
 
+    <select id="findByName" parameterType="String" resultMap="BaseResultMap">
+        select
+        `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
+        from `product`
+        where `name` = #{name}
+    </select>
+
     <select id="countAll" resultType="Integer">
         select count(*)
         from `product`

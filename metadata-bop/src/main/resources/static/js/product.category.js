@@ -152,7 +152,6 @@ function findProductCategeoryById(id) {
         "id": id
     };
     $.get(url, param, function(data) {
-        console.log(data.id);
         $("#editId").val(data.id);
         $("#productCodeU").val(data.code);
         $("#productNameU").val(data.name);
@@ -175,7 +174,6 @@ function updateProductCategory() {
             "remark": $("#productRemarkU").val()
         }),
         success: function(data) {
-            // alert(data.name);
             if(data.errCode !== '000000') {
                 layer.msg(data.errMsg, {time: 2000});
             }

@@ -12,15 +12,22 @@ public interface Field
     String PHONE = "phone";
     String CLIENT_USER_ID = "clientUserId";
     String FIRST_LOGIN = "firstLogin";
+
+    String ENABLED = "enabled";
+    String PAGE_NUM = "pageNum";
+    String PAGE_SIZE = "pageSize";
+    String PRODUCT_ID = "productId";
+    String START_TIME = "startTime";
+    String END_TIME = "endTime";
+    String CLIENT_ID = "clientId";
+
     String ALLOWED_QTY = "allowed_qty";
     String SUB_USER_LIST = "subUserList";
     String TO_OPEN_LIST = "toOpenList";
     String OPENED_LIST = "openedList";
-    String PRODUCT_ID = "productId";
     String FROM_DATE = "fromDate";
     String END_DATE = "endDate";
-    String PAGE_NUM = "pageNum";
-    String PAGE_SIZE = "pageSize";
+
     String TOTAL = "total";
     String PAGES = "pages";
     String LIST = "list";
@@ -28,5 +35,6 @@ public interface Field
     String TYPE = "type";
     String CONTENT = "content";
     String USER_ID = "userId";
-    String ENABLED = "enabled";
 }
+
+
