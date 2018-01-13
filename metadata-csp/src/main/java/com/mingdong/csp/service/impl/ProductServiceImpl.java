@@ -155,7 +155,7 @@ public class ProductServiceImpl implements ProductService
                 cell.setCellValue(dataDTO.getCallTime());
                 cell.setCellStyle(timeStyle);
                 dataRow.createCell(1).setCellValue(dataDTO.getProductName());
-                dataRow.createCell(2).setCellValue(dataDTO.getSuc());
+                dataRow.createCell(2).setCellValue(dataDTO.getSuc()+"");
                 dataRow.createCell(3).setCellValue(NumberUtils.formatAmount(dataDTO.getUnitAmt()));
                 dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
             }
