@@ -17,10 +17,6 @@
             <artifactId>metadata-core</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.mingdong</groupId>
-            <artifactId>mingdong-common</artifactId>
-        </dependency>
         <!-- spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
