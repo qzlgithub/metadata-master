@@ -514,6 +514,12 @@ public class ClientServiceImpl implements ClientService
             resp.result(RestResult.PRODUCT_OPENED);
             return;
         }
+        ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
+        if(pro != null)
+        {
+            resp.result(RestResult.CONTRACT_IS_EXIST);
+            return;
+        }
         Long clientProductId = IDUtils.getClientProductId(param.getNodeId());
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         // 保存产品的充值记录
@@ -783,5 +789,12 @@ public class ClientServiceImpl implements ClientService
             dataRow.createCell(11).setCellValue(pri.getRemark());
         }
         return wb;
+    }
+
+    @Override
+    public void checkIfContractExist(String contractNo, BLResp resp)
+    {
+        ProductRecharge pr = productRechargeMapper.findByContractNo(contractNo);
+        resp.addData(Field.EXIST, pr == null ? 0 : 1);
     }
 }

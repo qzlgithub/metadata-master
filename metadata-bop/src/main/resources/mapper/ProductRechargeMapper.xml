@@ -92,4 +92,9 @@
             <if test="endTime != null">and `create_time` &lt;= #{endTime}</if>
         </where>
     </select>
+
+    <select id="findByContractNo" parameterType="String" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `contract_no` = #{contractNo}
+    </select>
 </mapper>

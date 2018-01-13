@@ -52,10 +52,19 @@ function getSubIndustry() {
 }
 
 function createUser() {
-    /*console.log("account: " + $("#username").val() + "\ncorpName: " + $("#corpName").val() + "\nshortName: " +
-        $("#shortName").val() + "\nindustryId: " + $("#industryId").val() + "\nname: " + $("#name").val()
-        + "\nphone: " + $("#phone").val() + "\nemail: " + $("#email").val() + "\nlicense: " + $("#license").val()
-        + "\nenabled: " + $("input[name='enabled']:checked").val());*/
+    var username = $("#username").val();
+    var password = MD5($("#password").text());
+    var corpName = $("#corpName").val();
+    var shortName = $("#shortName").val();
+    var industryId = $("#industryId").val();
+    var name = $("#name").val();
+    var phone = $("#phone").val();
+    var email = $("#email").val();
+    var license = $("#license").val();
+    var enabled = $("input[name='enabled']:checked").val();
+    console.log("account: " + username + "password: " + password + "\ncorpName: " + corpName + "\nshortName: " + shortName + "\nindustryId: "
+        + industryId + "\nname: " + name + "\nphone: " + phone + "\nemail: " + email + "\nlicense: " + license
+        + "\nenabled: " + enabled);
     /*if(checkUsername()==true && checkCorpName()==true && checkCorpName() == true &&  checkContact() == true && checkPhone() == true
         && checkEmail() == true && checkLicense() == true){}*/
     $.ajax({
@@ -64,16 +73,16 @@ function createUser() {
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify({
-            "username": $("#username").val(),
-            "password": MD5($("#password").text()),
-            "corpName": $("#corpName").val(),
-            "shortName": $("#shortName").val(),
-            "industryId": $("#industryId").val(),
-            "name": $("#name").val(),
-            "phone": $("#phone").val(),
-            "email": $("#email").val(),
-            "license": $("#license").val(),
-            "enabled": $("input[name='enabled']:checked").val()
+            "username": username,
+            "password": password,
+            "corpName": corpName,
+            "shortName": shortName,
+            "industryId": industryId,
+            "name": name,
+            "phone": phone,
+            "email": email,
+            "license": license,
+            "enabled": enabled
         }),
         success: function(data) {
             if(data.errCode != '000000') {
@@ -102,7 +111,6 @@ function checkUsername() {
                 if(data.exist === 1) {
                     $("#usernameTip").text("该用户名已被注册！");
                     $("#usernameTip").show();
-                    return false;
                 }
                 else {
                     $("#usernameTip").text("恭喜，该用户名可用！");//长度未限定
@@ -114,7 +122,6 @@ function checkUsername() {
     else {
         $("#usernameTip").text("用户名不能为空");
         $("#usernameTip").show();
-        return false;
     }
 }
 
@@ -123,10 +130,9 @@ function checkCorpName() {
     if(corpName == "") {
         $("#corpNameTip").text("公司名称不能为空！");
         $("#corpNameTip").show();
-        return false;
     }
     else {
-        $("#corpNameTip").text("");//长度未限定：^[0-9a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]{2,20}$
+        $("#corpNameTip").text("");//长度未限定：^[0-9a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]{2,32}$
         $("#corpNameTip").hide();
     }
 }
@@ -136,7 +142,6 @@ function checkContact() {
     if(contact == "") {
         $("#contactTip").text("联系人不能为空！");
         $("#contactTip").show();
-        return false;
     }
     else {
         $("#contactTip").text("");//长度未限定
@@ -156,13 +161,11 @@ function checkPhone() {
         else {
             $("#phoneTip").text("联系电话格式错误！");
             $("#phoneTip").show();
-            return false;
         }
     }
     else {
         $("#phoneTip").text("联系电话不能为空！");
         $("#phoneTip").show();
-        return false;
     }
 }
 
@@ -177,7 +180,6 @@ function checkEmail() {
         else {
             $("#emailTip").text("邮箱格式不正确！");
             $("#emailTip").show();
-            return false;
         }
     }
 }
@@ -193,12 +195,10 @@ function checkLicense() {
         else {
             $("#licenseTip").text("社会信用代码格式不正确！");
             $("#licenseTip").show();
-            return false;
         }
     }
     else {
         $("#licenseTip").text("社会信用代码不能为空！");
         $("#licenseTip").show();
-        return false;
     }
 }

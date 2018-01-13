@@ -16,4 +16,6 @@ public interface ProductRechargeMapper
 
     int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    ProductRecharge findByContractNo(String contractNo);
 }

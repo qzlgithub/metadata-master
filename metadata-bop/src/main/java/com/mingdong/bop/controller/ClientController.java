@@ -164,6 +164,18 @@ public class ClientController
         return resp.getDataMap();
     }
 
+    /**
+     * 判断合同编号唯一性
+     */
+    @RequestMapping(value = "checkContract", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
+    {
+        BLResp resp = BLResp.build();
+        clientService.checkIfContractExist(contractNo, resp);
+        return resp.getDataMap();
+    }
+
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
