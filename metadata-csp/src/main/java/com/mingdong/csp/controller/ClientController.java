@@ -1,12 +1,13 @@
 package com.mingdong.csp.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
-import com.mingdong.csp.service.UserService;
+import com.mingdong.csp.service.ClientService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,16 +21,16 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "user")
-public class UserController
+@RequestMapping(value = "client")
+public class ClientController
 {
     @Resource
-    private UserService userService;
+    private ClientService clientService;
 
     /**
      * 用户登陆
      */
-    @PostMapping(value = "login")
+    @PostMapping(value = "user/login")
     public BLResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -46,26 +47,26 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.userLogin(username, password, session.getId(), resp);
+        clientService.userLogin(username, password, session.getId(), resp);
         return resp;
     }
 
     /**
      * 用户注销
      */
-    @PostMapping(value = "logout")
+    @PostMapping(value = "user/logout")
     public BLResp userLogout(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         String sessionId = session.getId();
-        userService.userLogout(sessionId);
+        clientService.userLogout(sessionId);
         return new BLResp();
     }
 
     /**
      * 用户修改密码
      */
-    @PostMapping(value = "password")
+    @PostMapping(value = "user/password")
     public BLResp changePassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -75,14 +76,14 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, resp);
+        clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, resp);
         return resp;
     }
 
     /**
      * 添加子账号
      */
-    @PostMapping(value = "/addition")
+    @PostMapping(value = "user/addition")
     public BLResp addChildAccount(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -100,7 +101,7 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.addChildAccount(clientUserId, username, password, name, phone, resp);
+        clientService.addChildAccount(clientUserId, username, password, name, phone, resp);
 
         return resp;
     }
@@ -108,11 +109,11 @@ public class UserController
     /**
      * 获取子账号列表
      */
-    @GetMapping(value = "childList")
+    @GetMapping(value = "user/list")
     public Map<String, Object> getChildAccountList(@RequestParam(value = Field.CLIENT_USER_ID) Long clientUserId)
     {
         BLResp resp = BLResp.build();
-        userService.getChildAccountMap(clientUserId);
+        clientService.getChildAccountMap(clientUserId);
         return resp.getDataMap();
     }
 
@@ -124,7 +125,7 @@ public class UserController
     {
         BLResp resp = BLResp.build();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        userService.changeStatus(clientUserId, resp);
+        clientService.changeStatus(clientUserId, resp);
 
         return resp;
     }
@@ -150,17 +151,26 @@ public class UserController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        userService.editChildAccount(clientUserId, username, password, name, phone, resp);
+        clientService.editChildAccount(clientUserId, username, password, name, phone, resp);
         return resp;
     }
 
     /**
      * 删除子账号
      */
-    @PostMapping(value = "dropChildAccount")
+    @PostMapping(value = "user/deletion")
     public BLResp dropChildAccount(@RequestParam(value = Field.CLIENT_USER_ID) Long clientUserId)
     {
         BLResp resp = BLResp.build();
+        return resp;
+    }
+
+    @GetMapping(value = "message")
+    public BLResp getClientMessage(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        BLResp resp = BLResp.build();
+        clientService.getClientMessage(RequestThread.getClientId(), new Page(pageNum, pageSize), resp);
         return resp;
     }
 

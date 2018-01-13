@@ -1,15 +1,21 @@
 package com.mingdong.bop.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.domain.entity.Client;
+import com.mingdong.bop.domain.entity.ClientMessage;
 import com.mingdong.bop.domain.entity.ClientUser;
 import com.mingdong.bop.domain.mapper.ClientMapper;
+import com.mingdong.bop.domain.mapper.ClientMessageMapper;
 import com.mingdong.bop.domain.mapper.ClientUserMapper;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.BaseDTO;
 import com.mingdong.core.model.dto.HomeDTO;
+import com.mingdong.core.model.dto.MessageDTO;
+import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import org.slf4j.Logger;
@@ -17,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class RemoteClientServiceImpl implements RemoteClientService
 {
@@ -26,6 +34,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ClientMapper clientMapper;
     @Resource
     private ClientUserMapper clientUserMapper;
+    @Resource
+    private ClientMessageMapper clientMessageMapper;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -91,5 +101,31 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return new HomeDTO(RestResult.OBJECT_NOT_FOUND);
         }
         return null;
+    }
+
+    @Override
+    public MessageListDTO getClientMessage(Long clientId, Page page)
+    {
+        MessageListDTO dto = new MessageListDTO(RestResult.SUCCESS);
+        int total = clientMessageMapper.countByClient(clientId);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        dto.setPages(pages);
+        List<MessageDTO> list = new ArrayList<>();
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientMessage> messageList = clientMessageMapper.getListByClient(clientId);
+            for(ClientMessage cm : messageList)
+            {
+                MessageDTO o = new MessageDTO();
+                o.setAddAt(cm.getCreateTime());
+                o.setType(cm.getType());
+                o.setContent(cm.getContent());
+                list.add(o);
+            }
+        }
+        dto.setMessages(list);
+        return dto;
     }
 }

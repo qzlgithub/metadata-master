@@ -1,8 +1,9 @@
 package com.mingdong.csp.service;
 
+import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
 
-public interface UserService
+public interface ClientService
 {
     void userLogin(String username, String password, String sessionId, BLResp resp);
 
@@ -31,4 +32,6 @@ public interface UserService
     void editChildAccount(Long clientUserId, String username, String password, String name, String phone, BLResp resp);
 
     void getHomeData(Long clientId, Long clientUserId, BLResp resp);
+
+    void getClientMessage(Long clientId, Page page, BLResp resp);
 }

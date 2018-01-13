@@ -21,4 +21,10 @@ public interface Field
     String END_DATE = "endDate";
     String PAGE_NUM = "pageNum";
     String PAGE_SIZE = "pageSize";
+    String TOTAL = "total";
+    String PAGES = "pages";
+    String LIST = "list";
+    String ADD_AT = "addAt";
+    String TYPE = "type";
+    String CONTENT = "content";
 }
