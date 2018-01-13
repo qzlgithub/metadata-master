@@ -20,8 +20,7 @@ public class StatsController
     public ModelAndView gotoStatsIndex()
     {
         ModelAndView view = new ModelAndView("data-analysis/data-index");
-        BLResp resp = BLResp.build();
-        statsService.getIndexStats(resp);
+        BLResp resp = statsService.getIndexClientStats();
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getMap());
         return view;

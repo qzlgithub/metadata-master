@@ -38,8 +38,8 @@
                             <span class="layui-col-md3 mt25"><img src="../../static/images/img1.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">新增客户</p>
-                                <p class="col4 mt10">近30天： 6381个 </p>
-                                <p class="mt10 col2">总客户： 872000 个</p>
+                                <p class="col4 mt10" >近30天： <span th:text="${clientCountByDate}"/>位 </p>
+                                <p class="mt10 col2" >总客户： <span th:text="${allClientCount}"/>位 </p>
                                 <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                             </div>
                         </li>
@@ -47,8 +47,8 @@
                             <span class="layui-col-md3 mt25"><img src="../../static/images/img2.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">客户充值</p>
-                                <p class="col4 mt10">近7天充值： 6381元 </p>
-                                <p class="mt10 col2">近30天充值： 872000 个</p>
+                                <p class="col4 mt10">近7天充值： <span th:text="${clientRechargeByWeek}"/>元 </p>
+                                <p class="mt10 col2">近30天充值： <span th:text="${clientRechargeByMonth}"/>元 </p>
                                 <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                             </div>
                         </li>

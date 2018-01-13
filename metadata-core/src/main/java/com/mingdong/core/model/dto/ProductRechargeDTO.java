@@ -1,9 +1,9 @@
-package com.mingdong.bop.domain.entity;
+package com.mingdong.core.model.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductRechargeInfo
+public class ProductRechargeDTO
 {
     private Long id;
     private Date tradeTime;
@@ -15,13 +15,18 @@ public class ProductRechargeInfo
     private String rechargeType;
     private BigDecimal amount;
     private BigDecimal balance;
-    private String managerName;
     private String contractNo;
     private String remark;
 
-    public Long getId(){return id; }
+    public Long getId()
+    {
+        return id;
+    }
 
-    public void setId(Long id){this.id = id; }
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
     public Date getTradeTime()
     {
@@ -111,16 +116,6 @@ public class ProductRechargeInfo
     public void setBalance(BigDecimal balance)
     {
         this.balance = balance;
-    }
-
-    public String getManagerName()
-    {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName)
-    {
-        this.managerName = managerName;
     }
 
     public String getContractNo()

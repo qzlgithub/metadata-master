@@ -8,11 +8,19 @@ public class ApiReq
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Long corpId;
+    private Long clientId;
     private Long productId;
     private Integer suc;
     private BigDecimal unitAmt;
     private BigDecimal balance;
+
+    public Long getClientId(){ return clientId; }
+
+    public void setClientId(Long clientId){ this.clientId = clientId; }
+
+    public Integer getSuc(){ return suc; }
+
+    public void setSuc(Integer suc){ this.suc = suc; }
 
     public Long getId()
     {
@@ -52,16 +60,6 @@ public class ApiReq
     public void setProductId(Long productId)
     {
         this.productId = productId;
-    }
-
-    public Integer getSuc()
-    {
-        return suc;
-    }
-
-    public void setSuc(Integer suc)
-    {
-        this.suc = suc;
     }
 
     public BigDecimal getUnitAmt()
