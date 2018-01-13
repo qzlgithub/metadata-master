@@ -14,12 +14,12 @@ public interface ClientService
     /**
      * 添加子账号
      */
-    void addChildAccount(Long clientId, String username, String password, String name, String phone, BLResp resp);
+    void addAccount(Long primaryAccountId, String username, String password, String name, String phone, BLResp resp);
 
     /**
      * 子账号列表
      */
-    void getSubUserList(Long clientId, Long primaryUserId, BLResp resp);
+    void getAccountList(Long clientId, Long primaryUserId, BLResp resp);
 
     /**
      * 禁用启用子账号

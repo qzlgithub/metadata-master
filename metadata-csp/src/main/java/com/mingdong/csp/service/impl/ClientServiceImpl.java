@@ -10,7 +10,9 @@ import com.mingdong.core.model.dto.BaseDTO;
 import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.constant.Field;
@@ -60,15 +62,34 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void addChildAccount(Long clientId, String username, String password, String name, String phone, BLResp resp)
+    public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
+            BLResp resp)
     {
-
+        BaseDTO dto = clientApi.addAccount(primaryAccountId, username, password, name, phone);
+        resp.result(dto.getResult());
     }
 
     @Override
-    public void getSubUserList(Long clientId, Long primaryUserId, BLResp resp)
+    public void getAccountList(Long clientId, Long primaryUserId, BLResp resp)
     {
-
+        UserListDTO dto = clientApi.getSubUserList(clientId, primaryUserId);
+        if(dto.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(dto.getResult());
+            return;
+        }
+        List<Map<String, Object>> list = new ArrayList<>();
+        for(SubUserDTO o : dto.getUserList())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.USER_ID, o.getUserId() + "");
+            m.put(Field.USERNAME, o.getUsername());
+            m.put(Field.NAME, o.getName());
+            m.put(Field.PHONE, o.getPhone());
+            m.put(Field.ENABLED, o.getEnabled());
+            list.add(m);
+        }
+        resp.addData(Field.ALLOWED_QTY, dto.getAllowedQty()).addData(Field.LIST, list);
     }
 
     @Override

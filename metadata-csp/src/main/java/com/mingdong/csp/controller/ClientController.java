@@ -83,26 +83,20 @@ public class ClientController
     /**
      * 添加子账号
      */
-    @PostMapping(value = "user/addition")
-    public BLResp addChildAccount(@RequestBody JSONObject jsonReq)
+    @PostMapping(value = "account/addition")
+    public BLResp addAccount(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         String name = jsonReq.getString(Field.NAME);
         String phone = jsonReq.getString(Field.PHONE);
-        if(clientUserId == null || clientUserId <= 0)
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password) || StringUtils.isNullBlank(name) ||
                 StringUtils.isNullBlank(phone))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.addChildAccount(clientUserId, username, password, name, phone, resp);
-
+        clientService.addAccount(RequestThread.getUserId(), username, password, name, phone, resp);
         return resp;
     }
 
@@ -110,11 +104,11 @@ public class ClientController
      * 获取子账号列表
      */
     @LoginRequired
-    @GetMapping(value = "subUser/list")
-    public BLResp getSubUserList()
+    @GetMapping(value = "account/list")
+    public BLResp getAccountList()
     {
         BLResp resp = BLResp.build();
-        clientService.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId(), resp);
+        clientService.getAccountList(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         return resp;
     }
 

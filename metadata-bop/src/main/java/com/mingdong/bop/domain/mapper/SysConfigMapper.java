@@ -11,4 +11,6 @@ public interface SysConfigMapper
     void updateById(SysConfig obj);
 
     List<SysConfig> getAll();
+
+    SysConfig findByName(String name);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public class UserListDTO extends BaseDTO
 {
     private int allowedQty;
-    private List<UserDTO> userList;
+    private List<SubUserDTO> userList;
 
     public UserListDTO(RestResult result)
     {
@@ -24,12 +24,12 @@ public class UserListDTO extends BaseDTO
         this.allowedQty = allowedQty;
     }
 
-    public List<UserDTO> getUserList()
+    public List<SubUserDTO> getUserList()
     {
         return userList;
     }
 
-    public void setUserList(List<UserDTO> userList)
+    public void setUserList(List<SubUserDTO> userList)
     {
         this.userList = userList;
     }

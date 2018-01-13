@@ -27,4 +27,6 @@ public interface Field
     String ADD_AT = "addAt";
     String TYPE = "type";
     String CONTENT = "content";
+    String USER_ID = "userId";
+    String ENABLED = "enabled";
 }

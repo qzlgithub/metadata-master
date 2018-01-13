@@ -101,9 +101,9 @@
 
     <select id="getListByClientAndStatus" resultMap="BaseResultMap">
         <include refid="select_all" />
-        where `deleted` = 0
-        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        where `client_id` = #{clientId}
         <if test="enabled != null">and `enabled` = #{enabled}</if>
+        <if test="deleted != null">and `deleted` = #{deleted}</if>
     </select>
 
     <update id="resetPasswordByIds">
@@ -134,7 +134,11 @@
         <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </select>
 
-    <select id="countByClient" parameterType="Long" resultType="Integer">
-        select count(*) from `client_user` where `client_id` = #{clientId} and `deleted` = 0
+    <select id="countByClientAndStatus" resultType="Integer">
+        select count(*)
+        from `client_user`
+        where `client_id` = #{clientId}
+        <if test="enabled != null">and `enabled` = #{enabled}</if>
+        <if test="deleted != null">and `deleted` = #{deleted}</if>
     </select>
 </mapper>

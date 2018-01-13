@@ -19,4 +19,6 @@ public interface ClientMapper
     Client findById(Long id);
 
     List<Client> getListByIdList(@Param("idList") List<Long> idList);
+
+    Client findByPrimaryAccount(Long primaryAccountId);
 }

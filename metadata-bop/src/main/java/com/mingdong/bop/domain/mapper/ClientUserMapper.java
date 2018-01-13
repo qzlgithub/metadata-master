@@ -18,7 +18,11 @@ public interface ClientUserMapper
 
     ClientUser findByUsername(String username);
 
-    List<ClientUser> getListByClientAndStatus(@Param("clientId") Long clientId, @Param("enabled") Integer enabled);
+    int countByClientAndStatus(@Param("clientId") Long clientId, @Param("enabled") Integer enabled,
+            @Param("deleted") Integer deleted);
+
+    List<ClientUser> getListByClientAndStatus(@Param("clientId") Long clientId, @Param("enabled") Integer enabled,
+            @Param("deleted") Integer deleted);
 
     void resetPasswordByIds(@Param("password") String password, @Param("date") Date date,
             @Param("idList") List<Long> idList);
@@ -27,6 +31,4 @@ public interface ClientUserMapper
             @Param("idList") List<Long> idList);
 
     List<ClientUser> getListByClientsAndPrimary(@Param("clientIdList") List<Long> clientIdList);
-
-    int countByClient(Long clientId);
 }

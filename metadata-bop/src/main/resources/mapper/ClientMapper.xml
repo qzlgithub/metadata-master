@@ -103,4 +103,9 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="findByPrimaryAccount" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `primary_user_id` = #{primaryAccountId}
+    </select>
 </mapper>

@@ -319,7 +319,8 @@ public class ClientServiceImpl implements ClientService
             map.put(Field.USERNAME, masterUser.getUsername());
             map.put(Field.USER_ENABLED, masterUser.getEnabled());
             // 子账号
-            List<ClientUser> subUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE);
+            List<ClientUser> subUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
+                    TrueOrFalse.FALSE);
             List<Map<String, Object>> userList = new ArrayList<>();
             for(ClientUser user : subUserList)
             {
@@ -466,7 +467,8 @@ public class ClientServiceImpl implements ClientService
         {
             return list;
         }
-        List<ClientUser> cuList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE);
+        List<ClientUser> cuList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
         for(ClientUser cu : cuList)
         {
             if(!client.getPrimaryUserId().equals(cu.getId()))

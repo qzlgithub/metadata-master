@@ -1,13 +1,18 @@
 package com.mingdong.bop.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.mingdong.bop.configurer.Param;
 import com.mingdong.bop.constant.Constant;
+import com.mingdong.bop.constant.SysParam;
 import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientMessage;
 import com.mingdong.bop.domain.entity.ClientUser;
+import com.mingdong.bop.domain.entity.SysConfig;
 import com.mingdong.bop.domain.mapper.ClientMapper;
 import com.mingdong.bop.domain.mapper.ClientMessageMapper;
 import com.mingdong.bop.domain.mapper.ClientUserMapper;
+import com.mingdong.bop.domain.mapper.SysConfigMapper;
+import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
@@ -16,7 +21,9 @@ import com.mingdong.core.model.dto.BaseDTO;
 import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +36,11 @@ import java.util.List;
 
 public class RemoteClientServiceImpl implements RemoteClientService
 {
-    private static Logger logger = LoggerFactory.getLogger(RemoteProductServiceImpl.class);
+    private static Logger lo4gger = LoggerFactory.getLogger(RemoteProductServiceImpl.class);
+    @Resource
+    private Param param;
+    @Resource
+    private SysConfigMapper sysConfigMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -155,12 +166,82 @@ public class RemoteClientServiceImpl implements RemoteClientService
         userUpd.setUpdateTime(current);
         userUpd.setDeleted(TrueOrFalse.TRUE);
         clientUserMapper.updateSkipNull(userUpd);
-        int qty = clientUserMapper.countByClient(client.getId());
-        Client clientUpd = new Client();
-        clientUpd.setId(client.getId());
-        clientUpd.setUpdateTime(current);
-        clientUpd.setAccountQty(qty > 1 ? (qty - 1) : 0);
-        clientMapper.updateSkipNull(client);
+        updateClientAccountQty(client.getId());
         return new BaseDTO(RestResult.SUCCESS);
+    }
+
+    @Override
+    public UserListDTO getSubUserList(Long clientId, Long primaryUserId)
+    {
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            return new UserListDTO(RestResult.INTERNAL_ERROR);
+        }
+        else if(!primaryUserId.equals(client.getPrimaryUserId()))
+        {
+            return new UserListDTO(RestResult.ONLY_PRIMARY_USER);
+        }
+        List<SubUserDTO> list = new ArrayList<>();
+        List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
+        for(ClientUser cu : userList)
+        {
+            SubUserDTO dto = new SubUserDTO();
+            dto.setUserId(cu.getId());
+            dto.setUsername(cu.getUsername());
+            dto.setName(cu.getName());
+            dto.setPhone(cu.getPhone());
+            dto.setEnabled(cu.getEnabled());
+            list.add(dto);
+        }
+        SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        UserListDTO dto = new UserListDTO(RestResult.SUCCESS);
+        dto.setAllowedQty(config == null ? 5 : Integer.parseInt(config.getValue()));
+        dto.setUserList(list);
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public BaseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
+    {
+        Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
+        if(client == null)
+        {
+            return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
+        }
+        ClientUser account = clientUserMapper.findByUsername(username);
+        if(account != null)
+        {
+            return new BaseDTO(RestResult.USERNAME_EXIST);
+        }
+        Date current = new Date();
+        account = new ClientUser();
+        account.setId(IDUtils.getClientUser(param.getNodeId()));
+        account.setCreateTime(current);
+        account.setUpdateTime(current);
+        account.setClientId(client.getId());
+        account.setName(name);
+        account.setPhone(phone);
+        account.setUsername(username);
+        account.setPassword(Md5Utils.encrypt(password));
+        account.setEnabled(TrueOrFalse.TRUE);
+        account.setDeleted(TrueOrFalse.FALSE);
+        clientUserMapper.add(account);
+        updateClientAccountQty(client.getId());
+        return new BaseDTO(RestResult.SUCCESS);
+    }
+
+    /**
+     * 更新企业的子账号个数
+     */
+    private void updateClientAccountQty(Long clientId)
+    {
+        int quantity = clientUserMapper.countByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
+        Client client = new Client();
+        client.setId(clientId);
+        client.setUpdateTime(new Date());
+        client.setAccountQty(quantity > 1 ? (quantity - 1) : 0);
+        clientMapper.updateSkipNull(client);
     }
 }
