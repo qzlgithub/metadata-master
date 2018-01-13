@@ -37,7 +37,7 @@
     </insert>
 
     <update id="updateById" parameterType="ApiReq">
-        update `api_req` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `corp_id` = #{corpId},
+        update `api_req` set `create_time` = #{createTime}, `update_time` = #{updateTime}, client_id = #{corpId},
         `product_id` = #{productId}, `suc` = #{suc}, `unit_amt` = #{unitAmt}, `balance` = #{balance} where `id` = #{id}
     </update>
 
@@ -56,11 +56,11 @@
     </update>
 
     <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `corp_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
+        select `id`, `create_time`, `update_time`, client_id, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `corp_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
+        select `id`, `create_time`, `update_time`, client_id, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
         where `id` = #{id}
     </select>
 

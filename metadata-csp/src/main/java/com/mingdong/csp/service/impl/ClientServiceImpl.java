@@ -66,9 +66,9 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public BLResp getChildAccountMap(Long id)
+    public void getSubUserList(Long clientId, Long primaryUserId, BLResp resp)
     {
-        return null;
+
     }
 
     @Override
@@ -120,5 +120,12 @@ public class ClientServiceImpl implements ClientService
             list.add(map);
         }
         resp.addData(Field.LIST, list);
+    }
+
+    @Override
+    public void setSubUserDeleted(Long primaryUserId, Long subUserId, BLResp resp)
+    {
+        BaseDTO dto = clientApi.setSubUserDeleted(primaryUserId, subUserId);
+        resp.result(dto.getResult());
     }
 }

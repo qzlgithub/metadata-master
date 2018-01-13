@@ -7,7 +7,7 @@ import java.util.List;
 public class HomeDTO extends BaseDTO
 {
     private int totalAllowedQty;
-    private List<SubUserDTO> subUsers;
+    private List<UserDTO> subUsers;
     private List<ProdDTO> opened;
     private List<ProdDTO> toOpen;
 
@@ -26,12 +26,12 @@ public class HomeDTO extends BaseDTO
         this.totalAllowedQty = totalAllowedQty;
     }
 
-    public List<SubUserDTO> getSubUsers()
+    public List<UserDTO> getSubUsers()
     {
         return subUsers;
     }
 
-    public void setSubUsers(List<SubUserDTO> subUsers)
+    public void setSubUsers(List<UserDTO> subUsers)
     {
         this.subUsers = subUsers;
     }

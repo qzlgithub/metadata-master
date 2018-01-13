@@ -3,6 +3,7 @@ package com.mingdong.csp.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.csp.constant.Field;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "client")
@@ -109,12 +109,13 @@ public class ClientController
     /**
      * 获取子账号列表
      */
-    @GetMapping(value = "user/list")
-    public Map<String, Object> getChildAccountList(@RequestParam(value = Field.CLIENT_USER_ID) Long clientUserId)
+    @LoginRequired
+    @GetMapping(value = "subUser/list")
+    public BLResp getSubUserList()
     {
         BLResp resp = BLResp.build();
-        clientService.getChildAccountMap(clientUserId);
-        return resp.getDataMap();
+        clientService.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId(), resp);
+        return resp;
     }
 
     /**
@@ -126,7 +127,6 @@ public class ClientController
         BLResp resp = BLResp.build();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
         clientService.changeStatus(clientUserId, resp);
-
         return resp;
     }
 
@@ -134,15 +134,15 @@ public class ClientController
      * 编辑子账号
      */
     @PostMapping(value = "editChildAccount")
-    public BLResp editChildAccount(@RequestBody JSONObject jsonObject)
+    public BLResp editChildAccount(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        String username = jsonObject.getString(Field.USERNAME);
-        String password = jsonObject.getString(Field.PASSWORD);
-        String name = jsonObject.getString(Field.NAME);
-        String phone = jsonObject.getString(Field.PHONE);
-        if(clientUserId == null || clientUserId <= 0)
+        Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
+        String username = jsonReq.getString(Field.USERNAME);
+        String password = jsonReq.getString(Field.PASSWORD);
+        String name = jsonReq.getString(Field.NAME);
+        String phone = jsonReq.getString(Field.PHONE);
+        if(clientUserId == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
@@ -158,13 +158,21 @@ public class ClientController
     /**
      * 删除子账号
      */
+    @LoginRequired
     @PostMapping(value = "user/deletion")
-    public BLResp dropChildAccount(@RequestParam(value = Field.CLIENT_USER_ID) Long clientUserId)
+    public BLResp dropSubUser(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
+        Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
+        if(clientUserId == null)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        clientService.setSubUserDeleted(RequestThread.getUserId(), clientUserId, resp);
         return resp;
     }
 
+    @LoginRequired
     @GetMapping(value = "message")
     public BLResp getClientMessage(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)

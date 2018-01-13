@@ -15,4 +15,6 @@ public interface RemoteClientService
     HomeDTO getUserHomeData(Long clientId, Long clientUserId);
 
     MessageListDTO getClientMessage(Long clientId, Page page);
+
+    BaseDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
 }

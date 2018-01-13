@@ -19,7 +19,7 @@ public interface ClientService
     /**
      * 子账号列表
      */
-    BLResp getChildAccountMap(Long id);
+    void getSubUserList(Long clientId, Long primaryUserId, BLResp resp);
 
     /**
      * 禁用启用子账号
@@ -34,4 +34,6 @@ public interface ClientService
     void getHomeData(Long clientId, Long clientUserId, BLResp resp);
 
     void getClientMessage(Long clientId, Page page, BLResp resp);
+
+    void setSubUserDeleted(Long primaryUserId, Long subUserId, BLResp resp);
 }

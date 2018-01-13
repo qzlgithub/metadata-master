@@ -133,4 +133,8 @@
         where c.`id` in
         <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </select>
+
+    <select id="countByClient" parameterType="Long" resultType="Integer">
+        select count(*) from `client_user` where `client_id` = #{clientId} and `deleted` = 0
+    </select>
 </mapper>

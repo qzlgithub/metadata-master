@@ -63,7 +63,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         {
             return new UserDTO(RestResult.INVALID_PASSCODE);
         }
-        UserDTO dto = new UserDTO();
+        UserDTO dto = new UserDTO(RestResult.SUCCESS);
         dto.setUserId(user.getId());
         dto.setName(user.getName());
         dto.setManagerQq("");
@@ -127,5 +127,40 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         dto.setMessages(list);
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public BaseDTO setSubUserDeleted(Long primaryUserId, Long subUserId)
+    {
+        ClientUser primaryUser = clientUserMapper.findById(primaryUserId);
+        if(primaryUser == null)
+        {
+            return new BaseDTO(RestResult.INTERNAL_ERROR);
+        }
+        Client client = clientMapper.findById(primaryUser.getClientId());
+        if(client == null || !primaryUserId.equals(client.getPrimaryUserId()))
+        {
+            return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
+        }
+        ClientUser subUser = clientUserMapper.findById(subUserId);
+        if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(
+                subUser.getClientId()))
+        {
+            return new BaseDTO(RestResult.OBJECT_NOT_FOUND);
+        }
+        Date current = new Date();
+        ClientUser userUpd = new ClientUser();
+        userUpd.setId(subUserId);
+        userUpd.setUpdateTime(current);
+        userUpd.setDeleted(TrueOrFalse.TRUE);
+        clientUserMapper.updateSkipNull(userUpd);
+        int qty = clientUserMapper.countByClient(client.getId());
+        Client clientUpd = new Client();
+        clientUpd.setId(client.getId());
+        clientUpd.setUpdateTime(current);
+        clientUpd.setAccountQty(qty > 1 ? (qty - 1) : 0);
+        clientMapper.updateSkipNull(client);
+        return new BaseDTO(RestResult.SUCCESS);
     }
 }
