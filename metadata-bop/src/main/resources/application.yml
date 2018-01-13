@@ -14,7 +14,7 @@ spring:
     password: iPwd@201712
   thymeleaf:
     enabled: true
-    cache: true
+    cache: false
     check-template-location: true
     content-type: text/html
     encoding: UTF-8
