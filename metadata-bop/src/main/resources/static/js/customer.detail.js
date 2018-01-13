@@ -289,6 +289,7 @@ function checkStartTime() {
     else {
         $("#startTimeTip").text("请选择服务开始时间！");
         $("#startTimeTip").show();
+        $("#renew-start").focus();
     }
 }
 
@@ -303,7 +304,6 @@ function checkEndTime() {
             if(getDate(startTime) - getDate(endTime) > 0) {
                 $("#endTimeTip").text("结束时间不能小于开始时间");
                 $("#endTimeTip").show();
-                return false;
             }
             else {
                 $("#endTimeTip").text("");
@@ -318,6 +318,7 @@ function checkEndTime() {
     else {
         $("#endTimeTip").text("请选择服务结束时间！");
         $("#endTimeTip").show();
+        $("#renew-end").focus();
     }
 }
 
@@ -409,6 +410,7 @@ function checkOpenStart() {
     else {
         $("#openStartTip").text("请选择服务开始时间！");
         $("#openStartTip").show();
+        $("#open-start").focus();
     }
 }
 
@@ -423,7 +425,6 @@ function checkOpenEnd() {
             if(getDate(startTime) - getDate(endTime) > 0) {
                 $("#openEndTip").text("结束时间不能小于开始时间");
                 $("#openEndTip").show();
-                return false;
             }
             else {
                 $("#openEndTip").text("");
@@ -438,6 +439,7 @@ function checkOpenEnd() {
     else {
         $("#openEndTip").text("请选择服务结束时间！");
         $("#openEndTip").show();
+        $("#open-end").focus();
     }
 }
 
@@ -480,10 +482,22 @@ function checkOpenAmt() {
 }
 
 function checkOpenContract() {
-    var contNumber = $("#open-contract").val();
-    if(contNumber !== "") {
-        $("#openContractTip").text("");
-        $("#openContractTip").hide();
+    var conNumber = $("#open-contract").val();
+    if(conNumber !== "") {
+        $.get(
+            "/client/checkContract",
+            {"contractNo": conNumber},
+            function(data) {
+                if(data.exist === 1) {
+                    $("#openContractTip").text("该合同编号已存在！");
+                    $("#openContractTip").show();
+                }
+                else {
+                    $("#openContractTip").text("");
+                    $("#openContractTip").hide();
+                }
+            }
+        );
     }
     else {
         $("#openContractTip").text("请填写合同编号！");

@@ -22,7 +22,8 @@ public enum RestResult
     INDUSTRY_CODE_EXIST("100016", "行业编号已被占用"),
     PRODUCT_OPENED("100017", "该产品服务已开通"),
     ONLY_PRIMARY_USER("100018", "非主账号无此操作权限"),
-    INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
+    INTERNAL_ERROR("999999", "系统繁忙，请稍后重试"),
+    CONTRACT_IS_EXIST("100019","合同编号已存在");
 
     private final String code;
     private final String message;

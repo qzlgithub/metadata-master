@@ -57,4 +57,6 @@ public interface ClientService
     void getClientOperateLog(Long clientId, Page page, BLResp resp);
 
     XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime);
+
+    void checkIfContractExist(String contractNo, BLResp resp);
 }
