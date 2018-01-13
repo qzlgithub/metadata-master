@@ -5,7 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="corp_id" property="corpId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="suc" property="suc" jdbcType="TINYINT" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
@@ -18,7 +18,7 @@
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
             <if test="updateTime != null">`update_time`,</if>
-            <if test="corpId != null">`corp_id`,</if>
+            <if test="clientId != null">`client_id`,</if>
             <if test="productId != null">`product_id`,</if>
             <if test="suc != null">`suc`,</if>
             <if test="unitAmt != null">`unit_amt`,</if>
@@ -28,7 +28,7 @@
             <if test="id != null">#{id},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-            <if test="corpId != null">#{corpId},</if>
+            <if test="clientId != null">#{clientId},</if>
             <if test="productId != null">#{productId},</if>
             <if test="suc != null">#{suc},</if>
             <if test="unitAmt != null">#{unitAmt},</if>
@@ -37,7 +37,7 @@
     </insert>
 
     <update id="updateById" parameterType="ApiReq">
-        update `api_req` set `create_time` = #{createTime}, `update_time` = #{updateTime}, client_id = #{corpId},
+        update `api_req` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `client_id` = #{clientId},
         `product_id` = #{productId}, `suc` = #{suc}, `unit_amt` = #{unitAmt}, `balance` = #{balance} where `id` = #{id}
     </update>
 
@@ -46,7 +46,7 @@
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="corpId != null">`corp_id` = #{corpId},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
             <if test="productId != null">`product_id` = #{productId},</if>
             <if test="suc != null">`suc` = #{suc},</if>
             <if test="unitAmt != null">`unit_amt` = #{unitAmt},</if>
@@ -56,12 +56,23 @@
     </update>
 
     <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, client_id, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
+        select `id`, `create_time`, `update_time`, `client_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, client_id, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
+        select `id`, `create_time`, `update_time`, `client_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
         where `id` = #{id}
+    </select>
+
+    <select id="countBy" resultType="int">
+        select count(*)
+        from `api_req`
+        <where>
+            <if test="clientId != null">`client_id` = #{clientId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+            <if test="startTime != null">and `create_time` >= #{startTime}</if>
+            <if test="endTime != null">and `create_time` &lt;= #{endTime}</if>
+        </where>
     </select>
 
 </mapper>

@@ -55,7 +55,7 @@ function checkProdName() {
 
 function checkCostAmt() {
     var unitPrice = $("#product-cost").val();
-    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 匹配任意浮点型数据
+    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$");
     if(unitPrice !== "") {
         if(reg.test(unitPrice)) {
             $("#costAmtTip").text("");

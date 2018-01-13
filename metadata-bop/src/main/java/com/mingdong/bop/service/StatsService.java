@@ -6,5 +6,4 @@ public interface StatsService
 {
     BLResp getIndexClientStats();
 
-    void getIndexStats(BLResp resp);
 }

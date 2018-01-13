@@ -90,8 +90,10 @@
                     </div>
                 </div>
                 <div class="form-title mb20">产品服务</div>
+
                 <div class="m30">
                     <ul class="customer-detail clearfix">
+
                         <li th:each="cp : ${opened}">
                             <p class="clearfix mb40" th:if="${cp.billPlan == 1}">
                                 <span th:text="${cp.startDate} + ' - ' + ${cp.endDate}"></span>
@@ -116,6 +118,7 @@
                                 </a>
                             </p>
                         </li>
+
                         <li th:each="prod : ${toOpen}">
                             <p class="tc mt15"><img src="../../static/images/icon/check-icon.png"/></p>
                             <p class="tc mt5" th:text="${prod.productName}"></p>
@@ -123,8 +126,10 @@
                                 <span class="cp open-product" th:attr="data-product-id = ${prod.productId}">开通</span>
                             </p>
                         </li>
+
                     </ul>
                 </div>
+
                 <div class="form-title mb20">账户余额</div>
                 <div class="m30 clearfix">
                     <div class="w30 fl">
@@ -133,6 +138,7 @@
                             <div class="layui-input-block col2" th:text="${accountEnabled} eq '1' ? '正常':'禁用'">正常</div>
                         </div>
                     </div>
+
                     <div class="w40 fl">
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">账户余额：</label>
@@ -145,6 +151,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="form-title mb20">子账号</div>
                 <div class="m30 clearfix">

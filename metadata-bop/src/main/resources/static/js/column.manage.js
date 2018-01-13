@@ -28,11 +28,12 @@ function editColumn() {
                 });
             }
             else {
-                layer.msg("修改成功", {
+                window.location.href = "/privilege/index.html";
+            /*    layer.msg("修改成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/privilege/index.html";
-                });
+
+                });*/
             }
         }
     });

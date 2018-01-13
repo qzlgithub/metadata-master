@@ -182,6 +182,13 @@ public class ProductServiceImpl implements ProductService
             resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
             return;
         }
+        // 3. 校验产品名是否重复
+        Product prod = productMapper.findByName(name);
+        if(prod != null)
+        {
+            resp.result(RestResult.PRODUCT_NAME_EXIST);
+            return;
+        }
         Long productId = IDUtils.getProductId(param.getNodeId());
         Date curr = new Date();
         if(!StringUtils.isNullBlank(content))
@@ -211,6 +218,13 @@ public class ProductServiceImpl implements ProductService
     public void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
             String remark, String content, BLResp resp)
     {
+        Product prod = productMapper.findByCode(code);
+        if(prod != null)
+        {
+            resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
+
+        }
+
         Product product = productMapper.findById(id);
         if(product == null)
         {

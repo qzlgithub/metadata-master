@@ -137,7 +137,7 @@ public class ClientController
     public ModelAndView gotoAccountRecharge(@RequestParam(value = Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("customer-manage/account-recharge");
-        view.addObject("clientId", id);
+        view.addObject(Field.CLIENT_ID, id);
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -150,7 +150,7 @@ public class ClientController
     public ModelAndView gotoAccountConsumption(@RequestParam(value = Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("customer-manage/account-consume");
-        view.addObject("clientId", id);
+        view.addObject(Field.CLIENT_ID, id);
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
