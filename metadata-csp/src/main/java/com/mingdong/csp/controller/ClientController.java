@@ -146,7 +146,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
+        //clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
         return resp;
     }
 
