@@ -1,6 +1,21 @@
 server:
   port: 8888
 
+spring:
+  redis:
+    host: 47.96.15.125
+    port: 6379
+    password: iPwd@201712
+  thymeleaf:
+    enabled: true
+    cache: true
+    check-template-location: true
+    content-type: text/html
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+
 dubbo:
   registry:
     address: 47.96.154.110:2181

@@ -1,0 +1,125 @@
+
+@charset "utf-8";
+/**
+* Description: Base style
+* Developers: chenjiwei
+**/
+body {
+    padding-top: 0px;
+}
+
+img{width: 100%; display: block;}
+
+/*header */
+.navbar-inverse{background: #fff; height: 85px; border-color: #0d1730; border-bottom-width: 2px;}
+.navbar-inverse .navbar-toggle {border-color: #245285; margin-top: 22px;}
+.navbar-inverse .navbar-toggle .icon-bar { background-color: #245285;}
+.navbar-inverse .navbar-toggle:focus,.navbar-inverse .navbar-toggle:hover{background-color:#fff}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {border-color: #fff; background: none;}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {margin-top: 10px;}
+.navbar-nav{margin-top: 10px;}
+.navbar-inverse .navbar-nav>li{margin:0px 5px;}
+.nav>li>a{padding: 10px 23px;}
+.header1 .navbar-nav>li>a { color: #fff; font-size: 16px;}
+.header2 .navbar-nav>li>a { color: #fff; font-size: 16px;}
+.navbar-inverse .navbar-nav>li>a:hover{background: #627fc9;color: #fff; border-radius: 3px;}
+/*.navbar-inverse .navbar-nav>li>a:visited{color: #245285}*/
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{background: #627fc9; border-radius: 3px;}
+.login{border:solid 1px #245285; color: #245285; padding: 0px 6px;}
+.login:hover{background: #245285; color:#fff;}
+.navbar-header{padding-right: 5%;}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img{display:initial; max-width: initial  height: initial;}
+
+.header1{background:url(../images/header-bg.png) repeat-x; height: 83px;}
+.header1 a i{background: url(../images/logo.png) no-repeat; background-size:contain; width: 214px; height: 77px; display: inline-block;}
+.header2 a i{background: url(../images/logo-1.png) no-repeat; background-size:contain; width: 214px; height: 77px; display: inline-block;}
+.header2{color: #fff; background:#000;}
+.navbar-right li{color: #fff;}
+.navbar-right li span{margin-right: 10px;}
+
+@media screen and (max-width: 1024px)
+{
+	.navbar-header{padding-right: 0%!important;}
+}
+@media (max-width: 425px)
+{
+	.navbar-logo{width: 55%; margin-top: 5px;}
+	.header-mt10{margin-top: 0px;}
+}
+
+
+/*******footer********/
+.footer{color: #777; padding: 30px 0; border-top: 1px solid #eeefef; margin-top: 0px; background: #eeefef;}
+.mpCopyRight, .mpFooterLinks {display: block; text-align: center; line-height: 2.4; font-size: 12px; color: #B7B7B7;}
+.mpFooterLinks li { display: inline-block;}
+.mpFooterLinks li + li:before { content: '|'; display: inline-block;  padding: 0 12px;}
+.mpCopyRight, .mpFooterLinks {display: block; text-align: center; line-height: 2.4;  font-size: 12px; color: #858B97;}
+
+/**top**/
+.fa-angle-up:before {content: "";}
+#scrollUp{background: url(../images/icon/top.png); background-size: contain; width: 49px; height: 49px; bottom: 2%}
+@media screen and (min-width: 992px)
+{
+#scrollUp {
+    bottom: 26%;
+}
+}
+/*.service{background: url(../images/icon/service.png); background-size: contain; width: 100px; height: 100px; position: fixed;  bottom: 167px; right: 20px; z-index: 999999999;}*/
+
+.fixedBox {
+	background: #eee;
+    top: 53%;
+    width: 49px;
+    height: 49px;
+    right: 20px;
+    position: fixed;
+    z-index: 9999;
+	_position:absolute;
+}
+.fixedBox ul.fixedBoxList i{background: url(../images/icon/qq.png) no-repeat; background-size: initial; height: 49px; width: 49px; position: absolute;}
+
+.fixedBox ul.fixedBoxList li.hover .bjfff {
+	top:0px;
+	width:10px;
+	height:64px;
+	right:-5px;
+	position:absolute;
+}
+.fixedBox ul.fixedBoxList li.Service .ServiceBox {
+	background: #eee;
+    left: -142px;
+    top: -10px;
+    display: none;
+    position: absolute;
+    z-index: 999;
+    padding: 10px;
+}
+.fixedBox ul.fixedBoxList li.Service .ServiceBox em{background: url(../images/icon/jt.png) no-repeat; background-size: initial; height: 19px; width: 15px; position: absolute;right: -12px;
+    top: 40px;}
+.fixedBox ul.fixedBoxList li.hover.Service .ServiceBox {
+	display:block;
+}
+
+.weixin-icon{top:52px;}
+.weixin-icon-nav{top: 40px!important; }
+.weixin-icon-nav .weixin-title{font-size: 16px; color: #000; line-height: 30px;}
+.sina-icon{top: 104px;}
+
+
+/******icon*******/
+.icon{display: inline-block; vertical-align: middle;}
+.pj-icon1{background:url(../images/pj-icon1.png) no-repeat; background-size: 100% 100%; width: 24px; height: 24px;}
+.pj-icon2{background:url(../images/pj-icon2.png) no-repeat; background-size: 100% 100%; width: 24px; height: 24px;}
+.pj-icon3{background:url(../images/pj-icon3.png) no-repeat; background-size: 100% 100%; width: 24px; height: 24px;}
+.kefu{background:url(../images/kefu.png) no-repeat; background-size: 100% 100%; width: 30px; height: 30px;}
+.user{background:url(../images/user.png) no-repeat; background-size: 100% 100%; width: 20px; height: 20px; margin-right: 5px;}
+.eamil{background:url(../images/eamil.png) no-repeat; background-size: 100% 100%; width: 21px; height: 16px; margin-right: 5px;}
+.exit{background:url(../images/edit.png) no-repeat; background-size: 100% 100%; width: 20px; height: 20px; margin-right: 5px;}
+.jg{background:url(../images/jg.png) no-repeat; background-size: 100% 100%; width: 24px; height: 24px;}
+
+.icon-01{background:url(../images/01.png) no-repeat; background-size: 100% 100%; width: 31px; height: 38px;}
+.icon-02-1{background:url(../images/02-1.png) no-repeat; background-size: 100% 100%; width: 31px; height: 38px;}
+.icon-02{background:url(../images/02.png) no-repeat; background-size: 100% 100%; width: 31px; height: 38px;}
+
+.open-eye{background:url(../images/open.png) no-repeat; background-size: 100% 100%; width: 24px; height: 18px;position: absolute; top: 10px; right: 9px;}
+.close-eye{background:url(../images/close.png) no-repeat; background-size: 100% 100%; width: 24px; height: 18px;position: absolute; top: 10px;  right: 9px;}

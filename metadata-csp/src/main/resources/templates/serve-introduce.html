@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>明动科技</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="robots" content="index,follow">
+    <meta name="application-name" content="bootcss.com">
+    <meta property="qc:admins" content="1603466166416277433363757477167"/>
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/site.min.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png">
+    <link rel="shortcut icon" href="images/icon/favicon.png">
+
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy">
+<!--header-->
+<div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
+    <div class="container header-mt10">
+        <div class="navbar-header">
+            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"
+               onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
+        </div>
+        <div class="navbar-collapse collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
+                <li><a href="programme.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
+                </li>
+                <li><a href="case.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
+                <li class="active"><a href="apidownload.html"
+                                      onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">设置中心</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden-sm">
+                <li>
+                    <span><i class="icon user"></i>上午好，李先生</span>
+                    <span><i class="icon exit"></i>退出  &nbsp;&nbsp;&nbsp;|</span>
+                    <span>修改密码</span>
+                    <span><i class="icon eamil"></i>消息</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--header end-->
+<!--advimg-->
+<div class="masthead pb0"></div>
+<!--advimg end-->
+<!--面包屑-->
+<div class="container mt45 mb20">
+    位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <span class="col2">服务详情</span>
+</div>
+<!--面包屑 end-->
+<!--内容-->
+<div class="container mt20 mb20 bg-white">
+    <div class="fz-16 bd-bottom pb15 pt15 fb pl5">金融预期常欠客</div>
+    <div class="row development">
+        <!--right-->
+        <div class="col-lg-10 col-sm-10 col-md-10">
+            <div class="tab-pane fade in active tab-content">
+                <div class="development-nav p0 important">
+                    <div id="voice1">
+                        <div class="msghoverbg">
+                            <h1>1.语音接口地址与示例</h1>
+                            通用接口地址：http://client.movek.net:8888<br>
+                        </div>
+                        <div class="msghoverbg">
+                            <p>1.1 语音平台接口地址</p>
+                            通用接口地址：http://client.movek.net:8888
+                        </div>
+                        <div class="msghoverbg">
+                            <p>1.2 快速应用示例</p>
+                            <p>发送语音</p>
+                            http://client.movek.net:8888/sendvms.aspx?action=send&account=序列号&password=密码&userid=特服号&title=标题&mobile=手机号1,手机号2,手机号&Vmsmsg=内容
+                        </div>
+                    </div>
+                    <div id="voice2">
+                        <div class="msghoverbg">
+                            <h1>2.语音发送接口</h1>
+                            <p>2.1 HTTP 发送接口</p>
+                            发送接口地址：http://client.movek.net:8888/sendvms.aspx<br>
+                        </div>
+                        <div class="msghoverbg">
+                            <p>2.2 语音示例</p>
+                            <div>请求方式：<i>POST、GET</i>,数据编码：UTF-8</div>
+                            http://client.movek.net:8888/sendvms.aspx?action=send&userid=12&account=zhouyang&password=123456&mobile=138********,135********&title=abc&Vmsmsg
+                            =内容<br>
+                        </div>
+                        <div class="msghoverbg">
+                            <p>2.3发送返回值</p>
+                            在接收到客户端发送的http请求后，返回以xml的方式返回处理结果（JSON返回一致）。格式为：<br>
+                            &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;<br>
+                            &lt;returnvms&gt;<br>
+                            &lt;returnstatus&gt;返回状态值：成功返回Success 失败返回：Faild&lt;/returnstatus&gt;<br>
+                            &lt;message&gt;返回信息&lt;/message&gt;<br>
+                            &lt;remainpoint&gt; 返回余额&lt;/remainpoint&gt; <br>
+                            &lt;taskID&gt;返回本次任务的序列ID &lt;/taskID&gt;<br>
+                            &lt;successCounts&gt;成功短信数：当成功后返回提交成功短信数&lt;/successCounts&gt; <br>
+                            &lt;/returnvms&gt;<br>
+                            JSON返回值：<br>
+                            {"code":"Success","data":{"returnstatus":"返回状态值：成功返回Success
+                            失败返回：Faild","message":"返回信息","remainpoint":返回余额,"taskID":"返回本次任务的ID","successCounts":"成功短信数"},"msg":"ok"}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--right end-->
+        <!--left-->
+        <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important mt15" style="position: fixed; right: 9%;">
+            <img src="../images/lxkf.png" style="width: 79px;">
+        </div>
+        <!--left end-->
+    </div>
+
+</div>
+<!--内容 end-->
+
+<!--footer-->
+<footer class="footer">
+    <div class="container ">
+        <ul class="mpFooterLinks">
+            <li><a href="https://www.antgroup.com/introduction.htm" target="_blank" seed="mpFooterLinks-linkT14"
+                   smartracker="on">关于蚂蚁</a></li>
+            <li><a href="https://www.antgroup.com" target="_blank" seed="mpFooterLinks-linkT15"
+                   smartracker="on">蚂蚁金服</a></li>
+            <li><a href="https://www.alipay.com" target="_blank" seed="mpFooterLinks-linkT16" smartracker="on">支付宝</a>
+            </li>
+            <li><a href="https://www.koubei.com" target="_blank" seed="mpFooterLinks-linkT17" smartracker="on">口碑</a>
+            </li>
+            <li><a href="https://www.zmxy.com.cn" target="_blank" seed="mpFooterLinks-linkT18" smartracker="on">芝麻信用</a>
+            </li>
+        </ul>
+        <ul class="mpFooterLinks">
+            <li><a href="http://www.alibabagroup.com/cn/global/home" target="_blank" seed="mpFooterLinks-linkT19"
+                   smartracker="on">阿里巴巴集团</a></li>
+            <li><a href="https://www.alibaba.com" target="_blank" seed="mpFooterLinks-linkT20"
+                   smartracker="on">阿里巴巴国际站</a></li>
+            <li><a href="https://www.1688.com/" target="_blank" seed="mpFooterLinks-linkT21" smartracker="on">1688</a>
+            </li>
+            <li><a href="https://www.taobao.com/" target="_blank" seed="mpFooterLinks-linkT22" smartracker="on">淘宝</a>
+            </li>
+            <li><a href="https://www.tmall.com/" target="_blank" seed="mpFooterLinks-linkT23" smartracker="on">天猫</a>
+            </li>
+            <li><a href="https://ju.taobao.com/" target="_blank" seed="mpFooterLinks-linkT24" smartracker="on">聚划算</a>
+            </li>
+            <li><a href="http://www.alimama.com/" target="_blank" seed="mpFooterLinks-linkT25" smartracker="on">阿里妈妈</a>
+            </li>
+            <li><a href="https://www.aliyun.com/" target="_blank" seed="mpFooterLinks-linkT26"
+                   smartracker="on">阿里云计算</a></li>
+        </ul>
+        <span class="mpCopyRight">Copyright © 2017 蚂蚁金融服务集团 | ICP证: 沪ICP备15027489号-2</span>
+    </div>
+</footer>
+<!--在线客服-->
+<div class="fixedBox">
+    <ul class="fixedBoxList">
+        <li class="fixeBoxLi Service">
+            <i></i>
+            <div class="ServiceBox">
+                <em></em>
+                <div class="bjfff"></div>
+                <P class="p2"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885540004&site=qq&menu=yes"><img
+                        border="0" src="../images/icon/qq-sq.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
+                <P class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885540001&site=qq&menu=yes"><img
+                        border="0" src="../images/icon/qq-sh.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
+                <p class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885539934&site=qq&menu=yes"><img
+                        border="0" src="../images/icon/qq-js.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></p>
+                <p><img border="0" src="images/icon/400.png"/></p>
+            </div>
+        </li>
+        <li class="fixeBoxLi Service">
+            <i class="weixin-icon"><img src="../images/icon/weixin.png"></i>
+            <div class="ServiceBox weixin-icon-nav">
+                <div class="bjfff"></div>
+                <P class="p2"><img src="../images/ewm.png" style="width: 121px;"></P>
+                <p class="tc weixin-title">微信公众号</p>
+            </div>
+        </li>
+        <li class="fixeBoxLi Service">
+            <i class="sina-icon"><a
+                    href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=真实的appkey',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&source=',e(r),'&sourceUrl=',e(l),'&content=',c||'gb2312','&pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','图片链接|默认为空','标题|默认当前页标题','内容链接|默认当前页location','页面编码gb2312|utf-8默认gb2312'));"
+                    target="_blank"><img src="../images/icon/sina.png"></a></i>
+        </li>
+    </ul>
+</div>
+<!--在线客服 end-->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.unveil.min.js"></script>
+<script src="../js/jquery.scrollUp.min.js"></script>
+<script src="../js/jquery.matchHeight-min.js"></script>
+<script src="../js/site.min.js"></script>
+<script src="../js/bootstrap-touch-slider.js"></script>
+<script src="../js/lanrenzhijia.js"></script>
+<script src="../js/public.js"></script>
+<script src="../js/toc.min.js"></script>
+<script src="../plugins/layui/layui.js"></script>
+<script>
+    //点击加背景色
+    /*$(function(){
+      $(".development-menu li").click(function(){
+        $(this).hasClass('active');
+        if($(this).hasClass('active')){
+          var index = $(this).attr('data');
+          $("#mms"+index).css({ "background": "#e3e5e6", "padding-left": "15px" }); 
+        }else{
+        var index = $(this).attr('data');
+        $("#mms"+index).css({ "background": "#fff", "padding-left": "0px" });
+        }  
+      })
+    })*/
+
+    //滚动加背景色
+    /* $(window).scroll(function () {
+       $(".development-menu li").each(function(){
+         if($(this).hasClass('active')){
+         var index = $(this).attr('data');
+         $("#mms"+index).css({ "background": "#e3e5e6", "padding-left": "15px" });
+         }else{
+         var index = $(this).attr('data');
+         $("#mms"+index).css({ "background": "#fff", "padding-left": "0px" });
+         }
+       });
+     })*/
+</script>
+</body>
+</html>
+  
