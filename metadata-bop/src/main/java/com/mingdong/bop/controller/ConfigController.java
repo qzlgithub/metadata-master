@@ -9,6 +9,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,6 +44,15 @@ public class ConfigController
     public ModelAndView configIndustry()
     {
         ModelAndView view = new ModelAndView("system-manage/industry-manage");
+        view.addObject(Field.LIST, systemService.getHierarchyIndustry());
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @GetMapping(value = "setting.html")
+    public ModelAndView otherSettingPage()
+    {
+        ModelAndView view = new ModelAndView("system-manage/other-setting");
         view.addObject(Field.LIST, systemService.getHierarchyIndustry());
         view.addAllObjects(RequestThread.getMap());
         return view;

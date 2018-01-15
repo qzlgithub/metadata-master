@@ -11,6 +11,7 @@ public enum PathModule
     PRIVILEGE_INDEX("/privilege/index.html", "privilege_index"),
     CONFIG_RECHARGE("/config/recharge.html", "config_recharge"),
     CONFIG_INDUSTRY("/config/industry.html", "config_industry"),
+    CONFIG_OTHER("/config/setting.html", "config_other"),
     PRODUCT_INDEX("/product/index.html", "product_index"),
     PRODUCT_CATEGORY_INDEX("/product/category/index.html", "product_category_index"),
     CLIENT_INDEX("/client/index.html", "client_index"),
