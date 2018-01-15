@@ -50,44 +50,44 @@
 </div>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript">
-    $(document).keydown(function(e) {
-        if(e.keyCode === 13) {
-            login();
+$(document).keydown(function(e) {
+    if(e.keyCode === 13) {
+        login();
+    }
+});
+
+function refImage() {
+    $.ajax({
+        url: "/common/imageCode",
+        success: function(e) {
+            $("#yzmimg").attr("src", e.image);
         }
     });
+}
 
-    function refImage() {
-        $.ajax({
-            url: "/common/imageCode",
-            success: function(e) {
-                $("#yzmimg").attr("src", e.image);
+function login() {
+    $.ajax({
+        type: "POST",
+        url: "/login",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "username": $("#account").val(),
+            "password": MD5($("#password").val()),
+            "imageCode": $("#code").val()
+        }),
+        success: function(data) {
+            if(data.errCode !== '000000') {
+                refImage();
+                $("#code").val("");
+                layer.msg(data.errMsg);
             }
-        });
-    }
-
-    function login() {
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "username": $("#account").val(),
-                "password": MD5($("#password").val()),
-                "imageCode": $("#code").val()
-            }),
-            success: function(data) {
-                if(data.errCode !== '000000') {
-                    refImage();
-                    $("#code").val("");
-                    layer.msg(data.errMsg);
-                }
-                else {
-                    window.location.href = "/manager/index.html";
-                }
+            else {
+                window.location.href = "/manager/index.html";
             }
-        });
-    }
+        }
+    });
+}
 </script>
 </body>
 </html>
