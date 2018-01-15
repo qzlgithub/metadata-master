@@ -1,6 +1,8 @@
 package com.mingdong.csp.controller;
 
 import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.model.ImageCode;
+import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.service.ClientService;
 import org.springframework.stereotype.Controller;
