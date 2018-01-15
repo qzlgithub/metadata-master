@@ -21,16 +21,6 @@
     <link href="../css/base.css" rel="stylesheet"/>
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
-    <link rel="shortcut icon" href="images/icon/favicon.png"/>
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
@@ -49,7 +39,7 @@
     <dl class="development-nav sever-detail pt0 pb0 important">
         <dd class="row ml0 mr0 bd-none important">
             <div class="col-md-6">
-                <p>下午好，李先生</p>
+                <p id="home-greeting"></p>
                 <p class="col2 important pl25">您的服务目前各项指标正常，请放心使用~</p>
                 <p class="ml20"><span class="appid-btn">查看处理</span></p>
             </div>
@@ -160,50 +150,47 @@
 
 <!--修改密码 提示层-->
 <div id="edit-pwd" style="display: none">
-    <!--form-->
     <div class="layui-layer-title">修改密码</div>
     <div class="mb30">
-        <form class="layui-form">
-            <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
-            <div class="m30">
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
-                    <div class="layui-input-block" id="oldpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="close-eye icon" id="oldpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="oldpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="open-eye icon" id="oldpwd-open"></i>
-                    </div>
+        <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
+                <div class="layui-input-block" id="org-enc-pwd">
+                    <input type="password" id="org-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="org-show"></i>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
-                    <div class="layui-input-block" id="newpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="close-eye icon" id="newpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="newpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="open-eye icon" id="newpwd-open"></i>
-                    </div>
+                <div class="layui-input-block" id="org-dec-pwd" style="display: none">
+                    <input type="text" id="org-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="org-hide"></i>
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+                <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
+                <div class="layui-input-block" id="new-enc-pwd">
+                    <input type="password" id="new-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="new-show"></i>
+                </div>
+                <div class="layui-input-block" id="new-dec-pwd" style="display: none">
+                    <input type="text" id="new-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="new-hide"></i>
                 </div>
             </div>
-        </form>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+            </div>
+        </div>
     </div>
-    <!--form end-->
 </div>
 <!--修改密码 提示层 end-->
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.scrollUp.min.js}"></script>
@@ -213,50 +200,8 @@
 <script type="text/javascript" th:src="@{/js/lanrenzhijia.js}"></script>
 <script type="text/javascript" th:src="@{/js/public.js}"></script>
 <script type="text/javascript" th:src="@{/js/toc.min.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
-<script type="text/javascript">
-    var message;
-    layui.config({
-        base: '../build/js/'
-    }).use(['app', 'message'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        $('#editpwd').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#edit-pwd'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });
-    });
-    $(document).ready(function() {
-        $("#oldpwd-open").click(function() {
-            $("#oldpwd1").show();
-            $("#oldpwd2").hide();
-        });
-        $("#oldpwd-close").click(function() {
-            $("#oldpwd1").hide();
-            $("#oldpwd2").show();
-        });
-        $("#newpwd-open").click(function() {
-            $("#newpwd1").show();
-            $("#newpwd2").hide();
-        });
-        $("#newpwd-close").click(function() {
-            $("#newpwd1").hide();
-            $("#newpwd2").show();
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/home.js}"></script>
 </body>
 </html>
   

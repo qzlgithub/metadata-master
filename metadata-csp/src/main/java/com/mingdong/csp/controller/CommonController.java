@@ -26,7 +26,6 @@ public class CommonController
         ImageCode imageCode = CaptchaUtils.buildImageCode();
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
         resp.addData(Field.IMAGE_CAPTCHA, "data:image/png;base64," + imageCode.getBase64Code());
-        logger.info("验证码：{}", imageCode.getCode());
         return resp;
     }
 }

@@ -19,7 +19,10 @@ public class InterceptorConfigurer extends WebMvcConfigurerAdapter
     public void addInterceptors(InterceptorRegistry registry)
     {
         registry.addInterceptor(webAccessInterceptor).addPathPatterns("/**/**.html").excludePathPatterns("/index.html");
-        registry.addInterceptor(apiAccessInterceptor).addPathPatterns("/**/**");
+        registry.addInterceptor(apiAccessInterceptor)
+                .addPathPatterns("/**/**")
+                .excludePathPatterns("/**.html")
+                .excludePathPatterns("/**/**.html");
         super.addInterceptors(registry);
     }
 

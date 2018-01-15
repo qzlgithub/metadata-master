@@ -4,6 +4,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.constant.Field;
+import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,6 @@ public class PageController
         HttpSession session = request.getSession();
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + imageCode.getBase64Code());
-        logger.info("验证码：{}", imageCode.getCode());
         return view;
     }
 
@@ -48,6 +48,7 @@ public class PageController
         ModelAndView view = new ModelAndView("home");
         //        BLResp resp = BLResp.build();
         //        clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
