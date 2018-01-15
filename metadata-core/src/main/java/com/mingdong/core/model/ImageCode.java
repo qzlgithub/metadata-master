@@ -1,4 +1,4 @@
-package com.mingdong.bop.model;
+package com.mingdong.core.model;
 
 public class ImageCode
 {

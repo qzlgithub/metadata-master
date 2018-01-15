@@ -1,8 +1,8 @@
 package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ImageCode;
-import com.mingdong.bop.util.CaptchaUtils;
+import com.mingdong.core.model.ImageCode;
+import com.mingdong.core.util.CaptchaUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +16,6 @@ import java.util.Map;
 @RequestMapping(value = "common")
 public class CommonController
 {
-
     @RequestMapping(value = "imageCode")
     public Map<String, Object> getImageCode(HttpServletRequest request) throws IOException
     {

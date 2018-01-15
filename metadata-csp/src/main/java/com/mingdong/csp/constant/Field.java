@@ -45,4 +45,6 @@ public interface Field
     String SUC = "suc";
     String UNIT_AMT = "unitAmt";
 
+    String CAPTCHA_CODE = "captchaCode";
+    String IMAGE_CAPTCHA = "imageCaptcha";
 }
