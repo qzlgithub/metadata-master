@@ -83,6 +83,7 @@ public class ClientController
     /**
      * 添加子账号
      */
+    @LoginRequired
     @PostMapping(value = "account/addition")
     public BLResp addAccount(@RequestBody JSONObject jsonReq)
     {
@@ -115,6 +116,7 @@ public class ClientController
     /**
      * 子账号的启用禁用
      */
+    @LoginRequired
     @PostMapping(value = "changeStatus")
     public BLResp changeStatus(@RequestBody JSONObject jsonObject)
     {
@@ -127,6 +129,7 @@ public class ClientController
     /**
      * 编辑子账号
      */
+    @LoginRequired
     @PostMapping(value = "editChildAccount")
     public BLResp editChildAccount(@RequestBody JSONObject jsonReq)
     {

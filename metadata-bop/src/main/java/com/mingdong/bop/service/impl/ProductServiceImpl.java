@@ -219,7 +219,7 @@ public class ProductServiceImpl implements ProductService
             String remark, String content, BLResp resp)
     {
         Product prod = productMapper.findByCode(code);
-        if(prod != null)
+        if(prod != null && !id.equals(prod.getId()))
         {
             resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
 
