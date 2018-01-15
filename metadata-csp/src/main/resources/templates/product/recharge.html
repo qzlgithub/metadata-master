@@ -52,14 +52,7 @@
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
         <!--left-->
-        <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important" id="myScrollspy">
-            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked" data-spy="affix"
-                data-offset-top="125">
-                <li><a href="">我的服务</a></li>
-                <li><a href="">服务提醒</a></li>
-                <li><a href="">回收站</a></li>
-            </ul>
-        </div>
+        <div th:include="product-common :: left"></div>
         <!--left end-->
         <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
