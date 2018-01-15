@@ -13,6 +13,8 @@ public enum PathModule
     CONFIG_INDUSTRY("/config/industry.html", "config_industry"),
     CONFIG_OTHER("/config/setting.html", "config_other"),
     PRODUCT_INDEX("/product/index.html", "product_index"),
+    PRODUCT_EDIT("/product/edit.html", "product_index"),
+    PRODUCT_ADDITION("/product/addition.html", "product_index"),
     PRODUCT_CATEGORY_INDEX("/product/category/index.html", "product_category_index"),
     CLIENT_INDEX("/client/index.html", "client_index"),
     CLIENT_ADDITION("/client/addition.html", "client_index"),
