@@ -34,13 +34,14 @@ public class ClientController
     public BLResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        String userCode = jsonReq.getString(Field.CODE);
         HttpSession session = request.getSession();
+        // TODO 开发过程暂时注释掉
+        /*String userCode = jsonReq.getString(Field.CODE);
         String code = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
         if(StringUtils.isNullBlank(userCode) || !userCode.equalsIgnoreCase(code))
         {
             return resp.result(RestResult.INVALID_CAPTCHA);
-        }
+        }*/
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password))

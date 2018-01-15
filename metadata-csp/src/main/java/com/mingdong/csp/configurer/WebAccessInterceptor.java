@@ -2,6 +2,7 @@ package com.mingdong.csp.configurer;
 
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.csp.component.RedisDao;
+import com.mingdong.csp.constant.PathPage;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
                     return false;
                 }
                 RequestThread.set(us.getClientId(), us.getUserId());
+                RequestThread.setCurrPage(PathPage.getPageByPath(path));
             }
         }
         return true;
