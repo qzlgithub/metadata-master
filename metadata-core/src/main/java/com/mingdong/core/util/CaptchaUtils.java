@@ -1,6 +1,6 @@
-package com.mingdong.bop.util;
+package com.mingdong.core.util;
 
-import com.mingdong.bop.model.ImageCode;
+import com.mingdong.core.model.ImageCode;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
