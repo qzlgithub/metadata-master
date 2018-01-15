@@ -11,21 +11,20 @@
             </div>
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/home.html}"
-                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
-                    <li><a th:href="@{/product/mine.html}"
-                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
-                    </li>
-                    <li><a th:href="@{/product/all.html}"
-                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
-                    <li class="active"><a th:href="@{/system/account-list.html}"
-                                          onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">设置中心</a></li>
+                    <li th:class="${currPage eq 'home'} ? 'active' : ''">
+                        <a th:href="@{/home.html}">主页</a></li>
+                    <li th:class="${currPage eq 'my-product'} ? 'active' : ''">
+                        <a th:href="@{/product/mine.html}">我的服务</a></li>
+                    <li th:class="${currPage eq 'all-product'} ? 'active' : ''">
+                        <a th:href="@{/product/all.html}">全部服务</a></li>
+                    <li th:class="${currPage eq 'system'} ? 'active' : ''">
+                        <a th:href="@{/system/account-list.html}">设置中心</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li>
-                        <span><i class="icon user"></i><md id="greeting">上午好，李先生</md></span>
+                        <span><i class="icon user"></i><md id="greeting"></md></span>
                         <span><i class="icon exit"></i>退出  &nbsp;&nbsp;&nbsp;|</span>
-                        <span>修改密码</span>
+                        <span id="chgPwd" class="cp">修改密码</span>
                         <span><i class="icon eamil"></i>消息</span>
                     </li>
                 </ul>
@@ -43,13 +42,16 @@
                     <em></em>
                     <div class="bjfff"></div>
                     <P class="p2">
-                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540004&amp;site=qq&amp;menu=yes">
+                        <a target="_blank"
+                           href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540004&amp;site=qq&amp;menu=yes">
                             <img border="0" src="../images/icon/qq-sq.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
                     <P class="p2 mt5">
-                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540001&amp;site=qq&amp;menu=yes">
+                        <a target="_blank"
+                           href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540001&amp;site=qq&amp;menu=yes">
                             <img border="0" src="../images/icon/qq-sh.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
                     <p class="p2 mt5">
-                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885539934&amp;site=qq&amp;menu=yes">
+                        <a target="_blank"
+                           href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885539934&amp;site=qq&amp;menu=yes">
                             <img border="0" src="../images/icon/qq-js.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></p>
                     <p><img border="0" src="images/icon/400.png"/></p>
                 </div>
