@@ -2,10 +2,10 @@ package com.mingdong.bop.controller;
 
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ImageCode;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.util.CaptchaUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.model.ImageCode;
+import com.mingdong.core.util.CaptchaUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

@@ -56,72 +56,72 @@ public class PageController
     public ModelAndView productAll()
     {
 
-        ModelAndView modelAndView = new ModelAndView("/product/all");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/all");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/detail.html"})
     public ModelAndView productDetail()
     {
-        ModelAndView modelAndView = new ModelAndView("/product/detail");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/detail");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/introduce.html"})
     public ModelAndView productIntroduce()
     {
-        ModelAndView modelAndView = new ModelAndView("/product/introduce");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/introduce");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/mine.html"})
     public ModelAndView productMine()
     {
-        ModelAndView modelAndView = new ModelAndView("/product/mine");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/mine");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/recharge.html"})
     public ModelAndView productRecharge()
     {
-        ModelAndView modelAndView = new ModelAndView("/product/recharge");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/recharge");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/request.html"})
     public ModelAndView productRequest()
     {
-        ModelAndView modelAndView = new ModelAndView("/product/request");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/product/request");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/system/account-list.html"})
     public ModelAndView systemAccountList()
     {
-        ModelAndView modelAndView = new ModelAndView("/system/account-list");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/system/account-list");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/system/account-set.html"})
     public ModelAndView systemAccountSet()
     {
-        ModelAndView modelAndView = new ModelAndView("/system/account-set");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/system/account-set");
+        return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/system/message.html"})
     public ModelAndView systemMessage()
     {
-        ModelAndView modelAndView = new ModelAndView("/system/message");
-        return modelAndView;
+        ModelAndView view = new ModelAndView("/system/message");
+        return view;
     }
 
 }
