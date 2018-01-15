@@ -36,7 +36,7 @@ public class ClientController
         BLResp resp = BLResp.build();
         String userCode = jsonReq.getString(Field.CODE);
         HttpSession session = request.getSession();
-        String code = (String) session.getAttribute(Field.CODE);
+        String code = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
         if(StringUtils.isNullBlank(userCode) || !userCode.equalsIgnoreCase(code))
         {
             return resp.result(RestResult.INVALID_CAPTCHA);

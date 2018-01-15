@@ -33,10 +33,11 @@ public class ProductServiceImpl implements ProductService
     RemoteProductService remoteProductService;
 
     @Override
-    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
+    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+            BLResp resp)
     {
-        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate, endDate, page,
-                resp);
+        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
+                endDate, page, resp);
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<Map<String, Object>>(dataList.size());
@@ -74,8 +75,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate, endDate, page,
-                BLResp.build());
+        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
+                endDate, page, BLResp.build());
         if(CollectionUtils.isNotEmpty(dataList))
         {
             ProductRechargeDTO dataDTO;
@@ -102,9 +103,11 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
+    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+            BLResp resp)
     {
-        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate, endDate, page, resp);
+        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
+                endDate, page, resp);
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<Map<String, Object>>(dataList.size());
@@ -138,8 +141,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate, endDate, page,
-                BLResp.build());
+        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
+                endDate, page, BLResp.build());
         if(CollectionUtils.isNotEmpty(dataList))
         {
             ProductRequestDTO dataDTO;
@@ -155,7 +158,7 @@ public class ProductServiceImpl implements ProductService
                 cell.setCellValue(dataDTO.getCallTime());
                 cell.setCellStyle(timeStyle);
                 dataRow.createCell(1).setCellValue(dataDTO.getProductName());
-                dataRow.createCell(2).setCellValue(dataDTO.getSuc()+"");
+                dataRow.createCell(2).setCellValue(dataDTO.getSuc() + "");
                 dataRow.createCell(3).setCellValue(NumberUtils.formatAmount(dataDTO.getUnitAmt()));
                 dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
             }

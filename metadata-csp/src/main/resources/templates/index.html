@@ -37,7 +37,6 @@
     <div id="login-top"></div>
     <div id="login-content" class="pt35 important">
         <div class="tc fz-24 mb15">登录</div>
-        <!--<form id="login_form">-->
         <p class="clearfix">
             <label>用户名：</label>
             <input class="text-input" type="text" id="username"/>
@@ -59,13 +58,29 @@
                 <img id='captcha' align='absmiddle' onclick="changeImage()" th:src="${imageCaptcha}"/></a>
         </p>
         <p class="mt20">
-            <input class="button" type="button" style="padding: 10px 20px; width: 100%; font-size: 18px!important;"
-                   value="登 录"/>
+            <input id="user-login" class="button" type="button" value="登 录"
+                   style="padding: 10px 20px; width: 100%; font-size: 18px!important;"/>
         </p>
-        <!--</form>-->
     </div>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    });
+</script>
 </body>
 </html>

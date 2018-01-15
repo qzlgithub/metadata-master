@@ -1,16 +1,29 @@
-$(function() {
-    $("#hide-pass").click(function() {
-        $("#dec-passcode").val($("#enc-passcode").val());
-        $("#pwd-show").hide();
-        $("#pwd-hide").show();
-    });
-    $("#show-pass").click(function() {
-        $("#enc-passcode").val($("#dec-passcode").val());
-        $("#pwd-hide").hide();
-        $("#pwd-show").show();
-    });
+$(document).keydown(function(e) {
+    if(e.keyCode === 13) {
+        userLogin();
+    }
+});
+$("#user-login").click(function() {
+    userLogin();
+});
+$("#dec-passcode").keyup(function() {
+    $("#enc-passcode").val($("#dec-passcode").val());
+});
+$("#enc-passcode").keyup(function() {
+    $("#dec-passcode").val($("#enc-passcode").val());
+});
+$("#hide-pass").click(function() {
+    $("#pwd-show").hide();
+    $("#pwd-hide").show();
+});
+$("#show-pass").click(function() {
+    $("#pwd-hide").hide();
+    $("#pwd-show").show();
 });
 
+/**
+ * 刷新验证码图片
+ */
 function changeImage() {
     $.get(
         "/captcha",
@@ -21,4 +34,43 @@ function changeImage() {
             }
         }
     );
+}
+
+function userLogin() {
+    var username = $("#username").val();
+    var password = $("#enc-passcode").val();
+    var code = $("#captcha-code").val();
+    if(username === '') {
+        layer.msg("请填写正确的用户名！");
+        return;
+    }
+    if(password === '') {
+        layer.msg("请填写您的密码！");
+        return;
+    }
+    if(code === '') {
+        layer.msg("请填写验证码！");
+        return;
+    }
+    $.ajax({
+        type: "post",
+        url: "/client/user/login",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({"username": username, "password": password, "code": code}),
+        success: function(res) {
+            if(res.errCode === '000000') {
+                var data = res.dataMap;
+                sessionStorage.setItem("user_name", data.name);
+                sessionStorage.setItem("username", data.username);
+                sessionStorage.setItem("first_login", data.firstLogin);
+                window.location.href = "/home.html";
+            }
+            else {
+                $("#captcha-code").val("");
+                changeImage();
+                layer.msg("登陆失败，" + res.errMsg);
+            }
+        }
+    })
 }
