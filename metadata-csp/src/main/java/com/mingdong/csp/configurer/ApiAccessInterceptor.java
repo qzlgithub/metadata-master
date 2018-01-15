@@ -1,11 +1,15 @@
 package com.mingdong.csp.configurer;
 
+import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.BLResp;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
@@ -25,9 +29,23 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
     {
         String path = request.getRequestURI(); // same with request.getServletPath()
         logger.info("Request to {}", path);
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-        UserSession us = redisDao.getUserSession(sessionId);
+        if(handler.getClass().isAssignableFrom(HandlerMethod.class))
+        {
+            LoginRequired annotation = ((HandlerMethod) handler).getMethod().getAnnotation(LoginRequired.class);
+            if(annotation != null)
+            {
+                HttpSession session = request.getSession();
+                String sessionId = session.getId();
+                UserSession us = redisDao.getUserSession(sessionId);
+                if(us == null)
+                {
+                    String resp = BLResp.getErrResp(RestResult.ACCESS_LIMITED);
+                    response.getOutputStream().write(resp.getBytes("UTF-8"));
+                    return false;
+                }
+                RequestThread.set(us.getClientId(), us.getUserId());
+            }
+        }
 
         return true;
     }

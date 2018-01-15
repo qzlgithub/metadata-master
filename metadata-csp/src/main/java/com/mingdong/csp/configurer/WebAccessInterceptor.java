@@ -35,8 +35,10 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
                 UserSession us = redisDao.getUserSession(sessionId);
                 if(us == null)
                 {
+                    response.sendRedirect("/index.html");
                     return false;
                 }
+                RequestThread.set(us.getClientId(), us.getUserId());
             }
         }
         return true;

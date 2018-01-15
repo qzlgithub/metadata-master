@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService
             resp.result(dto.getResult());
             return;
         }
-        UserSession session = new UserSession(dto.getUserId(), dto.getName());
+        UserSession session = new UserSession(dto.getClientId(), dto.getUserId(), dto.getName());
         redisDao.saveUserSession(sessionId, session);
         resp.addData(Field.NAME, dto.getName()).addData(Field.MANAGER_QQ, dto.getManagerQq()).addData(Field.FIRST_LOGIN,
                 dto.getFirstLogin());

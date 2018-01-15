@@ -4,11 +4,11 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(Long userId, Long clientId)
+    public static void set(Long clientId, Long userId)
     {
         RequestHolder holder = new RequestHolder();
-        holder.setUserId(userId);
         holder.setClientId(clientId);
+        holder.setUserId(userId);
         threadHolder.set(holder);
     }
 

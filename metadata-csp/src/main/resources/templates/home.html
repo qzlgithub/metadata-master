@@ -152,58 +152,51 @@
 </div>
 <!--内容 end-->
 
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 
 <!--修改密码 提示层-->
 <div id="edit-pwd" style="display: none">
-    <!--form-->
     <div class="layui-layer-title">修改密码</div>
     <div class="mb30">
-        <form class="layui-form">
-            <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
-            <div class="m30">
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
-                    <div class="layui-input-block" id="oldpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="close-eye icon" id="oldpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="oldpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="open-eye icon" id="oldpwd-open"></i>
-                    </div>
+        <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
+                <div class="layui-input-block" id="oldpwd1">
+                    <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="oldpwd-close"></i>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
-                    <div class="layui-input-block" id="newpwd1">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="close-eye icon" id="newpwd-close"></i>
-                    </div>
-                    <div class="layui-input-block" id="newpwd2" style="display: none">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
-                        <i class="open-eye icon" id="newpwd-open"></i>
-                    </div>
+                <div class="layui-input-block" id="oldpwd2" style="display: none">
+                    <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="oldpwd-open"></i>
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+                <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
+                <div class="layui-input-block" id="newpwd1">
+                    <input type="password" name="username" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="newpwd-close"></i>
+                </div>
+                <div class="layui-input-block" id="newpwd2" style="display: none">
+                    <input type="text" name="username" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="newpwd-open"></i>
                 </div>
             </div>
-        </form>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+            </div>
+        </div>
     </div>
-    <!--form end-->
 </div>
 <!--修改密码 提示层 end-->
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/jquery.unveil.min.js"></script>
 <script type="text/javascript" src="../js/jquery.scrollUp.min.js"></script>
@@ -213,7 +206,9 @@
 <script type="text/javascript" src="../js/lanrenzhijia.js"></script>
 <script type="text/javascript" src="../js/public.js"></script>
 <script type="text/javascript" src="../js/toc.min.js"></script>
-<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<!--<script type="text/javascript" th:src="@{/js/home.js}"></script>-->
 <script type="text/javascript">
     var message;
     layui.config({
@@ -228,7 +223,10 @@
         app.set({
             type: 'iframe'
         }).init();
-        $('#editpwd').on('click', function() {
+    });
+    $(document).ready(function() {
+        var first = sessionStorage.getItem("first_login");
+        if(first !== "1") {
             layer.open({
                 title: false,
                 type: 1,
@@ -236,9 +234,9 @@
                 area: ['500px'],
                 shadeClose: true
             });
-        });
+        }
     });
-    $(document).ready(function() {
+    /*$(document).ready(function() {
         $("#oldpwd-open").click(function() {
             $("#oldpwd1").show();
             $("#oldpwd2").hide();
@@ -255,7 +253,7 @@
             $("#newpwd1").hide();
             $("#newpwd2").show();
         });
-    });
+    });*/
 </script>
 </body>
 </html>
