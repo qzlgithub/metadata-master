@@ -32,7 +32,7 @@ public class PageController
         ModelAndView view = new ModelAndView("index");
         ImageCode imageCode = CaptchaUtils.buildImageCode();
         HttpSession session = request.getSession();
-        session.setAttribute(Field.CAPTCHA_CODE, imageCode.getCode());
+        session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + imageCode.getBase64Code());
         logger.info("验证码：{}", imageCode.getCode());
         return view;

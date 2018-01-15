@@ -12,6 +12,10 @@ public class UserDTO extends BaseDTO
     private String managerQq;
     private Integer firstLogin;
 
+    public UserDTO()
+    {
+    }
+
     public UserDTO(RestResult result)
     {
         super(result);

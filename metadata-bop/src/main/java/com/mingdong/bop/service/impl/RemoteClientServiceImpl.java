@@ -7,10 +7,12 @@ import com.mingdong.bop.constant.SysParam;
 import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientMessage;
 import com.mingdong.bop.domain.entity.ClientUser;
+import com.mingdong.bop.domain.entity.Manager;
 import com.mingdong.bop.domain.entity.SysConfig;
 import com.mingdong.bop.domain.mapper.ClientMapper;
 import com.mingdong.bop.domain.mapper.ClientMessageMapper;
 import com.mingdong.bop.domain.mapper.ClientUserMapper;
+import com.mingdong.bop.domain.mapper.ManagerMapper;
 import com.mingdong.bop.domain.mapper.SysConfigMapper;
 import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
@@ -36,11 +38,13 @@ import java.util.List;
 
 public class RemoteClientServiceImpl implements RemoteClientService
 {
-    private static Logger lo4gger = LoggerFactory.getLogger(RemoteProductServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(RemoteClientService.class);
     @Resource
     private Param param;
     @Resource
     private SysConfigMapper sysConfigMapper;
+    @Resource
+    private ManagerMapper managerMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -74,10 +78,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
         {
             return new UserDTO(RestResult.INVALID_PASSCODE);
         }
+        Manager manager = managerMapper.findById(client.getManagerId());
         UserDTO dto = new UserDTO(RestResult.SUCCESS);
         dto.setUserId(user.getId());
         dto.setName(user.getName());
-        dto.setManagerQq("");
+        dto.setManagerQq(manager == null ? "" : manager.getQq());
         dto.setFirstLogin(Constant.DEFAULT_ENC_PWD.equals(user.getPassword()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
         return dto;
     }

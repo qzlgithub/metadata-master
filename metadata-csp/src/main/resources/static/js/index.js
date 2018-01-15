@@ -57,12 +57,12 @@ function userLogin() {
         url: "/client/user/login",
         dataType: "json",
         contentType: "application/json",
-        data: JSON.stringify({"username": username, "password": password, "code": code}),
+        data: JSON.stringify({"username": username, "password": MD5(password), "code": code}),
         success: function(res) {
             if(res.errCode === '000000') {
                 var data = res.dataMap;
                 sessionStorage.setItem("user_name", data.name);
-                sessionStorage.setItem("username", data.username);
+                sessionStorage.setItem("manager_qq", data.managerQq);
                 sessionStorage.setItem("first_login", data.firstLogin);
                 window.location.href = "/home.html";
             }

@@ -2,9 +2,16 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
-public class BaseDTO
+import java.io.Serializable;
+
+public class BaseDTO implements Serializable
 {
     private String code;
+
+    public BaseDTO()
+    {
+        code = RestResult.SUCCESS.getCode();
+    }
 
     public BaseDTO(RestResult result)
     {

@@ -47,4 +47,5 @@ public interface Field
 
     String CAPTCHA_CODE = "captchaCode";
     String IMAGE_CAPTCHA = "imageCaptcha";
+    String MANAGER_QQ = "managerQq";
 }
