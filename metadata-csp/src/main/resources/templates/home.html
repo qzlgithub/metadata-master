@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <title>沃动科技</title>
@@ -34,33 +35,7 @@
 
 <body data-spy="scroll" data-target="#myScrollspy">
 <!--header-->
-<div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
-    <div class="container header-mt10">
-        <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"
-               onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
-        </div>
-        <div class="navbar-collapse collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li><a href="index.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
-                <li><a href="programme.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
-                </li>
-                <li><a href="case.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
-                <li class="active">
-                    <a href="apidownload.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">设置中心</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right hidden-sm">
-                <li>
-                    <span><i class="icon user"></i>上午好，李先生</span>
-                    <span><i class="icon exit"></i>退出  &nbsp;&nbsp;&nbsp;|</span>
-                    <span id="editpwd" class="cp">修改密码</span>
-                    <span><i class="icon eamil"></i>消息</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<div th:include="common :: top"></div>
 <!--header end-->
 <!--advimg-->
 <div class="masthead pb0"></div>
