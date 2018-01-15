@@ -80,6 +80,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         Manager manager = managerMapper.findById(client.getManagerId());
         UserDTO dto = new UserDTO(RestResult.SUCCESS);
+        dto.setClientId(user.getClientId());
         dto.setUserId(user.getId());
         dto.setName(user.getName());
         dto.setManagerQq(manager == null ? "" : manager.getQq());

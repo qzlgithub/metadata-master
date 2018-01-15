@@ -24,6 +24,7 @@ public enum RestResult
     ONLY_PRIMARY_USER("100018", "非主账号无此操作权限"),
     CONTRACT_IS_EXIST("100019","合同编号已存在"),
     PRODUCT_NAME_EXIST("100020","产品名称已存在"),
+    ACCESS_LIMITED("999998","访问受限（缺少访问凭证）"),
     INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
 
     private final String code;

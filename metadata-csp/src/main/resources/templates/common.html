@@ -11,16 +11,19 @@
             </div>
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/home.html}" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
-                    <li><a th:href="@{/product/mine.html}" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
+                    <li><a th:href="@{/home.html}"
+                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v2doc'])">主页</a></li>
+                    <li><a th:href="@{/product/mine.html}"
+                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v3doc'])">我的服务</a>
                     </li>
-                    <li><a th:href="@{/product/all.html}" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
+                    <li><a th:href="@{/product/all.html}"
+                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">全部服务</a></li>
                     <li class="active"><a th:href="@{/system/account-list.html}"
                                           onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">设置中心</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li>
-                        <span><i class="icon user"></i>上午好，李先生</span>
+                        <span><i class="icon user"></i><md id="greeting">上午好，李先生</md></span>
                         <span><i class="icon exit"></i>退出  &nbsp;&nbsp;&nbsp;|</span>
                         <span>修改密码</span>
                         <span><i class="icon eamil"></i>消息</span>
@@ -39,12 +42,15 @@
                 <div class="ServiceBox">
                     <em></em>
                     <div class="bjfff"></div>
-                    <P class="p2"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540004&amp;site=qq&amp;menu=yes"><img
-                            border="0" src="../images/icon/qq-sq.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
-                    <P class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540001&amp;site=qq&amp;menu=yes"><img
-                            border="0" src="../images/icon/qq-sh.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
-                    <p class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885539934&amp;site=qq&amp;menu=yes"><img
-                            border="0" src="../images/icon/qq-js.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></p>
+                    <P class="p2">
+                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540004&amp;site=qq&amp;menu=yes">
+                            <img border="0" src="../images/icon/qq-sq.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
+                    <P class="p2 mt5">
+                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885540001&amp;site=qq&amp;menu=yes">
+                            <img border="0" src="../images/icon/qq-sh.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
+                    <p class="p2 mt5">
+                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2885539934&amp;site=qq&amp;menu=yes">
+                            <img border="0" src="../images/icon/qq-js.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></p>
                     <p><img border="0" src="images/icon/400.png"/></p>
                 </div>
             </li>
@@ -74,27 +80,37 @@
                        smartracker="on">关于蚂蚁</a></li>
                 <li><a href="https://www.antgroup.com" target="_blank" seed="mpFooterLinks-linkT15"
                        smartracker="on">蚂蚁金服</a></li>
-                <li><a href="https://www.alipay.com" target="_blank" seed="mpFooterLinks-linkT16" smartracker="on">支付宝</a>
+                <li><a href="https://www.alipay.com" target="_blank" seed="mpFooterLinks-linkT16"
+                       smartracker="on">支付宝</a>
                 </li>
-                <li><a href="https://www.koubei.com" target="_blank" seed="mpFooterLinks-linkT17" smartracker="on">口碑</a>
+                <li><a href="https://www.koubei.com" target="_blank" seed="mpFooterLinks-linkT17"
+                       smartracker="on">口碑</a>
                 </li>
-                <li><a href="https://www.zmxy.com.cn" target="_blank" seed="mpFooterLinks-linkT18" smartracker="on">芝麻信用</a>
+                <li><a href="https://www.zmxy.com.cn" target="_blank" seed="mpFooterLinks-linkT18"
+                       smartracker="on">芝麻信用</a>
                 </li>
             </ul>
             <ul class="mpFooterLinks">
-                <li><a href="http://www.alibabagroup.com/cn/global/home" target="_blank" seed="mpFooterLinks-linkT19"
+                <li>
+                    <a href="http://www.alibabagroup.com/cn/global/home" target="_blank" seed="mpFooterLinks-linkT19"
                        smartracker="on">阿里巴巴集团</a></li>
-                <li><a href="https://www.alibaba.com" target="_blank" seed="mpFooterLinks-linkT20"
+                <li>
+                    <a href="https://www.alibaba.com" target="_blank" seed="mpFooterLinks-linkT20"
                        smartracker="on">阿里巴巴国际站</a></li>
-                <li><a href="https://www.1688.com/" target="_blank" seed="mpFooterLinks-linkT21" smartracker="on">1688</a>
+                <li><a href="https://www.1688.com/" target="_blank" seed="mpFooterLinks-linkT21"
+                       smartracker="on">1688</a>
                 </li>
-                <li><a href="https://www.taobao.com/" target="_blank" seed="mpFooterLinks-linkT22" smartracker="on">淘宝</a>
+                <li><a href="https://www.taobao.com/" target="_blank" seed="mpFooterLinks-linkT22"
+                       smartracker="on">淘宝</a>
                 </li>
-                <li><a href="https://www.tmall.com/" target="_blank" seed="mpFooterLinks-linkT23" smartracker="on">天猫</a>
+                <li><a href="https://www.tmall.com/" target="_blank" seed="mpFooterLinks-linkT23"
+                       smartracker="on">天猫</a>
                 </li>
-                <li><a href="https://ju.taobao.com/" target="_blank" seed="mpFooterLinks-linkT24" smartracker="on">聚划算</a>
+                <li><a href="https://ju.taobao.com/" target="_blank" seed="mpFooterLinks-linkT24"
+                       smartracker="on">聚划算</a>
                 </li>
-                <li><a href="http://www.alimama.com/" target="_blank" seed="mpFooterLinks-linkT25" smartracker="on">阿里妈妈</a>
+                <li><a href="http://www.alimama.com/" target="_blank" seed="mpFooterLinks-linkT25"
+                       smartracker="on">阿里妈妈</a>
                 </li>
                 <li><a href="https://www.aliyun.com/" target="_blank" seed="mpFooterLinks-linkT26"
                        smartracker="on">阿里云计算</a></li>

@@ -14,7 +14,7 @@
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
 
     <!-- Site CSS -->
-    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet"/>
@@ -67,8 +67,9 @@
                 <div class="border-title">多账号管理<i class="col1 fz-12">（子账号需登录配置Appkey才能调用接口）</i></div>
                 <div class="clearfix mt30">
             <span class="fr mb10">
-                共<i class="col1 fz-16 pr5 pl5">3</i>个，还可新增<i class="col1 fz-16 pr5 pl5">3</i>个<a id="addaccount"
-                                                                                                 class="add-button ml10 cp">新增账号</a>
+                共<i class="col1 fz-16 pr5 pl5">3</i>个，还可新增<i class="col1 fz-16 pr5 pl5">3</i>个<a href="javascript" id="addaccount"
+                                                                                                 class="add-button ml10 cp"
+                                                                                                 onclick="addAccount()">新增账号</a>
             </span>
                 </div>
                 <table class="layui-table mt10">
@@ -80,7 +81,7 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="dataBody">
                     <tr>
                         <td>001</td>
                         <td>admin</td>
@@ -220,17 +221,18 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/jquery.unveil.min.js"></script>
-<script src="../js/jquery.scrollUp.min.js"></script>
-<script src="../js/jquery.matchHeight-min.js"></script>
-<script src="../js/site.min.js"></script>
-<script src="../js/bootstrap-touch-slider.js"></script>
-<script src="../js/lanrenzhijia.js"></script>
-<script src="../js/public.js"></script>
-<script src="../js/toc.min.js"></script>
-<script src="../plugins/layui/layui.js"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.scrollUp.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.matchHeight-min.js}"></script>
+<script type="text/javascript" th:src="@{/js/site.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-touch-slider.js}"></script>
+<script type="text/javascript" th:src="@{/js/lanrenzhijia.js}"></script>
+<script type="text/javascript" th:src="@{/js/public.js}"></script>
+<script type="text/javascript" th:src="@{/js/toc.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/account-list.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script>
     var message;
     layui.config({
@@ -245,24 +247,6 @@
         app.set({
             type: 'iframe'
         }).init();
-        $('#editaccount').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#edit-account'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });
-        $('#addaccount').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#add-account'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });
     });
 </script>
 </body>

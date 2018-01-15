@@ -1,5 +1,6 @@
 package com.mingdong.core.model;
 
+import com.alibaba.fastjson.JSON;
 import com.mingdong.core.constant.RestResult;
 
 import java.util.HashMap;
@@ -15,6 +16,13 @@ public class BLResp
     {
         BLResp resp = new BLResp();
         return resp.result(RestResult.SUCCESS);
+    }
+
+    public static String getErrResp(RestResult result)
+    {
+        BLResp resp = new BLResp();
+        resp.result(result);
+        return JSON.toJSONString(resp);
     }
 
     public String getErrCode()

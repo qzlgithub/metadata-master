@@ -4,6 +4,7 @@ import com.mingdong.core.constant.RestResult;
 
 public class UserDTO extends BaseDTO
 {
+    private Long clientId;
     private Long userId;
     private String username;
     private String name;
@@ -24,6 +25,16 @@ public class UserDTO extends BaseDTO
     public Long getUserId()
     {
         return userId;
+    }
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
     }
 
     public void setUserId(Long userId)

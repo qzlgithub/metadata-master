@@ -42,10 +42,10 @@ public class PageController
      * 用户首页
      */
     @LoginRequired
-    @GetMapping(value = {"/home.html"})
+    @GetMapping(value = "home.html")
     public ModelAndView getHomeData()
     {
-        ModelAndView view = new ModelAndView("/home");
+        ModelAndView view = new ModelAndView("home");
         //        BLResp resp = BLResp.build();
         //        clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         return view;
