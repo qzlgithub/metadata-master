@@ -2,11 +2,10 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
-import com.mingdong.core.model.dto.ProductRequestDTO;
+import com.mingdong.core.model.dto.ProductRecListDTO;
+import com.mingdong.core.model.dto.ProductReqListDTO;
 
 import java.util.Date;
-import java.util.List;
 
 public interface RemoteProductService
 {
@@ -20,7 +19,7 @@ public interface RemoteProductService
      * @param page
      * @param resp
      */
-    List<ProductRechargeDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
+    ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
 
     /**
      * 获取客户请求记录
@@ -32,6 +31,6 @@ public interface RemoteProductService
      * @param page
      * @param resp
      */
-    List<ProductRequestDTO> getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
+    ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
 
 }

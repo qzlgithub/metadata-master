@@ -9,8 +9,11 @@ import com.mingdong.bop.domain.mapper.ApiReqMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.common.model.Page;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
+import com.mingdong.core.model.dto.ProductReqListDTO;
 import com.mingdong.core.model.dto.ProductRequestDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,12 +39,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
     ApiReqInfoMapper apiReqInfoMapper;
 
     @Override
-    public List<ProductRechargeDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+    public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
             BLResp resp)
     {
         if(page == null)
         {
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+            ProductRecListDTO productRecListDTO = new ProductRecListDTO(RestResult.SUCCESS);
             if(CollectionUtils.isNotEmpty(dataList))
             {
                 List<ProductRechargeDTO> dataDtoList = new ArrayList<ProductRechargeDTO>();
@@ -52,11 +56,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     dataDtoList.add(productRechargeDTO);
                     productRechargeToDTO(item, productRechargeDTO);
                 }
-                return dataDtoList;
+                productRecListDTO.setProductRechargeDTOList(dataDtoList);
+                return productRecListDTO;
             }
             else
             {
-                return new ArrayList<ProductRechargeDTO>();
+                productRecListDTO.setProductRechargeDTOList(new ArrayList<ProductRechargeDTO>());
+                return productRecListDTO;
             }
         }
         else
@@ -67,6 +73,9 @@ public class RemoteProductServiceImpl implements RemoteProductService
             resp.addData(Field.PAGES, pages);
             resp.addData(Field.PAGE_NUM, page.getPageNum());
             resp.addData(Field.PAGE_SIZE, page.getPageSize());
+            ProductRecListDTO productRecListDTO = new ProductRecListDTO(RestResult.SUCCESS);
+            productRecListDTO.setTotal(total);
+            productRecListDTO.setPages(pages);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
@@ -79,11 +88,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     dataDtoList.add(productRechargeDTO);
                     productRechargeToDTO(item, productRechargeDTO);
                 }
-                return dataDtoList;
+                productRecListDTO.setProductRechargeDTOList(dataDtoList);
+                return productRecListDTO;
             }
             else
             {
-                return new ArrayList<ProductRechargeDTO>();
+                productRecListDTO.setProductRechargeDTOList(new ArrayList<ProductRechargeDTO>());
+                return productRecListDTO;
             }
         }
     }
@@ -106,12 +117,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public List<ProductRequestDTO> getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+    public ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
             BLResp resp)
     {
         if(page == null)
         {
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+            ProductReqListDTO productReqListDTO = new ProductReqListDTO(RestResult.SUCCESS);
             if(CollectionUtils.isNotEmpty(dataList))
             {
                 List<ProductRequestDTO> dataDtoList = new ArrayList<ProductRequestDTO>();
@@ -122,11 +134,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     dataDtoList.add(dataDto);
                     productRequestToDto(item, dataDto);
                 }
-                return dataDtoList;
+                productReqListDTO.setProductRequestDTOList(dataDtoList);
+                return productReqListDTO;
             }
             else
             {
-                return new ArrayList<ProductRequestDTO>();
+                productReqListDTO.setProductRequestDTOList(new ArrayList<ProductRequestDTO>());
+                return productReqListDTO;
             }
         }
         else
@@ -137,6 +151,9 @@ public class RemoteProductServiceImpl implements RemoteProductService
             resp.addData(Field.PAGES, pages);
             resp.addData(Field.PAGE_NUM, page.getPageNum());
             resp.addData(Field.PAGE_SIZE, page.getPageSize());
+            ProductReqListDTO productReqListDTO = new ProductReqListDTO(RestResult.SUCCESS);
+            productReqListDTO.setTotal(total);
+            productReqListDTO.setPages(pages);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
@@ -149,11 +166,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     dataDtoList.add(dataDto);
                     productRequestToDto(item, dataDto);
                 }
-                return dataDtoList;
+                productReqListDTO.setProductRequestDTOList(dataDtoList);
+                return productReqListDTO;
             }
             else
             {
-                return new ArrayList<ProductRequestDTO>();
+                productReqListDTO.setProductRequestDTOList(new ArrayList<ProductRequestDTO>());
+                return productReqListDTO;
             }
         }
     }

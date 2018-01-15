@@ -5,7 +5,9 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
+import com.mingdong.core.model.dto.ProductReqListDTO;
 import com.mingdong.core.model.dto.ProductRequestDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.csp.constant.Field;
@@ -36,8 +38,9 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
             BLResp resp)
     {
-        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
+        ProductRecListDTO productRecListDTO = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
                 endDate, page, resp);
+        List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<Map<String, Object>>(dataList.size());
@@ -75,8 +78,9 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        List<ProductRechargeDTO> dataList = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
+        ProductRecListDTO productRecListDTO = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate,
                 endDate, page, BLResp.build());
+        List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             ProductRechargeDTO dataDTO;
@@ -106,8 +110,9 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
             BLResp resp)
     {
-        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
+        ProductReqListDTO productReqListDTO = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
                 endDate, page, resp);
+        List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<Map<String, Object>>(dataList.size());
@@ -141,8 +146,9 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        List<ProductRequestDTO> dataList = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
+        ProductReqListDTO productReqListDTO = remoteProductService.getProductRequestRecord(clientId, productId, fromDate,
                 endDate, page, BLResp.build());
+        List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             ProductRequestDTO dataDTO;
