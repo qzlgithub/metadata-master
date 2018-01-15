@@ -9,6 +9,10 @@ public class UserListDTO extends BaseDTO
     private int allowedQty;
     private List<SubUserDTO> userList;
 
+    public UserListDTO(){
+
+    }
+
     public UserListDTO(RestResult result)
     {
         super(result);

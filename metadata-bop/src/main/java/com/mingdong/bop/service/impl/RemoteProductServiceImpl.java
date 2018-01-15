@@ -1,7 +1,6 @@
 package com.mingdong.bop.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.domain.entity.ApiReqInfo;
 import com.mingdong.bop.domain.entity.ProductRechargeInfo;
 import com.mingdong.bop.domain.mapper.ApiReqInfoMapper;
@@ -10,7 +9,6 @@ import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
@@ -39,8 +37,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     ApiReqInfoMapper apiReqInfoMapper;
 
     @Override
-    public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
-            BLResp resp)
+    public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page)
     {
         if(page == null)
         {
@@ -69,10 +66,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             int total = productRechargeMapper.countBy(clientId, productId, fromDate, endDate);
             int pages = page.getTotalPage(total);
-            resp.addData(Field.TOTAL, total);
-            resp.addData(Field.PAGES, pages);
-            resp.addData(Field.PAGE_NUM, page.getPageNum());
-            resp.addData(Field.PAGE_SIZE, page.getPageSize());
             ProductRecListDTO productRecListDTO = new ProductRecListDTO(RestResult.SUCCESS);
             productRecListDTO.setTotal(total);
             productRecListDTO.setPages(pages);
@@ -117,8 +110,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
-            BLResp resp)
+    public ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page)
     {
         if(page == null)
         {
@@ -147,10 +139,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             int total = apiReqMapper.countBy(clientId, productId, fromDate, endDate);
             int pages = page.getTotalPage(total);
-            resp.addData(Field.TOTAL, total);
-            resp.addData(Field.PAGES, pages);
-            resp.addData(Field.PAGE_NUM, page.getPageNum());
-            resp.addData(Field.PAGE_SIZE, page.getPageSize());
             ProductReqListDTO productReqListDTO = new ProductReqListDTO(RestResult.SUCCESS);
             productReqListDTO.setTotal(total);
             productReqListDTO.setPages(pages);

@@ -1,6 +1,8 @@
 package com.mingdong.core.model.dto;
 
-public class SubUserDTO
+import java.io.Serializable;
+
+public class SubUserDTO implements Serializable
 {
     private Long userId;
     private String username;
