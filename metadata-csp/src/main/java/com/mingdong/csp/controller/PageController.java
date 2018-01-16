@@ -58,8 +58,8 @@ public class PageController
     @GetMapping(value = {"/product/all.html"})
     public ModelAndView productAll()
     {
-
         ModelAndView view = new ModelAndView("/product/all");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -68,6 +68,7 @@ public class PageController
     public ModelAndView productDetail()
     {
         ModelAndView view = new ModelAndView("/product/detail");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -76,6 +77,7 @@ public class PageController
     public ModelAndView productIntroduce()
     {
         ModelAndView view = new ModelAndView("/product/introduce");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -84,6 +86,7 @@ public class PageController
     public ModelAndView productMine()
     {
         ModelAndView view = new ModelAndView("/product/mine");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -92,6 +95,7 @@ public class PageController
     public ModelAndView productRecharge()
     {
         ModelAndView view = new ModelAndView("/product/recharge");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -100,6 +104,7 @@ public class PageController
     public ModelAndView productRequest()
     {
         ModelAndView view = new ModelAndView("/product/request");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -108,6 +113,7 @@ public class PageController
     public ModelAndView systemAccountList()
     {
         ModelAndView view = new ModelAndView("/system/account-list");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -116,6 +122,7 @@ public class PageController
     public ModelAndView systemAccountSet()
     {
         ModelAndView view = new ModelAndView("/system/account-set");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
@@ -124,6 +131,7 @@ public class PageController
     public ModelAndView systemMessage()
     {
         ModelAndView view = new ModelAndView("/system/message");
+        view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 

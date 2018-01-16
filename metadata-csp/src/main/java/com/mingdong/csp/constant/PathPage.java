@@ -3,9 +3,10 @@ package com.mingdong.csp.constant;
 public enum PathPage
 {
     HOME_PAGE("/home.html", "home"),
-    MANAGER_ADDITION("/manager/addition.html", "my-product"),
-    MANAGER_EDIT("/manager/edit.html", "all-product"),
-    ROLE_INDEX("/role/index.html", "system");
+    MINE_PROD("/product/mine.html", "my-product"),
+    ALL_PROD("/product/all.html", "all-product"),
+    SETTING_MESSAGE("/system/message.html", "system"),
+    SETTING_ACCOUNT("/system/account-list.html", "system");
 
     private String path;
     private String page;
