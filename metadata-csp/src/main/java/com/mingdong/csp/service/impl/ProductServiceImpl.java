@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.TOTAL, productRecListDTO.getTotal()).addData(Field.PAGES, productRecListDTO.getPages()).addData(Field.PAGE_NUM,
+        resp.addData(Field.CODE,productRecListDTO.getCode()).addData(Field.TOTAL, productRecListDTO.getTotal()).addData(Field.PAGES, productRecListDTO.getPages()).addData(Field.PAGE_NUM,
                 page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
@@ -129,7 +129,7 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.TOTAL, productReqListDTO.getTotal()).addData(Field.PAGES, productReqListDTO.getPages()).addData(Field.PAGE_NUM,
+        resp.addData(Field.CODE,productReqListDTO.getCode()).addData(Field.TOTAL, productReqListDTO.getTotal()).addData(Field.PAGES, productReqListDTO.getPages()).addData(Field.PAGE_NUM,
                 page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
