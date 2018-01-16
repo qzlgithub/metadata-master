@@ -9,42 +9,43 @@ layui.config({
     message = layui.message;
     //主入口
     app.set({type: 'iframe'}).init();
-    $('#chgPwd').on('click', function() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: $('#edit-pwd'),
-            area: ['500px'],
-            shadeClose: true
-        });
-    });
     $("#home-greeting").text(getGreeting());
     var first = sessionStorage.getItem("first_login");
     if(first !== "1") {
         layer.open({
             title: false,
             type: 1,
-            content: $('#edit-pwd'),
+            content: $('#init-password'),
             area: ['500px'],
             shadeClose: true
         });
     }
 });
-$(document).ready(function() {
-    $("#org-show").click(function() {
-        $("#org-enc-pwd").hide();
-        $("#org-dec-pwd").show();
-    });
-    $("#org-hide").click(function() {
-        $("#org-enc-pwd").show();
-        $("#org-dec-pwd").hide();
-    });
-    $("#new-show").click(function() {
-        $("#new-enc-pwd").hide();
-        $("#new-dec-pwd").show();
-    });
-    $("#new-hide").click(function() {
-        $("#new-enc-pwd").show();
-        $("#new-dec-pwd").hide();
-    });
+$("#init-org-enc-password").keyup(function() {
+    $("#init-org-dec-password").val($("#init-org-enc-password").val());
+});
+$("#init-org-dec-password").keyup(function() {
+    $("#init-org-enc-password").val($("#init-org-dec-password").val());
+});
+$("#init-new-enc-password").keyup(function() {
+    $("#init-new-dec-password").val($("#init-new-enc-password").val());
+});
+$("#init-new-dec-password").keyup(function() {
+    $("#init-new-enc-password").val($("#init-new-dec-password").val());
+});
+$("#init-org-show").click(function() {
+    $("#init-org-enc-pwd").hide();
+    $("#init-org-dec-pwd").show();
+});
+$("#init-org-hide").click(function() {
+    $("#init-org-enc-pwd").show();
+    $("#init-org-dec-pwd").hide();
+});
+$("#init-new-show").click(function() {
+    $("#init-new-enc-pwd").hide();
+    $("#init-new-dec-pwd").show();
+});
+$("#init-new-hide").click(function() {
+    $("#init-new-enc-pwd").show();
+    $("#init-new-dec-pwd").hide();
 });

@@ -157,31 +157,31 @@
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
 
-<div id="edit-pwd" style="display: none">
+<div id="init-password" style="display: none">
     <div class="layui-layer-title">修改密码</div>
     <div class="mb30">
         <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
         <div class="m30">
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
-                <div class="layui-input-block" id="org-enc-pwd">
-                    <input type="password" id="org-enc-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="close-eye icon" id="org-show"></i>
+                <div class="layui-input-block" id="init-org-enc-pwd">
+                    <input type="password" id="init-org-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="init-org-show"></i>
                 </div>
-                <div class="layui-input-block" id="org-dec-pwd" style="display: none">
-                    <input type="text" id="org-dec-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="open-eye icon" id="org-hide"></i>
+                <div class="layui-input-block" id="init-org-dec-pwd" style="display: none">
+                    <input type="text" id="init-org-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="init-org-hide"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
-                <div class="layui-input-block" id="new-enc-pwd">
-                    <input type="password" id="new-enc-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="close-eye icon" id="new-show"></i>
+                <div class="layui-input-block" id="init-new-enc-pwd">
+                    <input type="password" id="init-new-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="close-eye icon" id="init-new-show"></i>
                 </div>
-                <div class="layui-input-block" id="new-dec-pwd" style="display: none">
-                    <input type="text" id="new-dec-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="open-eye icon" id="new-hide"></i>
+                <div class="layui-input-block" id="init-new-dec-pwd" style="display: none">
+                    <input type="text" id="init-new-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <i class="open-eye icon" id="init-new-hide"></i>
                 </div>
             </div>
         </div>
@@ -192,6 +192,8 @@
         </div>
     </div>
 </div>
+
+<div id="change-password" style="display: none" th:include="common :: password"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>

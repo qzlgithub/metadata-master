@@ -113,17 +113,11 @@
 
 
 </div>
-<!--内容 end-->
 
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
+<div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
@@ -136,6 +130,7 @@
 <script type="text/javascript" th:src="@{/js/toc.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/message.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
 </html>
   

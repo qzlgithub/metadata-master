@@ -2,7 +2,6 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta charset="utf-8"/>
     <title>明动科技</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -24,7 +23,6 @@
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
 
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -34,38 +32,26 @@
     <!-- Favicons -->
     <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
     <link rel="shortcut icon" href="images/icon/favicon.png"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
     位置：<a href=""> 主页</a> > <span class="col2">设置中心</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--left-->
         <div th:include="system-common :: left"></div>
-        <!--left end-->
-        <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
             <!--tab-->
             <div class="mt30 pl10 pr10 pb30">
                 <div class="border-title">多账号管理<i class="col1 fz-12">（子账号需登录配置Appkey才能调用接口）</i></div>
                 <div class="clearfix mt30">
             <span class="fr mb10">
-                共<i class="col1 fz-16 pr5 pl5" id="acount">3</i>个，还可新增<i class="col1 fz-16 pr5 pl5">3</i>个<a href="javascript:"
-                                                                                                            id="addaccount"
-                                                                                                 class="add-button ml10 cp"
-                                                                                                 onclick="addAccount()">新增账号</a>
+                共<i class="col1 fz-16 pr5 pl5" id="acount">3</i>个，
+                还可新增<i class="col1 fz-16 pr5 pl5">3</i>个
+                <a href="javascript:" id="addaccount" class="add-button ml10 cp" onclick="addAccount()">新增账号</a>
             </span>
                 </div>
                 <table class="layui-table mt10">
@@ -90,17 +76,12 @@
 
 
 </div>
-<!--内容 end-->
 
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
+<div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!--新增账号 提示层-->
 <div id="add-account" style="display: none">
-    <!--form-->
     <div class="layui-layer-title">新增账号</div>
     <div class="mb30">
         <form class="layui-form">
@@ -149,13 +130,9 @@
             </div>
         </form>
     </div>
-    <!--form end-->
 </div>
-<!--新增账号 提示层 end-->
 
-<!--修改账号 提示层-->
 <div id="edit-account" style="display: none">
-    <!--form-->
     <div class="layui-layer-title">修改账号</div>
     <div class="mb30">
         <form class="layui-form">
@@ -199,14 +176,8 @@
             </div>
         </form>
     </div>
-    <!--form end-->
 </div>
-<!--修改账号 提示层 end-->
 
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
@@ -219,6 +190,7 @@
 <script type="text/javascript" th:src="@{/js/toc.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/account-list.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script>
     var message;
     layui.config({
