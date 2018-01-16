@@ -67,12 +67,13 @@ public class ClientController
     /**
      * 用户修改密码
      */
+    @LoginRequired
     @PostMapping(value = "user/password")
     public BLResp changePassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        String oldPwd = jsonReq.getString(Field.OLD_PWD);
-        String newPwd = jsonReq.getString(Field.NEW_PWD);
+        String oldPwd = jsonReq.getString(Field.ORG_PASSWORD);
+        String newPwd = jsonReq.getString(Field.NEW_PASSWORD);
         if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);

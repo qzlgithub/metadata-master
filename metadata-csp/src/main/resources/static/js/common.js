@@ -49,6 +49,15 @@ $("#exit").click(function() {
         }
     });
 });
+$("#change-pwd").click(function() {
+    var orgPwd = $("#org-enc-password").val();
+    var newPwd = $("#new-enc-password").val();
+    if(orgPwd === '' || newPwd === '') {
+        layer.msg("请填写正确的密码！");
+        return;
+    }
+    changePwd(orgPwd, newPwd);
+});
 
 function getGreeting() {
     var hour = new Date().getHours();
@@ -61,4 +70,31 @@ function getGreeting() {
     else {
         return "晚上好，" + sessionStorage.getItem("user_name");
     }
+}
+
+function changePwd(orgPwd, newPwd) {
+    $.ajax({
+        type: "POST",
+        url: "/client/user/password",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "orgPassword": MD5(orgPwd),
+            "newPassword": MD5(newPwd)
+        }),
+        success: function(data) {
+            if(data.errCode !== '000000') {
+                layer.msg("修改失败:" + data.errMsg, {
+                    time: 2000
+                });
+            }
+            else {
+                layer.msg("修改成功", {
+                    time: 2000
+                }, function() {
+                    layer.closeAll();
+                });
+            }
+        }
+    })
 }

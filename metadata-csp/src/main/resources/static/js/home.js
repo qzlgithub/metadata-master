@@ -49,3 +49,12 @@ $("#init-new-hide").click(function() {
     $("#init-new-enc-pwd").show();
     $("#init-new-dec-pwd").hide();
 });
+$("#chg-init-pwd").click(function() {
+    var orgPwd = $("#init-org-enc-password").val();
+    var newPwd = $("#init-new-enc-password").val();
+    if(orgPwd === '' || newPwd === '') {
+        layer.msg("请填写正确的密码！");
+        return;
+    }
+    changePwd(orgPwd, newPwd);
+});

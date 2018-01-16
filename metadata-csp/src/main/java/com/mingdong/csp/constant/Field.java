@@ -7,7 +7,9 @@ public interface Field
     String PASSWORD = "password";
 
     String OLD_PWD = "odlPwd";
+    String ORG_PASSWORD = "orgPassword";
     String NEW_PWD = "newPwd";
+    String NEW_PASSWORD = "newPassword";
     String NAME = "name";
     String PHONE = "phone";
     String CLIENT_USER_ID = "clientUserId";
