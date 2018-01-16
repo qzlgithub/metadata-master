@@ -13,6 +13,7 @@ public interface Field
     String NAME = "name";
     String PHONE = "phone";
     String CLIENT_USER_ID = "clientUserId";
+    String CLIENT_ID="clientId";
     String FIRST_LOGIN = "firstLogin";
     String ALLOWED_QTY = "allowedQty";
     String SUB_USER_LIST = "subUserList";

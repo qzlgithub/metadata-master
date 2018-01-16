@@ -15,6 +15,7 @@ public enum RestResult
     ACCOUNT_IS_EXIST("100010", "账号已存在"),
     USERNAME_EXIST("100011", "用户名已存在"),
     INVALID_CAPTCHA("100012", "无效的验证码"),
+    ACCOUNT_COUNT_MAX("100013", "账号数量已到上限"),
 
     INVALID_PRODUCT_NAME("100013", "无效的产品类型名称"),
     KEY_FIELD_MISSING("100014", "关键字段不能为空"),

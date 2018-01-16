@@ -104,14 +104,27 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changeStatus(Long clientUserId, BLResp resp)
     {
-
+        UserDTO userDTO = clientApi.changeStatus(clientUserId);
+        if(userDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(userDTO.getResult());
+            return;
+        }
+        resp.addData(Field.USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.NAME,
+                userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
-    public void editChildAccount(Long clientUserId, String username, String password, String name, String phone,
-            BLResp resp)
+    public void editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled, BLResp resp)
     {
-
+        UserDTO userDTO = clientApi.editChildAccount(clientUserId, username, password, name, phone,enabled);
+        if(userDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(userDTO.getResult());
+            return;
+        }
+        resp.addData(Field.USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.NAME,
+                userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
@@ -178,8 +191,8 @@ public class ClientServiceImpl implements ClientService
             resp.result(dto.getResult());
             return;
         }
-        resp.addData(Field.TOTAL, dto.getTotal()).addData(Field.PAGES, dto.getPages()).addData(Field.PAGE_NUM,
-                page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, dto.getTotal()).addData(Field.PAGES, dto.getPages()).addData(Field.PAGE_NUM, page.getPageNum()).addData(
+                Field.PAGE_SIZE, page.getPageSize());
         List<Map<String, Object>> list = new ArrayList<>();
         for(MessageDTO m : dto.getMessages())
         {
@@ -197,5 +210,19 @@ public class ClientServiceImpl implements ClientService
     {
         BaseDTO dto = clientApi.setSubUserDeleted(primaryUserId, subUserId);
         resp.result(dto.getResult());
+    }
+
+    @Override
+    public void getAccountByUserId(Long userId, BLResp resp)
+    {
+        UserDTO userDTO = clientApi.getAccountByUserId(userId);
+        if(userDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(userDTO.getResult());
+            return;
+        }
+        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.USERNAME,
+                userDTO.getUsername()).addData(Field.NAME, userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(
+                Field.ENABLED, userDTO.getEnabled());
     }
 }

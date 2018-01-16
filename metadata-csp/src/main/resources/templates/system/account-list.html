@@ -49,8 +49,8 @@
                 <div class="border-title">多账号管理<i class="col1 fz-12">（子账号需登录配置Appkey才能调用接口）</i></div>
                 <div class="clearfix mt30">
             <span class="fr mb10">
-                共<i class="col1 fz-16 pr5 pl5" id="acount">3</i>个，
-                还可新增<i class="col1 fz-16 pr5 pl5">3</i>个
+                共<i class="col1 fz-16 pr5 pl5" id="acountAll"></i>个，
+                还可新增<i class="col1 fz-16 pr5 pl5" id="canAddNumber"></i>个
                 <a href="javascript:" id="addaccount" class="add-button ml10 cp" onclick="addAccount()">新增账号</a>
             </span>
                 </div>
@@ -89,38 +89,38 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>账号：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" id="add-username" placeholder="请输入" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="password" id="add-pwd" placeholder="请输入" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>联系人：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" id="add-name" placeholder="请输入" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>联系电话：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" id="add-phone" placeholder="请输入" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>账号状态：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="radio" name="1" value="1" title="正常" checked=""/>
-                        <input type="radio" name="1" value="2" title="停用" checked=""/>
+                        <input type="radio" name="add-enabled"  value="1" title="正常" checked="checked"/>
+                        <input type="radio" name="add-enabled"  value="0" title="停用"/>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+                    <a class="layui-btn" lay-submit="" lay-filter="demo1" onclick="addSubmitAccount()">保存</a>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -137,41 +137,42 @@
     <div class="mb30">
         <form class="layui-form">
             <div class="m30">
+                <input type="hidden" id="edit-id"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>账号：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" placeholder="请输入" id="edit-username" class="layui-input" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>密码：</label>
+                    <label class="layui-form-label"><i class="col1"></i>密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="password" placeholder="为空表示不修改密码" id="edit-pwd" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>联系人：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" placeholder="请输入" id="edit-name" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>联系电话：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" placeholder="请输入" id="edit-phone" class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>账号状态：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="radio" name="1" value="1" title="正常" checked=""/>
-                        <input type="radio" name="1" value="2" title="停用" checked=""/>
+                        <input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常"/>
+                        <input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="停用"/>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <a class="layui-btn" lay-submit="" lay-filter="demo1">保存</a>
+                    <a class="layui-btn" lay-submit="" lay-filter="demo1" onclick="editSubmitAccount()">保存</a>
                 </div>
             </div>
         </form>

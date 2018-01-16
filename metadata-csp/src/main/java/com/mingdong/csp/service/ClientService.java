@@ -29,11 +29,13 @@ public interface ClientService
     /**
      * 编辑子账号
      */
-    void editChildAccount(Long clientUserId, String username, String password, String name, String phone, BLResp resp);
+    void editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled, BLResp resp);
 
     void getHomeData(Long clientId, Long clientUserId, BLResp resp);
 
     void getClientMessage(Long clientId, Page page, BLResp resp);
 
     void setSubUserDeleted(Long primaryUserId, Long subUserId, BLResp resp);
+
+    void getAccountByUserId(Long userId, BLResp resp);
 }

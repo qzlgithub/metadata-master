@@ -128,6 +128,14 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
+    @GetMapping(value = "childAccountDetail")
+    public BLResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId){
+        BLResp resp = BLResp.build();
+        clientService.getAccountByUserId(clientUserId,resp);
+        return resp;
+    }
+
     /**
      * 编辑子账号
      */
@@ -146,12 +154,12 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password) || StringUtils.isNullBlank(name) ||
+        if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(name) ||
                 StringUtils.isNullBlank(phone))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        //clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
+        clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
         return resp;
     }
 

@@ -17,6 +17,7 @@ import com.mingdong.bop.domain.mapper.SysConfigMapper;
 import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.BaseDTO;
@@ -162,8 +163,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
         }
         ClientUser subUser = clientUserMapper.findById(subUserId);
-        if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(
-                subUser.getClientId()))
+        if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(subUser.getClientId()))
         {
             return new BaseDTO(RestResult.OBJECT_NOT_FOUND);
         }
@@ -225,6 +225,21 @@ public class RemoteClientServiceImpl implements RemoteClientService
         {
             return new BaseDTO(RestResult.USERNAME_EXIST);
         }
+        SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
+        int subAccountCount = 0;
+        for(ClientUser cu : userList)
+        {
+            if(!cu.getId().equals(client.getPrimaryUserId()))
+            {
+                subAccountCount++;
+            }
+        }
+        int canSubAccountCount = config == null ? 5 : Integer.parseInt(config.getValue());
+        if(subAccountCount >= canSubAccountCount){
+            return new BaseDTO(RestResult.ACCOUNT_COUNT_MAX);
+        }
+
         Date current = new Date();
         account = new ClientUser();
         account.setId(IDUtils.getClientUser(param.getNodeId()));
@@ -254,4 +269,69 @@ public class RemoteClientServiceImpl implements RemoteClientService
         client.setAccountQty(quantity > 1 ? (quantity - 1) : 0);
         clientMapper.updateSkipNull(client);
     }
+
+    @Override
+    @Transactional
+    public UserDTO changeStatus(Long clientUserId)
+    {
+        ClientUser clientUser = clientUserMapper.findById(clientUserId);
+        if(Constant.ENABLED_1 == clientUser.getEnabled())
+        {
+            clientUser.setEnabled(Constant.ENABLED_0);
+        }
+        else
+        {
+            clientUser.setEnabled(Constant.ENABLED_1);
+        }
+        clientUserMapper.updateById(clientUser);
+        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
+        userDTO.setUserId(clientUser.getId());
+        userDTO.setClientId(clientUser.getClientId());
+        userDTO.setName(clientUser.getName());
+        userDTO.setPhone(clientUser.getPhone());
+        userDTO.setUsername(clientUser.getUsername());
+        userDTO.setEnabled(clientUser.getEnabled());
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO getAccountByUserId(Long clientUserId)
+    {
+        ClientUser clientUser = clientUserMapper.findById(clientUserId);
+        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
+        userDTO.setUserId(clientUser.getId());
+        userDTO.setClientId(clientUser.getClientId());
+        userDTO.setName(clientUser.getName());
+        userDTO.setPhone(clientUser.getPhone());
+        userDTO.setUsername(clientUser.getUsername());
+        userDTO.setEnabled(clientUser.getEnabled());
+        return userDTO;
+    }
+
+    @Override
+    @Transactional
+    public UserDTO editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled)
+    {
+        ClientUser clientUserByUserName = clientUserMapper.findByUsername(username);
+        if(clientUserByUserName != null && clientUserByUserName.getId().longValue() != clientUserId.longValue())
+        {
+            return new UserDTO(RestResult.USERNAME_EXIST);
+        }
+        ClientUser clientUser = clientUserMapper.findById(clientUserId);
+        clientUser.setUsername(username);
+        clientUser.setPassword(StringUtils.isNullBlank(password) ? clientUser.getPassword() : Md5Utils.encrypt(password));
+        clientUser.setName(name);
+        clientUser.setPhone(phone);
+        clientUser.setEnabled(enabled);
+        clientUserMapper.updateById(clientUser);
+        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
+        userDTO.setUserId(clientUser.getId());
+        userDTO.setClientId(clientUser.getClientId());
+        userDTO.setName(clientUser.getName());
+        userDTO.setPhone(clientUser.getPhone());
+        userDTO.setUsername(clientUser.getUsername());
+        userDTO.setEnabled(clientUser.getEnabled());
+        return userDTO;
+    }
+
 }

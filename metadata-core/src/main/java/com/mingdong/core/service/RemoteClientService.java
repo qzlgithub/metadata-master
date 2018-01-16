@@ -22,4 +22,10 @@ public interface RemoteClientService
     UserListDTO getSubUserList(Long clientId, Long primaryUserId);
 
     BaseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone);
+
+    UserDTO changeStatus(Long clientUserId);
+
+    UserDTO getAccountByUserId(Long clientUserId);
+
+    UserDTO editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled);
 }
