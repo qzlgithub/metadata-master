@@ -9,6 +9,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -51,7 +52,8 @@ public class ClientServiceImpl implements ClientService
             resp.result(dto.getResult());
             return;
         }
-        UserSession session = new UserSession(dto.getClientId(), dto.getUserId(), dto.getName(), dto.getPrimary());
+        UserSession session = new UserSession(dto.getClientId(), dto.getUserId(), dto.getName(), username,
+                dto.getPrimary());
         redisDao.saveUserSession(sessionId, session);
         resp.addData(Field.NAME, dto.getName()).addData(Field.MANAGER_QQ, dto.getManagerQq()).addData(Field.FIRST_LOGIN,
                 dto.getFirstLogin());
@@ -224,5 +226,19 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.USERNAME,
                 userDTO.getUsername()).addData(Field.NAME, userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(
                 Field.ENABLED, userDTO.getEnabled());
+    }
+
+    @Override
+    public void getUserCredential(Long userId, String password, Long productId, BLResp resp)
+    {
+        CredentialDTO dto = clientApi.getUserCredential(userId, password, productId);
+        if(dto.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(dto.getResult());
+            return;
+        }
+        resp.addData(Field.APP_ID, dto.getAppId());
+        resp.addData(Field.APP_KEY, dto.getAppKey() != null ? dto.getAppKey() : "");
+        resp.addData(Field.REQ_HOST, dto.getReqHost() != null ? dto.getReqHost() : "");
     }
 }

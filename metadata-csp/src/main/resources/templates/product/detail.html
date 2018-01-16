@@ -176,7 +176,7 @@
                 </div>
             </div>
             <div class="layui-form-item tc">
-                <button class="layui-btn" id="appkid-step2">下一步</button>
+                <button class="layui-btn" id="next-step" th:attr="obj-id=${productId}">下一步</button>
             </div>
         </div>
     </div>
@@ -192,15 +192,15 @@
             <div class="m30">
                 <div class="layui-form-item">
                     <label class="layui-form-label">AppID：</label>
-                    <div class="layui-input-block w60 pt10">
+                    <div class="layui-input-block">
                         <md id="app-id"></md>
-                        <span class="add-button ml10 cp">复制</span>
+                        <span class="add-button ml10 cp" id="cp-app-id">复制</span>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">AppKey：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="app-key" placeholder="请输入" class="layui-input w60"
+                        <input type="text" id="app-key" placeholder="未设置" class="layui-input w60"
                                style="display: inline-block;"/>
                         <span class="add-button ml10 cp">生成</span>
                     </div>
@@ -208,7 +208,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">请求IP：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="request-host" placeholder="请输入" class="layui-input w80"/>
+                        <input type="text" id="req-host" placeholder="未设置" class="layui-input w80"/>
                     </div>
                 </div>
             </div>
@@ -256,9 +256,39 @@
                 shadeClose: true
             });
         });
-        $('#appkid-step2').on('click', function() {
-            $("#mode_app_id_1").hide();
-            $("#mode_app_id_2").show();
+        $("#cp-app-id").on('click',function() {
+            
+        });
+        $('#next-step').on('click', function() {
+            var password = $("#password").val();
+            if(password === '') {
+                layer.msg("请输入您的登陆密码已完成验证！");
+                return;
+            }
+            var productId = $(this).attr("obj-id");
+            $.ajax({
+                type: "POST",
+                url: "/client/user/credential",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "productId": productId,
+                    "password": MD5(password)
+                }),
+                success: function(res) {
+                    if(res.errCode === '000000') {
+                        var data = res.dataMap;
+                        $("#app-id").text(data.appId);
+                        $("#app-key").val(data.appKey);
+                        $("#req-host").val(data.reqHost);
+                        $("#mode_app_id_1").hide();
+                        $("#mode_app_id_2").show();
+                    }
+                    else {
+                        layer.msg("认证失败：" + res.errMsg);
+                    }
+                }
+            });
         });
     });
 </script>

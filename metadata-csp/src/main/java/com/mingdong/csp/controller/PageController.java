@@ -89,6 +89,7 @@ public class PageController
         BLResp resp = BLResp.build();
         productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
         view.addAllObjects(resp.getDataMap());
+        view.addObject(Field.USERNAME, RequestThread.getUsername());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

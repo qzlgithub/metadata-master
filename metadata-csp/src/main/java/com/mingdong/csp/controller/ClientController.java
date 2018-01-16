@@ -83,6 +83,24 @@ public class ClientController
     }
 
     /**
+     * 获取用户产品凭证信息
+     */
+    @LoginRequired
+    @PostMapping(value = "user/credential")
+    public BLResp getUserCredential(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long productId = jsonReq.getLong(Field.PRODUCT_ID);
+        String password = jsonReq.getString(Field.PASSWORD);
+        if(productId == null || StringUtils.isNullBlank(password))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        clientService.getUserCredential(RequestThread.getUserId(), password, productId, resp);
+        return resp;
+    }
+
+    /**
      * 添加子账号
      */
     @LoginRequired

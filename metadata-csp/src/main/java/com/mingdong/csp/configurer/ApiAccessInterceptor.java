@@ -43,7 +43,7 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
                     response.getOutputStream().write(resp.getBytes("UTF-8"));
                     return false;
                 }
-                RequestThread.set(us.getClientId(), us.getUserId(), us.getPrimary());
+                RequestThread.set(us.getClientId(), us.getUserId(), us.getUsername(), us.getPrimary());
             }
         }
 

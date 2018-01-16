@@ -59,4 +59,7 @@ public interface Field
     String TO_DATE = "toDate";
     String STATUS = "status";
     String REMAIN_DAYS = "remainDays";
+    String APP_ID = "appId";
+    String APP_KEY = "appKey";
+    String REQ_HOST = "reqHost";
 }

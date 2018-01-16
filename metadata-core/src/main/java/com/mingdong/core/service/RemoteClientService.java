@@ -2,6 +2,7 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -28,4 +29,6 @@ public interface RemoteClientService
     UserDTO getAccountByUserId(Long clientUserId);
 
     UserDTO editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled);
+
+    CredentialDTO getUserCredential(Long userId, String password, Long productId);
 }

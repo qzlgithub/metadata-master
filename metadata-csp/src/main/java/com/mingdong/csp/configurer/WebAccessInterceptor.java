@@ -39,7 +39,7 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
                     response.sendRedirect("/index.html");
                     return false;
                 }
-                RequestThread.set(us.getClientId(), us.getUserId(), us.getPrimary());
+                RequestThread.set(us.getClientId(), us.getUserId(), us.getUsername(), us.getPrimary());
                 RequestThread.setCurrPage(PathPage.getPageByPath(path));
             }
         }
