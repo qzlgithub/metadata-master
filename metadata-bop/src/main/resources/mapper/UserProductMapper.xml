@@ -62,4 +62,9 @@
         </set>
         where `id` = #{id}
     </update>
+
+    <select id="findByUserAndProduct" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `user_id` = #{userId} and `product_id` = #{productId}
+    </select>
 </mapper>

@@ -38,4 +38,6 @@ public interface ClientService
     void setSubUserDeleted(Long primaryUserId, Long subUserId, BLResp resp);
 
     void getAccountByUserId(Long userId, BLResp resp);
+
+    void getUserCredential(Long userId, String password, Long productId, BLResp resp);
 }

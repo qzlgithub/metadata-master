@@ -6,14 +6,18 @@ import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.constant.SysParam;
 import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientMessage;
+import com.mingdong.bop.domain.entity.ClientProduct;
 import com.mingdong.bop.domain.entity.ClientUser;
 import com.mingdong.bop.domain.entity.Manager;
 import com.mingdong.bop.domain.entity.SysConfig;
+import com.mingdong.bop.domain.entity.UserProduct;
 import com.mingdong.bop.domain.mapper.ClientMapper;
 import com.mingdong.bop.domain.mapper.ClientMessageMapper;
+import com.mingdong.bop.domain.mapper.ClientProductMapper;
 import com.mingdong.bop.domain.mapper.ClientUserMapper;
 import com.mingdong.bop.domain.mapper.ManagerMapper;
 import com.mingdong.bop.domain.mapper.SysConfigMapper;
+import com.mingdong.bop.domain.mapper.UserProductMapper;
 import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
@@ -21,6 +25,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.BaseDTO;
+import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
@@ -49,9 +54,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Resource
     private ClientMapper clientMapper;
     @Resource
+    private ClientProductMapper clientProductMapper;
+    @Resource
     private ClientUserMapper clientUserMapper;
     @Resource
     private ClientMessageMapper clientMessageMapper;
+    @Resource
+    private UserProductMapper userProductMapper;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -256,6 +265,32 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUserMapper.add(account);
         updateClientAccountQty(client.getId());
         return new BaseDTO(RestResult.SUCCESS);
+    }
+
+    @Override
+    public CredentialDTO getUserCredential(Long userId, String password, Long productId)
+    {
+        CredentialDTO dto = new CredentialDTO();
+        ClientUser user = clientUserMapper.findById(userId);
+        if(user == null || !user.getPassword().equals(Md5Utils.encrypt(password)))
+        {
+            dto.setErrCode(RestResult.INVALID_PASSCODE.getCode());
+            return dto;
+        }
+        ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
+        if(cp == null)
+        {
+            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            return dto;
+        }
+        dto.setAppId(cp.getAppId());
+        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
+        if(up != null)
+        {
+            dto.setAppKey(up.getAppKey());
+            dto.setReqHost(up.getReqHost());
+        }
+        return dto;
     }
 
     /**

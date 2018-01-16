@@ -4,6 +4,7 @@ public class RequestHolder
 {
     private Long clientId;
     private Long userId;
+    private String username;
     private String currPage;
     private Integer primary;
 
@@ -25,6 +26,16 @@ public class RequestHolder
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
     }
 
     public String getCurrPage()

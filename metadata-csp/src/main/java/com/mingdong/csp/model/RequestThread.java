@@ -9,11 +9,12 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(Long clientId, Long userId, Integer primary)
+    public static void set(Long clientId, Long userId, String username, Integer primary)
     {
         RequestHolder holder = new RequestHolder();
         holder.setClientId(clientId);
         holder.setUserId(userId);
+        holder.setUsername(username);
         holder.setPrimary(primary);
         threadHolder.set(holder);
     }
@@ -53,5 +54,10 @@ public class RequestThread
     public static void cleanup()
     {
         threadHolder.remove();
+    }
+
+    public static String getUsername()
+    {
+        return get().getUsername();
     }
 }
