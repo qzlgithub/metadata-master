@@ -1,8 +1,9 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MessageDTO
+public class MessageDTO implements Serializable
 {
     private Date addAt;
     private Integer type;

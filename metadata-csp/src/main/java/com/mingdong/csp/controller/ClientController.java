@@ -124,7 +124,7 @@ public class ClientController
     {
         BLResp resp = BLResp.build();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        clientService.changeStatus(clientUserId, resp);
+        clientService.changeStatus(RequestThread.getUserId(),clientUserId, resp);
         return resp;
     }
 
@@ -159,7 +159,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.editChildAccount(clientUserId, username, password, name, phone,enabled, resp);
+        clientService.editChildAccount(RequestThread.getUserId(),clientUserId, username, password, name, phone,enabled, resp);
         return resp;
     }
 

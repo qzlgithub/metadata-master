@@ -3,6 +3,7 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.domain.mapper.StatsClientMapper;
 import com.mingdong.bop.service.StatsService;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +38,14 @@ public class StatsServiceImpl implements StatsService
         Long clientCountByDate = statsClientMapper.getClientCountByDate(monthDay);
         BigDecimal clientRechargeByWeek = statsClientMapper.getClientRechargeByDate(weekDay);
         BigDecimal clientRechargeByMonth = statsClientMapper.getClientRechargeByDate(monthDay);
-        resp.addData("allClientCount",allClientCount);
-        resp.addData("clientCountByDate",clientCountByDate);
-        resp.addData("clientRechargeByWeek",clientRechargeByWeek.toString());
-        resp.addData("clientRechargeByMonth",clientRechargeByMonth.toString());
+        resp.addData("allClientCount", allClientCount);
+        resp.addData("clientCountByDate", clientCountByDate);
+        resp.addData("clientRechargeByWeek", NumberUtils.formatAmount(clientRechargeByWeek));
+        resp.addData("clientRechargeByMonth", NumberUtils.formatAmount(clientRechargeByMonth));
+//        BigDecimal nowIncome = statsClientMapper.getApiIncome(nowDay);
+//        BigDecimal nowAndPreviouIncome = statsClientMapper.getApiIncome(previousDay);
+//        BigDecimal previouIncome = nowAndPreviouIncome.subtract(nowIncome);
+
         return resp;
     }
 

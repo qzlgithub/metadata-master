@@ -135,6 +135,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/system/account-list");
         view.addAllObjects(RequestThread.getPageData());
+        view.addObject("primary" , RequestThread.getPrimary()==1?true:false);
         return view;
     }
 
@@ -153,6 +154,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/system/message");
         view.addAllObjects(RequestThread.getPageData());
+        view.addObject("primary" , RequestThread.getPrimary()==1?true:false);
         return view;
     }
 

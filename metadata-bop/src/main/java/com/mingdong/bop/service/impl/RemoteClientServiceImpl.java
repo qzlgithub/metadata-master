@@ -236,7 +236,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         int canSubAccountCount = config == null ? 5 : Integer.parseInt(config.getValue());
-        if(subAccountCount >= canSubAccountCount){
+        if(subAccountCount >= canSubAccountCount)
+        {
             return new BaseDTO(RestResult.ACCOUNT_COUNT_MAX);
         }
 
@@ -272,8 +273,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public UserDTO changeStatus(Long clientUserId)
+    public UserDTO changeStatus(Long primaryAccountId, Long clientUserId)
     {
+        Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
+        if(client == null)
+        {
+            return new UserDTO(RestResult.ONLY_PRIMARY_USER);
+        }
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(Constant.ENABLED_1 == clientUser.getEnabled())
         {
@@ -310,8 +316,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public UserDTO editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled)
+    public UserDTO editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name, String phone,
+            Integer enabled)
     {
+        Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
+        if(client == null)
+        {
+            return new UserDTO(RestResult.ONLY_PRIMARY_USER);
+        }
         ClientUser clientUserByUserName = clientUserMapper.findByUsername(username);
         if(clientUserByUserName != null && clientUserByUserName.getId().longValue() != clientUserId.longValue())
         {

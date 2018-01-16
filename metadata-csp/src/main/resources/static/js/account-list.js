@@ -89,7 +89,7 @@ function delAccount(id) {
                 success: function(data) {
                     if(data.errCode === '000000') {
                         layer.msg("删除成功", {
-                            time: 2000
+                            time: 1000
                         }, function() {
                             layer.closeAll();
                             getAccountList();
@@ -182,11 +182,9 @@ function addSubmitAccount() {
             url: "/client/account/addition",
             dataType: "json",
             contentType: "application/json",
-            data: JSON.stringify({"username": username, "password": pwd, "name": name, "phone": phone, "enabled": enabled}),
+            data: JSON.stringify({"username": username, "password": MD5(pwd), "name": name, "phone": phone, "enabled": enabled}),
             success: function(data) {
                 if(data.errCode === '000000') {
-                    var obj = data.dataMap;
-                    $("#statusAction" + id).text("停用");
                     layer.msg("新增成功", {
                         time: 2000
                     }, function() {
@@ -224,7 +222,7 @@ function editSubmitAccount() {
             data: JSON.stringify({
                 "clientUserId": id,
                 "username": username,
-                "password": pwd,
+                "password": MD5(pwd),
                 "name": name,
                 "phone": phone,
                 "enabled": enabled

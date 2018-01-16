@@ -71,8 +71,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
-            BLResp resp)
+    public void addAccount(Long primaryAccountId, String username, String password, String name, String phone, BLResp resp)
     {
         BaseDTO dto = clientApi.addAccount(primaryAccountId, username, password, name, phone);
         resp.result(dto.getResult());
@@ -102,28 +101,29 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeStatus(Long clientUserId, BLResp resp)
+    public void changeStatus(Long primaryAccountId, Long clientUserId, BLResp resp)
     {
-        UserDTO userDTO = clientApi.changeStatus(clientUserId);
+        UserDTO userDTO = clientApi.changeStatus(primaryAccountId, clientUserId);
         if(userDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.NAME,
+        resp.addData(Field.USER_ID, userDTO.getUserId() + "").addData(Field.CLIENT_ID, userDTO.getClientId() + "").addData(Field.NAME,
                 userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
-    public void editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled, BLResp resp)
+    public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name, String phone,
+            Integer enabled, BLResp resp)
     {
-        UserDTO userDTO = clientApi.editChildAccount(clientUserId, username, password, name, phone,enabled);
+        UserDTO userDTO = clientApi.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone, enabled);
         if(userDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.NAME,
+        resp.addData(Field.USER_ID, userDTO.getUserId() + "").addData(Field.CLIENT_ID, userDTO.getClientId() + "").addData(Field.NAME,
                 userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
     }
 
@@ -221,8 +221,11 @@ public class ClientServiceImpl implements ClientService
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId()+"").addData(Field.CLIENT_ID, userDTO.getClientId()+"").addData(Field.USERNAME,
-                userDTO.getUsername()).addData(Field.NAME, userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(
-                Field.ENABLED, userDTO.getEnabled());
+        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "")
+                .addData(Field.CLIENT_ID, userDTO.getClientId() + "")
+                .addData(Field.USERNAME, userDTO.getUsername())
+                .addData(Field.NAME, userDTO.getName())
+                .addData(Field.PHONE, userDTO.getPhone())
+                .addData(Field.ENABLED, userDTO.getEnabled());
     }
 }

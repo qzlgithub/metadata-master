@@ -13,7 +13,7 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `client_id`, `type`, `content`
-        from `client_message`;
+        from `client_message`
     </sql>
 
     <insert id="add" parameterType="ClientMessage">
