@@ -28,7 +28,7 @@ public interface RemoteClientService
 
     UserDTO getAccountByUserId(Long clientUserId);
 
-    UserDTO editChildAccount(Long clientUserId, String username, String password, String name, String phone, Integer enabled);
+    UserDTO editChildAccount(Long primaryAccountId,Long clientUserId, String username, String password, String name, String phone, Integer enabled);
 
     CredentialDTO getUserCredential(Long userId, String password, Long productId);
 }
