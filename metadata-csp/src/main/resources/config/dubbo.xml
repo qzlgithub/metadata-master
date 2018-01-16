@@ -23,4 +23,6 @@
                      interface="com.mingdong.core.service.RemoteProductService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="managerApi"
                      interface="com.mingdong.core.service.RemoteClientService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="sysConfigApi"
+                     interface="com.mingdong.core.service.RemoteSysConfigService" />
 </beans>

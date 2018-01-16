@@ -20,8 +20,10 @@
     <!-- version="1.0" registry="zookeeper" owner="chcree" -->
     <dubbo:service interface="com.mingdong.core.service.RemoteProductService" ref="productApi" />
     <dubbo:service interface="com.mingdong.core.service.RemoteClientService" ref="clientApi" />
+    <dubbo:service interface="com.mingdong.core.service.RemoteSysConfigService" ref="sysConfigApi" />
 
     <!-- 具体服务接口的实现 -->
     <bean id="productApi" class="com.mingdong.bop.service.impl.RemoteProductServiceImpl" />
     <bean id="clientApi" class="com.mingdong.bop.service.impl.RemoteClientServiceImpl" />
+    <bean id="sysConfigApi" class="com.mingdong.bop.service.impl.RemoteSysConfigServiceImpl" />
 </beans>

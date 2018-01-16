@@ -4,6 +4,7 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
@@ -38,6 +39,11 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
     {
         ProductRecListDTO productRecListDTO = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate, endDate, page);
+        if(productRecListDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(productRecListDTO.getResult());
+            return;
+        }
         List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -60,7 +66,7 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE,productRecListDTO.getCode()).addData(Field.TOTAL, productRecListDTO.getTotal()).addData(Field.PAGES, productRecListDTO.getPages()).addData(Field.PAGE_NUM,
+        resp.addData(Field.TOTAL, productRecListDTO.getTotal()).addData(Field.PAGES, productRecListDTO.getPages()).addData(Field.PAGE_NUM,
                 page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
@@ -109,6 +115,11 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
     {
         ProductReqListDTO productReqListDTO = remoteProductService.getProductRequestRecord(clientId, productId, fromDate, endDate, page);
+        if(productReqListDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(productReqListDTO.getResult());
+            return;
+        }
         List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {

@@ -49,4 +49,6 @@ public interface Field
     String IMAGE_CAPTCHA = "imageCaptcha";
     String MANAGER_QQ = "managerQq";
     String CURR_PAGE = "currPage";
+
+    String VALUE = "value";
 }

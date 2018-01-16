@@ -15,13 +15,15 @@ function getAccountList(){
         "/client/account/list",
         {},
         function(data) {
-            var list = data.list;
-            $("#dataBody").empty();
-            for(var d in list) {
-                var row = rowStr.replace(/#{id}/g, list[d].id).replace("#{username}", list[d].username)
-                .replace("#{name}", list[d].name)
-                .replace("#{phone}", list[d].phone);
-                $("#dataBody").append(row);
+            if(data.errCode === '000000') {
+                var list = data.dataMap.list;
+                $("#dataBody").empty();
+                for(var d in list) {
+                    var row = rowStr.replace(/#{id}/g, list[d].id).replace("#{username}", list[d].username)
+                    .replace("#{name}", list[d].name)
+                    .replace("#{phone}", list[d].phone);
+                    $("#dataBody").append(row);
+                }
             }
         }
     );
