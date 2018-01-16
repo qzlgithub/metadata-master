@@ -114,21 +114,53 @@ public class PageController
 
     @LoginRequired
     @GetMapping(value = {"/product/recharge.html"})
-    public ModelAndView productRecharge()
+    public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/recharge");
+        view.addObject(Field.PRODUCT_ID, productId + "");
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/request.html"})
-    public ModelAndView productRequest()
+    public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID) Long productId)
+    {
+        ModelAndView view = new ModelAndView("/product/request");
+        view.addObject(Field.PRODUCT_ID, productId + "");
+        view.addAllObjects(RequestThread.getPageData());
+        return view;
+    }
+
+    /*@LoginRequired
+    @GetMapping(value = {"/product/recharge.html"})
+    public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        ModelAndView view = new ModelAndView("/product/recharge");
+        BLResp resp = BLResp.build();
+        productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
+                new Page(pageNum, pageSize), resp);
+        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(RequestThread.getPageData());
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = {"/product/request.html"})
+    public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ModelAndView view = new ModelAndView("/product/request");
         view.addAllObjects(RequestThread.getPageData());
         return view;
-    }
+    }*/
 
     @LoginRequired
     @GetMapping(value = {"/system/account-list.html"})
@@ -136,7 +168,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/system/account-list");
         view.addAllObjects(RequestThread.getPageData());
-        view.addObject("primary" , RequestThread.getPrimary()==1?true:false);
+        view.addObject("primary", RequestThread.getPrimary() == 1);
         return view;
     }
 
@@ -155,7 +187,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/system/message");
         view.addAllObjects(RequestThread.getPageData());
-        view.addObject("primary" , RequestThread.getPrimary()==1?true:false);
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
         return view;
     }
 

@@ -66,13 +66,12 @@ public class BLResp
         return this;
     }
 
-    public BLResp addData(String k, Object v)
+    public void addData(String k, Object v)
     {
         if(dataMap == null)
         {
             dataMap = new HashMap<>();
         }
         dataMap.put(k, v);
-        return this;
     }
 }

@@ -272,8 +272,10 @@ public class TradeServiceImpl implements TradeService
     {
         int total = productRechargeMapper.countBy(clientId, productId, startTime, endTime);
         int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total).addData(Field.PAGES, pages).addData(Field.PAGE_NUM, page.getPageNum()).addData(
-                Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, total);
+        resp.addData(Field.PAGES, pages);
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);

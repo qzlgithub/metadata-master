@@ -15,6 +15,11 @@ public class MessageDTO implements Serializable
         return addAt;
     }
 
+    public void setAddAt(Date addAt)
+    {
+        this.addAt = addAt;
+    }
+
     public String getTypeName()
     {
         return typeName;
@@ -23,11 +28,6 @@ public class MessageDTO implements Serializable
     public void setTypeName(String typeName)
     {
         this.typeName = typeName;
-    }
-
-    public void setAddAt(Date addAt)
-    {
-        this.addAt = addAt;
     }
 
     public Integer getType()

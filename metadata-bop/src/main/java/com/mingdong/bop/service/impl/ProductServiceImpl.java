@@ -267,8 +267,11 @@ public class ProductServiceImpl implements ProductService
     {
         BLResp resp = BLResp.build();
         DictProductType dictProductType = dictProductTypeMapper.findById(id);
-        return resp.addData(Field.ID, dictProductType.getId()).addData(Field.CODE, dictProductType.getCode()).addData(
-                Field.NAME, dictProductType.getName()).addData(Field.REMARK, dictProductType.getRemark());
+        resp.addData(Field.ID, dictProductType.getId());
+        resp.addData(Field.CODE, dictProductType.getCode());
+        resp.addData(Field.NAME, dictProductType.getName());
+        resp.addData(Field.REMARK, dictProductType.getRemark());
+        return resp;
 
     }
 

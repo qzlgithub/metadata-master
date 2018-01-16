@@ -17,14 +17,15 @@ public class SysConfigServiceImpl implements SysConfigService
     RemoteSysConfigService remoteSysConfigService;
 
     @Override
-    public void getSysConfigByName(String name, BLResp resp){
+    public void getSysConfigByName(String name, BLResp resp)
+    {
         SysConfigDTO sysConfigDTO = remoteSysConfigService.getSysConfigByName(name);
         if(sysConfigDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(sysConfigDTO.getResult());
             return;
         }
-        resp.addData(Field.NAME,sysConfigDTO.getName());
-        resp.addData(Field.VALUE,sysConfigDTO.getValue());
+        resp.addData(Field.NAME, sysConfigDTO.getName());
+        resp.addData(Field.VALUE, sysConfigDTO.getValue());
     }
 }

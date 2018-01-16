@@ -14,7 +14,8 @@ public class RemoteSysConfigServiceImpl implements RemoteSysConfigService
     private SysConfigMapper sysConfigMapper;
 
     @Override
-    public SysConfigDTO getSysConfigByName(String name){
+    public SysConfigDTO getSysConfigByName(String name)
+    {
         SysConfig sysConfig = sysConfigMapper.findByName(name);
         SysConfigDTO sysConfigDTO = new SysConfigDTO(RestResult.SUCCESS);
         sysConfigDTO.setId(sysConfig.getId());

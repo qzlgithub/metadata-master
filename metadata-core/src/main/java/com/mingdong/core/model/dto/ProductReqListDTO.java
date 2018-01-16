@@ -10,7 +10,8 @@ public class ProductReqListDTO extends BaseDTO
     private int total;
     private int pages;
 
-    public ProductReqListDTO(RestResult result){
+    public ProductReqListDTO(RestResult result)
+    {
         super(result);
     }
 

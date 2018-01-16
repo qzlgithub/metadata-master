@@ -24,12 +24,13 @@ public interface ClientService
     /**
      * 禁用启用子账号
      */
-    void changeStatus(Long primaryAccountId,Long clientUserId, BLResp resp);
+    void changeStatus(Long primaryAccountId, Long clientUserId, BLResp resp);
 
     /**
      * 编辑子账号
      */
-    void editChildAccount(Long primaryAccountId,Long clientUserId, String username, String password, String name, String phone, Integer enabled, BLResp resp);
+    void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name,
+            String phone, Integer enabled, BLResp resp);
 
     void getHomeData(Long clientId, Long clientUserId, BLResp resp);
 
@@ -40,4 +41,6 @@ public interface ClientService
     void getAccountByUserId(Long userId, BLResp resp);
 
     void getUserCredential(Long userId, String password, Long productId, BLResp resp);
+
+    void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, BLResp resp);
 }

@@ -4,7 +4,6 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.configurer.Param;
-import com.mingdong.core.constant.BillPlan;
 import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.Trade;
@@ -42,6 +41,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -618,14 +618,14 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.BILL_PLAN, pr.getBillPlan());
         if(BillPlan.YEAR.getId().equals(pr.getBillPlan()))
         {
-            resp.addData(Field.START_DATE, DateUtils.format(pr.getStartDate(), DateFormat.YYYY_MM_DD)).addData(
-                    Field.END_DATE, DateUtils.format(pr.getEndDate(), DateFormat.YYYY_MM_DD)).addData(Field.AMOUNT,
-                    NumberUtils.formatAmount(pr.getAmount()));
+            resp.addData(Field.START_DATE, DateUtils.format(pr.getStartDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.END_DATE, DateUtils.format(pr.getEndDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(pr.getAmount()));
         }
         else
         {
-            resp.addData(Field.BALANCE, NumberUtils.formatAmount(pr.getBalance())).addData(Field.UNIT_AMT,
-                    NumberUtils.formatAmount(pr.getUnitAmt()));
+            resp.addData(Field.BALANCE, NumberUtils.formatAmount(pr.getBalance()));
+            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(pr.getUnitAmt()));
         }
         BigDecimal totalAmt = productRechargeMapper.sumAmountByClientProduct(clientProductId);
         resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
@@ -725,8 +725,10 @@ public class ClientServiceImpl implements ClientService
         }
         int total = clientOperateLogMapper.countByClientUser(client.getPrimaryUserId());
         int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total).addData(Field.PAGES, pages).addData(Field.PAGE_NUM, page.getPageNum()).addData(
-                Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, total);
+        resp.addData(Field.PAGES, pages);
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);

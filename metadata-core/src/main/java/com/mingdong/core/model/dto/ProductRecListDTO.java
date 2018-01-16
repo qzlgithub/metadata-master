@@ -10,7 +10,13 @@ public class ProductRecListDTO extends BaseDTO
     private int total;
     private int pages;
 
-    public ProductRecListDTO(RestResult result){
+    public ProductRecListDTO()
+    {
+        super(RestResult.SUCCESS);
+    }
+
+    public ProductRecListDTO(RestResult result)
+    {
         super(result);
     }
 

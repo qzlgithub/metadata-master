@@ -42,9 +42,9 @@ public class StatsServiceImpl implements StatsService
         resp.addData("clientCountByDate", clientCountByDate);
         resp.addData("clientRechargeByWeek", NumberUtils.formatAmount(clientRechargeByWeek));
         resp.addData("clientRechargeByMonth", NumberUtils.formatAmount(clientRechargeByMonth));
-//        BigDecimal nowIncome = statsClientMapper.getApiIncome(nowDay);
-//        BigDecimal nowAndPreviouIncome = statsClientMapper.getApiIncome(previousDay);
-//        BigDecimal previouIncome = nowAndPreviouIncome.subtract(nowIncome);
+        //        BigDecimal nowIncome = statsClientMapper.getApiIncome(nowDay);
+        //        BigDecimal nowAndPreviouIncome = statsClientMapper.getApiIncome(previousDay);
+        //        BigDecimal previouIncome = nowAndPreviouIncome.subtract(nowIncome);
 
         return resp;
     }

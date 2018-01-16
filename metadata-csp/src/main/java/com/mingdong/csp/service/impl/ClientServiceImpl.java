@@ -55,8 +55,9 @@ public class ClientServiceImpl implements ClientService
         UserSession session = new UserSession(dto.getClientId(), dto.getUserId(), dto.getName(), username,
                 dto.getPrimary());
         redisDao.saveUserSession(sessionId, session);
-        resp.addData(Field.NAME, dto.getName()).addData(Field.MANAGER_QQ, dto.getManagerQq()).addData(Field.FIRST_LOGIN,
-                dto.getFirstLogin());
+        resp.addData(Field.NAME, dto.getName());
+        resp.addData(Field.MANAGER_QQ, dto.getManagerQq());
+        resp.addData(Field.FIRST_LOGIN, dto.getFirstLogin());
     }
 
     @Override
@@ -73,7 +74,8 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void addAccount(Long primaryAccountId, String username, String password, String name, String phone, BLResp resp)
+    public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
+            BLResp resp)
     {
         BaseDTO dto = clientApi.addAccount(primaryAccountId, username, password, name, phone);
         resp.result(dto.getResult());
@@ -99,7 +101,8 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.ENABLED, o.getEnabled());
             list.add(m);
         }
-        resp.addData(Field.ALLOWED_QTY, dto.getAllowedQty()).addData(Field.LIST, list);
+        resp.addData(Field.ALLOWED_QTY, dto.getAllowedQty());
+        resp.addData(Field.LIST, list);
     }
 
     @Override
@@ -111,22 +114,29 @@ public class ClientServiceImpl implements ClientService
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.USER_ID, userDTO.getUserId() + "").addData(Field.CLIENT_ID, userDTO.getClientId() + "").addData(Field.NAME,
-                userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
+        resp.addData(Field.USER_ID, userDTO.getUserId() + "");
+        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
+        resp.addData(Field.NAME, userDTO.getName());
+        resp.addData(Field.PHONE, userDTO.getPhone());
+        resp.addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
-    public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name, String phone,
-            Integer enabled, BLResp resp)
+    public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
+            String name, String phone, Integer enabled, BLResp resp)
     {
-        UserDTO userDTO = clientApi.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone, enabled);
+        UserDTO userDTO = clientApi.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone,
+                enabled);
         if(userDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.USER_ID, userDTO.getUserId() + "").addData(Field.CLIENT_ID, userDTO.getClientId() + "").addData(Field.NAME,
-                userDTO.getName()).addData(Field.PHONE, userDTO.getPhone()).addData(Field.ENABLED, userDTO.getEnabled());
+        resp.addData(Field.USER_ID, userDTO.getUserId() + "");
+        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
+        resp.addData(Field.NAME, userDTO.getName());
+        resp.addData(Field.PHONE, userDTO.getPhone());
+        resp.addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
@@ -193,8 +203,10 @@ public class ClientServiceImpl implements ClientService
             resp.result(dto.getResult());
             return;
         }
-        resp.addData(Field.TOTAL, dto.getTotal()).addData(Field.PAGES, dto.getPages()).addData(Field.PAGE_NUM, page.getPageNum()).addData(
-                Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, dto.getTotal());
+        resp.addData(Field.PAGES, dto.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<Map<String, Object>> list = new ArrayList<>();
         for(MessageDTO m : dto.getMessages())
         {
@@ -223,12 +235,12 @@ public class ClientServiceImpl implements ClientService
             resp.result(userDTO.getResult());
             return;
         }
-        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "")
-                .addData(Field.CLIENT_ID, userDTO.getClientId() + "")
-                .addData(Field.USERNAME, userDTO.getUsername())
-                .addData(Field.NAME, userDTO.getName())
-                .addData(Field.PHONE, userDTO.getPhone())
-                .addData(Field.ENABLED, userDTO.getEnabled());
+        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "");
+        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
+        resp.addData(Field.USERNAME, userDTO.getUsername());
+        resp.addData(Field.NAME, userDTO.getName());
+        resp.addData(Field.PHONE, userDTO.getPhone());
+        resp.addData(Field.ENABLED, userDTO.getEnabled());
     }
 
     @Override
@@ -243,5 +255,12 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.APP_ID, dto.getAppId());
         resp.addData(Field.APP_KEY, dto.getAppKey() != null ? dto.getAppKey() : "");
         resp.addData(Field.REQ_HOST, dto.getReqHost() != null ? dto.getReqHost() : "");
+    }
+
+    @Override
+    public void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, BLResp resp)
+    {
+        BaseDTO dto = clientApi.saveUserCredential(userId, productId, appKey, reqHost);
+        resp.result(dto.getResult());
     }
 }

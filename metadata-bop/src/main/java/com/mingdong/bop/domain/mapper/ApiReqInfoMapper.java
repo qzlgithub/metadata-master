@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ApiReqInfoMapper
 {
-    List<ApiReqInfo> getListBy(@Param("clientId") Long clientId, @Param("productId") Long productId, @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime);
+    List<ApiReqInfo> getListBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

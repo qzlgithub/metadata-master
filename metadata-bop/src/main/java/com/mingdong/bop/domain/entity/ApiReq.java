@@ -14,13 +14,25 @@ public class ApiReq
     private BigDecimal unitAmt;
     private BigDecimal balance;
 
-    public Long getClientId(){ return clientId; }
+    public Long getClientId()
+    {
+        return clientId;
+    }
 
-    public void setClientId(Long clientId){ this.clientId = clientId; }
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
 
-    public Integer getSuc(){ return suc; }
+    public Integer getSuc()
+    {
+        return suc;
+    }
 
-    public void setSuc(Integer suc){ this.suc = suc; }
+    public void setSuc(Integer suc)
+    {
+        this.suc = suc;
+    }
 
     public Long getId()
     {

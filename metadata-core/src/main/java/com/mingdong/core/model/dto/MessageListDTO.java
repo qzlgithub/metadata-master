@@ -10,7 +10,8 @@ public class MessageListDTO extends BaseDTO
     private int total;
     private int pages;
 
-    public MessageListDTO(){
+    public MessageListDTO()
+    {
 
     }
 

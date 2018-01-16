@@ -459,7 +459,8 @@ public class SystemServiceImpl implements SystemService
             parentMap.put(Field.SUB_LIST, subList);
             list.add(parentMap);
         }
-        return resp.addData(Field.LIST, list);
+        resp.addData(Field.LIST, list);
+        return resp;
     }
 
     @Override
@@ -587,7 +588,8 @@ public class SystemServiceImpl implements SystemService
             }
             hierarchyList.add(map);
         }
-        return resp.addData(Field.LIST, hierarchyList);
+        resp.addData(Field.LIST, hierarchyList);
+        return resp;
     }
 
     @Override

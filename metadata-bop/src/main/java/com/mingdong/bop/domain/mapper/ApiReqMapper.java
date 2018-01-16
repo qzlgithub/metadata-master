@@ -18,7 +18,7 @@ public interface ApiReqMapper
 
     List<ApiReq> getAll();
 
-    int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId, @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime);
+    int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 }

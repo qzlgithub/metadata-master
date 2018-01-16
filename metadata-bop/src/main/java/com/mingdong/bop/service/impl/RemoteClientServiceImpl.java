@@ -172,7 +172,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
         }
         ClientUser subUser = clientUserMapper.findById(subUserId);
-        if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(subUser.getClientId()))
+        if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(
+                subUser.getClientId()))
         {
             return new BaseDTO(RestResult.OBJECT_NOT_FOUND);
         }
@@ -268,45 +269,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public CredentialDTO getUserCredential(Long userId, String password, Long productId)
-    {
-        CredentialDTO dto = new CredentialDTO();
-        ClientUser user = clientUserMapper.findById(userId);
-        if(user == null || !user.getPassword().equals(Md5Utils.encrypt(password)))
-        {
-            dto.setErrCode(RestResult.INVALID_PASSCODE.getCode());
-            return dto;
-        }
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
-        if(cp == null)
-        {
-            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
-            return dto;
-        }
-        dto.setAppId(cp.getAppId());
-        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
-        if(up != null)
-        {
-            dto.setAppKey(up.getAppKey());
-            dto.setReqHost(up.getReqHost());
-        }
-        return dto;
-    }
-
-    /**
-     * 更新企业的子账号个数
-     */
-    private void updateClientAccountQty(Long clientId)
-    {
-        int quantity = clientUserMapper.countByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
-        Client client = new Client();
-        client.setId(clientId);
-        client.setUpdateTime(new Date());
-        client.setAccountQty(quantity > 1 ? (quantity - 1) : 0);
-        clientMapper.updateSkipNull(client);
-    }
-
-    @Override
     @Transactional
     public UserDTO changeStatus(Long primaryAccountId, Long clientUserId)
     {
@@ -351,8 +313,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public UserDTO editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name, String phone,
-            Integer enabled)
+    public UserDTO editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
+            String name, String phone, Integer enabled)
     {
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
         if(client == null)
@@ -366,7 +328,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         clientUser.setUsername(username);
-        clientUser.setPassword(StringUtils.isNullBlank(password) ? clientUser.getPassword() : Md5Utils.encrypt(password));
+        clientUser.setPassword(
+                StringUtils.isNullBlank(password) ? clientUser.getPassword() : Md5Utils.encrypt(password));
         clientUser.setName(name);
         clientUser.setPhone(phone);
         clientUser.setEnabled(enabled);
@@ -379,6 +342,87 @@ public class RemoteClientServiceImpl implements RemoteClientService
         userDTO.setUsername(clientUser.getUsername());
         userDTO.setEnabled(clientUser.getEnabled());
         return userDTO;
+    }
+
+    @Override
+    public CredentialDTO getUserCredential(Long userId, String password, Long productId)
+    {
+        CredentialDTO dto = new CredentialDTO();
+        ClientUser user = clientUserMapper.findById(userId);
+        if(user == null || !user.getPassword().equals(Md5Utils.encrypt(password)))
+        {
+            dto.setErrCode(RestResult.INVALID_PASSCODE.getCode());
+            return dto;
+        }
+        ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
+        if(cp == null)
+        {
+            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            return dto;
+        }
+        dto.setAppId(cp.getAppId());
+        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
+        if(up != null)
+        {
+            dto.setAppKey(up.getAppKey());
+            dto.setReqHost(up.getReqHost());
+        }
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public BaseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
+    {
+        BaseDTO dto = new BaseDTO();
+        ClientUser user = clientUserMapper.findById(userId);
+        if(user == null)
+        {
+            dto.setCode(RestResult.INTERNAL_ERROR.getCode());
+            return dto;
+        }
+        ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
+        if(cp == null)
+        {
+            dto.setCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            return dto;
+        }
+        Date current = new Date();
+        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
+        if(up == null)
+        {
+            up = new UserProduct();
+            up.setCreateTime(current);
+            up.setUpdateTime(current);
+            up.setUserId(userId);
+            up.setProductId(productId);
+            up.setAppKey(appKey);
+            up.setReqHost(reqHost);
+            userProductMapper.add(up);
+        }
+        else
+        {
+            UserProduct upUpd = new UserProduct();
+            upUpd.setId(up.getId());
+            upUpd.setUpdateTime(current);
+            upUpd.setAppKey(appKey);
+            upUpd.setReqHost(reqHost);
+            userProductMapper.updateSkipNull(upUpd);
+        }
+        return dto;
+    }
+
+    /**
+     * 更新企业的子账号个数
+     */
+    private void updateClientAccountQty(Long clientId)
+    {
+        int quantity = clientUserMapper.countByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
+        Client client = new Client();
+        client.setId(clientId);
+        client.setUpdateTime(new Date());
+        client.setAccountQty(quantity > 1 ? (quantity - 1) : 0);
+        clientMapper.updateSkipNull(client);
     }
 
 }

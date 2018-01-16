@@ -11,11 +11,13 @@ public class SysConfigDTO extends BaseDTO
     private String name;
     private String value;
 
-    public SysConfigDTO(){
+    public SysConfigDTO()
+    {
 
     }
 
-    public SysConfigDTO(RestResult result){
+    public SysConfigDTO(RestResult result)
+    {
         super(result);
     }
 
@@ -49,25 +51,37 @@ public class SysConfigDTO extends BaseDTO
         this.value = value;
     }
 
-    public Integer getIntegerValue(){
-        return StringUtils.isNullBlank(value)?null:Integer.valueOf(value);
+    public Integer getIntegerValue()
+    {
+        return StringUtils.isNullBlank(value) ? null : Integer.valueOf(value);
     }
 
-    public String getStringValue(){
+    public String getStringValue()
+    {
         return value;
     }
 
-    public Boolean getBooleanValue(){
-        if(StringUtils.isNullBlank(value)){
+    public Boolean getBooleanValue()
+    {
+        if(StringUtils.isNullBlank(value))
+        {
             return null;
-        }else{
-            if(Arrays.asList(new String[]{"0","1"}).contains(value)){
-                if("0".equals(value)){
+        }
+        else
+        {
+            if(Arrays.asList(new String[]{"0", "1"}).contains(value))
+            {
+                if("0".equals(value))
+                {
                     return false;
-                }else{
+                }
+                else
+                {
                     return true;
                 }
-            }else{
+            }
+            else
+            {
                 return Boolean.valueOf(value);
             }
         }

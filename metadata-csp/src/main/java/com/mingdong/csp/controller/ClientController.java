@@ -86,17 +86,31 @@ public class ClientController
      * 获取用户产品凭证信息
      */
     @LoginRequired
+    @GetMapping(value = "user/credential")
+    public BLResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
+            @RequestParam(value = Field.PASSWORD) String password)
+    {
+        BLResp resp = BLResp.build();
+        clientService.getUserCredential(RequestThread.getUserId(), password, productId, resp);
+        return resp;
+    }
+
+    /**
+     * 更新用户产品凭证信息
+     */
+    @LoginRequired
     @PostMapping(value = "user/credential")
-    public BLResp getUserCredential(@RequestBody JSONObject jsonReq)
+    public BLResp saveUserCredential(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         Long productId = jsonReq.getLong(Field.PRODUCT_ID);
-        String password = jsonReq.getString(Field.PASSWORD);
-        if(productId == null || StringUtils.isNullBlank(password))
+        String appKey = jsonReq.getString(Field.APP_KEY);
+        String reqHost = jsonReq.getString(Field.REQ_HOST);
+        if(productId == null || StringUtils.isNullBlank(appKey) || StringUtils.isNullBlank(reqHost))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.getUserCredential(RequestThread.getUserId(), password, productId, resp);
+        clientService.saveUserCredential(RequestThread.getUserId(), productId, appKey, reqHost, resp);
         return resp;
     }
 
@@ -142,15 +156,16 @@ public class ClientController
     {
         BLResp resp = BLResp.build();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        clientService.changeStatus(RequestThread.getUserId(),clientUserId, resp);
+        clientService.changeStatus(RequestThread.getUserId(), clientUserId, resp);
         return resp;
     }
 
     @LoginRequired
     @GetMapping(value = "childAccountDetail")
-    public BLResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId){
+    public BLResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
+    {
         BLResp resp = BLResp.build();
-        clientService.getAccountByUserId(clientUserId,resp);
+        clientService.getAccountByUserId(clientUserId, resp);
         return resp;
     }
 
@@ -172,12 +187,12 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(name) ||
-                StringUtils.isNullBlank(phone))
+        if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(name) || StringUtils.isNullBlank(phone))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.editChildAccount(RequestThread.getUserId(),clientUserId, username, password, name, phone,enabled, resp);
+        clientService.editChildAccount(RequestThread.getUserId(), clientUserId, username, password, name, phone,
+                enabled, resp);
         return resp;
     }
 

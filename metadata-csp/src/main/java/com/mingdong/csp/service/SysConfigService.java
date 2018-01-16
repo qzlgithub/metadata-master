@@ -6,6 +6,7 @@ public interface SysConfigService
 {
     /**
      * 获取系统参数
+     *
      * @param name
      * @param resp
      */

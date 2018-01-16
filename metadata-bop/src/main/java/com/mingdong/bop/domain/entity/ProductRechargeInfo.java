@@ -19,9 +19,15 @@ public class ProductRechargeInfo
     private String contractNo;
     private String remark;
 
-    public Long getId(){return id; }
+    public Long getId()
+    {
+        return id;
+    }
 
-    public void setId(Long id){this.id = id; }
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
     public Date getTradeTime()
     {

@@ -71,10 +71,10 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.TOTAL, productRecListDTO.getTotal())
-                .addData(Field.PAGES, productRecListDTO.getPages())
-                .addData(Field.PAGE_NUM, page.getPageNum())
-                .addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, productRecListDTO.getTotal());
+        resp.addData(Field.PAGES, productRecListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
     @Override
@@ -150,11 +150,11 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE, productReqListDTO.getCode())
-                .addData(Field.TOTAL, productReqListDTO.getTotal())
-                .addData(Field.PAGES, productReqListDTO.getPages())
-                .addData(Field.PAGE_NUM, page.getPageNum())
-                .addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.CODE, productReqListDTO.getCode());
+        resp.addData(Field.TOTAL, productReqListDTO.getTotal());
+        resp.addData(Field.PAGES, productReqListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
     @Override
