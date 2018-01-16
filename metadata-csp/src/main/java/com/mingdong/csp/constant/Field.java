@@ -12,7 +12,7 @@ public interface Field
     String PHONE = "phone";
     String CLIENT_USER_ID = "clientUserId";
     String FIRST_LOGIN = "firstLogin";
-    String ALLOWED_QTY = "allowed_qty";
+    String ALLOWED_QTY = "allowedQty";
     String SUB_USER_LIST = "subUserList";
     String TO_OPEN_LIST = "toOpenList";
     String OPENED_LIST = "openedList";
@@ -51,4 +51,9 @@ public interface Field
     String CURR_PAGE = "currPage";
 
     String VALUE = "value";
+    String IS_PRIMARY = "isPrimary";
+    String BILL_PLAN = "billPlan";
+    String TO_DATE = "toDate";
+    String STATUS = "status";
+    String REMAIN_DAYS = "remainDays";
 }

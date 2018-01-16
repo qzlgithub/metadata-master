@@ -6,6 +6,7 @@ public class UserDTO extends BaseDTO
 {
     private Long clientId;
     private Long userId;
+    private Integer primary;
     private String username;
     private String name;
     private String phone;
@@ -22,11 +23,6 @@ public class UserDTO extends BaseDTO
         super(result);
     }
 
-    public Long getUserId()
-    {
-        return userId;
-    }
-
     public Long getClientId()
     {
         return clientId;
@@ -37,9 +33,24 @@ public class UserDTO extends BaseDTO
         this.clientId = clientId;
     }
 
+    public Long getUserId()
+    {
+        return userId;
+    }
+
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public Integer getPrimary()
+    {
+        return primary;
+    }
+
+    public void setPrimary(Integer primary)
+    {
+        this.primary = primary;
     }
 
     public String getUsername()

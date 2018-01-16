@@ -5,6 +5,7 @@ public class RequestHolder
     private Long clientId;
     private Long userId;
     private String currPage;
+    private Integer primary;
 
     public Long getClientId()
     {
@@ -34,5 +35,15 @@ public class RequestHolder
     public void setCurrPage(String currPage)
     {
         this.currPage = currPage;
+    }
+
+    public Integer getPrimary()
+    {
+        return primary;
+    }
+
+    public void setPrimary(Integer primary)
+    {
+        this.primary = primary;
     }
 }

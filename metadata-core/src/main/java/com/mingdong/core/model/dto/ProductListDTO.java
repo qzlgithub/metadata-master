@@ -4,36 +4,19 @@ import com.mingdong.core.constant.RestResult;
 
 import java.util.List;
 
-public class HomeDTO extends BaseDTO
+public class ProductListDTO extends BaseDTO
 {
-    private int totalAllowedQty;
-    private List<UserDTO> subUsers;
     private List<ProductDTO> opened;
     private List<ProductDTO> toOpen;
 
-    public HomeDTO(RestResult result)
+    public ProductListDTO()
+    {
+        super(RestResult.SUCCESS);
+    }
+
+    public ProductListDTO(RestResult result)
     {
         super(result);
-    }
-
-    public int getTotalAllowedQty()
-    {
-        return totalAllowedQty;
-    }
-
-    public void setTotalAllowedQty(int totalAllowedQty)
-    {
-        this.totalAllowedQty = totalAllowedQty;
-    }
-
-    public List<UserDTO> getSubUsers()
-    {
-        return subUsers;
-    }
-
-    public void setSubUsers(List<UserDTO> subUsers)
-    {
-        this.subUsers = subUsers;
     }
 
     public List<ProductDTO> getOpened()

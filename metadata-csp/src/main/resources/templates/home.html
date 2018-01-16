@@ -24,17 +24,10 @@
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
 </div>
-<!--面包屑 end-->
-<!--产品服务-->
 <div class="container mt20 mb20 bg-white">
     <dl class="development-nav sever-detail pt0 pb0 important">
         <dd class="row ml0 mr0 bd-none important">
@@ -45,28 +38,15 @@
             </div>
             <div class="col-md-6 bd-left pl20">
                 <p class="p0 important">
-                    多账号管理 共<i class="col5 fz-20">2</i>个，还可新增<i class="col1 fz-20">3</i>个 <a href="" class="fr">管理>></a>
+                    账号管理
+                    共<i class="col5 fz-20" th:text="${subUserList.size()}"></i>个，
+                    还可新增<i class="col1 fz-20" th:text="${allowedQty - subUserList.size()}"></i>个
+                    <a href="" class="fr">管理>></a>
                 </p>
                 <ul class="user-list clearfix">
-                    <li>
+                    <li th:each="o : ${subUserList}">
                         <p><img src="../images/account-img.png"/></p>
-                        <p>firethehole</p>
-                    </li>
-                    <li>
-                        <p><img src="../images/account-img.png"/></p>
-                        <p>firethehole</p>
-                    </li>
-                    <li>
-                        <p><img src="../images/account-img.png"/></p>
-                        <p>firethehole</p>
-                    </li>
-                    <li>
-                        <p><img src="../images/account-img.png"/></p>
-                        <p>firethehole</p>
-                    </li>
-                    <li>
-                        <p><img src="../images/account-img.png"/></p>
-                        <p>firethehole</p>
+                        <p th:text="${o.name}"></p>
                     </li>
                 </ul>
             </div>
@@ -82,7 +62,34 @@
             <dt>我的服务<span class="fr col2 pr30">more>></span></dt>
             <dd>
                 <ul class="row mr0 ml0">
-                    <li>
+                    <li th:each="o : ${openedList}">
+                        <div class="serve-list-title">
+                            <md th:text="${o.name}"></md>
+                            <!-- 正常 -->
+                            <span class="fr" th:if="${o.status == 0}">服务中</span>
+                            <!-- 未开始 -->
+                            <i class="wks-icon icon" th:if="${o.status == 1}"></i>
+                            <!-- 即将过期 -->
+                            <i class="jjgq-icon icon" th:if="${o.status == 2}"></i>
+                            <!-- 已过期 -->
+                            <i class="ygq-icon icon" th:if="${o.status == 3}"></i>
+                            <!-- 余额不足 -->
+                            <i class="yebz-icon icon" th:if="${o.status == 4}"></i>
+                            <!-- 已欠费 -->
+                            <i class="yqf-icon icon" th:if="${o.status == 5}"></i>
+                        </div>
+                        <p class="col2 tc fz-14 important" th:if="${o.billPlan == 1}"
+                           th:text="${o.fromDate} + ' - ' + ${o.toDate}"></p>
+                        <p class="fz-20 col5 tc important" th:if="${o.billPlan == 1}"
+                           th:text="'剩余' + ${o.remainDays} + '天'"></p>
+                        <p class="col2 tc fz-14 important" th:if="${o.billPlan != 1}"
+                           th:text="'当前余额：￥' + ${o.balance}"></p>
+                        <p class="fz-20 col5 tc important" th:if="${o.billPlan != 1}"
+                           th:text="${o.unitAmt} + '元/次'"></p>
+                        <p class="tc mb15 mt10">
+                            <a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a></p>
+                    </li>
+                    <!--<li>
                         <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
                         <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
                         <p class="fz-20 col5 tc important">剩365天</p>
@@ -105,7 +112,7 @@
                         <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
                         <p class="fz-20 col5 tc important">剩365天</p>
                         <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a></p>
-                    </li>
+                    </li>-->
                 </ul>
             </dd>
         </dl>
@@ -113,7 +120,15 @@
             <dt>新服务<span class="fr col2 pr30">more>></span></dt>
             <dd>
                 <ul class="row mr0 ml0">
-                    <li>
+                    <li th:each="o : ${toOpenList}">
+                        <div class="serve-list-title">
+                            <md th:text="${o.name}"></md>
+                            <span class="fr">未开通</span></div>
+                        <p class="col2 tl fz-14 p10 important" th:text="${o.remark}"></p>
+                        <p class="tc mb15 mt10">
+                            <a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a></p>
+                    </li>
+                    <!--<li>
                         <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
                         <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
                         <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a></p>
@@ -132,23 +147,16 @@
                         <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
                         <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
                         <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a></p>
-                    </li>
+                    </li>-->
                 </ul>
             </dd>
         </dl>
     </div>
-    <!--服务列表 left end-->
-
 </div>
-<!--内容 end-->
 
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 
-<!--修改密码 提示层-->
 <div id="edit-pwd" style="display: none">
     <div class="layui-layer-title">修改密码</div>
     <div class="mb30">
@@ -184,11 +192,7 @@
         </div>
     </div>
 </div>
-<!--修改密码 提示层 end-->
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>

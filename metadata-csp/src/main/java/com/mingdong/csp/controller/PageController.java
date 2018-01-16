@@ -1,6 +1,7 @@
 package com.mingdong.csp.controller;
 
 import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.constant.Field;
@@ -46,8 +47,9 @@ public class PageController
     public ModelAndView getHomeData()
     {
         ModelAndView view = new ModelAndView("home");
-        //        BLResp resp = BLResp.build();
-        //        clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
+        BLResp resp = BLResp.build();
+        clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
+        view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

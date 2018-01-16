@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.configurer.Param;
-import com.mingdong.bop.constant.BillPlan;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.Trade;

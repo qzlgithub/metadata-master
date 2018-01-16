@@ -12,6 +12,7 @@
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
@@ -25,7 +26,8 @@
             pr.`end_date`   as end_date,
             pr.`amount`     as amount,
             pr.`balance`    as balance,
-            pr.`unit_amt`   as unit_amt
+            pr.`unit_amt`   as unit_amt,
+            p.`remark`      as remark
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}

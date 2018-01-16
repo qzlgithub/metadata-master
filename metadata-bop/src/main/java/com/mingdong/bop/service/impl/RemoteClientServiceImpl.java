@@ -82,6 +82,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         UserDTO dto = new UserDTO(RestResult.SUCCESS);
         dto.setClientId(user.getClientId());
         dto.setUserId(user.getId());
+        dto.setPrimary(user.getId().equals(client.getPrimaryUserId()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
         dto.setName(user.getName());
         dto.setManagerQq(manager == null ? "" : manager.getQq());
         dto.setFirstLogin(Constant.DEFAULT_ENC_PWD.equals(user.getPassword()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
@@ -192,13 +193,16 @@ public class RemoteClientServiceImpl implements RemoteClientService
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
         for(ClientUser cu : userList)
         {
-            SubUserDTO dto = new SubUserDTO();
-            dto.setUserId(cu.getId());
-            dto.setUsername(cu.getUsername());
-            dto.setName(cu.getName());
-            dto.setPhone(cu.getPhone());
-            dto.setEnabled(cu.getEnabled());
-            list.add(dto);
+            if(!cu.getId().equals(client.getPrimaryUserId()))
+            {
+                SubUserDTO dto = new SubUserDTO();
+                dto.setUserId(cu.getId());
+                dto.setUsername(cu.getUsername());
+                dto.setName(cu.getName());
+                dto.setPhone(cu.getPhone());
+                dto.setEnabled(cu.getEnabled());
+                list.add(dto);
+            }
         }
         SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
         UserListDTO dto = new UserListDTO(RestResult.SUCCESS);

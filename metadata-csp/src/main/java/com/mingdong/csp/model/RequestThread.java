@@ -1,7 +1,6 @@
 package com.mingdong.csp.model;
 
 import com.mingdong.csp.constant.Field;
-import com.mingdong.csp.constant.PathPage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +9,12 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(Long clientId, Long userId)
+    public static void set(Long clientId, Long userId, Integer primary)
     {
         RequestHolder holder = new RequestHolder();
         holder.setClientId(clientId);
         holder.setUserId(userId);
+        holder.setPrimary(primary);
         threadHolder.set(holder);
     }
 
@@ -36,6 +36,11 @@ public class RequestThread
     public static Long getClientId()
     {
         return get().getClientId();
+    }
+
+    public static Integer getPrimary()
+    {
+        return get().getPrimary();
     }
 
     public static Map<String, Object> getPageData()
