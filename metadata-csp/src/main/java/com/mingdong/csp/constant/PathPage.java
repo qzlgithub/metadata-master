@@ -4,6 +4,7 @@ public enum PathPage
 {
     HOME_PAGE("/home.html", "home"),
     MINE_PROD("/product/mine.html", "my-product"),
+    MINE_PROD_DETAIL("/product/detail.html", "my-product"),
     ALL_PROD("/product/all.html", "all-product"),
     SETTING_MESSAGE("/system/message.html", "system"),
     SETTING_ACCOUNT("/system/account-list.html", "system");

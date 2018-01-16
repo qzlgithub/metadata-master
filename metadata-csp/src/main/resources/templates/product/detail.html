@@ -2,7 +2,6 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta charset="utf-8"/>
     <title>明动科技</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -24,50 +23,52 @@
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
 
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
     <!-- Favicons -->
     <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
     <link rel="shortcut icon" href="images/icon/favicon.png"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
+
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
+
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
+
 <div class="container mt45 mb20">
     位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <span class="col2">服务详情</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
+
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--left-->
         <div th:include="product-common :: left"></div>
-        <!--left end-->
-        <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
-            <!--产品服务-->
             <dl class="development-nav sever-detail">
-                <dt>金融预期常欠客</dt>
+                <dt th:text="${productName}"></dt>
                 <dd class="row ml0 mr0">
                     <div class="col-md-6">
-                        <p class="pt10 important">服务时间<em class="ml30">2107/12/08—2018/12/08</em> <i
-                                class="col1 fz-16 ml40">剩365天</i></p>
-                        <p>服务状态<i class="col3 fz-16 ml30">服务中/已停止</i></p>
-                        <p>服务指标<em class="ml30"><i class="icon pj-icon1 mr5"></i>良好</em><em class="ml20"><i
-                                class="icon pj-icon2 mr5"></i>余额不足/即将过期</em><em class="ml20"><i
-                                class="icon pj-icon3 mr5"></i>已过期</em></p>
+                        <p class="pt10 important" th:if="${billPlan == 1}">
+                            服务时间<em class="ml30" th:text="${fromDate} + ' - ' + ${toDate}"></em>
+                            <i class="col1 fz-16 ml40" th:text="'剩' + ${remainDays} + '天'"></i></p>
+                        <p class="pt10 important" th:if="${billPlan != 1}">
+                            账户余额<em class="ml30" th:text="'￥ ' + ${balance}"></em>
+                            <i class="col1 fz-16 ml40" th:text="${unitAmt} + '元/次'"></i></p>
+                        <p>服务状态
+                            <i class="col3 fz-16 ml30"
+                               th:text="${status == 0 || status == 2 || status == 4} ? '服务中' : '已停止'"></i></p>
+                        <p>
+                            服务指标
+                            <em class="ml30" th:if="${status == 0}"><i class="icon pj-icon1 mr5"></i>良好</em>
+                            <em class="ml20" th:if="${status == 1}"><i class="icon pj-icon3 mr5"></i>未开始</em>
+                            <em class="ml20" th:if="${status == 2}"><i class="icon pj-icon2 mr5"></i>即将过期</em>
+                            <em class="ml20" th:if="${status == 3}"><i class="icon pj-icon3 mr5"></i>已过期</em>
+                            <em class="ml20" th:if="${status == 4}"><i class="icon pj-icon2 mr5"></i>余额不足</em>
+                            <em class="ml20" th:if="${status == 5}"><i class="icon pj-icon3 mr5"></i>已欠费</em>
+                        </p>
                     </div>
                     <div class="col-md-6 bd-left pl20">
                         <p class="pt10 important"><i class="icon kefu mr5"></i>续约</p>
@@ -76,19 +77,12 @@
                     </div>
                 </dd>
             </dl>
-            <!--产品服务 end-->
-            <!--tab-->
             <div class="pl40 pr40 pb40">
                 <ul class="nav nav-tabs row case-tab mb20" role="tablist">
-                    <li role="presentation" class="active col-lg-2 col-sm-2 col-md-2 col-xs-3"><a href="#home"
-                                                                                                  aria-controls="home"
-                                                                                                  role="tab"
-                                                                                                  data-toggle="tab">开发文档</a>
-                    </li>
-                    <li role="presentation" class="col-lg-2 col-sm-2 col-md-2 col-xs-3"><a href="#profile"
-                                                                                           aria-controls="profile"
-                                                                                           role="tab" data-toggle="tab">API介绍</a>
-                    </li>
+                    <li role="presentation" class="active col-lg-2 col-sm-2 col-md-2 col-xs-3">
+                        <a href="#home" aria-controls="home" role="tab" data-toggle="tab">开发文档</a></li>
+                    <li role="presentation" class="col-lg-2 col-sm-2 col-md-2 col-xs-3">
+                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">API介绍</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="home">

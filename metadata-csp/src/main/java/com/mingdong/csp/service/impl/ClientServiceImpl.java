@@ -18,6 +18,7 @@ import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -27,8 +28,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +146,7 @@ public class ClientServiceImpl implements ClientService
                 {
                     map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
                     map.put(Field.TO_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD_2));
-                    map.put(Field.REMAIN_DAYS, getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
+                    map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
                 }
                 else
                 {
@@ -198,24 +197,5 @@ public class ClientServiceImpl implements ClientService
     {
         BaseDTO dto = clientApi.setSubUserDeleted(primaryUserId, subUserId);
         resp.result(dto.getResult());
-    }
-
-    private long getDayDiffFromNow(Date fromDate, Date toDate)
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date today = calendar.getTime();
-        if(today.before(fromDate))
-        {
-            return (toDate.getTime() - fromDate.getTime()) / 24 / 3600 / 1000;
-        }
-        else if(today.after(toDate))
-        {
-            return 0;
-        }
-        return (toDate.getTime() - today.getTime()) / 24 / 3600 / 1000;
     }
 }

@@ -13,6 +13,7 @@
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
     </resultMap>
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
@@ -34,5 +35,29 @@
             left join `product_recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
         where p.`enabled` = 1
+    </select>
+
+    <select id="getClientProductInfo" parameterType="Long" resultMap="BaseResultMap">
+        select
+            p.`id`          as product_id,
+            p.`name`        as product_name,
+            cp.`app_id`     as app_id,
+            cp.`id`         as client_product_id,
+            cp.`bill_plan`  as bill_plan,
+            pr.`start_date` as start_date,
+            pr.`end_date`   as end_date,
+            pr.`amount`     as amount,
+            pr.`balance`    as balance,
+            pr.`unit_amt`   as unit_amt,
+            p.`remark`      as remark,
+            pt.`content`    as content
+        from `client_product` cp
+            left join `product` p
+                on cp.`product_id` = p.`id`
+            left join `product_txt` pt
+                on cp.`product_id` = pt.`id`
+            left join `product_recharge` pr
+                on cp.`latest_recharge_id` = pr.`id`
+        where cp.`id` = #{id}
     </select>
 </mapper>

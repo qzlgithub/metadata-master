@@ -16,6 +16,7 @@ public class ProductClientInfo
     private BigDecimal balance;
     private BigDecimal unitAmt;
     private String remark;
+    private String content;
 
     public Long getProductId()
     {
@@ -125,5 +126,15 @@ public class ProductClientInfo
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public String getContent()
+    {
+        return content;
+    }
+
+    public void setContent(String content)
+    {
+        this.content = content;
     }
 }

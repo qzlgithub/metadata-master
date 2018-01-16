@@ -1,4 +1,4 @@
-package com.mingdong.bop.constant;
+package com.mingdong.core.constant;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,13 +37,13 @@ public enum ProductStatus
         return NORMAL.getId();
     }
 
-    public static Integer getStatusByBalance(BigDecimal costAmt, BigDecimal balance)
+    public static Integer getStatusByBalance(BigDecimal unitAmt, BigDecimal balance)
     {
-        if(balance.compareTo(costAmt) < 0)
+        if(balance.compareTo(unitAmt) < 0)
         {
             return IN_ARREAR.getId();
         }
-        BigDecimal threshold = costAmt.multiply(new BigDecimal(5000));
+        BigDecimal threshold = unitAmt.multiply(new BigDecimal(5000));
         if(balance.compareTo(threshold) < 0)
         {
             return INSUFFICIENT_BALANCE.getId();

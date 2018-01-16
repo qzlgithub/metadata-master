@@ -1,20 +1,39 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.constant.RestResult;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProductDTO implements Serializable
 {
+    private String errCode;
     private Long id;
     private String name;
     private String remark;
+    private String content;
     private Integer billPlan;
     private Integer status;
     private BigDecimal costAmt;
     private BigDecimal balance;
     private Date fromDate;
     private Date toDate;
+
+    public ProductDTO()
+    {
+        errCode = "000000";
+    }
+
+    public String getErrCode()
+    {
+        return errCode;
+    }
+
+    public void setErrCode(String errCode)
+    {
+        this.errCode = errCode;
+    }
 
     public Long getId()
     {
@@ -44,6 +63,16 @@ public class ProductDTO implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public String getContent()
+    {
+        return content;
+    }
+
+    public void setContent(String content)
+    {
+        this.content = content;
     }
 
     public Integer getBillPlan()
@@ -104,5 +133,10 @@ public class ProductDTO implements Serializable
     public void setToDate(Date toDate)
     {
         this.toDate = toDate;
+    }
+
+    public RestResult getResult()
+    {
+        return RestResult.getByCode(errCode);
     }
 }

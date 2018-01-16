@@ -10,10 +10,12 @@ import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
 import com.mingdong.csp.service.ClientService;
+import com.mingdong.csp.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -29,6 +31,8 @@ public class PageController
     private RedisDao redisDao;
     @Resource
     private ClientService clientService;
+    @Resource
+    private ProductService productService;
 
     /**
      * 登陆页
@@ -79,9 +83,12 @@ public class PageController
 
     @LoginRequired
     @GetMapping(value = {"/product/detail.html"})
-    public ModelAndView productDetail()
+    public ModelAndView productDetail(@RequestParam(value = Field.ID) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/detail");
+        BLResp resp = BLResp.build();
+        productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
+        view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

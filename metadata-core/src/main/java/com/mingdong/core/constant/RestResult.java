@@ -22,9 +22,10 @@ public enum RestResult
     INDUSTRY_CODE_EXIST("100016", "行业编号已被占用"),
     PRODUCT_OPENED("100017", "该产品服务已开通"),
     ONLY_PRIMARY_USER("100018", "非主账号无此操作权限"),
-    CONTRACT_IS_EXIST("100019","合同编号已存在"),
-    PRODUCT_NAME_EXIST("100020","产品名称已存在"),
-    ACCESS_LIMITED("999998","访问受限（缺少访问凭证）"),
+    CONTRACT_IS_EXIST("100019", "合同编号已存在"),
+    PRODUCT_NAME_EXIST("100020", "产品名称已存在"),
+    PRODUCT_NOT_OPEN("100021", "客户未开通本产品"),
+    ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),
     INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
 
     private final String code;
@@ -48,7 +49,7 @@ public enum RestResult
                 }
             }
         }
-        return null;
+        return INTERNAL_ERROR;
     }
 
     public String getCode()

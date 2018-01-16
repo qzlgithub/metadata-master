@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
@@ -20,4 +21,6 @@ public interface RemoteProductService
     ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page);
 
     ProductListDTO getIndexProductList(Long clientId);
+
+    ProductDTO getClientProductDetail(Long clientId, Long productId);
 }

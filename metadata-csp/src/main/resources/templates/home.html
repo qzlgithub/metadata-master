@@ -87,7 +87,8 @@
                         <p class="fz-20 col5 tc important" th:if="${o.billPlan != 1}"
                            th:text="${o.unitAmt} + '元/次'"></p>
                         <p class="tc mb15 mt10">
-                            <a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a></p>
+                            <a href=""><i class="icon kefu mr5"></i>续约</a> ｜
+                            <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
                     </li>
                 </ul>
             </dd>

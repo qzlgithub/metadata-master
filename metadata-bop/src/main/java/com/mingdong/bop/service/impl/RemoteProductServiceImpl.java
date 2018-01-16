@@ -2,17 +2,19 @@ package com.mingdong.bop.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Constant;
-import com.mingdong.bop.constant.ProductStatus;
 import com.mingdong.bop.domain.entity.ApiReqInfo;
+import com.mingdong.bop.domain.entity.ClientProduct;
 import com.mingdong.bop.domain.entity.ProductClientInfo;
 import com.mingdong.bop.domain.entity.ProductRechargeInfo;
 import com.mingdong.bop.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.bop.domain.mapper.ApiReqMapper;
+import com.mingdong.bop.domain.mapper.ClientProductMapper;
 import com.mingdong.bop.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
@@ -44,6 +46,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private ApiReqMapper apiReqMapper;
     @Resource
     private ApiReqInfoMapper apiReqInfoMapper;
+    @Resource
+    private ClientProductMapper clientProductMapper;
 
     @Override
     public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
@@ -207,6 +211,34 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         dto.setOpened(opened);
         dto.setToOpen(toOpen);
+        return dto;
+    }
+
+    @Override
+    public ProductDTO getClientProductDetail(Long clientId, Long productId)
+    {
+        ProductDTO dto = new ProductDTO();
+        ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
+        if(clientProduct == null)
+        {
+            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            return dto;
+        }
+        ProductClientInfo info = productClientInfoMapper.getClientProductInfo(clientProduct.getId());
+        dto.setId(info.getProductId());
+        dto.setName(info.getProductName());
+        dto.setContent(info.getContent());
+        dto.setBillPlan(info.getBillPlan());
+        if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
+        {
+            dto.setFromDate(info.getStartDate());
+            dto.setToDate(info.getEndDate());
+        }
+        else
+        {
+            dto.setCostAmt(info.getUnitAmt());
+            dto.setBalance(info.getBalance());
+        }
         return dto;
     }
 

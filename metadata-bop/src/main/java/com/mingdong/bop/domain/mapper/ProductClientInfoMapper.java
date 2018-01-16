@@ -7,4 +7,6 @@ import java.util.List;
 public interface ProductClientInfoMapper
 {
     List<ProductClientInfo> getListByClient(Long clientId);
+
+    ProductClientInfo getClientProductInfo(Long clientProductId);
 }

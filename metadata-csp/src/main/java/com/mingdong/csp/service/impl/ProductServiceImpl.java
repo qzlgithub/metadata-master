@@ -4,13 +4,17 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
 import com.mingdong.core.model.dto.ProductRequestDTO;
 import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.service.ProductService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,14 +35,15 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl implements ProductService
 {
-
     @Resource
-    RemoteProductService remoteProductService;
+    private RemoteProductService productApi;
 
     @Override
-    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
+    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+            BLResp resp)
     {
-        ProductRecListDTO productRecListDTO = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate, endDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate,
+                endDate, page);
         if(productRecListDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResult());
@@ -66,8 +71,10 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.TOTAL, productRecListDTO.getTotal()).addData(Field.PAGES, productRecListDTO.getPages()).addData(Field.PAGE_NUM,
-                page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.TOTAL, productRecListDTO.getTotal())
+                .addData(Field.PAGES, productRecListDTO.getPages())
+                .addData(Field.PAGE_NUM, page.getPageNum())
+                .addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
     @Override
@@ -84,7 +91,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRecListDTO productRecListDTO = remoteProductService.getProductRechargeRecord(clientId, productId, fromDate, endDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate,
+                endDate, page);
         List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -112,9 +120,11 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp)
+    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+            BLResp resp)
     {
-        ProductReqListDTO productReqListDTO = remoteProductService.getProductRequestRecord(clientId, productId, fromDate, endDate, page);
+        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, endDate,
+                page);
         if(productReqListDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(productReqListDTO.getResult());
@@ -140,8 +150,11 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE,productReqListDTO.getCode()).addData(Field.TOTAL, productReqListDTO.getTotal()).addData(Field.PAGES, productReqListDTO.getPages()).addData(Field.PAGE_NUM,
-                page.getPageNum()).addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.addData(Field.CODE, productReqListDTO.getCode())
+                .addData(Field.TOTAL, productReqListDTO.getTotal())
+                .addData(Field.PAGES, productReqListDTO.getPages())
+                .addData(Field.PAGE_NUM, page.getPageNum())
+                .addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
     @Override
@@ -156,7 +169,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        ProductReqListDTO productReqListDTO = remoteProductService.getProductRequestRecord(clientId, productId, fromDate, endDate, page);
+        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, endDate,
+                page);
         List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -179,5 +193,32 @@ public class ProductServiceImpl implements ProductService
             }
         }
         return wb;
+    }
+
+    @Override
+    public void getClientProductDetail(Long clientId, Long productId, BLResp resp)
+    {
+        ProductDTO dto = productApi.getClientProductDetail(clientId, productId);
+        if(dto.getResult() != RestResult.SUCCESS)
+        {
+            resp.result(dto.getResult());
+            return;
+        }
+        resp.addData(Field.PRODUCT_ID, dto.getId() + "");
+        resp.addData(Field.PRODUCT_NAME, dto.getName());
+        resp.addData(Field.BILL_PLAN, dto.getBillPlan());
+        if(BillPlan.YEAR.getId().equals(dto.getBillPlan()))
+        {
+            resp.addData(Field.STATUS, ProductStatus.getStatusByDate(dto.getFromDate(), dto.getToDate()));
+            resp.addData(Field.FROM_DATE, DateUtils.format(dto.getFromDate(), DateFormat.YYYY_MM_DD_2));
+            resp.addData(Field.TO_DATE, DateUtils.format(dto.getToDate(), DateFormat.YYYY_MM_DD_2));
+            resp.addData(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(dto.getFromDate(), dto.getToDate()) + "");
+        }
+        else
+        {
+            resp.addData(Field.STATUS, ProductStatus.getStatusByBalance(dto.getCostAmt(), dto.getBalance()));
+            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(dto.getCostAmt()));
+            resp.addData(Field.BALANCE, NumberUtils.formatAmount(dto.getBalance()));
+        }
     }
 }
