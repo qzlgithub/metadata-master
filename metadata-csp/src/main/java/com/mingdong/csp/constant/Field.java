@@ -62,4 +62,5 @@ public interface Field
     String APP_ID = "appId";
     String APP_KEY = "appKey";
     String REQ_HOST = "reqHost";
+    String PRODUCT_LIST = "productList";
 }

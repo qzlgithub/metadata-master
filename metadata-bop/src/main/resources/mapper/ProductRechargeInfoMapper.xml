@@ -9,6 +9,7 @@
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
         <result column="recharge_type" property="rechargeType" jdbcType="VARCHAR" />
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
@@ -23,6 +24,7 @@
             pr.`id`          as id,
             pr.`create_time` as trade_time,
             pr.`trade_no`    as trade_no,
+            pr.`bill_plan`   as bill_plan,
             c.`corp_name`    as corp_name,
             c.`short_name`   as short_name,
             cu.`username`    as username,

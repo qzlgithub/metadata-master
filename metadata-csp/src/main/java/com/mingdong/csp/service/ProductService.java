@@ -5,6 +5,8 @@ import com.mingdong.core.model.BLResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public interface ProductService
 {
@@ -29,4 +31,6 @@ public interface ProductService
     XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date endDate);
 
     void getClientProductDetail(Long clientId, Long productId, BLResp resp);
+
+    List<Map<String, Object>> getClientProductList(Long clientId);
 }

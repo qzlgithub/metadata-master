@@ -60,4 +60,14 @@
                 on cp.`latest_recharge_id` = pr.`id`
         where cp.`id` = #{id}
     </select>
+
+    <select id="getClientDictList" parameterType="Long" resultMap="BaseResultMap">
+        select
+            p.`id`   as product_id,
+            p.`name` as product_name
+        from `client_product` cp
+            left join `product` p
+                on cp.`product_id` = p.`id`
+        where cp.`client_id` = #{clientId}
+    </select>
 </mapper>

@@ -2,7 +2,6 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta charset="utf-8"/>
     <title>明动科技</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -12,7 +11,6 @@
     <meta name="robots" content="index,follow"/>
     <meta name="application-name" content="bootcss.com"/>
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
-
     <!-- Site CSS -->
     <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
@@ -23,64 +21,62 @@
     <link href="../css/base.css" rel="stylesheet"/>
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
     <!-- Favicons -->
     <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
     <link rel="shortcut icon" href="images/icon/favicon.png"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
-    位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <a href="">服务详情</a> > <span class="col2">历史充值</span>
+    位置：<a href="">主页</a> > <a href="">我的服务</a> > <a href="">服务详情</a> > <span class="col2">历史充值</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
+
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--left-->
         <div th:include="product-common :: left"></div>
-        <!--left end-->
-        <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
-            <!--tab-->
             <div class="mt30 pl10 pr10 pb30">
                 <div class="border-title">服务充值记录</div>
-                <!--搜索-->
                 <ul class="search-list clearfix border-b2 pb15 mt20">
                     <li>服务名称：
-                        <select name="modules" class="select-list">
+                        <select id="product-sel" class="select-list">
                             <option value="">全部</option>
-                            <option value="1">是</option>
-                            <option value="2">否</option>
+                            <option th:each="o : ${productList}" th:value="${o.id}" th:text="${o.name}"
+                                    th:selected="${o.id} eq ${productId}"></option>
                         </select>
                     </li>
-                    <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date" id="date1"
-                                                                                autocomplete="off" class="layui-input"/></em><i
-                            class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                    <li class="position-r">统计时间：
+                        <em class="inline-block">
+                            <input type="text" id="from-date" autocomplete="off" class="layui-input date"/>
+                        </em>
+                        -
+                        <em class="inline-block">
+                            <input type="text" id="to-date" autocomplete="off" class="layui-input date"/>
+                        </em>
+                        <!--<i class="layui-icon fz-24 date-icon col4">&#xe637;</i>-->
+                    </li>
                     <li>
-                        <button class="check-button">查询</button>
+                        <input type="hidden" id="page-num"/>
+                        <input type="hidden" id="page-size"/>
+                        <button class="check-button" id="search">查询</button>
                     </li>
                 </ul>
-                <!--搜索 end-->
                 <div class="clearfix mt30">
-                    <em class="fz-14 pl15 col4 pt15">共50,000条</em>
+                    <em class="fz-14 pl15 col4 pt15">
+                        共
+                        <md id="total-qty">0</md>
+                        条
+                    </em>
                     <span class="fr mb10">
-                一次最多导出1000条<a href="customer-add.html" class="add-button ml10">导出</a>
-            </span>
+                        一次最多导出1000条<a href="customer-add.html" class="add-button ml10">导出</a>
+                    </span>
                 </div>
                 <table class="layui-table mt10">
                     <thead>
@@ -94,16 +90,7 @@
                         <th>合同编号</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>001</td>
-                        <td>admin</td>
-                        <td>阿里巴巴</td>
-                        <td>阿里巴巴</td>
-                        <td>购物/网上商超</td>
-                        <td>张三</td>
-                        <td>18733035161</td>
-                    </tr>
+                    <tbody id="data-list">
                     </tbody>
                 </table>
                 <!--page-->
@@ -124,8 +111,10 @@
                             <a href="javascript:;" class="layui-laypage-next" data-page="2">
                                 <i class="layui-icon"></i>
                             </a>
-                            <span class="layui-laypage-skip">到第<input type="text" min="1" value="1" class="layui-input"/>页<button
-                                    type="button" class="layui-laypage-btn">确定</button></span>
+                            <span class="layui-laypage-skip">
+                                到第<input type="text" min="1" value="1" class="layui-input"/>页
+                                <button type="button" class="layui-laypage-btn">确定</button>
+                            </span>
                             <span class="layui-laypage-count">共 1000 条</span>
                             <span class="layui-laypage-limits">
                           <select lay-ignore="">
@@ -143,28 +132,15 @@
                         </div>
                     </div>
                 </div>
-                <!--page end-->
             </div>
-            <!--tab-->
         </div>
-        <!--right end-->
-
     </div>
-
-
 </div>
-<!--内容 end-->
 
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 <div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
@@ -178,30 +154,7 @@
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script>
-    var message;
-    layui.config({
-        base: '../build/js/'
-    }).use(['app', 'message', 'laydate'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        laydate = layui.laydate;
-        //日期
-        laydate.render({
-            elem: '#date'
-        });
-        laydate.render({
-            elem: '#date1'
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/recharge.js}"></script>
 </body>
 </html>
   

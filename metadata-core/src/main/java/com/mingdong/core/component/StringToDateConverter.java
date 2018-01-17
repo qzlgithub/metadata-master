@@ -1,4 +1,4 @@
-package com.mingdong.bop.configurer;
+package com.mingdong.core.component;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;

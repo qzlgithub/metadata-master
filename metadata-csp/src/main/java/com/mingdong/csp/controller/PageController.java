@@ -22,6 +22,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class PageController
@@ -114,20 +116,28 @@ public class PageController
 
     @LoginRequired
     @GetMapping(value = {"/product/recharge.html"})
-    public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID) Long productId)
+    public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/recharge");
-        view.addObject(Field.PRODUCT_ID, productId + "");
+        List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
+        view.addObject(Field.PRODUCT_LIST, productList);
+        if(productId != null)
+        {
+            view.addObject(Field.PRODUCT_ID, productId + "");
+        }
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
 
     @LoginRequired
     @GetMapping(value = {"/product/request.html"})
-    public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID) Long productId)
+    public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/request");
-        view.addObject(Field.PRODUCT_ID, productId + "");
+        if(productId != null)
+        {
+            view.addObject(Field.PRODUCT_ID, productId + "");
+        }
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

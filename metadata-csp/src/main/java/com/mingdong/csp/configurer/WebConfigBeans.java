@@ -1,4 +1,4 @@
-package com.mingdong.bop.configurer;
+package com.mingdong.csp.configurer;
 
 import com.mingdong.core.component.StringToDateConverter;
 import org.springframework.context.annotation.Configuration;

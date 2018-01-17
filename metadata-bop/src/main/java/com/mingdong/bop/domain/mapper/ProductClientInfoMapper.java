@@ -9,4 +9,6 @@ public interface ProductClientInfoMapper
     List<ProductClientInfo> getListByClient(Long clientId);
 
     ProductClientInfo getClientProductInfo(Long clientProductId);
+
+    List<ProductClientInfo> getClientDictList(Long clientId);
 }

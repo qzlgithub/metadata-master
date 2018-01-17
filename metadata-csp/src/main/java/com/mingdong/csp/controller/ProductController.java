@@ -29,7 +29,7 @@ public class ProductController
      * 查询产品充值记录
      */
     @LoginRequired
-    @GetMapping(value = "recharge/list")
+    @GetMapping(value = "recharge")
     public BLResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.END_DATE, required = false) Date endDate,

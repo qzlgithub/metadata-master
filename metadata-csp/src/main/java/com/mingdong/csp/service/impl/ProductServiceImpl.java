@@ -8,7 +8,9 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ProductDTO;
+import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
@@ -56,15 +58,16 @@ public class ProductServiceImpl implements ProductService
             for(ProductRechargeDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, item.getId());
+                // map.put(Field.ID, item.getId());
                 map.put(Field.AMOUNT, NumberUtils.formatAmount(item.getAmount()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 map.put(Field.CONTRACT_NO, item.getContractNo());
-                map.put(Field.CORP_NAME, item.getCorpName());
+                // map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.PRODUCT_NAME, item.getProductName());
+                map.put(Field.BILL_PLAN, item.getBillPlan()); // TODO
                 map.put(Field.RECHARGE_TYPE, item.getRechargeType());
-                map.put(Field.REMARK, item.getRemark());
-                map.put(Field.SHORT_NAME, item.getShortName());
+                // map.put(Field.REMARK, item.getRemark());
+                // map.put(Field.SHORT_NAME, item.getShortName());
                 map.put(Field.TRADE_NO, item.getTradeNo());
                 map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
                 list.add(map);
@@ -220,5 +223,23 @@ public class ProductServiceImpl implements ProductService
             resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(dto.getCostAmt()));
             resp.addData(Field.BALANCE, NumberUtils.formatAmount(dto.getBalance()));
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> getClientProductList(Long clientId)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        ProductDictDTO dto = productApi.getClientProductDictDTO(clientId);
+        if(dto.getResult() == RestResult.SUCCESS)
+        {
+            for(DictDTO d : dto.getProductDictList())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, d.getKey());
+                map.put(Field.NAME, d.getValue());
+                list.add(map);
+            }
+        }
+        return list;
     }
 }

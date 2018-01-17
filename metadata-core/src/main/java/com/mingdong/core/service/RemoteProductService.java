@@ -2,6 +2,7 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ProductDTO;
+import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
@@ -23,4 +24,6 @@ public interface RemoteProductService
     ProductListDTO getIndexProductList(Long clientId);
 
     ProductDTO getClientProductDetail(Long clientId, Long productId);
+
+    ProductDictDTO getClientProductDictDTO(Long clientId);
 }

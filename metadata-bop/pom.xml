@@ -17,10 +17,6 @@
             <artifactId>metadata-core</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
         <!-- spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

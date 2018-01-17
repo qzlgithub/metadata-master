@@ -11,7 +11,7 @@ layui.config({
     app.set({type: 'iframe'}).init();
     $("#home-greeting").text(getGreeting());
     var first = sessionStorage.getItem("first_login");
-    if(first !== "1") {
+    if(first === "1") {
         layer.open({
             title: false,
             type: 1,

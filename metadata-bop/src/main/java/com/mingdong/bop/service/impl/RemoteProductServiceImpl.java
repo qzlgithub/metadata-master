@@ -16,7 +16,9 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ProductDTO;
+import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRecListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
@@ -239,6 +241,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
             dto.setCostAmt(info.getUnitAmt());
             dto.setBalance(info.getBalance());
         }
+        return dto;
+    }
+
+    @Override
+    public ProductDictDTO getClientProductDictDTO(Long clientId)
+    {
+        ProductDictDTO dto = new ProductDictDTO();
+        List<ProductClientInfo> dataList = productClientInfoMapper.getClientDictList(clientId);
+        List<DictDTO> dictList = new ArrayList<>();
+        for(ProductClientInfo o : dataList)
+        {
+            DictDTO dd = new DictDTO();
+            dd.setKey(o.getProductId() + "");
+            dd.setValue(o.getProductName());
+            dictList.add(dd);
+        }
+        dto.setProductDictList(dictList);
         return dto;
     }
 

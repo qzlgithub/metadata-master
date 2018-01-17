@@ -13,6 +13,7 @@ public class ProductRechargeDTO implements Serializable
     private String shortName;
     private String username;
     private String productName;
+    private Integer billPlan;
     private String rechargeType;
     private BigDecimal amount;
     private BigDecimal balance;
@@ -87,6 +88,16 @@ public class ProductRechargeDTO implements Serializable
     public void setProductName(String productName)
     {
         this.productName = productName;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
     }
 
     public String getRechargeType()
