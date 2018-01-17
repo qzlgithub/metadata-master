@@ -14,6 +14,7 @@
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 </head>
 
+
 <body>
 <div class="layui-layout layui-layout-admin kit-layout-admin">
     <div th:include="common :: top"></div>
@@ -343,27 +344,31 @@
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 
+
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
     document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
 </script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="../../static/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/account.add.js}"></script>
+<!--<script type="text/javascript" th:src="@{/js/manager.add.js}"></script>-->
 <script>
     var message;
     layui.config({
         base: '../../static/build/js/'
-    }).use(['app', 'message', 'laydate'], function() {
+    }).use(['app', 'message'], function() {
         var app = layui.app,
             $ = layui.jquery,
             layer = layui.layer;
         //将message设置为全局以便子页面调用
         message = layui.message;
-        laydate = layui.laydate;
         //主入口
-        //修改密码
+        app.set({
+            type: 'iframe'
+        }).init();
         $('#editpwd').on('click', function() {
             layer.open({
                 title: false,
@@ -410,7 +415,10 @@
             $(".time-input2").toggle();
         });
     });
+
 </script>
+
+
 </body>
 
 </html>

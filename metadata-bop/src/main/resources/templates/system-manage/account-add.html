@@ -107,16 +107,17 @@
                         <td>后台账号管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="checkall"/>全选
-                            <input type="checkbox" class="privilege" id="11101"/>添加
-                            <input type="checkbox" class="privilege" id="11102"/>编辑
-                            <input type="checkbox" class="privilege" id="11103"/>停用
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
+                            <input type="checkbox" class="privilege" name="check" id="11101"/>添加
+                            <input type="checkbox" class="privilege" name="check" id="11102"/>编辑
+                            <input type="checkbox" class="privilege" name="check" id="11103"/>停用
                         </td>
                     </tr>
                     <tr>
                         <td>分组管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="11201"/>添加
                             <input type="checkbox" class="privilege" id="11202"/>编辑
                             <input type="checkbox" class="privilege" id="11203"/>停用
@@ -127,7 +128,8 @@
                         <td>栏目管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="12101"/>修改图标
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
+                            <input type="checkbox" class="privilege " id="12101"/>修改图标
                             <input type="checkbox" class="privilege" id="12102"/>是否显示
                             <input type="checkbox" class="privilege" id="12103"/>编辑
                             <input type="checkbox" class="privilege" id="12104"/>删除
@@ -137,6 +139,7 @@
                         <td>充值类型</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="12201"/>添加类型
                             <input type="checkbox" class="privilege" id="12202"/>是否显示
                             <input type="checkbox" class="privilege" id="12203"/>编辑
@@ -147,6 +150,7 @@
                         <td>行业分类</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="12301"/>添加行业
                             <input type="checkbox" class="privilege" id="12302"/>是否显示
                             <input type="checkbox" class="privilege" id="12303"/>编辑
@@ -157,6 +161,7 @@
                     <tr>
                         <td>其他设置</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="12401"/>设置客服
                             <input type="checkbox" class="privilege" id="12402"/>设置子账号数量
                         </td>
@@ -166,6 +171,7 @@
                         <td rowspan="2">产品管理</td>
                         <td>产品类别管理</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="21101"/>添加
                             <input type="checkbox" class="privilege" id="21102"/>编辑
                             <input type="checkbox" class="privilege" id="21103"/>停用
@@ -174,6 +180,7 @@
                     <tr>
                         <td>产品列表</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="21201"/>添加
                             <input type="checkbox" class="privilege" id="21202"/>编辑
                             <input type="checkbox" class="privilege" id="21203"/>停用
@@ -187,6 +194,7 @@
                         <td>客户管理
                         </td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="31101"/>查看
                             <input type="checkbox" class="privilege" id="31102"/>添加
                             <input type="checkbox" class="privilege" id="31103"/>编辑
@@ -208,12 +216,14 @@
                         <td rowspan="5">运营数据管理</td>
                         <td>运营数据汇总</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="41101"/>查看
                         </td>
                     </tr>
                     <tr>
                         <td>客户数据</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="41201"/>查看
                             <input type="checkbox" class="privilege" id="41202"/>导出
                         </td>
@@ -221,6 +231,7 @@
                     <tr>
                         <td>充值数据</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="41301"/>查看
                             <input type="checkbox" class="privilege" id="41302"/>导出
                         </td>
@@ -228,6 +239,7 @@
                     <tr>
                         <td>营收列表</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="41401"/>查看
                             <input type="checkbox" class="privilege" id="41402"/>导出
                         </td>
@@ -235,6 +247,7 @@
                     <tr>
                         <td>产品请求数据</td>
                         <td class="tl important">
+                            <input type="checkbox" class="privilege reverseSelect"/>全选
                             <input type="checkbox" class="privilege" id="41501"/>查看
                             <input type="checkbox" class="privilege" id="41502"/>导出
                         </td>
@@ -292,17 +305,17 @@
         });
     });
     //全选复选框
-    $(document).ready(function() {
-        $('#checkall').click(function() { /*checkall是全选复选框的id名称*/
-            $('input:checkbox[id]').prop('checked', this.checked);
-            /*设置复选框的动态属性*/
-        });
-        $('input:checkbox[id]').click(function() {
-            isall = $('input:checkbox[id]').length == $('input:checkbox[id]:checked').length;
-            /*获取当前选中的个数，判断是否跟全部复选框的个数是否相等*/
-            $('#checkall').prop('checked', isall);
-        });
-    });
+    $(function(){
+        $(".reverseSelect").on("click",function(){
+            if(!$(this).is(":checked")){
+                $(this).parent("td").find('input').prop("checked",false);
+            }else{
+                $(this).parent("td").find('input').prop("checked",true);
+            }
+        })
+    })
+
+
 </script>
 </body>
 </html>

@@ -275,9 +275,11 @@ $(document).ready(function() {
 }*/
 function checkStartTime() {
     var startTime = $("#renew-start").val();
+    console.log("startTime",startTime);
     var reg = new RegExp(
         "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(startTime !== "") {
+
+    if(startTime !=="") {
         if(reg.test(startTime)) {
             $("#startTimeTip").text("");
             $("#startTimeTip").hide();
@@ -300,7 +302,8 @@ function checkEndTime() {
     var reg =
         new
         RegExp("^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(endTime !== "") {
+    console.log("endTime",endTime);
+    if(endTime) {
         if(reg.test(endTime)) {
             if(getDate(startTime) - getDate(endTime) > 0) {
                 $("#endTimeTip").text("结束时间不能小于开始时间");

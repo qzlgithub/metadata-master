@@ -200,7 +200,9 @@
                 </li>
             </ul>
         </div>
-        <div class="box" id="pagination"></div>
+        <div class="layui-form-item tc">
+            <div class="box" id="pagination"></div>
+        </div>
     </div>
 </div>
 <!-- 冻结解冻提示层 -->
@@ -247,13 +249,13 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>服务时间：</label>
                 <div class="layui-input-inline" style="width: 150px;">
                     <input type="text" id="renew-start" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date" onblur="checkStartTime()"/>
+                           autocomplete="off" class="layui-input date" onchange="checkStartTime()"/>
                     <i class="col3 pl10" id="startTimeTip" style="display: none"></i>
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline" style="width: 150px;">
                     <input type="text" id="renew-end" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date" onblur="checkEndTime()"/>
+                           autocomplete="off" class="layui-input date" onchange="checkEndTime()"/>
                     <i class="col3 pl10" id="endTimeTip" style="display: none"></i>
                 </div>
             </div>
@@ -269,7 +271,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-amt" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display: inline;" onblur="checkRecharge()"/> 元
+                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge()"/> 元
                     <i class="col3 pl10" id="rechargeTip" style="display: none"></i>
                 </div>
             </div>
@@ -353,7 +355,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="open-amt" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display:inline;" onblur="checkOpenAmt()"/> 元
+                           class="layui-input" style="width:60%; display:inline;" onblur="checkOpenAmt()"/> 元
                     <i class="col3 pl10" id="openAmtTip" style="display: none"></i>
                 </div>
             </div>
