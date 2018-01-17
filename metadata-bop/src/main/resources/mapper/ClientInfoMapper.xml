@@ -68,17 +68,30 @@
     <!-- @formatter:on -->
 
     <select id="getSimilarCorpByName" resultMap="BaseResultMap">
-        select
-            c.`corp_name`   as corp_name,
-            cu.`name`       as name,
-            cu.`phone`      as phone,
-            cu.`email`      as email,
-            c.`create_time` as register_time
-        from `client` c
-            left join `client_user` cu
-                on c.`primary_user_id` = cu.`id`
-        where (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
+        select c.`corp_name` as corp_name, cu.`name` as name, cu.`phone` as phone, cu.`email` as email, c.`create_time`
+        as register_time from `client` c left join `client_user` cu on c.`primary_user_id` = cu.`id` where
+        (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
         <if test="clientId != null">and c.`id` != #{clientId}</if>
         limit 5
     </select>
+
+    <select id="getClientInfoListByDate" resultMap="BaseResultMap">
+      select
+          c.`create_time` as register_time,
+          c.`corp_name`   as corp_name,
+          c.`short_name`  as short_name,
+          cu.`username`   as username,
+          cu.`name`       as name,
+          cu.`phone`      as phone,
+          cu.`email`      as email,
+          m.`name`  as manager_name
+      from `client` c
+         left join `client_user` cu
+            on c.`primary_user_id` = cu.`id`
+                left join `manager` m
+                    on c.`manager_id` = m.`id`
+      where c.`create_time` >= #{date}
+    </select>
+
+
 </mapper>

@@ -15,8 +15,6 @@ public enum RestResult
     ACCOUNT_IS_EXIST("100010", "账号已存在"),
     USERNAME_EXIST("100011", "用户名已存在"),
     INVALID_CAPTCHA("100012", "无效的验证码"),
-    ACCOUNT_COUNT_MAX("100013", "账号数量已到上限"),
-
     INVALID_PRODUCT_NAME("100013", "无效的产品类型名称"),
     KEY_FIELD_MISSING("100014", "关键字段不能为空"),
     ROLE_NAME_EXIST("100015", "角色名已存在"),
@@ -26,6 +24,8 @@ public enum RestResult
     CONTRACT_IS_EXIST("100019", "合同编号已存在"),
     PRODUCT_NAME_EXIST("100020", "产品名称已存在"),
     PRODUCT_NOT_OPEN("100021", "客户未开通本产品"),
+    ACCOUNT_COUNT_MAX("100022", "账号数量已到上限"),
+    PARAMETER_ERROR("100023", "参数错误"),
     ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),
     INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
 

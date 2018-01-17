@@ -3,6 +3,7 @@ package com.mingdong.bop.domain.mapper;
 import com.mingdong.bop.domain.entity.ClientInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ClientInfoMapper
@@ -15,4 +16,6 @@ public interface ClientInfoMapper
             @Param("industryIdList") List<Long> industryIdList);
 
     List<ClientInfo> getSimilarCorpByName(@Param("name") String name, @Param("clientId") Long clientId);
+
+    List<ClientInfo> getClientInfoListByDate(@Param("date") Date date);
 }

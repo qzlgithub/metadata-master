@@ -38,9 +38,9 @@
                             <span class="layui-col-md3 mt25"><img src="../../static/images/img1.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">新增客户</p>
-                                <p class="col4 mt10" >近30天： <span th:text="${clientCountByDate}"/>位 </p>
-                                <p class="mt10 col2" >总客户： <span th:text="${allClientCount}"/>位 </p>
-                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                <p class="col4 mt10">近30天： <span th:text="${clientCountByDate}"/>位 </p>
+                                <p class="mt10 col2">总客户： <span th:text="${allClientCount}"/>位 </p>
+                                <p class="mt10 tr fz-12"><a href="/stats/customer.html">查看明细</a></p>
                             </div>
                         </li>
                         <li class="layui-col-md3 mr40 ml40">
@@ -49,7 +49,7 @@
                                 <p class="fz-16 mt10">客户充值</p>
                                 <p class="col4 mt10">近7天充值： <span th:text="${clientRechargeByWeek}"/>元 </p>
                                 <p class="mt10 col2">近30天充值： <span th:text="${clientRechargeByMonth}"/>元 </p>
-                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                <p class="mt10 tr fz-12"><a href="/stats/recharge.html">查看明细</a></p>
                             </div>
                         </li>
                         <li class="layui-col-md3">
@@ -340,7 +340,7 @@
 <!--提示层 end-->
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 
 <script type="text/javascript">
