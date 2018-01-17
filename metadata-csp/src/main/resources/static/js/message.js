@@ -1,7 +1,7 @@
 $(function() {
     var obj = {
         pageNum: 1,
-        pageSize: 1
+        pageSize: 10
     };
     getMessageListInit(obj);
 });

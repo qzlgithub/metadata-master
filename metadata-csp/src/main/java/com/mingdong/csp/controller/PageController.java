@@ -178,7 +178,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/system/account-list");
         view.addAllObjects(RequestThread.getPageData());
-        view.addObject("primary", RequestThread.getPrimary() == 1);
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
         return view;
     }
 
