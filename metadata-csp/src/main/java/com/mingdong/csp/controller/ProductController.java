@@ -114,8 +114,13 @@ public class ProductController
             resp.result(RestResult.PARAMETER_ERROR);
             return resp;
         }
+        String[] types = selectedType.split(",");
+        Integer[] typeInts = new Integer[types.length];
+        for(int i = 0;i < types.length;i++){
+            typeInts[i] = Integer.valueOf(types[i]);
+        }
         productService.getProductListBy(RequestThread.getClientId(),isOpen,
-                selectedType.split(","), new Page(pageNum, pageSize), resp);
+                typeInts, new Page(pageNum, pageSize), resp);
         return resp;
     }
 }

@@ -20,6 +20,7 @@ public class ProductClientInfo
     private String remark;
     private String content;
     private String code;
+    private Integer typeId;
 
     public String getCode()
     {
@@ -169,5 +170,15 @@ public class ProductClientInfo
     public void setContent(String content)
     {
         this.content = content;
+    }
+
+    public Integer getTypeId()
+    {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId)
+    {
+        this.typeId = typeId;
     }
 }

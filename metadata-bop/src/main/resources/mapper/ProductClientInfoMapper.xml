@@ -5,6 +5,7 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
         <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="type_id" property="typeId" jdbcType="BIGINT" />
         <result column="type_name" property="typeName" jdbcType="VARCHAR" />
         <result column="app_id" property="appId" jdbcType="VARCHAR" />
         <result column="client_product_id" property="clientProductId" jdbcType="BIGINT" />
@@ -34,7 +35,8 @@
         select
             p.`id`           as product_id,
             p.`name`         as product_name,
-            p.`code`        as code,
+            p.`code`         as code,
+            p.`type_id`         as type_id,
             pt.`name`        as type_name,
             cp.`app_id`      as app_id,
             cp.`id`          as client_product_id,
@@ -54,6 +56,62 @@
             left join `dict_product_type` pt
                 on p.`type_id` = pt.`id`
         where p.`enabled` = 1
+    </select>
+
+    <select id="countInfoListBy" resultType="Integer">
+        select
+        count(p.`id`)
+        from `product` p
+        <if test="isOpen == null">left join `client_product` cp</if>
+        <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
+        <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
+        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
+        left join `product_recharge` pr
+        on cp.`latest_recharge_id` = pr.`id`
+        left join `dict_product_type` pt
+        on p.`type_id` = pt.`id`
+        where p.`enabled` = 1
+        <if test="selectedType != null">
+            and p.`type_id`
+            <foreach  collection="selectedType" item="typeId" open="in (" close=")" separator=",">
+                #{typeId}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getInfoListBy" resultMap="BaseResultMap">
+        select
+        p.`id`           as product_id,
+        p.`name`         as product_name,
+        p.`code`         as code,
+        p.`type_id`         as type_id,
+        pt.`name`        as type_name,
+        cp.`app_id`      as app_id,
+        cp.`id`          as client_product_id,
+        cp.`bill_plan`   as bill_plan,
+        pr.`start_date`  as start_date,
+        pr.`end_date`    as end_date,
+        pr.`amount`      as amount,
+        pr.`balance`     as balance,
+        pr.`unit_amt`    as unit_amt,
+        pr.`update_time` as arrear_time,
+        p.`remark`       as remark
+        from `product` p
+        <if test="isOpen == null">left join `client_product` cp</if>
+        <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
+        <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
+        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
+        left join `product_recharge` pr
+        on cp.`latest_recharge_id` = pr.`id`
+        left join `dict_product_type` pt
+        on p.`type_id` = pt.`id`
+        where p.`enabled` = 1
+        <if test="selectedType != null">
+            and p.`type_id`
+            <foreach  collection="selectedType" item="typeId" open="in (" close=")" separator=",">
+                #{typeId}
+            </foreach>
+        </if>
     </select>
 
     <select id="getClientProductInfo" parameterType="Long" resultMap="BaseResultMap">

@@ -38,5 +38,5 @@ public interface ProductService
 
     List<Map<String, Object>> getDictProductTypeList(Integer enabled);
 
-    void getProductListBy(Long clientId, Integer isOpen,String[] selectedType, Page page, BLResp resp);
+    void getProductListBy(Long clientId, Integer isOpen,Integer[] selectedType, Page page, BLResp resp);
 }
