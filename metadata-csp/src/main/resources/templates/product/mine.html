@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="../css/font-awesome.min.css" rel="stylesheet"/>
+    <!--<link href="../css/font-awesome.min.css" rel="stylesheet"/>-->
     <link href="../css/site.min.css" rel="stylesheet"/>
     <link href="../css/animate.min.css" rel="stylesheet"/>
     <link href="../css/base.css" rel="stylesheet"/>
@@ -137,7 +137,6 @@
                                 <p class="tc mb15 mt10">
                                     <a href=""><i class="icon kefu mr5"></i>再次开通</a> ｜
                                     <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
-
                             </li>
                         </ul>
                     </dd>
@@ -146,7 +145,6 @@
         </div>
         <!--服务列表 left end-->
     </div>
-
 </div>
 <!--内容 end-->
 
@@ -184,7 +182,7 @@
         }else{
         var index = $(this).attr('data');
         $("#mms"+index).css({ "background": "#fff", "padding-left": "0px" });
-        }  
+        }
       })
     })*/
 
