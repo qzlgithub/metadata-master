@@ -425,6 +425,7 @@ function getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, paren
                 .replace("#{accountEnabled}", list[d].userEnabled === 1 ? "冻结账号" : "解冻账号");
                 $("#dataBody").append(dataTr);
             }
+            renderCheckbox();
             $("#total").text("共 " + data.total + " 条");
             $("#pages").text("共 " + data.pages + " 页");
             $("#totalPage").val(data.pages);
@@ -444,6 +445,15 @@ function getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, paren
             refreshPageInfo($("#frontPages"), $("#nextPages"), data.pageNum, data.pages);
         }
     );
+}
+
+//重新渲染
+function renderCheckbox(){
+    ;!function(){
+        //无需再执行layui.use()方法加载模块，直接使用即可
+        var form = layui.form;
+        form.render('checkbox');
+    }();
 }
 
 function refreshPageInfo(front, next, pageNum, totalPage) {

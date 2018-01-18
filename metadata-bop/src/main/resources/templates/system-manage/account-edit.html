@@ -331,6 +331,16 @@
             });
         });
     });
+    //全选复选框
+    $(function(){
+        $(".reverseSelect").on("click",function(){
+            if(!$(this).is(":checked")){
+                $(this).parent("td").find('input').prop("checked",false);
+            }else{
+                $(this).parent("td").find('input').prop("checked",true);
+            }
+        })
+    })
 </script>
 </body>
 

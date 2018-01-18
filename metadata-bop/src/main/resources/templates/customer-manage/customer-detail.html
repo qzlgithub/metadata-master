@@ -333,13 +333,13 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>服务时间：</label>
                 <div class="layui-input-inline">
                     <input type="text" id="open-start" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date" onblur="checkOpenStart()"/>
+                           autocomplete="off" class="layui-input date" onchange="checkOpenStart()"/>
                     <i class="col3 pl10" id="openStartTip" style="display: none"></i>
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
                     <input type="text" id="open-end" lay-verify="date" placeholder="yyyy-MM-dd"
-                           autocomplete="off" class="layui-input date" onblur="checkOpenEnd()"/>
+                           autocomplete="off" class="layui-input date" onchange="checkOpenEnd()"/>
                     <i class="col3 pl10" id="openEndTip" style="display: none"></i>
                 </div>
             </div>
