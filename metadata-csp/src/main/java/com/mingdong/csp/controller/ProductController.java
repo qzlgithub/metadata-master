@@ -116,11 +116,12 @@ public class ProductController
         }
         String[] types = selectedType.split(",");
         Integer[] typeInts = new Integer[types.length];
-        for(int i = 0;i < types.length;i++){
+        for(int i = 0; i < types.length; i++)
+        {
             typeInts[i] = Integer.valueOf(types[i]);
         }
-        productService.getProductListBy(RequestThread.getClientId(),isOpen,
-                typeInts, new Page(pageNum, pageSize), resp);
+        productService.getProductListBy(RequestThread.getClientId(), isOpen, typeInts, new Page(pageNum, pageSize),
+                resp);
         return resp;
     }
 }

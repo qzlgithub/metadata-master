@@ -150,18 +150,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ProductListDTO dto = new ProductListDTO();
         List<ProductClientInfo> dataList;
-        if(page == null){
-            dataList = productClientInfoMapper.getInfoListBy(clientId,isOpen,selectedType);
-        }else{
-            int total = productClientInfoMapper.countInfoListBy(clientId,isOpen,selectedType);
+        if(page == null)
+        {
+            dataList = productClientInfoMapper.getInfoListBy(clientId, isOpen, selectedType);
+        }
+        else
+        {
+            int total = productClientInfoMapper.countInfoListBy(clientId, isOpen, selectedType);
             int pages = page.getTotalPage(total);
             dto.setTotal(total);
             dto.setPages(pages);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productClientInfoMapper.getInfoListBy(clientId,isOpen,selectedType);
-            }else{
+                dataList = productClientInfoMapper.getInfoListBy(clientId, isOpen, selectedType);
+            }
+            else
+            {
                 dataList = new ArrayList<>();
             }
         }
@@ -268,18 +273,21 @@ public class RemoteProductServiceImpl implements RemoteProductService
         List<DictProductTypeDTO> dataDtoList = new ArrayList<>();
         dictProductTypeListDTO.setDictProductTypeDTOList(dataDtoList);
         List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
-        if(CollectionUtils.isNotEmpty(dataList)){
+        if(CollectionUtils.isNotEmpty(dataList))
+        {
             DictProductTypeDTO dictProductTypeDTO;
-            for(DictProductType item : dataList){
+            for(DictProductType item : dataList)
+            {
                 dictProductTypeDTO = new DictProductTypeDTO();
                 dataDtoList.add(dictProductTypeDTO);
-                dictProductTypeToDictProductTypeDTO(item,dictProductTypeDTO);
+                dictProductTypeToDictProductTypeDTO(item, dictProductTypeDTO);
             }
         }
         return dictProductTypeListDTO;
     }
 
-    private void dictProductTypeToDictProductTypeDTO(DictProductType left,DictProductTypeDTO right){
+    private void dictProductTypeToDictProductTypeDTO(DictProductType left, DictProductTypeDTO right)
+    {
         right.setId(left.getId());
         right.setCode(left.getCode());
         right.setName(left.getName());

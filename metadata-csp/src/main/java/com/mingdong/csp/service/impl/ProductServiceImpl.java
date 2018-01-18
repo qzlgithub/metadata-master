@@ -313,21 +313,25 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.TRASH_LIST, trashList);
         resp.addData(Field.NORMAL_LIST, productList);
     }
+
     @Override
-    public List<Map<String, Object>> getDictProductTypeList(Integer enabled){
+    public List<Map<String, Object>> getDictProductTypeList(Integer enabled)
+    {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map;
         DictProductTypeListDTO dictProductTypeListDTO = productApi.getDictProductTypeList(enabled);
         List<DictProductTypeDTO> dataDTOList = dictProductTypeListDTO.getDictProductTypeDTOList();
-        if(CollectionUtils.isNotEmpty(dataDTOList)){
-            for(DictProductTypeDTO item : dataDTOList){
+        if(CollectionUtils.isNotEmpty(dataDTOList))
+        {
+            for(DictProductTypeDTO item : dataDTOList)
+            {
                 map = new HashMap<>();
                 list.add(map);
-                map.put(Field.ID,item.getId()+"");
-                map.put(Field.CODE,item.getCode());
-                map.put(Field.NAME,item.getName());
-                map.put(Field.REMARK,item.getRemark());
-                map.put(Field.ENABLED,item.getEnabled()+"");
+                map.put(Field.ID, item.getId() + "");
+                map.put(Field.CODE, item.getCode());
+                map.put(Field.NAME, item.getName());
+                map.put(Field.REMARK, item.getRemark());
+                map.put(Field.ENABLED, item.getEnabled() + "");
             }
         }
         return list;
@@ -337,7 +341,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp)
     {
         List<Integer> typeList = Arrays.asList(selectedType);
-        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen, typeList.contains(Constant.All)?null:selectedType, page);
+        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen,
+                typeList.contains(Constant.All) ? null : selectedType, page);
         List<Map<String, Object>> allList = new ArrayList<>();
         Map<String, Object> map;
         if(productListDTO.getResult() == RestResult.SUCCESS)
@@ -346,9 +351,12 @@ public class ProductServiceImpl implements ProductService
             for(ProductDTO d : productListDTO.getOpened())
             {
                 map = new HashMap<>();
-                if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId())){
+                if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId()))
+                {
                     allList.add(map);
-                }else{
+                }
+                else
+                {
                     continue;
                 }
                 map.put(Field.PRODUCT_ID, d.getId() + "");
@@ -367,13 +375,17 @@ public class ProductServiceImpl implements ProductService
                     map.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
                 }
             }
-            if(TrueOrFalse.FALSE == isOpen){
+            if(TrueOrFalse.FALSE == isOpen)
+            {
                 for(ProductDTO d : productListDTO.getToOpen())
                 {
                     map = new HashMap<>();
-                    if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId())){
+                    if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId()))
+                    {
                         allList.add(map);
-                    }else{
+                    }
+                    else
+                    {
                         continue;
                     }
                     map.put(Field.PRODUCT_ID, d.getId() + "");
@@ -382,8 +394,8 @@ public class ProductServiceImpl implements ProductService
                 }
             }
         }
-        resp.addData(Field.LIST,allList);
-        resp.addData(Field.PAGES,productListDTO.getPages());
-        resp.addData(Field.TOTAL,productListDTO.getTotal());
+        resp.addData(Field.LIST, allList);
+        resp.addData(Field.PAGES, productListDTO.getPages());
+        resp.addData(Field.TOTAL, productListDTO.getTotal());
     }
 }

@@ -24,6 +24,11 @@ public class ProductDTO implements Serializable
     private String code;
     private Integer typeId;
 
+    public ProductDTO()
+    {
+        errCode = "000000";
+    }
+
     public String getCode()
     {
         return code;
@@ -32,11 +37,6 @@ public class ProductDTO implements Serializable
     public void setCode(String code)
     {
         this.code = code;
-    }
-
-    public ProductDTO()
-    {
-        errCode = "000000";
     }
 
     public String getErrCode()

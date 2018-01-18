@@ -86,7 +86,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>账号：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="add-username" placeholder="请输入" class="layui-input"/>
+                        <input type="text" id="add-username" placeholder="请输入" class="layui-input" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -104,7 +104,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col1">*</i>联系电话：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="add-phone" placeholder="请输入" class="layui-input"/>
+                        <input type="text" id="add-phone" placeholder="请输入" class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"/>
                     </div>
                 </div>
                 <div class="layui-form-item">

@@ -15,6 +15,9 @@ public interface ProductClientInfoMapper
 
     List<ProductClientInfo> getClientDictList(Long clientId);
 
-    List<ProductClientInfo> getInfoListBy(@Param("clientId")Long clientId,@Param("isOpen")Integer isOpen,@Param("selectedType")Integer[] selectedType);
-    int countInfoListBy(@Param("clientId")Long clientId,@Param("isOpen")Integer isOpen,@Param("selectedType")Integer[] selectedType);
+    List<ProductClientInfo> getInfoListBy(@Param("clientId") Long clientId, @Param("isOpen") Integer isOpen,
+            @Param("selectedType") Integer[] selectedType);
+
+    int countInfoListBy(@Param("clientId") Long clientId, @Param("isOpen") Integer isOpen,
+            @Param("selectedType") Integer[] selectedType);
 }
