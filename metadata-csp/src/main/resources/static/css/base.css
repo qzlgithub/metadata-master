@@ -319,6 +319,9 @@
 .fw-6.important {font-weight: 600 !important;}
 .fw-7.important {font-weight: 700 !important;}
 .fb{font-weight: bold;}
+.fb-normal{font-weight:normal;}
+
+.fb-normal.important{font-weight:normal!important;}
 
 /*width*/
 .col-5 {-webkit-box-flex: 0; -webkit-flex: 0 0 5%; -moz-box-flex: 0; -moz-flex: 0 0 5%; -ms-flex: 0 0 5%; flex: 0 0 5%; max-width: 5%;}

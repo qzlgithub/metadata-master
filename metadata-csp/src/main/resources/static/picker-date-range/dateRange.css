@@ -1,8 +1,6 @@
 
 /*========== reset ==========*/
-html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, iframe,hr{margin:0;padding:0;}
-body{font:12px/1.6 Tahoma,microsoft yahei,"微软雅黑","宋体";*font-family:"微软雅黑","宋体";}
-fieldset, img { border:0; }
+
 address, caption, cite, dfn, em, th, var{font-style:normal;font-weight:normal;}
 ol, ul { list-style:none; }
 caption, th { text-align:left; }
@@ -172,10 +170,7 @@ input{padding:2px 0 1px;*padding:4px 0 0;_padding:4px 0 0;_height:21px;}
  */
 .ta_date{ 
 			border:1px solid #d8d8d8;
-	-webkit-border-radius: 3px;
-   -moz-border-radius: 3px;
-	    border-radius: 3px;
-		 background-color: #fefefe;
+		 background-color: #fff;
 	  background-image: -ms-linear-gradient(top, #fafafa, #f5f5f5);
 	  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#f5f5f5));
 	  background-image: -moz-linear-gradient(top, #fafafa, #f5f5f5);
@@ -184,9 +179,7 @@ input{padding:2px 0 1px;*padding:4px 0 0;_padding:4px 0 0;_height:21px;}
 	  background-repeat: repeat-x;
 	   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-		   box-shadow:0px 1px 1px rgba(218,218,218,0.8);
-		   float:left;
+      display: inline-block;
 }
 
 .ta_date .date_title {
@@ -209,8 +202,8 @@ input{padding:2px 0 1px;*padding:4px 0 0;_padding:4px 0 0;_height:21px;}
 .ta_date .to{ padding:0 5px;}
 .ta_date .opt_sel{/*====*/
 	width:30px;
-	height:28px;
-	line-height:28px;
+	height:30px;
+	line-height:30px;
 	display:inline-block;
 	text-align:center;
 	vertical-align:middle;
@@ -234,7 +227,7 @@ input{padding:2px 0 1px;*padding:4px 0 0;_padding:4px 0 0;_height:21px;}
 	font-size:0;
 	content: "";
 	overflow:hidden;
-	*margin-top:10px;
+	margin-top:13px;
 }
 
 
