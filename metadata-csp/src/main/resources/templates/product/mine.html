@@ -43,7 +43,7 @@
                 data-offset-top="125">
                 <li><a href="#mms1">我的服务</a></li>
                 <li><a href="#mms2">服务提醒</a></li>
-                <li><a href="#mms3">回收站</a></li>
+                <li th:if="${trashList.size() != 0}"><a href="#mms3">回收站</a></li>
             </ul>
         </div>
         <!--服务列表 left-->
@@ -84,6 +84,9 @@
                 </dl>
                 <dl id="mms2" class="serve-list">
                     <dt>服务提醒</dt>
+                    <div th:if="${remindList.size() == 0}">
+                        ︿(￣︶￣)︿您当前的服务状态良好，请放心使用~
+                    </div>
                     <dd>
                         <ul class="row mr0 ml0">
                             <li th:each="o : ${remindList}">
@@ -112,7 +115,7 @@
                         </ul>
                     </dd>
                 </dl>
-                <dl id="mms3" class="serve-list">
+                <dl id="mms3" class="serve-list" th:if="${trashList.size() != 0}">
                     <dt>回收站</dt>
                     <dd>
                         <ul class="row mr0 ml0">

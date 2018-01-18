@@ -24,17 +24,6 @@
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
     <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
-    <link rel="shortcut icon" href="images/icon/favicon.png"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
@@ -49,9 +38,9 @@
             <div class="row mt15 ml5 mr15">
                 <ul class="clearfix checkbox-list mt15 pl10 col-md-10">
                     <em class="fl mt5">服务分类：</em>
-                    <li class="productTypeClass active" id="typeAllId"><input type="hidden"
-                                                                              class="productTypeIdClass"
-                                                                value="-99"/>不限</li>
+                    <li class="productTypeClass active" id="typeAllId">
+                        <input type="hidden" class="productTypeIdClass" value="-99"/>不限
+                    </li>
                     <li th:each="productType : ${productTypeList}"
                         class="productTypeClass"
                     ><input type="hidden" class="productTypeIdClass" th:value="${productType.id}"/><span
@@ -59,13 +48,11 @@
                 </ul>
                 <div class="col-md-2 mt15 tr checkbox" style="left: 92px;">
                     <input type='checkbox' id='isOpenId' name='isOpenName' onchange="doChangeParameter()"/>
-                    <label for='isOpenId'>已开通</label>
+                    <label for='isOpenId'>包含已开通</label>
                 </div>
             </div>
             <dl class="serve-list development-nav p0 important">
-                <dd id="dataBody">
-
-                </dd>
+                <dd id="dataBody"></dd>
             </dl>
             <div class="box" id="pagination"></div>
         </div>
@@ -90,7 +77,6 @@
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/all.js}"></script>
-
 </body>
 </html>
   
