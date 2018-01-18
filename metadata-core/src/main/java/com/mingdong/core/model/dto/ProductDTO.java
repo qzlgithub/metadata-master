@@ -11,12 +11,14 @@ public class ProductDTO implements Serializable
     private String errCode;
     private Long id;
     private String name;
+    private String typeName;
     private String remark;
     private String content;
     private Integer billPlan;
     private Integer status;
     private BigDecimal costAmt;
     private BigDecimal balance;
+    private Date arrearTime;
     private Date fromDate;
     private Date toDate;
 
@@ -53,6 +55,16 @@ public class ProductDTO implements Serializable
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public String getTypeName()
+    {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName)
+    {
+        this.typeName = typeName;
     }
 
     public String getRemark()
@@ -113,6 +125,16 @@ public class ProductDTO implements Serializable
     public void setBalance(BigDecimal balance)
     {
         this.balance = balance;
+    }
+
+    public Date getArrearTime()
+    {
+        return arrearTime;
+    }
+
+    public void setArrearTime(Date arrearTime)
+    {
+        this.arrearTime = arrearTime;
     }
 
     public Date getFromDate()

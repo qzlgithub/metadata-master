@@ -7,6 +7,7 @@ public class ProductClientInfo
 {
     private Long productId;
     private String productName;
+    private String typeName;
     private String appId;
     private Long clientProductId;
     private Integer billPlan;
@@ -15,6 +16,7 @@ public class ProductClientInfo
     private BigDecimal amount;
     private BigDecimal balance;
     private BigDecimal unitAmt;
+    private Date arrearTime;
     private String remark;
     private String content;
 
@@ -36,6 +38,16 @@ public class ProductClientInfo
     public void setProductName(String productName)
     {
         this.productName = productName;
+    }
+
+    public String getTypeName()
+    {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName)
+    {
+        this.typeName = typeName;
     }
 
     public String getAppId()
@@ -116,6 +128,16 @@ public class ProductClientInfo
     public void setUnitAmt(BigDecimal unitAmt)
     {
         this.unitAmt = unitAmt;
+    }
+
+    public Date getArrearTime()
+    {
+        return arrearTime;
+    }
+
+    public void setArrearTime(Date arrearTime)
+    {
+        this.arrearTime = arrearTime;
     }
 
     public String getRemark()

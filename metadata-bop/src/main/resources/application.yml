@@ -5,11 +5,11 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.96.154.110:3306/mis?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://192.168.2.159:3306/mis?useUnicode=true&useSSL=false&characterEncoding=utf-8
     username: root
-    password: iPwd@201712
+    password: wdkj@2018
   redis:
-    host: 47.96.15.125
+    host: 192.168.2.159
     port: 6379
     password: iPwd@201712
   thymeleaf:
@@ -33,4 +33,4 @@ dubbo:
   protocol:
     port: 33002
   registry:
-    address: 47.96.154.110:2181
+    address: 192.168.2.159:2181

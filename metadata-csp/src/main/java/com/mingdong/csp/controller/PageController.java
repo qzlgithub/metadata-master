@@ -110,6 +110,9 @@ public class PageController
     public ModelAndView productMine()
     {
         ModelAndView view = new ModelAndView("/product/mine");
+        BLResp resp = BLResp.build();
+        productService.getClientProductDetailList(RequestThread.getClientId(), resp);
+        view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
