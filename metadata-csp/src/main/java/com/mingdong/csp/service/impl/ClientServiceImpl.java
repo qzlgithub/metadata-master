@@ -155,7 +155,7 @@ public class ClientServiceImpl implements ClientService
             resp.addData(Field.ALLOWED_QTY, userListDTO.getAllowedQty());
             resp.addData(Field.SUB_USER_LIST, subUserList);
         }
-        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), null);
+        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), null, null, null);
         List<Map<String, Object>> opened = new ArrayList<>();
         List<Map<String, Object>> toOpen = new ArrayList<>();
         if(productListDTO.getResult() == RestResult.SUCCESS)

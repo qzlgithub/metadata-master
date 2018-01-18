@@ -146,21 +146,21 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductListDTO getIndexProductList(Long clientId, Page page)
+    public ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page)
     {
         ProductListDTO dto = new ProductListDTO();
         List<ProductClientInfo> dataList;
         if(page == null){
-            dataList = productClientInfoMapper.getListByClient(clientId);
+            dataList = productClientInfoMapper.getInfoListBy(clientId,isOpen,selectedType);
         }else{
-            int total = productClientInfoMapper.countListByClient(clientId);
+            int total = productClientInfoMapper.countInfoListBy(clientId,isOpen,selectedType);
             int pages = page.getTotalPage(total);
             dto.setTotal(total);
             dto.setPages(pages);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productClientInfoMapper.getListByClient(clientId);
+                dataList = productClientInfoMapper.getInfoListBy(clientId,isOpen,selectedType);
             }else{
                 dataList = new ArrayList<>();
             }
@@ -177,6 +177,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
                     d.setCode(info.getCode());
+                    d.setTypeId(info.getTypeId());
                     d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
                     if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
@@ -203,6 +204,9 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
                     d.setRemark(info.getRemark());
+                    d.setCode(info.getCode());
+                    d.setTypeName(info.getTypeName());
+                    d.setTypeId(info.getTypeId());
                     toOpen.add(d);
                 }
             }
@@ -276,6 +280,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     private void dictProductTypeToDictProductTypeDTO(DictProductType left,DictProductTypeDTO right){
+        right.setId(left.getId());
         right.setCode(left.getCode());
         right.setName(left.getName());
         right.setRemark(left.getRemark());

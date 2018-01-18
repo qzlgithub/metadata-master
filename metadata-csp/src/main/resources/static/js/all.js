@@ -15,12 +15,11 @@ function getAllProductList(obj, pageFun) {
                 $("#dataBody").empty();
                 var htmlStr = '<ul class="row mr0 ml0" >';
                 for(var d in list) {
-                    console.log(list[d]);
                     htmlStr += '<li>';
                     if(typeof list[d].status === 'undefined'){
                         htmlStr += '<div class="serve-list-title">'+list[d].name+'<span class="fr">未开通</span></div>';
                         htmlStr += '<p class="col2 tl fz-14 p10 important">'+list[d].remark+'</p>';
-                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="">查看详情</a></p>';
+                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id='+list[d].productId+'">查看详情</a></p>';
                     }else{
                         htmlStr += '<div class="serve-list-title">'+list[d].name;
                         if(list[d].status === 0){
@@ -44,7 +43,7 @@ function getAllProductList(obj, pageFun) {
                             htmlStr += '<p class="col2 tc fz-14 important">当前余额：￥'+list[d].balance+'</p>';
                             htmlStr += '<p class="fz-20 col5 tc important">'+list[d].unitAmt+'元/次</p>';
                         }
-                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>'
+                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="/product/detail.html?id='+list[d].productId+'">查看服务</a>'
                     }
                     htmlStr += '</li>';
                 }
@@ -73,9 +72,9 @@ function doChangeParameter() {
     $('.productTypeClass').each(function() {
         if($(this).hasClass('active')) {
             if(selectedType === ""){
-                selectedType += $(this).find('.productTypeCodeClass').val();
+                selectedType += $(this).find('.productTypeIdClass').val();
             }else{
-                selectedType += "," + $(this).find('.productTypeCodeClass').val();
+                selectedType += "," + $(this).find('.productTypeIdClass').val();
             }
         }
     });

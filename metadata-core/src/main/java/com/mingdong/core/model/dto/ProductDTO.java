@@ -22,6 +22,7 @@ public class ProductDTO implements Serializable
     private Date fromDate;
     private Date toDate;
     private String code;
+    private Integer typeId;
 
     public String getCode()
     {
@@ -171,5 +172,15 @@ public class ProductDTO implements Serializable
     public RestResult getResult()
     {
         return RestResult.getByCode(errCode);
+    }
+
+    public Integer getTypeId()
+    {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId)
+    {
+        this.typeId = typeId;
     }
 }

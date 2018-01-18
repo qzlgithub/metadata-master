@@ -22,7 +22,7 @@ public interface RemoteProductService
      */
     ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page);
 
-    ProductListDTO getIndexProductList(Long clientId, Page page);
+    ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page);
 
     ProductDTO getClientProductDetail(Long clientId, Long productId);
 

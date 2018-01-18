@@ -256,7 +256,7 @@ public class ProductServiceImpl implements ProductService
         List<Map<String, Object>> remindList = new ArrayList<>();
         List<Map<String, Object>> trashList = new ArrayList<>();
         List<Map<String, Object>> productList = new ArrayList<>();
-        ProductListDTO dto = productApi.getIndexProductList(clientId,null);
+        ProductListDTO dto = productApi.getIndexProductList(clientId, null, null, null);
         List<ProductDTO> list = dto.getOpened();
         Map<String, List<Map<String, Object>>> typeGroupProduct = new HashMap<>();
         for(ProductDTO o : list)
@@ -323,6 +323,7 @@ public class ProductServiceImpl implements ProductService
             for(DictProductTypeDTO item : dataDTOList){
                 map = new HashMap<>();
                 list.add(map);
+                map.put(Field.ID,item.getId()+"");
                 map.put(Field.CODE,item.getCode());
                 map.put(Field.NAME,item.getName());
                 map.put(Field.REMARK,item.getRemark());
@@ -333,51 +334,52 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductListBy(Long clientId, Integer isOpen, String[] selectedType, Page page, BLResp resp)
+    public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp)
     {
-        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), page);
+        List<Integer> typeList = Arrays.asList(selectedType);
+        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen, typeList.contains(Constant.All)?null:selectedType, page);
         List<Map<String, Object>> allList = new ArrayList<>();
         Map<String, Object> map;
-        List<String> typeList = Arrays.asList(selectedType);
         if(productListDTO.getResult() == RestResult.SUCCESS)
         {
-            if(TrueOrFalse.FALSE == isOpen){
-                for(ProductDTO d : productListDTO.getOpened())
-                {
-                    map = new HashMap<>();
-                    if(typeList.contains(Constant.All) || typeList.contains(d.getCode())){
-                        allList.add(map);
-                    }else{
-                        continue;
-                    }
-                    map.put(Field.PRODUCT_ID, d.getId() + "");
-                    map.put(Field.NAME, d.getName());
-                    map.put(Field.STATUS, d.getStatus());
-                    map.put(Field.BILL_PLAN, d.getBillPlan());
-                    if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
-                    {
-                        map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
-                        map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
-                        map.put(Field.TO_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD_2));
-                    }
-                    else
-                    {
-                        map.put(Field.UNIT_AMT, NumberUtils.formatAmount(d.getCostAmt()));
-                        map.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
-                    }
-                }
-            }
-            for(ProductDTO d : productListDTO.getToOpen())
+
+            for(ProductDTO d : productListDTO.getOpened())
             {
                 map = new HashMap<>();
-                if(typeList.contains(Constant.All) || typeList.contains(d.getCode())){
+                if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId())){
                     allList.add(map);
                 }else{
                     continue;
                 }
                 map.put(Field.PRODUCT_ID, d.getId() + "");
-                map.put(Field.REMARK, d.getRemark());
                 map.put(Field.NAME, d.getName());
+                map.put(Field.STATUS, d.getStatus());
+                map.put(Field.BILL_PLAN, d.getBillPlan());
+                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                {
+                    map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
+                    map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
+                    map.put(Field.TO_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD_2));
+                }
+                else
+                {
+                    map.put(Field.UNIT_AMT, NumberUtils.formatAmount(d.getCostAmt()));
+                    map.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
+                }
+            }
+            if(TrueOrFalse.FALSE == isOpen){
+                for(ProductDTO d : productListDTO.getToOpen())
+                {
+                    map = new HashMap<>();
+                    if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId())){
+                        allList.add(map);
+                    }else{
+                        continue;
+                    }
+                    map.put(Field.PRODUCT_ID, d.getId() + "");
+                    map.put(Field.REMARK, d.getRemark());
+                    map.put(Field.NAME, d.getName());
+                }
             }
         }
         resp.addData(Field.LIST,allList);
