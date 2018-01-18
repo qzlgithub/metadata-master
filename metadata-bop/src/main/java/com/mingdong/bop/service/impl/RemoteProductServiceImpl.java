@@ -183,6 +183,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     ProductDTO d = new ProductDTO();
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
+                    d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
                     if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
                     {
@@ -195,6 +196,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                         d.setStatus(ProductStatus.getStatusByBalance(info.getUnitAmt(), info.getBalance()));
                         d.setCostAmt(info.getUnitAmt());
                         d.setBalance(info.getBalance());
+                        d.setArrearTime(info.getArrearTime());
                     }
                     opened.add(d);
                 }

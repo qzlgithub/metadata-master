@@ -33,4 +33,6 @@ public interface ProductService
     void getClientProductDetail(Long clientId, Long productId, BLResp resp);
 
     List<Map<String, Object>> getClientProductList(Long clientId);
+
+    void getClientProductDetailList(Long clientId, BLResp resp);
 }

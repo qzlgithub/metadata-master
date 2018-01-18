@@ -63,4 +63,8 @@ public interface Field
     String APP_KEY = "appKey";
     String REQ_HOST = "reqHost";
     String PRODUCT_LIST = "productList";
+    String TYPE_NAME = "typeName";
+    String REMIND_LIST = "remindList";
+    String TRASH_LIST = "trashList";
+    String NORMAL_LIST = "normalList";
 }

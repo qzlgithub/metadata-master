@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="ProductClientInfo">
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
         <result column="app_id" property="appId" jdbcType="VARCHAR" />
         <result column="client_product_id" property="clientProductId" jdbcType="BIGINT" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
@@ -12,28 +13,33 @@
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="arrear_time" property="arrearTime" jdbcType="TIMESTAMP" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
         <result column="content" property="content" jdbcType="LONGVARCHAR" />
     </resultMap>
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
         select
-            p.`id`          as product_id,
-            p.`name`        as product_name,
-            cp.`app_id`     as app_id,
-            cp.`id`         as client_product_id,
-            cp.`bill_plan`  as bill_plan,
-            pr.`start_date` as start_date,
-            pr.`end_date`   as end_date,
-            pr.`amount`     as amount,
-            pr.`balance`    as balance,
-            pr.`unit_amt`   as unit_amt,
-            p.`remark`      as remark
+            p.`id`           as product_id,
+            p.`name`         as product_name,
+            pt.`name`        as type_name,
+            cp.`app_id`      as app_id,
+            cp.`id`          as client_product_id,
+            cp.`bill_plan`   as bill_plan,
+            pr.`start_date`  as start_date,
+            pr.`end_date`    as end_date,
+            pr.`amount`      as amount,
+            pr.`balance`     as balance,
+            pr.`unit_amt`    as unit_amt,
+            pr.`update_time` as arrear_time,
+            p.`remark`       as remark
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
             left join `product_recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
+            left join `dict_product_type` pt
+                on p.`type_id` = pt.`id`
         where p.`enabled` = 1
     </select>
 

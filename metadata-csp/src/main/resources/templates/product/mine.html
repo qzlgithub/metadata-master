@@ -2,7 +2,6 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta charset="utf-8"/>
     <title>沃动科技</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -12,7 +11,6 @@
     <meta name="robots" content="index,follow"/>
     <meta name="application-name" content="bootcss.com"/>
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
-
     <!-- Site CSS -->
     <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
@@ -23,17 +21,6 @@
     <link href="../css/base.css" rel="stylesheet"/>
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
-    <link rel="shortcut icon" href="images/icon/favicon.png"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
@@ -65,99 +52,62 @@
                 <dl id="mms1" class="serve-list">
                     <dt>我的服务</dt>
                     <dd>
-                        <p>金融借贷</p>
-                        <ul class="row mr0 ml0">
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<span class="fr">服务中</span></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="jjgq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="yebz-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-                            </li>
-                        </ul>
-                        <p>国企银行</p>
-                        <ul class="row mr0 ml0">
-                            <li>
-                                <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
-                                <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a
-                                        href="">查看详情</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
-                                <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a
-                                        href="">查看详情</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
-                                <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a
-                                        href="">查看详情</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">常拒贷<span class="fr">已开通</span></div>
-                                <p class="col2 tl fz-14 p10 important">专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a
-                                        href="">查看详情</a></p>
-                            </li>
-                        </ul>
+                        <md th:each="o : ${normalList}">
+                            <p th:text="${o.typeName}"></p>
+                            <ul class="row mr0 ml0">
+                                <li th:each="t : ${o.productList}">
+                                    <div class="serve-list-title">
+                                        <md th:text="${t.productName}"></md>
+                                        <span class="fr" th:if="${t.status == 0}">服务中</span>
+                                        <i class="wks-icon icon" th:if="${t.status == 1}"></i>
+                                        <i class="jjgq-icon icon" th:if="${t.status == 2}"></i>
+                                        <i class="ygq-icon icon" th:if="${t.status == 3}"></i>
+                                        <i class="yebz-icon icon" th:if="${t.status == 4}"></i>
+                                        <i class="yqf-icon icon" th:if="${t.status == 5}"></i>
+                                    </div>
+                                    <p class="col2 tc fz-14 important" th:if="${t.billPlan == 1}"
+                                       th:text="${t.fromDate} + ' - ' + ${t.toDate}"></p>
+                                    <p class="fz-20 col5 tc important" th:if="${t.billPlan == 1}"
+                                       th:text="'剩余' + ${t.remainDays} + '天'"></p>
+                                    <p class="col2 tc fz-14 important" th:if="${t.billPlan != 1}"
+                                       th:text="'当前余额：￥' + ${t.balance}"></p>
+                                    <p class="fz-20 col5 tc important" th:if="${t.billPlan != 1}"
+                                       th:text="${t.unitAmt} + '元/次'"></p>
+                                    <p class="tc mb15 mt10">
+                                        <a href=""><i class="icon kefu mr5"></i>续约</a> ｜
+                                        <a th:href="'/product/detail.html?id=' + ${t.productId}">查看服务</a>
+                                    </p>
+                                </li>
+                            </ul>
+                        </md>
                     </dd>
                 </dl>
                 <dl id="mms2" class="serve-list">
                     <dt>服务提醒</dt>
                     <dd>
                         <ul class="row mr0 ml0">
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">余额 600元</p>
-                                <p class="fz-20 col5 tc important">0.8元/次</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
+                            <li th:each="o : ${remindList}">
+                                <div class="serve-list-title">
+                                    <md th:text="${o.productName}"></md>
+                                    <span class="fr" th:if="${o.status == 0}">服务中</span>
+                                    <i class="wks-icon icon" th:if="${o.status == 1}"></i>
+                                    <i class="jjgq-icon icon" th:if="${o.status == 2}"></i>
+                                    <i class="ygq-icon icon" th:if="${o.status == 3}"></i>
+                                    <i class="yebz-icon icon" th:if="${o.status == 4}"></i>
+                                    <i class="yqf-icon icon" th:if="${o.status == 5}"></i>
+                                </div>
+                                <p class="col2 tc fz-14 important" th:if="${o.billPlan == 1}"
+                                   th:text="${o.fromDate} + ' - ' + ${o.toDate}"></p>
+                                <p class="fz-20 col5 tc important" th:if="${o.billPlan == 1}"
+                                   th:text="'剩余' + ${o.remainDays} + '天'"></p>
+                                <p class="col2 tc fz-14 important" th:if="${o.billPlan != 1}"
+                                   th:text="'当前余额：￥' + ${o.balance}"></p>
+                                <p class="fz-20 col5 tc important" th:if="${o.billPlan != 1}"
+                                   th:text="${o.unitAmt} + '元/次'"></p>
+                                <p class="tc mb15 mt10">
+                                    <a href=""><i class="icon kefu mr5"></i>续约</a> ｜
+                                    <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
 
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<span class="fr">服务中</span></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="jjgq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="yebz-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a
-                                        href="">查看服务</a></p>
                             </li>
                         </ul>
                     </dd>
@@ -166,27 +116,28 @@
                     <dt>回收站</dt>
                     <dd>
                         <ul class="row mr0 ml0">
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">余额 600元</p>
-                                <p class="fz-20 col5 tc important">0.8元/次</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>再次开通</a> ｜ <a href="">查看服务</a>
-                                </p>
+                            <li th:each="o : ${trashList}">
+                                <div class="serve-list-title">
+                                    <md th:text="${o.productName}"></md>
+                                    <span class="fr" th:if="${o.status == 0}">服务中</span>
+                                    <i class="wks-icon icon" th:if="${o.status == 1}"></i>
+                                    <i class="jjgq-icon icon" th:if="${o.status == 2}"></i>
+                                    <i class="ygq-icon icon" th:if="${o.status == 3}"></i>
+                                    <i class="yebz-icon icon" th:if="${o.status == 4}"></i>
+                                    <i class="yqf-icon icon" th:if="${o.status == 5}"></i>
+                                </div>
+                                <p class="col2 tc fz-14 important" th:if="${o.billPlan == 1}"
+                                   th:text="${o.fromDate} + ' - ' + ${o.toDate}"></p>
+                                <p class="fz-20 col5 tc important" th:if="${o.billPlan == 1}"
+                                   th:text="'剩余' + ${o.remainDays} + '天'"></p>
+                                <p class="col2 tc fz-14 important" th:if="${o.billPlan != 1}"
+                                   th:text="'当前余额：￥' + ${o.balance}"></p>
+                                <p class="fz-20 col5 tc important" th:if="${o.billPlan != 1}"
+                                   th:text="${o.unitAmt} + '元/次'"></p>
+                                <p class="tc mb15 mt10">
+                                    <a href=""><i class="icon kefu mr5"></i>再次开通</a> ｜
+                                    <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
 
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>再次开通</a> ｜ <a href="">查看服务</a>
-                                </p>
-                            </li>
-                            <li>
-                                <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
-                                <p class="col2 tc fz-14 important">2107/12/08—2018/12/08</p>
-                                <p class="fz-20 col5 tc important">剩365天</p>
-                                <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>再次开通</a> ｜ <a href="">查看服务</a>
-                                </p>
                             </li>
                         </ul>
                     </dd>
