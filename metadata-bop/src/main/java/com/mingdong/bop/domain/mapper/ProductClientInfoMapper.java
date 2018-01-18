@@ -6,9 +6,12 @@ import java.util.List;
 
 public interface ProductClientInfoMapper
 {
+    int countListByClient(Long clientId);
+
     List<ProductClientInfo> getListByClient(Long clientId);
 
     ProductClientInfo getClientProductInfo(Long clientProductId);
 
     List<ProductClientInfo> getClientDictList(Long clientId);
+
 }

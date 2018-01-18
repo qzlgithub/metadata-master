@@ -1,18 +1,23 @@
 $(function() {
     var obj = {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        init : true
     };
-    getClientListInit(obj, function(pageNum,pages,total) {
+    getClientList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
-            initPageNo: pageNum, // 初始页码
-            totalPages: pages, //总页数
-            totalCount: '合计' + total + '条数据', // 条目总数
-            slideSpeed: 600, // 缓动速度。单位毫秒
-            jump: false, //是否支持跳转
-            callback: function(currentPage) { // 回调函数
-                obj['pageNum'] = currentPage;
-                getClientListInit(obj);
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                if(pageObj['init']){
+                    pageObj['init'] = false;
+                }else {
+                    pageObj['pageNum'] = currentPage;
+                    getClientList(obj);
+                }
             }
         })
     });
@@ -28,7 +33,7 @@ var rowStr = '<tr>' +
     '<td>#{managerName}</td>' +
     '</tr>';
 
-function getClientListInit(obj, fun) {
+function getClientList(obj, pageFun) {
     var scopeType = $('#scopeId').find('.active').attr('otherVal');
     $.get(
         "/stats/client/clientList",
@@ -52,8 +57,8 @@ function getClientListInit(obj, fun) {
                     .replace("#{managerName}", list[d].managerName);
                     $("#dataBody").append(row);
                 }
-                if(typeof fun === 'function') {
-                    fun(pageNum,pages,total);
+                if(typeof pageFun === 'function') {
+                    pageFun(obj,pages,total);
                 }
             }
         }

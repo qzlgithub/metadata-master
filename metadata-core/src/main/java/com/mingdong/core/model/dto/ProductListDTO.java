@@ -8,6 +8,8 @@ public class ProductListDTO extends BaseDTO
 {
     private List<ProductDTO> opened;
     private List<ProductDTO> toOpen;
+    private int total;
+    private int pages;
 
     public ProductListDTO()
     {
@@ -37,5 +39,25 @@ public class ProductListDTO extends BaseDTO
     public void setToOpen(List<ProductDTO> toOpen)
     {
         this.toOpen = toOpen;
+    }
+
+    public int getTotal()
+    {
+        return total;
+    }
+
+    public void setTotal(int total)
+    {
+        this.total = total;
+    }
+
+    public int getPages()
+    {
+        return pages;
+    }
+
+    public void setPages(int pages)
+    {
+        this.pages = pages;
     }
 }

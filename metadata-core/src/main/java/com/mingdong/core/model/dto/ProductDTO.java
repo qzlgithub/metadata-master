@@ -21,6 +21,17 @@ public class ProductDTO implements Serializable
     private Date arrearTime;
     private Date fromDate;
     private Date toDate;
+    private String code;
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
 
     public ProductDTO()
     {

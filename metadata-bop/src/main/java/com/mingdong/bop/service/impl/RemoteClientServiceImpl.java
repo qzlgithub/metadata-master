@@ -278,13 +278,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return new UserDTO(RestResult.ONLY_PRIMARY_USER);
         }
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
-        if(Constant.ENABLED_1 == clientUser.getEnabled())
+        if(TrueOrFalse.TRUE == clientUser.getEnabled())
         {
-            clientUser.setEnabled(Constant.ENABLED_0);
+            clientUser.setEnabled(TrueOrFalse.FALSE);
         }
         else
         {
-            clientUser.setEnabled(Constant.ENABLED_1);
+            clientUser.setEnabled(TrueOrFalse.TRUE);
         }
         clientUserMapper.updateById(clientUser);
         UserDTO userDTO = new UserDTO(RestResult.SUCCESS);

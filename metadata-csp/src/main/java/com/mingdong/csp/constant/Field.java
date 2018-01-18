@@ -67,4 +67,8 @@ public interface Field
     String REMIND_LIST = "remindList";
     String TRASH_LIST = "trashList";
     String NORMAL_LIST = "normalList";
+    String PRODUCT_TYPE_LIST = "productTypeList";
+
+    String SELECTED_TYPE = "selectedType";
+    String IS_OPEN = "isOpen";
 }

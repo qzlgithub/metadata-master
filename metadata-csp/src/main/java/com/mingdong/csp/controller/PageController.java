@@ -2,6 +2,7 @@ package com.mingdong.csp.controller;
 
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
@@ -80,6 +81,8 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/product/all");
         view.addAllObjects(RequestThread.getPageData());
+        List<Map<String, Object>> productTypeList = productService.getDictProductTypeList(TrueOrFalse.TRUE);
+        view.addObject(Field.PRODUCT_TYPE_LIST, productTypeList);
         return view;
     }
 

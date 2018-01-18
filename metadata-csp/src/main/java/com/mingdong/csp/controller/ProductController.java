@@ -1,7 +1,9 @@
 package com.mingdong.csp.controller;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -97,5 +99,23 @@ public class ProductController
         wb.write(os);
         os.flush();
         os.close();
+    }
+
+    @LoginRequired
+    @GetMapping(value = "allList")
+    public BLResp getProductByParam(@RequestParam(value = Field.SELECTED_TYPE, required = false) String selectedType,
+            @RequestParam(value = Field.IS_OPEN, required = false) Integer isOpen,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        BLResp resp = BLResp.build();
+        if(StringUtils.isNullBlank(selectedType))
+        {
+            resp.result(RestResult.PARAMETER_ERROR);
+            return resp;
+        }
+        productService.getProductListBy(RequestThread.getClientId(),isOpen,
+                selectedType.split(","), new Page(pageNum, pageSize), resp);
+        return resp;
     }
 }

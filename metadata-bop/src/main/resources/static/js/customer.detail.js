@@ -7,12 +7,37 @@ $(".show-log").click(function() {
     var obj = {
         clientId: $("#client-id").val(),
         pageNum: 1,
-        pageSize: 5
+        pageSize: 5,
+        init : true
     };
-    getOperateLogListAndOpen(obj);
+    getOperateLogList(obj,function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                if(pageObj['init']){
+                    pageObj['init'] = false;
+                }else {
+                    pageObj['pageNum'] = currentPage;
+                    getOperateLogList(pageObj);
+                }
+            }
+        })
+    },function(){
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#ban-div'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
 });
 
-function getOperateLogListAndOpen(obj) {
+function getOperateLogList(obj,pageFun,openLayerFun) {
     $.get(
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
@@ -34,62 +59,15 @@ function getOperateLogListAndOpen(obj) {
                         .replace(/#{reason}/g, list[o].reason);
                         div.append(tr);
                     }
-                    $('#pagination').paging({
-                        initPageNo: pageNum, // 初始页码
-                        totalPages: pages, //总页数
-                        totalCount: '合计' + total + '条数据', // 条目总数
-                        slideSpeed: 600, // 缓动速度。单位毫秒
-                        jump: false, //是否支持跳转
-                        callback: function(currentPage) { // 回调函数
-                            obj['pageNum'] = currentPage;
-                            getOperateLogList(obj);
-                        }
-                    })
-                }
-                else {
-                    div.append("<h3>暂无数据</h3>");
-                }
-                layer.open({
-                    title: false,
-                    type: 1,
-                    content: $('#ban-div'),
-                    area: ['700px'],
-                    shadeClose: true
-                });
-            }
-            else {
-                layer.msg(res.errMsg);
-            }
-        }
-    );
-}
-
-function getOperateLogList(obj) {
-    $.get(
-        "/client/operate/log",
-        {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
-        function(res) {
-            if(res.errCode === '000000') {
-                var div = $("#ban-data-body");
-                div.empty();
-                div.append('<input type="hidden" class="havaText">')
-                var result = res.dataMap;
-                var total = result.total;
-                var pages = result.pages;
-                var pageNum = result.pageNum;
-                var pageSize = result.pageSize;
-                var list = result.list;
-                if(typeof(list) !== "undefined" && list.length > 0) {
-                    for(var o in list) {
-                        var tr = logTr.replace(/#{type}/g, list[o].type === 1 ? "解冻操作" : "冻结操作")
-                        .replace(/#{managerName}/g, list[o].managerName)
-                        .replace(/#{operateTime}/g, list[o].operateTime)
-                        .replace(/#{reason}/g, list[o].reason);
-                        div.append(tr);
+                    if(typeof pageFun === 'function') {
+                        pageFun(obj,pages,total);
                     }
                 }
                 else {
                     div.append("<h3>暂无数据</h3>");
+                }
+                if(typeof openLayerFun === 'function') {
+                    openLayerFun();
                 }
             }
             else {

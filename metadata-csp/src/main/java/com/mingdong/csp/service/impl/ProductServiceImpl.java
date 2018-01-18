@@ -7,8 +7,11 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.DictProductTypeDTO;
+import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
@@ -18,7 +21,9 @@ import com.mingdong.core.model.dto.ProductReqListDTO;
 import com.mingdong.core.model.dto.ProductRequestDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
+import com.mingdong.csp.constant.Constant;
 import com.mingdong.csp.constant.Field;
+import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -30,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -250,7 +256,7 @@ public class ProductServiceImpl implements ProductService
         List<Map<String, Object>> remindList = new ArrayList<>();
         List<Map<String, Object>> trashList = new ArrayList<>();
         List<Map<String, Object>> productList = new ArrayList<>();
-        ProductListDTO dto = productApi.getIndexProductList(clientId);
+        ProductListDTO dto = productApi.getIndexProductList(clientId,null);
         List<ProductDTO> list = dto.getOpened();
         Map<String, List<Map<String, Object>>> typeGroupProduct = new HashMap<>();
         for(ProductDTO o : list)
@@ -306,5 +312,76 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.REMIND_LIST, remindList);
         resp.addData(Field.TRASH_LIST, trashList);
         resp.addData(Field.NORMAL_LIST, productList);
+    }
+    @Override
+    public List<Map<String, Object>> getDictProductTypeList(Integer enabled){
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map;
+        DictProductTypeListDTO dictProductTypeListDTO = productApi.getDictProductTypeList(enabled);
+        List<DictProductTypeDTO> dataDTOList = dictProductTypeListDTO.getDictProductTypeDTOList();
+        if(CollectionUtils.isNotEmpty(dataDTOList)){
+            for(DictProductTypeDTO item : dataDTOList){
+                map = new HashMap<>();
+                list.add(map);
+                map.put(Field.CODE,item.getCode());
+                map.put(Field.NAME,item.getName());
+                map.put(Field.REMARK,item.getRemark());
+                map.put(Field.ENABLED,item.getEnabled()+"");
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public void getProductListBy(Long clientId, Integer isOpen, String[] selectedType, Page page, BLResp resp)
+    {
+        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), page);
+        List<Map<String, Object>> allList = new ArrayList<>();
+        Map<String, Object> map;
+        List<String> typeList = Arrays.asList(selectedType);
+        if(productListDTO.getResult() == RestResult.SUCCESS)
+        {
+            if(TrueOrFalse.FALSE == isOpen){
+                for(ProductDTO d : productListDTO.getOpened())
+                {
+                    map = new HashMap<>();
+                    if(typeList.contains(Constant.All) || typeList.contains(d.getCode())){
+                        allList.add(map);
+                    }else{
+                        continue;
+                    }
+                    map.put(Field.PRODUCT_ID, d.getId() + "");
+                    map.put(Field.NAME, d.getName());
+                    map.put(Field.STATUS, d.getStatus());
+                    map.put(Field.BILL_PLAN, d.getBillPlan());
+                    if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                    {
+                        map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
+                        map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
+                        map.put(Field.TO_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD_2));
+                    }
+                    else
+                    {
+                        map.put(Field.UNIT_AMT, NumberUtils.formatAmount(d.getCostAmt()));
+                        map.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
+                    }
+                }
+            }
+            for(ProductDTO d : productListDTO.getToOpen())
+            {
+                map = new HashMap<>();
+                if(typeList.contains(Constant.All) || typeList.contains(d.getCode())){
+                    allList.add(map);
+                }else{
+                    continue;
+                }
+                map.put(Field.PRODUCT_ID, d.getId() + "");
+                map.put(Field.REMARK, d.getRemark());
+                map.put(Field.NAME, d.getName());
+            }
+        }
+        resp.addData(Field.LIST,allList);
+        resp.addData(Field.PAGES,productListDTO.getPages());
+        resp.addData(Field.TOTAL,productListDTO.getTotal());
     }
 }

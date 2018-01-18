@@ -23,7 +23,7 @@
     <link href="../css/base.css" rel="stylesheet"/>
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
-
+    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -38,46 +38,39 @@
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
     位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <span class="col2">服务详情</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--tab-->
         <div class="pl40 pr40 pb40">
             <div class="row mt15 ml5 mr15">
                 <ul class="clearfix checkbox-list mt15 pl10 col-md-10">
                     <em class="fl mt5">服务分类：</em>
-                    <li class="active">不限</li>
-                    <li>金融借贷</li>
-                    <li>国企银行</li>
-                    <li>电商消费类</li>
+                    <li class="productTypeClass active" id="typeAllId"><input type="hidden"
+                                                                              class="productTypeCodeClass"
+                                                                value="ALL"/>不限</li>
+                    <li th:each="productType : ${productTypeList}"
+                        class="productTypeClass"
+                    ><input type="hidden" class="productTypeCodeClass" th:value="${productType.code}"/><span
+                            th:text="${productType.name}"></span></li>
                 </ul>
                 <div class="col-md-2 mt15 tr checkbox" style="left: 92px;">
-                    <input type='checkbox' id='checkbox1' name='checkboox[]'/>
-                    <label for='checkbox1'>已开通</label>
+                    <input type='checkbox' id='isOpenId' name='isOpenName' onchange="doChangeParameter()"/>
+                    <label for='isOpenId'>已开通</label>
                 </div>
             </div>
-            <!--list-->
             <dl class="serve-list development-nav p0 important">
-                <dd>
-                    <ul class="row mr0 ml0">
+                <dd id="dataBody">
+                    <ul class="row mr0 ml0" >
                         <li>
                             <div class="serve-list-title">金融逾期常欠客<i class="ygq-icon icon"></i></div>
                             <p class="col2 tc fz-14 important">余额 600元</p>
                             <p class="fz-20 col5 tc important">0.8元/次</p>
                             <p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="">查看服务</a>
                             </p>
-
                         </li>
                         <li>
                             <div class="serve-list-title">金融逾期常欠客<span class="fr">服务中</span></div>
@@ -129,65 +122,14 @@
                     </ul>
                 </dd>
             </dl>
-            <!--page-->
-            <div class="layui-table-tool mt20 tc">
-                <div class="layui-inline layui-table-page" id="layui-table-page1">
-                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                        <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
-                            <i class="layui-icon"></i>
-                        </a>
-                        <span class="layui-laypage-curr">
-                        <em class="layui-laypage-em"></em>
-                        <em>1</em>
-                    </span>
-                        <a href="javascript:;" data-page="2">2</a>
-                        <a href="javascript:;" data-page="3">3</a>
-                        <span class="layui-laypage-spr">…</span>
-                        <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
-                        <a href="javascript:;" class="layui-laypage-next" data-page="2">
-                            <i class="layui-icon"></i>
-                        </a>
-                        <span class="layui-laypage-skip">到第<input type="text" min="1" value="1" class="layui-input"/>页<button
-                                type="button" class="layui-laypage-btn">确定</button></span>
-                        <span class="layui-laypage-count">共 1000 条</span>
-                        <span class="layui-laypage-limits">
-                        <select lay-ignore="">
-                            <option value="10">10 条/页</option>
-                            <option value="20">20 条/页</option>
-                            <option value="30" selected="">30 条/页</option>
-                            <option value="40">40 条/页</option>
-                            <option value="50">50 条/页</option>
-                            <option value="60">60 条/页</option>
-                            <option value="70">70 条/页</option>
-                            <option value="80">80 条/页</option>
-                            <option value="90">90 条/页</option>
-                        </select>
-                    </span>
-                    </div>
-                </div>
-            </div>
-            <!--page end-->
-            <!--list end-->
-
+            <div class="box" id="pagination"></div>
         </div>
-        <!--tab-->
-
     </div>
-
-
 </div>
-<!--内容 end-->
-
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 <div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.unveil.min.js}"></script>
@@ -201,17 +143,8 @@
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script>
-    $("li").click(function() {
-        if($(this).hasClass('active')) {
-            $(this).removeClass('active');
-        }
-        else {
-            $(this).addClass('active');
-        }
-        ;
-    });
-</script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/js/all.js}"></script>
 
 </body>
 </html>

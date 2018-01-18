@@ -19,6 +19,17 @@ public class ProductClientInfo
     private Date arrearTime;
     private String remark;
     private String content;
+    private String code;
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
 
     public Long getProductId()
     {
