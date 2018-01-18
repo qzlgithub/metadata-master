@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.2.159:3306/mis?useUnicode=true&useSSL=false&characterEncoding=utf-8
     username: root
-    password: iPwd@201712
+    password: wdkj@2018
   redis:
     host: 192.168.2.159
     port: 6379
