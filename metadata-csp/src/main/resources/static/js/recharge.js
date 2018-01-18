@@ -11,10 +11,19 @@ layui.config({
     app.set({
         type: 'iframe'
     }).init();
-    laydate = layui.laydate;
-    laydate.render({
-        elem: '.date'
-    });
+});
+var dateRange = new pickerDateRange('date', {
+    isTodayValid: true,
+    startDate: '2012-06-14',
+    endDate: '2012-07-10',
+    needCompare: false,
+    defaultText: ' 至 ',
+    autoSubmit: true,
+    inputTrigger: 'input_trigger',
+    theme: 'ta',
+    success: function(obj) {
+        alert('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
+    }
 });
 $(function() {
     var productId = $("#product-sel").val();
