@@ -1,6 +1,28 @@
 $(function() {
     resetPrivilege();
 });
+$(".parent-priv").click(function() {
+    var pid = $(this).attr("id");
+    if(!$(this).is(":checked")) {
+        $("." + pid).prop("checked", false);
+    }
+    else {
+        $("." + pid).prop("checked", true);
+    }
+});
+$(".privilege").click(function() {
+    var parentId = $(this).attr("p-id");
+    var allChecked = true;
+    $("." + parentId).each(function() {
+        var checked = $(this).is(":checked");
+        console.log(checked);
+        allChecked = allChecked && checked;
+        if(!allChecked) {
+            return false;
+        }
+    });
+    $("#" + parentId).prop("checked", allChecked);
+});
 
 function resetPrivilege() {
     var roleId = $("#roleId").val();
@@ -8,12 +30,25 @@ function resetPrivilege() {
         "/role/privilege",
         {"roleId": roleId},
         function(data) {
-            $(".privilege").removeAttr("checked");
+            $(".privilege").prop("checked", false);
             for(var i in data) {
-                $("#" + data[i]).attr("checked", "checked");
+                $("#" + data[i]).prop("checked", true);
             }
+            checkSubPrivAllChecked();
         }
     );
+}
+
+function checkSubPrivAllChecked() {
+    $(".parent-priv").each(function() {
+        var id = $(this).attr("id");
+        var allChecked = true;
+        $("." + id).each(function() {
+            var checked = $(this).is(":checked");
+            allChecked = allChecked && checked;
+        });
+        $(this).prop("checked", allChecked);
+    });
 }
 
 function saveManager() {
@@ -44,7 +79,7 @@ function saveManager() {
         }),
         success: function(data) {
             if(data.errCode !== "000000") {
-                layer.msg("保存失败:" + data.errMsg,{
+                layer.msg("保存失败:" + data.errMsg, {
                     time: 2000
                 });
             }
