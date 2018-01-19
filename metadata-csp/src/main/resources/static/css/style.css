@@ -102,6 +102,10 @@ body{color: #484848; background: #eeefef;}
 .new-center-left li{color: #999!important}
 .new-center-left li:hover,.new-center-left li.active{background: #f2faff; border-left: solid 3px #627fc9; color: #627fc9;}
 .new-center-left li:hover a,.new-center-left li.active a{color: #627fc9; text-decoration: none; padding: 21px 27px;}
+
+.new-center-left li:hover:after,.new-center-left li.active:after{background: #f2faff; border-left: solid 3px #627fc9; color: #627fc9;}
+.new-center-left li:hover a:after,.new-center-left li.active:after{{color: #627fc9; text-decoration: none; padding: 21px 27px;}
+
 .new-center-list li{line-height: 35px; height: 35px; color: #999;}
 .new-center-list li a{ color: #6f6d6d;}
 .new-center-list li a:hover{ color: #245285;}
