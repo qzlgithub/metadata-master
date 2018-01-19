@@ -18,7 +18,7 @@ function getAllProductList(obj, pageFun) {
                     htmlStr += '<li>';
                     if(typeof list[d].status === 'undefined'){
                         htmlStr += '<div class="serve-list-title">'+list[d].name+'<span class="fr">未开通</span></div>';
-                        htmlStr += '<p class="col2 tl fz-14 p10 important">'+list[d].remark+'</p>';
+                        htmlStr += '<p class="col2 tl fz-14 p10 important" style="height: 89px; overflow: hidden;">'+list[d].remark+'</p>';
                         htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id='+list[d].productId+'">查看详情</a></p>';
                     }else{
                         htmlStr += '<div class="serve-list-title">'+list[d].name;
