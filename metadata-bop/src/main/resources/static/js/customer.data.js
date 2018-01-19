@@ -1,4 +1,54 @@
 $(function() {
+    customerDataInit();
+    showChart();
+});
+function showChart(){
+    var myChart = echarts.init(document.getElementById('panel'));
+    var scopeType = $('#scopeId').find('.active').attr('otherVal');
+    $.get('/stats/client/clientListJson',
+        {"scopeType": scopeType},
+        function (data) {
+            var data = eval("("+data+")");
+            myChart.setOption(option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    data: data.map(function (item) {
+                        return item[0];
+                    })
+                },
+                yAxis: {
+                    splitLine: {
+                        show: false
+                    }
+                },
+                toolbox: {
+                    left: 'center',
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                dataZoom: [{
+                    startValue: '2014-06-01'
+                }, {
+                    type: 'inside'
+                }],
+                series: {
+                    type: 'line',
+                    data: data.map(function (item) {
+                        return item[1];
+                    })
+                }
+            });
+        });
+}
+
+function customerDataInit(){
     var obj = {
         pageNum: 1,
         pageSize: 10,
@@ -21,7 +71,7 @@ $(function() {
             }
         })
     });
-});
+}
 var rowStr = '<tr>' +
     '<td>#{registerDate}</td>' +
     '<td>#{corpName}</td>' +
@@ -58,10 +108,27 @@ function getClientList(obj, pageFun) {
                     $("#dataBody").append(row);
                 }
                 if(typeof pageFun === 'function') {
+                    $('#chartTitleId').text(result.title);
                     pageFun(obj,pages,total);
                 }
             }
         }
     );
 }
+
+$('#scopeId span').click(function(){
+    $('#scopeId span').each(function(){
+        $(this).removeClass('active');
+    });
+    $(this).addClass('active');
+    customerDataInit();
+    showChart();
+});
+
+function clientOutPrint(){
+    var scopeType = $('#scopeId').find('.active').attr('otherVal');
+    location.href='/stats/client/clientList/export?scopeType='+scopeType;
+}
+
+
 

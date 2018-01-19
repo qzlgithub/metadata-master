@@ -1,12 +1,15 @@
 package com.mingdong.bop.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Controller
 @RequestMapping(value = "stats")
@@ -44,13 +50,36 @@ public class StatsController
 
     @RequestMapping(value = "/client/clientList", method = RequestMethod.GET)
     @ResponseBody
-    public BLResp getClentList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public BLResp getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         BLResp resp = statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize));
         return resp;
+    }
+
+    @GetMapping(value = "client/clientList/export")
+    public void exportProductRequestRecord(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            HttpServletResponse response) throws IOException
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        XSSFWorkbook wb = statsService.createClientListXlsx(scopeTypeEnum,new Page(1, 1000));
+        String filename = new String("客户数据".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
+    }
+
+    @GetMapping(value = "client/clientListJson")
+    @ResponseBody
+    public String getClientListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType){
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        JSONArray jsonArray = statsService.getClientListJson(scopeTypeEnum);
+        return jsonArray.toJSONString();
     }
 
     @RequestMapping(value = "recharge.html")

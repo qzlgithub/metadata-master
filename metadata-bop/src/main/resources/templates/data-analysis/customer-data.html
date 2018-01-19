@@ -68,29 +68,10 @@
                             <span otherVal="2">本季度</span>
                             <span otherVal="3">近一年</span>
                         </li>
-                        <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date"
-                                                                                    id="date" autocomplete="off"
-                                                                                    class="layui-input"/></em><i
-                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                        <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>
-                            对比时间
-                        </li>
-                        <li class="position-r timeinput time-input2"><em class="inline-block"><input type="text"
-                                                                                                     name="date"
-                                                                                                     id="date1"
-                                                                                                     autocomplete="off"
-                                                                                                     class="layui-input"/></em><i
-                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                        <li class="product-fx mt10 clearfix">
-                            <span class="active">按月</span>
-                            <span>按时</span>
-                            <span>按日</span>
-                            <span>按周</span>
-                        </li>
+
                     </ul>
-                    <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
-                    <div class="tc mt20 mb20" id="panel" style="display: block;"><img
-                            src="../../static/images/data-img3.png"/></div>
+                    <p class="tc pt20 pb20 col4 fz-16" id="chartTitleId"></p>
+                    <div class="tc mt20 mb20" id="panel" style="height:500px;display: block;"></div>
                     <p class="slide"><a href="javascript:;" class="btn-slide">统计图</a></p>
                 </dd>
             </dl>
@@ -100,7 +81,7 @@
             <dl class="public-data">
                 <dt class="clearfix">
                     <span class="fr mb10">
-                            <a href="javascript:" class="add-button">导出</a>
+                            <a href="javascript:" class="add-button" onclick="clientOutPrint()">导出</a>
                         </span>
                 </dt>
                 <dd class="layui-row">
@@ -145,6 +126,7 @@
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/customer.data.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/echarts/echarts.common.min.js}"></script>
 
 <script>
     var message;

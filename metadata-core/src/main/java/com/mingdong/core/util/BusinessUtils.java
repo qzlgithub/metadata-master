@@ -27,4 +27,18 @@ public class BusinessUtils
         }
         return (to.getTime() - today.getTime()) / 24 / 3600 / 1000;
     }
+
+    public static long getDayDiff(Date from, Date to)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.setTime(from);
+        Date before = calendar.getTime();
+        calendar.setTime(to);
+        Date after = calendar.getTime();
+        return (after.getTime() - before.getTime()) / 24 / 3600 / 1000;
+    }
 }
