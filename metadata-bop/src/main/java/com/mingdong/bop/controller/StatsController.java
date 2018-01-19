@@ -1,6 +1,7 @@
 package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.model.RequestThread;
@@ -60,11 +61,11 @@ public class StatsController
     }
 
     @GetMapping(value = "client/clientList/export")
-    public void exportProductRequestRecord(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public void exportClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             HttpServletResponse response) throws IOException
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        XSSFWorkbook wb = statsService.createClientListXlsx(scopeTypeEnum,new Page(1, 1000));
+        XSSFWorkbook wb = statsService.createClientListXlsx(scopeTypeEnum, new Page(1, 1000));
         String filename = new String("客户数据".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
@@ -76,7 +77,8 @@ public class StatsController
 
     @GetMapping(value = "client/clientListJson")
     @ResponseBody
-    public String getClientListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType){
+    public String getClientListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
+    {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         JSONArray jsonArray = statsService.getClientListJson(scopeTypeEnum);
         return jsonArray.toJSONString();
@@ -87,7 +89,44 @@ public class StatsController
     {
         ModelAndView view = new ModelAndView("data-analysis/recharge-data");
         view.addAllObjects(RequestThread.getMap());
+        BLResp resp = statsService.getRechargeIndexStats();
+        view.addAllObjects(resp.getDataMap());
         return view;
+    }
+
+    @RequestMapping(value = "/client/rechargeList", method = RequestMethod.GET)
+    @ResponseBody
+    public BLResp getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        BLResp resp = statsService.getRechargeList(scopeTypeEnum, new Page(pageNum, pageSize));
+        return resp;
+    }
+
+    @GetMapping(value = "client/rechargeList/export")
+    public void exportRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            HttpServletResponse response) throws IOException
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        XSSFWorkbook wb = statsService.createRechargeListXlsx(scopeTypeEnum, new Page(1, 1000));
+        String filename = new String("充值数据".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
+    }
+
+    @GetMapping(value = "client/rechargeListJson")
+    @ResponseBody
+    public String getRechargeListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        JSONObject jsonObject = statsService.getRechargeListJson(scopeTypeEnum);
+        return jsonObject.toJSONString();
     }
 
     @RequestMapping(value = "revenue.html")

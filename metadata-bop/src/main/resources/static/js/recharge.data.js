@@ -3,47 +3,50 @@ $(function() {
     showChart();
 });
 function showChart(){
-    var myChart = echarts.init(document.getElementById('panel'));
+    var leftChart = echarts.init(document.getElementById('leftPanel'));
+    var rightChart = echarts.init(document.getElementById('rightPanel'));
     var scopeType = $('#scopeId').find('.active').attr('otherVal');
-    $.get('/stats/client/clientListJson',
+    $.get('/stats/client/rechargeListJson',
         {"scopeType": scopeType},
         function (data) {
-            var data = eval("("+data+")");
-            myChart.setOption(option = {
+            var jsonObj = JSON.parse(data);
+            leftChart.setOption({
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
-                xAxis: {
-                    data: data.map(function (item) {
-                        return item[0];
-                    })
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data:jsonObj.leftJson.legendData
                 },
-                yAxis: {
-                    splitLine: {
-                        show: false
-                    }
-                },
-                toolbox: {
-                    left: 'center',
-                    feature: {
-                        dataZoom: {
-                            yAxisIndex: 'none'
+                series: [
+                    {
+                        name:'访问来源',
+                        type:'pie',
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            }
                         },
-                        restore: {},
-                        saveAsImage: {}
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data:jsonObj.leftJson.data
                     }
-                },
-                dataZoom: [{
-                    startValue: '2014-06-01'
-                }, {
-                    type: 'inside'
-                }],
-                series: {
-                    type: 'line',
-                    data: data.map(function (item) {
-                        return item[1];
-                    })
-                }
+                ]
             });
         });
 }
@@ -73,20 +76,21 @@ function customerDataInit(){
     });
 }
 var rowStr = '<tr>' +
-    '<td>#{registerDate}</td>' +
+    '<td>#{tradeTime}</td>' +
     '<td>#{corpName}</td>' +
     '<td>#{shortName}</td>' +
     '<td>#{username}</td>' +
-    '<td>#{name}</td>' +
-    '<td>#{phone}</td>' +
-    '<td>#{email}</td>' +
+    '<td>#{productName}</td>' +
+    '<td>#{amount}</td>' +
+    '<td>#{rechargeType}</td>' +
+    '<td>#{balance}</td>' +
     '<td>#{managerName}</td>' +
     '</tr>';
 
 function getClientList(obj, pageFun) {
     var scopeType = $('#scopeId').find('.active').attr('otherVal');
     $.get(
-        "/stats/client/clientList",
+        "/stats/client/rechargeList",
         {"pageNum": obj['pageNum'], "pageSize": obj['pageSize'], "scopeType": scopeType},
         function(data) {
             if(data.errCode === '000000') {
@@ -96,13 +100,14 @@ function getClientList(obj, pageFun) {
                 var list = data.dataMap.list;
                 $("#dataBody").empty();
                 for(var d in list) {
-                    var row = rowStr.replace("#{registerDate}", list[d].registerDate)
+                    var row = rowStr.replace("#{tradeTime}", list[d].tradeTime)
                     .replace("#{corpName}", list[d].corpName)
                     .replace("#{shortName}", list[d].shortName)
                     .replace("#{username}", list[d].username)
-                    .replace("#{name}", list[d].name)
-                    .replace("#{phone}", list[d].phone)
-                    .replace("#{email}", list[d].email)
+                    .replace("#{productName}", list[d].productName)
+                    .replace("#{amount}", list[d].amount)
+                    .replace("#{rechargeType}", list[d].rechargeType)
+                    .replace("#{balance}", list[d].balance)
                     .replace("#{managerName}", list[d].managerName);
                     $("#dataBody").append(row);
                 }
@@ -126,7 +131,7 @@ $('#scopeId span').click(function(){
 
 function clientOutPrint(){
     var scopeType = $('#scopeId').find('.active').attr('otherVal');
-    location.href='/stats/client/clientList/export?scopeType='+scopeType;
+    location.href='/stats/client/rechargeList/export?scopeType='+scopeType;
 }
 
 

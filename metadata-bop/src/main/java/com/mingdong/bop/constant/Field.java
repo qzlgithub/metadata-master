@@ -89,12 +89,15 @@ public interface Field
     String OPERATE_TIME = "operateTime";
     String REASON = "reason";
     String TITLE = "title";
-
+    String TRADE_TIME = "tradeTime";
     String SCOPE_TYPE = "scopeType";
     String ALL_CLIENT_COUNT = "allClientCount";
     String CLIENT_COUNT_BY_DATE = "clientCountByDate";
+    String CLIENT_RECHARGE_BY_NOW = "clientRechargeByNow";
     String CLIENT_RECHARGE_BY_WEEK = "clientRechargeByWeek";
     String CLIENT_RECHARGE_BY_MONTH = "clientRechargeByMonth";
+    String CLIENT_RECHARGE_BY_MONTH_FIRST = "clientRechargeByMonthFirst";
+    String CLIENT_RECHARGE_BY_ALL = "clientRechargeByAll";
     String CLIENT_COUNT_BY_WEEK = "clientCountByWeek";
     String CLIENT_COUNT_BY_MONTH_FRIST = "clientCountByMonthFrist";
     String SUB_USER_QTY = "subUserQty";

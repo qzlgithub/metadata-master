@@ -2,9 +2,13 @@ package com.mingdong.bop.constant;
 
 public enum ScopeType
 {
-    MONTH("1"),
-    QUARTER("2"),
-    TYPE("3");
+    NOW("0"),
+    YESTERDAY("1"),
+    WEEK("2"),
+    HALF_MONTH("3"),
+    MONTH("4"),
+    QUARTER("5"),
+    YEAR("6");
 
     private String type;
 

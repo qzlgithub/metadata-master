@@ -17,5 +17,5 @@ public interface ClientInfoMapper
 
     List<ClientInfo> getSimilarCorpByName(@Param("name") String name, @Param("clientId") Long clientId);
 
-    List<ClientInfo> getClientInfoListByDate(@Param("start")Date start,@Param("end")Date end);
+    List<ClientInfo> getClientInfoListByDate(@Param("start") Date start, @Param("end") Date end);
 }

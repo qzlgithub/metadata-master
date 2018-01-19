@@ -22,16 +22,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="data::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
             <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
             <a><cite>客户数据</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--运营汇总-->
             <dl class="public-data">
                 <dt class="mt0 important">客户数据</dt>
                 <dd>
@@ -57,27 +53,21 @@
                     </ul>
                 </dd>
             </dl>
-            <!--运营汇总 end-->
-            <!--客户数据统计-->
             <dl class="public-data">
                 <dt>客户数据统计</dt>
                 <dd class="layui-row">
                     <ul class="clearfix p10 product-fx-warp">
                         <li class="product-fx mt10 clearfix" id="scopeId">
-                            <span class="active" otherVal="1">近30天</span>
-                            <span otherVal="2">本季度</span>
-                            <span otherVal="3">近一年</span>
+                            <span class="active" otherVal="4">近30天</span>
+                            <span otherVal="5">本季度</span>
+                            <span otherVal="6">近一年</span>
                         </li>
-
                     </ul>
                     <p class="tc pt20 pb20 col4 fz-16" id="chartTitleId"></p>
                     <div class="tc mt20 mb20" id="panel" style="height:500px;display: block;"></div>
                     <p class="slide"><a href="javascript:;" class="btn-slide">统计图</a></p>
                 </dd>
             </dl>
-            <!--客户数据统计 end-->
-
-            <!--客户数据统计-->
             <dl class="public-data">
                 <dt class="clearfix">
                     <span class="fr mb10">
@@ -102,18 +92,14 @@
 
                         </tbody>
                     </table>
-                    <!--page-->
                     <div class="box mt40" id="pagination"></div>
-                    <!--page end-->
                 </dd>
             </dl>
-            <!--客户数据统计 end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript">
