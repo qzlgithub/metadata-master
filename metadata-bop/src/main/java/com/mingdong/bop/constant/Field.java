@@ -88,6 +88,7 @@ public interface Field
     String QQ = "qq";
     String OPERATE_TIME = "operateTime";
     String REASON = "reason";
+    String TITLE = "title";
 
     String SCOPE_TYPE = "scopeType";
     String ALL_CLIENT_COUNT = "allClientCount";

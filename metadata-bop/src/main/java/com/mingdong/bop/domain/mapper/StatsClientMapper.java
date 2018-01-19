@@ -1,5 +1,7 @@
 package com.mingdong.bop.domain.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,7 +9,7 @@ public interface StatsClientMapper
 {
     Long getAllClientCount();
 
-    Long getClientCountByDate(Date date);
+    Long getClientCountByDate(@Param("start")Date start,@Param("end")Date end);
 
     BigDecimal getClientRechargeByDate(Date date);
 

@@ -90,7 +90,13 @@
             on c.`primary_user_id` = cu.`id`
                 left join `manager` m
                     on c.`manager_id` = m.`id`
-      where c.`create_time` >= #{date}
+      where 1 = 1
+        <if test="start != null">
+            and c.`create_time` &gt;= #{start}
+        </if>
+        <if test="end != null">
+            and c.`create_time` &lt;= #{end}
+        </if>
     </select>
 
 

@@ -77,19 +77,19 @@ public class DateCalculateUtils
         {
             if(currentMonth >= 1 && currentMonth <= 3)
             {
-                c.set(Calendar.MONTH, 1);
+                c.set(Calendar.MONTH, 0);
             }
             else if(currentMonth >= 4 && currentMonth <= 6)
             {
-                c.set(Calendar.MONTH, 3);
+                c.set(Calendar.MONTH, 2);
             }
             else if(currentMonth >= 7 && currentMonth <= 9)
             {
-                c.set(Calendar.MONTH, 4);
+                c.set(Calendar.MONTH, 3);
             }
             else if(currentMonth >= 10 && currentMonth <= 12)
             {
-                c.set(Calendar.MONTH, 9);
+                c.set(Calendar.MONTH, 8);
             }
             c.set(Calendar.DATE, 1);
             if(isDealAfter)
