@@ -1,3 +1,41 @@
+$(".parent-privilege").click(function() {
+    var pid = $(this).attr("id");
+    if(!$(this).is(":checked")) {
+        $("." + pid).prop("checked", false);
+    }
+    else {
+        $("." + pid).prop("checked", true);
+    }
+});
+$(".privilege").click(function() {
+    var parentId = $(this).attr("p-id");
+    var allChecked = true;
+    $("." + parentId).each(function() {
+        var checked = $(this).is(":checked");
+        console.log(checked);
+        allChecked = allChecked && checked;
+        if(!allChecked) {
+            return false;
+        }
+    });
+    $("#" + parentId).prop("checked", allChecked);
+});
+$(function() {
+    checkSubPrivAllChecked();
+});
+
+function checkSubPrivAllChecked() {
+    $(".parent-privilege").each(function() {
+        var id = $(this).attr("id");
+        var allChecked = true;
+        $("." + id).each(function() {
+            var checked = $(this).is(":checked");
+            allChecked = allChecked && checked;
+        });
+        $(this).prop("checked", allChecked);
+    });
+}
+
 function saveRole() {
     var privilege = build_privilege();
     $.ajax({
@@ -28,156 +66,11 @@ function saveRole() {
 }
 
 function build_privilege() {
-    var privilege = [];
-    if($("#11101").is(":checked")) {
-        privilege.push("11101");
-    }
-    if($("#11102").is(":checked")) {
-        privilege.push("11102");
-    }
-    if($("#11103").is(":checked")) {
-        privilege.push("11103");
-    }
-    if($("#11201").is(":checked")) {
-        privilege.push("11201");
-    }
-    if($("#11202").is(":checked")) {
-        privilege.push("11202");
-    }
-    if($("#11203").is(":checked")) {
-        privilege.push("11203");
-    }
-    if($("#12101").is(":checked")) {
-        privilege.push("12101");
-    }
-    if($("#12102").is(":checked")) {
-        privilege.push("12102");
-    }
-    if($("#12103").is(":checked")) {
-        privilege.push("12103");
-    }
-    if($("#12104").is(":checked")) {
-        privilege.push("12104");
-    }
-    if($("#12201").is(":checked")) {
-        privilege.push("12201");
-    }
-    if($("#12202").is(":checked")) {
-        privilege.push("12202");
-    }
-    if($("#12203").is(":checked")) {
-        privilege.push("12203");
-    }
-    if($("#12204").is(":checked")) {
-        privilege.push("12204");
-    }
-    if($("#12301").is(":checked")) {
-        privilege.push("12301");
-    }
-    if($("#12302").is(":checked")) {
-        privilege.push("12302");
-    }
-    if($("#12303").is(":checked")) {
-        privilege.push("12303");
-    }
-    if($("#12304").is(":checked")) {
-        privilege.push("12304");
-    }
-    if($("#12305").is(":checked")) {
-        privilege.push("12305");
-    }
-    if($("#12401").is(":checked")) {
-        privilege.push("12401");
-    }
-    if($("#12402").is(":checked")) {
-        privilege.push("12402");
-    }
-    if($("#21101").is(":checked")) {
-        privilege.push("21101");
-    }
-    if($("#21102").is(":checked")) {
-        privilege.push("21102");
-    }
-    if($("#21103").is(":checked")) {
-        privilege.push("21103");
-    }
-    if($("#21201").is(":checked")) {
-        privilege.push("21201");
-    }
-    if($("#21202").is(":checked")) {
-        privilege.push("21202");
-    }
-    if($("#21203").is(":checked")) {
-        privilege.push("21203");
-    }
-    if($("#31101").is(":checked")) {
-        privilege.push("31101");
-    }
-    if($("#31102").is(":checked")) {
-        privilege.push("31102");
-    }
-    if($("#31103").is(":checked")) {
-        privilege.push("31103");
-    }
-    if($("#31104").is(":checked")) {
-        privilege.push("31104");
-    }
-    if($("#31105").is(":checked")) {
-        privilege.push("31105");
-    }
-    if($("#31106").is(":checked")) {
-        privilege.push("31106");
-    }
-    if($("#31107").is(":checked")) {
-        privilege.push("31107");
-    }
-    if($("#31108").is(":checked")) {
-        privilege.push("31108");
-    }
-    if($("#31109").is(":checked")) {
-        privilege.push("31109");
-    }
-    if($("#31110").is(":checked")) {
-        privilege.push("31110");
-    }
-    if($("#31111").is(":checked")) {
-        privilege.push("31111");
-    }
-    if($("#31112").is(":checked")) {
-        privilege.push("31112");
-    }
-    if($("#31113").is(":checked")) {
-        privilege.push("31113");
-    }
-    if($("#31114").is(":checked")) {
-        privilege.push("31114");
-    }
-    if($("#41101").is(":checked")) {
-        privilege.push("41101");
-    }
-    if($("#41201").is(":checked")) {
-        privilege.push("41201");
-    }
-    if($("#41202").is(":checked")) {
-        privilege.push("41202");
-    }
-    if($("#41301").is(":checked")) {
-        privilege.push("41301");
-    }
-    if($("#41302").is(":checked")) {
-        privilege.push("41302");
-    }
-    if($("#41401").is(":checked")) {
-        privilege.push("41401");
-    }
-    if($("#41402").is(":checked")) {
-        privilege.push("41402");
-    }
-    if($("#41501").is(":checked")) {
-        privilege.push("41501");
-    }
-    if($("#41502").is(":checked")) {
-        privilege.push("41502");
-    }
-    return privilege;
+    var privileges = [];
+    $(".privilege").each(function() {
+        if($(this).is(":checked")) {
+            privileges.push($(this).attr("id"));
+        }
+    });
+    return privileges;
 }
