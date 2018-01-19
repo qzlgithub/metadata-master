@@ -4,16 +4,19 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.constant.SysParam;
 import com.mingdong.bop.domain.entity.DictIndustry;
 import com.mingdong.bop.domain.entity.DictProductType;
 import com.mingdong.bop.domain.entity.DictRechargeType;
 import com.mingdong.bop.domain.entity.Privilege;
 import com.mingdong.bop.domain.entity.Role;
+import com.mingdong.bop.domain.entity.SysConfig;
 import com.mingdong.bop.domain.mapper.DictIndustryMapper;
 import com.mingdong.bop.domain.mapper.DictProductTypeMapper;
 import com.mingdong.bop.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.bop.domain.mapper.PrivilegeMapper;
 import com.mingdong.bop.domain.mapper.RoleMapper;
+import com.mingdong.bop.domain.mapper.SysConfigMapper;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -43,6 +46,8 @@ public class SystemServiceImpl implements SystemService
     private DictIndustryMapper dictIndustryMapper;
     @Resource
     private DictRechargeTypeMapper dictRechargeTypeMapper;
+    @Resource
+    private SysConfigMapper sysConfigMapper;
     @Resource
     private PrivilegeMapper privilegeMapper;
 
@@ -615,6 +620,45 @@ public class SystemServiceImpl implements SystemService
         }
         redisDao.setSystemModule(map);
         return map;
+    }
+
+    @Override
+    @Transactional
+    public void setGlobalSetting(Integer subUserQty, String serviceQQ, BLResp resp)
+    {
+        Date current = new Date();
+        SysConfig sysConfig = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        if(sysConfig == null)
+        {
+            sysConfig = new SysConfig();
+            sysConfig.setCreateTime(current);
+            sysConfig.setUpdateTime(current);
+            sysConfig.setName(SysParam.CLIENT_SUB_USER_QTY);
+            sysConfig.setValue(subUserQty + "");
+            sysConfigMapper.add(sysConfig);
+        }
+        else if(!sysConfig.getValue().equals(subUserQty + ""))
+        {
+            sysConfig.setUpdateTime(current);
+            sysConfig.setValue(subUserQty + "");
+            sysConfigMapper.updateById(sysConfig);
+        }
+        sysConfig = sysConfigMapper.findByName(SysParam.SERVICE_QQ);
+        if(sysConfig == null)
+        {
+            sysConfig = new SysConfig();
+            sysConfig.setCreateTime(current);
+            sysConfig.setUpdateTime(current);
+            sysConfig.setName(SysParam.SERVICE_QQ);
+            sysConfig.setValue(serviceQQ);
+            sysConfigMapper.add(sysConfig);
+        }
+        else if(!sysConfig.getValue().equals(serviceQQ))
+        {
+            sysConfig.setUpdateTime(current);
+            sysConfig.setValue(serviceQQ);
+            sysConfigMapper.updateById(sysConfig);
+        }
     }
 
     private void cacheAllIndustryData()

@@ -50,7 +50,7 @@
             <if test="clientId != null">pr.`client_id` = #{clientId}</if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
-            <if test="endTime != null">and pr.`create_time` &lt;= #{endTime}</if>
+            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
         </where>
         order by pr.`create_time` desc
     </select>

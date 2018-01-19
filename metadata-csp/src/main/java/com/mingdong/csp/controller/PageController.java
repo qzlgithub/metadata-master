@@ -1,5 +1,7 @@
 package com.mingdong.csp.controller;
 
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -23,6 +25,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -131,6 +135,12 @@ public class PageController
         {
             view.addObject(Field.PRODUCT_ID, productId + "");
         }
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        Date lastWeek = calendar.getTime();
+        view.addObject(Field.FROM_DATE, DateUtils.format(lastWeek, DateFormat.YYYY_MM_DD));
+        view.addObject(Field.TO_DATE, DateUtils.format(today, DateFormat.YYYY_MM_DD));
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

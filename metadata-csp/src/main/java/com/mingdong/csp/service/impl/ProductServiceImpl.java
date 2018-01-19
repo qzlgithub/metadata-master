@@ -48,11 +48,10 @@ public class ProductServiceImpl implements ProductService
     private RemoteProductService productApi;
 
     @Override
-    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+    public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate,
-                endDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate, page);
         if(productRecListDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResult());
@@ -88,7 +87,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date fromDate, Date endDate)
+    public XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date fromDate, Date toDate)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值记录");
@@ -101,8 +100,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate,
-                endDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate, page);
         List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -130,10 +128,10 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page,
+    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, endDate,
+        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
                 page);
         if(productReqListDTO.getResult() != RestResult.SUCCESS)
         {
@@ -168,7 +166,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date endDate)
+    public XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("接口调用记录");
@@ -179,7 +177,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, endDate,
+        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
                 page);
         List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))

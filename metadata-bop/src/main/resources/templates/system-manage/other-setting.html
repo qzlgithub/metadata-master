@@ -33,23 +33,23 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">客户子账号数：</label>
                     <div class="layui-input-block w40">
-                        <input type="text"   placeholder="请输入"
-                               autocomplete="off" class="layui-input"/>
-                        <i class="col3 pl10"  style="display: none"></i>
+                        <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="sub-user-qty" th:value="${subUserQty}"/>
+                        <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">官网客服QQ：</label>
                     <div class="layui-input-block w40">
-                        <input type="text"  placeholder="请输入"
-                               autocomplete="off" class="layui-input"/>
+                        <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="service-qq" th:value="${serviceQQ}"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
-                    <button class="layui-btn">保存</button>
+                    <button class="layui-btn" id="setting-update">保存</button>
                 </div>
             </div>
         </div>
@@ -86,6 +86,28 @@
                 area: ['500px', '250px'],
                 shadeClose: true
             });
+        });
+    });
+    $("#setting-update").click(function() {
+        var subUserQty = $("#sub-user-qty").val();
+        var serviceQQ = $("#service-qq").val();
+        $.ajax({
+            type: "post",
+            url: "/config/global/setting",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "subUserQty": subUserQty,
+                "serviceQQ": serviceQQ
+            }),
+            success: function(res) {
+                if(res.errCode === '000000') {
+                    layer.msg("保存成功");
+                }
+                else {
+                    layer.msg("操作失败：" + res.errMsg);
+                }
+            }
         });
     });
 </script>

@@ -33,7 +33,6 @@
             <!--功能操作-->
             <div class="clearfix mt20"><span class="fr add-button cp" id="addindustry">添加一级行业</span></div>
             <!--功能操作 end-->
-            <!--table-->
             <dl class="jurisdiction-list mt10">
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
@@ -43,24 +42,21 @@
                     <span class="w30">操作</span>
                     <span class="w15">排序</span>
                 </dt>
-                <!-- TODO data here -->
                 <dd th:each="parent: ${list}">
-                    <!-- 父级 -->
                     <div class="clearfix jurisdiction-list-div">
                         <a href="#accordion1" class="accordion-title accordionTitle js-accordionTrigger w5"></a>
                         <a class="w20 tl important"><i class="pl20" th:text="${parent.name}"></i></a>
                         <a class="w20" th:text="${parent.code}"></a>
                         <a class="w10 pt0 important">
                             <div class="layui-form">
-                                <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest"
-                                       lay-text="ON|OFF"/>
+                                <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
+                                       class="parent-industry" th:attr="obj-id=${parent.id}"
+                                       th:checked="${parent.enabled == 1}"/>
                             </div>
                         </a>
                         <a class="w30">
-                            <!--<span class="edit cp mr30 add-child" data-id="${parent.id}">新增子行业</span>-->
                             <span class="edit cp mr30 add-child" th:attr="data-id=${parent.id}">新增子行业</span>
                             <span class="mr30 edit cp edit-industry" th:attr="data-id=${parent.id}">编辑</span>
-                            <!--<span href="#" class="del cp">删除</span>-->
                         </a>
                         <a class="w15"><i class="icon sort-icon"></i></a>
                     </div>
@@ -73,8 +69,9 @@
                             <em class="w20" th:text="${child.code}"></em>
                             <em class="w10 pt0 important">
                                 <div class="layui-form">
-                                    <input type="checkbox" checked="" name="open" lay-skin="switch"
-                                           lay-filter="switchTest" lay-text="ON|OFF"/>
+                                    <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
+                                           class="child-industry" th:attr="obj-id=${child.id}"
+                                           th:checked="${child.enabled == 1 &amp;&amp; parent.enabled == 1}"/>
                                 </div>
                             </em>
                             <em class="w30">
@@ -84,9 +81,7 @@
                         </li>
                     </ul>
                 </dd>
-                <!-- TODO data here -->
             </dl>
-            <!--table end-->
         </div>
     </div>
 
@@ -95,10 +90,8 @@
 
 <!--添加一级行业 提示层-->
 <div id="add-industry" class="modal">
-    <!--form-->
     <div class="layui-layer-title">添加一级行业</div>
     <div class="mb30">
-        <!--<form class="layui-form" id="industryForm" action="">-->
         <div class="m30">
             <div class="layui-form-item">
                 <label class="layui-form-label">编号：</label>
@@ -122,15 +115,12 @@
                 <button class="layui-btn" onclick="addIndustry(1)">保存</button>
             </div>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
 <!--提示层 end-->
 
 <!--编辑行业 提示层-->
 <div id="edit-industry" class="modal">
-    <!--form-->
     <div class="layui-layer-title">编辑行业</div>
     <div class="mb30">
         <form class="layui-form" action="">
@@ -160,16 +150,13 @@
             </div>
         </form>
     </div>
-    <!--form end-->
 </div>
 <!--提示层 end-->
 
 <!--添加二级行业 提示层-->
 <div id="child-industry" class="modal">
-    <!--form-->
     <div class="layui-layer-title">添加子行业</div>
     <div class="mb30">
-        <!--<form class="layui-form" action="">-->
         <div class="m30">
             <div class="layui-form-item">
                 <label class="layui-form-label">编号：</label>
@@ -194,9 +181,7 @@
                 <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="addIndustry(2)">保存</button>
             </div>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
 <!--提示层 end-->
 
@@ -252,7 +237,7 @@
         skipClickDelay = function(e) {
             e.preventDefault();
             e.target.click();
-        }
+        };
         setAriaAttr = function(el, ariaType, newProperty) {
             el.setAttribute(ariaType, newProperty);
         };

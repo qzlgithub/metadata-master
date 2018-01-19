@@ -10,6 +10,7 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -201,5 +202,20 @@ public class ConfigController
     public List<Map<String, Object>> configTypeList()
     {
         return systemService.getProductListMap();
+    }
+
+    @PostMapping(value = "global/setting")
+    @ResponseBody
+    public BLResp setGlobalSetting(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Integer subUserQty = jsonReq.getInteger(Field.SUB_USER_QTY);
+        String serviceQQ = jsonReq.getString(Field.SERVICE_QQ);
+        if(subUserQty == null || StringUtils.isNullBlank(serviceQQ))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.setGlobalSetting(subUserQty, serviceQQ, resp);
+        return resp;
     }
 }

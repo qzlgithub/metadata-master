@@ -52,9 +52,7 @@
                     <td>
                         <div class="layui-form">
                             <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                   th:if="${o.enabled == 1}" checked="checked"/>
-                            <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                   th:if="${o.enabled != 1}"/>
+                                   th:checked="${o.enabled == 1}"/>
                         </div>
                     </td>
                     <td>

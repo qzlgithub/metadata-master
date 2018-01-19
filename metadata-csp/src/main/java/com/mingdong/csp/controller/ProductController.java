@@ -5,6 +5,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
@@ -34,12 +35,14 @@ public class ProductController
     @GetMapping(value = "recharge")
     public BLResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.END_DATE, required = false) Date endDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         BLResp resp = BLResp.build();
-        productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, endDate,
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
+        productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
                 new Page(pageNum, pageSize), resp);
         return resp;
     }
@@ -50,11 +53,13 @@ public class ProductController
     @GetMapping(value = "recharge/export")
     public void exportProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.END_DATE, required = false) Date endDate, HttpServletResponse response)
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
             throws IOException
     {
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         XSSFWorkbook wb = productService.createProductRechargeXlsx(RequestThread.getClientId(), productId, fromDate,
-                endDate);
+                toDate);
         String filename = new String("产品充值记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
@@ -71,12 +76,14 @@ public class ProductController
     @GetMapping(value = "request/list")
     public BLResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.END_DATE, required = false) Date endDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         BLResp resp = BLResp.build();
-        productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, endDate,
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
+        productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate,
                 new Page(pageNum, pageSize), resp);
         return resp;
     }
@@ -87,11 +94,13 @@ public class ProductController
     @GetMapping(value = "request/export")
     public void exportProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.END_DATE, required = false) Date endDate, HttpServletResponse response)
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
             throws IOException
     {
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         XSSFWorkbook wb = productService.createProductRequestXlsx(RequestThread.getClientId(), productId, fromDate,
-                endDate);
+                toDate);
         String filename = new String("产品服务请求记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");

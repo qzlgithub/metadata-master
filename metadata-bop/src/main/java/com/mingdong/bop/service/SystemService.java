@@ -61,4 +61,6 @@ public interface SystemService
     String getIndustryName(Long industryId);
 
     Map<String, String> cacheSystemModule();
+
+    void setGlobalSetting(Integer subUserQty, String serviceQQ, BLResp resp);
 }

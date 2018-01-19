@@ -13,22 +13,22 @@ public interface ProductService
     /**
      * 获取客户项目充值记录
      */
-    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
+    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, BLResp resp);
 
     /**
      * 导出客户项目充值记录
      */
-    XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date fromDate, Date endDate);
+    XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
 
     /**
      * 客户请求记录
      */
-    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate, Page page, BLResp resp);
+    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, BLResp resp);
 
     /**
      * 导出客户请求记录
      */
-    XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date endDate);
+    XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
 
     void getClientProductDetail(Long clientId, Long productId, BLResp resp);
 

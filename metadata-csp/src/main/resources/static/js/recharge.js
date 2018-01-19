@@ -12,23 +12,26 @@ layui.config({
         type: 'iframe'
     }).init();
 });
-var dateRange = new pickerDateRange('date', {
-    isTodayValid: true,
-    startDate: '2012-06-14',
-    endDate: '2012-07-10',
-    needCompare: false,
-    defaultText: ' 至 ',
-    autoSubmit: true,
-    inputTrigger: 'input_trigger',
-    theme: 'ta',
-    success: function(obj) {
-        alert('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
-    }
-});
 $(function() {
+    var fromObj = $("#from-date");
+    var toObj = $("#to-date");
+    new pickerDateRange('date', {
+        isTodayValid: true,
+        startDate: fromObj.val(),
+        endDate: toObj.val(),
+        needCompare: false,
+        defaultText: ' 至 ',
+        autoSubmit: true,
+        inputTrigger: 'input_trigger',
+        theme: 'ta',
+        success: function(obj) {
+            fromObj.val(obj.startDate);
+            toObj.val(obj.endDate);
+        }
+    });
     var productId = $("#product-sel").val();
-    var fromDate = $("#from-date").val();
-    var toDate = $("#to-date").val();
+    var fromDate = fromObj.val();
+    var toDate = toObj.val();
     search(productId, fromDate, toDate, 1, 15);
 });
 $("#search").click(function() {

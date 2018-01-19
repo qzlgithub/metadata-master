@@ -97,4 +97,6 @@ public interface Field
     String CLIENT_RECHARGE_BY_MONTH = "clientRechargeByMonth";
     String CLIENT_COUNT_BY_WEEK = "clientCountByWeek";
     String CLIENT_COUNT_BY_MONTH_FRIST = "clientCountByMonthFrist";
+    String SUB_USER_QTY = "subUserQty";
+    String SERVICE_QQ = "serviceQQ";
 }

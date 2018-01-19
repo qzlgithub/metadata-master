@@ -41,4 +41,34 @@ public class BusinessUtils
         Date after = calendar.getTime();
         return (after.getTime() - before.getTime()) / 24 / 3600 / 1000;
     }
+
+    public static Date getDayStartTime(Date date)
+    {
+        if(date != null)
+        {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.getTime();
+        }
+        return null;
+    }
+
+    public static Date getLastDayStartTime(Date date)
+    {
+        if(date != null)
+        {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.getTime();
+        }
+        return null;
+    }
 }
