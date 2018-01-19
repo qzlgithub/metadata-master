@@ -9,8 +9,12 @@ public interface StatsClientMapper
 {
     Long getAllClientCount();
 
-    Long getClientCountByDate(@Param("start")Date start,@Param("end")Date end);
+    Long getClientCountByDate(@Param("start") Date start, @Param("end") Date end);
 
-    BigDecimal getClientRechargeByDate(Date date);
+    BigDecimal getClientRechargeByDate(@Param("start") Date start, @Param("end") Date end);
+
+    BigDecimal getClientRechargeAll();
+
+    Long countClientRechargeByDate(@Param("start") Date start, @Param("end") Date end);
 
 }

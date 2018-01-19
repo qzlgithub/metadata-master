@@ -19,6 +19,28 @@ public class ProductRechargeInfo
     private String managerName;
     private String contractNo;
     private String remark;
+    private Integer rechargeTypeInt;
+    private BigDecimal rechargeTypeSum;
+
+    public Integer getRechargeTypeInt()
+    {
+        return rechargeTypeInt;
+    }
+
+    public void setRechargeTypeInt(Integer rechargeTypeInt)
+    {
+        this.rechargeTypeInt = rechargeTypeInt;
+    }
+
+    public BigDecimal getRechargeTypeSum()
+    {
+        return rechargeTypeSum;
+    }
+
+    public void setRechargeTypeSum(BigDecimal rechargeTypeSum)
+    {
+        this.rechargeTypeSum = rechargeTypeSum;
+    }
 
     public Long getId()
     {

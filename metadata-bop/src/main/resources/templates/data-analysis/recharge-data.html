@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
     <!--<script src="../../static/js/jquery-1.11.1.min.js"></script>-->
 </head>
 
@@ -21,16 +22,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="data::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
             <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
             <a><cite>充值数据</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--运营汇总-->
             <dl class="public-data">
                 <dt class="mt0 important">充值数据</dt>
                 <dd>
@@ -38,81 +35,55 @@
                         <li class="layui-col-md2 layui-col-list">
                             <div class="fz-14">
                                 <p class="fz-16 mt10 tc">今日充值(元)</p>
-                                <p class="col4 mt20 tc fz-24">500000 </p>
+                                <p class="col4 mt20 tc fz-24" th:text="${clientRechargeByNow}"></p>
                             </div>
                         </li>
                         <li class="layui-col-md2 layui-col-list ml30 mr30">
                             <div class="fz-14">
                                 <p class="fz-16 mt10 tc">近7天充值(元)</p>
-                                <p class="col4 mt20 tc fz-24">500000 </p>
+                                <p class="col4 mt20 tc fz-24" th:text="${clientRechargeByWeek}"></p>
                             </div>
                         </li>
                         <li class="layui-col-md2 layui-col-list mr30">
                             <div class="fz-14">
                                 <p class="fz-16 mt10 tc">当月充值(元)</p>
-                                <p class="col4 mt20 tc fz-24">500000 </p>
+                                <p class="col4 mt20 tc fz-24" th:text="${clientRechargeByMonthFirst}"></p>
                             </div>
                         </li>
                         <li class="layui-col-md2 layui-col-list">
                             <div class="fz-14">
                                 <p class="fz-16 mt10 tc">充值总量(元)</p>
-                                <p class="col4 mt20 tc fz-24">500000 </p>
+                                <p class="col4 mt20 tc fz-24" th:text="${clientRechargeByAll}"></p>
                             </div>
                         </li>
                     </ul>
                 </dd>
             </dl>
-            <!--运营汇总 end-->
-            <!--客户数据统计-->
             <dl class="public-data">
                 <dt>客户数据统计</dt>
                 <dd class="layui-row">
                     <ul class="clearfix p10 product-fx-warp">
-                        <li class="product-fx mt10 clearfix">
-                            <span class="active">近7天</span>
-                            <span>近15天</span>
-                            <span>近30天</span>
-                            <span>近一年</span>
-                        </li>
-                        <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date"
-                                                                                    id="date1" autocomplete="off"
-                                                                                    class="layui-input"/></em><i
-                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                        <li class="mt10"><label class="contrast-time"><input type="checkbox" name=""/></label>对比时间</li>
-                        <li class="position-r time-input timeinput"><em class="inline-block"><input type="text"
-                                                                                                    name="date"
-                                                                                                    id="date1"
-                                                                                                    autocomplete="off"
-                                                                                                    class="layui-input"/></em><i
-                                class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                        <li class="product-fx mt10 clearfix">
-                            <span class="active">按时</span>
-                            <span>按日</span>
-                            <span>按周</span>
-                            <span>按月</span>
+                        <li class="product-fx mt10 clearfix" id="scopeId">
+                            <span class="active" otherVal="2">近7天</span>
+                            <span otherVal="3">近15天</span>
+                            <span otherVal="4">近30天</span>
+                            <span otherVal="6">近一年</span>
                         </li>
                     </ul>
-                    <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
-                    <div class="layui-row tc mt20 mb20" id="panel">
-                        <div class="layui-col-md4">
-                            <p class="tc"><img src="../../static/images/data-img1.png"/></p>
+                    <p class="tc pt20 pb20 col4 fz-16" id="chartTitleId"></p>
+                    <div class="layui-row tc mt20 mb20" id="panel" style="height:500px;display: block;">
+                        <div class="layui-col-md4" id="leftPanel" style="height:500px;">
                         </div>
-                        <div class="layui-col-md8 p30 tc">
-                            <p class="tc"><img src="../../static/images/data-img4.png"/></p>
+                        <div class="layui-col-md8 p30 tc" id="rightPanel" style="height:500px;">
                         </div>
                     </div>
-                    <p class="slide"><a href="javascript:;" class="btn-slide active">统计图</a></p>
+                    <p class="slide"><a href="javascript:;" class="btn-slide">统计图</a></p>
                 </dd>
             </dl>
-            <!--客户数据统计 end-->
-
-            <!--客户数据统计-->
             <dl class="public-data">
                 <dt class="clearfix">
-                    <em class="col5">2017/11/1-2017/11/30</em>
-                    <em class="col2 fz-14 pl40">共50,000条</em>
                     <span class="fr mb10">
-                            <a href="customer-add.html" class="add-button">导出</a>
+                            <a href="javascript:" class="add-button" onclick="clientOutPrint()">导出</a>
                         </span>
                 </dt>
                 <dd class="layui-row">
@@ -130,68 +101,18 @@
                             <th>经手人</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>001</td>
-                            <td>阿里巴巴</td>
-                            <td>阿里巴巴</td>
-                            <td>购物/网上商超</td>
-                            <td>购物/网上商超</td>
-                            <td>张三</td>
-                            <td>18733035161</td>
-                            <td>孙权</td>
-                            <td>3个</td>
-                        </tr>
+                        <tbody id="dataBody">
                         </tbody>
                     </table>
-                    <!--page-->
-                    <div class="layui-table-tool mt20">
-                        <div class="layui-inline layui-table-page" id="layui-table-page1">
-                            <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                                <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
-                                    <i class="layui-icon"></i>
-                                </a>
-                                <span class="layui-laypage-curr">
-                                        <em class="layui-laypage-em"></em>
-                                        <em>1</em>
-                                    </span>
-                                <a href="javascript:;" data-page="2">2</a>
-                                <a href="javascript:;" data-page="3">3</a>
-                                <span class="layui-laypage-spr">…</span>
-                                <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
-                                <a href="javascript:;" class="layui-laypage-next" data-page="2">
-                                    <i class="layui-icon"></i>
-                                </a>
-                                <span class="layui-laypage-skip">到第<input type="text" min="1" value="1"
-                                                                          class="layui-input"/>页<button type="button" class="layui-laypage-btn">确定</button></span>
-                                <span class="layui-laypage-count">共 1000 条</span>
-                                <span class="layui-laypage-limits">
-                                        <select lay-ignore="">
-                                            <option value="10">10 条/页</option>
-                                            <option value="20">20 条/页</option>
-                                            <option value="30" selected="">30 条/页</option>
-                                            <option value="40">40 条/页</option>
-                                            <option value="50">50 条/页</option>
-                                            <option value="60">60 条/页</option>
-                                            <option value="70">70 条/页</option>
-                                            <option value="80">80 条/页</option>
-                                            <option value="90">90 条/页</option>
-                                        </select>
-                                    </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--page end-->
+                    <div class="box mt40" id="pagination"></div>
                 </dd>
             </dl>
-            <!--客户数据统计 end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
 
 <script type="text/javascript">
@@ -202,6 +123,9 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/recharge.data.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/echarts/echarts.common.min.js}"></script>
 <script>
     var message;
     layui.config({
