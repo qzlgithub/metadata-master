@@ -98,11 +98,12 @@
                         <td>后台账号管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="11101"
+                            <input type="checkbox" class="parent-privilege" id="p11100"/>全选
+                            <input type="checkbox" class="privilege p11100" id="11101" p-id="p11100" checked=""
                                    th:checked="${#lists.contains(privilege,'11101')}"/>添加
-                            <input type="checkbox" class="privilege" id="11102"
+                            <input type="checkbox" class="privilege p11100" id="11102" p-id="p11100" checked=""
                                    th:checked="${#lists.contains(privilege,'11102')}"/>编辑
-                            <input type="checkbox" class="privilege" id="11103"
+                            <input type="checkbox" class="privilege p11100" id="11103" p-id="p11100" checked=""
                                    th:checked="${#lists.contains(privilege,'11103')}"/>停用
                         </td>
                     </tr>
@@ -110,11 +111,12 @@
                         <td>分组管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="11201"
+                            <input type="checkbox" class="parent-privilege" id="p11200"/>全选
+                            <input type="checkbox" class="privilege p11200" id="11201" p-id="p11200" checked=""
                                    th:checked="${#lists.contains(privilege,'11201')}"/>添加
-                            <input type="checkbox" class="privilege" id="11202"
+                            <input type="checkbox" class="privilege p11200" id="11202" p-id="p11200" checked=""
                                    th:checked="${#lists.contains(privilege,'11202')}"/>编辑
-                            <input type="checkbox" class="privilege" id="11203"
+                            <input type="checkbox" class="privilege p11200" id="11203" p-id="p11200" checked=""
                                    th:checked="${#lists.contains(privilege,'11203')}"/>停用
                         </td>
                     </tr>
@@ -123,13 +125,14 @@
                         <td>栏目管理</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="12101"
+                            <input type="checkbox" class="parent-privilege" id="p12100"/>全选
+                            <input type="checkbox" class="privilege p12100" id="12101" p-id="p12100" checked=""
                                    th:checked="${#lists.contains(privilege,'12101')}"/>修改图标
-                            <input type="checkbox" class="privilege" id="12102"
+                            <input type="checkbox" class="privilege p12100" id="12102" p-id="p12100" checked=""
                                    th:checked="${#lists.contains(privilege,'12102')}"/>是否显示
-                            <input type="checkbox" class="privilege" id="12103"
+                            <input type="checkbox" class="privilege p12100" id="12103" p-id="p12100" checked=""
                                    th:checked="${#lists.contains(privilege,'12103')}"/>编辑
-                            <input type="checkbox" class="privilege" id="12104"
+                            <input type="checkbox" class="privilege p12100" id="12104" p-id="p12100" checked=""
                                    th:checked="${#lists.contains(privilege,'12104')}"/>删除
                         </td>
                     </tr>
@@ -137,13 +140,14 @@
                         <td>充值类型</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="12201"
+                            <input type="checkbox" class="parent-privilege" id="p12200"/>全选
+                            <input type="checkbox" class="privilege p12200" id="12201" p-id="p12200" checked=""
                                    th:checked="${#lists.contains(privilege,'12201')}"/>添加类型
-                            <input type="checkbox" class="privilege" id="12202"
+                            <input type="checkbox" class="privilege p12200" id="12202" p-id="p12200" checked=""
                                    th:checked="${#lists.contains(privilege,'12202')}"/>是否显示
-                            <input type="checkbox" class="privilege" id="12203"
+                            <input type="checkbox" class="privilege p12200" id="12203" p-id="p12200" checked=""
                                    th:checked="${#lists.contains(privilege,'12203')}"/>编辑
-                            <input type="checkbox" class="privilege" id="12204"
+                            <input type="checkbox" class="privilege p12200" id="12204" p-id="p12200" checked=""
                                    th:checked="${#lists.contains(privilege,'12204')}"/>删除
                         </td>
                     </tr>
@@ -151,24 +155,26 @@
                         <td>行业分类</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
-                            <input type="checkbox" class="privilege" id="12301"
+                            <input type="checkbox" class="parent-privilege" id="p12300"/>全选
+                            <input type="checkbox" class="privilege p12300" id="12301" p-id="p12300" checked=""
                                    th:checked="${#lists.contains(privilege,'12301')}"/>添加行业
-                            <input type="checkbox" class="privilege" id="12302"
+                            <input type="checkbox" class="privilege p12300" id="12302" p-id="p12300" checked=""
                                    th:checked="${#lists.contains(privilege,'12302')}"/>是否显示
-                            <input type="checkbox" class="privilege" id="12303"
+                            <input type="checkbox" class="privilege p12300" id="12303" p-id="p12300" checked=""
                                    th:checked="${#lists.contains(privilege,'12303')}"/>编辑
-                            <input type="checkbox" class="privilege" id="12304"
+                            <input type="checkbox" class="privilege p12300" id="12304" p-id="p12300" checked=""
                                    th:checked="${#lists.contains(privilege,'12304')}"/>删除
-                            <input type="checkbox" class="privilege" id="12305"
+                            <input type="checkbox" class="privilege p12300" id="12305" p-id="p12300" checked=""
                                    th:checked="${#lists.contains(privilege,'12305')}"/>增加子行业
                         </td>
                     </tr>
                     <tr>
                         <td>其他设置</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="12401"
+                            <input type="checkbox" class="parent-privilege" id="p12400"/>全选
+                            <input type="checkbox" class="privilege p12400" id="12401" p-id="p12400" checked=""
                                    th:checked="${#lists.contains(privilege,'12401')}"/>设置客服
-                            <input type="checkbox" class="privilege" id="12402"
+                            <input type="checkbox" class="privilege p12400" id="12402" p-id="p12400" checked=""
                                    th:checked="${#lists.contains(privilege,'12402')}"/>设置子账号数量
                         </td>
                     </tr>
@@ -177,22 +183,24 @@
                         <td rowspan="2">产品管理</td>
                         <td>产品类别管理</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="21101"
+                            <input type="checkbox" class="parent-privilege" id="p21100"/>全选
+                            <input type="checkbox" class="privilege p21100" id="21101" p-id="p21100" checked=""
                                    th:checked="${#lists.contains(privilege,'21101')}"/>添加
-                            <input type="checkbox" class="privilege" id="21102"
+                            <input type="checkbox" class="privilege p21100" id="21102" p-id="p21100" checked=""
                                    th:checked="${#lists.contains(privilege,'21102')}"/>编辑
-                            <input type="checkbox" class="privilege" id="21103"
+                            <input type="checkbox" class="privilege p21100" id="21103" p-id="p21100" checked=""
                                    th:checked="${#lists.contains(privilege,'21103')}"/>停用
                         </td>
                     </tr>
                     <tr>
                         <td>产品列表</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="21201"
+                            <input type="checkbox" class="parent-privilege" id="p21200"/>全选
+                            <input type="checkbox" class="privilege p21200" id="21201" p-id="p21200" checked=""
                                    th:checked="${#lists.contains(privilege,'21201')}"/>添加
-                            <input type="checkbox" class="privilege" id="21202"
+                            <input type="checkbox" class="privilege p21200" id="21202" p-id="p21200" checked=""
                                    th:checked="${#lists.contains(privilege,'21202')}"/>编辑
-                            <input type="checkbox" class="privilege" id="21203"
+                            <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""
                                    th:checked="${#lists.contains(privilege,'21203')}"/>停用
                         </td>
                     </tr>
@@ -204,33 +212,34 @@
                         <td>客户管理
                         </td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="31101"
+                            <input type="checkbox" class="parent-privilege" id="p31100"/>全选
+                            <input type="checkbox" class="privilege p31100" id="31101" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31101')}"/>查看
-                            <input type="checkbox" class="privilege" id="31102"
+                            <input type="checkbox" class="privilege p31100" id="31102" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31102')}"/>添加
-                            <input type="checkbox" class="privilege" id="31103"
+                            <input type="checkbox" class="privilege p31100" id="31103" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31103')}"/>编辑
-                            <input type="checkbox" class="privilege" id="31104"
+                            <input type="checkbox" class="privilege p31100" id="31104" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31104')}"/>冻结
-                            <input type="checkbox" class="privilege" id="31105"
+                            <input type="checkbox" class="privilege p31100" id="31105" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31105')}"/>解冻
-                            <input type="checkbox" class="privilege" id="31106"
+                            <input type="checkbox" class="privilege p31100" id="31106" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31106')}"/>删除
-                            <input type="checkbox" class="privilege" id="31107"
+                            <input type="checkbox" class="privilege p31100" id="31107" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31107')}"/>重置
-                            <input type="checkbox" class="privilege" id="31108"
+                            <input type="checkbox" class="privilege p31100" id="31108" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31108')}"/>开通服务
-                            <input type="checkbox" class="privilege" id="31109"
+                            <input type="checkbox" class="privilege p31100" id="31109" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31109')}"/>续签
-                            <input type="checkbox" class="privilege" id="31110"
+                            <input type="checkbox" class="privilege p31100" id="31110" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31110')}"/>账户充值
-                            <input type="checkbox" class="privilege" id="31111"
+                            <input type="checkbox" class="privilege p31100" id="31111" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31111')}"/>产品历史充值记录导出
-                            <input type="checkbox" class="privilege" id="31112"
+                            <input type="checkbox" class="privilege p31100" id="31112" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31112')}"/>产品消费明细导出
-                            <input type="checkbox" class="privilege" id="31113"
+                            <input type="checkbox" class="privilege p31100" id="31113" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31113')}"/>子账号消费明细导出
-                            <input type="checkbox" class="privilege" id="31114"
+                            <input type="checkbox" class="privilege p31100" id="31114" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31114')}"/>重置密钥
                         </td>
                     </tr>
@@ -239,43 +248,48 @@
                         <td rowspan="5">运营数据管理</td>
                         <td>运营数据汇总</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="41101"
+                            <input type="checkbox" class="parent-privilege" id="p41100"/>全选
+                            <input type="checkbox" class="privilege p41100" id="41101" p-id="p41100" checked=""
                                    th:checked="${#lists.contains(privilege,'41101')}"/>查看
                         </td>
                     </tr>
                     <tr>
                         <td>客户数据</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="41201"
+                            <input type="checkbox" class="parent-privilege" id="p41200"/>全选
+                            <input type="checkbox" class="privilege p41200" id="41201" p-id="p41200" checked=""
                                    th:checked="${#lists.contains(privilege,'41201')}"/>查看
-                            <input type="checkbox" class="privilege" id="41202"
+                            <input type="checkbox" class="privilege p41200" id="41202" p-id="p41200" checked=""
                                    th:checked="${#lists.contains(privilege,'41202')}"/>导出
                         </td>
                     </tr>
                     <tr>
                         <td>充值数据</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="41301"
+                            <input type="checkbox" class="parent-privilege" id="p41300"/>全选
+                            <input type="checkbox" class="privilege p41300" id="41301" p-id="p41300" checked=""
                                    th:checked="${#lists.contains(privilege,'41301')}"/>查看
-                            <input type="checkbox" class="privilege" id="41302"
+                            <input type="checkbox" class="privilege p41300" id="41302" p-id="p41300" checked=""
                                    th:checked="${#lists.contains(privilege,'41302')}"/>导出
                         </td>
                     </tr>
                     <tr>
                         <td>营收列表</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="41401"
+                            <input type="checkbox" class="parent-privilege" id="p41400"/>全选
+                            <input type="checkbox" class="privilege p41400" id="41401" p-id="p41400" checked=""
                                    th:checked="${#lists.contains(privilege,'41401')}"/>查看
-                            <input type="checkbox" class="privilege" id="41402"
+                            <input type="checkbox" class="privilege p41400" id="41402" p-id="p41400" checked=""
                                    th:checked="${#lists.contains(privilege,'41402')}"/>导出
                         </td>
                     </tr>
                     <tr>
                         <td>产品请求数据</td>
                         <td class="tl important">
-                            <input type="checkbox" class="privilege" id="41501"
+                            <input type="checkbox" class="parent-privilege" id="p41500"/>全选
+                            <input type="checkbox" class="privilege p41500" id="41501" p-id="p41500" checked=""
                                    th:checked="${#lists.contains(privilege,'41501')}"/>查看
-                            <input type="checkbox" class="privilege" id="41502"
+                            <input type="checkbox" class="privilege p41500" id="41502" p-id="p41500" checked=""
                                    th:checked="${#lists.contains(privilege,'41502')}"/>导出
                         </td>
                     </tr>
@@ -331,16 +345,6 @@
             });
         });
     });
-    //全选复选框
-    $(function(){
-        $(".reverseSelect").on("click",function(){
-            if(!$(this).is(":checked")){
-                $(this).parent("td").find('input').prop("checked",false);
-            }else{
-                $(this).parent("td").find('input').prop("checked",true);
-            }
-        })
-    })
 </script>
 </body>
 
