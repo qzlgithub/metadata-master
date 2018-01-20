@@ -1,8 +1,7 @@
 $(function() {
     var obj = {
         pageNum: 1,
-        pageSize: 10,
-        init : true
+        pageSize: 10
     };
     getMessageList(obj,function(pageObj, pages, total) {
         $('#pagination').paging({
@@ -12,12 +11,8 @@ $(function() {
             slideSpeed: 600,
             jump: false,
             callback: function(currentPage) {
-                if(pageObj['init']){
-                    pageObj['init'] = false;
-                }else {
-                    pageObj['pageNum'] = currentPage;
-                    getMessageList(pageObj);
-                }
+                pageObj['pageNum'] = currentPage;
+                getMessageList(pageObj);
             }
         })
     });

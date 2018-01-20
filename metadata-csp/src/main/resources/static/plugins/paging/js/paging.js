@@ -100,10 +100,10 @@
                 handles(pageIndex);
             })
 
-            function handles(pageIndex) {
+            function beforeHandles(pageIndex){
                 lis.removeClass('sel-page').eq(pageIndex - 1).addClass('sel-page');
                 if (totalPages <= 5) {
-                    that.options.callback(pageIndex);
+                    //that.options.callback(pageIndex);
                     return false;
                 }
                 if (pageIndex >= 3 && pageIndex <= totalPages - 2) distance = (pageIndex - 3) * liWidth;
@@ -114,10 +114,14 @@
                 pageIndex == 1 ? prePage.attr('disabled', true) : prePage.attr('disabled', false);
                 pageIndex == totalPages ? lastPage.attr('disabled', true) : lastPage.attr('disabled', false);
                 pageIndex == totalPages ? nextPage.attr('disabled', true) : nextPage.attr('disabled', false);
+            }
+
+            function handles(pageIndex) {
+                beforeHandles(pageIndex);
                 that.options.callback(pageIndex);
             }
 
-            handles(that.options.pageNo); // 初始化页码位置
+            beforeHandles(that.options.pageNo); // 初始化页码位置
         }
     }
     $.fn.paging = function(options) {
