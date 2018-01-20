@@ -2,15 +2,11 @@ var message;
 layui.config({
     base: '../build/js/'
 }).use(['app', 'message', 'laydate'], function() {
-    var app = layui.app,
-        $ = layui.jquery,
-        layer = layui.layer;
+    var app = layui.app, $ = layui.jquery, layer = layui.layer;
     //将message设置为全局以便子页面调用
     message = layui.message;
     //主入口
-    app.set({
-        type: 'iframe'
-    }).init();
+    app.set({type: 'iframe'}).init();
 });
 $(function() {
     var fromObj = $("#from-date");
