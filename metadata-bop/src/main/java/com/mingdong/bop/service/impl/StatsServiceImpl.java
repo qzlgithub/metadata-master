@@ -7,6 +7,7 @@ import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.domain.entity.ClientInfo;
+import com.mingdong.bop.domain.entity.DictRechargeType;
 import com.mingdong.bop.domain.entity.ProductRechargeInfo;
 import com.mingdong.bop.domain.mapper.ClientInfoMapper;
 import com.mingdong.bop.domain.mapper.DictRechargeTypeMapper;
@@ -19,6 +20,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.util.BusinessUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,9 +38,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class StatsServiceImpl implements StatsService
@@ -396,49 +400,106 @@ public class StatsServiceImpl implements StatsService
         JSONObject jsonObject = new JSONObject();
         JSONObject leftObject = new JSONObject();
         JSONObject rightObject = new JSONObject();
-        //        List<DictRechargeType> rechargeTypes = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,TrueOrFalse.FALSE);
-        Map<String, Long> typeNameMap = new HashMap<>();
         JSONArray jsonArrayTemp;
-        //        jsonArrayTemp = new JSONArray();
-        //        for(DictRechargeType item : rechargeTypes){
-        //            jsonArrayTemp.add(item.getName());
-        //            typeNameMap.put(item.getName(),item.getId());
-        //        }
         Date currentDay = new Date();
         List<ProductRechargeInfo> dataList = new ArrayList<>();
+        Date beforeDate = null;
         if(ScopeType.WEEK == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-            dataList = productRechargeInfoMapper.getRechargeTypeSum(date, currentDay);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
         }
         else if(ScopeType.HALF_MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-            dataList = productRechargeInfoMapper.getRechargeTypeSum(date, currentDay);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
+            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
         }
         else if(ScopeType.MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            dataList = productRechargeInfoMapper.getRechargeTypeSum(date, currentDay);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            dataList = productRechargeInfoMapper.getRechargeTypeSum(date, currentDay);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
+        }
+        //left
+        Map<String,BigDecimal> typeNameBigDecMap = new HashMap<>();
+        Set<String> setTemp = new HashSet<>();
+        BigDecimal bigDecimalTemp;
+        for(ProductRechargeInfo item : dataList){
+            bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeType());
+            if(bigDecimalTemp == null){
+                bigDecimalTemp = new BigDecimal(0);
+            }
+            typeNameBigDecMap.put(item.getRechargeType(),bigDecimalTemp.add(item.getAmount()));
+            setTemp.add(item.getRechargeType());
         }
         jsonArrayTemp = new JSONArray();
         JSONObject jsonObjectTemp;
         JSONArray jsonArrayTemp1 = new JSONArray();
-        for(ProductRechargeInfo item : dataList)
-        {
+        for(Map.Entry<String,BigDecimal> entry : typeNameBigDecMap.entrySet()){
             jsonObjectTemp = new JSONObject();
-            jsonArrayTemp1.add(item.getRechargeType());
-            jsonObjectTemp.put("name", item.getRechargeType());
-            jsonObjectTemp.put("value", item.getRechargeTypeSum());
+            jsonObjectTemp.put("name", entry.getKey());
+            jsonObjectTemp.put("value", entry.getValue());
             jsonArrayTemp.add(jsonObjectTemp);
+        }
+        for(String item : setTemp){
+            jsonArrayTemp1.add(item);
         }
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
+        //right
+        List<DictRechargeType> dictRechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,TrueOrFalse.FALSE);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Map<String,BigDecimal>> dateMap = new LinkedHashMap<>();
+        Map<String,BigDecimal> bigMapTemp;
+        Calendar c = Calendar.getInstance();
+        c.setTime(beforeDate);
+        int difInt = (int) BusinessUtils.getDayDiff(beforeDate, currentDay) + 1;
+        for(int i = 0; i < difInt; i++)
+        {
+            bigMapTemp = new LinkedHashMap<>();
+            for(DictRechargeType item : dictRechargeTypeList){
+                bigMapTemp.put(item.getName(),new BigDecimal(0));
+            }
+            dateMap.put(sdf.format(c.getTime()), bigMapTemp);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        for(ProductRechargeInfo item : dataList){
+            String dateStrTemp = sdf.format(item.getTradeTime());
+            bigMapTemp = dateMap.get(dateStrTemp);
+            bigDecimalTemp = bigMapTemp.get(item.getRechargeType());
+            if(bigDecimalTemp != null){
+                bigMapTemp.put(item.getRechargeType(),bigDecimalTemp.add(item.getAmount()));
+            }
+        }
+        jsonArrayTemp = new JSONArray();
+        jsonArrayTemp1 = new JSONArray();
+        Map<String,List<BigDecimal>> nameBigDecMap = new LinkedHashMap<>();
+        List<BigDecimal> bigListTemp;
+        for(Map.Entry<String, Map<String,BigDecimal>> entry : dateMap.entrySet()){
+            jsonArrayTemp1.add(entry.getKey());
+            bigMapTemp = entry.getValue();
+            for(Map.Entry<String,BigDecimal> entrySec : bigMapTemp.entrySet()){
+                bigListTemp = nameBigDecMap.get(entrySec.getKey());
+                if(bigListTemp == null){
+                    bigListTemp = new ArrayList<>();
+                    nameBigDecMap.put(entrySec.getKey(),bigListTemp);
+                }
+                bigListTemp.add(entrySec.getValue());
+            }
+        }
+        for(Map.Entry<String,List<BigDecimal>> entry : nameBigDecMap.entrySet()){
+            jsonObjectTemp = new JSONObject();
+            jsonObjectTemp.put("name",entry.getKey());
+            jsonObjectTemp.put("type","bar");
+            jsonObjectTemp.put("data",entry.getValue());
+            jsonArrayTemp.add(jsonObjectTemp);
+        }
+        rightObject.put("series",jsonArrayTemp);
+        rightObject.put("names",jsonArrayTemp1);
         jsonObject.put("leftJson", leftObject);
         jsonObject.put("rightJson", rightObject);
         return jsonObject;
