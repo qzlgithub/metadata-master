@@ -86,8 +86,7 @@ function doChangeParameter() {
         selectedType : selectedType,
         isOpen : isOpen,
         pageNum: 1,
-        pageSize: 8,
-        init : true
+        pageSize: 8
     };
     getAllProductList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
@@ -97,12 +96,8 @@ function doChangeParameter() {
             slideSpeed: 600,
             jump: false,
             callback: function(currentPage) {
-                if(pageObj['init']){
-                    pageObj['init'] = false;
-                }else{
-                    pageObj['pageNum'] = currentPage;
-                    getAllProductList(pageObj);
-                }
+                pageObj['pageNum'] = currentPage;
+                getAllProductList(pageObj);
             }
         })
     });

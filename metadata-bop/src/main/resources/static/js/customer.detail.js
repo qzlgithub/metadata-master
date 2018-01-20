@@ -7,8 +7,7 @@ $(".show-log").click(function() {
     var obj = {
         clientId: $("#client-id").val(),
         pageNum: 1,
-        pageSize: 5,
-        init : true
+        pageSize: 5
     };
     getOperateLogList(obj,function(pageObj, pages, total) {
         $('#pagination').paging({
@@ -18,12 +17,8 @@ $(".show-log").click(function() {
             slideSpeed: 600,
             jump: false,
             callback: function(currentPage) {
-                if(pageObj['init']){
-                    pageObj['init'] = false;
-                }else {
-                    pageObj['pageNum'] = currentPage;
-                    getOperateLogList(pageObj);
-                }
+                pageObj['pageNum'] = currentPage;
+                getOperateLogList(pageObj);
             }
         })
     },function(){
