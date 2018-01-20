@@ -19,6 +19,7 @@ public class InterceptorConfigurer extends WebMvcConfigurerAdapter
         registry.addInterceptor(accessInterceptor)
                 .addPathPatterns("/**/**.html")
                 .addPathPatterns("/client/**")
+                .addPathPatterns("/stats/**")
                 .addPathPatterns("/changePwd")
                 .addPathPatterns("/client/product/open")
                 .addPathPatterns("/client/product/renew")
