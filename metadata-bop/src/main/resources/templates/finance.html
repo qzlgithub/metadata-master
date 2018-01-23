@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <body>
-<!--left-->
 <div th:fragment="left">
     <div class="layui-side-scroll">
         <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
         <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'51000')}">
-                <a class="" href="javascript:;"><i class="icon icon5" aria-hidden="true"></i><em
+                <a class="" href="#"><i class="icon icon5" aria-hidden="true"></i><em
                         th:text="${i_system.m51000}">核对管理mingdong.net</em></a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'finance_recharge'} ? 'layui-this':''"
