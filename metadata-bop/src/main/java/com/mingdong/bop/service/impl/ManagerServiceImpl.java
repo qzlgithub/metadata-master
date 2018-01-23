@@ -19,7 +19,6 @@ import com.mingdong.bop.domain.mapper.RoleMapper;
 import com.mingdong.bop.domain.mapper.RolePrivilegeMapper;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.ManagerService;
-import com.mingdong.core.util.IDUtils;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
@@ -28,6 +27,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

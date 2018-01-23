@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.configurer.Param;
 import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.constant.SysParam;
+import com.mingdong.bop.domain.TransformDTO;
 import com.mingdong.bop.domain.entity.Client;
 import com.mingdong.bop.domain.entity.ClientMessage;
 import com.mingdong.bop.domain.entity.ClientProduct;
@@ -299,12 +300,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             clientUser.setEnabled(TrueOrFalse.TRUE);
         }
         clientUserMapper.updateById(clientUser);
-        userDTO.setUserId(clientUser.getId());
-        userDTO.setClientId(clientUser.getClientId());
-        userDTO.setName(clientUser.getName());
-        userDTO.setPhone(clientUser.getPhone());
-        userDTO.setUsername(clientUser.getUsername());
-        userDTO.setEnabled(clientUser.getEnabled());
+        TransformDTO.clientUserToDTO(clientUser,userDTO);
         return userDTO;
     }
 
@@ -313,12 +309,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(clientUser.getId());
-        userDTO.setClientId(clientUser.getClientId());
-        userDTO.setName(clientUser.getName());
-        userDTO.setPhone(clientUser.getPhone());
-        userDTO.setUsername(clientUser.getUsername());
-        userDTO.setEnabled(clientUser.getEnabled());
+        TransformDTO.clientUserToDTO(clientUser,userDTO);
         return userDTO;
     }
 
@@ -348,12 +339,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUser.setPhone(phone);
         clientUser.setEnabled(enabled);
         clientUserMapper.updateById(clientUser);
-        userDTO.setUserId(clientUser.getId());
-        userDTO.setClientId(clientUser.getClientId());
-        userDTO.setName(clientUser.getName());
-        userDTO.setPhone(clientUser.getPhone());
-        userDTO.setUsername(clientUser.getUsername());
-        userDTO.setEnabled(clientUser.getEnabled());
+        TransformDTO.clientUserToDTO(clientUser,userDTO);
         return userDTO;
     }
 
@@ -364,13 +350,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null || !user.getPassword().equals(Md5Utils.encrypt(password)))
         {
-            dto.setErrCode(RestResult.INVALID_PASSCODE.getCode());
+            dto.getResultDTO().setResult(RestResult.INVALID_PASSCODE);
             return dto;
         }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
-            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            dto.getResultDTO().setResult(RestResult.PRODUCT_NOT_OPEN);
             return dto;
         }
         dto.setAppId(cp.getAppId());

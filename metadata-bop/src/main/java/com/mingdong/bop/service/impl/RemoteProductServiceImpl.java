@@ -3,6 +3,7 @@ package com.mingdong.bop.service.impl;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Constant;
+import com.mingdong.bop.domain.TransformDTO;
 import com.mingdong.bop.domain.entity.ApiReqInfo;
 import com.mingdong.bop.domain.entity.ClientProduct;
 import com.mingdong.bop.domain.entity.DictProductType;
@@ -25,10 +26,10 @@ import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductRecListDTO;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
-import com.mingdong.core.model.dto.ProductReqListDTO;
-import com.mingdong.core.model.dto.ProductRequestDTO;
+import com.mingdong.core.model.dto.ProductRecInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductReqInfoListDTO;
+import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +59,11 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private DictProductTypeMapper dictProductTypeMapper;
 
     @Override
-    public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    public ProductRecInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page)
     {
-        ProductRecListDTO productRecListDTO = new ProductRecListDTO();
-        List<ProductRechargeDTO> dataDtoList = new ArrayList<>();
+        ProductRecInfoListDTO productRecListDTO = new ProductRecInfoListDTO();
+        List<ProductRechargeInfoDTO> dataDtoList = new ArrayList<>();
         productRecListDTO.setProductRechargeDTOList(dataDtoList);
         if(page == null)
         {
@@ -70,12 +71,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     endDate);
             if(CollectionUtils.isNotEmpty(dataList))
             {
-                ProductRechargeDTO productRechargeDTO;
+                ProductRechargeInfoDTO productRechargeDTO;
                 for(ProductRechargeInfo item : dataList)
                 {
-                    productRechargeDTO = new ProductRechargeDTO();
+                    productRechargeDTO = new ProductRechargeInfoDTO();
                     dataDtoList.add(productRechargeDTO);
-                    productRechargeToDTO(item, productRechargeDTO);
+                    TransformDTO.productRechargeToDTO(item, productRechargeDTO);
                 }
             }
         }
@@ -90,12 +91,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
                         endDate);
-                ProductRechargeDTO productRechargeDTO;
+                ProductRechargeInfoDTO productRechargeDTO;
                 for(ProductRechargeInfo item : dataList)
                 {
-                    productRechargeDTO = new ProductRechargeDTO();
+                    productRechargeDTO = new ProductRechargeInfoDTO();
                     dataDtoList.add(productRechargeDTO);
-                    productRechargeToDTO(item, productRechargeDTO);
+                    TransformDTO.productRechargeToDTO(item, productRechargeDTO);
                 }
             }
         }
@@ -104,23 +105,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    public ProductReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page)
     {
-        ProductReqListDTO productReqListDTO = new ProductReqListDTO();
-        List<ProductRequestDTO> dataDtoList = new ArrayList<>();
+        ProductReqInfoListDTO productReqListDTO = new ProductReqInfoListDTO();
+        List<ProductRequestInfoDTO> dataDtoList = new ArrayList<>();
         productReqListDTO.setProductRequestDTOList(dataDtoList);
         if(page == null)
         {
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
             if(CollectionUtils.isNotEmpty(dataList))
             {
-                ProductRequestDTO dataDto;
+                ProductRequestInfoDTO dataDto;
                 for(ApiReqInfo item : dataList)
                 {
-                    dataDto = new ProductRequestDTO();
+                    dataDto = new ProductRequestInfoDTO();
                     dataDtoList.add(dataDto);
-                    productRequestToDto(item, dataDto);
+                    TransformDTO.productRequestToDTO(item, dataDto);
                 }
             }
         }
@@ -134,12 +135,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
-                ProductRequestDTO dataDto;
+                ProductRequestInfoDTO dataDto;
                 for(ApiReqInfo item : dataList)
                 {
-                    dataDto = new ProductRequestDTO();
+                    dataDto = new ProductRequestInfoDTO();
                     dataDtoList.add(dataDto);
-                    productRequestToDto(item, dataDto);
+                    TransformDTO.productRequestToDTO(item, dataDto);
                 }
             }
         }
@@ -281,49 +282,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
             {
                 dictProductTypeDTO = new DictProductTypeDTO();
                 dataDtoList.add(dictProductTypeDTO);
-                dictProductTypeToDictProductTypeDTO(item, dictProductTypeDTO);
+                TransformDTO.dictProductTypeToDTO(item, dictProductTypeDTO);
             }
         }
         return dictProductTypeListDTO;
     }
 
-    private void dictProductTypeToDictProductTypeDTO(DictProductType left, DictProductTypeDTO right)
-    {
-        right.setId(left.getId());
-        right.setCode(left.getCode());
-        right.setName(left.getName());
-        right.setRemark(left.getRemark());
-        right.setEnabled(left.getEnabled());
-    }
 
-    private void productRechargeToDTO(ProductRechargeInfo left, ProductRechargeDTO right)
-    {
-        right.setId(left.getId());
-        right.setAmount(left.getAmount());
-        right.setBalance(left.getBalance());
-        right.setContractNo(left.getContractNo());
-        right.setCorpName(left.getCorpName());
-        right.setContractNo(left.getContractNo());
-        right.setProductName(left.getProductName());
-        right.setRechargeType(left.getRechargeType());
-        right.setRemark(left.getRemark());
-        right.setShortName(left.getShortName());
-        right.setTradeNo(left.getTradeNo());
-        right.setTradeTime(left.getTradeTime());
-        right.setUsername(left.getUsername());
-    }
-
-    private void productRequestToDto(ApiReqInfo left, ProductRequestDTO right)
-    {
-        right.setId(left.getId());
-        right.setBalance(left.getBalance());
-        right.setCorpName(left.getCorpName());
-        right.setCallTime(left.getCallTime());
-        right.setProductName(left.getProductName());
-        right.setShortName(left.getShortName());
-        right.setSuc(left.getSuc());
-        right.setUnitAmt(left.getUnitAmt());
-        right.setUsername(left.getUsername());
-    }
 }
 
