@@ -11,14 +11,14 @@
                 <a class="" href="javascript:;"><i class="icon icon5" aria-hidden="true"></i><em
                         th:text="${i_system.m51000}">核对管理mingdong.net</em></a>
                 <dl class="layui-nav-child">
-                    <dd th:class="${i_module eq 'client_index'} ? 'layui-this':''"
+                    <dd th:class="${i_module eq 'finance_recharge'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'51100')}">
                         <a th:href="@{/finance/recharge.html}">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m51100}">充值记录mingdong.net</span>
                         </a>
                     </dd>
-                    <dd th:class="${i_module eq 'client_index'} ? 'layui-this':''"
+                    <dd th:class="${i_module eq 'finance_bill'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'51200')}">
                         <a th:href="@{/finance/bill.html}">
                             <i class="layui-icon">&#xe602;</i>

@@ -28,7 +28,9 @@ public enum PathModule
     STATS_CUSTOMER("/stats/customer.html", "stats_customer"),
     STATS_RECHARGE("/stats/recharge.html", "stats_recharge"),
     STATS_REVENUE("/stats/revenue.html", "stats_revenue"),
-    STATS_REQUEST("/stats/request.html", "stats_request");
+    STATS_REQUEST("/stats/request.html", "stats_request"),
+    FINANCE_BILL("/finance/bill.html", "finance_bill"),
+    FINANCE_RECHARGE("/finance/recharge.html", "finance_recharge");
 
     private String path;
     private String module;
