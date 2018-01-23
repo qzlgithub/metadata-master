@@ -26,7 +26,6 @@
             <a><cite>充值类型</cite></a>
         </div>
         <div class="p20">
-            <!--功能操作-->
             <div class="clearfix mt20"><span href="account-add.html" class="fr add-button cp" id="addclass">添加类型</span>
             </div>
             <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
@@ -45,7 +44,7 @@
                     <td th:text="${o.name}"></td>
                     <td th:text="${o.remark}"></td>
                     <td>
-                        <div class="layui-form">
+                        <div class="layui-form" th:attr="obj-id=${o.id}">
                             <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
                                    th:checked="${o.enabled == 1}"/>
                         </div>
@@ -72,9 +71,7 @@
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--新增 提示层-->
 <div id="add-manage" class="modal">
-    <!--form-->
     <div class="layui-layer-title">新增类型</div>
     <div class="mb30 layui-form">
         <div class="m30">
@@ -98,16 +95,11 @@
             </div>
         </div>
     </div>
-    <!--form end-->
 </div>
 
-<!--提示层 end-->
-<!--编辑 提示层-->
 <div id="edit-manage" class="modal">
-    <!--form-->
     <div class="layui-layer-title">编辑类型</div>
     <div class="mb30">
-        <!--<form class="layui-form" action="">-->
         <div class="m30">
             <div class="layui-form-item">
                 <label class="layui-form-label">类型名称：</label>
@@ -128,20 +120,11 @@
                 <button class="layui-btn" onclick="updateRechargeType()">保存</button>
             </div>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
 
-<!--提示层 end-->
-
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
@@ -171,23 +154,23 @@
             });
         });
         form.on('switch(switchTest)', function() {
-            enable_recharge_type(this.checked);
+            var id = $(this).parent().attr("obj-id");
+            enable_recharge_type(id, this.checked);
         });
     });
 
-    function enable_recharge_type(enabled) {
+    function enable_recharge_type(id, enabled) {
         $.ajax({
             type: "post",
-            url: "",
+            url: "/config/recharge/status",
             dataType: "json",
             contentType: "application/json",
-            data:JSON.toString({""}),
-            success: function(res) {
-
-            }
+            data: JSON.stringify({
+                "id": id,
+                "enabled": enabled ? 1 : 0
+            })
         });
     }
 </script>
 </body>
-
 </html>
