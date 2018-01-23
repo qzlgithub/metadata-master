@@ -127,6 +127,7 @@ function banClient() {
         return;
     }
     var enabled = $("#ban-client-enabled").val();
+    console.log('123')
     $.ajax({
         type: "POST",
         url: "/client/changeStatus",
@@ -134,6 +135,7 @@ function banClient() {
         contentType: "application/json",
         data: JSON.stringify({"id": clients, "enabled": enabled, "reason": reason}),
         success: function(res) {
+            console.log('456')
             if(res.errCode === '000000') {
                 layer.closeAll();
                 for(var o in clients) {
@@ -141,6 +143,9 @@ function banClient() {
                     obj.attr("obj-enabled", enabled);
                     obj.text(enabled === '1' ? "冻结账号" : "解冻账号");
                 }
+                 console.log($("#checkbox" + clients[o]).hasClass('layui-form-checked'));
+                 $("div").removeClass('layui-form-checked');
+
                 layer.msg(enabled === '1' ? "账号已解冻" : "账号已冻结", {time: 2000});
             }
             else {
@@ -372,7 +377,7 @@ function gotoPage() {
 
 var tr1
     =
-    '<tr><td><div class="layui-form"><input class="obj-checkbox" type="checkbox" name="checked" lay-skin="primary" lay-filter="choose" data-id="#{id}"/><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>' +
+    '<tr><td><div class="layui-form"><input class="obj-checkbox" type="checkbox" name="checked"  lay-skin="primary" id="checkbox-#{id}" lay-filter="choose" data-id="#{id}"/><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>' +
     '<td>#{id}</td>' +
     '<td>#{username}</td>' +
     '<td>#{corpName}</td>' +
