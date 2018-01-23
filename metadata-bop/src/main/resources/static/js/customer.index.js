@@ -135,6 +135,7 @@ function banClient() {
         data: JSON.stringify({"id": clients, "enabled": enabled, "reason": reason}),
         success: function(res) {
             if(res.errCode === '000000') {
+                $("#ban-reason").val('');
                 layer.closeAll();
                 for(var o in clients) {
                     var obj = $("#accountEnabled" + clients[o]);

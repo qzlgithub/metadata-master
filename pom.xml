@@ -12,6 +12,7 @@
         <module>metadata-bop</module>
         <module>metadata-csp</module>
         <module>metadata-core</module>
+        <module>metadata-mis</module>
     </modules>
 
     <parent>

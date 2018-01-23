@@ -35,14 +35,11 @@
                     公司名称：<input type="text" id="corpName" name="corpName" placeholder="请输入" class="search-input"/>
                 </li>
                 <li>
-                    账号：<input type="text" id="username" name="username" placeholder="请输入" class="search-input"/>
+                    公司简称：
+                    <input type="text" id="shortName" name="shortName" placeholder="请输入" class="search-input"/>
                 </li>
-                <li>账号状态：
-                    <select id="enabled" name="enabled" class="select-list">
-                        <option value="" selectd="selected">全部</option>
-                        <option value="1">启用</option>
-                        <option value="0">禁用</option>
-                    </select>
+                <li>
+                    账号：<input type="text" id="username" name="username" placeholder="请输入" class="search-input"/>
                 </li>
                 <li>
                     所在行业：
@@ -56,9 +53,12 @@
                         <option value="">全部</option>
                     </select>
                 </li>
-                <li>
-                    公司简称：
-                    <input type="text" id="shortName" name="shortName" placeholder="请输入" class="search-input"/>
+                <li>账号状态：
+                    <select id="enabled" name="enabled" class="select-list">
+                        <option value="" selectd="selected">全部</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
                 </li>
                 <li>
                     <button type="button" class="check-button" onclick="searchClientList()">查询</button>

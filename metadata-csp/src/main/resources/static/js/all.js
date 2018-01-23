@@ -5,7 +5,12 @@ $(function() {
 function getAllProductList(obj, pageFun) {
     $.get(
         "/product/allList",
-        {"selectedType": obj['selectedType'],"isOpen": obj['isOpen'],"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
+        {
+            "selectedType": obj['selectedType'],
+            "isOpen": obj['isOpen'],
+            "pageNum": obj['pageNum'],
+            "pageSize": obj['pageSize']
+        },
         function(data) {
             if(data.errCode === '000000') {
                 var result = data.dataMap;
@@ -16,34 +21,41 @@ function getAllProductList(obj, pageFun) {
                 var htmlStr = '<ul class="row mr0 ml0" >';
                 for(var d in list) {
                     htmlStr += '<li>';
-                    if(typeof list[d].status === 'undefined'){
-                        htmlStr += '<div class="serve-list-title">'+list[d].name+'<span class="fr">未开通</span></div>';
-                        htmlStr += '<p class="col2 tl fz-14 p10 important" style="height: 89px; overflow: hidden;">'+list[d].remark+'</p>';
-                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id='+list[d].productId+'">查看详情</a></p>';
-                    }else{
-                        htmlStr += '<div class="serve-list-title">'+list[d].name;
-                        if(list[d].status === 0){
+                    if(typeof list[d].status === 'undefined') {
+                        htmlStr += '<div class="serve-list-title">' + list[d].name + '<span class="fr">未开通</span></div>';
+                        htmlStr += '<p class="col2 tl fz-14 p10 important" style="height: 89px; overflow: hidden;">' + list[d].remark + '</p>';
+                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id=' + list[d].productId + '">查看详情</a></p>';
+                    }
+                    else {
+                        htmlStr += '<div class="serve-list-title">' + list[d].name;
+                        if(list[d].status === 0) {
                             htmlStr += '<span class="fr">服务中</span>';
-                        }else if(list[d].status === 1){
+                        }
+                        else if(list[d].status === 1) {
                             htmlStr += '<i class="wks-icon icon" ></i>';
-                        }else if(list[d].status === 2){
+                        }
+                        else if(list[d].status === 2) {
                             htmlStr += '<i class="jjgq-icon icon" ></i>';
-                        }else if(list[d].status === 3){
+                        }
+                        else if(list[d].status === 3) {
                             htmlStr += '<i class="ygq-icon icon" ></i>';
-                        }else if(list[d].status === 4){
+                        }
+                        else if(list[d].status === 4) {
                             htmlStr += '<i class="yebz-icon icon" ></i>';
-                        }else if(list[d].status === 5){
+                        }
+                        else if(list[d].status === 5) {
                             htmlStr += '<i class="yqf-icon icon" ></i>';
                         }
                         htmlStr += '</div>'
-                        if(list[d].billPlan === 1){
-                            htmlStr += '<p class="col2 tc fz-14 important">'+list[d].fromDate+' - '+list[d].toDate+'</p>';
-                            htmlStr += '<p class="fz-20 col5 tc important">剩余'+list[d].remainDays+'天</p>';
-                        }else{
-                            htmlStr += '<p class="col2 tc fz-14 important">当前余额：￥'+list[d].balance+'</p>';
-                            htmlStr += '<p class="fz-20 col5 tc important">'+list[d].unitAmt+'元/次</p>';
+                        if(list[d].billPlan === 1) {
+                            htmlStr += '<p class="col2 tc fz-14 important">' + list[d].fromDate + ' - ' + list[d].toDate + '</p>';
+                            htmlStr += '<p class="fz-20 col5 tc important">剩余' + list[d].remainDays + '天</p>';
                         }
-                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="/product/detail.html?id='+list[d].productId+'">查看服务</a>'
+                        else {
+                            htmlStr += '<p class="col2 tc fz-14 important">当前余额：￥' + list[d].balance + '</p>';
+                            htmlStr += '<p class="fz-20 col5 tc important">' + list[d].unitAmt + '元/次</p>';
+                        }
+                        htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="/product/detail.html?id=' + list[d].productId + '">查看服务</a>'
                     }
                     htmlStr += '</li>';
                 }
@@ -71,9 +83,10 @@ function doChangeParameter() {
     var selectedType = "";
     $('.productTypeClass').each(function() {
         if($(this).hasClass('active')) {
-            if(selectedType === ""){
+            if(selectedType === "") {
                 selectedType += $(this).find('.productTypeIdClass').val();
-            }else{
+            }
+            else {
                 selectedType += "," + $(this).find('.productTypeIdClass').val();
             }
         }
@@ -83,8 +96,8 @@ function doChangeParameter() {
         isOpen = 1;
     }
     var obj = {
-        selectedType : selectedType,
-        isOpen : isOpen,
+        selectedType: selectedType,
+        isOpen: isOpen,
         pageNum: 1,
         pageSize: 8
     };
