@@ -3,7 +3,9 @@ package com.mingdong.core.model.dto;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 
-public class ResultDTO
+import java.io.Serializable;
+
+public class ResultDTO implements Serializable
 {
     private String code;
 

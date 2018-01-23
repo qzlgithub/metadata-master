@@ -24,11 +24,11 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.BaseDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
@@ -66,67 +66,79 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public UserDTO userLogin(String username, String password)
     {
         ClientUser user = clientUserMapper.findByUsername(username);
+        UserDTO userDTO = new UserDTO();
         if(user == null || !TrueOrFalse.FALSE.equals(user.getDeleted()))
         {
-            return new UserDTO(RestResult.ACCOUNT_NOT_EXIST);
+            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return userDTO;
         }
         else if(!TrueOrFalse.TRUE.equals(user.getEnabled()))
         {
-            return new UserDTO(RestResult.ACCOUNT_DISABLED);
+            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_DISABLED);
+            return userDTO;
         }
         Client client = clientMapper.findById(user.getClientId());
         if(client == null || client.getPrimaryUserId() == null)
         {
-            return new UserDTO(RestResult.INTERNAL_ERROR);
+            userDTO.getResultDTO().setResult(RestResult.INTERNAL_ERROR);
+            return userDTO;
         }
         ClientUser primaryUser = clientUserMapper.findById(client.getPrimaryUserId());
         if(primaryUser == null || !TrueOrFalse.TRUE.equals(primaryUser.getEnabled()))
         {
-            return new UserDTO(RestResult.ACCOUNT_DISABLED);
+            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_DISABLED);
+            return userDTO;
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(password)))
         {
-            return new UserDTO(RestResult.INVALID_PASSCODE);
+            userDTO.getResultDTO().setResult(RestResult.INVALID_PASSCODE);
+            return userDTO;
         }
         Manager manager = managerMapper.findById(client.getManagerId());
-        UserDTO dto = new UserDTO(RestResult.SUCCESS);
-        dto.setClientId(user.getClientId());
-        dto.setUserId(user.getId());
-        dto.setPrimary(user.getId().equals(client.getPrimaryUserId()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-        dto.setName(user.getName());
-        dto.setManagerQq(manager == null ? "" : manager.getQq());
-        dto.setFirstLogin(Constant.DEFAULT_ENC_PWD.equals(user.getPassword()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-        return dto;
+        userDTO.setClientId(user.getClientId());
+        userDTO.setUserId(user.getId());
+        userDTO.setPrimary(user.getId().equals(client.getPrimaryUserId()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        userDTO.setName(user.getName());
+        userDTO.setManagerQq(manager == null ? "" : manager.getQq());
+        userDTO.setFirstLogin(
+                Constant.DEFAULT_ENC_PWD.equals(user.getPassword()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        return userDTO;
     }
 
     @Override
     @Transactional
-    public BaseDTO changeUserPassword(Long userId, String orgPassword, String newPassword)
+    public ResultDTO changeUserPassword(Long userId, String orgPassword, String newPassword)
     {
+        ResultDTO resultDTO = new ResultDTO();
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            return new BaseDTO(RestResult.ACCOUNT_NOT_EXIST);
+            resultDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return resultDTO;
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(orgPassword)))
         {
-            return new BaseDTO(RestResult.INVALID_PASSCODE);
+            resultDTO.setResult(RestResult.INVALID_PASSCODE);
+            return resultDTO;
         }
         ClientUser userUpd = new ClientUser();
         userUpd.setId(userId);
         userUpd.setUpdateTime(new Date());
         userUpd.setPassword(Md5Utils.encrypt(newPassword));
         clientUserMapper.updateSkipNull(userUpd);
-        return new BaseDTO(RestResult.SUCCESS);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
     @Override
     public HomeDTO getUserHomeData(Long clientId, Long clientUserId)
     {
+        HomeDTO homeDTO = new HomeDTO();
         Client client = clientMapper.findById(clientId);
         if(client == null)
         {
-            return new HomeDTO(RestResult.OBJECT_NOT_FOUND);
+            homeDTO.getResultDTO().setResult(RestResult.OBJECT_NOT_FOUND);
+            return homeDTO;
         }
         return null;
     }
@@ -134,7 +146,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Override
     public MessageListDTO getClientMessage(Long clientId, Page page)
     {
-        MessageListDTO dto = new MessageListDTO(RestResult.SUCCESS);
+        MessageListDTO dto = new MessageListDTO();
         int total = clientMessageMapper.countByClient(clientId);
         int pages = page.getTotalPage(total);
         dto.setTotal(total);
@@ -159,23 +171,27 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public BaseDTO setSubUserDeleted(Long primaryUserId, Long subUserId)
+    public ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId)
     {
+        ResultDTO resultDTO = new ResultDTO();
         ClientUser primaryUser = clientUserMapper.findById(primaryUserId);
         if(primaryUser == null)
         {
-            return new BaseDTO(RestResult.INTERNAL_ERROR);
+            resultDTO.setResult(RestResult.INTERNAL_ERROR);
+            return resultDTO;
         }
         Client client = clientMapper.findById(primaryUser.getClientId());
         if(client == null || !primaryUserId.equals(client.getPrimaryUserId()))
         {
-            return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
+            resultDTO.setResult(RestResult.ONLY_PRIMARY_USER);
+            return resultDTO;
         }
         ClientUser subUser = clientUserMapper.findById(subUserId);
         if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(
                 subUser.getClientId()))
         {
-            return new BaseDTO(RestResult.OBJECT_NOT_FOUND);
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
         }
         Date current = new Date();
         ClientUser userUpd = new ClientUser();
@@ -184,20 +200,24 @@ public class RemoteClientServiceImpl implements RemoteClientService
         userUpd.setDeleted(TrueOrFalse.TRUE);
         clientUserMapper.updateSkipNull(userUpd);
         updateClientAccountQty(client.getId());
-        return new BaseDTO(RestResult.SUCCESS);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
     @Override
     public UserListDTO getSubUserList(Long clientId, Long primaryUserId)
     {
         Client client = clientMapper.findById(clientId);
+        UserListDTO userListDTO = new UserListDTO();
         if(client == null)
         {
-            return new UserListDTO(RestResult.INTERNAL_ERROR);
+            userListDTO.getResultDTO().setResult(RestResult.INTERNAL_ERROR);
+            return userListDTO;
         }
         else if(!primaryUserId.equals(client.getPrimaryUserId()))
         {
-            return new UserListDTO(RestResult.ONLY_PRIMARY_USER);
+            userListDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
+            return userListDTO;
         }
         List<SubUserDTO> list = new ArrayList<>();
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
@@ -215,25 +235,27 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
-        UserListDTO dto = new UserListDTO(RestResult.SUCCESS);
-        dto.setAllowedQty(config == null ? 5 : Integer.parseInt(config.getValue()));
-        dto.setUserList(list);
-        return dto;
+        userListDTO.setAllowedQty(config == null ? 5 : Integer.parseInt(config.getValue()));
+        userListDTO.setUserList(list);
+        return userListDTO;
     }
 
     @Override
     @Transactional
-    public BaseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
+    public ResultDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
     {
+        ResultDTO resultDTO = new ResultDTO();
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
         if(client == null)
         {
-            return new BaseDTO(RestResult.ONLY_PRIMARY_USER);
+            resultDTO.setResult(RestResult.ONLY_PRIMARY_USER);
+            return resultDTO;
         }
         ClientUser account = clientUserMapper.findByUsername(username);
         if(account != null)
         {
-            return new BaseDTO(RestResult.USERNAME_EXIST);
+            resultDTO.setResult(RestResult.USERNAME_EXIST);
+            return resultDTO;
         }
         SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
@@ -248,7 +270,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
         int canSubAccountCount = config == null ? 5 : Integer.parseInt(config.getValue());
         if(subAccountCount >= canSubAccountCount)
         {
-            return new BaseDTO(RestResult.ACCOUNT_COUNT_MAX);
+            resultDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
+            return resultDTO;
         }
 
         Date current = new Date();
@@ -265,7 +288,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
         account.setDeleted(TrueOrFalse.FALSE);
         clientUserMapper.add(account);
         updateClientAccountQty(client.getId());
-        return new BaseDTO(RestResult.SUCCESS);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
     @Override
@@ -273,9 +297,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public UserDTO changeStatus(Long primaryAccountId, Long clientUserId)
     {
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
+        UserDTO userDTO = new UserDTO();
         if(client == null)
         {
-            return new UserDTO(RestResult.ONLY_PRIMARY_USER);
+            userDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
+            return userDTO;
         }
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(TrueOrFalse.TRUE == clientUser.getEnabled())
@@ -287,7 +313,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             clientUser.setEnabled(TrueOrFalse.TRUE);
         }
         clientUserMapper.updateById(clientUser);
-        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
         userDTO.setUserId(clientUser.getId());
         userDTO.setClientId(clientUser.getClientId());
         userDTO.setName(clientUser.getName());
@@ -301,7 +326,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public UserDTO getAccountByUserId(Long clientUserId)
     {
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
-        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
+        UserDTO userDTO = new UserDTO();
         userDTO.setUserId(clientUser.getId());
         userDTO.setClientId(clientUser.getClientId());
         userDTO.setName(clientUser.getName());
@@ -317,14 +342,17 @@ public class RemoteClientServiceImpl implements RemoteClientService
             String name, String phone, Integer enabled)
     {
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
+        UserDTO userDTO = new UserDTO();
         if(client == null)
         {
-            return new UserDTO(RestResult.ONLY_PRIMARY_USER);
+            userDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
+            return userDTO;
         }
         ClientUser clientUserByUserName = clientUserMapper.findByUsername(username);
         if(clientUserByUserName != null && clientUserByUserName.getId().longValue() != clientUserId.longValue())
         {
-            return new UserDTO(RestResult.USERNAME_EXIST);
+            userDTO.getResultDTO().setResult(RestResult.USERNAME_EXIST);
+            return userDTO;
         }
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         clientUser.setUsername(username);
@@ -334,7 +362,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUser.setPhone(phone);
         clientUser.setEnabled(enabled);
         clientUserMapper.updateById(clientUser);
-        UserDTO userDTO = new UserDTO(RestResult.SUCCESS);
         userDTO.setUserId(clientUser.getId());
         userDTO.setClientId(clientUser.getClientId());
         userDTO.setName(clientUser.getName());
@@ -372,20 +399,20 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public BaseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
+    public ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
     {
-        BaseDTO dto = new BaseDTO();
+        ResultDTO resultDTO = new ResultDTO();
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            dto.setCode(RestResult.INTERNAL_ERROR.getCode());
-            return dto;
+            resultDTO.setCode(RestResult.INTERNAL_ERROR.getCode());
+            return resultDTO;
         }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
-            dto.setCode(RestResult.PRODUCT_NOT_OPEN.getCode());
-            return dto;
+            resultDTO.setCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            return resultDTO;
         }
         Date current = new Date();
         UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
@@ -409,7 +436,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             upUpd.setReqHost(reqHost);
             userProductMapper.updateSkipNull(upUpd);
         }
-        return dto;
+        return resultDTO;
     }
 
     /**

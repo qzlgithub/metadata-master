@@ -3,22 +3,30 @@ package com.mingdong.core.model.dto;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class SysConfigDTO extends BaseDTO
+public class SysConfigDTO implements Serializable
 {
     private Long id;
     private String name;
     private String value;
+    private ResultDTO resultDTO;
 
     public SysConfigDTO()
     {
-
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    public SysConfigDTO(RestResult result)
+    public ResultDTO getResultDTO()
     {
-        super(result);
+        return resultDTO;
+    }
+
+    public void setResultDTO(ResultDTO resultDTO)
+    {
+        this.resultDTO = resultDTO;
     }
 
     public Long getId()

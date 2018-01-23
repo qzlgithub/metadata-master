@@ -2,22 +2,30 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductRecListDTO extends BaseDTO
+public class ProductRecListDTO implements Serializable
 {
     private List<ProductRechargeDTO> productRechargeDTOList;
     private int total;
     private int pages;
+    private ResultDTO resultDTO;
 
     public ProductRecListDTO()
     {
-        super(RestResult.SUCCESS);
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ProductRecListDTO(RestResult result)
+    public ResultDTO getResultDTO()
     {
-        super(result);
+        return resultDTO;
+    }
+
+    public void setResultDTO(ResultDTO resultDTO)
+    {
+        this.resultDTO = resultDTO;
     }
 
     public List<ProductRechargeDTO> getProductRechargeDTOList()

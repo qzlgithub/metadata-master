@@ -5,42 +5,27 @@ import com.mingdong.core.constant.RestResult;
 import java.io.Serializable;
 import java.util.List;
 
-public class DictProductTypeListDTO extends Base implements Serializable
+public class DictProductTypeListDTO implements Serializable
 {
-    private String resCode;
     private int total;
     private int pages;
     private List<DictProductTypeDTO> dictProductTypeDTOList;
+    private ResultDTO resultDTO;
 
     public DictProductTypeListDTO()
     {
-        resCode = RestResult.SUCCESS.getCode();
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    @Override
-    public RestResult getResult()
+    public ResultDTO getResultDTO()
     {
-        return RestResult.getByCode(resCode);
+        return resultDTO;
     }
 
-    @Override
-    public void setResult(RestResult restResult)
+    public void setResultDTO(ResultDTO resultDTO)
     {
-        if(restResult == null)
-        {
-            restResult = RestResult.SUCCESS;
-        }
-        resCode = restResult.getCode();
-    }
-
-    public String getResCode()
-    {
-        return resCode;
-    }
-
-    public void setResCode(String resCode)
-    {
-        this.resCode = resCode;
+        this.resultDTO = resultDTO;
     }
 
     public int getTotal()

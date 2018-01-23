@@ -2,23 +2,31 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductListDTO extends BaseDTO
+public class ProductListDTO implements Serializable
 {
     private List<ProductDTO> opened;
     private List<ProductDTO> toOpen;
     private int total;
     private int pages;
+    private ResultDTO resultDTO;
 
     public ProductListDTO()
     {
-        super(RestResult.SUCCESS);
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ProductListDTO(RestResult result)
+    public ResultDTO getResultDTO()
     {
-        super(result);
+        return resultDTO;
+    }
+
+    public void setResultDTO(ResultDTO resultDTO)
+    {
+        this.resultDTO = resultDTO;
     }
 
     public List<ProductDTO> getOpened()

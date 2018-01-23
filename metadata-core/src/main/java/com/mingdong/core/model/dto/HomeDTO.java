@@ -2,18 +2,31 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class HomeDTO extends BaseDTO
+public class HomeDTO implements Serializable
 {
     private int totalAllowedQty;
     private List<UserDTO> subUsers;
     private List<ProductDTO> opened;
     private List<ProductDTO> toOpen;
+    private ResultDTO resultDTO;
 
-    public HomeDTO(RestResult result)
+    public HomeDTO()
     {
-        super(result);
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public ResultDTO getResultDTO()
+    {
+        return resultDTO;
+    }
+
+    public void setResultDTO(ResultDTO resultDTO)
+    {
+        this.resultDTO = resultDTO;
     }
 
     public int getTotalAllowedQty()

@@ -2,7 +2,9 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
-public class UserDTO extends BaseDTO
+import java.io.Serializable;
+
+public class UserDTO implements Serializable
 {
     private Long clientId;
     private Long userId;
@@ -13,14 +15,22 @@ public class UserDTO extends BaseDTO
     private Integer enabled;
     private String managerQq;
     private Integer firstLogin;
+    private ResultDTO resultDTO;
 
     public UserDTO()
     {
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    public UserDTO(RestResult result)
+    public ResultDTO getResultDTO()
     {
-        super(result);
+        return resultDTO;
+    }
+
+    public void setResultDTO(ResultDTO resultDTO)
+    {
+        this.resultDTO = resultDTO;
     }
 
     public Long getClientId()

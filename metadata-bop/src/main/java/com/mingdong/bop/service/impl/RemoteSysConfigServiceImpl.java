@@ -2,7 +2,6 @@ package com.mingdong.bop.service.impl;
 
 import com.mingdong.bop.domain.entity.SysConfig;
 import com.mingdong.bop.domain.mapper.SysConfigMapper;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import com.mingdong.core.service.RemoteSysConfigService;
 
@@ -17,7 +16,7 @@ public class RemoteSysConfigServiceImpl implements RemoteSysConfigService
     public SysConfigDTO getSysConfigByName(String name)
     {
         SysConfig sysConfig = sysConfigMapper.findByName(name);
-        SysConfigDTO sysConfigDTO = new SysConfigDTO(RestResult.SUCCESS);
+        SysConfigDTO sysConfigDTO = new SysConfigDTO();
         sysConfigDTO.setId(sysConfig.getId());
         sysConfigDTO.setName(sysConfig.getName());
         sysConfigDTO.setValue(sysConfig.getValue());

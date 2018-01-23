@@ -53,9 +53,9 @@ public class ProductServiceImpl implements ProductService
     {
         ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
-        if(productRecListDTO.getResult() != RestResult.SUCCESS)
+        if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(productRecListDTO.getResult());
+            resp.result(productRecListDTO.getResultDTO().getResult());
             return;
         }
         List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
@@ -135,9 +135,9 @@ public class ProductServiceImpl implements ProductService
     {
         ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
                 page);
-        if(productReqListDTO.getResult() != RestResult.SUCCESS)
+        if(productReqListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(productReqListDTO.getResult());
+            resp.result(productReqListDTO.getResultDTO().getResult());
             return;
         }
         List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE, productReqListDTO.getCode());
+        resp.addData(Field.CODE, productReqListDTO.getResultDTO().getCode());
         resp.addData(Field.TOTAL, productReqListDTO.getTotal());
         resp.addData(Field.PAGES, productReqListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
@@ -237,7 +237,7 @@ public class ProductServiceImpl implements ProductService
     {
         List<Map<String, Object>> list = new ArrayList<>();
         ProductDictDTO dto = productApi.getClientProductDictDTO(clientId);
-        if(dto.getResult() == RestResult.SUCCESS)
+        if(dto.getResultDTO().getResult() == RestResult.SUCCESS)
         {
             for(DictDTO d : dto.getProductDictList())
             {
@@ -345,7 +345,7 @@ public class ProductServiceImpl implements ProductService
                 typeList.contains(Constant.All) ? null : selectedType, page);
         List<Map<String, Object>> allList = new ArrayList<>();
         Map<String, Object> map;
-        if(productListDTO.getResult() == RestResult.SUCCESS)
+        if(productListDTO.getResultDTO().getResult() == RestResult.SUCCESS)
         {
 
             for(ProductDTO d : productListDTO.getOpened())

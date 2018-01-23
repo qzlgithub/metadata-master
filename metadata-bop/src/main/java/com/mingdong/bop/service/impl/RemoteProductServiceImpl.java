@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Constant;
 import com.mingdong.bop.domain.entity.ApiReqInfo;
@@ -29,7 +30,6 @@ import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductReqListDTO;
 import com.mingdong.core.model.dto.ProductRequestDTO;
 import com.mingdong.core.service.RemoteProductService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     public ProductRecListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page)
     {
-        ProductRecListDTO productRecListDTO = new ProductRecListDTO(RestResult.SUCCESS);
+        ProductRecListDTO productRecListDTO = new ProductRecListDTO();
         List<ProductRechargeDTO> dataDtoList = new ArrayList<>();
         productRecListDTO.setProductRechargeDTOList(dataDtoList);
         if(page == null)
@@ -99,6 +99,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 }
             }
         }
+        productRecListDTO.getResultDTO().setResult(RestResult.SUCCESS);
         return productRecListDTO;
     }
 
@@ -106,7 +107,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     public ProductReqListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page)
     {
-        ProductReqListDTO productReqListDTO = new ProductReqListDTO(RestResult.SUCCESS);
+        ProductReqListDTO productReqListDTO = new ProductReqListDTO();
         List<ProductRequestDTO> dataDtoList = new ArrayList<>();
         productReqListDTO.setProductRequestDTOList(dataDtoList);
         if(page == null)
