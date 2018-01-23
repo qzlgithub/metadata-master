@@ -407,99 +407,111 @@ public class StatsServiceImpl implements StatsService
         if(ScopeType.WEEK == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
+            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         else if(ScopeType.HALF_MONTH == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
+            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         else if(ScopeType.MONTH == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
+            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            dataList = productRechargeInfoMapper.getListBy(null,null,beforeDate, currentDay);
+            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         //left
-        Map<String,BigDecimal> typeNameBigDecMap = new HashMap<>();
+        Map<String, BigDecimal> typeNameBigDecMap = new HashMap<>();
         Set<String> setTemp = new HashSet<>();
         BigDecimal bigDecimalTemp;
-        for(ProductRechargeInfo item : dataList){
+        for(ProductRechargeInfo item : dataList)
+        {
             bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeType());
-            if(bigDecimalTemp == null){
+            if(bigDecimalTemp == null)
+            {
                 bigDecimalTemp = new BigDecimal(0);
             }
-            typeNameBigDecMap.put(item.getRechargeType(),bigDecimalTemp.add(item.getAmount()));
+            typeNameBigDecMap.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
             setTemp.add(item.getRechargeType());
         }
         jsonArrayTemp = new JSONArray();
         JSONObject jsonObjectTemp;
         JSONArray jsonArrayTemp1 = new JSONArray();
-        for(Map.Entry<String,BigDecimal> entry : typeNameBigDecMap.entrySet()){
+        for(Map.Entry<String, BigDecimal> entry : typeNameBigDecMap.entrySet())
+        {
             jsonObjectTemp = new JSONObject();
             jsonObjectTemp.put("name", entry.getKey());
             jsonObjectTemp.put("value", entry.getValue());
             jsonArrayTemp.add(jsonObjectTemp);
         }
-        for(String item : setTemp){
+        for(String item : setTemp)
+        {
             jsonArrayTemp1.add(item);
         }
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
-        List<DictRechargeType> dictRechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,TrueOrFalse.FALSE);
+        List<DictRechargeType> dictRechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String, Map<String,BigDecimal>> dateMap = new LinkedHashMap<>();
-        Map<String,BigDecimal> bigMapTemp;
+        Map<String, Map<String, BigDecimal>> dateMap = new LinkedHashMap<>();
+        Map<String, BigDecimal> bigMapTemp;
         Calendar c = Calendar.getInstance();
         c.setTime(beforeDate);
         int difInt = (int) BusinessUtils.getDayDiff(beforeDate, currentDay) + 1;
         for(int i = 0; i < difInt; i++)
         {
             bigMapTemp = new LinkedHashMap<>();
-            for(DictRechargeType item : dictRechargeTypeList){
-                bigMapTemp.put(item.getName(),new BigDecimal(0));
+            for(DictRechargeType item : dictRechargeTypeList)
+            {
+                bigMapTemp.put(item.getName(), new BigDecimal(0));
             }
             dateMap.put(sdf.format(c.getTime()), bigMapTemp);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
-        for(ProductRechargeInfo item : dataList){
+        for(ProductRechargeInfo item : dataList)
+        {
             String dateStrTemp = sdf.format(item.getTradeTime());
             bigMapTemp = dateMap.get(dateStrTemp);
             bigDecimalTemp = bigMapTemp.get(item.getRechargeType());
-            if(bigDecimalTemp != null){
-                bigMapTemp.put(item.getRechargeType(),bigDecimalTemp.add(item.getAmount()));
+            if(bigDecimalTemp != null)
+            {
+                bigMapTemp.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
             }
         }
         jsonArrayTemp = new JSONArray();
         jsonArrayTemp1 = new JSONArray();
-        Map<String,List<BigDecimal>> nameBigDecMap = new LinkedHashMap<>();
+        Map<String, List<BigDecimal>> nameBigDecMap = new LinkedHashMap<>();
         List<BigDecimal> bigListTemp;
-        for(Map.Entry<String, Map<String,BigDecimal>> entry : dateMap.entrySet()){
+        for(Map.Entry<String, Map<String, BigDecimal>> entry : dateMap.entrySet())
+        {
             jsonArrayTemp1.add(entry.getKey());
             bigMapTemp = entry.getValue();
-            for(Map.Entry<String,BigDecimal> entrySec : bigMapTemp.entrySet()){
+            for(Map.Entry<String, BigDecimal> entrySec : bigMapTemp.entrySet())
+            {
                 bigListTemp = nameBigDecMap.get(entrySec.getKey());
-                if(bigListTemp == null){
+                if(bigListTemp == null)
+                {
                     bigListTemp = new ArrayList<>();
-                    nameBigDecMap.put(entrySec.getKey(),bigListTemp);
+                    nameBigDecMap.put(entrySec.getKey(), bigListTemp);
                 }
                 bigListTemp.add(entrySec.getValue());
             }
         }
-        for(Map.Entry<String,List<BigDecimal>> entry : nameBigDecMap.entrySet()){
+        for(Map.Entry<String, List<BigDecimal>> entry : nameBigDecMap.entrySet())
+        {
             jsonObjectTemp = new JSONObject();
-            jsonObjectTemp.put("name",entry.getKey());
-            jsonObjectTemp.put("type","bar");
-            jsonObjectTemp.put("data",entry.getValue());
+            jsonObjectTemp.put("name", entry.getKey());
+            jsonObjectTemp.put("type", "bar");
+            jsonObjectTemp.put("data", entry.getValue());
             jsonArrayTemp.add(jsonObjectTemp);
         }
-        rightObject.put("series",jsonArrayTemp);
-        rightObject.put("names",jsonArrayTemp1);
+        rightObject.put("series", jsonArrayTemp);
+        rightObject.put("names", jsonArrayTemp1);
         jsonObject.put("leftJson", leftObject);
         jsonObject.put("rightJson", rightObject);
         return jsonObject;
