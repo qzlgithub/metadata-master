@@ -127,7 +127,6 @@ function banClient() {
         return;
     }
     var enabled = $("#ban-client-enabled").val();
-    console.log('123')
     $.ajax({
         type: "POST",
         url: "/client/changeStatus",
@@ -135,7 +134,6 @@ function banClient() {
         contentType: "application/json",
         data: JSON.stringify({"id": clients, "enabled": enabled, "reason": reason}),
         success: function(res) {
-            console.log('456')
             if(res.errCode === '000000') {
                 $("#ban-reason").val('');
                 layer.closeAll();

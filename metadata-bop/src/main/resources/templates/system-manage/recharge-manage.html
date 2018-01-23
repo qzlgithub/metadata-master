@@ -20,20 +20,15 @@
     <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
             <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
             <a><cite>充值类型</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
             <!--功能操作-->
             <div class="clearfix mt20"><span href="account-add.html" class="fr add-button cp" id="addclass">添加类型</span>
             </div>
-            <!--功能操作 end-->
-            <!--table-->
             <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                 <thead>
                 <tr>
@@ -64,8 +59,6 @@
                 </tr>
                 </tbody>
             </table>
-            <!--table end-->
-            <!--page-->
             <div class="layui-table-tool mt20">
                 <div class="layui-inline layui-table-page" id="layui-table-page1">
                     <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
@@ -73,7 +66,6 @@
                     </div>
                 </div>
             </div>
-            <!--page end-->
         </div>
     </div>
 
@@ -159,9 +151,9 @@
     var message;
     layui.config({
         base: '../../static/build/js/'
-    }).use(['app', 'message'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
+    }).use(['form', 'app', 'message'], function() {
+        var form = layui.form,
+            app = layui.app,
             layer = layui.layer;
         //将message设置为全局以便子页面调用
         message = layui.message;
@@ -178,7 +170,23 @@
                 shadeClose: true
             });
         });
+        form.on('switch(switchTest)', function() {
+            enable_recharge_type(this.checked);
+        });
     });
+
+    function enable_recharge_type(enabled) {
+        $.ajax({
+            type: "post",
+            url: "",
+            dataType: "json",
+            contentType: "application/json",
+            data:JSON.toString({""}),
+            success: function(res) {
+
+            }
+        });
+    }
 </script>
 </body>
 

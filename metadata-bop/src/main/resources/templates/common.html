@@ -25,6 +25,12 @@
                     <p th:text="${i_system.m20000}">产品管理mingdong.net</p>
                 </a>
             </li>
+            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'50000')}">
+                <a th:href="@{/finance/index.html}">
+                    <img src="./../../images/icon/menu-icon2.png"/>
+                    <p th:text="${i_system.m50000}">财务管理mingdong.net</p>
+                </a>
+            </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'10000')}">
                 <a th:href="@{/manager/index.html}">
                     <img src="./../../images/icon/menu-icon1.png"/>
