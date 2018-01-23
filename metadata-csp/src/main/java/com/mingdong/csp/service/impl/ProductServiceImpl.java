@@ -51,7 +51,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+                page);
         if(productRecListDTO.getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResult());
@@ -100,7 +101,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate, page);
+        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+                page);
         List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {

@@ -119,7 +119,6 @@ function editAccount(id) {
         function(data) {
             if(data.errCode === '000000') {
                 var obj = data.dataMap;
-                console.log(obj);
                 $("#edit-id").val(obj.clientUserId + "");
                 $("#edit-username").val(obj.username);
                 $("#edit-pwd").val("");
