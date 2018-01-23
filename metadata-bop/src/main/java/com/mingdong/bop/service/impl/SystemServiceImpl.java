@@ -543,6 +543,21 @@ public class SystemServiceImpl implements SystemService
         }
     }
 
+    @Override
+    @Transactional
+    public void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp)
+    {
+        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
+        if(rechargeType != null && !enabled.equals(rechargeType.getEnabled()))
+        {
+            DictRechargeType updObj = new DictRechargeType();
+            updObj.setId(rechargeTypeId);
+            updObj.setUpdateTime(new Date());
+            updObj.setEnabled(enabled);
+            dictRechargeTypeMapper.updateSkipNull(updObj);
+        }
+    }
+
     private void cacheAllIndustryData()
     {
         List<DictIndustry> dataList = dictIndustryMapper.getIndustryInfo();

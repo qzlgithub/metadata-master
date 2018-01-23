@@ -197,6 +197,22 @@ public class ConfigController
 
     }
 
+    @PostMapping(value = "recharge/status")
+    @ResponseBody
+    public BLResp changeRechargeStatus(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
+        if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.changeRechargeStatus(id, enabled, resp);
+        return resp;
+
+    }
+
     @RequestMapping(value = "productTypeList", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> configTypeList()
