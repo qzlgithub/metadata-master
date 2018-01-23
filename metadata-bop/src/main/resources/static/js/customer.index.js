@@ -142,13 +142,11 @@ function banClient() {
                     obj.attr("obj-enabled", enabled);
                     obj.text(enabled === '1' ? "冻结账号" : "解冻账号");
                 }
-                 console.log($("#checkbox" + clients[o]).hasClass('layui-form-checked'));
-                 $("div").removeClass('layui-form-checked');
-
+                $("div").removeClass('layui-form-checked');
                 layer.msg(enabled === '1' ? "账号已解冻" : "账号已冻结", {time: 2000});
             }
             else {
-                layer.msg("操作失败:" + res.errMsg, {time: 2000});
+                layer.msg("操作失败：" + res.errMsg, {time: 2000});
             }
         }
     });
@@ -452,8 +450,8 @@ function getClientList(enabledVal, usernameVal, corpNameVal, shortNameVal, paren
 }
 
 //重新渲染
-function renderCheckbox(){
-    ;!function(){
+function renderCheckbox() {
+    ;!function() {
         //无需再执行layui.use()方法加载模块，直接使用即可
         var form = layui.form;
         form.render('checkbox');

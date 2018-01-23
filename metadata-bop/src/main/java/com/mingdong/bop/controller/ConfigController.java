@@ -138,6 +138,21 @@ public class ConfigController
         return resp;
     }
 
+    @PostMapping(value = "industry/status")
+    @ResponseBody
+    public BLResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
+        if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.changeIndustryStatus(id, enabled);
+        return resp;
+    }
+
     @RequestMapping(value = "recharge/list", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getRechargeList()

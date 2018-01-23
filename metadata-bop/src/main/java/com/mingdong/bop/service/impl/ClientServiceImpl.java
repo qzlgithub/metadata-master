@@ -34,7 +34,6 @@ import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
-import com.mingdong.core.util.IDUtils;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
@@ -45,6 +44,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.util.IDUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -416,8 +416,11 @@ public class ClientServiceImpl implements ClientService
                 logList.add(log);
             }
         }
-        clientOperateLogMapper.addList(logList);
-        clientUserMapper.updateStatusByIds(enabled, current, clientUserIdList);
+        if(logList.size() > 0)
+        {
+            clientOperateLogMapper.addList(logList);
+            clientUserMapper.updateStatusByIds(enabled, current, clientUserIdList);
+        }
     }
 
     @Override

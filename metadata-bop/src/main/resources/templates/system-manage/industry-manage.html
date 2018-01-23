@@ -19,20 +19,13 @@
 
     <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
             <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
             <a><cite>行业分类</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--搜索-->
-            <!--搜索 end-->
-            <!--功能操作-->
             <div class="clearfix mt20"><span class="fr add-button cp" id="addindustry">添加一级行业</span></div>
-            <!--功能操作 end-->
             <dl class="jurisdiction-list mt10">
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
@@ -48,10 +41,9 @@
                         <a class="w20 tl important"><i class="pl20" th:text="${parent.name}"></i></a>
                         <a class="w20" th:text="${parent.code}"></a>
                         <a class="w10 pt0 important">
-                            <div class="layui-form">
+                            <div class="layui-form" th:attr="obj-id=${parent.id}">
                                 <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                       class="parent-industry" th:attr="obj-id=${parent.id}"
-                                       th:checked="${parent.enabled == 1}"/>
+                                       class="parent-industry" th:checked="${parent.enabled == 1}"/>
                             </div>
                         </a>
                         <a class="w30">
@@ -60,7 +52,6 @@
                         </a>
                         <a class="w15"><i class="icon sort-icon"></i></a>
                     </div>
-                    <!-- 子集 -->
                     <ul class="accordion-content accordionItem is-collapsed jurisdiction-list-li" id="accordion1"
                         aria-hidden="true">
                         <li class="clearfix" th:each="child: ${parent.subList}">
@@ -68,9 +59,9 @@
                             <em class="w20 tl important"><i class="pl35" th:text="${child.name}"></i></em>
                             <em class="w20" th:text="${child.code}"></em>
                             <em class="w10 pt0 important">
-                                <div class="layui-form">
+                                <div class="layui-form" th:attr="obj-id=${child.id}">
                                     <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                           class="child-industry" th:attr="obj-id=${child.id}"
+                                           class="child-industry"
                                            th:checked="${child.enabled == 1 &amp;&amp; parent.enabled == 1}"/>
                                 </div>
                             </em>
@@ -88,7 +79,6 @@
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--添加一级行业 提示层-->
 <div id="add-industry" class="modal">
     <div class="layui-layer-title">添加一级行业</div>
     <div class="mb30">
@@ -98,7 +88,7 @@
                 <div class="layui-input-block">
                     <input type="text" id="new-code" lay-verify="required" placeholder="请输入"
                            autocomplete="off" class="layui-input" onblur="checkNewCode()"/>
-                    <p class="col3 mt5" id="tip-new-code"></p><!--当前编号已被占用-->
+                    <p class="col3 mt5" id="tip-new-code"></p>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -106,7 +96,7 @@
                 <div class="layui-input-block">
                     <input type="text" id="new-name" lay-verify="required" placeholder="请输入"
                            autocomplete="off" class="layui-input"/>
-                    <p class="col3 mt5" id="tip-new-name"></p><!--当前名称已存在-->
+                    <p class="col3 mt5" id="tip-new-name"></p>
                 </div>
             </div>
         </div>
@@ -117,20 +107,18 @@
         </div>
     </div>
 </div>
-<!--提示层 end-->
 
-<!--编辑行业 提示层-->
 <div id="edit-industry" class="modal">
     <div class="layui-layer-title">编辑行业</div>
     <div class="mb30">
-        <form class="layui-form" action="">
+        <!--<form class="layui-form" action="">-->
             <div class="m30">
                 <div class="layui-form-item">
                     <label class="layui-form-label">编号：</label>
                     <div class="layui-input-block">
                         <input type="text" id="edit-code" lay-verify="required" placeholder="请输入"
                                autocomplete="off" class="layui-input"/>
-                        <p class="col3 mt5" id="tip-edit-code"></p><!--当前编号已被占用-->
+                        <p class="col3 mt5" id="tip-edit-code"></p>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -138,22 +126,20 @@
                     <div class="layui-input-block">
                         <input type="text" id="edit-name" lay-verify="required" placeholder="请输入"
                                autocomplete="off" class="layui-input"/>
-                        <p class="col3 mt5" id="tip-edit-name"></p><!--当前名称已存在-->
+                        <p class="col3 mt5" id="tip-edit-name"></p>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <input type="hidden" id="edit-id"/>
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="editIndustry()">保存</button>
+                    <button class="layui-btn" onclick="editIndustry()">保存</button>
                 </div>
             </div>
-        </form>
+        <!--</form>-->
     </div>
 </div>
-<!--提示层 end-->
 
-<!--添加二级行业 提示层-->
 <div id="child-industry" class="modal">
     <div class="layui-layer-title">添加子行业</div>
     <div class="mb30">
@@ -183,15 +169,8 @@
         </div>
     </div>
 </div>
-<!--提示层 end-->
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
-
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
@@ -205,16 +184,11 @@
     var message;
     layui.config({
         base: '../../static/build/js/'
-    }).use(['app', 'message'], function() {
-        var app = layui.app,
+    }).use(['form', 'app', 'message'], function() {
+        var form = layui.form,
             $ = layui.jquery,
             layer = layui.layer;
-        //将message设置为全局以便子页面调用
         message = layui.message;
-        //主入口
-        /*  app.set({
-              type: 'iframe'
-          }).init();*/
         $('#addindustry').on('click', function() {
             layer.open({
                 title: false,
@@ -224,7 +198,26 @@
                 shadeClose: true
             });
         });
+        //form.on('switch(switchTest)', function() {
+        form.on('switch(parent-industry)', function() {
+            var id = $(this).parent().attr("obj-id");
+            enable_recharge_type(id, this.checked);
+        });
     });
+
+    function enable_recharge_type(id, enabled) {
+        $.ajax({
+            type: "post",
+            url: "/config/industry/status",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "id": id,
+                "enabled": enabled ? 1 : 0
+            })
+        });
+    }
+
     //展开合起
     (function() {
         var d = document,
@@ -257,7 +250,6 @@
         };
         //function
         switchAccordion = function(e) {
-            console.log("triggered");
             e.preventDefault();
             var thisAnswer = e.target.parentNode.nextElementSibling;
             var thisQuestion = e.target;

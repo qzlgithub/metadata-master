@@ -558,6 +558,21 @@ public class SystemServiceImpl implements SystemService
         }
     }
 
+    @Override
+    @Transactional
+    public void changeIndustryStatus(Long industryTypeId, Integer enabled)
+    {
+        DictIndustry di = dictIndustryMapper.findById(industryTypeId);
+        if(di != null && !enabled.equals(di.getEnabled()))
+        {
+            DictIndustry updObj = new DictIndustry();
+            updObj.setId(industryTypeId);
+            updObj.setUpdateTime(new Date());
+            updObj.setEnabled(enabled);
+            dictIndustryMapper.updateSkipNull(updObj);
+        }
+    }
+
     private void cacheAllIndustryData()
     {
         List<DictIndustry> dataList = dictIndustryMapper.getIndustryInfo();

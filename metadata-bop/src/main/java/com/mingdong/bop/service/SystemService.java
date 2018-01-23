@@ -57,4 +57,6 @@ public interface SystemService
     void setGlobalSetting(Integer subUserQty, String serviceQQ, BLResp resp);
 
     void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp);
+
+    void changeIndustryStatus(Long industryTypeId, Integer enabled);
 }
