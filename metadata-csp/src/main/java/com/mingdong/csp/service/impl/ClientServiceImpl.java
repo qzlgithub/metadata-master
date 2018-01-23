@@ -247,9 +247,9 @@ public class ClientServiceImpl implements ClientService
     public void getUserCredential(Long userId, String password, Long productId, BLResp resp)
     {
         CredentialDTO dto = clientApi.getUserCredential(userId, password, productId);
-        if(dto.getResult() != RestResult.SUCCESS)
+        if(dto.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(dto.getResult());
+            resp.result(dto.getResultDTO().getResult());
             return;
         }
         resp.addData(Field.APP_ID, dto.getAppId());

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductRechargeDTO implements Serializable
+public class ProductRechargeInfoDTO implements Serializable
 {
     private Long id;
     private Date tradeTime;

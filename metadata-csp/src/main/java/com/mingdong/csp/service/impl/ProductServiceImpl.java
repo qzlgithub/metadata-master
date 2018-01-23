@@ -15,10 +15,10 @@ import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductRecListDTO;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
-import com.mingdong.core.model.dto.ProductReqListDTO;
-import com.mingdong.core.model.dto.ProductRequestDTO;
+import com.mingdong.core.model.dto.ProductRecInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductReqInfoListDTO;
+import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Constant;
@@ -51,18 +51,18 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+        ProductRecInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
         if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResultDTO().getResult());
             return;
         }
-        List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeDTO item : dataList)
+            for(ProductRechargeInfoDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 // map.put(Field.ID, item.getId());
@@ -101,12 +101,12 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRecListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+        ProductRecInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
-        List<ProductRechargeDTO> dataList = productRecListDTO.getProductRechargeDTOList();
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getProductRechargeDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
-            ProductRechargeDTO dataDTO;
+            ProductRechargeInfoDTO dataDTO;
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
@@ -133,18 +133,18 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
+        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
                 page);
         if(productReqListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(productReqListDTO.getResultDTO().getResult());
             return;
         }
-        List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
+        List<ProductRequestInfoDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRequestDTO item : dataList)
+            for(ProductRequestInfoDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, item.getId());
@@ -179,12 +179,12 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        ProductReqListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
+        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
                 page);
-        List<ProductRequestDTO> dataList = productReqListDTO.getProductRequestDTOList();
+        List<ProductRequestInfoDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
-            ProductRequestDTO dataDTO;
+            ProductRequestInfoDTO dataDTO;
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();

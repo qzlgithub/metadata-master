@@ -5,14 +5,14 @@ import com.mingdong.core.constant.RestResult;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductRecListDTO implements Serializable
+public class ProductReqInfoListDTO implements Serializable
 {
-    private List<ProductRechargeDTO> productRechargeDTOList;
+    private List<ProductRequestInfoDTO> productRequestDTOList;
     private int total;
     private int pages;
     private ResultDTO resultDTO;
 
-    public ProductRecListDTO()
+    public ProductReqInfoListDTO()
     {
         this.resultDTO = new ResultDTO();
         resultDTO.setResult(RestResult.SUCCESS);
@@ -23,14 +23,14 @@ public class ProductRecListDTO implements Serializable
         return resultDTO;
     }
 
-    public List<ProductRechargeDTO> getProductRechargeDTOList()
+    public List<ProductRequestInfoDTO> getProductRequestDTOList()
     {
-        return productRechargeDTOList;
+        return productRequestDTOList;
     }
 
-    public void setProductRechargeDTOList(List<ProductRechargeDTO> productRechargeDTOList)
+    public void setProductRequestDTOList(List<ProductRequestInfoDTO> productRequestDTOList)
     {
-        this.productRechargeDTOList = productRechargeDTOList;
+        this.productRequestDTOList = productRequestDTOList;
     }
 
     public int getTotal()

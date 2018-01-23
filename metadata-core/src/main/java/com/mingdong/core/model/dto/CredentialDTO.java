@@ -6,24 +6,20 @@ import java.io.Serializable;
 
 public class CredentialDTO implements Serializable
 {
-    private String errCode;
     private String appId;
     private String appKey;
     private String reqHost;
+    private ResultDTO resultDTO;
 
     public CredentialDTO()
     {
-        errCode = RestResult.SUCCESS.getCode();
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
     }
 
-    public String getErrCode()
+    public ResultDTO getResultDTO()
     {
-        return errCode;
-    }
-
-    public void setErrCode(String errCode)
-    {
-        this.errCode = errCode;
+        return resultDTO;
     }
 
     public String getAppId()
@@ -56,8 +52,4 @@ public class CredentialDTO implements Serializable
         this.reqHost = reqHost;
     }
 
-    public RestResult getResult()
-    {
-        return RestResult.getByCode(errCode);
-    }
 }
