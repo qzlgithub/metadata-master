@@ -18,14 +18,12 @@ import com.mingdong.bop.domain.mapper.ClientUserMapper;
 import com.mingdong.bop.domain.mapper.ManagerMapper;
 import com.mingdong.bop.domain.mapper.SysConfigMapper;
 import com.mingdong.bop.domain.mapper.UserProductMapper;
-import com.mingdong.bop.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.CredentialDTO;
-import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -33,6 +31,7 @@ import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
+import com.mingdong.core.util.IDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,19 +127,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUserMapper.updateSkipNull(userUpd);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
-
-    @Override
-    public HomeDTO getUserHomeData(Long clientId, Long clientUserId)
-    {
-        HomeDTO homeDTO = new HomeDTO();
-        Client client = clientMapper.findById(clientId);
-        if(client == null)
-        {
-            homeDTO.getResultDTO().setResult(RestResult.OBJECT_NOT_FOUND);
-            return homeDTO;
-        }
-        return null;
     }
 
     @Override

@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ClientMessageMapper
 {
-    void add(ClientMessage obj);
-
     int countByClient(Long clientId);
 
     List<ClientMessage> getListByClient(Long clientId);

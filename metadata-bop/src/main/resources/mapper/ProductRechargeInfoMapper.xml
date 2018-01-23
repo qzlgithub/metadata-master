@@ -55,28 +55,4 @@
         order by pr.`create_time` desc
     </select>
 
-    <resultMap id="getRechargeTypeResult"   type="ProductRechargeInfo">
-        <result column="recharge_type" property="rechargeTypeInt" jdbcType="TINYINT" />
-        <result column="recharge_type_name" property="rechargeType" jdbcType="VARCHAR" />
-        <result column="recharge_sum" property="rechargeTypeSum" jdbcType="DECIMAL" />
-    </resultMap>
-
-    <select id="getRechargeTypeSum" resultMap="getRechargeTypeResult">
-        select
-          pr.`recharge_type` as recharge_type,
-          drt.`name` as recharge_type_name,
-          sum(pr.`amount`) as recharge_sum
-        from `product_recharge` as pr
-          left join `dict_recharge_type` as drt
-            on drt.`id` = pr.`recharge_type`
-        where 1=1
-        <if test="start != null">
-            and pr.`create_time` &gt;= #{start}
-        </if>
-        <if test="end != null">
-            and pr.`create_time` &lt;= #{end}
-        </if>
-        group by pr.`recharge_type`,drt.`name`
-    </select>
-
 </mapper>

@@ -12,36 +12,6 @@
         <result column="reason" property="reason" jdbcType="VARCHAR" />
     </resultMap>
 
-    <sql id="select_all">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `client_user_id`, `manager_id`, `type`, `reason`
-        from `client_operate_log`
-    </sql>
-
-    <insert id="add" parameterType="ClientOperateLog">
-        insert into `client_operate_log`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="clientId != null">`client_id`,</if>
-            <if test="clientUserId != null">`client_user_id`,</if>
-            <if test="managerId != null">`manager_id`,</if>
-            <if test="type != null">`type`,</if>
-            <if test="reason != null">`reason`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="clientId != null">#{clientId},</if>
-            <if test="clientUserId != null">#{clientUserId},</if>
-            <if test="managerId != null">#{managerId},</if>
-            <if test="type != null">#{type},</if>
-            <if test="reason != null">#{reason},</if>
-        </trim>
-    </insert>
-
     <insert id="addList" parameterType="List">
         insert into
             `client_operate_log`
@@ -52,32 +22,6 @@
              #{item.type}, #{item.reason})
         </foreach>
     </insert>
-
-    <update id="updateById" parameterType="ClientOperateLog">
-        update `client_operate_log`
-        set `create_time`    = #{createTime},
-            `update_time`    = #{updateTime},
-            `client_id`      = #{clientId},
-            `client_user_id` = #{clientUserId},
-            `manager_id`     = #{managerId},
-            `type`           = #{type},
-            `reason`         = #{reason}
-        where `id` = #{id}
-    </update>
-
-    <update id="updateSkipNull" parameterType="ClientOperateLog">
-        update `client_operate_log`
-        <set>
-            <if test="createTime != null">`create_time` = #{createTime},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="clientId != null">`client_id` = #{clientId},</if>
-            <if test="clientUserId != null">`client_user_id` = #{clientUserId},</if>
-            <if test="managerId != null">`manager_id` = #{managerId},</if>
-            <if test="type != null">`type` = #{type},</if>
-            <if test="reason != null">`reason` = #{reason},</if>
-        </set>
-        where `id` = #{id}
-    </update>
 
     <select id="countByClientUser" parameterType="Long" resultType="int">
         select count(*)

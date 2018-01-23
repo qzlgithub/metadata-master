@@ -8,7 +8,5 @@ public interface ClientAccountMapper
 
     void updateById(ClientAccount clientAccount);
 
-    void updateSkipNull(ClientAccount clientAccount);
-
     ClientAccount findById(Long id);
 }

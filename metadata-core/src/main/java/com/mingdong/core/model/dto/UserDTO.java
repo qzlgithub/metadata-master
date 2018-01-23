@@ -28,11 +28,6 @@ public class UserDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public Long getClientId()
     {
         return clientId;

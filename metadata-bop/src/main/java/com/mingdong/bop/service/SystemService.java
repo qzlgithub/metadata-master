@@ -44,19 +44,11 @@ public interface SystemService
 
     void addRechargeType(String name, String remark, BLResp resp);
 
-    BLResp editRechargeType(Long rechargeTypeId, String name, String remark, Integer enabled);
-
-    BLResp getIndustryList(Integer enabled);
-
     List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled);
-
-    BLResp editIndustry(Long industryId, String name, Integer enabled);
 
     BLResp getIndustryList(Page page);
 
     Map<String, Object> getInitIndustryMap();
-
-    BLResp getModuleHierarchy();
 
     String getIndustryName(Long industryId);
 

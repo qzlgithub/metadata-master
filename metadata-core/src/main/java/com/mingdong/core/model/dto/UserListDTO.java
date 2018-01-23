@@ -22,11 +22,6 @@ public class UserListDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public int getAllowedQty()
     {
         return allowedQty;

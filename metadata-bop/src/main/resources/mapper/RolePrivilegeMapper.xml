@@ -9,24 +9,6 @@
         <result column="privilege_id" property="privilegeId" jdbcType="BIGINT" />
     </resultMap>
 
-    <insert id="add" parameterType="RolePrivilege">
-        insert into `role_privilege`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="roleId != null">`role_id`,</if>
-            <if test="privilegeId != null">`privilege_id`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="roleId != null">#{roleId},</if>
-            <if test="privilegeId != null">#{privilegeId},</if>
-        </trim>
-    </insert>
-
     <insert id="addList" parameterType="List">
         insert into
             `role_privilege`
@@ -36,11 +18,6 @@
             (#{item.createTime}, #{item.updateTime}, #{item.roleId}, #{item.privilegeId})
         </foreach>
     </insert>
-
-    <update id="updateById" parameterType="RolePrivilege">
-        update `role_privilege` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `role_id` = #{roleId},
-        `privilege_id` = #{privilegeId} where `id` = #{id}
-    </update>
 
     <update id="updateSkipNull" parameterType="RolePrivilege">
         update `role_privilege`
@@ -56,14 +33,6 @@
     <delete id="deleteByRole" parameterType="Long">
         delete from `role_privilege` where `role_id` = #{roleId}
     </delete>
-
-    <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `role_id`, `privilege_id` from `role_privilege`
-    </select>
-
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `role_id`, `privilege_id` from `role_privilege` where `id` = #{id}
-    </select>
 
     <select id="getByRole" parameterType="Long" resultMap="BaseResultMap">
         select `privilege_id` from `role_privilege` where `role_id` = #{roleId}

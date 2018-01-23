@@ -53,27 +53,6 @@
               #{id}
     </update>
 
-    <update id="updateSkipNull" parameterType="Product">
-        update `product`
-        <set>
-            <if test="createTime != null">`create_time` = #{createTime},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="typeId != null">`type_id` = #{typeId},</if>
-            <if test="code != null">`code` = #{code},</if>
-            <if test="name != null">`name` = #{name},</if>
-            <if test="costAmt != null">`cost_amt` = #{costAmt},</if>
-            <if test="remark != null">`remark` = #{remark},</if>
-            <if test="enabled != null">`enabled` = #{enabled},</if>
-        </set>
-        where `id` = #{id}
-    </update>
-
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
-        from `product`
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
@@ -93,11 +72,6 @@
         `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
         from `product`
         where `name` = #{name}
-    </select>
-
-    <select id="countAll" resultType="Integer">
-        select count(*)
-        from `product`
     </select>
 
     <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">

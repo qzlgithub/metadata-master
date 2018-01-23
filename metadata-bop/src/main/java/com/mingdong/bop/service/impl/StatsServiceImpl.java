@@ -14,7 +14,7 @@ import com.mingdong.bop.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.bop.domain.mapper.StatsClientMapper;
 import com.mingdong.bop.service.StatsService;
-import com.mingdong.bop.util.DateCalculateUtils;
+import com.mingdong.core.util.DateCalculateUtils;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;

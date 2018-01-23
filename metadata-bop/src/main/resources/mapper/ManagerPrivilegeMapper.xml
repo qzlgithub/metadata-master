@@ -9,37 +9,12 @@
         <result column="privilege_id" property="privilegeId" jdbcType="BIGINT" />
     </resultMap>
 
-    <insert id="add" parameterType="ManagerPrivilege">
-        insert into `manager_privilege`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="managerId != null">`manager_id`,</if>
-            <if test="privilegeId != null">`privilege_id`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="managerId != null">#{managerId},</if>
-            <if test="privilegeId != null">#{privilegeId},</if>
-        </trim>
-    </insert>
-
     <insert id="addList" parameterType="List">
         insert into `manager_privilege` (`create_time`, `update_time`, `manager_id`, `privilege_id`) values
         <foreach collection="list" item="item" separator=",">
             (#{item.createTime}, #{item.updateTime}, #{item.managerId}, #{item.privilegeId})
         </foreach>
     </insert>
-
-    <update id="updateById" parameterType="ManagerPrivilege">
-        update `manager_privilege`
-        set `create_time`            = #{createTime}, `update_time` = #{updateTime}, `manager_id` =
-        #{managerId}, `privilege_id` = #{privilegeId}
-        where `id` = #{id}
-    </update>
 
     <update id="updateSkipNull" parameterType="ManagerPrivilege">
         update `manager_privilege`
@@ -51,19 +26,6 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `manager_id`, `privilege_id`
-        from `manager_privilege`
-    </select>
-
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `manager_id`, `privilege_id`
-        from `manager_privilege`
-        where `id` = #{id}
-    </select>
 
     <select id="getPrivilegeIdListByManager" parameterType="Long" resultMap="BaseResultMap">
         select mp.`privilege_id`

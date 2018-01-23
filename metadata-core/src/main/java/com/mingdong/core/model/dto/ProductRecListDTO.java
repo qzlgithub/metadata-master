@@ -23,11 +23,6 @@ public class ProductRecListDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public List<ProductRechargeDTO> getProductRechargeDTOList()
     {
         return productRechargeDTOList;

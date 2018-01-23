@@ -39,17 +39,6 @@
         </trim>
     </insert>
 
-    <update id="updateById" parameterType="UserProduct">
-        update `user_product`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `user_id`     = #{userId},
-            `product_id`  = #{productId},
-            `app_key`     = #{appKey},
-            `req_host`    = #{reqHost}
-        where `id` = #{id}
-    </update>
-
     <update id="updateSkipNull" parameterType="UserProduct">
         update `user_product`
         <set>

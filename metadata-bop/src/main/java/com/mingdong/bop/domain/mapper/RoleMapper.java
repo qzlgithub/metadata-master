@@ -9,10 +9,6 @@ public interface RoleMapper
 {
     void add(Role role);
 
-    void delete(Long id);
-
-    void updateById(Role role);
-
     void updateSkipNull(Role role);
 
     Role findById(Long id);

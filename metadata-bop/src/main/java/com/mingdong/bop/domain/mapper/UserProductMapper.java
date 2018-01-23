@@ -7,8 +7,6 @@ public interface UserProductMapper
 {
     void add(UserProduct obj);
 
-    void updateById(UserProduct obj);
-
     void updateSkipNull(UserProduct obj);
 
     UserProduct findByUserAndProduct(@Param("userId") Long userId, @Param("productId") Long productId);

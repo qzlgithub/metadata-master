@@ -6,9 +6,7 @@ public interface Field
     String USERNAME = "username";
     String PASSWORD = "password";
 
-    String OLD_PWD = "odlPwd";
     String ORG_PASSWORD = "orgPassword";
-    String NEW_PWD = "newPwd";
     String NEW_PASSWORD = "newPassword";
     String NAME = "name";
     String PHONE = "phone";
@@ -21,7 +19,6 @@ public interface Field
     String OPENED_LIST = "openedList";
     String PRODUCT_ID = "productId";
     String FROM_DATE = "fromDate";
-    String END_DATE = "endDate";
     String PAGE_NUM = "pageNum";
     String PAGE_SIZE = "pageSize";
     String TOTAL = "total";
@@ -48,12 +45,10 @@ public interface Field
     String SUC = "suc";
     String UNIT_AMT = "unitAmt";
 
-    String CAPTCHA_CODE = "captchaCode";
     String IMAGE_CAPTCHA = "imageCaptcha";
     String MANAGER_QQ = "managerQq";
     String CURR_PAGE = "currPage";
 
-    String VALUE = "value";
     String IS_PRIMARY = "isPrimary";
     String BILL_PLAN = "billPlan";
     String TO_DATE = "toDate";

@@ -2,7 +2,6 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.CredentialDTO;
-import com.mingdong.core.model.dto.HomeDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -13,8 +12,6 @@ public interface RemoteClientService
     UserDTO userLogin(String username, String password);
 
     ResultDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
-
-    HomeDTO getUserHomeData(Long clientId, Long clientUserId);
 
     MessageListDTO getClientMessage(Long clientId, Page page);
 

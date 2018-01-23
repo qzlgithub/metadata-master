@@ -23,11 +23,6 @@ public class MessageListDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public List<MessageDTO> getMessages()
     {
         return messages;

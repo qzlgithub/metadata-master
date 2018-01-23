@@ -9,8 +9,6 @@ public interface DictIndustryMapper
 {
     void add(DictIndustry dictIndustry);
 
-    void delete(Long id);
-
     void updateById(DictIndustry dictIndustry);
 
     void updateSkipNull(DictIndustry industry);

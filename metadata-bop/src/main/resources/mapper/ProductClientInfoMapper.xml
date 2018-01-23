@@ -20,17 +20,6 @@
         <result column="content" property="content" jdbcType="LONGVARCHAR" />
     </resultMap>
 
-    <select id="countListByClient" parameterType="Long" resultType="Integer">
-        select
-        count(p.`id`)
-        from `product` p
-        left join `client_product` cp
-        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
-        left join `product_recharge` pr
-        on cp.`latest_recharge_id` = pr.`id`
-        where p.`enabled` = 1
-    </select>
-
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
         select
             p.`id`           as product_id,

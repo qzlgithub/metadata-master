@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ProductInfoMapper
 {
-    ProductInfo findById(Long id);
-
     List<ProductInfo> getAll();
 
     int countAll();

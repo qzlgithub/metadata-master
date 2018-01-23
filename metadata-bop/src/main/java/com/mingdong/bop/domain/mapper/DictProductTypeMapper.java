@@ -9,8 +9,6 @@ public interface DictProductTypeMapper
 {
     void add(DictProductType dictProductType);
 
-    void delete(Long id);
-
     void updateById(DictProductType dictProductType);
 
     DictProductType findById(Long id);

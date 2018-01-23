@@ -39,19 +39,6 @@
         </trim>
     </insert>
 
-    <update id="updateById" parameterType="ClientProduct">
-        update `client_product`
-        set `create_time`        = #{createTime},
-            `update_time`        = #{updateTime},
-            `client_id`          = #{clientId},
-            `product_id`         = #{productId},
-            `app_id`             = #{appId},
-            `bill_plan`          = #{billPlan},
-            `balance`            = #{balance},
-            `latest_recharge_id` = #{latestRechargeId}
-        where `id` = #{id}
-    </update>
-
     <update id="updateSkipNull" parameterType="ClientProduct">
         update `client_product`
         <set>
@@ -66,13 +53,6 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-            `latest_recharge_id`
-        from `client_product`
-    </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select

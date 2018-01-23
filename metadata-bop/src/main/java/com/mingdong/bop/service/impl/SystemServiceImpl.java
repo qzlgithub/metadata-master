@@ -403,72 +403,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    @Transactional
-    public BLResp editRechargeType(Long rechargeTypeId, String name, String remark, Integer enabled)
-    {
-        BLResp resp = BLResp.build();
-        DictRechargeType type = dictRechargeTypeMapper.findById(rechargeTypeId);
-        if(type == null)
-        {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
-        }
-        if(TrueOrFalse.TRUE.equals(enabled) || TrueOrFalse.FALSE.equals(enabled))
-        {
-            if(!type.getEnabled().equals(enabled))
-            {
-                type = new DictRechargeType();
-                type.setId(rechargeTypeId);
-                type.setUpdateTime(new Date());
-                type.setEnabled(enabled);
-                dictRechargeTypeMapper.updateSkipNull(type);
-            }
-        }
-        else if(!StringUtils.isNullBlank(name))
-        {
-            type.setUpdateTime(new Date());
-            type.setName(name);
-            type.setRemark(remark);
-            dictRechargeTypeMapper.updateById(type);
-        }
-        return resp;
-    }
-
-    @Override
-    public BLResp getIndustryList(Integer enabled)
-    {
-        BLResp resp = BLResp.build();
-        List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(0L, enabled);
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(DictIndustry parent : parentList)
-        {
-            Map<String, Object> parentMap = new HashMap<>();
-            parentMap.put(Field.ID, parent.getId() + "");
-            parentMap.put(Field.NAME, parent.getName());
-            if(enabled == null)
-            {
-                parentMap.put(Field.ENABLED, parent.getEnabled());
-            }
-            List<DictIndustry> childList = dictIndustryMapper.getByParentAndStatus(parent.getId(), enabled);
-            List<Map<String, Object>> subList = new ArrayList<>(childList.size());
-            for(DictIndustry child : childList)
-            {
-                Map<String, Object> childMap = new HashMap<>();
-                childMap.put(Field.ID, child.getId() + "");
-                childMap.put(Field.NAME, child.getName());
-                if(enabled == null)
-                {
-                    childMap.put(Field.ENABLED, child.getEnabled());
-                }
-                subList.add(childMap);
-            }
-            parentMap.put(Field.SUB_LIST, subList);
-            list.add(parentMap);
-        }
-        resp.addData(Field.LIST, list);
-        return resp;
-    }
-
-    @Override
     public List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled)
     {
         List<DictIndustry> dataList = dictIndustryMapper.getByParentAndStatus(parentId, enabled);
@@ -481,35 +415,6 @@ public class SystemServiceImpl implements SystemService
             list.add(map);
         }
         return list;
-    }
-
-    @Override
-    @Transactional
-    public BLResp editIndustry(Long industryId, String name, Integer enabled)
-    {
-        BLResp resp = BLResp.build();
-        DictIndustry industry = dictIndustryMapper.findById(industryId);
-        if(industry == null)
-        {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
-        }
-        if(TrueOrFalse.TRUE.equals(enabled) || TrueOrFalse.FALSE.equals(enabled))
-        {
-            industry = new DictIndustry();
-            industry.setId(industryId);
-            industry.setUpdateTime(new Date());
-            industry.setEnabled(enabled);
-            dictIndustryMapper.updateById(industry);
-        }
-        else if(!industry.getName().equals(name))
-        {
-            industry = new DictIndustry();
-            industry.setId(industryId);
-            industry.setUpdateTime(new Date());
-            industry.setName(name);
-            dictIndustryMapper.updateById(industry);
-        }
-        return resp;
     }
 
     @Override
@@ -572,29 +477,6 @@ public class SystemServiceImpl implements SystemService
         map.put(Field.PARENT_INDUSTRY, parentIndustryList);
         map.put(Field.INDUSTRY, industryList);
         return map;
-    }
-
-    @Override
-    public BLResp getModuleHierarchy()
-    {
-        BLResp resp = BLResp.build();
-        List<Privilege> moduleList = privilegeMapper.getByParent(0L);
-        List<Map<String, Object>> hierarchyList = new ArrayList<>(moduleList.size());
-        for(Privilege module : moduleList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.MODULE_ID, module.getId() + "");
-            map.put(Field.NAME, module.getName());
-            map.put(Field.ENABLED, module.getEnabled());
-            List<Map<String, Object>> subList = getSubModule(module.getId());
-            if(!CollectionUtils.isEmpty(subList))
-            {
-                map.put(Field.SUB_MODULE, subList);
-            }
-            hierarchyList.add(map);
-        }
-        resp.addData(Field.LIST, hierarchyList);
-        return resp;
     }
 
     @Override

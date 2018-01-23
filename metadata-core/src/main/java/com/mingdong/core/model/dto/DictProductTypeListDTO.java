@@ -23,11 +23,6 @@ public class DictProductTypeListDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public int getTotal()
     {
         return total;

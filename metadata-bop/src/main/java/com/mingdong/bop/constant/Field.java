@@ -39,12 +39,8 @@ public interface Field
     String SUB_LIST = "subList";
     String SUB_MODULE = "subModule";
     String MODULE_ID = "moduleId";
-    String TRADE_ID = "tradeId";
     String TRADE_AT = "tradeAt";
-    String ACCOUNT = "account";
-    String TRADE_TYPE = "tradeType";
     String MANAGER_ID = "managerId";
-    String PRODUCT = "product";
     String IMAGE_CAPTCHA = "imageCaptcha";
     String PASSWORD = "password";
     String IMAGE_CODE = "imageCode";

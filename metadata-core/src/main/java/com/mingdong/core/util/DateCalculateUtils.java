@@ -1,4 +1,4 @@
-package com.mingdong.bop.util;
+package com.mingdong.core.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

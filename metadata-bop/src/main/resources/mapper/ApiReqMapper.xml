@@ -12,58 +12,6 @@
         <result column="balance" property="balance" jdbcType="DECIMAL" />
     </resultMap>
 
-    <insert id="add" parameterType="ApiReq">
-        insert into `api_req`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="clientId != null">`client_id`,</if>
-            <if test="productId != null">`product_id`,</if>
-            <if test="suc != null">`suc`,</if>
-            <if test="unitAmt != null">`unit_amt`,</if>
-            <if test="balance != null">`balance`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="clientId != null">#{clientId},</if>
-            <if test="productId != null">#{productId},</if>
-            <if test="suc != null">#{suc},</if>
-            <if test="unitAmt != null">#{unitAmt},</if>
-            <if test="balance != null">#{balance},</if>
-        </trim>
-    </insert>
-
-    <update id="updateById" parameterType="ApiReq">
-        update `api_req` set `create_time` = #{createTime}, `update_time` = #{updateTime}, `client_id` = #{clientId},
-        `product_id` = #{productId}, `suc` = #{suc}, `unit_amt` = #{unitAmt}, `balance` = #{balance} where `id` = #{id}
-    </update>
-
-    <update id="updateSkipNull" parameterType="ApiReq">
-        update `api_req`
-        <set>
-            <if test="createTime != null">`create_time` = #{createTime},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="clientId != null">`client_id` = #{clientId},</if>
-            <if test="productId != null">`product_id` = #{productId},</if>
-            <if test="suc != null">`suc` = #{suc},</if>
-            <if test="unitAmt != null">`unit_amt` = #{unitAmt},</if>
-            <if test="balance != null">`balance` = #{balance},</if>
-        </set>
-        where `id` = #{id}
-    </update>
-
-    <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `client_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
-    </select>
-
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `client_id`, `product_id`, `suc`, `unit_amt`, `balance` from `api_req`
-        where `id` = #{id}
-    </select>
-
     <select id="countBy" resultType="int">
         select count(*)
         from `api_req`

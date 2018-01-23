@@ -42,17 +42,6 @@
         where `id` = #{id}
     </update>
 
-    <update id="updateSkipNull" parameterType="ClientAccount">
-        update `client_account`
-        <set>
-            <if test="createTime != null">`create_time` = #{createTime},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="balance != null">`balance` = #{balance},</if>
-            <if test="enabled != null">`enabled` = #{enabled},</if>
-        </set>
-        where `id` = #{id}
-    </update>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}

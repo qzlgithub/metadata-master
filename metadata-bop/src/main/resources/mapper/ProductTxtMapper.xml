@@ -39,10 +39,6 @@
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `content` from `product_txt`
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select `id`, `create_time`, `update_time`, `content` from `product_txt` where `id` = #{id}
     </select>

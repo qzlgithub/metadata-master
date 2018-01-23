@@ -19,7 +19,7 @@ import com.mingdong.bop.domain.mapper.RoleMapper;
 import com.mingdong.bop.domain.mapper.RolePrivilegeMapper;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.ManagerService;
-import com.mingdong.bop.util.IDUtils;
+import com.mingdong.core.util.IDUtils;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;

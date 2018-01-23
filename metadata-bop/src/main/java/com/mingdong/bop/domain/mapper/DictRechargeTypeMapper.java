@@ -9,13 +9,9 @@ public interface DictRechargeTypeMapper
 {
     void add(DictRechargeType dictRechargeType);
 
-    void delete(Long id);
-
     void updateById(DictRechargeType dictRechargeType);
 
     DictRechargeType findById(Long id);
-
-    List<DictRechargeType> getAll();
 
     DictRechargeType findByName(String name);
 

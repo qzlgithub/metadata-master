@@ -63,12 +63,6 @@
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
-        from `dict_recharge_type`
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`

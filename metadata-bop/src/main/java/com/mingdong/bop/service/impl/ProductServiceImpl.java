@@ -12,7 +12,7 @@ import com.mingdong.bop.domain.mapper.ProductInfoMapper;
 import com.mingdong.bop.domain.mapper.ProductMapper;
 import com.mingdong.bop.domain.mapper.ProductTxtMapper;
 import com.mingdong.bop.service.ProductService;
-import com.mingdong.bop.util.IDUtils;
+import com.mingdong.core.util.IDUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;

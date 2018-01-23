@@ -42,10 +42,6 @@
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        <include refid="select_all" />
-    </select>
-
     <select id="findByName" parameterType="String" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `name` = #{name}

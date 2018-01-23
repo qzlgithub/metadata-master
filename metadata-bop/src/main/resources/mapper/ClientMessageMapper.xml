@@ -16,26 +16,6 @@
         from `client_message`
     </sql>
 
-    <insert id="add" parameterType="ClientMessage">
-        insert into `client_message`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="clientId != null">`client_id`,</if>
-            <if test="type != null">`type`,</if>
-            <if test="content != null">`content`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="clientId != null">#{clientId},</if>
-            <if test="type != null">#{type},</if>
-            <if test="content != null">#{content},</if>
-        </trim>
-    </insert>
-
     <select id="countByClient" parameterType="Long" resultType="Integer">
         select count(*)
         from `client_message`

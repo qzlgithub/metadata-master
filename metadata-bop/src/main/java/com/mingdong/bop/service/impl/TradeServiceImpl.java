@@ -2,8 +2,6 @@ package com.mingdong.bop.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.domain.entity.CorpTradeInfo;
-import com.mingdong.bop.domain.entity.ProdRechargeInfo;
 import com.mingdong.bop.domain.entity.ProductRechargeInfo;
 import com.mingdong.bop.domain.mapper.ClientAccountTradeMapper;
 import com.mingdong.bop.domain.mapper.CorpProdRechargeMapper;
@@ -15,7 +13,6 @@ import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
-import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Service;
 
@@ -41,91 +38,6 @@ public class TradeServiceImpl implements TradeService
     private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
-
-    @Override
-    public BLResp getCorpAccountTrade(Long corpId, boolean isRecharge, Page page)
-    {
-        BLResp resp = BLResp.build();
-        Integer income = isRecharge ? 1 : 0;
-        int total = clientAccountTradeMapper.countBy(corpId, income);
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            List<CorpTradeInfo> dataList;
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            if(isRecharge)
-            {
-                dataList = corpTradeInfoMapper.getCorpRechargeTrade(corpId);
-            }
-            else
-            {
-                dataList = corpTradeInfoMapper.getCorpSpendTrade(corpId);
-            }
-            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(CorpTradeInfo info : dataList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.TRADE_ID, info.getTradeId() + "");
-                map.put(Field.TRADE_AT, DateUtils.format(info.getTradeTime(), "yyyy-MM-dd HH:mm:ss"));
-                map.put(Field.TRADE_NO, info.getTradeNo());
-                map.put(Field.CORP_NAME, info.getCorpName());
-                map.put(Field.SHORT_NAME, info.getShortName());
-                map.put(Field.ACCOUNT, info.getAccount());
-                map.put(Field.TRADE_TYPE, info.getTradeType());
-                map.put(Field.AMOUNT, NumberUtils.formatAmount(info.getAmount()));
-                map.put(Field.BALANCE, NumberUtils.formatAmount(info.getBalance()));
-                map.put(Field.MANAGER_ID, info.getManagerId() + "");
-                map.put(Field.MANAGER_NAME, info.getManagerName());
-                map.put(Field.PRODUCT, info.getProduct());
-                map.put(Field.REMARK, info.getRemark());
-                list.add(map);
-            }
-            resp.addData(Field.LIST, list);
-        }
-        return resp;
-    }
-
-    @Override
-    public BLResp getCorpProdRechargeTrade(Long corpId, Long productId, Page page)
-    {
-        BLResp resp = new BLResp();
-        int total = corpProdRechargeMapper.countBy(corpId, productId);
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProdRechargeInfo> dataList = prodRechargeInfoMapper.getBy(corpId, productId);
-            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProdRechargeInfo info : dataList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.TRADE_ID, info.getTradeId() + "");
-                map.put(Field.TRADE_AT, DateUtils.format(info.getTradeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, info.getTradeNo());
-                map.put(Field.CORP_NAME, info.getCorpName());
-                map.put(Field.SHORT_NAME, info.getShortName());
-                map.put(Field.ACCOUNT, info.getAccount());
-                map.put(Field.PRODUCT, info.getProduct());
-                map.put(Field.AMOUNT, NumberUtils.formatAmount(info.getAmount()));
-                map.put(Field.BALANCE, NumberUtils.formatAmount(info.getBalance()));
-                map.put(Field.MANAGER_ID, info.getManagerId() + "");
-                map.put(Field.MANAGER_NAME, info.getManagerName());
-                map.put(Field.CONTRACT_NO, info.getContractNo());
-                map.put(Field.REMARK, info.getRemark());
-                list.add(map);
-            }
-            resp.addData(Field.LIST, list);
-        }
-        return resp;
-    }
 
     @Override
     public BLResp testList2(Long productId, Long clientId, Date time, Page page)
@@ -162,42 +74,6 @@ public class TradeServiceImpl implements TradeService
     /**
      * 测试数据
      */
-
-    @Override
-    public BLResp testList(Long productId, Long clientId, Date time, Page page)
-    {
-        BLResp resp = BLResp.build();
-        int total = 5;
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(int i = 0; i < 5; i++)
-        {
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
-            map.put("tradeNo", "123456");
-            map.put("clientName", "荣耀科技");
-            map.put("shortName", "荣科");
-            map.put("username", "王科");
-            map.put("productName", "白名单");
-            map.put("rechargeType", "自充");
-            map.put("amount", "8.50");
-            map.put("balance", "100000.00");
-            map.put("manager", "商务经理");
-            map.put("contractNo", "112233");
-            map.put("remark", "荣耀科技公司的充值记录");
-            list.add(map);
-        }
-
-        resp.addData(Field.LIST, list);
-        return resp;
-    }
-
     @Override
     public BLResp testList3(Long clientId, Date time, Page page)
     {

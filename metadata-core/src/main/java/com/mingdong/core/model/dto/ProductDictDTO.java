@@ -21,11 +21,6 @@ public class ProductDictDTO implements Serializable
         return resultDTO;
     }
 
-    public void setResultDTO(ResultDTO resultDTO)
-    {
-        this.resultDTO = resultDTO;
-    }
-
     public List<DictDTO> getProductDictList()
     {
         return productDictList;
