@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientInfoMapper">
+    <resultMap id="BaseResultMap" type="ClientInfo">
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+        <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
+        <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+        <result column="license" property="license" jdbcType="VARCHAR" />
+        <result column="industry_id" property="industryId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
+        <result column="account_qty" property="accountQty" jdbcType="INTEGER" />
+        <result column="account_enabled" property="accountEnabled" jdbcType="TINYINT" />
+        <result column="user_enabled" property="userEnabled" jdbcType="TINYINT" />
+    </resultMap>
+
+    <!-- @formatter:off -->
+    <select id="countBy" resultType="Integer">
+        select count(*)
+        from `client` c
+            join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+                <if test="enabled != null">and cu.`enabled` = #{enabled}</if>
+        where c.`deleted` = 0
+        <if test="cropName != null">and c.`corp_name` like '%${cropName}%'</if>
+        <if test="shortName != null">and c.`short_name` like '%${shortName}%'</if>
+        <if test="account != null">and cu.`username` like '%${account}%'</if>
+        <if test="industryIdList != null and industryIdList.size() > 0">
+            and c.`industry_id` in
+            <foreach collection="industryIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
+        </if>
+    </select>
+
+    <select id="getListBy" resultMap="BaseResultMap">
+        select
+            c.`id`          as client_id,
+            c.`create_time` as register_time,
+            c.`corp_name`   as corp_name,
+            c.`short_name`  as short_name,
+            c.`industry_id` as industry_id,
+            cu.`username`   as username,
+            cu.`name`       as name,
+            cu.`phone`      as phone,
+            m.`name`        as manager_name,
+            c.`account_qty` as account_qty,
+            cu.`enabled`    as user_enabled
+        from
+            `client` c
+            join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+                <if test="enabled != null">and cu.`enabled` = #{enabled}</if>
+            left join `manager` m
+                on c.`manager_id` = m.`id`
+        where c.`deleted` = 0
+        <if test="cropName != null">and c.`corp_name` like '%${cropName}%'</if>
+        <if test="shortName != null">and c.`short_name` like '%${shortName}%'</if>
+        <if test="account != null">and cu.`username` like '%${account}%'</if>
+        <if test="industryIdList != null and industryIdList.size() > 0">
+            and c.`industry_id` in
+            <foreach collection="industryIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
+        </if>
+        order by c.`create_time` desc
+    </select>
+    <!-- @formatter:on -->
+
+    <select id="getSimilarCorpByName" resultMap="BaseResultMap">
+        select c.`corp_name` as corp_name, cu.`name` as name, cu.`phone` as phone, cu.`email` as email, c.`create_time`
+        as register_time from `client` c left join `client_user` cu on c.`primary_user_id` = cu.`id` where
+        (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
+        <if test="clientId != null">and c.`id` != #{clientId}</if>
+        limit 5
+    </select>
+
+    <select id="getClientInfoListByDate" resultMap="BaseResultMap">
+      select
+          c.`create_time` as register_time,
+          c.`corp_name`   as corp_name,
+          c.`short_name`  as short_name,
+          cu.`username`   as username,
+          cu.`name`       as name,
+          cu.`phone`      as phone,
+          cu.`email`      as email,
+          m.`name`  as manager_name
+      from `client` c
+         left join `client_user` cu
+            on c.`primary_user_id` = cu.`id`
+                left join `manager` m
+                    on c.`manager_id` = m.`id`
+      where 1 = 1
+        <if test="start != null">
+            and c.`create_time` &gt;= #{start}
+        </if>
+        <if test="end != null">
+            and c.`create_time` &lt;= #{end}
+        </if>
+        order by c.`create_time`
+    </select>
+
+
+</mapper>

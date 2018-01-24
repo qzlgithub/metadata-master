@@ -1,30 +1,23 @@
-package com.mingdong.bop.service.impl;
+package com.mingdong.mis.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
-import com.mingdong.bop.configurer.Param;
-import com.mingdong.bop.constant.Constant;
-import com.mingdong.bop.constant.SysParam;
-import com.mingdong.bop.domain.TransformDTO;
-import com.mingdong.bop.domain.entity.Client;
-import com.mingdong.bop.domain.entity.ClientMessage;
-import com.mingdong.bop.domain.entity.ClientProduct;
-import com.mingdong.bop.domain.entity.ClientUser;
-import com.mingdong.bop.domain.entity.Manager;
-import com.mingdong.bop.domain.entity.SysConfig;
-import com.mingdong.bop.domain.entity.UserProduct;
-import com.mingdong.bop.domain.mapper.ClientMapper;
-import com.mingdong.bop.domain.mapper.ClientMessageMapper;
-import com.mingdong.bop.domain.mapper.ClientProductMapper;
-import com.mingdong.bop.domain.mapper.ClientUserMapper;
-import com.mingdong.bop.domain.mapper.ManagerMapper;
-import com.mingdong.bop.domain.mapper.SysConfigMapper;
-import com.mingdong.bop.domain.mapper.UserProductMapper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.component.Param;
+import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.ClientAccountDTO;
+import com.mingdong.core.model.dto.ClientDTO;
+import com.mingdong.core.model.dto.ClientInfoDTO;
+import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.DictIndustryDTO;
+import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -33,6 +26,27 @@ import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.util.IDUtils;
+import com.mingdong.mis.domain.TransformDTO;
+import com.mingdong.mis.domain.entity.Client;
+import com.mingdong.mis.domain.entity.ClientAccount;
+import com.mingdong.mis.domain.entity.ClientInfo;
+import com.mingdong.mis.domain.entity.ClientMessage;
+import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientUser;
+import com.mingdong.mis.domain.entity.DictIndustry;
+import com.mingdong.mis.domain.entity.Manager;
+import com.mingdong.mis.domain.entity.SysConfig;
+import com.mingdong.mis.domain.entity.UserProduct;
+import com.mingdong.mis.domain.mapper.ClientAccountMapper;
+import com.mingdong.mis.domain.mapper.ClientInfoMapper;
+import com.mingdong.mis.domain.mapper.ClientMapper;
+import com.mingdong.mis.domain.mapper.ClientMessageMapper;
+import com.mingdong.mis.domain.mapper.ClientProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserMapper;
+import com.mingdong.mis.domain.mapper.DictIndustryMapper;
+import com.mingdong.mis.domain.mapper.ManagerMapper;
+import com.mingdong.mis.domain.mapper.SysConfigMapper;
+import com.mingdong.mis.domain.mapper.UserProductMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +75,228 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ClientMessageMapper clientMessageMapper;
     @Resource
     private UserProductMapper userProductMapper;
+    @Resource
+    private ClientInfoMapper clientInfoMapper;
+    @Resource
+    private DictIndustryMapper dictIndustryMapper;
+    @Resource
+    private ClientAccountMapper clientAccountMapper;
+
+    @Override
+    public UserDTO findByUsername(String username)
+    {
+        ClientUser user = clientUserMapper.findByUsername(username);
+        UserDTO userDTO = new UserDTO();
+        if(user == null)
+        {
+            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return userDTO;
+        }
+        else
+        {
+            TransformDTO.userToDTO(user, userDTO);
+        }
+        return userDTO;
+    }
+
+    @Override
+    public ClientInfoListDTO getSimilarCorpByName(String corpName, Long clientId)
+    {
+        List<ClientInfo> similarCorpByName = clientInfoMapper.getSimilarCorpByName(corpName, clientId);
+        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
+        List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
+        clientInfoListDTO.setDataList(clientInfoDTOList);
+        if(CollectionUtils.isNotEmpty(similarCorpByName))
+        {
+            ClientInfoDTO clientInfoDTO;
+            for(ClientInfo item : similarCorpByName)
+            {
+                clientInfoDTO = new ClientInfoDTO();
+                TransformDTO.clientInfoToDTO(item, clientInfoDTO);
+                clientInfoDTOList.add(clientInfoDTO);
+            }
+        }
+        return clientInfoListDTO;
+    }
+
+    @Override
+    public DictIndustryListDTO getByParentAndStatus(Long parentIndustryId, Integer trueOrFalse)
+    {
+        List<DictIndustry> byParentAndStatus = dictIndustryMapper.getByParentAndStatus(parentIndustryId, trueOrFalse);
+        DictIndustryListDTO dictIndustryListDTO = new DictIndustryListDTO();
+        List<DictIndustryDTO> dictIndustryDTOList = new ArrayList<>();
+        dictIndustryListDTO.setDataList(dictIndustryDTOList);
+        if(CollectionUtils.isNotEmpty(byParentAndStatus))
+        {
+            DictIndustryDTO dictIndustryDTO;
+            for(DictIndustry item : byParentAndStatus)
+            {
+                dictIndustryDTO = new DictIndustryDTO();
+                TransformDTO.dictIndustryToDTO(item, dictIndustryDTO);
+                dictIndustryDTOList.add(dictIndustryDTO);
+            }
+        }
+        return dictIndustryListDTO;
+    }
+
+    @Override
+    public ClientInfoListDTO getClinetInfoListBy(Integer enabled, String username, String cropName, String shortName,
+            List<Long> industryIdList, Page page)
+    {
+        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
+        List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
+        clientInfoListDTO.setDataList(clientInfoDTOList);
+        ClientInfoDTO clientInfoDTO;
+        if(page == null)
+        {
+            List<ClientInfo> clientInfoList = clientInfoMapper.getListBy(enabled, username, cropName, shortName,
+                    industryIdList);
+            if(CollectionUtils.isNotEmpty(clientInfoList))
+            {
+                for(ClientInfo item : clientInfoList)
+                {
+                    clientInfoDTO = new ClientInfoDTO();
+                    TransformDTO.clientInfoToDTO(item, clientInfoDTO);
+                    clientInfoDTOList.add(clientInfoDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = clientInfoMapper.countBy(enabled, username, cropName, shortName, industryIdList);
+            int pages = page.getTotalPage(total);
+            clientInfoListDTO.setPages(pages);
+            clientInfoListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ClientInfo> clientInfoList = clientInfoMapper.getListBy(enabled, username, cropName, shortName,
+                        industryIdList);
+                for(ClientInfo item : clientInfoList)
+                {
+                    clientInfoDTO = new ClientInfoDTO();
+                    TransformDTO.clientInfoToDTO(item, clientInfoDTO);
+                    clientInfoDTOList.add(clientInfoDTO);
+                }
+            }
+        }
+        return clientInfoListDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveClientUser(ClientUserDTO clientUser)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ClientUser cu = new ClientUser();
+        TransformDTO.clientUserDTOToDomain(clientUser,cu);
+        clientUserMapper.add(cu);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveClient(ClientDTO client)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Client cu = new Client();
+        TransformDTO.clientDTOToDomain(client,cu);
+        clientMapper.add(cu);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public ClientDTO getClientByClientId(Long clientId)
+    {
+        ClientDTO clientDTO = new ClientDTO();
+        Client byId = clientMapper.findById(clientId);
+        TransformDTO.clientToDTO(byId,clientDTO);
+        return clientDTO;
+    }
+
+    @Override
+    public ClientUserDTO getClientUserByUserId(Long userId)
+    {
+        ClientUserDTO userDTO = new ClientUserDTO();
+        ClientUser user = clientUserMapper.findById(userId);
+        if(user == null)
+        {
+            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return userDTO;
+        }
+        else
+        {
+            TransformDTO.clientUserToDTO(user, userDTO);
+        }
+        return userDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateClientUserByUserId(ClientUserDTO clientUser)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ClientUser cu = new ClientUser();
+        TransformDTO.clientUserDTOToDomain(clientUser,cu);
+        clientUserMapper.updateById(cu);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public ClientAccountDTO getClientAccountByClientId(Long clientId)
+    {
+        ClientAccountDTO clientAccountDTO = new ClientAccountDTO();
+        ClientAccount byId = clientAccountMapper.findById(clientId);
+        TransformDTO.clientAccountToDTO(byId,clientAccountDTO);
+        return clientAccountDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateClientAccountById(ClientAccountDTO clientAccountDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ClientAccount clientAccount = new ClientAccount();
+        TransformDTO.clientAccountDTOToDomain(clientAccountDTO,clientAccount);
+        clientAccountMapper.updateById(clientAccount);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveClientAccount(ClientAccountDTO clientAccountDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ClientAccount clientAccount = new ClientAccount();
+        TransformDTO.clientAccountDTOToDomain(clientAccountDTO,clientAccount);
+        clientAccountMapper.add(clientAccount);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateClientById(ClientDTO clientDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Client client = new Client();
+        TransformDTO.clientDTOToDomain(clientDTO,client);
+        clientMapper.updateById(client);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public DictIndustryDTO getDictIndustryById(Long industryId)
+    {
+        DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
+
+        return dictIndustryDTO;
+    }
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -300,7 +536,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             clientUser.setEnabled(TrueOrFalse.TRUE);
         }
         clientUserMapper.updateById(clientUser);
-        TransformDTO.clientUserToDTO(clientUser,userDTO);
+        TransformDTO.userToDTO(clientUser, userDTO);
         return userDTO;
     }
 
@@ -309,7 +545,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         UserDTO userDTO = new UserDTO();
-        TransformDTO.clientUserToDTO(clientUser,userDTO);
+        TransformDTO.userToDTO(clientUser, userDTO);
         return userDTO;
     }
 
@@ -339,7 +575,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUser.setPhone(phone);
         clientUser.setEnabled(enabled);
         clientUserMapper.updateById(clientUser);
-        TransformDTO.clientUserToDTO(clientUser,userDTO);
+        TransformDTO.userToDTO(clientUser, userDTO);
         return userDTO;
     }
 

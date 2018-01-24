@@ -16,6 +16,8 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+node:
+  id: 1
 dubbo:
   registry:
     address: 192.168.2.159:2181

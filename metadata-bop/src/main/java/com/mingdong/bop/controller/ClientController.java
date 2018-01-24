@@ -3,7 +3,7 @@ package com.mingdong.bop.controller;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.mingdong.bop.constant.Constant;
+import com.mingdong.core.constant.Constant;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.NewClientVO;

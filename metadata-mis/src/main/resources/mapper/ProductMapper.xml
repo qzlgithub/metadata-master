@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ProductMapper">
+    <resultMap id="BaseResultMap" type="Product">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="type_id" property="typeId" jdbcType="INTEGER" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="cost_amt" property="costAmt" jdbcType="DECIMAL" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="enabled" property="enabled" jdbcType="TINYINT" />
+    </resultMap>
+
+    <insert id="add" parameterType="Product">
+        insert into `product`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="typeId != null">`type_id`,</if>
+            <if test="code != null">`code`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="costAmt != null">`cost_amt`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="enabled != null">`enabled`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="costAmt != null">#{costAmt},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="enabled != null">#{enabled},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="Product">
+        update `product`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `type_id`     = #{typeId},
+            `code`        = #{code},
+            `name`        = #{name},
+            `cost_amt`    = #{costAmt},
+            `remark`      = #{remark},
+            `enabled`     = #{enabled}
+        where `id` =
+              #{id}
+    </update>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
+        from `product`
+        where `id` = #{id}
+    </select>
+
+    <select id="findByCode" parameterType="String" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
+        from `product`
+        where `code` = #{code}
+    </select>
+
+    <select id="findByName" parameterType="String" resultMap="BaseResultMap">
+        select
+        `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
+        from `product`
+        where `name` = #{name}
+    </select>
+
+    <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `type_id`, `code`, `name`, `cost_amt`, `remark`, `enabled`
+        from `product`
+        where `enabled` = #{enabled}
+    </select>
+</mapper>

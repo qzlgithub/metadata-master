@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.constant.SysParam;
+import com.mingdong.core.constant.SysParam;
 import com.mingdong.bop.domain.entity.DictIndustry;
 import com.mingdong.bop.domain.entity.DictProductType;
 import com.mingdong.bop.domain.entity.DictRechargeType;

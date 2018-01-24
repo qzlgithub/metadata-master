@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ApiReqInfoMapper">
+    <resultMap id="BaseResultMap" type="ApiReqInfo">
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="call_time" property="callTime" jdbcType="TIMESTAMP" />
+        <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
+        <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="suc" property="suc" jdbcType="TINYINT" />
+        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <select id="getListBy" resultMap="BaseResultMap">
+        select
+        ar.`id`          as id,
+        ar.`create_time` as call_time,
+        c.`corp_name`    as corp_name,
+        c.`short_name`   as short_name,
+        cu.`username`    as username,
+        p.`name`         as product_name,
+        ar.`suc`         as suc,
+        ar.`unit_amt`     as unit_amt,
+        ar.`balance`     as balance
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        left join `client_user` cu
+        on c.`primary_user_id` = cu.`id`
+        left join `product` p
+        on ar.`product_id` = p.`id`
+        <where>
+            <if test="clientId != null">ar.`client_id` = #{clientId}</if>
+            <if test="productId != null">and ar.`product_id` = #{productId}</if>
+            <if test="startTime != null">and ar.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+        </where>
+        order by pr.`create_time` desc
+    </select>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper">
+    <resultMap id="BaseResultMap" type="ProductRechargeInfo">
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+        <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+        <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
+        <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="recharge_type" property="rechargeType" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
+        <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- @formatter:off -->
+    <select id="getListBy" resultMap="BaseResultMap">
+        select
+            pr.`id`          as id,
+            pr.`create_time` as trade_time,
+            pr.`trade_no`    as trade_no,
+            pr.`bill_plan`   as bill_plan,
+            c.`corp_name`    as corp_name,
+            c.`short_name`   as short_name,
+            cu.`username`    as username,
+            p.`name`         as product_name,
+            rt.`name`        as recharge_type,
+            pr.`amount`      as amount,
+            pr.`balance`     as balance,
+            m.`name`         as manager_name,
+            pr.`contract_no` as contract_no,
+            pr.`remark`      as remark
+        from `product_recharge` pr
+            left join `client` c
+                on pr.`client_id` = c.`id`
+            left join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+            left join `product` p
+                on pr.`product_id` = p.`id`
+            left join `manager` m
+                on pr.`manager_id` = m.`id`
+            left join `dict_recharge_type` rt
+                on pr.`recharge_type` = rt.`id`
+        <where>
+            <if test="clientId != null">pr.`client_id` = #{clientId}</if>
+            <if test="productId != null">and pr.`product_id` = #{productId}</if>
+            <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+        </where>
+        order by pr.`create_time` desc
+    </select>
+
+</mapper>

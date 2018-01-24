@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientUserMapper">
+    <resultMap id="BaseResultMap" type="ClientUser">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+        <result column="enabled" property="enabled" jdbcType="TINYINT" />
+        <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
+            `app_key`, `enabled`, `deleted`
+        from `client_user`
+    </sql>
+
+    <insert id="add" parameterType="ClientUser">
+        insert into `client_user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="phone != null">`phone`,</if>
+            <if test="email != null">`email`,</if>
+            <if test="username != null">`username`,</if>
+            <if test="password != null">`password`,</if>
+            <if test="appKey != null">`app_key`,</if>
+            <if test="enabled != null">`enabled`,</if>
+            <if test="deleted != null">`deleted`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="appKey != null">#{appKey},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="deleted != null">#{deleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="ClientUser">
+        update `client_user`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `client_id`   = #{clientId},
+            `name`        = #{name},
+            `phone`       = #{phone},
+            `email`       = #{email},
+            `username`    = #{username},
+            `password`    = #{password},
+            `app_key`     = #{appKey},
+            `enabled`     = #{enabled},
+            `deleted`     = #{deleted}
+        where `id` = #{id}
+    </update>
+
+    <update id="updateSkipNull" parameterType="ClientUser">
+        update `client_user`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="appKey != null">`app_key` = #{appKey},</if>
+            <if test="enabled != null">`enabled` = #{enabled},</if>
+            <if test="deleted != null">`deleted` = #{deleted},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
+
+    <select id="findByUsername" parameterType="String" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `username` = #{username}
+    </select>
+
+    <select id="getListByClientAndStatus" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `client_id` = #{clientId}
+        <if test="enabled != null">and `enabled` = #{enabled}</if>
+        <if test="deleted != null">and `deleted` = #{deleted}</if>
+    </select>
+
+    <update id="resetPasswordByIds">
+        update `client_user` set `password` = #{password}, `update_time` = #{date} where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateStatusByIds">
+        update `client_user`
+        set `enabled` = #{enabled},
+            `update_time` = #{date}
+        where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListByClientsAndPrimary" parameterType="List" resultMap="BaseResultMap">
+        select
+            cu.`id`, cu.`create_time`, cu.`update_time`, cu.`client_id`, cu.`name`, cu.`phone`, cu.`email`,
+            cu.`username`, cu.`password`, cu.`app_key`, cu.`enabled`, cu.`deleted`
+        from `client` c
+            left join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+        where c.`id` in
+        <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </select>
+
+    <select id="countByClientAndStatus" resultType="Integer">
+        select count(*)
+        from `client_user`
+        where `client_id` = #{clientId}
+        <if test="enabled != null">and `enabled` = #{enabled}</if>
+        <if test="deleted != null">and `deleted` = #{deleted}</if>
+    </select>
+</mapper>

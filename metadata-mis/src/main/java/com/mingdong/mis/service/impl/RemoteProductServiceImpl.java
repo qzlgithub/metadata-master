@@ -1,23 +1,10 @@
-package com.mingdong.bop.service.impl;
+package com.mingdong.mis.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
-import com.mingdong.bop.constant.Constant;
-import com.mingdong.bop.domain.TransformDTO;
-import com.mingdong.bop.domain.entity.ApiReqInfo;
-import com.mingdong.bop.domain.entity.ClientProduct;
-import com.mingdong.bop.domain.entity.DictProductType;
-import com.mingdong.bop.domain.entity.ProductClientInfo;
-import com.mingdong.bop.domain.entity.ProductRechargeInfo;
-import com.mingdong.bop.domain.mapper.ApiReqInfoMapper;
-import com.mingdong.bop.domain.mapper.ApiReqMapper;
-import com.mingdong.bop.domain.mapper.ClientProductMapper;
-import com.mingdong.bop.domain.mapper.DictProductTypeMapper;
-import com.mingdong.bop.domain.mapper.ProductClientInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.DictDTO;
@@ -31,6 +18,19 @@ import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.mis.domain.TransformDTO;
+import com.mingdong.mis.domain.entity.ApiReqInfo;
+import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.DictProductType;
+import com.mingdong.mis.domain.entity.ProductClientInfo;
+import com.mingdong.mis.domain.entity.ProductRechargeInfo;
+import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
+import com.mingdong.mis.domain.mapper.ApiReqMapper;
+import com.mingdong.mis.domain.mapper.ClientProductMapper;
+import com.mingdong.mis.domain.mapper.DictProductTypeMapper;
+import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
+import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
+import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -287,7 +287,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         return dictProductTypeListDTO;
     }
-
 
 }
 

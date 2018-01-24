@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ManagerMapper">
+    <resultMap id="BaseResultMap" type="Manager">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="enabled" property="enabled" jdbcType="TINYINT" />
+        <result column="session_id" property="sessionId" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `username`, `password`, `name`, `phone`, `qq`, `role_id`, `enabled`,
+            `session_id`
+        from `manager`
+    </sql>
+
+    <insert id="add" parameterType="Manager">
+        insert into `manager`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="username != null">`username`,</if>
+            <if test="password != null">`password`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="phone != null">`phone`,</if>
+            <if test="qq != null">`qq`,</if>
+            <if test="roleId != null">`role_id`,</if>
+            <if test="enabled != null">`enabled`,</if>
+            <if test="sessionId != null">`session_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="qq != null">#{qq},</if>
+            <if test="roleId != null">#{roleId},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="sessionId != null">#{sessionId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="Manager">
+        update `manager`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `username`    = #{username},
+            `password`    = #{password},
+            `name`        = #{name},
+            `phone`       = #{phone},
+            `qq`          = #{qq},
+            `role_id`     = #{roleId},
+            `enabled`     = #{enabled},
+            `session_id`  = #{sessionId}
+        where `id` = #{id}
+    </update>
+
+    <update id="updateSkipNull" parameterType="Manager">
+        update `manager`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="qq != null">`qq` = #{qq},</if>
+            <if test="roleId != null">`role_id` = #{roleId},</if>
+            <if test="enabled != null">`enabled` = #{enabled},</if>
+            <if test="sessionId != null">`session_id` = #{sessionId},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
+
+    <select id="findByUsername" parameterType="String" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `username` = #{username}
+    </select>
+
+    <select id="countBy" resultType="Integer">
+        select count(*) from `manager`
+        <where>
+            <if test="roleId != null">`role_id` = #{roleId}</if>
+            <if test="enabled != null">and `enabled` = #{enabled}</if>
+        </where>
+    </select>
+</mapper>

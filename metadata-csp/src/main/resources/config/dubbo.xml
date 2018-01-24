@@ -14,13 +14,17 @@
     <dubbo:registry id="zookeeper" protocol="zookeeper" address="${dubbo.registry.address}" />
 
     <!--***************************************************************************-->
-    <!-- provider配置：声明需要暴露的服务接口与接口实现-->
-    <!-- NONE -->
-
-    <!--***************************************************************************-->
     <!-- consumer配置：生成远程服务代理，和本地bean一样调用 -->
     <dubbo:reference retries="0" timeout="5000" check="false" id="productApi"
                      interface="com.mingdong.core.service.RemoteProductService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="managerApi"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="clientApi"
                      interface="com.mingdong.core.service.RemoteClientService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="managerApi"
+                     interface="com.mingdong.core.service.RemoteManagerService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="statsApi"
+                     interface="com.mingdong.core.service.RemoteStatsService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="systemApi"
+                     interface="com.mingdong.core.service.RemoteSystemService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="tradeApi"
+                     interface="com.mingdong.core.service.RemoteTradeService" />
 </beans>

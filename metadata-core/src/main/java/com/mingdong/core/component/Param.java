@@ -1,4 +1,4 @@
-package com.mingdong.bop.configurer;
+package com.mingdong.core.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

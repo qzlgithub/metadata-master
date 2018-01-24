@@ -1,4 +1,4 @@
-package com.mingdong.bop.constant;
+package com.mingdong.core.constant;
 
 public interface SysParam
 {
