@@ -15,7 +15,7 @@ import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductRecInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
@@ -51,14 +51,14 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductRecInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
         if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResultDTO().getResult());
             return;
         }
-        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getProductRechargeDTOList();
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
@@ -101,9 +101,9 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRecInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
+        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
-        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getProductRechargeDTOList();
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             ProductRechargeInfoDTO dataDTO;
@@ -375,7 +375,7 @@ public class ProductServiceImpl implements ProductService
                     map.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
                 }
             }
-            if(TrueOrFalse.FALSE == isOpen)
+            if(TrueOrFalse.FALSE.equals(isOpen))
             {
                 for(ProductDTO d : productListDTO.getToOpen())
                 {

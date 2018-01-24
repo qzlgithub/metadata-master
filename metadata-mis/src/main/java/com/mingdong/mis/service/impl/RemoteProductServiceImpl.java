@@ -10,19 +10,24 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.ProductClientInfoDTO;
+import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductRecInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
-import com.mingdong.mis.domain.TransformDTO;
+import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.DictProductType;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
+import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
@@ -33,8 +38,10 @@ import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,12 +66,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private DictProductTypeMapper dictProductTypeMapper;
 
     @Override
-    public ProductRecInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
-            Page page)
+    public ProductRechargeInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
+            Date endDate, Page page)
     {
-        ProductRecInfoListDTO productRecListDTO = new ProductRecInfoListDTO();
+        ProductRechargeInfoListDTO productRecListDTO = new ProductRechargeInfoListDTO();
         List<ProductRechargeInfoDTO> dataDtoList = new ArrayList<>();
-        productRecListDTO.setProductRechargeDTOList(dataDtoList);
+        productRecListDTO.setDataList(dataDtoList);
         if(page == null)
         {
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
@@ -76,7 +83,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     productRechargeDTO = new ProductRechargeInfoDTO();
                     dataDtoList.add(productRechargeDTO);
-                    TransformDTO.productRechargeToDTO(item, productRechargeDTO);
+                    EntityUtils.copyProperties(item, productRechargeDTO);
                 }
             }
         }
@@ -96,7 +103,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     productRechargeDTO = new ProductRechargeInfoDTO();
                     dataDtoList.add(productRechargeDTO);
-                    TransformDTO.productRechargeToDTO(item, productRechargeDTO);
+                    EntityUtils.copyProperties(item, productRechargeDTO);
                 }
             }
         }
@@ -121,7 +128,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     dataDto = new ProductRequestInfoDTO();
                     dataDtoList.add(dataDto);
-                    TransformDTO.productRequestToDTO(item, dataDto);
+                    EntityUtils.copyProperties(item, dataDto);
                 }
             }
         }
@@ -140,7 +147,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     dataDto = new ProductRequestInfoDTO();
                     dataDtoList.add(dataDto);
-                    TransformDTO.productRequestToDTO(item, dataDto);
+                    EntityUtils.copyProperties(item, dataDto);
                 }
             }
         }
@@ -282,10 +289,113 @@ public class RemoteProductServiceImpl implements RemoteProductService
             {
                 dictProductTypeDTO = new DictProductTypeDTO();
                 dataDtoList.add(dictProductTypeDTO);
-                TransformDTO.dictProductTypeToDTO(item, dictProductTypeDTO);
+                EntityUtils.copyProperties(item, dictProductTypeDTO);
             }
         }
         return dictProductTypeListDTO;
+    }
+
+    @Override
+    public ProductClientInfoListDTO getProductClientInfoListByClientId(Long clientId)
+    {
+        ProductClientInfoListDTO productClientInfoListDTO = new ProductClientInfoListDTO();
+        List<ProductClientInfoDTO> dataList = new ArrayList<>();
+        productClientInfoListDTO.setDataList(dataList);
+        List<ProductClientInfo> pciList = productClientInfoMapper.getListByClient(clientId);
+        if(CollectionUtils.isNotEmpty(pciList))
+        {
+            ProductClientInfoDTO productClientInfoDTO;
+            for(ProductClientInfo item : pciList)
+            {
+                productClientInfoDTO = new ProductClientInfoDTO();
+                EntityUtils.copyProperties(item, productClientInfoDTO);
+                dataList.add(productClientInfoDTO);
+            }
+        }
+        return productClientInfoListDTO;
+    }
+
+    @Override
+    public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
+    {
+        ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
+        ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
+        EntityUtils.copyProperties(pro, productRechargeDTO);
+        return productRechargeDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveProductRecharge(ProductRechargeDTO productRechargeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ProductRecharge pr = new ProductRecharge();
+        EntityUtils.copyProperties(productRechargeDTO, pr);
+        productRechargeMapper.add(pr);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public ProductRechargeDTO getProductRechargeById(Long id)
+    {
+        ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
+        ProductRecharge pr = productRechargeMapper.findById(id);
+        EntityUtils.copyProperties(pr, productRechargeDTO);
+        return productRechargeDTO;
+    }
+
+    @Override
+    public BigDecimal sumAmountByClientProduct(Long clientProductId)
+    {
+        return productRechargeMapper.sumAmountByClientProduct(clientProductId);
+    }
+
+    @Override
+    public ProductRechargeInfoListDTO getproductrechargeInfoList(Long clientId, Long productId, Date startTime,
+            Date endTime, Page page)
+    {
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
+        List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
+        productRechargeInfoListDTO.setDataList(dataList);
+        ProductRechargeInfoDTO clientOperateInfoDTO;
+        if(page == null)
+        {
+            List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId, productId,
+                    startTime, endTime);
+            if(CollectionUtils.isNotEmpty(productRechargeInfos))
+            {
+                for(ProductRechargeInfo item : productRechargeInfos)
+                {
+                    clientOperateInfoDTO = new ProductRechargeInfoDTO();
+                    EntityUtils.copyProperties(item, clientOperateInfoDTO);
+                    dataList.add(clientOperateInfoDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = productRechargeInfoMapper.countBy(clientId, productId, startTime, endTime);
+            int pages = page.getTotalPage(total);
+            productRechargeInfoListDTO.setPages(pages);
+            productRechargeInfoListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId,
+                        productId, startTime, endTime);
+                if(CollectionUtils.isNotEmpty(productRechargeInfos))
+                {
+                    for(ProductRechargeInfo item : productRechargeInfos)
+                    {
+                        clientOperateInfoDTO = new ProductRechargeInfoDTO();
+                        dataList.add(clientOperateInfoDTO);
+                        EntityUtils.copyProperties(item, clientOperateInfoDTO);
+                    }
+                }
+            }
+        }
+        return productRechargeInfoListDTO;
     }
 
 }

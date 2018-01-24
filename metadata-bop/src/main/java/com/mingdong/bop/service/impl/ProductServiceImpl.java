@@ -1,7 +1,7 @@
 package com.mingdong.bop.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.mingdong.core.component.Param;
+import com.mingdong.bop.component.Param;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.domain.entity.DictProductType;
 import com.mingdong.bop.domain.entity.Product;

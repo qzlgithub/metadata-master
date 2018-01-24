@@ -19,6 +19,17 @@ public class ProductRechargeInfoDTO implements Serializable
     private BigDecimal balance;
     private String contractNo;
     private String remark;
+    private String managerName;
+
+    public String getManagerName()
+    {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName)
+    {
+        this.managerName = managerName;
+    }
 
     public Long getId()
     {

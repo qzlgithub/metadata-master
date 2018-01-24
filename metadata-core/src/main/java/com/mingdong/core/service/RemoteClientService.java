@@ -4,7 +4,12 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ClientListDTO;
+import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
+import com.mingdong.core.model.dto.ClientOperateLogDTO;
+import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
+import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
@@ -13,6 +18,7 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RemoteClientService
@@ -48,7 +54,7 @@ public interface RemoteClientService
     DictIndustryListDTO getByParentAndStatus(Long parentIndustryId, Integer trueOrFalse);
 
     ClientInfoListDTO getClinetInfoListBy(Integer enabled, String account, String cropName, String shortName,
-            List<Long> industryIdList,Page page);
+            List<Long> industryIdList, Page page);
 
     ResultDTO saveClientUser(ClientUserDTO clientUser);
 
@@ -70,4 +76,29 @@ public interface RemoteClientService
 
     DictIndustryDTO getDictIndustryById(Long industryId);
 
+    ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted);
+
+    ClientUserListDTO getClientUserListByClientIds(List<Long> clientIdList);
+
+    ResultDTO saveClientOperateLogList(List<ClientOperateLogDTO> logList);
+
+    ResultDTO updateClientUserStatusByIds(Integer enabled, Date date, List<Long> idList);
+
+    ResultDTO setClientDeleted(List<Long> idList);
+
+    ClientListDTO getClientListByIds(List<Long> idList);
+
+    ResultDTO resetPasswordByIds(String pwd,List<Long> idList);
+
+    ClientProductDTO getClientProductById(Long clientProductId);
+
+    ResultDTO updateClientUserSkipNull(ClientUserDTO clientUserDTO);
+
+    ClientProductDTO getClientProductByClientAndProduct(Long clientId, Long productId);
+
+    ResultDTO saveClientProduct(ClientProductDTO clientProductDTO);
+
+    ResultDTO updateClientProductSkipNull(ClientProductDTO cp);
+
+    ClientOperateInfoListDTO getClientOperateInfoListByUserId(Long primaryUserId, Page page);
 }

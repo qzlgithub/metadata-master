@@ -1,34 +1,9 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.Trade;
-import com.mingdong.bop.domain.entity.Client;
-import com.mingdong.bop.domain.entity.ClientAccount;
-import com.mingdong.bop.domain.entity.ClientInfo;
-import com.mingdong.bop.domain.entity.ClientOperateInfo;
-import com.mingdong.bop.domain.entity.ClientOperateLog;
-import com.mingdong.bop.domain.entity.ClientProduct;
-import com.mingdong.bop.domain.entity.ClientUser;
-import com.mingdong.bop.domain.entity.DictIndustry;
-import com.mingdong.bop.domain.entity.Manager;
-import com.mingdong.bop.domain.entity.ProductClientInfo;
-import com.mingdong.bop.domain.entity.ProductRecharge;
-import com.mingdong.bop.domain.entity.ProductRechargeInfo;
-import com.mingdong.bop.domain.mapper.ClientAccountMapper;
-import com.mingdong.bop.domain.mapper.ClientInfoMapper;
-import com.mingdong.bop.domain.mapper.ClientMapper;
-import com.mingdong.bop.domain.mapper.ClientOperateInfoMapper;
-import com.mingdong.bop.domain.mapper.ClientOperateLogMapper;
-import com.mingdong.bop.domain.mapper.ClientProductMapper;
-import com.mingdong.bop.domain.mapper.ClientUserMapper;
-import com.mingdong.bop.domain.mapper.DictIndustryMapper;
-import com.mingdong.bop.domain.mapper.ManagerMapper;
-import com.mingdong.bop.domain.mapper.ProductClientInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -38,12 +13,35 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.component.Param;
+import com.mingdong.bop.component.Param;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ClientAccountDTO;
+import com.mingdong.core.model.dto.ClientDTO;
+import com.mingdong.core.model.dto.ClientInfoDTO;
+import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ClientListDTO;
+import com.mingdong.core.model.dto.ClientOperateInfoDTO;
+import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
+import com.mingdong.core.model.dto.ClientOperateLogDTO;
+import com.mingdong.core.model.dto.ClientProductDTO;
+import com.mingdong.core.model.dto.ClientUserDTO;
+import com.mingdong.core.model.dto.ClientUserListDTO;
+import com.mingdong.core.model.dto.DictIndustryDTO;
+import com.mingdong.core.model.dto.DictIndustryListDTO;
+import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.ProductClientInfoDTO;
+import com.mingdong.core.model.dto.ProductClientInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.service.RemoteClientService;
+import com.mingdong.core.service.RemoteManagerService;
+import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.IDUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -71,45 +69,28 @@ public class ClientServiceImpl implements ClientService
     @Resource
     private SystemService systemService;
     @Resource
-    private ClientMapper clientMapper;
+    private RemoteClientService remoteClientService;
     @Resource
-    private ClientUserMapper clientUserMapper;
+    private RemoteProductService remoteProductService;
     @Resource
-    private ClientAccountMapper clientAccountMapper;
-    @Resource
-    private ClientInfoMapper clientInfoMapper;
-    @Resource
-    private ClientProductMapper clientProductMapper;
-    @Resource
-    private ManagerMapper managerMapper;
-    @Resource
-    private DictIndustryMapper dictIndustryMapper;
-    @Resource
-    private ProductClientInfoMapper productClientInfoMapper;
-    @Resource
-    private ProductRechargeMapper productRechargeMapper;
-    @Resource
-    private ClientOperateLogMapper clientOperateLogMapper;
-    @Resource
-    private ClientOperateInfoMapper clientOperateInfoMapper;
-    @Resource
-    private ProductRechargeInfoMapper productRechargeInfoMapper;
+    private RemoteManagerService remoteManagerService;
 
     @Override
     public void checkIfUsernameExist(String username, BLResp resp)
     {
-        ClientUser user = clientUserMapper.findByUsername(username);
-        resp.addData(Field.EXIST, user == null ? 0 : 1);
+        UserDTO user = remoteClientService.findByUsername(username);
+        resp.addData(Field.EXIST, user.getResultDTO().getResult() != RestResult.SUCCESS ? 0 : 1);
     }
 
     @Override
     public void getSimilarCorp(String corpName, Long clientId, BLResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<ClientInfo> dataList = clientInfoMapper.getSimilarCorpByName(corpName, clientId);
+        ClientInfoListDTO similarCorpByName = remoteClientService.getSimilarCorpByName(corpName, clientId);
+        List<ClientInfoDTO> dataList = similarCorpByName.getDataList();
         if(!CollectionUtils.isEmpty(dataList))
         {
-            for(ClientInfo client : dataList)
+            for(ClientInfoDTO client : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.CORP_NAME, client.getCorpName());
@@ -134,9 +115,10 @@ public class ClientServiceImpl implements ClientService
         {
             if(parentIndustryId != null)
             {
-                List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(parentIndustryId,
+                DictIndustryListDTO byParentAndStatus = remoteClientService.getByParentAndStatus(parentIndustryId,
                         TrueOrFalse.TRUE);
-                for(DictIndustry d : parentList)
+                List<DictIndustryDTO> parentList = byParentAndStatus.getDataList();
+                for(DictIndustryDTO d : parentList)
                 {
                     industryList.add(d.getId());
                 }
@@ -146,20 +128,17 @@ public class ClientServiceImpl implements ClientService
         {
             industryList.add(industryId);
         }
-        int total = clientInfoMapper.countBy(enabled, username, cropName, shortName, industryList);
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        ClientInfoListDTO clinetInfoListBy = remoteClientService.getClinetInfoListBy(enabled, username, cropName,
+                shortName, industryList, page);
+        resp.addData(Field.TOTAL, clinetInfoListBy.getTotal());
+        resp.addData(Field.PAGES, clinetInfoListBy.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        List<ClientInfoDTO> clientInfoList = clinetInfoListBy.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(clientInfoList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-
-            List<ClientInfo> clientInfoList = clientInfoMapper.getListBy(enabled, username, cropName, shortName,
-                    industryList);
-            List<Map<String, Object>> list = new ArrayList<>(clientInfoList.size());
-            for(ClientInfo clientInfo : clientInfoList)
+            for(ClientInfoDTO clientInfo : clientInfoList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, clientInfo.getClientId() + "");
@@ -175,8 +154,8 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.USER_ENABLED, clientInfo.getUserEnabled());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
         return resp;
     }
 
@@ -186,8 +165,8 @@ public class ClientServiceImpl implements ClientService
             String name, String phone, String email, String license, Integer enabled, BLResp resp)
     {
         Date curr = new Date();
-        ClientUser clientUser = clientUserMapper.findByUsername(username);
-        if(clientUser != null)// 校验帐号是否重复
+        UserDTO user = remoteClientService.findByUsername(username);
+        if(curr != null)// 校验帐号是否重复
         {
             resp.result(RestResult.ACCOUNT_IS_EXIST);
             return;
@@ -195,7 +174,7 @@ public class ClientServiceImpl implements ClientService
         Long clientId = IDUtils.getClientId(param.getNodeId());
         Long clientUserId = IDUtils.getClientUser(param.getNodeId());
         // 创建客户主账号
-        clientUser = new ClientUser();
+        ClientUserDTO clientUser = new ClientUserDTO();
         clientUser.setId(clientUserId);
         clientUser.setCreateTime(curr);
         clientUser.setUpdateTime(curr);
@@ -208,7 +187,7 @@ public class ClientServiceImpl implements ClientService
         clientUser.setEnabled(enabled);
         clientUser.setDeleted(TrueOrFalse.FALSE);
         // 创建客户
-        Client client = new Client();
+        ClientDTO client = new ClientDTO();
         client.setId(clientId);
         client.setCreateTime(curr);
         client.setUpdateTime(curr);
@@ -221,8 +200,8 @@ public class ClientServiceImpl implements ClientService
         client.setAccountQty(1);
         client.setDeleted(TrueOrFalse.FALSE);
         // 保存客户及其账号
-        clientUserMapper.add(clientUser);
-        clientMapper.add(client);
+        remoteClientService.saveClientUser(clientUser);
+        remoteClientService.saveClient(client);
     }
 
     @Override
@@ -231,37 +210,37 @@ public class ClientServiceImpl implements ClientService
             String name, String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp)
     {
         Date current = new Date();
-        Client client = clientMapper.findById(clientId);
+        ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         // 更新用户信息
-        ClientUser clientUser = clientUserMapper.findById(client.getPrimaryUserId());
+        ClientUserDTO clientUser = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
         clientUser.setUpdateTime(current);
         clientUser.setName(name);
         clientUser.setPhone(phone);
         clientUser.setEmail(email);
         clientUser.setEnabled(userEnabled);
-        clientUserMapper.updateById(clientUser);
+        remoteClientService.updateClientUserByUserId(clientUser);
         // 更新客户账户状态
-        ClientAccount clientAccount = clientAccountMapper.findById(clientId);
+        ClientAccountDTO clientAccount = remoteClientService.getClientAccountByClientId(clientId);
         if(clientAccount != null)
         {
             clientAccount.setUpdateTime(current);
             clientAccount.setEnabled(accountEnabled);
-            clientAccountMapper.updateById(clientAccount);
+            remoteClientService.updateClientAccountById(clientAccount);
         }
         else
         {
-            clientAccount = new ClientAccount();
+            clientAccount = new ClientAccountDTO();
             clientAccount.setId(clientId);
             clientAccount.setCreateTime(current);
             clientAccount.setUpdateTime(current);
             clientAccount.setBalance(new BigDecimal(0));
             clientAccount.setEnabled(accountEnabled);
-            clientAccountMapper.add(clientAccount);
+            remoteClientService.saveClientAccount(clientAccount);
         }
         // 更新客户信息
         client.setUpdateTime(current);
@@ -269,19 +248,20 @@ public class ClientServiceImpl implements ClientService
         client.setShortName(shortName);
         client.setLicense(license);
         client.setIndustryId(industryId);
-        clientMapper.updateById(client);
+        remoteClientService.updateClientById(client);
     }
 
     @Override
     public Map<String, Object> findClientInfo(Long clientId)
     {
         Map<String, Object> map = new HashMap<>();
-        Client client = clientMapper.findById(clientId);
+
+        ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client != null)
         {
-            ClientUser user = clientUserMapper.findById(client.getPrimaryUserId());
-            ClientAccount clientAccount = clientAccountMapper.findById(clientId);
-            DictIndustry industry = dictIndustryMapper.findById(client.getIndustryId());
+            ClientUserDTO user = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
+            ClientAccountDTO clientAccount = remoteClientService.getClientAccountByClientId(clientId);
+            DictIndustryDTO industry = remoteClientService.getDictIndustryById(client.getIndustryId());
             map.put(Field.CLIENT_ID, clientId + "");
             map.put(Field.USERNAME, user.getUsername());
             map.put(Field.CORP_NAME, client.getCorpName());
@@ -308,21 +288,22 @@ public class ClientServiceImpl implements ClientService
     public Map<String, Object> findClientDetail(Long clientId)
     {
         Map<String, Object> map = new HashMap<>();
-        Client client = clientMapper.findById(clientId);
+        ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client != null)
         {
             // 主账号
-            ClientUser masterUser = clientUserMapper.findById(client.getPrimaryUserId());
+            ClientUserDTO masterUser = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
             map.put(Field.NAME, masterUser.getName());
             map.put(Field.PHONE, masterUser.getPhone());
             map.put(Field.EMAIL, masterUser.getEmail());
             map.put(Field.USERNAME, masterUser.getUsername());
             map.put(Field.USER_ENABLED, masterUser.getEnabled());
             // 子账号
-            List<ClientUser> subUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
-                    TrueOrFalse.FALSE);
+            ClientUserListDTO listByClientAndStatus = remoteClientService.getListByClientAndStatus(clientId,
+                    TrueOrFalse.TRUE, TrueOrFalse.FALSE);
+            List<ClientUserDTO> subUserList = listByClientAndStatus.getDataList();
             List<Map<String, Object>> userList = new ArrayList<>();
-            for(ClientUser user : subUserList)
+            for(ClientUserDTO user : subUserList)
             {
                 if(!client.getPrimaryUserId().equals(user.getId()))
                 {
@@ -335,10 +316,12 @@ public class ClientServiceImpl implements ClientService
                 }
             }
             // 开通产品
-            List<ProductClientInfo> pciList = productClientInfoMapper.getListByClient(clientId);
+            ProductClientInfoListDTO productClientInfoListByClientId =
+                    remoteProductService.getProductClientInfoListByClientId(clientId);
+            List<ProductClientInfoDTO> pciList = productClientInfoListByClientId.getDataList();
             List<Map<String, Object>> opened = new ArrayList<>();
             List<Map<String, Object>> toOpen = new ArrayList<>();
-            for(ProductClientInfo pci : pciList)
+            for(ProductClientInfoDTO pci : pciList)
             {
                 Map<String, Object> m = new HashMap<>();
                 if(pci.getClientProductId() != null)
@@ -370,10 +353,10 @@ public class ClientServiceImpl implements ClientService
             map.put(Field.OPENED, opened);
             map.put(Field.TO_OPEN, toOpen);
             // 账户余额
-            ClientAccount account = clientAccountMapper.findById(clientId);
+            ClientAccountDTO account = remoteClientService.getClientAccountByClientId(clientId);
             map.put(Field.BALANCE, account == null ? "0.00" : NumberUtils.formatAmount(account.getBalance()));
             // 其他
-            Manager manager = managerMapper.findById(client.getManagerId());
+            ManagerDTO manager = remoteManagerService.getManagerById(client.getManagerId());
             map.put(Field.CLIENT_ID, clientId + "");
             map.put(Field.CORP_NAME, client.getCorpName());
             map.put(Field.SHORT_NAME, client.getShortName());
@@ -391,7 +374,8 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
     {
-        List<ClientUser> userList = clientUserMapper.getListByClientsAndPrimary(clientIdList);
+        ClientUserListDTO clientUserListByClientIds = remoteClientService.getClientUserListByClientIds(clientIdList);
+        List<ClientUserDTO> userList = clientUserListByClientIds.getDataList();
         if(CollectionUtils.isEmpty(userList))
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -399,13 +383,13 @@ public class ClientServiceImpl implements ClientService
         }
         Date current = new Date();
         List<Long> clientUserIdList = new ArrayList<>();
-        List<ClientOperateLog> logList = new ArrayList<>();
-        for(ClientUser user : userList)
+        List<ClientOperateLogDTO> logList = new ArrayList<>();
+        for(ClientUserDTO user : userList)
         {
             if(!enabled.equals(user.getEnabled()))
             {
                 clientUserIdList.add(user.getId());
-                ClientOperateLog log = new ClientOperateLog();
+                ClientOperateLogDTO log = new ClientOperateLogDTO();
                 log.setCreateTime(current);
                 log.setUpdateTime(current);
                 log.setClientId(user.getClientId());
@@ -418,8 +402,8 @@ public class ClientServiceImpl implements ClientService
         }
         if(logList.size() > 0)
         {
-            clientOperateLogMapper.addList(logList);
-            clientUserMapper.updateStatusByIds(enabled, current, clientUserIdList);
+            remoteClientService.saveClientOperateLogList(logList);
+            remoteClientService.updateClientUserStatusByIds(enabled, current, clientUserIdList);
         }
     }
 
@@ -427,33 +411,34 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void setClientDeleted(List<Long> idList, BLResp resp)
     {
-        clientMapper.setClientDeleted(idList, new Date());
+        remoteClientService.setClientDeleted(idList);
     }
 
     @Override
     @Transactional
     public void resetClientPassword(List<Long> idList, BLResp resp)
     {
-        List<Client> clientList = clientMapper.getListByIdList(idList);
+        ClientListDTO clientListByIds = remoteClientService.getClientListByIds(idList);
+        List<ClientDTO> clientList = clientListByIds.getDataList();
         if(!CollectionUtils.isEmpty(clientList))
         {
             List<Long> clientUserIdList = new ArrayList<>(clientList.size());
-            for(Client client : clientList)
+            for(ClientDTO client : clientList)
             {
                 clientUserIdList.add(client.getPrimaryUserId());
             }
-            clientUserMapper.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, new Date(), clientUserIdList);
+            remoteClientService.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, clientUserIdList);
         }
     }
 
     @Override
     public Map<String, Object> getClientProductInfo(Long clientProductId)
     {
-        ClientProduct cp = clientProductMapper.findById(clientProductId);
+        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         Map<String, Object> map = new HashMap<>();
         if(cp != null)
         {
-            Client client = clientMapper.findById(cp.getClientId());
+            ClientDTO client = remoteClientService.getClientByClientId(cp.getClientId());
             map.put(Field.CLIENT_ID, cp.getClientId() + "");
             map.put(Field.PRODUCT_ID, cp.getProductId() + "");
             map.put(Field.CORP_NAME, client != null ? client.getCorpName() : "");
@@ -465,14 +450,15 @@ public class ClientServiceImpl implements ClientService
     public List<Map<String, Object>> getSubAccountList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        Client client = clientMapper.findById(clientId);
+        ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client == null)
         {
             return list;
         }
-        List<ClientUser> cuList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
-                TrueOrFalse.FALSE);
-        for(ClientUser cu : cuList)
+        ClientUserListDTO listByClientAndStatus = remoteClientService.getListByClientAndStatus(clientId,
+                TrueOrFalse.TRUE, TrueOrFalse.FALSE);
+        List<ClientUserDTO> cuList = listByClientAndStatus.getDataList();
+        for(ClientUserDTO cu : cuList)
         {
             if(!client.getPrimaryUserId().equals(cu.getId()))
             {
@@ -491,17 +477,17 @@ public class ClientServiceImpl implements ClientService
     @Transactional
     public void resetClientUserPassword(Long clientUserId, BLResp resp)
     {
-        ClientUser cu = clientUserMapper.findById(clientUserId);
+        ClientUserDTO cu = remoteClientService.getClientUserByUserId(clientUserId);
         if(cu == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        cu = new ClientUser();
+        cu = new ClientUserDTO();
         cu.setId(clientUserId);
         cu.setUpdateTime(new Date());
         cu.setPassword(Md5Utils.encrypt(Md5Utils.encrypt(Constant.DEFAULT_PASSWORD)));
-        clientUserMapper.updateSkipNull(cu);
+        remoteClientService.updateClientUserSkipNull(cu);
     }
 
     @Override
@@ -511,13 +497,13 @@ public class ClientServiceImpl implements ClientService
     {
 
         Date current = new Date();
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(clientId, productId);
+        ClientProductDTO cp = remoteClientService.getClientProductByClientAndProduct(clientId, productId);
         if(cp != null)
         {
             resp.result(RestResult.PRODUCT_OPENED);
             return;
         }
-        ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
+        ProductRechargeDTO pro = remoteProductService.getProductRechargeByContractNo(contractNo);
         if(pro != null)
         {
             resp.result(RestResult.CONTRACT_IS_EXIST);
@@ -526,7 +512,7 @@ public class ClientServiceImpl implements ClientService
         Long clientProductId = IDUtils.getClientProductId(param.getNodeId());
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         // 保存产品的充值记录
-        ProductRecharge pr = new ProductRecharge();
+        ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
@@ -543,9 +529,10 @@ public class ClientServiceImpl implements ClientService
         pr.setEndDate(endDate);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        productRechargeMapper.add(pr);
+        remoteProductService.saveProductRecharge(pr);
+
         // 保存客户产品的账户变更信息
-        cp = new ClientProduct();
+        cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setCreateTime(current);
         cp.setUpdateTime(current);
@@ -555,7 +542,7 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
-        clientProductMapper.add(cp);
+        remoteClientService.saveClientProduct(cp);
     }
 
     @Override
@@ -564,7 +551,7 @@ public class ClientServiceImpl implements ClientService
             Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
     {
         Date current = new Date();
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(clientId, productId);
+        ClientProductDTO cp = remoteClientService.getClientProductByClientAndProduct(clientId, productId);
         if(cp != null)
         {
             resp.result(RestResult.PRODUCT_OPENED);
@@ -572,7 +559,7 @@ public class ClientServiceImpl implements ClientService
         }
         Long clientProductId = IDUtils.getClientProductId(param.getNodeId());
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        ProductRecharge pr = new ProductRecharge();
+        ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
@@ -588,9 +575,9 @@ public class ClientServiceImpl implements ClientService
         pr.setUnitAmt(unitAmt);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        productRechargeMapper.add(pr);
+        remoteProductService.saveProductRecharge(pr);
         // 保存客户产品的账户变更信息
-        cp = new ClientProduct();
+        cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setCreateTime(current);
         cp.setUpdateTime(current);
@@ -600,19 +587,20 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(amount);
         cp.setLatestRechargeId(productRechargeId);
-        clientProductMapper.add(cp);
+        remoteClientService.saveClientProduct(cp);
     }
 
     @Override
     public void getProductRenewInfo(Long clientProductId, BLResp resp)
     {
-        ClientProduct cp = clientProductMapper.findById(clientProductId);
+        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         if(cp == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        ProductRecharge pr = productRechargeMapper.findById(cp.getLatestRechargeId());
+        ProductRechargeDTO pr = remoteProductService.getProductRechargeById(cp.getLatestRechargeId());
+
         if(pr == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -630,7 +618,7 @@ public class ClientServiceImpl implements ClientService
             resp.addData(Field.BALANCE, NumberUtils.formatAmount(pr.getBalance()));
             resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(pr.getUnitAmt()));
         }
-        BigDecimal totalAmt = productRechargeMapper.sumAmountByClientProduct(clientProductId);
+        BigDecimal totalAmt = remoteProductService.sumAmountByClientProduct(clientProductId);
         resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
     }
 
@@ -640,7 +628,7 @@ public class ClientServiceImpl implements ClientService
             BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp)
     {
         Date current = new Date();
-        ClientProduct cp = clientProductMapper.findById(clientProductId);
+        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         if(cp == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -648,7 +636,7 @@ public class ClientServiceImpl implements ClientService
         }
         // 保存产品续费记录
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        ProductRecharge pr = new ProductRecharge();
+        ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
@@ -665,15 +653,15 @@ public class ClientServiceImpl implements ClientService
         pr.setEndDate(endDate);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        productRechargeMapper.add(pr);
+        remoteProductService.saveProductRecharge(pr);
         // 更新客户产品信息
-        cp = new ClientProduct();
+        cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setUpdateTime(current);
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
-        clientProductMapper.updateSkipNull(cp);
+        remoteClientService.updateClientProductSkipNull(cp);
     }
 
     @Override
@@ -682,7 +670,7 @@ public class ClientServiceImpl implements ClientService
             BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
     {
         Date current = new Date();
-        ClientProduct cp = clientProductMapper.findById(clientProductId);
+        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         if(cp == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -690,7 +678,7 @@ public class ClientServiceImpl implements ClientService
         }
         // 保存产品续费记录
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        ProductRecharge pr = new ProductRecharge();
+        ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
@@ -706,38 +694,32 @@ public class ClientServiceImpl implements ClientService
         pr.setUnitAmt(unitAmt);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        productRechargeMapper.add(pr);
+        remoteProductService.saveProductRecharge(pr);
         // 更新客户产品信息
-        ClientProduct cpUpd = new ClientProduct();
+        ClientProductDTO cpUpd = new ClientProductDTO();
         cpUpd.setId(clientProductId);
         cpUpd.setUpdateTime(current);
         cpUpd.setBillPlan(billPlan);
         cpUpd.setBalance(amount.add(cp.getBalance()));
         cpUpd.setLatestRechargeId(productRechargeId);
-        clientProductMapper.updateSkipNull(cpUpd);
+        remoteClientService.updateClientProductSkipNull(cpUpd);
     }
 
     @Override
     public void getClientOperateLog(Long clientId, Page page, BLResp resp)
     {
-        Client client = clientMapper.findById(clientId);
+        ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        int total = clientOperateLogMapper.countByClientUser(client.getPrimaryUserId());
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientOperateInfo> dataList = clientOperateInfoMapper.getListByClientUser(client.getPrimaryUserId());
-            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ClientOperateInfo info : dataList)
+        ClientOperateInfoListDTO clientOperateInfoListByUserId = remoteClientService.getClientOperateInfoListByUserId(
+                client.getPrimaryUserId(), page);
+        List<ClientOperateInfoDTO> dataList = clientOperateInfoListByUserId.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(dataList)){
+            for(ClientOperateInfoDTO info : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.OPERATE_TIME, DateUtils.format(info.getOperateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -746,8 +728,8 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.REASON, info.getReason());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
     }
 
     @Override
@@ -769,14 +751,14 @@ public class ClientServiceImpl implements ClientService
         row.createCell(10).setCellValue("合同编号");
         row.createCell(11).setCellValue("备注");
 
-        PageHelper.startPage(1, 1000, false);
-        List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, startTime,
-                endTime);
+        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getproductrechargeInfoList(clientId, productId, startTime,
+                endTime,new Page(1,1000));
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoDTOS.getDataList();
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
         for(int i = 0; i < dataList.size(); i++)
         {
-            ProductRechargeInfo pri = dataList.get(i);
+            ProductRechargeInfoDTO pri = dataList.get(i);
             Row dataRow = sheet.createRow(i + 1);
             Cell cell = dataRow.createCell(0);
             cell.setCellValue(pri.getTradeTime());
@@ -799,7 +781,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void checkIfContractExist(String contractNo, BLResp resp)
     {
-        ProductRecharge pr = productRechargeMapper.findByContractNo(contractNo);
-        resp.addData(Field.EXIST, pr == null ? 0 : 1);
+        ProductRechargeDTO pr = remoteProductService.getProductRechargeByContractNo(contractNo);
+        resp.addData(Field.EXIST, pr.getResultDTO().getResult() != RestResult.SUCCESS ? 0 : 1);
     }
 }

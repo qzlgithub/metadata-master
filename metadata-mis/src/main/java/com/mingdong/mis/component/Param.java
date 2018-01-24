@@ -1,4 +1,4 @@
-package com.mingdong.core.component;
+package com.mingdong.mis.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
