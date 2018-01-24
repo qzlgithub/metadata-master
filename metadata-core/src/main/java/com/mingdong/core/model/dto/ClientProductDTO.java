@@ -2,10 +2,11 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ClientProductDTO
+public class ClientProductDTO implements Serializable
 {
     private Long id;
     private Date createTime;

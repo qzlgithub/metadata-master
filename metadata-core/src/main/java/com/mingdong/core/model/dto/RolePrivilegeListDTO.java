@@ -5,14 +5,14 @@ import com.mingdong.core.constant.RestResult;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductClientInfoListDTO implements Serializable
+public class RolePrivilegeListDTO implements Serializable
 {
-    private List<ProductClientInfoDTO> dataList;
+    private List<RolePrivilegeDTO> dataList;
     private int total;
     private int pages;
     private ResultDTO resultDTO;
 
-    public ProductClientInfoListDTO()
+    public RolePrivilegeListDTO()
     {
         this.resultDTO = new ResultDTO();
         resultDTO.setResult(RestResult.SUCCESS);
@@ -23,12 +23,12 @@ public class ProductClientInfoListDTO implements Serializable
         return resultDTO;
     }
 
-    public List<ProductClientInfoDTO> getDataList()
+    public List<RolePrivilegeDTO> getDataList()
     {
         return dataList;
     }
 
-    public void setDataList(List<ProductClientInfoDTO> dataList)
+    public void setDataList(List<RolePrivilegeDTO> dataList)
     {
         this.dataList = dataList;
     }

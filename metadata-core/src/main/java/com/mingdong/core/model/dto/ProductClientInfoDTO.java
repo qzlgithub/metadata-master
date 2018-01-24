@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductClientInfoDTO
+public class ProductClientInfoDTO implements Serializable
 {
     private Long productId;
     private String productName;

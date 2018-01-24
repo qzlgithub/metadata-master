@@ -2,9 +2,10 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClientUserListDTO
+public class ClientUserListDTO implements Serializable
 {
     private List<ClientUserDTO> dataList;
     private ResultDTO resultDTO;

@@ -2,9 +2,10 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClientOperateInfoListDTO
+public class ClientOperateInfoListDTO implements Serializable
 {
     private List<ClientOperateInfoDTO> dataList;
     private int total;

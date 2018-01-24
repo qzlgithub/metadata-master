@@ -1,8 +1,9 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ClientOperateInfoDTO
+public class ClientOperateInfoDTO implements Serializable
 {
     private Date operateTime;
     private Integer type;

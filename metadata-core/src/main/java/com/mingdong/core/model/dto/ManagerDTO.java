@@ -2,9 +2,10 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ManagerDTO
+public class ManagerDTO implements Serializable
 {
     private Long id;
     private Date createTime;

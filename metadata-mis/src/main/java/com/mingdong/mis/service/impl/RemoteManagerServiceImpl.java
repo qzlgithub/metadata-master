@@ -1,27 +1,47 @@
 package com.mingdong.mis.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.github.pagehelper.PageHelper;
+import com.mingdong.common.model.Page;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleListDTO;
+import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.Manager;
+import com.mingdong.mis.domain.entity.Role;
+import com.mingdong.mis.domain.entity.RolePrivilege;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
+import com.mingdong.mis.domain.mapper.RoleMapper;
+import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RemoteManagerServiceImpl implements RemoteManagerService
 {
     @Resource
     private ManagerMapper managerMapper;
+    @Resource
+    private RoleMapper roleMapper;
+    @Resource
+    private RolePrivilegeMapper rolePrivilegeMapper;
 
     @Override
     public ManagerDTO getManagerById(Long managerId)
     {
         ManagerDTO managerDTO = new ManagerDTO();
         Manager byId = managerMapper.findById(managerId);
-        if(byId == null){
+        if(byId == null)
+        {
             return null;
         }
-        EntityUtils.copyProperties(byId,managerDTO);
+        EntityUtils.copyProperties(byId, managerDTO);
         return managerDTO;
     }
 
@@ -30,10 +50,142 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     {
         ManagerDTO managerDTO = new ManagerDTO();
         Manager byId = managerMapper.findByUsername(username);
-        if(byId == null){
+        if(byId == null)
+        {
             return null;
         }
-        EntityUtils.copyProperties(byId,managerDTO);
+        EntityUtils.copyProperties(byId, managerDTO);
         return managerDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateManagerSkipNull(ManagerDTO managerUpd)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Manager manager = new Manager();
+        EntityUtils.copyProperties(managerUpd, manager);
+        managerMapper.updateSkipNull(manager);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public RoleListDTO getRoleList(Page page)
+    {
+        RoleListDTO roleListDTO = new RoleListDTO();
+        List<RoleDTO> dataList = new ArrayList<>();
+        roleListDTO.setDataList(dataList);
+        RoleDTO roleDTO;
+        if(page == null)
+        {
+            List<Role> roleList = roleMapper.getList();
+            if(CollectionUtils.isNotEmpty(roleList))
+            {
+                for(Role item : roleList)
+                {
+                    roleDTO = new RoleDTO();
+                    EntityUtils.copyProperties(item, roleDTO);
+                    dataList.add(roleDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = roleMapper.countAll();
+            int pages = page.getTotalPage(total);
+            roleListDTO.setPages(pages);
+            roleListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<Role> roleList = roleMapper.getList();
+                if(CollectionUtils.isNotEmpty(roleList))
+                {
+                    for(Role item : roleList)
+                    {
+                        roleDTO = new RoleDTO();
+                        dataList.add(roleDTO);
+                        EntityUtils.copyProperties(item, roleDTO);
+                    }
+                }
+            }
+        }
+        return roleListDTO;
+    }
+
+    @Override
+    public RoleDTO getRoleByName(String name)
+    {
+        RoleDTO roleDTO = new RoleDTO();
+        Role role = roleMapper.findByName(name);
+        if(role == null){
+            return null;
+        }
+        EntityUtils.copyProperties(role,roleDTO);
+        return roleDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveRolePrivilegeList(List<RolePrivilegeDTO> toAddList)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        List<RolePrivilege> dataList = new ArrayList<>();
+        RolePrivilege rolePrivilege;
+        for(RolePrivilegeDTO item : toAddList){
+            rolePrivilege = new RolePrivilege();
+            EntityUtils.copyProperties(item,rolePrivilege);
+            dataList.add(rolePrivilege);
+        }
+        rolePrivilegeMapper.addList(dataList);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveRole(RoleDTO roleDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = new Role();
+        EntityUtils.copyProperties(roleDTO, role);
+        roleMapper.add(role);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public RoleDTO getRoleById(Long roleId)
+    {
+        RoleDTO roleDTO = new RoleDTO();
+        Role role = roleMapper.findById(roleId);
+        if(role == null){
+            return null;
+        }
+        EntityUtils.copyProperties(role,roleDTO);
+        return roleDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO deleteRolePrivilegeByRoleId(Long roleId)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        rolePrivilegeMapper.deleteByRole(roleId);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateRoleSkipNull(RoleDTO roleDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = new Role();
+        EntityUtils.copyProperties(roleDTO,role);
+        roleMapper.updateSkipNull(role);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 }

@@ -1,30 +1,15 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.constant.RestResult;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
-public class ClientAccountDTO implements Serializable
+public class RoleDTO implements Serializable
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private BigDecimal balance;
+    private String name;
     private Integer enabled;
-    private ResultDTO resultDTO;
-
-    public ClientAccountDTO()
-    {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
-    }
-
-    public ResultDTO getResultDTO()
-    {
-        return resultDTO;
-    }
 
     public Long getId()
     {
@@ -56,14 +41,14 @@ public class ClientAccountDTO implements Serializable
         this.updateTime = updateTime;
     }
 
-    public BigDecimal getBalance()
+    public String getName()
     {
-        return balance;
+        return name;
     }
 
-    public void setBalance(BigDecimal balance)
+    public void setName(String name)
     {
-        this.balance = balance;
+        this.name = name;
     }
 
     public Integer getEnabled()
