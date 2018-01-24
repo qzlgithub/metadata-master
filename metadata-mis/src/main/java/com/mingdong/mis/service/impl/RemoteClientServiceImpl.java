@@ -227,6 +227,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientDTO clientDTO = new ClientDTO();
         Client byId = clientMapper.findById(clientId);
+        if(byId == null){
+            return null;
+        }
         EntityUtils.copyProperties(byId, clientDTO);
         return clientDTO;
     }
@@ -238,13 +241,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
-            return userDTO;
+            return null;
         }
-        else
-        {
-            EntityUtils.copyProperties(user,userDTO);
-        }
+        EntityUtils.copyProperties(user,userDTO);
         return userDTO;
     }
 
@@ -265,6 +264,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientAccountDTO clientAccountDTO = new ClientAccountDTO();
         ClientAccount byId = clientAccountMapper.findById(clientId);
+        if(byId == null){
+            return null;
+        }
         EntityUtils.copyProperties(byId, clientAccountDTO);
         return clientAccountDTO;
     }
@@ -310,6 +312,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
         DictIndustry byId = dictIndustryMapper.findById(industryId);
+        if(byId == null){
+            return null;
+        }
         EntityUtils.copyProperties(byId, dictIndustryDTO);
         return dictIndustryDTO;
     }
@@ -420,6 +425,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientProductDTO clientProductDTO = new ClientProductDTO();
         ClientProduct cp = clientProductMapper.findById(clientProductId);
+        if(cp == null){
+            return null;
+        }
         EntityUtils.copyProperties(cp,clientProductDTO);
         return clientProductDTO;
     }
@@ -441,6 +449,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ClientProductDTO clientProductDTO = new ClientProductDTO();
         ClientProduct cp = clientProductMapper.findByClientAndProduct(clientId, productId);
+        if(cp == null){
+            return null;
+        }
         EntityUtils.copyProperties(cp,clientProductDTO);
         return clientProductDTO;
     }
@@ -759,6 +770,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public UserDTO getAccountByUserId(Long clientUserId)
     {
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
+        if(clientUser == null){
+            return null;
+        }
         UserDTO userDTO = new UserDTO();
         TransformDTO.userToDTO(clientUser, userDTO);
         return userDTO;

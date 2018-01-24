@@ -320,6 +320,9 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
         ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
+        if(pro == null){
+            return null;
+        }
         EntityUtils.copyProperties(pro, productRechargeDTO);
         return productRechargeDTO;
     }
@@ -341,6 +344,9 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
         ProductRecharge pr = productRechargeMapper.findById(id);
+        if(pr == null){
+            return null;
+        }
         EntityUtils.copyProperties(pr, productRechargeDTO);
         return productRechargeDTO;
     }
