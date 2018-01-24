@@ -1,21 +1,9 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.github.pagehelper.PageHelper;
+import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.domain.entity.Manager;
-import com.mingdong.bop.domain.entity.ManagerInfo;
-import com.mingdong.bop.domain.entity.ManagerPrivilege;
-import com.mingdong.bop.domain.entity.Privilege;
-import com.mingdong.bop.domain.entity.Role;
-import com.mingdong.bop.domain.entity.RolePrivilege;
-import com.mingdong.bop.domain.mapper.ManagerInfoMapper;
-import com.mingdong.bop.domain.mapper.ManagerMapper;
-import com.mingdong.bop.domain.mapper.ManagerPrivilegeMapper;
-import com.mingdong.bop.domain.mapper.PrivilegeMapper;
-import com.mingdong.bop.domain.mapper.RoleMapper;
-import com.mingdong.bop.domain.mapper.RolePrivilegeMapper;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.constant.DateFormat;
@@ -23,10 +11,21 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.bop.component.Param;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.ManagerInfoDTO;
+import com.mingdong.core.model.dto.ManagerInfoListDTO;
+import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
+import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
+import com.mingdong.core.model.dto.PrivilegeDTO;
+import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleListDTO;
+import com.mingdong.core.model.dto.RolePrivilegeDTO;
+import com.mingdong.core.model.dto.RolePrivilegeListDTO;
+import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,24 +47,14 @@ public class ManagerServiceImpl implements ManagerService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private ManagerMapper managerMapper;
-    @Resource
-    private ManagerInfoMapper managerInfoMapper;
-    @Resource
-    private RoleMapper roleMapper;
-    @Resource
-    private PrivilegeMapper privilegeMapper;
-    @Resource
-    private RolePrivilegeMapper rolePrivilegeMapper;
-    @Resource
-    private ManagerPrivilegeMapper managerPrivilegeMapper;
+    private RemoteManagerService remoteManagerService;
 
     @Override
     @Transactional
     public void userLogin(String username, String password, String sessionId, BLResp resp)
     {
         // 1. 验证登陆信息正确性
-        Manager manager = managerMapper.findByUsername(username);
+        ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
         if(manager == null)
         {
             resp.result(RestResult.ACCOUNT_NOT_EXIST);
@@ -93,11 +82,11 @@ public class ManagerServiceImpl implements ManagerService
         }
         Date current = new Date();
         // 更新用户的sessionId
-        Manager managerUpd = new Manager();
+        ManagerDTO managerUpd = new ManagerDTO();
         managerUpd.setId(manager.getId());
         managerUpd.setUpdateTime(current);
         managerUpd.setSessionId(sessionId);
-        managerMapper.updateSkipNull(managerUpd);
+        remoteManagerService.updateManagerSkipNull(managerUpd);
         // 缓存用户的账号及权限
         List<String> privilegeList = getManagerPrivilegeIdList(manager.getId());
         ManagerSession ms = new ManagerSession();
@@ -140,7 +129,7 @@ public class ManagerServiceImpl implements ManagerService
     @Transactional
     public void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp)
     {
-        Manager manager = managerMapper.findById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -154,29 +143,23 @@ public class ManagerServiceImpl implements ManagerService
         String newPassword = Md5Utils.encrypt(newPwd);
         if(!manager.getPassword().equals(newPassword))
         {
-            manager = new Manager();
+            manager = new ManagerDTO();
             manager.setId(managerId);
             manager.setUpdateTime(new Date());
             manager.setPassword(newPassword);
-            managerMapper.updateSkipNull(manager);
+            remoteManagerService.updateManagerSkipNull(manager);
         }
     }
 
     @Override
     public void getRoleList(Page page, BLResp resp)
     {
-        int total = roleMapper.countAll();
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        RoleListDTO roleListDTO = remoteManagerService.getRoleList(page);
+        List<RoleDTO> roleList = roleListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(roleList.size());
+        if(CollectionUtils.isNotEmpty(roleList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<Role> roleList = roleMapper.getList();
-            List<Map<String, Object>> list = new ArrayList<>(roleList.size());
-            for(Role role : roleList)
+            for(RoleDTO role : roleList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, role.getId() + "");
@@ -185,15 +168,15 @@ public class ManagerServiceImpl implements ManagerService
                 map.put(Field.ENABLED, role.getEnabled());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
     }
 
     @Override
     @Transactional
     public void addRole(String name, List<Long> privilege, BLResp resp)
     {
-        Role role = roleMapper.findByName(name);
+        RoleDTO role = remoteManagerService.getRoleByName(name);
         if(role != null)
         {
             resp.result(RestResult.ROLE_NAME_EXIST);
@@ -202,78 +185,72 @@ public class ManagerServiceImpl implements ManagerService
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
         Date current = new Date();
         Long roleId = IDUtils.getRoleId(param.getNodeId());
-        List<RolePrivilege> toAddList = new ArrayList<>();
+        List<RolePrivilegeDTO> toAddList = new ArrayList<>();
         for(Long id : allPrivilegeIdList)
         {
-            RolePrivilege rp = new RolePrivilege();
+            RolePrivilegeDTO rp = new RolePrivilegeDTO();
             rp.setCreateTime(current);
             rp.setUpdateTime(current);
-            rp.setRoleId(roleId);
             rp.setPrivilegeId(id);
+            rp.setRoleId(roleId);
             toAddList.add(rp);
         }
-        rolePrivilegeMapper.addList(toAddList);
-        role = new Role();
+        remoteManagerService.saveRolePrivilegeList(toAddList);
+        role = new RoleDTO();
         role.setId(roleId);
         role.setCreateTime(current);
         role.setUpdateTime(current);
         role.setName(name);
         role.setEnabled(TrueOrFalse.TRUE);
-        roleMapper.add(role);
+        remoteManagerService.saveRole(role);
     }
 
     @Override
     @Transactional
     public void editRole(Long roleId, String roleName, List<Long> privilege, BLResp resp)
     {
-        Role role = roleMapper.findById(roleId);
+        RoleDTO role = remoteManagerService.getRoleById(roleId);
         if(role == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        Role org = roleMapper.findByName(roleName);
+        RoleDTO org = remoteManagerService.getRoleByName(roleName);
         if(org != null && !roleId.equals(org.getId()))
         {
             resp.result(RestResult.ROLE_NAME_EXIST);
             return;
         }
-        rolePrivilegeMapper.deleteByRole(roleId);
+        remoteManagerService.deleteRolePrivilegeByRoleId(roleId);
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
         Date current = new Date();
-        List<RolePrivilege> toAddList = new ArrayList<>();
+        List<RolePrivilegeDTO> toAddList = new ArrayList<>();
         for(Long id : allPrivilegeIdList)
         {
-            RolePrivilege rp = new RolePrivilege();
+            RolePrivilegeDTO rp = new RolePrivilegeDTO();
             rp.setCreateTime(current);
             rp.setUpdateTime(current);
             rp.setRoleId(roleId);
             rp.setPrivilegeId(id);
             toAddList.add(rp);
         }
-        rolePrivilegeMapper.addList(toAddList);
-        Role roleUpd = new Role();
+        remoteManagerService.saveRolePrivilegeList(toAddList);
+        RoleDTO roleUpd = new RoleDTO();
         roleUpd.setId(roleId);
         roleUpd.setUpdateTime(new Date());
         roleUpd.setName(roleName);
-        roleMapper.updateSkipNull(roleUpd);
+        remoteManagerService.updateRoleSkipNull(roleUpd);
     }
 
     @Override
     public void getManagerList(Long roleId, Integer enabled, Page page, BLResp resp)
     {
-        int total = managerMapper.countBy(roleId, enabled);
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleId, enabled, page);
+        List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(managerList.size());
+        if(CollectionUtils.isNotEmpty(managerList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ManagerInfo> managerList = managerInfoMapper.getListBy(roleId, enabled);
-            List<Map<String, Object>> list = new ArrayList<>(managerList.size());
-            for(ManagerInfo manager : managerList)
+            for(ManagerInfoDTO manager : managerList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, manager.getManagerId() + "");
@@ -285,28 +262,32 @@ public class ManagerServiceImpl implements ManagerService
                 map.put(Field.ENABLED, manager.getEnabled());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
     }
 
     @Override
     public void getManagerInfo(Long managerId, BLResp resp)
     {
-        Manager manager = managerMapper.findById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        List<ManagerPrivilege> dataList = managerPrivilegeMapper.getPrivilegeIdListByManager(managerId);
+        ManagerPrivilegeListDTO managerPrivilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(
+                managerId);
+
+        List<ManagerPrivilegeDTO> dataList = managerPrivilegeListDTO.getDataList();
         List<String> privilege = new ArrayList<>(dataList.size());
-        for(ManagerPrivilege mp : dataList)
+        for(ManagerPrivilegeDTO mp : dataList)
         {
             privilege.add(mp.getPrivilegeId() + "");
         }
-        List<Role> roleDataList = roleMapper.getList();
+        RoleListDTO roleListDTO = remoteManagerService.getRoleList(null);
+        List<RoleDTO> roleDataList = roleListDTO.getDataList();
         List<Map<String, Object>> roleList = new ArrayList<>(roleDataList.size());
-        for(Role role : roleDataList)
+        for(RoleDTO role : roleDataList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.ID, role.getId() + "");
@@ -329,7 +310,7 @@ public class ManagerServiceImpl implements ManagerService
     public void addManager(String username, String password, String name, String phone, String qq, Long roleId,
             Integer enabled, List<Long> privilege, BLResp resp)
     {
-        Manager manager = managerMapper.findByUsername(username);
+        ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
         if(manager != null)
         {
             resp.result(RestResult.USERNAME_EXIST);
@@ -338,18 +319,18 @@ public class ManagerServiceImpl implements ManagerService
         Date current = new Date();
         Long managerId = IDUtils.getManagerId(param.getNodeId());
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        List<ManagerPrivilege> list = new ArrayList<>();
+        List<ManagerPrivilegeDTO> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
-            ManagerPrivilege mp = new ManagerPrivilege();
-            mp.setCreateTime(current);
+            ManagerPrivilegeDTO mp = new ManagerPrivilegeDTO();
             mp.setUpdateTime(current);
+            mp.setCreateTime(current);
             mp.setManagerId(managerId);
             mp.setPrivilegeId(privilegeId);
             list.add(mp);
         }
-        managerPrivilegeMapper.addList(list);
-        manager = new Manager();
+        remoteManagerService.saveManagerPrivilegeList(list);
+        manager = new ManagerDTO();
         manager.setId(managerId);
         manager.setCreateTime(current);
         manager.setUpdateTime(current);
@@ -360,7 +341,8 @@ public class ManagerServiceImpl implements ManagerService
         manager.setQq(qq);
         manager.setRoleId(roleId);
         manager.setEnabled(enabled);
-        managerMapper.add(manager);
+        remoteManagerService.saveManager(manager);
+
     }
 
     @Override
@@ -368,7 +350,7 @@ public class ManagerServiceImpl implements ManagerService
     public void editManager(Long managerId, Long roleId, String name, String phone, String qq, Integer enabled,
             List<Long> privilege, BLResp resp)
     {
-        Manager manager = managerMapper.findById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -376,18 +358,18 @@ public class ManagerServiceImpl implements ManagerService
         }
         Date current = new Date();
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        managerPrivilegeMapper.deleteByManager(managerId);
-        List<ManagerPrivilege> list = new ArrayList<>();
+        remoteManagerService.deleteManagerPrivilegeByManagerId(managerId);
+        List<ManagerPrivilegeDTO> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
-            ManagerPrivilege mp = new ManagerPrivilege();
+            ManagerPrivilegeDTO mp = new ManagerPrivilegeDTO();
             mp.setCreateTime(current);
             mp.setUpdateTime(current);
             mp.setManagerId(managerId);
             mp.setPrivilegeId(privilegeId);
             list.add(mp);
         }
-        managerPrivilegeMapper.addList(list);
+        remoteManagerService.saveManagerPrivilegeList(list);
         //更新账号信息
         manager.setUpdateTime(current);
         manager.setRoleId(roleId);
@@ -395,19 +377,20 @@ public class ManagerServiceImpl implements ManagerService
         manager.setPhone(phone);
         manager.setQq(qq);
         manager.setEnabled(enabled);
-        managerMapper.updateById(manager);
+        remoteManagerService.updateManagerById(manager);
     }
 
     @Override
     public Map<String, Object> getRolePrivilegeDetail(Long roleId)
     {
         Map<String, Object> map = new HashMap<>();
-        Role role = roleMapper.findById(roleId);
+        RoleDTO role = remoteManagerService.getRoleById(roleId);
         map.put(Field.ROLE_ID, roleId + "");
         map.put(Field.ROLE_NAME, role != null ? role.getName() : "");
-        List<RolePrivilege> dataList = rolePrivilegeMapper.getByRole(roleId);
+        RolePrivilegeListDTO rolePrivilegeListByRoleId = remoteManagerService.getRolePrivilegeListByRoleId(roleId);
+        List<RolePrivilegeDTO> dataList = rolePrivilegeListByRoleId.getDataList();
         List<String> list = new ArrayList<>();
-        for(RolePrivilege rp : dataList)
+        for(RolePrivilegeDTO rp : dataList)
         {
             list.add(rp.getPrivilegeId() + "");
         }
@@ -418,9 +401,10 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public List<String> getRolePrivilege(Long roleId)
     {
-        List<RolePrivilege> dataList = rolePrivilegeMapper.getByRole(roleId);
+        RolePrivilegeListDTO rolePrivilegeListByRoleId = remoteManagerService.getRolePrivilegeListByRoleId(roleId);
+        List<RolePrivilegeDTO> dataList = rolePrivilegeListByRoleId.getDataList();
         List<String> list = new ArrayList<>();
-        for(RolePrivilege rp : dataList)
+        for(RolePrivilegeDTO rp : dataList)
         {
             list.add(rp.getPrivilegeId() + "");
         }
@@ -431,7 +415,7 @@ public class ManagerServiceImpl implements ManagerService
     @Transactional
     public void changeStatus(Long roleId, BLResp resp)
     {
-        Role role = roleMapper.findById(roleId);
+        RoleDTO role = remoteManagerService.getRoleById(roleId);
         if(role == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -442,18 +426,18 @@ public class ManagerServiceImpl implements ManagerService
         {
             enabled = TrueOrFalse.FALSE;
         }
-        Role roleUpd = new Role();
+        RoleDTO roleUpd = new RoleDTO();
         roleUpd.setId(roleId);
         roleUpd.setUpdateTime(new Date());
         roleUpd.setEnabled(enabled);
-        roleMapper.updateSkipNull(roleUpd);
+        remoteManagerService.updateRoleSkipNull(roleUpd);
         resp.addData(Field.ENABLED, enabled);
     }
 
     @Override
     public void changeManagerStatus(Long managerId, BLResp resp)
     {
-        Manager manager = managerMapper.findById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -464,18 +448,18 @@ public class ManagerServiceImpl implements ManagerService
         {
             enabled = TrueOrFalse.FALSE;
         }
-        Manager managerUpd = new Manager();
+        ManagerDTO managerUpd = new ManagerDTO();
         managerUpd.setId(managerId);
         managerUpd.setUpdateTime(new Date());
         managerUpd.setEnabled(enabled);
-        managerMapper.updateSkipNull(managerUpd);
+        remoteManagerService.updateManagerSkipNull(managerUpd);
         resp.addData(Field.ENABLED, enabled);
     }
 
     @Override
     public void checkIfRoleNameExist(String name, BLResp resp)
     {
-        Role role = roleMapper.findByName(name);
+        RoleDTO role = remoteManagerService.getRoleByName(name);
         resp.addData(Field.EXIST, role == null ? 0 : 1);
     }
 
@@ -495,8 +479,11 @@ public class ManagerServiceImpl implements ManagerService
         Set<Long> set = new HashSet<>();
         if(!CollectionUtils.isEmpty(privilege))
         {
-            List<Privilege> privilegeList = privilegeMapper.getParentIdByChildId(new ArrayList<>(privilege));
-            for(Privilege p : privilegeList)
+            PrivilegeListDTO privilegeListByIds = remoteManagerService.getPrivilegeListByIds(
+                    new ArrayList<>(privilege));
+
+            List<PrivilegeDTO> privilegeList = privilegeListByIds.getDataList();
+            for(PrivilegeDTO p : privilegeList)
             {
                 if(p.getParentId() != null && p.getParentId() != 0)
                 {
@@ -510,9 +497,11 @@ public class ManagerServiceImpl implements ManagerService
 
     private List<String> getManagerPrivilegeIdList(Long managerId)
     {
-        List<ManagerPrivilege> dataList = managerPrivilegeMapper.getPrivilegeIdListByManager(managerId);
+        ManagerPrivilegeListDTO managerPrivilegeListByManagerId =
+                remoteManagerService.getManagerPrivilegeListByManagerId(managerId);
+        List<ManagerPrivilegeDTO> dataList = managerPrivilegeListByManagerId.getDataList();
         List<String> list = new ArrayList<>(dataList.size());
-        for(ManagerPrivilege mp : dataList)
+        for(ManagerPrivilegeDTO mp : dataList)
         {
             list.add(mp.getPrivilegeId() + "");
         }
@@ -521,9 +510,10 @@ public class ManagerServiceImpl implements ManagerService
 
     private String getRoleTopPrivilege(Long roleId)
     {
-        List<Privilege> privilegeList = privilegeMapper.getTopListByRole(roleId);
+        PrivilegeListDTO privilegeListDTO = remoteManagerService.getPrivilegeTopListByRoleId(roleId);
+        List<PrivilegeDTO> privilegeList = privilegeListDTO.getDataList();
         StringBuilder sb = new StringBuilder();
-        for(Privilege p : privilegeList)
+        for(PrivilegeDTO p : privilegeList)
         {
             sb.append(",").append(p.getName());
         }

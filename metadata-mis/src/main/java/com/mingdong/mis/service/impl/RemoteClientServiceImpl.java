@@ -101,16 +101,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public UserDTO findByUsername(String username)
     {
         ClientUser user = clientUserMapper.findByUsername(username);
+        if(user == null){
+            return null;
+        }
         UserDTO userDTO = new UserDTO();
-        if(user == null)
-        {
-            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
-            return userDTO;
-        }
-        else
-        {
-            TransformDTO.userToDTO(user,userDTO);
-        }
+        TransformDTO.userToDTO(user,userDTO);
         return userDTO;
     }
 

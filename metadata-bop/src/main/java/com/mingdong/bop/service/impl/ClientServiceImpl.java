@@ -79,7 +79,7 @@ public class ClientServiceImpl implements ClientService
     public void checkIfUsernameExist(String username, BLResp resp)
     {
         UserDTO user = remoteClientService.findByUsername(username);
-        resp.addData(Field.EXIST, user.getResultDTO().getResult() != RestResult.SUCCESS ? 0 : 1);
+        resp.addData(Field.EXIST, user == null ? 0 : 1);
     }
 
     @Override
@@ -782,6 +782,6 @@ public class ClientServiceImpl implements ClientService
     public void checkIfContractExist(String contractNo, BLResp resp)
     {
         ProductRechargeDTO pr = remoteProductService.getProductRechargeByContractNo(contractNo);
-        resp.addData(Field.EXIST, pr.getResultDTO().getResult() != RestResult.SUCCESS ? 0 : 1);
+        resp.addData(Field.EXIST, pr == null ? 0 : 1);
     }
 }
