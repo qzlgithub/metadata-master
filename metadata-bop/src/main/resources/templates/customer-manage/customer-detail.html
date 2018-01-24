@@ -64,8 +64,12 @@
                     <div class="w30 fl">
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">账号状态：</label>
-                            <div class="layui-input-block col2 show-log"
-                                 th:text="${userEnabled} eq '1' ? '启用':'禁用'"></div>
+                            <div class="layui-input-block col2">
+                                <i th:text="${userEnabled} eq '1' ? '启用':'禁用'"></i>
+                                <span class="log-button show-log cp ml10">操作记录</span>
+                            </div>
+
+
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">公司名称：</label>
@@ -88,6 +92,26 @@
                             <div class="layui-input-block col2" th:text="${registerDate}"></div>
                         </div>
                     </div>
+                </div>
+                <div class="m30 clearfix">
+                    <table class="layui-table w60">
+                        <thead>
+                        <tr>
+                            <th class="position-r">联系人<i class="chang-icon"></i></th>
+                            <th>职位</th>
+                            <th>联系电话</th>
+                            <th>联系邮箱</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>张三<i class="chang-icon"></i></td>
+                            <td>技术总监</td>
+                            <td>135781245</td>
+                            <td>zhangsan@qq.com</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="form-title mb20">产品服务</div>
 
@@ -445,11 +469,6 @@
 </div>
 
 <!--提示层 end-->
-
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
