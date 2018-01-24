@@ -20,16 +20,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a><cite>客户管理</cite></a>
         </div>
-        <!-- 面包屑 end -->
         <div class="p20">
-            <!--搜索-->
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
                     公司名称：<input type="text" id="corpName" name="corpName" placeholder="请输入" class="search-input"/>
@@ -64,18 +60,18 @@
                     <button type="button" class="check-button" onclick="searchClientList()">查询</button>
                 </li>
             </ul>
-            <!--搜索 end-->
-            <!--功能操作-->
             <div class="clearfix mt20">
-                批量操作
-                <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)">冻结账号</a>
-                <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)">解冻账号</a>
-                <a href="#" class="cz-button mr10" onclick="batchDeleted()">停用</a>
-                <a href="#" class="cz-button" onclick="batchResetPwd()">重置密码</a>
-                <a th:href="@{/client/addition.html}" class="fr add-button">添加客户</a>
+                <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)"
+                   th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
+                <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)"
+                   th:if="${#lists.contains(i_privilege, '31105')}">解冻账号</a>
+                <a href="#" class="cz-button mr10" onclick="batchDeleted()"
+                   th:if="${#lists.contains(i_privilege, '31106')}">停用</a>
+                <a href="#" class="cz-button" onclick="batchResetPwd()"
+                   th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
+                <a th:href="@{/client/addition.html}" class="fr add-button"
+                   th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
             </div>
-            <!--功能操作 end-->
-            <!--table-->
             <div class="layui-form">
                 <table class="layui-table">
                     <thead>
@@ -96,7 +92,7 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody id="dataBody"><!-- TODO data here --></tbody>
+                    <tbody id="dataBody"></tbody>
                 </table>
             </div>
             <!--table end-->
@@ -136,14 +132,12 @@
                     </div>
                 </div>
             </div>
-            <!--page end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--子账号  提示层-->
 <div id="child-account" class="modal">
     <div class="layui-layer-title" id="child-account-title">子账号列表</div>
     <div class="mb30">
@@ -203,9 +197,7 @@
         </div>
     </div>
 </div>
-<!-- 冻结/解冻账号提示层 -->
 
-<!-- 修改密码  提示层 -->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
