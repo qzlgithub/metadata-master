@@ -616,7 +616,7 @@ body {
 /************date*************/
 .date_selector, .date_selector *{width: auto;height: auto;border: none;background: none;margin: 0;padding: 0;text-align: left;text-decoration: none;}
 
-.date_selector{background:#fbfbfb;border: 1px solid #ccc;padding: 10px;margin:0;margin-top:-1px;position: absolute;z-index:100000;display:none;border-radius: 3px;box-shadow: 0 0 5px #aaa;box-shadow:0 2px 2px #ccc; width:220px;}
+.date_selector{background:#fbfbfb;border: 1px solid #ccc;padding: 10px;margin:0;margin-top:-1px;position: absolute;z-index:100000;display:none;border-radius: 3px;box-shadow: 0 0 5px #aaa;box-shadow:0 2px 2px #ccc; width:255px; position: fixed;}
 
 .date_selector_ieframe{position: absolute;z-index: 99999;display: none;}
 
@@ -640,7 +640,7 @@ body {
 
 .date_selector .next{right: 0;}
 
-.date_selector table{border-spacing: 0;border-collapse: collapse;clear: both;margin: 0; width:220px;}
+.date_selector table{border-spacing: 0;border-collapse: collapse;clear: both;margin: 0; width:255px;}
 
 .date_selector th, .date_selector td{width: 2.5em;height: 2em;padding: 0 !important;text-align: center !important;color: #666;font-weight: normal;}
 
@@ -657,4 +657,4 @@ body {
 .date_selector td.selected{background:#2b579a;color: #fff;font-weight: bold;}
 
 .date_selector td.selectable_day:hover, .date_selector td.selectable_day.hover{background:#5985c7;color: #fff;}
-.date-input{background: #fff;border: 1px solid #e6e6e6;font-size: 14px;color:#333;padding: 7px;border-radius: 3px;}
+.date-input{background: #fff;border: 1px solid #e6e6e6;font-size: 14px;color:#333;border-radius: 2px; height: 37px; padding-left: 5px;}
