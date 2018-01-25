@@ -339,7 +339,7 @@ public class ProductServiceImpl implements ProductService
     public BLResp getProductInfoList(Page page)
     {
         BLResp resp = BLResp.build();
-        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(page);
+        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(null, page);
         resp.addData(Field.TOTAL, productInfoListDTO.getTotal());
         resp.addData(Field.PAGES, productInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
@@ -363,5 +363,30 @@ public class ProductServiceImpl implements ProductService
         }
         resp.addData(Field.LIST, list);
         return resp;
+    }
+
+
+    @Override
+    public List<Map<String, Object>> getProductInfoListMap(Integer enabled)
+    {
+        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(enabled,null);
+        List<ProductInfoDTO> productInfoList = productInfoListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
+        if(CollectionUtils.isNotEmpty(productInfoList))
+        {
+            for(ProductInfoDTO productInfo : productInfoList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, productInfo.getId() + "");
+                map.put(Field.CODE, productInfo.getCode());
+                map.put(Field.NAME, productInfo.getName());
+                map.put(Field.REMARK, productInfo.getRemark());
+                map.put(Field.ENABLED, productInfo.getEnabled() + "");
+                map.put(Field.COST_AMT, productInfo.getCostAmt());
+                map.put(Field.TYPE_NAME, productInfo.getTypeName());
+                list.add(map);
+            }
+        }
+        return list;
     }
 }

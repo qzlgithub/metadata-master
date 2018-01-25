@@ -395,7 +395,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductRechargeInfoListDTO getproductrechargeInfoList(Long clientId, Long productId, Date startTime,
+    public ProductRechargeInfoListDTO getProductRechargeInfoList(Long clientId, Long productId, Date startTime,
             Date endTime, Page page)
     {
         ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
@@ -624,7 +624,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductInfoListDTO getProductInfoList(Page page)
+    public ProductInfoListDTO getProductInfoList(Integer enabled, Page page)
     {
         ProductInfoListDTO productInfoListDTO = new ProductInfoListDTO();
         List<ProductInfoDTO> dataList = new ArrayList<>();
@@ -632,7 +632,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         ProductInfoDTO productInfoDTO;
         if(page == null)
         {
-            List<ProductInfo> productInfoList = productInfoMapper.getAll();
+            List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
             if(CollectionUtils.isNotEmpty(productInfoList))
             {
                 for(ProductInfo item : productInfoList)
@@ -645,14 +645,14 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         else
         {
-            int total = productInfoMapper.countAll();
+            int total = productInfoMapper.countByEnabled(enabled);
             int pages = page.getTotalPage(total);
             productInfoListDTO.setPages(pages);
             productInfoListDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductInfo> productInfoList = productInfoMapper.getAll();
+                List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
                 if(CollectionUtils.isNotEmpty(productInfoList))
                 {
                     for(ProductInfo item : productInfoList)

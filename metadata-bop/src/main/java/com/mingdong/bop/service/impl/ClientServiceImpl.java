@@ -759,7 +759,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(10).setCellValue("合同编号");
         row.createCell(11).setCellValue("备注");
 
-        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getproductrechargeInfoList(clientId,
+        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getProductRechargeInfoList(clientId,
                 productId, startTime, endTime, new Page(1, 1000));
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoDTOS.getDataList();
         CellStyle timeStyle = wb.createCellStyle();

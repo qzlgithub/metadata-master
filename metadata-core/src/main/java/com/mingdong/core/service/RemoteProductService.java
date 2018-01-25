@@ -49,7 +49,7 @@ public interface RemoteProductService
 
     BigDecimal sumAmountByClientProduct(Long clientProductId);
 
-    ProductRechargeInfoListDTO getproductrechargeInfoList(Long clientId, Long productId, Date startTime, Date endTime,
+    ProductRechargeInfoListDTO getProductRechargeInfoList(Long clientId, Long productId, Date startTime, Date endTime,
             Page page);
 
     DictProductTypeDTO getDictProductTypeByCode(String code);
@@ -80,6 +80,6 @@ public interface RemoteProductService
 
     ProductListDTO getProductListByStatus(Integer enabled);
 
-    ProductInfoListDTO getProductInfoList(Page page);
+    ProductInfoListDTO getProductInfoList(Integer enabled, Page page);
 
 }

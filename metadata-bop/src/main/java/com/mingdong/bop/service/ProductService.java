@@ -34,4 +34,6 @@ public interface ProductService
     List<Map<String, Object>> getProductTypeDict(Integer enabled);
 
     BLResp getProductInfoList(Page page);
+
+    List<Map<String, Object>> getProductInfoListMap(Integer enabled);
 }

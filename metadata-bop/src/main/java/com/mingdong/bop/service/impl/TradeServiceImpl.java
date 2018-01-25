@@ -132,7 +132,7 @@ public class TradeServiceImpl implements TradeService
     public void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page,
             BLResp resp)
     {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getproductrechargeInfoList(
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoList(
                 clientId, productId, startTime, endTime, page);
         resp.addData(Field.TOTAL, productRechargeInfoListDTO.getTotal());
         resp.addData(Field.PAGES, productRechargeInfoListDTO.getPages());

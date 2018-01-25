@@ -77,6 +77,11 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("finance/recharge-list");
         view.addAllObjects(RequestThread.getMap());
+        List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
+        List<Map<String, Object>> productInfoListMap = productService.getProductInfoListMap(TrueOrFalse.TRUE);
+
+
         return view;
     }
 
