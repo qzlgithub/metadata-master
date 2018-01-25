@@ -1,19 +1,15 @@
 package com.mingdong.bop.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.domain.entity.ProductRechargeInfo;
-import com.mingdong.bop.domain.mapper.ClientAccountTradeMapper;
-import com.mingdong.bop.domain.mapper.CorpProdRechargeMapper;
-import com.mingdong.bop.domain.mapper.CorpTradeInfoMapper;
-import com.mingdong.bop.domain.mapper.ProdRechargeInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeMapper;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.service.RemoteProductService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,17 +23,7 @@ import java.util.Map;
 public class TradeServiceImpl implements TradeService
 {
     @Resource
-    private ClientAccountTradeMapper clientAccountTradeMapper;
-    @Resource
-    private CorpTradeInfoMapper corpTradeInfoMapper;
-    @Resource
-    private CorpProdRechargeMapper corpProdRechargeMapper;
-    @Resource
-    private ProdRechargeInfoMapper prodRechargeInfoMapper;
-    @Resource
-    private ProductRechargeInfoMapper productRechargeInfoMapper;
-    @Resource
-    private ProductRechargeMapper productRechargeMapper;
+    private RemoteProductService remoteProductService;
 
     @Override
     public BLResp testList2(Long productId, Long clientId, Date time, Page page)
@@ -146,19 +132,17 @@ public class TradeServiceImpl implements TradeService
     public void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page,
             BLResp resp)
     {
-        int total = productRechargeMapper.countBy(clientId, productId, startTime, endTime);
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getproductrechargeInfoList(
+                clientId, productId, startTime, endTime, page);
+        resp.addData(Field.TOTAL, productRechargeInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, productRechargeInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(dataList.size());
+        if(CollectionUtils.isNotEmpty(dataList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, startTime,
-                    endTime);
-            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeInfo pri : dataList)
+            for(ProductRechargeInfoDTO pri : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.TRADE_AT, DateUtils.format(pri.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -175,8 +159,8 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.REMARK, pri.getRemark());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
     }
 
 }

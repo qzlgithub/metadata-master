@@ -1,14 +1,31 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.constant.RestResult;
+
 import java.io.Serializable;
+import java.util.Date;
 
 public class DictProductTypeDTO implements Serializable
 {
     private Long id;
+    private Date createTime;
+    private Date updateTime;
     private String code;
     private String name;
     private String remark;
     private Integer enabled;
+    private ResultDTO resultDTO;
+
+    public DictProductTypeDTO()
+    {
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public ResultDTO getResultDTO()
+    {
+        return resultDTO;
+    }
 
     public Long getId()
     {
@@ -18,6 +35,26 @@ public class DictProductTypeDTO implements Serializable
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public Date getCreateTime()
+    {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime)
+    {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime()
+    {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime)
+    {
+        this.updateTime = updateTime;
     }
 
     public String getCode()
@@ -59,4 +96,5 @@ public class DictProductTypeDTO implements Serializable
     {
         this.enabled = enabled;
     }
+
 }

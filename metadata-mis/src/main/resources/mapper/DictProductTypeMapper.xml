@@ -95,4 +95,13 @@
             <if test="enabled != null">`enabled` = #{enabled}</if>
         </where>
     </select>
+
+    <select id="countListByStatus" parameterType="Integer" resultType="Integer">
+        select
+        count(`id`)
+        from `dict_product_type`
+        <where>
+            <if test="enabled != null">`enabled` = #{enabled}</if>
+        </where>
+    </select>
 </mapper>

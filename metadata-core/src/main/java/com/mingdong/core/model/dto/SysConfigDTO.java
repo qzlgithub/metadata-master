@@ -1,17 +1,29 @@
-package com.mingdong.bop.domain.entity;
+package com.mingdong.core.model.dto;
 
+import com.mingdong.core.constant.RestResult;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class DictIndustry
+public class SysConfigDTO implements Serializable
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private String code;
     private String name;
-    private Integer seqNo;
-    private Long parentId;
-    private Integer enabled;
+    private String value;
+    private ResultDTO resultDTO;
+
+    public SysConfigDTO()
+    {
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public ResultDTO getResultDTO()
+    {
+        return resultDTO;
+    }
 
     public Long getId()
     {
@@ -43,16 +55,6 @@ public class DictIndustry
         this.updateTime = updateTime;
     }
 
-    public String getCode()
-    {
-        return code;
-    }
-
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
-
     public String getName()
     {
         return name;
@@ -63,35 +65,13 @@ public class DictIndustry
         this.name = name;
     }
 
-    public Integer getSeqNo()
+    public String getValue()
     {
-        return seqNo;
+        return value;
     }
 
-    public void setSeqNo(Integer seqNo)
+    public void setValue(String value)
     {
-        this.seqNo = seqNo;
-    }
-
-    public Long getParentId()
-    {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId)
-    {
-        this.parentId = parentId;
-    }
-
-    public Integer getEnabled()
-    {
-        return enabled;
-    }
-
-    public void setEnabled(Integer enabled)
-    {
-        this.enabled = enabled;
+        this.value = value;
     }
 }
-
-

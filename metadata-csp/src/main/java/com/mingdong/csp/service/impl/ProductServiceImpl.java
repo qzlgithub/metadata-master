@@ -15,8 +15,8 @@ import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
@@ -51,8 +51,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
-                page);
+        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
+                fromDate, toDate, page);
         if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(productRecListDTO.getResultDTO().getResult());
@@ -101,8 +101,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品服务余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId, fromDate, toDate,
-                page);
+        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
+                fromDate, toDate, page);
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -133,8 +133,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
-                page);
+        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
+                toDate, page);
         if(productReqListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(productReqListDTO.getResultDTO().getResult());
@@ -179,8 +179,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(3).setCellValue("3");
         row.createCell(4).setCellValue("4");
         Page page = new Page(1, 1000);
-        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
-                page);
+        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
+                toDate, page);
         List<ProductRequestInfoDTO> dataList = productReqListDTO.getProductRequestDTOList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -319,8 +319,8 @@ public class ProductServiceImpl implements ProductService
     {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map;
-        DictProductTypeListDTO dictProductTypeListDTO = productApi.getDictProductTypeList(enabled);
-        List<DictProductTypeDTO> dataDTOList = dictProductTypeListDTO.getDictProductTypeDTOList();
+        DictProductTypeListDTO dictProductTypeListDTO = productApi.getDictProductTypeList(enabled, null);
+        List<DictProductTypeDTO> dataDTOList = dictProductTypeListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataDTOList))
         {
             for(DictProductTypeDTO item : dataDTOList)

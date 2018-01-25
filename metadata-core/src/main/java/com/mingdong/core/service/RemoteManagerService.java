@@ -5,7 +5,6 @@ import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
-import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
@@ -50,7 +49,4 @@ public interface RemoteManagerService
 
     RolePrivilegeListDTO getRolePrivilegeListByRoleId(Long roleId);
 
-    PrivilegeListDTO getPrivilegeListByIds(List<Long> ids);
-
-    PrivilegeListDTO getPrivilegeTopListByRoleId(Long roleId);
 }

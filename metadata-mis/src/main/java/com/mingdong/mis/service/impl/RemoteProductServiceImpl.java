@@ -14,30 +14,37 @@ import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
+import com.mingdong.core.model.dto.ProductInfoDTO;
+import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
+import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.DictProductType;
+import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
+import com.mingdong.mis.domain.entity.ProductInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
+import com.mingdong.mis.domain.entity.ProductTxt;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.DictProductTypeMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
+import com.mingdong.mis.domain.mapper.ProductInfoMapper;
+import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mingdong.mis.domain.mapper.ProductTxtMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -48,8 +55,6 @@ import java.util.List;
 
 public class RemoteProductServiceImpl implements RemoteProductService
 {
-    private static Logger logger = LoggerFactory.getLogger(RemoteProductServiceImpl.class);
-
     @Resource
     private ProductRechargeMapper productRechargeMapper;
     @Resource
@@ -64,6 +69,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private ClientProductMapper clientProductMapper;
     @Resource
     private DictProductTypeMapper dictProductTypeMapper;
+    @Resource
+    private ProductMapper productMapper;
+    @Resource
+    private ProductTxtMapper productTxtMapper;
+    @Resource
+    private ProductInfoMapper productInfoMapper;
 
     @Override
     public ProductRechargeInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
@@ -107,7 +118,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 }
             }
         }
-        productRecListDTO.getResultDTO().setResult(RestResult.SUCCESS);
         return productRecListDTO;
     }
 
@@ -276,20 +286,45 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public DictProductTypeListDTO getDictProductTypeList(Integer enabled)
+    public DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page)
     {
+
         DictProductTypeListDTO dictProductTypeListDTO = new DictProductTypeListDTO();
         List<DictProductTypeDTO> dataDtoList = new ArrayList<>();
-        dictProductTypeListDTO.setDictProductTypeDTOList(dataDtoList);
-        List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
-        if(CollectionUtils.isNotEmpty(dataList))
+        dictProductTypeListDTO.setDataList(dataDtoList);
+        DictProductTypeDTO dictProductTypeDTO;
+        if(page == null)
         {
-            DictProductTypeDTO dictProductTypeDTO;
-            for(DictProductType item : dataList)
+            List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
+            if(CollectionUtils.isNotEmpty(dataList))
             {
-                dictProductTypeDTO = new DictProductTypeDTO();
-                dataDtoList.add(dictProductTypeDTO);
-                EntityUtils.copyProperties(item, dictProductTypeDTO);
+                for(DictProductType item : dataList)
+                {
+                    dictProductTypeDTO = new DictProductTypeDTO();
+                    dataDtoList.add(dictProductTypeDTO);
+                    EntityUtils.copyProperties(item, dictProductTypeDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = dictProductTypeMapper.countListByStatus(enabled);
+            int pages = page.getTotalPage(total);
+            dictProductTypeListDTO.setTotal(total);
+            dictProductTypeListDTO.setPages(pages);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
+                if(CollectionUtils.isNotEmpty(dataList))
+                {
+                    for(DictProductType item : dataList)
+                    {
+                        dictProductTypeDTO = new DictProductTypeDTO();
+                        EntityUtils.copyProperties(item, dictProductTypeDTO);
+                        dataDtoList.add(dictProductTypeDTO);
+                    }
+                }
             }
         }
         return dictProductTypeListDTO;
@@ -320,7 +355,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
         ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
-        if(pro == null){
+        if(pro == null)
+        {
             return null;
         }
         EntityUtils.copyProperties(pro, productRechargeDTO);
@@ -344,7 +380,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
         ProductRecharge pr = productRechargeMapper.findById(id);
-        if(pr == null){
+        if(pr == null)
+        {
             return null;
         }
         EntityUtils.copyProperties(pr, productRechargeDTO);
@@ -402,6 +439,232 @@ public class RemoteProductServiceImpl implements RemoteProductService
             }
         }
         return productRechargeInfoListDTO;
+    }
+
+    @Override
+    public DictProductTypeDTO getDictProductTypeByCode(String code)
+    {
+        DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
+        DictProductType type = dictProductTypeMapper.findByCode(code);
+        if(type == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(type, dictProductTypeDTO);
+        return dictProductTypeDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveDictProductType(DictProductTypeDTO dictProductTypeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictProductType type = new DictProductType();
+        EntityUtils.copyProperties(dictProductTypeDTO, type);
+        dictProductTypeMapper.add(type);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public DictProductTypeDTO getDictProductTypeById(Long id)
+    {
+        DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
+        DictProductType type = dictProductTypeMapper.findById(id);
+        if(type == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(type, dictProductTypeDTO);
+        return dictProductTypeDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateDictProductTypeSkipNull(DictProductTypeDTO dictProductTypeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictProductType type = new DictProductType();
+        EntityUtils.copyProperties(dictProductTypeDTO, type);
+        dictProductTypeMapper.updateSkipNull(type);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public ProductDTO getProductById(Long productId)
+    {
+        ProductDTO productDTO = new ProductDTO();
+        Product product = productMapper.findById(productId);
+        if(product == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(product, productDTO);
+        return productDTO;
+    }
+
+    @Override
+    public ProductTxtDTO getProductTxtById(Long productId)
+    {
+        ProductTxtDTO productTxtDTO = new ProductTxtDTO();
+        ProductTxt productTxt = productTxtMapper.findById(productId);
+        if(productTxt == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(productTxt, productTxtDTO);
+        return productTxtDTO;
+    }
+
+    @Override
+    public ProductDTO getProductByCode(String code)
+    {
+        ProductDTO productDTO = new ProductDTO();
+        Product product = productMapper.findByCode(code);
+        if(product == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(product, productDTO);
+        return productDTO;
+    }
+
+    @Override
+    public ProductDTO getProductByName(String name)
+    {
+        ProductDTO productDTO = new ProductDTO();
+        Product product = productMapper.findByName(name);
+        if(product == null)
+        {
+            return null;
+        }
+        EntityUtils.copyProperties(product, productDTO);
+        return productDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveProductTxt(ProductTxtDTO productTxtDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ProductTxt productTxt = new ProductTxt();
+        EntityUtils.copyProperties(productTxtDTO, productTxt);
+        productTxtMapper.add(productTxt);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO saveProduct(ProductDTO productTxtDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Product product = new Product();
+        EntityUtils.copyProperties(productTxtDTO, product);
+        productMapper.add(product);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateProductById(ProductDTO productDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Product product = new Product();
+        EntityUtils.copyProperties(productDTO, product);
+        productMapper.updateById(product);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateProductTxtById(ProductTxtDTO productTxtDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        ProductTxt productTxt = new ProductTxt();
+        EntityUtils.copyProperties(productTxtDTO, productTxt);
+        productTxtMapper.updateById(productTxt);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateDictProductTypeById(DictProductTypeDTO dictProductTypeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictProductType dictProductType = new DictProductType();
+        EntityUtils.copyProperties(dictProductTypeDTO, dictProductType);
+        dictProductTypeMapper.updateById(dictProductType);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    public ProductListDTO getProductListByStatus(Integer enabled)
+    {
+        ProductListDTO productListDTO = new ProductListDTO();
+        List<ProductDTO> dataList = new ArrayList<>();
+        productListDTO.setDataList(dataList);
+        ProductDTO productDTO;
+        List<Product> productList = productMapper.getListByStatus(enabled);
+        if(CollectionUtils.isNotEmpty(productList))
+        {
+            for(Product item : productList)
+            {
+                productDTO = new ProductDTO();
+                EntityUtils.copyProperties(item, productDTO);
+                dataList.add(productDTO);
+            }
+        }
+        return productListDTO;
+    }
+
+    @Override
+    public ProductInfoListDTO getProductInfoList(Page page)
+    {
+        ProductInfoListDTO productInfoListDTO = new ProductInfoListDTO();
+        List<ProductInfoDTO> dataList = new ArrayList<>();
+        productInfoListDTO.setDataList(dataList);
+        ProductInfoDTO productInfoDTO;
+        if(page == null)
+        {
+            List<ProductInfo> productInfoList = productInfoMapper.getAll();
+            if(CollectionUtils.isNotEmpty(productInfoList))
+            {
+                for(ProductInfo item : productInfoList)
+                {
+                    productInfoDTO = new ProductInfoDTO();
+                    EntityUtils.copyProperties(item, productInfoDTO);
+                    dataList.add(productInfoDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = productInfoMapper.countAll();
+            int pages = page.getTotalPage(total);
+            productInfoListDTO.setPages(pages);
+            productInfoListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ProductInfo> productInfoList = productInfoMapper.getAll();
+                if(CollectionUtils.isNotEmpty(productInfoList))
+                {
+                    for(ProductInfo item : productInfoList)
+                    {
+                        productInfoDTO = new ProductInfoDTO();
+                        dataList.add(productInfoDTO);
+                        EntityUtils.copyProperties(item, productInfoDTO);
+                    }
+                }
+            }
+        }
+        return productInfoListDTO;
     }
 
 }

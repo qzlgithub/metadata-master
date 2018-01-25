@@ -1,28 +1,28 @@
 package com.mingdong.bop.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.core.constant.SysParam;
-import com.mingdong.bop.domain.entity.DictIndustry;
-import com.mingdong.bop.domain.entity.DictProductType;
-import com.mingdong.bop.domain.entity.DictRechargeType;
-import com.mingdong.bop.domain.entity.Privilege;
-import com.mingdong.bop.domain.entity.Role;
-import com.mingdong.bop.domain.entity.SysConfig;
-import com.mingdong.bop.domain.mapper.DictIndustryMapper;
-import com.mingdong.bop.domain.mapper.DictProductTypeMapper;
-import com.mingdong.bop.domain.mapper.DictRechargeTypeMapper;
-import com.mingdong.bop.domain.mapper.PrivilegeMapper;
-import com.mingdong.bop.domain.mapper.RoleMapper;
-import com.mingdong.bop.domain.mapper.SysConfigMapper;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.DictIndustryDTO;
+import com.mingdong.core.model.dto.DictIndustryListDTO;
+import com.mingdong.core.model.dto.DictProductTypeDTO;
+import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.DictRechargeTypeDTO;
+import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.PrivilegeDTO;
+import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleListDTO;
+import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.RemoteSystemService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,24 +39,17 @@ public class SystemServiceImpl implements SystemService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private DictProductTypeMapper dictProductTypeMapper;
+    private RemoteSystemService remoteSystemService;
     @Resource
-    private RoleMapper roleMapper;
-    @Resource
-    private DictIndustryMapper dictIndustryMapper;
-    @Resource
-    private DictRechargeTypeMapper dictRechargeTypeMapper;
-    @Resource
-    private SysConfigMapper sysConfigMapper;
-    @Resource
-    private PrivilegeMapper privilegeMapper;
+    private RemoteProductService remoteProductService;
 
     @Override
     public List<Map<String, Object>> getValidRole()
     {
-        List<Role> roleList = roleMapper.getByStatus(TrueOrFalse.TRUE);
+        RoleListDTO roleListByStatus = remoteSystemService.getRoleListByStatus(TrueOrFalse.TRUE);
+        List<RoleDTO> roleList = roleListByStatus.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(Role role : roleList)
+        for(RoleDTO role : roleList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.ROLE_ID, role.getId() + "");
@@ -69,7 +62,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public boolean checkIndustryCodeExist(String code)
     {
-        DictIndustry industry = dictIndustryMapper.findByCode(code.toUpperCase());
+        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code.toUpperCase());
         return industry != null;
     }
 
@@ -78,7 +71,7 @@ public class SystemServiceImpl implements SystemService
     {
         Map<String, String> map = new HashMap<>();
         map.put(Field.ID, id + "");
-        DictIndustry industry = dictIndustryMapper.findById(id);
+        DictIndustryDTO industry = remoteSystemService.getDictIndustryById(id);
         if(industry != null)
         {
             map.put(Field.CODE, industry.getCode());
@@ -90,9 +83,11 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Map<String, Object>> getIndustryMap(Long parentId, Integer enabled)
     {
-        List<DictIndustry> dataList = dictIndustryMapper.getByParentAndStatus(parentId, enabled);
+        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(parentId,
+                enabled);
+        List<DictIndustryDTO> dataList = dictIndustryListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(DictIndustry industry : dataList)
+        for(DictIndustryDTO industry : dataList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.ID, industry.getId() + "");
@@ -106,14 +101,14 @@ public class SystemServiceImpl implements SystemService
     @Transactional
     public void addIndustryType(Long id, String code, String name, BLResp resp)
     {
-        DictIndustry industry = dictIndustryMapper.findByCode(code);
+        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code);
         if(industry != null)
         {
             resp.result(RestResult.INDUSTRY_CODE_EXIST);
             return;
         }
         Date current = new Date();
-        industry = new DictIndustry();
+        industry = new DictIndustryDTO();
         industry.setCreateTime(current);
         industry.setUpdateTime(current);
         industry.setCode(code.toUpperCase());
@@ -121,52 +116,52 @@ public class SystemServiceImpl implements SystemService
         industry.setSeqNo(1); // TODO 序号
         industry.setParentId(id != null ? id : 0L);
         industry.setEnabled(TrueOrFalse.TRUE);
-        dictIndustryMapper.add(industry);
+        remoteSystemService.saveDictIndustry(industry);
     }
 
     @Override
     @Transactional
     public void editIndustryInfo(Long id, String code, String name, BLResp resp)
     {
-        DictIndustry industry = dictIndustryMapper.findByCode(code);
+        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code);
         if(industry != null && !id.equals(industry.getId()))
         {
             resp.result(RestResult.INDUSTRY_CODE_EXIST);
             return;
         }
-        industry = dictIndustryMapper.findById(id);
+        industry = remoteSystemService.getDictIndustryById(id);
         if(industry == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        industry = new DictIndustry();
+        industry = new DictIndustryDTO();
         industry.setId(id);
         industry.setUpdateTime(new Date());
         industry.setCode(code);
         industry.setName(name);
-        dictIndustryMapper.updateSkipNull(industry);
+        remoteSystemService.updateDictIndustrySkipNull(industry);
     }
 
     @Override
     @Transactional
     public void dropRechargeType(Long rechargeTypeId, BLResp resp)
     {
-        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
+        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
         if(rechargeType != null && TrueOrFalse.FALSE.equals(rechargeType.getDeleted()))
         {
-            rechargeType = new DictRechargeType();
+            rechargeType = new DictRechargeTypeDTO();
             rechargeType.setId(rechargeTypeId);
             rechargeType.setUpdateTime(new Date());
             rechargeType.setDeleted(TrueOrFalse.TRUE);
-            dictRechargeTypeMapper.updateSkipNull(rechargeType);
+            remoteSystemService.updateDictRechargeTypeSkipNull(rechargeType);
         }
     }
 
     @Override
     public void getRechargeTypeInfo(Long rechargeTypeId, BLResp resp)
     {
-        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
+        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
         resp.addData(Field.ID, rechargeTypeId + "");
         if(rechargeType != null)
         {
@@ -178,19 +173,19 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void updateRechargeType(Long id, String name, String remark, BLResp resp)
     {
-        DictRechargeType org = dictRechargeTypeMapper.findByName(name);
+        DictRechargeTypeDTO org = remoteSystemService.getDictRechargeTypeByName(name);
         if(org != null && !id.equals(org.getId()))
         {
             resp.result(RestResult.CATEGORY_NAME_EXIST);
             return;
         }
-        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(id);
+        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(id);
         if(rechargeType != null)
         {
             rechargeType.setUpdateTime(new Date());
             rechargeType.setName(name);
             rechargeType.setRemark(remark);
-            dictRechargeTypeMapper.updateById(rechargeType);
+            remoteSystemService.updateDictRechargeTypeById(rechargeType);
         }
 
     }
@@ -198,9 +193,10 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Map<String, Object>> getProductListMap()
     {
-        List<DictProductType> dataList = dictProductTypeMapper.getAll();
+        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
+        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(DictProductType dictProductType : dataList)
+        for(DictProductTypeDTO dictProductType : dataList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.TYPE_NAME, dictProductType.getName());
@@ -214,8 +210,9 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getHierarchyIndustry()//TODO HERE
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(0L, null);
-        for(DictIndustry di : parentList)
+        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(0L, null);
+        List<DictIndustryDTO> parentList = dictIndustryListDTO.getDataList();
+        for(DictIndustryDTO di : parentList)
         {
             Map<String, Object> p = new HashMap<>();
             p.put(Field.ID, di.getId() + "");
@@ -223,8 +220,10 @@ public class SystemServiceImpl implements SystemService
             p.put(Field.NAME, di.getName());
             p.put(Field.ENABLED, di.getEnabled());
             List<Map<String, Object>> subList = new ArrayList<>();
-            List<DictIndustry> childList = dictIndustryMapper.getByParentAndStatus(di.getId(), null);
-            for(DictIndustry ind : childList)
+            DictIndustryListDTO dictIndustryListByParentAndStatus =
+                    remoteSystemService.getDictIndustryListByParentAndStatus(di.getId(), null);
+            List<DictIndustryDTO> childList = dictIndustryListByParentAndStatus.getDataList();
+            for(DictIndustryDTO ind : childList)
             {
                 Map<String, Object> c = new HashMap<>();
                 c.put(Field.ID, ind.getId() + "");
@@ -243,16 +242,19 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getHierarchyPrivilege()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<Privilege> parentList = privilegeMapper.getByParentAndStatus(0L, null);
-        for(Privilege pl : parentList)
+        PrivilegeListDTO privilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(0L, null);
+        List<PrivilegeDTO> parentList = privilegeListDTO.getDataList();
+        for(PrivilegeDTO pl : parentList)
         {
             Map<String, Object> p = new HashMap<>();
             p.put(Field.NAME, pl.getName());
             p.put(Field.ID, pl.getId() + "");
             p.put(Field.ENABLED, pl.getEnabled());
             List<Map<String, Object>> subList = new ArrayList<>();
-            List<Privilege> childList = privilegeMapper.getByParentAndStatus(pl.getId(), null);
-            for(Privilege ple : childList)
+            PrivilegeListDTO childPrivilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(pl.getId(),
+                    null);
+            List<PrivilegeDTO> childList = childPrivilegeListDTO.getDataList();
+            for(PrivilegeDTO ple : childList)
             {
                 Map<String, Object> c = new HashMap<>();
                 c.put(Field.NAME, ple.getName());
@@ -260,8 +262,10 @@ public class SystemServiceImpl implements SystemService
                 c.put(Field.ENABLED, ple.getEnabled());
                 //subList.add(c);
                 List<Map<String, Object>> thrList = new ArrayList<>();
-                List<Privilege> thrChildList = privilegeMapper.getByParentAndStatus(ple.getId(), null);
-                for(Privilege pleg : thrChildList)
+                PrivilegeListDTO thrChildPrivilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(
+                        ple.getId(), null);
+                List<PrivilegeDTO> thrChildList = thrChildPrivilegeListDTO.getDataList();
+                for(PrivilegeDTO pleg : thrChildList)
                 {
                     Map<String, Object> cc = new HashMap<>();
                     cc.put(Field.NAME, pleg.getName());
@@ -284,7 +288,7 @@ public class SystemServiceImpl implements SystemService
     {
         Map<String, Object> privilegeMap = new HashMap<>();
         privilegeMap.put(Field.ID, id + "");
-        Privilege privilege = privilegeMapper.findById(id);
+        PrivilegeDTO privilege = remoteSystemService.getPrivilegeById(id);
         if(privilege != null)
         {
             privilegeMap.put(Field.NAME, privilege.getName());
@@ -296,7 +300,7 @@ public class SystemServiceImpl implements SystemService
     @Transactional
     public void editPrivilegeInfo(Long privilegeId, String name, BLResp resp)
     {
-        Privilege privilege = privilegeMapper.findById(privilegeId);
+        PrivilegeDTO privilege = remoteSystemService.getPrivilegeById(privilegeId);
         if(privilege == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -306,11 +310,11 @@ public class SystemServiceImpl implements SystemService
         {
             return;
         }
-        privilege = new Privilege();
+        privilege = new PrivilegeDTO();
         privilege.setId(privilegeId);
         privilege.setUpdateTime(new Date());
         privilege.setName(name);
-        privilegeMapper.updateSkipNull(privilege);
+        remoteSystemService.updatePrivilegeSkipNull(privilege);
         cacheSystemModule();
     }
 
@@ -318,8 +322,10 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getRechargeDict()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<DictRechargeType> rechargeTypeList = dictRechargeTypeMapper.getByStatus(TrueOrFalse.TRUE);
-        for(DictRechargeType drt : rechargeTypeList)
+        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(
+                TrueOrFalse.TRUE, null);
+        List<DictRechargeTypeDTO> rechargeTypeList = dictRechargeTypeListDTO.getDataList();
+        for(DictRechargeTypeDTO drt : rechargeTypeList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.ID, drt.getId() + "");
@@ -332,12 +338,14 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void getRechargeTypeList(Integer enabled, BLResp resp)
     {
-        List<DictRechargeType> dataList = dictRechargeTypeMapper.getByStatus(enabled);
+        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(enabled,
+                null);
+        List<DictRechargeTypeDTO> dataList = dictRechargeTypeListDTO.getDataList();
         resp.addData(Field.TOTAL, dataList.size());
-        if(!CollectionUtils.isEmpty(dataList))
+        if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(DictRechargeType type : dataList)
+            for(DictRechargeTypeDTO type : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, type.getId() + "");
@@ -357,9 +365,10 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getRechargeTypeList(Integer enabled, Integer deleted)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<DictRechargeType> dataList = dictRechargeTypeMapper.getListByStatus(enabled, deleted);
-
-        for(DictRechargeType o : dataList)
+        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(enabled,
+                deleted);
+        List<DictRechargeTypeDTO> dataList = dictRechargeTypeListDTO.getDataList();
+        for(DictRechargeTypeDTO o : dataList)
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ID, o.getId() + "");
@@ -375,7 +384,7 @@ public class SystemServiceImpl implements SystemService
     @Transactional
     public void addRechargeType(String name, String remark, BLResp resp)
     {
-        DictRechargeType type = dictRechargeTypeMapper.findByName(name);
+        DictRechargeTypeDTO type = remoteSystemService.getDictRechargeTypeByName(name);
         if(type != null && TrueOrFalse.FALSE.equals(type.getDeleted()))
         {
             resp.result(RestResult.CATEGORY_NAME_EXIST);
@@ -384,34 +393,36 @@ public class SystemServiceImpl implements SystemService
         Date current = new Date();
         if(type == null)
         {
-            type = new DictRechargeType();
+            type = new DictRechargeTypeDTO();
             type.setCreateTime(current);
             type.setUpdateTime(current);
             type.setName(name);
             type.setRemark(remark);
             type.setEnabled(TrueOrFalse.TRUE);
             type.setDeleted(TrueOrFalse.FALSE);
-            dictRechargeTypeMapper.add(type);
+            remoteSystemService.saveDictRechargeType(type);
         }
         else
         {
             type.setUpdateTime(current);
             type.setRemark(remark);
             type.setDeleted(TrueOrFalse.FALSE);
-            dictRechargeTypeMapper.updateById(type);
+            remoteSystemService.updateDictRechargeTypeById(type);
         }
     }
 
     @Override
     public List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled)
     {
-        List<DictIndustry> dataList = dictIndustryMapper.getByParentAndStatus(parentId, enabled);
+        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(parentId,
+                enabled);
+        List<DictIndustryDTO> dataList = dictIndustryListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(DictIndustry parent : dataList)
+        for(DictIndustryDTO parent : dataList)
         {
             Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, parent.getId() + "");
             map.put(Field.NAME, parent.getName());
+            map.put(Field.ID, parent.getId() + "");
             list.add(map);
         }
         return list;
@@ -421,18 +432,16 @@ public class SystemServiceImpl implements SystemService
     public BLResp getIndustryList(Page page)
     {
         BLResp resp = BLResp.build();
-        int total = dictIndustryMapper.countAll();
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        DictIndustryListDTO dictIndustryList = remoteSystemService.getDictIndustryList(page);
+        resp.addData(Field.TOTAL, dictIndustryList.getTotal());
+        resp.addData(Field.PAGES, dictIndustryList.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        List<DictIndustryDTO> industryList = dictIndustryList.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(industryList.size());
+        if(CollectionUtils.isNotEmpty(industryList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<DictIndustry> industryList = dictIndustryMapper.getAll();
-            List<Map<String, Object>> list = new ArrayList<>(industryList.size());
-            for(DictIndustry industry : industryList)
+            for(DictIndustryDTO industry : industryList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, industry.getId() + "");
@@ -441,10 +450,8 @@ public class SystemServiceImpl implements SystemService
                 map.put(Field.NAME, industry.getName());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
-
         }
-
+        resp.addData(Field.LIST, list);
         return resp;
     }
 
@@ -454,24 +461,27 @@ public class SystemServiceImpl implements SystemService
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> parentIndustryList = new ArrayList<>();
         List<Map<String, Object>> industryList = new ArrayList<>();
-        List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(0L, TrueOrFalse.TRUE);
-        for(DictIndustry industry : parentList)
+        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(0L,
+                TrueOrFalse.TRUE);
+        List<DictIndustryDTO> parentList = dictIndustryListDTO.getDataList();
+        for(DictIndustryDTO industry : parentList)
         {
             Map<String, Object> pm = new HashMap<>();
+            parentIndustryList.add(pm);
             pm.put(Field.ID, industry.getId() + "");
             pm.put(Field.NAME, industry.getName());
-            parentIndustryList.add(pm);
         }
         if(!CollectionUtils.isEmpty(parentList))
         {
-            List<DictIndustry> childList = dictIndustryMapper.getByParentAndStatus(parentList.get(0).getId(),
-                    TrueOrFalse.TRUE);
-            for(DictIndustry industry : childList)
+            DictIndustryListDTO childDictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(
+                    parentList.get(0).getId(), TrueOrFalse.TRUE);
+            List<DictIndustryDTO> childList = childDictIndustryListDTO.getDataList();
+            for(DictIndustryDTO industry : childList)
             {
                 Map<String, Object> pm = new HashMap<>();
-                pm.put(Field.ID, industry.getId() + "");
                 pm.put(Field.NAME, industry.getName());
                 industryList.add(pm);
+                pm.put(Field.ID, industry.getId() + "");
             }
         }
         map.put(Field.PARENT_INDUSTRY, parentIndustryList);
@@ -495,8 +505,9 @@ public class SystemServiceImpl implements SystemService
     public Map<String, String> cacheSystemModule()
     {
         Map<String, String> map = new HashMap<>();
-        List<Privilege> privilegeList = privilegeMapper.getListByLevel(3);
-        for(Privilege p : privilegeList)
+        PrivilegeListDTO privilegeByLevel = remoteSystemService.getPrivilegeByLevel(3);
+        List<PrivilegeDTO> privilegeList = privilegeByLevel.getDataList();
+        for(PrivilegeDTO p : privilegeList)
         {
             map.put("m" + p.getId(), p.getName());
         }
@@ -509,37 +520,37 @@ public class SystemServiceImpl implements SystemService
     public void setGlobalSetting(Integer subUserQty, String serviceQQ, BLResp resp)
     {
         Date current = new Date();
-        SysConfig sysConfig = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        SysConfigDTO sysConfig = remoteSystemService.getSysConfigByName(SysParam.CLIENT_SUB_USER_QTY);
         if(sysConfig == null)
         {
-            sysConfig = new SysConfig();
+            sysConfig = new SysConfigDTO();
             sysConfig.setCreateTime(current);
             sysConfig.setUpdateTime(current);
             sysConfig.setName(SysParam.CLIENT_SUB_USER_QTY);
             sysConfig.setValue(subUserQty + "");
-            sysConfigMapper.add(sysConfig);
+            remoteSystemService.saveSysConfig(sysConfig);
         }
         else if(!sysConfig.getValue().equals(subUserQty + ""))
         {
             sysConfig.setUpdateTime(current);
             sysConfig.setValue(subUserQty + "");
-            sysConfigMapper.updateById(sysConfig);
+            remoteSystemService.updateSysConfigById(sysConfig);
         }
-        sysConfig = sysConfigMapper.findByName(SysParam.SERVICE_QQ);
+        sysConfig = remoteSystemService.getSysConfigByName(SysParam.SERVICE_QQ);
         if(sysConfig == null)
         {
-            sysConfig = new SysConfig();
+            sysConfig = new SysConfigDTO();
             sysConfig.setCreateTime(current);
             sysConfig.setUpdateTime(current);
             sysConfig.setName(SysParam.SERVICE_QQ);
             sysConfig.setValue(serviceQQ);
-            sysConfigMapper.add(sysConfig);
+            remoteSystemService.saveSysConfig(sysConfig);
         }
         else if(!sysConfig.getValue().equals(serviceQQ))
         {
             sysConfig.setUpdateTime(current);
             sysConfig.setValue(serviceQQ);
-            sysConfigMapper.updateById(sysConfig);
+            remoteSystemService.updateSysConfigById(sysConfig);
         }
     }
 
@@ -547,14 +558,14 @@ public class SystemServiceImpl implements SystemService
     @Transactional
     public void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp)
     {
-        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
+        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
         if(rechargeType != null && !enabled.equals(rechargeType.getEnabled()))
         {
-            DictRechargeType updObj = new DictRechargeType();
+            DictRechargeTypeDTO updObj = new DictRechargeTypeDTO();
             updObj.setId(rechargeTypeId);
             updObj.setUpdateTime(new Date());
             updObj.setEnabled(enabled);
-            dictRechargeTypeMapper.updateSkipNull(updObj);
+            remoteSystemService.updateDictRechargeTypeSkipNull(updObj);
         }
     }
 
@@ -562,47 +573,25 @@ public class SystemServiceImpl implements SystemService
     @Transactional
     public void changeIndustryStatus(Long industryTypeId, Integer enabled)
     {
-        DictIndustry di = dictIndustryMapper.findById(industryTypeId);
+        DictIndustryDTO di = remoteSystemService.getDictIndustryById(industryTypeId);
         if(di != null && !enabled.equals(di.getEnabled()))
         {
-            DictIndustry updObj = new DictIndustry();
+            DictIndustryDTO updObj = new DictIndustryDTO();
             updObj.setId(industryTypeId);
             updObj.setUpdateTime(new Date());
             updObj.setEnabled(enabled);
-            dictIndustryMapper.updateSkipNull(updObj);
+            remoteSystemService.updateDictIndustrySkipNull(updObj);
         }
     }
 
     private void cacheAllIndustryData()
     {
-        List<DictIndustry> dataList = dictIndustryMapper.getIndustryInfo();
-        for(DictIndustry industry : dataList)
+        DictIndustryListDTO dictIndustryInfoList = remoteSystemService.getDictIndustryInfoList();
+        List<DictIndustryDTO> dataList = dictIndustryInfoList.getDataList();
+        for(DictIndustryDTO industry : dataList)
         {
             redisDao.saveIndustryInfo(industry.getId(), industry.getName());
         }
     }
 
-    private List<Map<String, Object>> getSubModule(Long parentModuleId)
-    {
-        List<Privilege> moduleList = privilegeMapper.getByParent(parentModuleId);
-        if(!CollectionUtils.isEmpty(moduleList))
-        {
-            List<Map<String, Object>> list = new ArrayList<>();
-            for(Privilege module : moduleList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.MODULE_ID, module.getId() + "");
-                map.put(Field.NAME, module.getName());
-                map.put(Field.ENABLED, module.getEnabled());
-                List<Map<String, Object>> subList = getSubModule(module.getId());
-                if(subList != null)
-                {
-                    map.put(Field.SUB_MODULE, list);
-                }
-                list.add(map);
-            }
-            return list;
-        }
-        return null;
-    }
 }

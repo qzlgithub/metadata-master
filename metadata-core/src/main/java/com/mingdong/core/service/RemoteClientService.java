@@ -11,8 +11,6 @@ import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
-import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -51,9 +49,7 @@ public interface RemoteClientService
 
     ClientInfoListDTO getSimilarCorpByName(String corpName, Long clientId);
 
-    DictIndustryListDTO getByParentAndStatus(Long parentIndustryId, Integer trueOrFalse);
-
-    ClientInfoListDTO getClinetInfoListBy(Integer enabled, String account, String cropName, String shortName,
+    ClientInfoListDTO getClientInfoListBy(Integer enabled, String account, String cropName, String shortName,
             List<Long> industryIdList, Page page);
 
     ResultDTO saveClientUser(ClientUserDTO clientUser);
@@ -74,8 +70,6 @@ public interface RemoteClientService
 
     ResultDTO updateClientById(ClientDTO clientDTO);
 
-    DictIndustryDTO getDictIndustryById(Long industryId);
-
     ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted);
 
     ClientUserListDTO getClientUserListByClientIds(List<Long> clientIdList);
@@ -88,7 +82,7 @@ public interface RemoteClientService
 
     ClientListDTO getClientListByIds(List<Long> idList);
 
-    ResultDTO resetPasswordByIds(String pwd,List<Long> idList);
+    ResultDTO resetPasswordByIds(String pwd, List<Long> idList);
 
     ClientProductDTO getClientProductById(Long clientProductId);
 
@@ -101,4 +95,6 @@ public interface RemoteClientService
     ResultDTO updateClientProductSkipNull(ClientProductDTO cp);
 
     ClientOperateInfoListDTO getClientOperateInfoListByUserId(Long primaryUserId, Page page);
+
+    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
 }

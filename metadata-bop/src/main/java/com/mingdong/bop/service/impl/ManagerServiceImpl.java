@@ -26,6 +26,7 @@ import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.service.RemoteManagerService;
+import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,8 @@ public class ManagerServiceImpl implements ManagerService
     private RedisDao redisDao;
     @Resource
     private RemoteManagerService remoteManagerService;
+    @Resource
+    private RemoteSystemService remoteSystemService;
 
     @Override
     @Transactional
@@ -155,6 +158,10 @@ public class ManagerServiceImpl implements ManagerService
     public void getRoleList(Page page, BLResp resp)
     {
         RoleListDTO roleListDTO = remoteManagerService.getRoleList(page);
+        resp.addData(Field.TOTAL, roleListDTO.getTotal());
+        resp.addData(Field.PAGES, roleListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<RoleDTO> roleList = roleListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(roleList.size());
         if(CollectionUtils.isNotEmpty(roleList))
@@ -246,6 +253,10 @@ public class ManagerServiceImpl implements ManagerService
     public void getManagerList(Long roleId, Integer enabled, Page page, BLResp resp)
     {
         ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleId, enabled, page);
+        resp.addData(Field.TOTAL, managerListDTO.getTotal());
+        resp.addData(Field.PAGES, managerListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(managerList.size());
         if(CollectionUtils.isNotEmpty(managerList))
@@ -479,8 +490,7 @@ public class ManagerServiceImpl implements ManagerService
         Set<Long> set = new HashSet<>();
         if(!CollectionUtils.isEmpty(privilege))
         {
-            PrivilegeListDTO privilegeListByIds = remoteManagerService.getPrivilegeListByIds(
-                    new ArrayList<>(privilege));
+            PrivilegeListDTO privilegeListByIds = remoteSystemService.getPrivilegeListByIds(new ArrayList<>(privilege));
 
             List<PrivilegeDTO> privilegeList = privilegeListByIds.getDataList();
             for(PrivilegeDTO p : privilegeList)
@@ -510,7 +520,7 @@ public class ManagerServiceImpl implements ManagerService
 
     private String getRoleTopPrivilege(Long roleId)
     {
-        PrivilegeListDTO privilegeListDTO = remoteManagerService.getPrivilegeTopListByRoleId(roleId);
+        PrivilegeListDTO privilegeListDTO = remoteSystemService.getPrivilegeTopListByRoleId(roleId);
         List<PrivilegeDTO> privilegeList = privilegeListDTO.getDataList();
         StringBuilder sb = new StringBuilder();
         for(PrivilegeDTO p : privilegeList)

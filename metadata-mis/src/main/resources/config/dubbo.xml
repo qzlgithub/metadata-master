@@ -23,7 +23,6 @@
     <dubbo:service interface="com.mingdong.core.service.RemoteManagerService" ref="managerApi" />
     <dubbo:service interface="com.mingdong.core.service.RemoteStatsService" ref="statsApi" />
     <dubbo:service interface="com.mingdong.core.service.RemoteSystemService" ref="systemApi" />
-    <dubbo:service interface="com.mingdong.core.service.RemoteTradeService" ref="tradeApi" />
 
     <!-- 具体服务接口的实现 -->
     <bean id="productApi" class="com.mingdong.mis.service.impl.RemoteProductServiceImpl" />
@@ -31,6 +30,5 @@
     <bean id="managerApi" class="com.mingdong.mis.service.impl.RemoteManagerServiceImpl" />
     <bean id="statsApi" class="com.mingdong.mis.service.impl.RemoteStatsServiceImpl" />
     <bean id="systemApi" class="com.mingdong.mis.service.impl.RemoteSystemServiceImpl" />
-    <bean id="tradeApi" class="com.mingdong.mis.service.impl.RemoteTradeServiceImpl" />
 
 </beans>

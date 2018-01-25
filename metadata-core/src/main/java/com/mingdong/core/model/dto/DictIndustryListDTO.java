@@ -8,6 +8,8 @@ import java.util.List;
 public class DictIndustryListDTO implements Serializable
 {
     private List<DictIndustryDTO> dataList;
+    private int total;
+    private int pages;
     private ResultDTO resultDTO;
 
     public DictIndustryListDTO()
@@ -29,5 +31,25 @@ public class DictIndustryListDTO implements Serializable
     public void setDataList(List<DictIndustryDTO> dataList)
     {
         this.dataList = dataList;
+    }
+
+    public int getTotal()
+    {
+        return total;
+    }
+
+    public void setTotal(int total)
+    {
+        this.total = total;
+    }
+
+    public int getPages()
+    {
+        return pages;
+    }
+
+    public void setPages(int pages)
+    {
+        this.pages = pages;
     }
 }

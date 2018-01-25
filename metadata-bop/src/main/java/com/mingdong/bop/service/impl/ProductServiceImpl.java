@@ -1,23 +1,23 @@
 package com.mingdong.bop.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.domain.entity.DictProductType;
-import com.mingdong.bop.domain.entity.Product;
-import com.mingdong.bop.domain.entity.ProductInfo;
-import com.mingdong.bop.domain.entity.ProductTxt;
-import com.mingdong.bop.domain.mapper.DictProductTypeMapper;
-import com.mingdong.bop.domain.mapper.ProductInfoMapper;
-import com.mingdong.bop.domain.mapper.ProductMapper;
-import com.mingdong.bop.domain.mapper.ProductTxtMapper;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.DictProductTypeDTO;
+import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.ProductDTO;
+import com.mingdong.core.model.dto.ProductInfoDTO;
+import com.mingdong.core.model.dto.ProductInfoListDTO;
+import com.mingdong.core.model.dto.ProductListDTO;
+import com.mingdong.core.model.dto.ProductTxtDTO;
+import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.IDUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,31 +35,22 @@ public class ProductServiceImpl implements ProductService
     @Resource
     private Param param;
     @Resource
-    private DictProductTypeMapper dictProductTypeMapper;
-    @Resource
-    private ProductMapper productMapper;
-    @Resource
-    private ProductTxtMapper productTxtMapper;
-    @Resource
-    private ProductInfoMapper productInfoMapper;
+    private RemoteProductService remoteProductService;
 
     @Override
     public BLResp getProdCategory(Page page)
     {
         BLResp resp = BLResp.build();
-        int total = dictProductTypeMapper.countAll();
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, page);
+        resp.addData(Field.TOTAL, dictProductTypeList.getTotal());
+        resp.addData(Field.PAGES, dictProductTypeList.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-
-        if(total > 0 && page.getPageNum() <= pages)
+        List<DictProductTypeDTO> prodTypeList = dictProductTypeList.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(prodTypeList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<DictProductType> prodTypeList = dictProductTypeMapper.getAll();
-            List<Map<String, Object>> list = new ArrayList<>(prodTypeList.size());
-            for(DictProductType type : prodTypeList)
+            for(DictProductTypeDTO type : prodTypeList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, type.getId() + "");
@@ -69,8 +60,8 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.ENABLED, type.getEnabled());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
         return resp;
     }
 
@@ -78,7 +69,7 @@ public class ProductServiceImpl implements ProductService
     @Transactional
     public void addProdCategory(String code, String name, String remark, BLResp resp)
     {
-        DictProductType type = dictProductTypeMapper.findByCode(code);
+        DictProductTypeDTO type = remoteProductService.getDictProductTypeByCode(code);
         if(type != null)
         {
             resp.result(RestResult.CATEGORY_CODE_EXIST);
@@ -95,14 +86,14 @@ public class ProductServiceImpl implements ProductService
             return;
         }
         Date curr = new Date();
-        type = new DictProductType();
+        type = new DictProductTypeDTO();
         type.setCreateTime(curr);
         type.setUpdateTime(curr);
         type.setCode(code);
         type.setName(name);
         type.setRemark(remark);
         type.setEnabled(TrueOrFalse.TRUE);
-        dictProductTypeMapper.add(type);
+        remoteProductService.saveDictProductType(type);
     }
 
     @Override
@@ -110,26 +101,26 @@ public class ProductServiceImpl implements ProductService
     public BLResp editProdCategory(Long productId, String code, String name, String remark)
     {
         BLResp resp = BLResp.build();
-        DictProductType type = dictProductTypeMapper.findById(productId);
+        DictProductTypeDTO type = remoteProductService.getDictProductTypeById(productId);
         if(type == null)
         {
             return resp.result(RestResult.OBJECT_NOT_FOUND);
         }
         Integer enabled = type.getEnabled();
-        type = dictProductTypeMapper.findByCode(code);
+        type = remoteProductService.getDictProductTypeByCode(code);
         if(type != null && !productId.equals(type.getId()))
         {
             return resp.result(RestResult.CATEGORY_CODE_EXIST);
         }
 
-        type = new DictProductType();
+        type = new DictProductTypeDTO();
         type.setId(productId);
         type.setUpdateTime(new Date());
         type.setCode(code);
         type.setName(name);
         type.setRemark(remark);
         type.setEnabled(enabled);
-        dictProductTypeMapper.updateSkipNull(type);
+        remoteProductService.updateDictProductTypeSkipNull(type);
         return resp;
     }
 
@@ -138,10 +129,10 @@ public class ProductServiceImpl implements ProductService
     {
         Map<String, Object> map = new HashMap<>();
         map.put(Field.ID, productId + "");
-        Product product = productMapper.findById(productId);
+        ProductDTO product = remoteProductService.getProductById(productId);
         if(product != null)
         {
-            ProductTxt productTxt = productTxtMapper.findById(productId);
+            ProductTxtDTO productTxt = remoteProductService.getProductTxtById(productId);
             map.put(Field.TYPE, product.getTypeId() + "");
             map.put(Field.CODE, product.getCode());
             map.put(Field.NAME, product.getName());
@@ -150,9 +141,10 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.ENABLED, product.getEnabled());
             map.put(Field.CONTENT, productTxt == null ? "" : productTxt.getContent());
         }
-        List<DictProductType> dictType = dictProductTypeMapper.getAll();
+        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
+        List<DictProductTypeDTO> dictType = dictProductTypeList.getDataList();
         List<Map<String, Object>> productType = new ArrayList<>();
-        for(DictProductType type : dictType)
+        for(DictProductTypeDTO type : dictType)
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ID, type.getId() + "");
@@ -169,21 +161,21 @@ public class ProductServiceImpl implements ProductService
             String remark, String content, BLResp resp)
     {
         // 1. 校验产品类型是否有效
-        DictProductType type = dictProductTypeMapper.findById(productType);
+        DictProductTypeDTO type = remoteProductService.getDictProductTypeById(productType);
         if(type == null)
         {
             resp.result(RestResult.INVALID_PRODUCT_TYPE);
             return;
         }
         // 2. 校验产品编码是否重复
-        Product product = productMapper.findByCode(code);
+        ProductDTO product = remoteProductService.getProductByCode(code);
         if(product != null)
         {
             resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
             return;
         }
         // 3. 校验产品名是否重复
-        Product prod = productMapper.findByName(name);
+        ProductDTO prod = remoteProductService.getProductByName(name);
         if(prod != null)
         {
             resp.result(RestResult.PRODUCT_NAME_EXIST);
@@ -193,24 +185,24 @@ public class ProductServiceImpl implements ProductService
         Date curr = new Date();
         if(!StringUtils.isNullBlank(content))
         {
-            ProductTxt productTxt = new ProductTxt();
+            ProductTxtDTO productTxt = new ProductTxtDTO();
             productTxt.setId(productId);
             productTxt.setCreateTime(curr);
             productTxt.setUpdateTime(curr);
             productTxt.setContent(content);
-            productTxtMapper.add(productTxt);
+            remoteProductService.saveProductTxt(productTxt);
         }
-        product = new Product();
+        product = new ProductDTO();
         product.setId(productId);
         product.setCreateTime(curr);
         product.setUpdateTime(curr);
-        product.setTypeId(productType);
+        product.setTypeId(productType.intValue());
         product.setCode(code);
         product.setName(name);
         product.setCostAmt(costAmt);
         product.setRemark(remark);
         product.setEnabled(enabled);
-        productMapper.add(product);
+        remoteProductService.saveProduct(product);
     }
 
     @Override
@@ -218,14 +210,13 @@ public class ProductServiceImpl implements ProductService
     public void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
             String remark, String content, BLResp resp)
     {
-        Product prod = productMapper.findByCode(code);
+        ProductDTO prod = remoteProductService.getProductByCode(code);
         if(prod != null && !id.equals(prod.getId()))
         {
             resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
 
         }
-
-        Product product = productMapper.findById(id);
+        ProductDTO product = remoteProductService.getProductById(id);
         if(product == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -234,31 +225,31 @@ public class ProductServiceImpl implements ProductService
         Date current = new Date();
         product.setId(id);
         product.setUpdateTime(current);
-        product.setTypeId(productType);
+        product.setTypeId(productType.intValue());
         product.setCode(code);
         product.setName(name);
         product.setCostAmt(costAmt);
         product.setEnabled(enabled);
         product.setRemark(remark);
-        productMapper.updateById(product);
-        ProductTxt productTxt = productTxtMapper.findById(id);
+        remoteProductService.updateProductById(product);
+        ProductTxtDTO productTxt = remoteProductService.getProductTxtById(id);
         if(productTxt == null)
         {
             if(!StringUtils.isNullBlank(content))
             {
-                productTxt = new ProductTxt();
+                productTxt = new ProductTxtDTO();
                 productTxt.setId(id);
                 productTxt.setCreateTime(current);
                 productTxt.setUpdateTime(current);
                 productTxt.setContent(content);
-                productTxtMapper.add(productTxt);
+                remoteProductService.saveProductTxt(productTxt);
             }
         }
         else
         {
             productTxt.setUpdateTime(current);
             productTxt.setContent(content);
-            productTxtMapper.updateById(productTxt);
+            remoteProductService.updateProductTxtById(productTxt);
         }
     }
 
@@ -266,7 +257,7 @@ public class ProductServiceImpl implements ProductService
     public BLResp getProductCategoryInfo(Long id)
     {
         BLResp resp = BLResp.build();
-        DictProductType dictProductType = dictProductTypeMapper.findById(id);
+        DictProductTypeDTO dictProductType = remoteProductService.getDictProductTypeById(id);
         resp.addData(Field.ID, dictProductType.getId());
         resp.addData(Field.CODE, dictProductType.getCode());
         resp.addData(Field.NAME, dictProductType.getName());
@@ -280,7 +271,7 @@ public class ProductServiceImpl implements ProductService
     @Transactional
     public void updateCateStatus(Long id, Integer enabled, BLResp resp)
     {
-        DictProductType productCategory = dictProductTypeMapper.findById(id);
+        DictProductTypeDTO productCategory = remoteProductService.getDictProductTypeById(id);
         if(productCategory == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -290,7 +281,7 @@ public class ProductServiceImpl implements ProductService
         {
             productCategory.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             productCategory.setUpdateTime(new Date());
-            dictProductTypeMapper.updateById(productCategory);
+            remoteProductService.updateDictProductTypeById(productCategory);
         }
     }
 
@@ -298,7 +289,7 @@ public class ProductServiceImpl implements ProductService
     @Transactional
     public void updateProdStatus(Long id, Integer enabled, BLResp resp)
     {
-        Product product = productMapper.findById(id);
+        ProductDTO product = remoteProductService.getProductById(id);
         if(product == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -308,16 +299,17 @@ public class ProductServiceImpl implements ProductService
         {
             product.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             product.setUpdateTime(new Date());
-            productMapper.updateById(product);
+            remoteProductService.updateProductById(product);
         }
     }
 
     @Override
     public List<Map<String, Object>> getProductDict()
     {
-        List<Product> productList = productMapper.getListByStatus(TrueOrFalse.TRUE);
+        ProductListDTO productListByStatus = remoteProductService.getProductListByStatus(TrueOrFalse.TRUE);
+        List<ProductDTO> productList = productListByStatus.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(Product p : productList)
+        for(ProductDTO p : productList)
         {
             Map<String, Object> map = new HashMap<>();
             map.put(Field.ID, p.getId() + "");
@@ -331,12 +323,13 @@ public class ProductServiceImpl implements ProductService
     public List<Map<String, Object>> getProductTypeDict(Integer enabled)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
-        for(DictProductType o : dataList)
+        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(enabled, null);
+        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
+        for(DictProductTypeDTO o : dataList)
         {
             Map<String, Object> m = new HashMap<>();
-            m.put(Field.ID, o.getId() + "");
             m.put(Field.NAME, o.getName());
+            m.put(Field.ID, o.getId() + "");
             list.add(m);
         }
         return list;
@@ -346,18 +339,16 @@ public class ProductServiceImpl implements ProductService
     public BLResp getProductInfoList(Page page)
     {
         BLResp resp = BLResp.build();
-        int total = productInfoMapper.countAll();
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(page);
+        resp.addData(Field.TOTAL, productInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, productInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        if(total > 0 && page.getPageNum() <= pages)
+        List<ProductInfoDTO> productInfoList = productInfoListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
+        if(CollectionUtils.isNotEmpty(productInfoList))
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductInfo> productInfoList = productInfoMapper.getAll();
-            List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
-            for(ProductInfo productInfo : productInfoList)
+            for(ProductInfoDTO productInfo : productInfoList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, productInfo.getId() + "");
@@ -369,8 +360,8 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.COST_AMT, productInfo.getCostAmt());
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
         }
+        resp.addData(Field.LIST, list);
         return resp;
     }
 }

@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mingdong.mis.domain.mapper.StatsClientMapper">
 
-    <select id="getAllClientCount" resultType="Long">
+    <select id="getAllClientCount" resultType="Integer">
         select count(*) from `client`
     </select>
 
-    <select id="getClientCountByDate" resultType="Long">
+    <select id="getClientCountByDate" resultType="Integer">
         select count(*) from `client` where 1=1
         <if test="start != null">
             and `create_time` &gt;= #{start}
@@ -30,7 +30,7 @@
         select sum(`amount`) from `product_recharge`
     </select>
 
-    <select id="countClientRechargeByDate" resultType="Long">
+    <select id="countClientRechargeByDate" resultType="Integer">
         select count(`id`) from `product_recharge` where 1=1
         <if test="start != null">
             and `create_time` &gt;= #{start}

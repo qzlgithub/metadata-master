@@ -1,14 +1,28 @@
-package com.mingdong.bop.domain.entity;
+package com.mingdong.core.model.dto;
 
+import com.mingdong.core.constant.RestResult;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class RolePrivilege
+public class ProductTxtDTO implements Serializable
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Long roleId;
-    private Long privilegeId;
+    private String content;
+    private ResultDTO resultDTO;
+
+    public ProductTxtDTO()
+    {
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public ResultDTO getResultDTO()
+    {
+        return resultDTO;
+    }
 
     public Long getId()
     {
@@ -40,25 +54,13 @@ public class RolePrivilege
         this.updateTime = updateTime;
     }
 
-    public Long getRoleId()
+    public String getContent()
     {
-        return roleId;
+        return content;
     }
 
-    public void setRoleId(Long roleId)
+    public void setContent(String content)
     {
-        this.roleId = roleId;
-    }
-
-    public Long getPrivilegeId()
-    {
-        return privilegeId;
-    }
-
-    public void setPrivilegeId(Long privilegeId)
-    {
-        this.privilegeId = privilegeId;
+        this.content = content;
     }
 }
-
-

@@ -1,14 +1,31 @@
-package com.mingdong.bop.domain.entity;
+package com.mingdong.core.model.dto;
 
+import com.mingdong.core.constant.RestResult;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class Role
+public class DictRechargeTypeDTO implements Serializable
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
     private String name;
+    private String remark;
     private Integer enabled;
+    private Integer deleted;
+    private ResultDTO resultDTO;
+
+    public DictRechargeTypeDTO()
+    {
+        this.resultDTO = new ResultDTO();
+        resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public ResultDTO getResultDTO()
+    {
+        return resultDTO;
+    }
 
     public Long getId()
     {
@@ -50,6 +67,16 @@ public class Role
         this.name = name;
     }
 
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+
     public Integer getEnabled()
     {
         return enabled;
@@ -59,6 +86,14 @@ public class Role
     {
         this.enabled = enabled;
     }
+
+    public Integer getDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted)
+    {
+        this.deleted = deleted;
+    }
 }
-
-

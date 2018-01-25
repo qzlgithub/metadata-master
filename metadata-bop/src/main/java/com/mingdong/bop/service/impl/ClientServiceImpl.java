@@ -1,6 +1,7 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.Trade;
@@ -13,7 +14,6 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.bop.component.Param;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
@@ -42,6 +42,7 @@ import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -74,6 +75,8 @@ public class ClientServiceImpl implements ClientService
     private RemoteProductService remoteProductService;
     @Resource
     private RemoteManagerService remoteManagerService;
+    @Resource
+    private RemoteSystemService remoteSystemService;
 
     @Override
     public void checkIfUsernameExist(String username, BLResp resp)
@@ -115,8 +118,8 @@ public class ClientServiceImpl implements ClientService
         {
             if(parentIndustryId != null)
             {
-                DictIndustryListDTO byParentAndStatus = remoteClientService.getByParentAndStatus(parentIndustryId,
-                        TrueOrFalse.TRUE);
+                DictIndustryListDTO byParentAndStatus = remoteSystemService.getDictIndustryListByParentAndStatus(
+                        parentIndustryId, TrueOrFalse.TRUE);
                 List<DictIndustryDTO> parentList = byParentAndStatus.getDataList();
                 for(DictIndustryDTO d : parentList)
                 {
@@ -128,7 +131,7 @@ public class ClientServiceImpl implements ClientService
         {
             industryList.add(industryId);
         }
-        ClientInfoListDTO clinetInfoListBy = remoteClientService.getClinetInfoListBy(enabled, username, cropName,
+        ClientInfoListDTO clinetInfoListBy = remoteClientService.getClientInfoListBy(enabled, username, cropName,
                 shortName, industryList, page);
         resp.addData(Field.TOTAL, clinetInfoListBy.getTotal());
         resp.addData(Field.PAGES, clinetInfoListBy.getPages());
@@ -166,7 +169,7 @@ public class ClientServiceImpl implements ClientService
     {
         Date curr = new Date();
         UserDTO user = remoteClientService.findByUsername(username);
-        if(curr != null)// 校验帐号是否重复
+        if(user != null)// 校验帐号是否重复
         {
             resp.result(RestResult.ACCOUNT_IS_EXIST);
             return;
@@ -261,7 +264,7 @@ public class ClientServiceImpl implements ClientService
         {
             ClientUserDTO user = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
             ClientAccountDTO clientAccount = remoteClientService.getClientAccountByClientId(clientId);
-            DictIndustryDTO industry = remoteClientService.getDictIndustryById(client.getIndustryId());
+            DictIndustryDTO industry = remoteSystemService.getDictIndustryById(client.getIndustryId());
             map.put(Field.CLIENT_ID, clientId + "");
             map.put(Field.USERNAME, user.getUsername());
             map.put(Field.CORP_NAME, client.getCorpName());
@@ -716,9 +719,14 @@ public class ClientServiceImpl implements ClientService
         }
         ClientOperateInfoListDTO clientOperateInfoListByUserId = remoteClientService.getClientOperateInfoListByUserId(
                 client.getPrimaryUserId(), page);
+        resp.addData(Field.TOTAL, clientOperateInfoListByUserId.getTotal());
+        resp.addData(Field.PAGES, clientOperateInfoListByUserId.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<ClientOperateInfoDTO> dataList = clientOperateInfoListByUserId.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(dataList)){
+        if(CollectionUtils.isNotEmpty(dataList))
+        {
             for(ClientOperateInfoDTO info : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
@@ -751,8 +759,8 @@ public class ClientServiceImpl implements ClientService
         row.createCell(10).setCellValue("合同编号");
         row.createCell(11).setCellValue("备注");
 
-        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getproductrechargeInfoList(clientId, productId, startTime,
-                endTime,new Page(1,1000));
+        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getproductrechargeInfoList(clientId,
+                productId, startTime, endTime, new Page(1, 1000));
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoDTOS.getDataList();
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));

@@ -5,16 +5,14 @@ import com.mingdong.core.constant.RestResult;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductListDTO implements Serializable
+public class DictRechargeTypeListDTO implements Serializable
 {
-    private List<ProductDTO> opened;
-    private List<ProductDTO> toOpen;
+    private List<DictRechargeTypeDTO> dataList;
     private int total;
     private int pages;
     private ResultDTO resultDTO;
-    private List<ProductDTO> dataList;
 
-    public ProductListDTO()
+    public DictRechargeTypeListDTO()
     {
         this.resultDTO = new ResultDTO();
         resultDTO.setResult(RestResult.SUCCESS);
@@ -25,24 +23,14 @@ public class ProductListDTO implements Serializable
         return resultDTO;
     }
 
-    public List<ProductDTO> getOpened()
+    public List<DictRechargeTypeDTO> getDataList()
     {
-        return opened;
+        return dataList;
     }
 
-    public void setOpened(List<ProductDTO> opened)
+    public void setDataList(List<DictRechargeTypeDTO> dataList)
     {
-        this.opened = opened;
-    }
-
-    public List<ProductDTO> getToOpen()
-    {
-        return toOpen;
-    }
-
-    public void setToOpen(List<ProductDTO> toOpen)
-    {
-        this.toOpen = toOpen;
+        this.dataList = dataList;
     }
 
     public int getTotal()
@@ -63,15 +51,5 @@ public class ProductListDTO implements Serializable
     public void setPages(int pages)
     {
         this.pages = pages;
-    }
-
-    public List<ProductDTO> getDataList()
-    {
-        return dataList;
-    }
-
-    public void setDataList(List<ProductDTO> dataList)
-    {
-        this.dataList = dataList;
     }
 }

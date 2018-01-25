@@ -9,7 +9,7 @@ public class DictProductTypeListDTO implements Serializable
 {
     private int total;
     private int pages;
-    private List<DictProductTypeDTO> dictProductTypeDTOList;
+    private List<DictProductTypeDTO> dataList;
     private ResultDTO resultDTO;
 
     public DictProductTypeListDTO()
@@ -43,13 +43,13 @@ public class DictProductTypeListDTO implements Serializable
         this.pages = pages;
     }
 
-    public List<DictProductTypeDTO> getDictProductTypeDTOList()
+    public List<DictProductTypeDTO> getDataList()
     {
-        return dictProductTypeDTOList;
+        return dataList;
     }
 
-    public void setDictProductTypeDTOList(List<DictProductTypeDTO> dictProductTypeDTOList)
+    public void setDataList(List<DictProductTypeDTO> dataList)
     {
-        this.dictProductTypeDTOList = dictProductTypeDTOList;
+        this.dataList = dataList;
     }
 }

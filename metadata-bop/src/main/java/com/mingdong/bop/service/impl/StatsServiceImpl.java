@@ -2,17 +2,9 @@ package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
-import com.mingdong.bop.domain.entity.ClientInfo;
-import com.mingdong.bop.domain.entity.DictRechargeType;
-import com.mingdong.bop.domain.entity.ProductRechargeInfo;
-import com.mingdong.bop.domain.mapper.ClientInfoMapper;
-import com.mingdong.bop.domain.mapper.DictRechargeTypeMapper;
-import com.mingdong.bop.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.bop.domain.mapper.StatsClientMapper;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -21,6 +13,16 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ClientInfoDTO;
+import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.DictRechargeTypeDTO;
+import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.service.RemoteClientService;
+import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.RemoteStatsService;
+import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.core.util.DateCalculateUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -50,13 +52,13 @@ public class StatsServiceImpl implements StatsService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private StatsClientMapper statsClientMapper;
+    private RemoteStatsService remoteStatsService;
     @Resource
-    private ClientInfoMapper clientInfoMapper;
+    private RemoteSystemService remoteSystemService;
     @Resource
-    private ProductRechargeInfoMapper productRechargeInfoMapper;
+    private RemoteProductService remoteProductService;
     @Resource
-    private DictRechargeTypeMapper dictRechargeTypeMapper;
+    private RemoteClientService remoteClientService;
 
     @Override
     public BLResp getIndexStats()
@@ -67,12 +69,12 @@ public class StatsServiceImpl implements StatsService
         Date previousDay = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);//昨天00:00:00
         Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
         Date monthDay = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);//近30天00:00:00
-        Long allClientCount = statsClientMapper.getAllClientCount();
-        Long clientCountByDate = statsClientMapper.getClientCountByDate(monthDay, currentDay);
-        BigDecimal clientRechargeByWeek = statsClientMapper.getClientRechargeByDate(weekDay, currentDay);
-        BigDecimal clientRechargeByMonth = statsClientMapper.getClientRechargeByDate(monthDay, currentDay);
-        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount);
-        resp.addData(Field.CLIENT_COUNT_BY_DATE, clientCountByDate);
+        Integer allClientCount = remoteStatsService.getAllClientCount();
+        Integer clientCountByDate = remoteStatsService.getClientCountByDate(monthDay, currentDay);
+        BigDecimal clientRechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay, currentDay);
+        BigDecimal clientRechargeByMonth = remoteStatsService.getClientRechargeStatsByDate(monthDay, currentDay);
+        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount + "");
+        resp.addData(Field.CLIENT_COUNT_BY_DATE, clientCountByDate + "");
         resp.addData(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(clientRechargeByWeek));
         resp.addData(Field.CLIENT_RECHARGE_BY_MONTH, NumberUtils.formatAmount(clientRechargeByMonth));
 
@@ -86,12 +88,12 @@ public class StatsServiceImpl implements StatsService
         Date currentDay = new Date();
         Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
         Date monthFrist = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);//当前月第一天00:00:00
-        Long allClientCount = statsClientMapper.getAllClientCount();
-        Long clientCountByWeek = statsClientMapper.getClientCountByDate(weekDay, currentDay);
-        Long clientCountByMonthFrist = statsClientMapper.getClientCountByDate(monthFrist, currentDay);
-        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount);
-        resp.addData(Field.CLIENT_COUNT_BY_WEEK, clientCountByWeek);
-        resp.addData(Field.CLIENT_COUNT_BY_MONTH_FRIST, clientCountByMonthFrist);
+        Integer allClientCount = remoteStatsService.getAllClientCount();
+        Integer clientCountByWeek = remoteStatsService.getClientCountByDate(weekDay, currentDay);
+        Integer clientCountByMonthFrist = remoteStatsService.getClientCountByDate(monthFrist, currentDay);
+        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount + "");
+        resp.addData(Field.CLIENT_COUNT_BY_WEEK, clientCountByWeek + "");
+        resp.addData(Field.CLIENT_COUNT_BY_MONTH_FRIST, clientCountByMonthFrist + "");
         return resp;
     }
 
@@ -102,26 +104,51 @@ public class StatsServiceImpl implements StatsService
         Date currentDay = new Date();
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        Date beforeDate;
         if(ScopeType.MONTH == scopeTypeEnum)
         {
 
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            getClientInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
         }
         else if(ScopeType.QUARTER == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-            getClientInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            getClientInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
         }
         else
         {
             return resp.result(RestResult.PARAMETER_ERROR);
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String dateStr = sdf.format(beforeDate);
+        String currentDayStr = sdf.format(currentDay);
+        ClientInfoListDTO clientInfoListDTO = remoteClientService.getClientInfoListByDate(beforeDate, currentDay, page);
+        resp.addData(Field.TOTAL, clientInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, clientInfoListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        List<ClientInfoDTO> clientInfoListByDate = clientInfoListDTO.getDataList();
+        Integer total = clientInfoListDTO.getTotal();
+        resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
+        List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
+        Map<String, Object> map;
+        for(ClientInfoDTO item : clientInfoListByDate)
+        {
+            map = new HashMap<>();
+            map.put(Field.REGISTER_DATE, DateUtils.format(item.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            map.put(Field.CORP_NAME, item.getCorpName());
+            map.put(Field.SHORT_NAME, item.getShortName());
+            map.put(Field.USERNAME, item.getUsername());
+            map.put(Field.NAME, item.getName());
+            map.put(Field.PHONE, item.getPhone());
+            map.put(Field.EMAIL, item.getEmail());
+            map.put(Field.MANAGER_NAME, item.getManagerName());
+            dataList.add(map);
+        }
+        resp.addData(Field.LIST, dataList);
         return resp;
     }
 
@@ -140,41 +167,22 @@ public class StatsServiceImpl implements StatsService
         row.createCell(6).setCellValue("邮箱");
         row.createCell(7).setCellValue("商务经理");
         Date currentDay = new Date();
-        List<ClientInfo> dataList = new ArrayList<>();
+        Date beforeDate = new Date();
         if(ScopeType.MONTH == scopeTypeEnum)
         {
 
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            Long total = statsClientMapper.getClientCountByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
         }
         else if(ScopeType.QUARTER == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-            Long total = statsClientMapper.getClientCountByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            Long total = statsClientMapper.getClientCountByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
         }
+        ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
 
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -182,7 +190,7 @@ public class StatsServiceImpl implements StatsService
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ClientInfo dataInfo;
+            ClientInfoDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -208,24 +216,21 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArray = new JSONArray();
         JSONArray jsonArraySec;
         Date currentDay = new Date();
-        List<ClientInfo> dataList = new ArrayList<>();
-        Date beforeDate = null;
+        Date beforeDate = new Date();
         if(ScopeType.MONTH == scopeTypeEnum)
         {
-
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            dataList = clientInfoMapper.getClientInfoListByDate(beforeDate, currentDay);
-        }
-        else if(ScopeType.QUARTER == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-            dataList = clientInfoMapper.getClientInfoListByDate(beforeDate, currentDay);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            dataList = clientInfoMapper.getClientInfoListByDate(beforeDate, currentDay);
         }
+        else if(ScopeType.QUARTER == scopeTypeEnum)
+        {
+            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+        }
+        ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, null);
+        List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Integer> dateMap = new LinkedHashMap<>();
         Calendar c = Calendar.getInstance();
@@ -237,7 +242,7 @@ public class StatsServiceImpl implements StatsService
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
         Integer intTemp;
-        for(ClientInfo item : dataList)
+        for(ClientInfoDTO item : dataList)
         {
             String strTemp = sdf.format(item.getRegisterTime());
             intTemp = dateMap.get(strTemp);
@@ -261,10 +266,10 @@ public class StatsServiceImpl implements StatsService
         Date nowDay = DateCalculateUtils.getCurrentDate(currentDay);
         Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
         Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
-        BigDecimal rechargeByNow = statsClientMapper.getClientRechargeByDate(nowDay, currentDay);
-        BigDecimal rechargeByWeek = statsClientMapper.getClientRechargeByDate(weekDay, currentDay);
-        BigDecimal rechargeByMonthFirst = statsClientMapper.getClientRechargeByDate(monthFirst, currentDay);
-        BigDecimal rechargeByAll = statsClientMapper.getClientRechargeAll();
+        BigDecimal rechargeByNow = remoteStatsService.getClientRechargeStatsByDate(nowDay, currentDay);
+        BigDecimal rechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay, currentDay);
+        BigDecimal rechargeByMonthFirst = remoteStatsService.getClientRechargeStatsByDate(monthFirst, currentDay);
+        BigDecimal rechargeByAll = remoteStatsService.getClientRechargeStatsAll();
         resp.addData(Field.CLIENT_RECHARGE_BY_NOW, NumberUtils.formatAmount(rechargeByNow));
         resp.addData(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(rechargeByWeek));
         resp.addData(Field.CLIENT_RECHARGE_BY_MONTH_FIRST, NumberUtils.formatAmount(rechargeByMonthFirst));
@@ -277,30 +282,29 @@ public class StatsServiceImpl implements StatsService
     {
         BLResp resp = BLResp.build();
         Date currentDay = new Date();
+        Date beforeDate;
         if(ScopeType.WEEK == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-            getProductRechargeInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+
         }
         else if(ScopeType.HALF_MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-            getProductRechargeInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
         }
         else if(ScopeType.MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            getProductRechargeInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            getProductRechargeInfoList(page, date, currentDay, resp);
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
         }
         else
         {
             return resp.result(RestResult.PARAMETER_ERROR);
         }
+        getProductRechargeInfoList(page, beforeDate, currentDay, resp);
         return resp;
     }
 
@@ -320,60 +324,35 @@ public class StatsServiceImpl implements StatsService
         row.createCell(7).setCellValue("账户余额(不包含服务)");
         row.createCell(8).setCellValue("经手人");
         Date currentDay = new Date();
-        List<ProductRechargeInfo> dataList = new ArrayList<>();
+        Date beforeDate = new Date();
         if(ScopeType.WEEK == scopeTypeEnum)
         {
 
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-            Long total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productRechargeInfoMapper.getListBy(null, null, date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+
         }
         else if(ScopeType.HALF_MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-            Long total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productRechargeInfoMapper.getListBy(null, null, date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
         }
         else if(ScopeType.MONTH == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            Long total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productRechargeInfoMapper.getListBy(null, null, date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
-            Date date = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            Long total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-            int pages = page.getTotalPage(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productRechargeInfoMapper.getListBy(null, null, date, currentDay);
-            }
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
         }
-
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
+                beforeDate, currentDay, page);
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ProductRechargeInfo dataInfo;
+            ProductRechargeInfoDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -402,33 +381,31 @@ public class StatsServiceImpl implements StatsService
         JSONObject rightObject = new JSONObject();
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
-        List<ProductRechargeInfo> dataList = new ArrayList<>();
         Date beforeDate = null;
         if(ScopeType.WEEK == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         else if(ScopeType.HALF_MONTH == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
-        }
-        else if(ScopeType.MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
         else if(ScopeType.YEAR == scopeTypeEnum)
         {
             beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-            dataList = productRechargeInfoMapper.getListBy(null, null, beforeDate, currentDay);
         }
+        else if(ScopeType.MONTH == scopeTypeEnum)
+        {
+            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+        }
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
+                beforeDate, currentDay, null);
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
         //left
         Map<String, BigDecimal> typeNameBigDecMap = new HashMap<>();
         Set<String> setTemp = new HashSet<>();
         BigDecimal bigDecimalTemp;
-        for(ProductRechargeInfo item : dataList)
+        for(ProductRechargeInfoDTO item : dataList)
         {
             bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeType());
             if(bigDecimalTemp == null)
@@ -455,8 +432,9 @@ public class StatsServiceImpl implements StatsService
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
-        List<DictRechargeType> dictRechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,
-                TrueOrFalse.FALSE);
+        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(
+                TrueOrFalse.TRUE, TrueOrFalse.FALSE);
+        List<DictRechargeTypeDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getDataList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Map<String, BigDecimal>> dateMap = new LinkedHashMap<>();
         Map<String, BigDecimal> bigMapTemp;
@@ -466,14 +444,14 @@ public class StatsServiceImpl implements StatsService
         for(int i = 0; i < difInt; i++)
         {
             bigMapTemp = new LinkedHashMap<>();
-            for(DictRechargeType item : dictRechargeTypeList)
+            for(DictRechargeTypeDTO item : dictRechargeTypeList)
             {
                 bigMapTemp.put(item.getName(), new BigDecimal(0));
             }
             dateMap.put(sdf.format(c.getTime()), bigMapTemp);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
-        for(ProductRechargeInfo item : dataList)
+        for(ProductRechargeInfoDTO item : dataList)
         {
             String dateStrTemp = sdf.format(item.getTradeTime());
             bigMapTemp = dateMap.get(dateStrTemp);
@@ -520,8 +498,8 @@ public class StatsServiceImpl implements StatsService
     private void getProductRechargeInfoList(Page page, Date date, Date currentDay, BLResp resp)
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        Long total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-        BigDecimal sumRec = statsClientMapper.getClientRechargeByDate(date, currentDay);
+        Integer total = remoteStatsService.getClientRechargeCountByDate(date, currentDay);
+        BigDecimal sumRec = remoteStatsService.getClientRechargeStatsByDate(date, currentDay);
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
         resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
@@ -536,17 +514,18 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-        List<ProductRechargeInfo> infoDateList = productRechargeInfoMapper.getListBy(null, null, start, end);
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeRecord(
+                null,null,start, end, page);
+        List<ProductRechargeInfoDTO> infoDateList = productRechargeInfoListDTO.getDataList();
         List<Map<String, Object>> dataList = getProductRechargeInfoDateList(infoDateList);
         return dataList;
     }
 
-    private List<Map<String, Object>> getProductRechargeInfoDateList(List<ProductRechargeInfo> infoDateList)
+    private List<Map<String, Object>> getProductRechargeInfoDateList(List<ProductRechargeInfoDTO> infoDateList)
     {
         List<Map<String, Object>> dataList = new ArrayList<>(infoDateList.size());
         Map<String, Object> map;
-        for(ProductRechargeInfo item : infoDateList)
+        for(ProductRechargeInfoDTO item : infoDateList)
         {
             map = new HashMap<>();
             dataList.add(map);
@@ -559,50 +538,6 @@ public class StatsServiceImpl implements StatsService
             map.put(Field.RECHARGE_TYPE, item.getRechargeType());
             map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
             map.put(Field.MANAGER_NAME, item.getManagerName());
-        }
-        return dataList;
-    }
-
-    private void getClientInfoList(Page page, Date date, Date currentDay, BLResp resp)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        Long total = statsClientMapper.getClientCountByDate(date, currentDay);
-        String dateStr = sdf.format(date);
-        String currentDayStr = sdf.format(currentDay);
-        resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
-        int pages = page.getTotalPage(total.intValue());
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            resp.addData(Field.LIST, getClientInfoList(page, date, currentDay));
-        }
-    }
-
-    private List<Map<String, Object>> getClientInfoList(Page page, Date start, Date end)
-    {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-        List<ClientInfo> clientInfoListByDate = clientInfoMapper.getClientInfoListByDate(start, end);
-        List<Map<String, Object>> dataList = getClientInfoDateList(clientInfoListByDate);
-        return dataList;
-    }
-
-    private List<Map<String, Object>> getClientInfoDateList(List<ClientInfo> clientInfoListByDate)
-    {
-        List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
-        Map<String, Object> map;
-        for(ClientInfo item : clientInfoListByDate)
-        {
-            map = new HashMap<>();
-            map.put(Field.REGISTER_DATE, DateUtils.format(item.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            map.put(Field.CORP_NAME, item.getCorpName());
-            map.put(Field.SHORT_NAME, item.getShortName());
-            map.put(Field.USERNAME, item.getUsername());
-            map.put(Field.NAME, item.getName());
-            map.put(Field.PHONE, item.getPhone());
-            map.put(Field.EMAIL, item.getEmail());
-            map.put(Field.MANAGER_NAME, item.getManagerName());
-            dataList.add(map);
         }
         return dataList;
     }

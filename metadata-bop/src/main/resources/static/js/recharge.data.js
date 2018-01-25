@@ -70,7 +70,7 @@ function showChart(){
                 },
                 calculable : true,
                 legend: {
-                    data:['Growth', 'Budget 2011', 'Budget 2012'],
+                    data:jsonObj.leftJson.legendData,
                     itemGap: 5
                 },
                 grid: {
@@ -88,7 +88,7 @@ function showChart(){
                 yAxis: [
                     {
                         type : 'value',
-                        name : 'Budget (million USD)',
+                        name : '',
                         axisLabel: {
                             formatter: function (a) {
                                 a = +a;

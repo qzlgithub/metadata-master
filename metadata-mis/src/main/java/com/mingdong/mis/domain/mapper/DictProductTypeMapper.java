@@ -21,5 +21,7 @@ public interface DictProductTypeMapper
 
     int countAll();
 
+    int countListByStatus(@Param("enabled") Integer enabled);
+
     List<DictProductType> getListByStatus(@Param("enabled") Integer enabled);
 }

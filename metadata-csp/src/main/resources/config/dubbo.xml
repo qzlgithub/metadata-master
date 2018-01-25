@@ -25,6 +25,4 @@
                      interface="com.mingdong.core.service.RemoteStatsService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="systemApi"
                      interface="com.mingdong.core.service.RemoteSystemService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="tradeApi"
-                     interface="com.mingdong.core.service.RemoteTradeService" />
 </beans>
