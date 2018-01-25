@@ -4,7 +4,6 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,31 +26,6 @@ public class RoleController
 {
     @Resource
     private ManagerService managerService;
-
-    @RequestMapping(value = "index.html")
-    public ModelAndView gotoRoleIndex()
-    {
-        ModelAndView view = new ModelAndView("system-manage/group-manage");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "addition.html")
-    public ModelAndView gotoRoleAddition()
-    {
-        ModelAndView view = new ModelAndView("system-manage/group-add");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "edit.html")
-    public ModelAndView gotoRoleEdit(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("system-manage/group-edit");
-        view.addAllObjects(managerService.getRolePrivilegeDetail(id));
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
     @RequestMapping(value = "privilege", method = RequestMethod.GET)
     @ResponseBody

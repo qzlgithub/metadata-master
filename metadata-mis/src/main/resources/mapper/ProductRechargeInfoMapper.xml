@@ -55,4 +55,27 @@
         order by pr.`create_time` desc
     </select>
 
+    <select id="countBy" resultType="Integer">
+        select
+            count(pr.`id`)
+        from `product_recharge` pr
+            left join `client` c
+                on pr.`client_id` = c.`id`
+            left join `client_user` cu
+                on c.`primary_user_id` = cu.`id`
+            left join `product` p
+                on pr.`product_id` = p.`id`
+            left join `manager` m
+                on pr.`manager_id` = m.`id`
+            left join `dict_recharge_type` rt
+                on pr.`recharge_type` = rt.`id`
+        <where>
+            <if test="clientId != null">pr.`client_id` = #{clientId}</if>
+            <if test="productId != null">and pr.`product_id` = #{productId}</if>
+            <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+        </where>
+        order by pr.`create_time` desc
+    </select>
+
 </mapper>

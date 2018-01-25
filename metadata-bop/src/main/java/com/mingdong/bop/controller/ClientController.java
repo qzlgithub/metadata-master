@@ -9,13 +9,10 @@ import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.ProdRechargeVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
-import com.mingdong.bop.service.ProductService;
-import com.mingdong.bop.service.SystemService;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
-import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -45,115 +41,7 @@ public class ClientController
     @Resource
     private ClientService clientService;
     @Resource
-    private ProductService productService;
-    @Resource
-    private SystemService systemService;
-    @Resource
     private TradeService tradeService;
-
-    /**
-     * 页面：客户列表
-     */
-    @RequestMapping(value = "index.html")
-    public ModelAndView clientIndexPage()
-    {
-        ModelAndView view = new ModelAndView("customer-manage/customer-index");
-        List<Map<String, Object>> industryList = systemService.getIndustryList(0L, TrueOrFalse.TRUE);
-        view.addObject(Field.INDUSTRY_LIST, industryList);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户添加页面
-     */
-    @RequestMapping(value = "addition.html")
-    public ModelAndView gotoClientAddition()
-    {
-        ModelAndView view = new ModelAndView("customer-manage/customer-add");
-        view.addAllObjects(systemService.getInitIndustryMap());
-        view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户编辑页面
-     */
-    @RequestMapping(value = "edit.html")
-    public ModelAndView gotoClientEdit(@RequestParam(value = Field.CLIENT_ID) Long clientId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/customer-edit");
-        Map<String, Object> clientMap = clientService.findClientInfo(clientId);
-        view.addAllObjects(clientMap);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户详情页面
-     */
-    @RequestMapping(value = "detail.html")
-    public ModelAndView gotoClientDetail(@RequestParam(value = Field.CLIENT_ID) Long clientId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/customer-detail");
-        Map<String, Object> clientMap = clientService.findClientDetail(clientId);
-        view.addAllObjects(clientMap);
-        view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 充值记录
-     */
-    @RequestMapping(value = "product/recharge.html")
-    public ModelAndView gotoRechargeRecord(@RequestParam(value = Field.ID) Long clientProductId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/product-recharge");
-        view.addAllObjects(clientService.getClientProductInfo(clientProductId));
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 消费明细
-     */
-    @RequestMapping(value = "product/consume.html")
-    public ModelAndView gotoConsumptionDetail(@RequestParam(value = Field.ID) Long clientProductId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/product-consume");
-        view.addAllObjects(clientService.getClientProductInfo(clientProductId));
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 账户充值
-     */
-    @RequestMapping(value = "account/recharge.html")
-    public ModelAndView gotoAccountRecharge(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/account-recharge");
-        view.addObject(Field.CLIENT_ID, id);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 账户消费
-     */
-
-    @RequestMapping(value = "account/consume.html")
-    public ModelAndView gotoAccountConsumption(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/account-consume");
-        view.addObject(Field.CLIENT_ID, id);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
     @RequestMapping(value = "check", method = RequestMethod.GET)
     @ResponseBody

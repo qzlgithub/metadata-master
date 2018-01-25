@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -46,15 +45,6 @@ public class AccountController
         String password = jsonReq.getString(Field.PASSWORD);
         managerService.userLogin(username, password, sessionId, resp);
         return resp;
-    }
-
-    @RequestMapping(value = "logout")
-    public ModelAndView managerLogout(HttpServletRequest request)
-    {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-        managerService.userLogout(sessionId);
-        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "changePwd", method = RequestMethod.POST)

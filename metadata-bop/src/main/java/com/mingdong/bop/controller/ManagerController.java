@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ManagerVO;
 import com.mingdong.bop.model.NewManagerVO;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
-import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -30,37 +27,6 @@ public class ManagerController
 {
     @Resource
     private ManagerService managerService;
-    @Resource
-    private SystemService systemService;
-
-    @RequestMapping(value = "index.html")
-    public ModelAndView gotoManagerManagement()
-    {
-        ModelAndView view = new ModelAndView("system-manage/account-management");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "addition.html")
-    public ModelAndView gotoManagerAdditionPage()
-    {
-        ModelAndView view = new ModelAndView("system-manage/account-add");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "edit.html")
-    public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.ID) Long managerId)
-    {
-        BLResp resp = BLResp.build();
-        managerService.getManagerInfo(managerId, resp);
-        ModelAndView view = new ModelAndView("system-manage/account-edit");
-        view.addAllObjects(resp.getDataMap());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
     /**
      * 添加新账号

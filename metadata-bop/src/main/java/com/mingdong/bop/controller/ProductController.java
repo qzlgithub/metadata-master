@@ -3,7 +3,6 @@ package com.mingdong.bop.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ProductVO;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -28,42 +26,6 @@ public class ProductController
 {
     @Resource
     private ProductService productService;
-
-    @GetMapping(value = "index.html")
-    public ModelAndView productIndex()
-    {
-        ModelAndView view = new ModelAndView("product-manage/product-index");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/addition.html")
-    public ModelAndView productAddition()
-    {
-        ModelAndView view = new ModelAndView("product-manage/product-add");
-        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/edit.html")
-    public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("product-manage/product-edit");
-        // TODO FIX...
-        Map<String, Object> map = productService.getProductInfo(id);
-        view.addAllObjects(map);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/category/index.html")
-    public ModelAndView productCategoryIndex()
-    {
-        ModelAndView view = new ModelAndView("product-manage/product-category");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
     @GetMapping(value = "/productCategory/list")
     @ResponseBody

@@ -456,10 +456,11 @@ public class StatsServiceImpl implements StatsService
             String dateStrTemp = sdf.format(item.getTradeTime());
             bigMapTemp = dateMap.get(dateStrTemp);
             bigDecimalTemp = bigMapTemp.get(item.getRechargeType());
-            if(bigDecimalTemp != null)
+            if(bigDecimalTemp == null)
             {
-                bigMapTemp.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
+                bigDecimalTemp = new BigDecimal(0);
             }
+            bigMapTemp.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
         }
         jsonArrayTemp = new JSONArray();
         jsonArrayTemp1 = new JSONArray();

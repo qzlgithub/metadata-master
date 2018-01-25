@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -28,26 +26,6 @@ public class StatsController
 {
     @Resource
     private StatsService statsService;
-
-    @RequestMapping(value = "index.html")
-    public ModelAndView gotoStatsIndex()
-    {
-        ModelAndView view = new ModelAndView("data-analysis/data-index");
-        view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getIndexStats();
-        view.addAllObjects(resp.getDataMap());
-        return view;
-    }
-
-    @RequestMapping(value = "customer.html")
-    public ModelAndView gotoStatsCustomer()
-    {
-        ModelAndView view = new ModelAndView("data-analysis/customer-data");
-        view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getClientIndexStats();
-        view.addAllObjects(resp.getDataMap());
-        return view;
-    }
 
     @RequestMapping(value = "/client/clientList", method = RequestMethod.GET)
     @ResponseBody
@@ -82,16 +60,6 @@ public class StatsController
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         JSONArray jsonArray = statsService.getClientListJson(scopeTypeEnum);
         return jsonArray.toJSONString();
-    }
-
-    @RequestMapping(value = "recharge.html")
-    public ModelAndView gotoStatsRecharge()
-    {
-        ModelAndView view = new ModelAndView("data-analysis/recharge-data");
-        view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getRechargeIndexStats();
-        view.addAllObjects(resp.getDataMap());
-        return view;
     }
 
     @RequestMapping(value = "/client/rechargeList", method = RequestMethod.GET)
@@ -129,20 +97,6 @@ public class StatsController
         return jsonObject.toJSONString();
     }
 
-    @RequestMapping(value = "revenue.html")
-    public ModelAndView gotoStatsRevenue()
-    {
-        ModelAndView view = new ModelAndView("data-analysis/revenue-data");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
-    @RequestMapping(value = "request.html")
-    public ModelAndView gotoStatsRequest()
-    {
-        ModelAndView view = new ModelAndView("data-analysis/product-data-request");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
 }

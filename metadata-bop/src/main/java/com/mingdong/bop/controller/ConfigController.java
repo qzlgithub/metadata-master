@@ -2,21 +2,18 @@ package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -29,35 +26,6 @@ public class ConfigController
 {
     @Resource
     private SystemService systemService;
-
-    @RequestMapping(value = "recharge.html")
-    public ModelAndView configRecharge()
-    {
-        ModelAndView view = new ModelAndView("system-manage/recharge-manage");
-        List<Map<String, Object>> list = systemService.getRechargeTypeList(null, TrueOrFalse.FALSE);
-        view.addObject(Field.LIST, list);
-        view.addObject(Field.TOTAL, list.size());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "industry.html")
-    public ModelAndView configIndustry()
-    {
-        ModelAndView view = new ModelAndView("system-manage/industry-manage");
-        view.addObject(Field.LIST, systemService.getHierarchyIndustry());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "setting.html")
-    public ModelAndView otherSettingPage()
-    {
-        ModelAndView view = new ModelAndView("system-manage/other-setting");
-        view.addObject(Field.LIST, systemService.getHierarchyIndustry());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 
     @RequestMapping(value = "industry", method = RequestMethod.GET)
     @ResponseBody
