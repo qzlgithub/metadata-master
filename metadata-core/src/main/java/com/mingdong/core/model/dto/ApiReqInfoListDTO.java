@@ -2,9 +2,10 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ApiReqInfoListDTO
+public class ApiReqInfoListDTO implements Serializable
 {
     private List<ApiReqInfoDTO> dataList;
     private int total;
