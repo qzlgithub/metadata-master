@@ -104,4 +104,6 @@ public interface Field
     String TYPE_Id = "typeId";
     String SHOW_STATS = "showStats";
     String HIT = "hit";
+    String MODULE = "module";
+    String STATUS = "status";
 }

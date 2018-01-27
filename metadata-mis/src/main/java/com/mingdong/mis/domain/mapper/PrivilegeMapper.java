@@ -3,6 +3,7 @@ package com.mingdong.mis.domain.mapper;
 import com.mingdong.mis.domain.entity.Privilege;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PrivilegeMapper
@@ -20,4 +21,7 @@ public interface PrivilegeMapper
     void updateSkipNull(Privilege privilege);
 
     List<Privilege> getListByLevel(int level);
+
+    void updateModuleStatusByIds(@Param("enabled") Integer enabled, @Param("data") Date date,
+            @Param("idList") List<Long> idList);
 }

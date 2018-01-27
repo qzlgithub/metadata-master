@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RemoteSystemServiceImpl implements RemoteSystemService
@@ -394,6 +395,13 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             findPrivilegeDTO(privilegeList, dataList);
         }
         return privilegeListDTO;
+    }
+
+    @Override
+    @Transactional
+    public void setModuleStatus(Integer status, List<Long> moduleIdList)
+    {
+        privilegeMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
     }
 
     private void findDictIndustryDTO(List<DictIndustry> dictIndustryList, List<DictIndustryDTO> dataList)
