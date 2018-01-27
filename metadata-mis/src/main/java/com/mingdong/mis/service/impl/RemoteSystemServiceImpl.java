@@ -85,7 +85,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
                 EntityUtils.copyProperties(item, dictIndustryDTO);
                 dataList.add(dictIndustryDTO);
             }
-            findDictIndustryDTO(dictIndustryList, dataList);
         }
         return dictIndustryListDTO;
     }
