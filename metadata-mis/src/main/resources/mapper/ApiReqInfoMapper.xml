@@ -9,11 +9,9 @@
         <result column="client_id" property="clientId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="hit" property="hit" jdbcType="TINYINT" />
-        <result column="link_ip" property="linkIp" jdbcType="VARCHAR" />
+        <result column="request_ip" property="requestIp" jdbcType="VARCHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
-        <result column="result_code" property="resultCode" jdbcType="VARCHAR" />
-        <result column="consumption_no" property="consumptionNo" jdbcType="VARCHAR" />
-        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
@@ -30,11 +28,9 @@
         ar.`client_id` as client_id,
         ar.`product_id` as product_id,
         ar.`hit`         as hit,
-        ar.`link_ip`     as link_ip,
+        ar.`request_ip`     as request_ip,
         ar.`bill_plan`     as bill_plan,
-        ar.`result_code`     as result_code,
-        ar.`consumption_no`     as consumption_no,
-        ar.`unit_amt`     as unit_amt,
+        ar.`fee`     as fee,
         ar.`balance`     as balance,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
@@ -50,8 +46,8 @@
         <where>
             <if test="clientId != null">ar.`client_id` = #{clientId}</if>
             <if test="productId != null">and ar.`product_id` = #{productId}</if>
-            <if test="startTime != null">and ar.`create_time` >= #{startTime}</if>
-            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
+            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
         order by ar.`create_time` desc
     </select>
@@ -71,7 +67,7 @@
             <if test="typeId != null">and p.`type_id` = #{typeId}</if>
             <if test="productId != null">and ar.`product_id` >= #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
-            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
         order by ar.`create_time` desc
     </select>
@@ -85,11 +81,9 @@
         ar.`client_id` as client_id,
         ar.`product_id` as product_id,
         ar.`hit`         as hit,
-        ar.`link_ip`     as link_ip,
+        ar.`request_ip`     as request_ip,
         ar.`bill_plan`     as bill_plan,
-        ar.`result_code`     as result_code,
-        ar.`consumption_no`     as consumption_no,
-        ar.`unit_amt`     as unit_amt,
+        ar.`fee`     as fee,
         ar.`balance`     as balance,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
@@ -107,12 +101,30 @@
             <if test="typeId != null">and p.`type_id` = #{typeId}</if>
             <if test="productId != null">and ar.`product_id` >= #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
-            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
         order by ar.`create_time` desc
     </select>
 
-
+    <select id="getClientBillFeeSum" resultType="BigDecimal">
+        select
+        sum(ar.`fee`)
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        left join `client_user` cu
+        on c.`primary_user_id` = cu.`id`
+        left join `product` p
+        on ar.`product_id` = p.`id`
+        <where>
+            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="typeId != null">and p.`type_id` = #{typeId}</if>
+            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
+            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
+        </where>
+        order by ar.`create_time` desc
+    </select>
 
 
 </mapper>

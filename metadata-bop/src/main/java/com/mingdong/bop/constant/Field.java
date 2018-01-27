@@ -102,5 +102,6 @@ public interface Field
     String PRODUCT_INFO_LIST = "productInfoList";
     String MANAGER_LIST = "managerList";
     String TYPE_Id = "typeId";
-    String RECHARGE_ALL = "rechargeAll";
+    String SHOW_STATS = "showStats";
+    String HIT = "hit";
 }

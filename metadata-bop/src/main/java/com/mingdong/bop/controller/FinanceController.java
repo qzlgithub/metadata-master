@@ -82,15 +82,15 @@ public class FinanceController
             @RequestParam(value = Field.END_DATE, required = false) Date endDate, HttpServletResponse response)
             throws IOException
     {
-        //        XSSFWorkbook wb = tradeService.createProductRechargeInfoListXlsx(shortName, typeId, productId, managerId,
-        //                startDate, endDate, new Page(1, 1000));
-        //        String filename = new String("充值记录".getBytes(), "ISO8859-1");
-        //        response.setContentType("application/vnd.ms-excel");
-        //        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        //        OutputStream os = response.getOutputStream();
-        //        wb.write(os);
-        //        os.flush();
-        //        os.close();
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(shortName, typeId, productId, startDate, endDate,
+                new Page(1, 1000));
+        String filename = new String("消费记录".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
     }
 
 }

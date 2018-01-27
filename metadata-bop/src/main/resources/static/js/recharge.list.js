@@ -57,7 +57,7 @@ function getRechargeList(obj, pageFun) {
         },
         function(data) {
             if(data.errCode === '000000') {
-                $("#showRechargeAll").text('');
+                $("#showStats").text('');
                 var result = data.dataMap;
                 var total = result.total;
                 var pages = result.pages;
@@ -83,7 +83,7 @@ function getRechargeList(obj, pageFun) {
                     pageFun(obj, pages, total);
                 }
                 if(obj['shortName'] != '') {
-                    $("#showRechargeAll").text("共充值了 " + data.dataMap.rechargeAll + " 元");
+                    $("#showStats").text(data.dataMap.showStats);
                 }
             }
         }

@@ -27,4 +27,7 @@ public interface TradeService
 
     void getClientBillList(String shortName, Long typeId, Long productId, Date startDate, Date endDate, Page page,
             BLResp resp);
+
+    XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long productId, Date startDate, Date endDate,
+            Page page);
 }

@@ -184,7 +184,7 @@ public class TradeServiceImpl implements TradeService
         {
             BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId,
                     managerId, startDate, endDate);
-            resp.addData(Field.RECHARGE_ALL, NumberUtils.formatAmount(allRecharge));
+            resp.addData(Field.SHOW_STATS, "共充值了 " + NumberUtils.formatAmount(allRecharge) + " 元");
         }
         else
         {
@@ -277,12 +277,13 @@ public class TradeServiceImpl implements TradeService
     {
         if(StringUtils.isNotBlank(shortName))
         {
+            BigDecimal billFeeSum = remoteClientService.getClientBillFeeSum(shortName, typeId, productId, startDate,
+                    endDate);
+            resp.addData(Field.SHOW_STATS, "计次消耗 " + billFeeSum + " 元");
         }
-        else
-        {
-            shortName = null;
-        }
-        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId, startDate, endDate, page);
+        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
+        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId,
+                startDate, endDate, page);
         resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
         resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
@@ -295,17 +296,65 @@ public class TradeServiceImpl implements TradeService
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, item.getConsumptionNo());
+                map.put(Field.TRADE_NO, item.getId()+"");
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.SHORT_NAME, item.getShortName());
                 map.put(Field.USERNAME, item.getUsername());
                 map.put(Field.PRODUCT_NAME, item.getProductName());
-                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getUnitAmt()));
+                map.put(Field.BILL_PLAN, item.getBillPlanName());
+                map.put(Field.HIT, item.getHit());
+                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getFee()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 list.add(map);
             }
         }
         resp.addData(Field.LIST, list);
+    }
+
+    @Override
+    public XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long productId, Date startDate,
+            Date endDate, Page page)
+    {
+        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("消费数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("时间");
+        row.createCell(1).setCellValue("消费单号");
+        row.createCell(2).setCellValue("公司名称");
+        row.createCell(3).setCellValue("公司简称");
+        row.createCell(4).setCellValue("账号");
+        row.createCell(5).setCellValue("产品服务");
+        row.createCell(6).setCellValue("计费方式");
+        row.createCell(7).setCellValue("是否成功");
+        row.createCell(8).setCellValue("消费(元)");
+        row.createCell(9).setCellValue("余额(元)");
+        Row dataRow;
+        Cell cell;
+        CellStyle timeStyle = wb.createCellStyle();
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId,
+                startDate, endDate, page);
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
+        ApiReqInfoDTO dataInfo;
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            dataInfo = dataList.get(i);
+            dataRow = sheet.createRow(i + 1);
+            cell = dataRow.createCell(0);
+            cell.setCellValue(dataInfo.getCreateTime());
+            cell.setCellStyle(timeStyle);
+            dataRow.createCell(1).setCellValue(dataInfo.getId()+"");
+            dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+            dataRow.createCell(3).setCellValue(dataInfo.getShortName());
+            dataRow.createCell(4).setCellValue(dataInfo.getUsername());
+            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+            dataRow.createCell(6).setCellValue(dataInfo.getBillPlanName());
+            dataRow.createCell(7).setCellValue(dataInfo.getHit());
+            dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+            dataRow.createCell(9).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+        }
+        return wb;
     }
 
 }
