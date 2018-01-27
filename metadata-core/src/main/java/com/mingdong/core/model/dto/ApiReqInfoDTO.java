@@ -1,9 +1,9 @@
-package com.mingdong.mis.domain.entity;
+package com.mingdong.core.model.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ApiReqInfo
+public class ApiReqInfoDTO
 {
     private Long id;
     private Date createTime;
@@ -23,16 +23,6 @@ public class ApiReqInfo
     private String productName;
     private String billPlanName;
 
-    public String getBillPlanName()
-    {
-        return billPlanName;
-    }
-
-    public void setBillPlanName(String billPlanName)
-    {
-        this.billPlanName = billPlanName;
-    }
-
     public String getConsumptionNo()
     {
         return consumptionNo;
@@ -51,6 +41,16 @@ public class ApiReqInfo
     public void setResultCode(String resultCode)
     {
         this.resultCode = resultCode;
+    }
+
+    public String getBillPlanName()
+    {
+        return billPlanName;
+    }
+
+    public void setBillPlanName(String billPlanName)
+    {
+        this.billPlanName = billPlanName;
     }
 
     public Long getId()

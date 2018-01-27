@@ -11,8 +11,8 @@ public interface ProductInfoMapper
 
     int countAll();
 
-    List<ProductInfo> getListByEnabled(@Param("enabled")Integer enabled);
+    List<ProductInfo> getListByEnabled(@Param("enabled") Integer enabled);
 
-    int countByEnabled(@Param("enabled")Integer enabled);
+    int countByEnabled(@Param("enabled") Integer enabled);
 
 }

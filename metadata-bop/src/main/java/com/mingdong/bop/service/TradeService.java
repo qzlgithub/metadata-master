@@ -20,9 +20,11 @@ public interface TradeService
     void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page, BLResp resp);
 
     void getProductRechargeInfoList(String shortName, Long typeId, Long productId, Long managerId, Date startDate,
-            Date endDate, Page page,BLResp resp);
+            Date endDate, Page page, BLResp resp);
 
     XSSFWorkbook createProductRechargeInfoListXlsx(String shortName, Long typeId, Long productId, Long managerId,
             Date startDate, Date endDate, Page page);
 
+    void getClientBillList(String shortName, Long typeId, Long productId, Date startDate, Date endDate, Page page,
+            BLResp resp);
 }

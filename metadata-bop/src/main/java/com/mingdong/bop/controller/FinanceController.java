@@ -24,7 +24,7 @@ public class FinanceController
     private TradeService tradeService;
 
     @GetMapping(value = "/rechargeList")
-    public BLResp getProductRecharge(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
+    public BLResp getRechargeList(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
             @RequestParam(value = Field.TYPE_Id, required = false) Long typeId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.MANAGER_ID, required = false) Long managerId,
@@ -40,7 +40,7 @@ public class FinanceController
     }
 
     @GetMapping(value = "/rechargeList/export")
-    public void exportClientList(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
+    public void exportRechargeList(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
             @RequestParam(value = Field.TYPE_Id, required = false) Long typeId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.MANAGER_ID, required = false) Long managerId,
@@ -57,6 +57,40 @@ public class FinanceController
         wb.write(os);
         os.flush();
         os.close();
+    }
+
+    @GetMapping(value = "/billList")
+    public BLResp getBillList(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
+            @RequestParam(value = Field.TYPE_Id, required = false) Long typeId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_DATE, required = false) Date startDate,
+            @RequestParam(value = Field.END_DATE, required = false) Date endDate,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        BLResp resp = BLResp.build();
+        tradeService.getClientBillList(shortName, typeId, productId, startDate, endDate, new Page(pageNum, pageSize),
+                resp);
+        return resp;
+    }
+
+    @GetMapping(value = "/billList/export")
+    public void exportBillList(@RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
+            @RequestParam(value = Field.TYPE_Id, required = false) Long typeId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_DATE, required = false) Date startDate,
+            @RequestParam(value = Field.END_DATE, required = false) Date endDate, HttpServletResponse response)
+            throws IOException
+    {
+        //        XSSFWorkbook wb = tradeService.createProductRechargeInfoListXlsx(shortName, typeId, productId, managerId,
+        //                startDate, endDate, new Page(1, 1000));
+        //        String filename = new String("充值记录".getBytes(), "ISO8859-1");
+        //        response.setContentType("application/vnd.ms-excel");
+        //        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        //        OutputStream os = response.getOutputStream();
+        //        wb.write(os);
+        //        os.flush();
+        //        os.close();
     }
 
 }

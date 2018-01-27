@@ -9,6 +9,8 @@ import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
@@ -32,6 +34,7 @@ import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.domain.TransformDTO;
+import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientAccount;
 import com.mingdong.mis.domain.entity.ClientInfo;
@@ -43,6 +46,7 @@ import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.entity.UserProduct;
+import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientAccountMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientMapper;
@@ -91,6 +95,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ClientOperateInfoMapper clientOperateInfoMapper;
     @Resource
     private StatsClientMapper statsClientMapper;
+    @Resource
+    private ApiReqInfoMapper apiReqInfoMapper;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -886,6 +892,56 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         return clientInfoListDTO;
+    }
+
+    @Override
+    public ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate,
+            Date endDate, Page page)
+    {
+//        List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
+
+
+
+
+        ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
+        List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
+        apiReqInfoListDTO.setDataList(apiReqInfoDTOList);
+        ApiReqInfoDTO apiReqInfoDTO;
+        if(page == null)
+        {
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
+            if(CollectionUtils.isNotEmpty(apiReqInfoList))
+            {
+                for(ApiReqInfo item : apiReqInfoList)
+                {
+                    apiReqInfoDTO = new ApiReqInfoDTO();
+                    EntityUtils.copyProperties(item, apiReqInfoDTO);
+                    apiReqInfoDTOList.add(apiReqInfoDTO);
+                }
+            }
+        }
+        else
+        {
+            int total = apiReqInfoMapper.countClientBillListBy(shortName, typeId, productId, startDate, endDate);
+            int pages = page.getTotalPage(total);
+            apiReqInfoListDTO.setPages(pages);
+            apiReqInfoListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
+                if(CollectionUtils.isNotEmpty(apiReqInfoList))
+                {
+                    for(ApiReqInfo item : apiReqInfoList)
+                    {
+                        apiReqInfoDTO = new ApiReqInfoDTO();
+                        apiReqInfoDTOList.add(apiReqInfoDTO);
+                        EntityUtils.copyProperties(item, apiReqInfoDTO);
+                    }
+                }
+            }
+        }
+        return apiReqInfoListDTO;
     }
 
     /**

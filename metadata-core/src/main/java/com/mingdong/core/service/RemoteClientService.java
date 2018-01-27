@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -97,4 +98,6 @@ public interface RemoteClientService
     ClientOperateInfoListDTO getClientOperateInfoListByUserId(Long primaryUserId, Page page);
 
     ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
+
+    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate, Date endDate, Page page);
 }

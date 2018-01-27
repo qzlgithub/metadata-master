@@ -7,15 +7,17 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <result column="client_id" property="clientId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="hit" property="hit" jdbcType="TINYINT" />
+        <result column="link_ip" property="linkIp" jdbcType="VARCHAR" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="result_code" property="resultCode" jdbcType="VARCHAR" />
+        <result column="consumption_no" property="consumptionNo" jdbcType="VARCHAR" />
+        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
-        <result column="hit" property="hit" jdbcType="TINYINT" />
-        <result column="link_ip" property="linkIp" jdbcType="VARCHAR" />
-        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
-        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
-        <result column="balance" property="balance" jdbcType="DECIMAL" />
     </resultMap>
 
     <select id="getListBy" resultMap="BaseResultMap">
@@ -25,13 +27,17 @@
         ar.`update_time` as update_time,
         ar.`client_id` as client_id,
         ar.`product_id` as product_id,
+        ar.`hit`         as hit,
+        ar.`link_ip`     as link_ip,
+        ar.`bill_plan`     as bill_plan,
+        ar.`result_code`     as result_code,
+        ar.`consumption_no`     as consumption_no,
+        ar.`unit_amt`     as unit_amt,
+        ar.`balance`     as balance,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
         cu.`username`    as username,
-        p.`name`         as product_name,
-        ar.`hit`         as hit,
-        ar.`unit_amt`     as unit_amt,
-        ar.`balance`     as balance
+        p.`name`         as product_name
         from `api_req` ar
         left join `client` c
         on ar.`client_id` = c.`id`
@@ -45,7 +51,65 @@
             <if test="startTime != null">and ar.`create_time` >= #{startTime}</if>
             <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
         </where>
-        order by pr.`create_time` desc
+        order by ar.`create_time` desc
     </select>
+
+    <select id="countClientBillListBy" resultType="Integer">
+        select
+        count(ar.`id`)
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        left join `client_user` cu
+        on c.`primary_user_id` = cu.`id`
+        left join `product` p
+        on ar.`product_id` = p.`id`
+        <where>
+            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="typeId != null">and p.`type_id` = #{typeId}</if>
+            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
+            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+        </where>
+        order by ar.`create_time` desc
+    </select>
+
+    <select id="getClientBillListBy" resultMap="BaseResultMap">
+        select
+        ar.`id`          as id,
+        ar.`create_time` as create_time,
+        ar.`update_time` as update_time,
+        ar.`client_id` as client_id,
+        ar.`product_id` as product_id,
+        ar.`hit`         as hit,
+        ar.`link_ip`     as link_ip,
+        ar.`bill_plan`     as bill_plan,
+        ar.`result_code`     as result_code,
+        ar.`consumption_no`     as consumption_no,
+        ar.`unit_amt`     as unit_amt,
+        ar.`balance`     as balance,
+        c.`corp_name`    as corp_name,
+        c.`short_name`   as short_name,
+        cu.`username`    as username,
+        p.`name`         as product_name
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        left join `client_user` cu
+        on c.`primary_user_id` = cu.`id`
+        left join `product` p
+        on ar.`product_id` = p.`id`
+        <where>
+            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="typeId != null">and p.`type_id` = #{typeId}</if>
+            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
+            <if test="endTime != null">and ar.`create_time` &lt;= #{endTime}</if>
+        </where>
+        order by ar.`create_time` desc
+    </select>
+
+
+
 
 </mapper>

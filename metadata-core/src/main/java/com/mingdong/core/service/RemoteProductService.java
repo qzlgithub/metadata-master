@@ -82,9 +82,9 @@ public interface RemoteProductService
 
     ProductInfoListDTO getProductInfoList(Integer enabled, Page page);
 
-    ProductRechargeInfoListDTO getProductRechargeInfoListBy(String shortName, Long typeId, Long productId, Long managerId, Date startDate,
-            Date endDate, Page page);
+    ProductRechargeInfoListDTO getProductRechargeInfoListBy(String shortName, Long typeId, Long productId,
+            Long managerId, Date startDate, Date endDate, Page page);
 
-    BigDecimal getProductRechargeInfoSumBy(String shortName, Long typeId, Long productId, Long managerId, Date startDate,
-            Date endDate);
+    BigDecimal getProductRechargeInfoSumBy(String shortName, Long typeId, Long productId, Long managerId,
+            Date startDate, Date endDate);
 }

@@ -69,6 +69,9 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("finance/bill-list");
         view.addAllObjects(RequestThread.getMap());
+        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
+
+        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         return view;
     }
 
@@ -82,9 +85,9 @@ public class PageController
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
         List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
 
-        view.addObject(Field.RECHARGE_TYPE_LIST,rechargeTypeList);
-        view.addObject(Field.PRODUCT_INFO_LIST,productInfoList);
-        view.addObject(Field.MANAGER_LIST,managerList);
+        view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
+        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
+        view.addObject(Field.MANAGER_LIST, managerList);
         return view;
     }
 

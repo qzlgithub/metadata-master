@@ -20,11 +20,11 @@ public interface ProductRechargeInfoMapper
             @Param("typeId") Long typeId, @Param("productId") Long productId, @Param("managerId") Long managerId,
             @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    int countProductRechargeInfoBy(@Param("shortName") String shortName,
-            @Param("typeId") Long typeId, @Param("productId") Long productId, @Param("managerId") Long managerId,
-            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    int countProductRechargeInfoBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
+            @Param("productId") Long productId, @Param("managerId") Long managerId, @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 
-    BigDecimal getProductRechargeInfoSumBy(@Param("shortName") String shortName,
-            @Param("typeId") Long typeId, @Param("productId") Long productId, @Param("managerId") Long managerId,
-            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    BigDecimal getProductRechargeInfoSumBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
+            @Param("productId") Long productId, @Param("managerId") Long managerId, @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate);
 }

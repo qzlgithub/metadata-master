@@ -365,11 +365,10 @@ public class ProductServiceImpl implements ProductService
         return resp;
     }
 
-
     @Override
     public List<Map<String, Object>> getProductInfoListMap(Integer enabled)
     {
-        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(enabled,null);
+        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(enabled, null);
         List<ProductInfoDTO> productInfoList = productInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
         if(CollectionUtils.isNotEmpty(productInfoList))

@@ -10,6 +10,8 @@
         <result column="hit" property="hit" jdbcType="TINYINT" />
         <result column="link_ip" property="linkIp" jdbcType="VARCHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="result_code" property="resultCode" jdbcType="VARCHAR" />
+        <result column="consumption_no" property="consumptionNo" jdbcType="VARCHAR" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
     </resultMap>

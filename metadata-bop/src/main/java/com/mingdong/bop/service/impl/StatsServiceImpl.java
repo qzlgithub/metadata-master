@@ -105,7 +105,8 @@ public class StatsServiceImpl implements StatsService
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
         Date beforeDate;
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case MONTH:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
                 break;
@@ -164,7 +165,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(7).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case MONTH:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
                 break;
@@ -213,7 +215,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case MONTH:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
                 break;
@@ -280,7 +283,8 @@ public class StatsServiceImpl implements StatsService
         BLResp resp = BLResp.build();
         Date currentDay = new Date();
         Date beforeDate;
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case WEEK:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
                 break;
@@ -317,7 +321,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(8).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case WEEK:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
                 break;
@@ -372,7 +377,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
         Date beforeDate = null;
-        switch(scopeTypeEnum){
+        switch(scopeTypeEnum)
+        {
             case WEEK:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
                 break;
@@ -505,8 +511,8 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeRecord(
-                null,null,start, end, page);
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeRecord(null,
+                null, start, end, page);
         List<ProductRechargeInfoDTO> infoDateList = productRechargeInfoListDTO.getDataList();
         List<Map<String, Object>> dataList = getProductRechargeInfoDateList(infoDateList);
         return dataList;

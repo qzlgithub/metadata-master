@@ -3,6 +3,7 @@ package com.mingdong.core.constant;
 public enum BillPlan
 {
     YEAR(1),
+    //包年
     REQ(2),
     RES(3);
 

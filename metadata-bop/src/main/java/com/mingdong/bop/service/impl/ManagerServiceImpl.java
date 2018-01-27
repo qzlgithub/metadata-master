@@ -480,13 +480,15 @@ public class ManagerServiceImpl implements ManagerService
         ManagerInfoListDTO managerInfoList = remoteManagerService.getManagerInfoList(null, enabled, null);
         List<ManagerInfoDTO> dataList = managerInfoList.getDataList();
         List<Map<String, Object>> dataListMap = new ArrayList<>();
-        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(dataList)){
+        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(dataList))
+        {
             Map<String, Object> dataMap;
-            for(ManagerInfoDTO item : dataList){
+            for(ManagerInfoDTO item : dataList)
+            {
                 dataMap = new HashMap<>();
                 dataListMap.add(dataMap);
-                dataMap.put(Field.ID,item.getManagerId()+"");
-                dataMap.put(Field.NAME,item.getName());
+                dataMap.put(Field.ID, item.getManagerId() + "");
+                dataMap.put(Field.NAME, item.getName());
             }
         }
         return dataListMap;

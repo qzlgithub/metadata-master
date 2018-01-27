@@ -97,6 +97,4 @@ public class StatsController
         return jsonObject.toJSONString();
     }
 
-
-
 }

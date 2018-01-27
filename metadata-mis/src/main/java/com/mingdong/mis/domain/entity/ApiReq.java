@@ -6,15 +6,37 @@ import java.util.Date;
 public class ApiReq
 {
     private Long id;
-    private Date createTime;
-    private Date updateTime;
     private Long clientId;
     private Long productId;
-    private Integer hit;
-    private String linkIp;
-    private Integer billPlan;
-    private BigDecimal unitAmt;
-    private BigDecimal balance;
+    private Date createTime;
+    private Date updateTime;
+    private Integer hit;//成功与否
+    private Integer billPlan;//消费方式
+    private String linkIp;//连接ip
+    private BigDecimal unitAmt;//单价
+    private BigDecimal balance;//余额
+    private String consumptionNo;//消费单号
+    private String resultCode;//结果状态
+
+    public String getConsumptionNo()
+    {
+        return consumptionNo;
+    }
+
+    public void setConsumptionNo(String consumptionNo)
+    {
+        this.consumptionNo = consumptionNo;
+    }
+
+    public String getResultCode()
+    {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode)
+    {
+        this.resultCode = resultCode;
+    }
 
     public Long getClientId()
     {

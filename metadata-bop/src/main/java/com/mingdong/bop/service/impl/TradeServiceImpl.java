@@ -7,8 +7,11 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +35,8 @@ public class TradeServiceImpl implements TradeService
 {
     @Resource
     private RemoteProductService remoteProductService;
+    @Resource
+    private RemoteClientService remoteClientService;
 
     @Override
     public BLResp testList2(Long productId, Long clientId, Date time, Page page)
@@ -177,8 +182,8 @@ public class TradeServiceImpl implements TradeService
     {
         if(StringUtils.isNotBlank(shortName))
         {
-            BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId, managerId, startDate,
-                    endDate);
+            BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId,
+                    managerId, startDate, endDate);
             resp.addData(Field.RECHARGE_ALL, NumberUtils.formatAmount(allRecharge));
         }
         else
@@ -220,7 +225,7 @@ public class TradeServiceImpl implements TradeService
     public XSSFWorkbook createProductRechargeInfoListXlsx(String shortName, Long typeId, Long productId, Long managerId,
             Date startDate, Date endDate, Page page)
     {
-        shortName = StringUtils.isNotBlank(shortName)?shortName:null;
+        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值数据");
         Row row = sheet.createRow(0);
@@ -264,6 +269,43 @@ public class TradeServiceImpl implements TradeService
             dataRow.createCell(11).setCellValue(dataInfo.getRemark());
         }
         return wb;
+    }
+
+    @Override
+    public void getClientBillList(String shortName, Long typeId, Long productId, Date startDate, Date endDate,
+            Page page, BLResp resp)
+    {
+        if(StringUtils.isNotBlank(shortName))
+        {
+        }
+        else
+        {
+            shortName = null;
+        }
+        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId, startDate, endDate, page);
+        resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(dataList.size());
+        if(CollectionUtils.isNotEmpty(dataList))
+        {
+            for(ApiReqInfoDTO item : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, item.getConsumptionNo());
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.SHORT_NAME, item.getShortName());
+                map.put(Field.USERNAME, item.getUsername());
+                map.put(Field.PRODUCT_NAME, item.getProductName());
+                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getUnitAmt()));
+                map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
+                list.add(map);
+            }
+        }
+        resp.addData(Field.LIST, list);
     }
 
 }
