@@ -1,23 +1,14 @@
 package com.mingdong.mis.model.api;
 
+import com.mingdong.common.util.CollectionUtils;
+
 import java.util.List;
 import java.util.Map;
 
 public class APIData implements APIPayload
 {
-    private Integer hit;
     private List<Map<String, Object>> query;
     private List<Map<String, Object>> result;
-
-    public Integer getHit()
-    {
-        return hit;
-    }
-
-    public void setHit(Integer hit)
-    {
-        this.hit = hit;
-    }
 
     public List<Map<String, Object>> getQuery()
     {
@@ -42,6 +33,6 @@ public class APIData implements APIPayload
     @Override
     public boolean hit()
     {
-        return false;
+        return !CollectionUtils.isEmpty(result);
     }
 }

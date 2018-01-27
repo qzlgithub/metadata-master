@@ -20,8 +20,8 @@ public class DataController
     public BLResp getProductionData(@RequestParam(value = Field.PHONE) String phone)
     {
         BLResp resp = BLResp.build();
-        dataService.getProductionData(RequestThread.getProductId(), RequestThread.getClientId(),
-                RequestThread.getUserId(), phone, resp);
+        dataService.getProductionData(RequestThread.getRequestIp(), RequestThread.getProductId(),
+                RequestThread.getClientId(), RequestThread.getUserId(), phone, resp);
         return resp;
     }
 }

@@ -10,6 +10,8 @@ public interface ProductRechargeMapper
 {
     void add(ProductRecharge obj);
 
+    void updateSkipNull(ProductRecharge obj);
+
     ProductRecharge findById(Long id);
 
     BigDecimal sumAmountByClientProduct(Long clientProductId);

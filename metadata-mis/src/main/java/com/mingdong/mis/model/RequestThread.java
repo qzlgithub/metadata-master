@@ -4,9 +4,10 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(Long productId, Long clientId, Long userId)
+    public static void set(String requestIp, Long productId, Long clientId, Long userId)
     {
         RequestHolder holder = new RequestHolder();
+        holder.setRequestIp(requestIp);
         holder.setProductId(productId);
         holder.setClientId(clientId);
         holder.setUserId(userId);
@@ -16,6 +17,11 @@ public class RequestThread
     private static RequestHolder get()
     {
         return threadHolder.get();
+    }
+
+    public static String getRequestIp()
+    {
+        return get().getRequestIp();
     }
 
     public static Long getProductId()

@@ -6,88 +6,17 @@ import java.util.Date;
 public class ApiReq
 {
     private Long id;
-    private Long userId;
-    private Long clientId;
-    private Long productId;
     private Date createTime;
     private Date updateTime;
-    private Integer hit;//成功与否
-    private Integer billPlan;//消费方式
-    private String linkIp;//连接ip
-    private BigDecimal unitAmt;//单价
-    private BigDecimal balance;//余额
-    private String consumptionNo;//消费单号
-    private String resultCode;//结果状态
-
-    public Long getUserId()
-    {
-        return userId;
-    }
-
-    public void setUserId(Long userId)
-    {
-        this.userId = userId;
-    }
-
-    public String getConsumptionNo()
-    {
-        return consumptionNo;
-    }
-
-    public void setConsumptionNo(String consumptionNo)
-    {
-        this.consumptionNo = consumptionNo;
-    }
-
-    public String getResultCode()
-    {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode)
-    {
-        this.resultCode = resultCode;
-    }
-
-    public Long getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(Long clientId)
-    {
-        this.clientId = clientId;
-    }
-
-    public Integer getHit()
-    {
-        return hit;
-    }
-
-    public void setHit(Integer hit)
-    {
-        this.hit = hit;
-    }
-
-    public String getLinkIp()
-    {
-        return linkIp;
-    }
-
-    public void setLinkIp(String linkIp)
-    {
-        this.linkIp = linkIp;
-    }
-
-    public Integer getBillPlan()
-    {
-        return billPlan;
-    }
-
-    public void setBillPlan(Integer billPlan)
-    {
-        this.billPlan = billPlan;
-    }
+    private String requestNo;
+    private Long productId;
+    private Long clientId;
+    private Long userId;
+    private Integer billPlan;
+    private String requestIp;
+    private Integer hit;
+    private BigDecimal fee;
+    private BigDecimal balance;
 
     public Long getId()
     {
@@ -119,6 +48,16 @@ public class ApiReq
         this.updateTime = updateTime;
     }
 
+    public String getRequestNo()
+    {
+        return requestNo;
+    }
+
+    public void setRequestNo(String requestNo)
+    {
+        this.requestNo = requestNo;
+    }
+
     public Long getProductId()
     {
         return productId;
@@ -129,14 +68,64 @@ public class ApiReq
         this.productId = productId;
     }
 
-    public BigDecimal getUnitAmt()
+    public Long getClientId()
     {
-        return unitAmt;
+        return clientId;
     }
 
-    public void setUnitAmt(BigDecimal unitAmt)
+    public void setClientId(Long clientId)
     {
-        this.unitAmt = unitAmt;
+        this.clientId = clientId;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
+    }
+
+    public String getRequestIp()
+    {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp)
+    {
+        this.requestIp = requestIp;
+    }
+
+    public Integer getHit()
+    {
+        return hit;
+    }
+
+    public void setHit(Integer hit)
+    {
+        this.hit = hit;
+    }
+
+    public BigDecimal getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee)
+    {
+        this.fee = fee;
     }
 
     public BigDecimal getBalance()

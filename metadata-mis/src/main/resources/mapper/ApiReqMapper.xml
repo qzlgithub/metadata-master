@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mingdong.mis.domain.mapper.ApiReqMapper">
+    <resultMap id="BaseResultMap" type="ApiReq">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="request_no" property="requestNo" jdbcType="VARCHAR" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="request_ip" property="requestIp" jdbcType="VARCHAR" />
+        <result column="hit" property="hit" jdbcType="TINYINT" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <insert id="add" parameterType="ApiReq">
+        insert into
+            `api_req`
+            (`id`, `create_time`, `update_time`, `request_no`, `product_id`, `client_id`, `user_id`, `bill_plan`,
+             `request_ip`, `hit`, `fee`, `balance`)
+        values
+            (#{id}, #{createTime}, #{updateTime}, #{requestNo}, #{productId}, #{clientId}, #{userId}, #{billPlan},
+             #{requestIp}, #{hit}, #{fee}, #{balance})
+    </insert>
 
     <select id="countBy" resultType="int">
-        select count(*)
-        from `api_req`
+        select count(*) from `api_req`
         <where>
             <if test="clientId != null">`client_id` = #{clientId}</if>
             <if test="productId != null">and `product_id` = #{productId}</if>
