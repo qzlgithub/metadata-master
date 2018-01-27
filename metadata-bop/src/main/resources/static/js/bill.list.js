@@ -33,12 +33,10 @@ var rowStr = '<tr>' +
     '<td>#{shortName}</td>' +
     '<td>#{username}</td>' +
     '<td>#{productName}</td>' +
-    '<td>#{rechargeType}</td>' +
-    '<td>#{amount}</td>' +
+    '<td>#{billPlan}</td>' +
+    '<td>#{hit}</td>' +
+    '<td>#{unitAmt}</td>' +
     '<td>#{balance}</td>' +
-    '<td>#{manager}</td>' +
-    '<td>#{contractNo}</td>' +
-    '<td>#{remark}</td>' +
     '</tr>';
 
 function getBillList(obj, pageFun) {
@@ -55,7 +53,7 @@ function getBillList(obj, pageFun) {
         },
         function(data) {
             if(data.errCode === '000000') {
-                $("#showRechargeAll").text('');
+                $("#showStats").text('');
                 var result = data.dataMap;
                 var total = result.total;
                 var pages = result.pages;
@@ -68,12 +66,10 @@ function getBillList(obj, pageFun) {
                     .replace("#{shortName}", list[d].shortName)
                     .replace("#{username}", list[d].username)
                     .replace("#{productName}", list[d].productName)
-                    .replace("#{rechargeType}", list[d].rechargeType)
-                    .replace("#{amount}", list[d].amount)
-                    .replace("#{balance}", list[d].balance)
-                    .replace("#{manager}", list[d].managerName)
-                    .replace("#{contractNo}", list[d].contractNo)
-                    .replace("#{remark}", list[d].remark);
+                    .replace("#{billPlan}", list[d].billPlan)
+                    .replace("#{hit}", list[d].hit)
+                    .replace("#{unitAmt}", list[d].unitAmt)
+                    .replace("#{balance}", list[d].balance);
                     $("#dataBody").append(row);
                 }
                 if(typeof pageFun === 'function') {
@@ -81,7 +77,7 @@ function getBillList(obj, pageFun) {
                     pageFun(obj, pages, total);
                 }
                 if(obj['shortName'] != '') {
-                    $("#showRechargeAll").text("共充值了 " + data.dataMap.rechargeAll + " 元");
+                    $("#showStats").text(data.dataMap.showStats);
                 }
             }
         }
@@ -93,7 +89,7 @@ function clientOutPrint() {
     var rechargeType = $("#rechargeType").val().trim();
     var productId = $("#productId").val().trim();
     var selectDate = $("#selectDate").val().trim();
-    var url = '/finance/rechargeList/export?shortName=' + shortName + "&rechargeType=" + rechargeType
+    var url = '/finance/billList/export?shortName=' + shortName + "&rechargeType=" + rechargeType
         + "&productId=" + productId
         + "&startDate=" + (selectDate == '' ? '' : selectDate + " 00:00:00")
         + "&endDate=" + (selectDate == '' ? '' : selectDate + " 23:59:59");

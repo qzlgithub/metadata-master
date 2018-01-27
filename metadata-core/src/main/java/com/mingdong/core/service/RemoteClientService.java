@@ -17,6 +17,7 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -99,5 +100,9 @@ public interface RemoteClientService
 
     ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
 
-    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate, Date endDate, Page page);
+    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate, Date endDate,
+            Page page);
+
+    BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate);
+
 }

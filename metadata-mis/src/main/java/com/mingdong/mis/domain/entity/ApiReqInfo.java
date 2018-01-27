@@ -13,16 +13,34 @@ public class ApiReqInfo
     private Long productId;
     private Integer hit;//成功与否
     private Integer billPlan;//消费方式
-    private String linkIp;//连接ip
-    private BigDecimal unitAmt;//单价
+    private String requestIp;//连接ip
+    private BigDecimal fee;//消费金额
     private BigDecimal balance;//余额
-    private String consumptionNo;//消费单号
-    private String resultCode;//结果状态
     private String corpName;
     private String shortName;
     private String username;
     private String productName;
     private String billPlanName;
+
+    public BigDecimal getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee)
+    {
+        this.fee = fee;
+    }
+
+    public String getRequestIp()
+    {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp)
+    {
+        this.requestIp = requestIp;
+    }
 
     public Long getUserId()
     {
@@ -42,26 +60,6 @@ public class ApiReqInfo
     public void setBillPlanName(String billPlanName)
     {
         this.billPlanName = billPlanName;
-    }
-
-    public String getConsumptionNo()
-    {
-        return consumptionNo;
-    }
-
-    public void setConsumptionNo(String consumptionNo)
-    {
-        this.consumptionNo = consumptionNo;
-    }
-
-    public String getResultCode()
-    {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode)
-    {
-        this.resultCode = resultCode;
     }
 
     public Long getId()
@@ -124,16 +122,6 @@ public class ApiReqInfo
         this.hit = hit;
     }
 
-    public String getLinkIp()
-    {
-        return linkIp;
-    }
-
-    public void setLinkIp(String linkIp)
-    {
-        this.linkIp = linkIp;
-    }
-
     public Integer getBillPlan()
     {
         return billPlan;
@@ -142,16 +130,6 @@ public class ApiReqInfo
     public void setBillPlan(Integer billPlan)
     {
         this.billPlan = billPlan;
-    }
-
-    public BigDecimal getUnitAmt()
-    {
-        return unitAmt;
-    }
-
-    public void setUnitAmt(BigDecimal unitAmt)
-    {
-        this.unitAmt = unitAmt;
     }
 
     public BigDecimal getBalance()

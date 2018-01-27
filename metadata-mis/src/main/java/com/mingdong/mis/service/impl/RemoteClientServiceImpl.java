@@ -62,6 +62,7 @@ import com.mingdong.mis.domain.mapper.UserProductMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -898,18 +899,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate,
             Date endDate, Page page)
     {
-//        List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
-
-
-
-
         ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
         List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
         apiReqInfoListDTO.setDataList(apiReqInfoDTOList);
         ApiReqInfoDTO apiReqInfoDTO;
         if(page == null)
         {
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId,
+                    startDate, endDate);
             if(CollectionUtils.isNotEmpty(apiReqInfoList))
             {
                 for(ApiReqInfo item : apiReqInfoList)
@@ -929,7 +926,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId, startDate, endDate);
+                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId,
+                        startDate, endDate);
                 if(CollectionUtils.isNotEmpty(apiReqInfoList))
                 {
                     for(ApiReqInfo item : apiReqInfoList)
@@ -942,6 +940,12 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         return apiReqInfoListDTO;
+    }
+
+    @Override
+    public BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate)
+    {
+        return apiReqInfoMapper.getClientBillFeeSum(shortName, typeId, productId, startDate, endDate);
     }
 
     /**

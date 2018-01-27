@@ -41,7 +41,7 @@
                 <li>选择充值产品：
                     <div class="layui-inline">
                         <div class="layui-input-inline layui-form">
-                            <select name="city" lay-verify="" lay-search="" id="productId">
+                            <select name="city" lay-verify="" lay-search="" class="select-list" id="productId">
                                 <option value="">全部</option>
                                 <option th:each="item:${productInfoList}" th:value="${item.id}"
                                         th:text="${item.name}"></option>
@@ -62,7 +62,7 @@
                 </li>-->
                 <li class="position-r">客户归属人：
                     <div class="layui-input-inline layui-form">
-                        <select name="quiz2" lay-verify="" lay-search="" id="managerId">
+                        <select name="quiz2" lay-verify="" lay-search="" class="select-list" id="managerId">
                             <option value="">全部</option>
                             <option th:each="item:${managerList}" th:value="${item.id}"
                                     th:text="${item.name}"></option>
@@ -73,7 +73,7 @@
                     <button href="javascript:" class="check-button" onclick="billListInit()">查询</button>
                 </li>
             </ul>
-            <div class="clearfix mt20"><em id="showRechargeAll"></em><span
+            <div class="clearfix mt20"><em id="showStats"></em><span
                     class="fr"><i class="col2 mr10">一次最多导出<em>1000</em>条</i><a
                     href="javascript:" class="add-button" onclick="clientOutPrint()">导出</a></span></div>
             <div class="layui-form mt20">
