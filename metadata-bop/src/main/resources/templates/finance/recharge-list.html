@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
     <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
 
 </head>
 
@@ -48,9 +49,17 @@
                         </div>
                     </div>
                 </li>
-                <li class="position-r">选择时间：
+                <!--<li class="position-r">选择时间：
                     <input type="text" class="date_picker date-input" readonly="readonly" id="selectDate"/>
-                    <i class="layui-icon fz-24 date-icon col4" style="right: 15px;">&#xe637;</i></li>
+                    <i class="layui-icon fz-24 date-icon col4" style="right: 15px;">&#xe637;</i>/li>-->
+                <li class="position-r">选择时间：
+                    <div class="ta_date" id="div_date1">
+                        <span class="date_title" id="date"></span>
+                        <a class="opt_sel" id="input_trigger" href="#">
+                            <i class="i_orderd"></i>
+                        </a>
+                    </div>
+                </li>
                 <li class="position-r">客户归属人：
                     <div class="layui-input-inline layui-form">
                         <select name="quiz2" lay-verify="" lay-search="" id="managerId">
@@ -102,9 +111,41 @@
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/recharge.list.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
 <script type="text/javascript">
     $(function() {
         $('.date_picker').date_input();
+    })
+    $(function() {
+        var fromObj = $("#from-date");
+        var toObj = $("#to-date");
+        new pickerDateRange('date', {
+            isTodayValid: true,
+            startDate: fromObj.val(),
+            endDate: toObj.val(),
+            needCompare: false,
+            defaultText: ' 至 ',
+            autoSubmit: true,
+            inputTrigger: 'input_trigger',
+            theme: 'ta',
+            success: function(obj) {
+                fromObj.val(obj.startDate);
+                toObj.val(obj.endDate);
+            }
+        })
     })
 </script>
 </body>
