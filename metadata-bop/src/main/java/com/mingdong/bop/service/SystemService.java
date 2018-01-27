@@ -61,4 +61,6 @@ public interface SystemService
     void changeIndustryStatus(Long industryTypeId, Integer enabled);
 
     void setModuleStatus(List<Long> moduleIdList, Integer status, BLResp resp);
+
+    Map<String, Object> getSettings();
 }

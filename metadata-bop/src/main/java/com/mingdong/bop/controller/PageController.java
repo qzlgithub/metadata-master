@@ -78,8 +78,8 @@ public class PageController
         Date date = new Date();
         Date beforeDayDate = DateCalculateUtils.getBeforeDayDate(date, 30, true);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view.addObject(Field.START_DATE,sdf.format(beforeDayDate));
-        view.addObject(Field.END_DATE,sdf.format(date));
+        view.addObject(Field.START_DATE, sdf.format(beforeDayDate));
+        view.addObject(Field.END_DATE, sdf.format(date));
         return view;
     }
 
@@ -99,8 +99,8 @@ public class PageController
         Date date = new Date();
         Date beforeDayDate = DateCalculateUtils.getBeforeDayDate(date, 30, true);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view.addObject(Field.START_DATE,sdf.format(beforeDayDate));
-        view.addObject(Field.END_DATE,sdf.format(date));
+        view.addObject(Field.START_DATE, sdf.format(beforeDayDate));
+        view.addObject(Field.END_DATE, sdf.format(date));
         return view;
     }
 
@@ -240,7 +240,7 @@ public class PageController
     public ModelAndView otherSettingPage()
     {
         ModelAndView view = new ModelAndView("system-manage/other-setting");
-        view.addObject(Field.LIST, systemService.getHierarchyIndustry());
+        view.addAllObjects(systemService.getSettings());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

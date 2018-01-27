@@ -591,6 +591,12 @@ public class SystemServiceImpl implements SystemService
         remoteSystemService.setModuleStatus(status, moduleIdList);
     }
 
+    @Override
+    public Map<String, Object> getSettings()
+    {
+        return remoteSystemService.getSettingData();
+    }
+
     private void cacheAllIndustryData()
     {
         DictIndustryListDTO dictIndustryInfoList = remoteSystemService.getDictIndustryInfoList();

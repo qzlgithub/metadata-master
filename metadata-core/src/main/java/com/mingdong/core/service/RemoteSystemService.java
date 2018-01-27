@@ -12,6 +12,7 @@ import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RemoteSystemService
 {
@@ -64,4 +65,6 @@ public interface RemoteSystemService
     PrivilegeListDTO getPrivilegeByParent(Long parentModuleId);
 
     void setModuleStatus(Integer status, List<Long> moduleIdList);
+
+    Map<String, Object> getSettingData();
 }

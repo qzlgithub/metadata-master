@@ -32,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RemoteSystemServiceImpl implements RemoteSystemService
 {
@@ -403,6 +405,18 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public void setModuleStatus(Integer status, List<Long> moduleIdList)
     {
         privilegeMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
+    }
+
+    @Override
+    public Map<String, Object> getSettingData()
+    {
+        List<SysConfig> list = sysConfigMapper.getAll();
+        Map<String, Object> map = new HashMap<>();
+        for(SysConfig o : list)
+        {
+            map.put(o.getName(), o.getValue());
+        }
+        return map;
     }
 
     private void findDictIndustryDTO(List<DictIndustry> dictIndustryList, List<DictIndustryDTO> dataList)

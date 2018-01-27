@@ -46,4 +46,8 @@
         <include refid="select_all" />
         where `name` = #{name}
     </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        <include refid="select_all" />
+    </select>
 </mapper>
