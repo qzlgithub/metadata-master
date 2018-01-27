@@ -1,5 +1,10 @@
 package com.mingdong.core.util;
 
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.util.DateUtils;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -71,5 +76,24 @@ public class BusinessUtils
             return calendar.getTime();
         }
         return null;
+    }
+
+    public static boolean checkAccountValid(Date startDate, Date endDate) throws ParseException
+    {
+        Date now = new Date();
+        String start = DateUtils.format(startDate, DateFormat.YYYY_MM_DD);
+        startDate = DateUtils.parseToDate(start, DateFormat.YYYY_MM_DD);
+        if(now.before(startDate))
+        {
+            return false;
+        }
+        String end = DateUtils.format(endDate, DateFormat.YYYY_MM_DD);
+        endDate = DateUtils.parseToDate(end, DateFormat.YYYY_MM_DD_HH_MM_SS);
+        return !now.after(endDate);
+    }
+
+    public static boolean checkAccountValid(BigDecimal unitAmt, BigDecimal balance)
+    {
+        return unitAmt != null && balance != null && balance.doubleValue() >= unitAmt.doubleValue();
     }
 }

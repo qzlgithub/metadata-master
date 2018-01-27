@@ -26,6 +26,7 @@ public enum RestResult
     PRODUCT_NOT_OPEN("100021", "客户未开通本产品"),
     ACCOUNT_COUNT_MAX("100022", "账号数量已到上限"),
     PARAMETER_ERROR("100023", "参数错误"),
+    INSUFFICIENT_BALANCE("100024", "账户余额不足或已过期"),
     ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),
     INTERNAL_ERROR("999999", "系统繁忙，请稍后重试");
 
