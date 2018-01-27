@@ -3,9 +3,9 @@ server:
 
 spring:
   redis:
-    host: 192.168.2.159
+    host: 192.168.2.139
     port: 6379
-    password: iPwd@201712
+    password: 123456
   thymeleaf:
     enabled: true
     cache: true
@@ -20,4 +20,4 @@ node:
   id: 1
 dubbo:
   registry:
-    address: 192.168.2.159:2181
+    address: 192.168.2.139:2181

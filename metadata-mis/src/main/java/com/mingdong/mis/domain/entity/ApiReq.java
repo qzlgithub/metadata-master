@@ -6,6 +6,7 @@ import java.util.Date;
 public class ApiReq
 {
     private Long id;
+    private Long userId;
     private Long clientId;
     private Long productId;
     private Date createTime;
@@ -17,6 +18,16 @@ public class ApiReq
     private BigDecimal balance;//余额
     private String consumptionNo;//消费单号
     private String resultCode;//结果状态
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
 
     public String getConsumptionNo()
     {
