@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
     <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
 
 </head>
 
@@ -33,6 +34,9 @@
                 <li>选择计费方式：
                     <select name="modules" lay-verify="required" lay-search="" class="select-list" id="rechargeType">
                         <option value="">全部</option>
+                        <option value="1">包年</option>
+                        <option value="2">请求计费</option>
+                        <option value="3">请求成功计费</option>
                     </select>
                 </li>
                 <li>选择产品：
@@ -46,10 +50,21 @@
                         </div>
                     </div>
                 </li>
-                <li class="position-r">选择时间：<em class="inline-block">
+                <!--li class="position-r">选择时间：<em class="inline-block">
                     <input type="text" autocomplete="off" class="layui-input date_picker"
                            id="selectDate"/></em>
-                    <i class="layui-icon fz-24 date-icon col4" style="right: 15px;">&#xe637;</i></li>
+                    <i class="layui-icon fz-24 date-icon col4" style="right: 15px;">&#xe637;</i></li-->
+                <li class="position-r">选择时间：
+                    <div class="ta_date" id="div_date1">
+                        <span class="date_title" id="date1"></span>
+                        <a class="opt_sel" id="input_trigger1" href="#">
+                            <i class="i_orderd"></i>
+                        </a>
+                    </div>
+                    <input type="hidden" id="startDate" th:value="${startDate}"/>
+                    <input type="hidden" id="endDate" th:value="${endDate}"/>
+                    <div id="datePicker1"></div>
+                </li>
                 <li>
                     <button class="check-button" onclick="billListInit()">查询</button>
                 </li>
@@ -89,22 +104,16 @@
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/bill.list.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
 <script>
-    layui.use('form', function(){
+    layui.use('form', function() {
         var form = layui.form;
-
-
         //监听提交
-        form.on('submit(formDemo)', function(data){
+        form.on('submit(formDemo)', function(data) {
             layer.msg(JSON.stringify(data.field));
             return false;
         });
     });
-</script>
-<script type="text/javascript">
-    $(function() {
-        $('.date_picker').date_input();
-    })
 </script>
 </body>
 </html>

@@ -1,4 +1,20 @@
 $(function() {
+    var startDate = $("#startDate");
+    var endDate = $("#endDate");
+    new pickerDateRange('date1', {
+        isTodayValid : true,
+        startDate : startDate.val(),
+        endDate : endDate.val(),
+        needCompare : false,
+        defaultText : ' 至 ',
+        autoSubmit : true,
+        inputTrigger : 'input_trigger1',
+        theme : 'ta',
+        success : function(obj) {
+            startDate.val(obj.startDate);
+            endDate.val(obj.endDate);
+        }
+    });
     billListInit();
 });
 
@@ -9,7 +25,8 @@ function billListInit() {
         shortName: $("#shortName").val().trim(),
         rechargeType: $("#rechargeType").val().trim(),
         productId: $("#productId").val().trim(),
-        selectDate: $("#selectDate").val().trim()
+        startDate: $("#startDate").val().trim(),
+        endDate: $("#endDate").val().trim()
     };
     getBillList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
@@ -48,8 +65,8 @@ function getBillList(obj, pageFun) {
             "shortName": obj['shortName'],
             "typeId": obj['rechargeType'],
             "productId": obj['productId'],
-            "startDate": obj['selectDate'] == '' ? '' : obj['selectDate'] + " 00:00:00",
-            "endDate": obj['selectDate'] == '' ? '' : obj['selectDate'] + " 23:59:59"
+            "startDate": obj['startDate'] == '' ? '' : obj['startDate'] + " 00:00:00",
+            "endDate": obj['endDate'] == '' ? '' : obj['endDate'] + " 23:59:59"
         },
         function(data) {
             if(data.errCode === '000000') {
@@ -88,11 +105,12 @@ function clientOutPrint() {
     var shortName = $("#shortName").val().trim();
     var rechargeType = $("#rechargeType").val().trim();
     var productId = $("#productId").val().trim();
-    var selectDate = $("#selectDate").val().trim();
+    var startDate = $("#startDate").val().trim();
+    var endDate = $("#endDate").val().trim();
     var url = '/finance/billList/export?shortName=' + shortName + "&rechargeType=" + rechargeType
         + "&productId=" + productId
-        + "&startDate=" + (selectDate == '' ? '' : selectDate + " 00:00:00")
-        + "&endDate=" + (selectDate == '' ? '' : selectDate + " 23:59:59");
+        + "&startDate=" + (startDate == '' ? '' : startDate + " 00:00:00")
+        + "&endDate=" + (endDate == '' ? '' : endDate + " 23:59:59");
     location.href = encodeURI(url);
 }
 
