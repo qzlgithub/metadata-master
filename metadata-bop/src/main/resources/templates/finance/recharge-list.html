@@ -59,6 +59,8 @@
                             <i class="i_orderd"></i>
                         </a>
                     </div>
+                    <input type="hidden" id="startDate" th:value="${startDate}"/>
+                    <input type="hidden" id="endDate" th:value="${endDate}"/>
                     <div id="datePicker1"></div>
                 </li>
                 <li class="position-r">客户归属人：
@@ -71,7 +73,7 @@
                     </div>
                 </li>
                 <li>
-                    <button href="javascript:" class="check-button" onclick="billListInit()">查询</button>
+                    <button href="javascript:" class="check-button" onclick="rechargeListInit()">查询</button>
                 </li>
             </ul>
             <div class="clearfix mt20"><em id="showStats"></em><span
@@ -106,6 +108,7 @@
 <script src="../../static/plugins/layui/layui.js"></script>
 <script src="/plugins/layui/lay/modules/laydate.js"></script>
 <!--<script src="http://www.jq22.com/jquery/1.8.3/jquery.min.js"></script>-->
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="/plugins/js/jquery.date_input.pack.js"></script>
 <script type="text/javascript" th:src="@{/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
@@ -113,7 +116,6 @@
 <script type="text/javascript" th:src="@{/js/recharge.list.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script>
     layui.use('form', function(){
         var form = layui.form;
@@ -126,27 +128,6 @@
         });
     });
 </script>
-<!--<script type="text/javascript">
-    $(function() {
-        $('.date_picker').date_input();
-    })
-</script>-->
-<script type="text/javascript">
-    //var STATS_START_TIME = '1329148800';
-    var dateRange1 = new pickerDateRange('date1', {
-        isTodayValid : true,
-        startDate : '2012-06-14',
-        endDate : '2012-07-10',
-        needCompare : false,
-        defaultText : ' 至 ',
-        autoSubmit : true,
-        inputTrigger : 'input_trigger1',
-        theme : 'ta',
-        success : function(obj) {
-            $("#dCon2").html('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
-        }
-    });
 
-</script>
 </body>
 </html>
