@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ApiReqInfoDTO
+public class ApiReqInfoDTO implements Serializable
 {
     private Long id;
     private Date createTime;

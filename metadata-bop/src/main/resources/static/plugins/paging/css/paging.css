@@ -48,7 +48,7 @@
   float: left;
 }
 .box .pageWrap ul .sel-page {
-  background-color: dodgerblue;
+  background-color: dodgerblue; color: #fff;
 }
 .box .jump-text {
   width: 60px;
