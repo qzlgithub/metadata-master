@@ -15,6 +15,6 @@ public class MISApplication
     public static void main(String[] args)
     {
         SpringApplication.run(MISApplication.class, args);
-        System.out.println("##### startup CSP service successfully ...");
+        System.out.println("##### startup MIS service successfully ...");
     }
 }
