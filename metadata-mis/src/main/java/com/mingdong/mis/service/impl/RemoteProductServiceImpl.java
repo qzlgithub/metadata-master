@@ -667,5 +667,56 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return productInfoListDTO;
     }
 
+    @Override
+    public ProductRechargeInfoListDTO getProductRechargeInfoListBy(String shortName, Long typeId, Long productId,
+            Long managerId, Date startDate, Date endDate, Page page)
+    {
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
+        List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
+        productRechargeInfoListDTO.setDataList(dataList);
+        ProductRechargeInfoDTO productRechargeInfoDTO;
+        if(page == null)
+        {
+            List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getProductRechargeInfoListBy(
+                    shortName, typeId, productId, managerId, startDate, endDate);
+            for(ProductRechargeInfo item : productRechargeInfoList)
+            {
+                productRechargeInfoDTO = new ProductRechargeInfoDTO();
+                EntityUtils.copyProperties(item, productRechargeInfoDTO);
+                dataList.add(productRechargeInfoDTO);
+            }
+        }
+        else
+        {
+            int total = productRechargeInfoMapper.countProductRechargeInfoBy(shortName, typeId, productId, managerId,
+                    startDate, endDate);
+            int pages = page.getTotalPage(total);
+            productRechargeInfoListDTO.setPages(pages);
+            productRechargeInfoListDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ProductRechargeInfo> productRechargeInfoList =
+                        productRechargeInfoMapper.getProductRechargeInfoListBy(shortName, typeId, productId, managerId,
+                                startDate, endDate);
+                for(ProductRechargeInfo item : productRechargeInfoList)
+                {
+                    productRechargeInfoDTO = new ProductRechargeInfoDTO();
+                    EntityUtils.copyProperties(item, productRechargeInfoDTO);
+                    dataList.add(productRechargeInfoDTO);
+                }
+            }
+        }
+        return productRechargeInfoListDTO;
+    }
+
+    @Override
+    public BigDecimal getProductRechargeInfoSumBy(String shortName, Long typeId, Long productId, Long managerId,
+            Date startDate, Date endDate)
+    {
+        return productRechargeInfoMapper.getProductRechargeInfoSumBy(shortName, typeId, productId, managerId, startDate,
+                endDate);
+    }
+
 }
 

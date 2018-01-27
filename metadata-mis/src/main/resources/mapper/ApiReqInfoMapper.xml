@@ -3,12 +3,17 @@
 <mapper namespace="com.mingdong.mis.domain.mapper.ApiReqInfoMapper">
     <resultMap id="BaseResultMap" type="ApiReqInfo">
         <result column="id" property="id" jdbcType="BIGINT" />
-        <result column="call_time" property="callTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
-        <result column="suc" property="suc" jdbcType="TINYINT" />
+        <result column="hit" property="hit" jdbcType="TINYINT" />
+        <result column="link_ip" property="linkIp" jdbcType="VARCHAR" />
+        <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
         <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
     </resultMap>
@@ -16,12 +21,15 @@
     <select id="getListBy" resultMap="BaseResultMap">
         select
         ar.`id`          as id,
-        ar.`create_time` as call_time,
+        ar.`create_time` as create_time,
+        ar.`update_time` as update_time,
+        ar.`client_id` as client_id,
+        ar.`product_id` as product_id,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
         cu.`username`    as username,
         p.`name`         as product_name,
-        ar.`suc`         as suc,
+        ar.`hit`         as hit,
         ar.`unit_amt`     as unit_amt,
         ar.`balance`     as balance
         from `api_req` ar

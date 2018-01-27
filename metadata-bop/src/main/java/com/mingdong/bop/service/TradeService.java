@@ -2,6 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.Date;
 
@@ -17,4 +18,11 @@ public interface TradeService
     BLResp testList4(Long clientId, Date time, Page page);
 
     void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page, BLResp resp);
+
+    void getProductRechargeInfoList(String shortName, Long typeId, Long productId, Long managerId, Date startDate,
+            Date endDate, Page page,BLResp resp);
+
+    XSSFWorkbook createProductRechargeInfoListXlsx(String shortName, Long typeId, Long productId, Long managerId,
+            Date startDate, Date endDate, Page page);
+
 }

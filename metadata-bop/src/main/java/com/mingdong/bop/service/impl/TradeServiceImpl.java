@@ -5,14 +5,22 @@ import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -152,8 +160,8 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.USERNAME, pri.getUsername());
                 map.put(Field.PRODUCT_NAME, pri.getProductName());
                 map.put(Field.RECHARGE_TYPE, pri.getRechargeType());
-                map.put(Field.AMOUNT, pri.getAmount());
-                map.put(Field.BALANCE, pri.getBalance());
+                map.put(Field.AMOUNT, NumberUtils.formatAmount(pri.getAmount()));
+                map.put(Field.BALANCE, NumberUtils.formatAmount(pri.getBalance()));
                 map.put(Field.MANAGER_NAME, pri.getManagerName());
                 map.put(Field.CONTRACT_NO, pri.getContractNo());
                 map.put(Field.REMARK, pri.getRemark());
@@ -161,6 +169,101 @@ public class TradeServiceImpl implements TradeService
             }
         }
         resp.addData(Field.LIST, list);
+    }
+
+    @Override
+    public void getProductRechargeInfoList(String shortName, Long typeId, Long productId, Long managerId,
+            Date startDate, Date endDate, Page page, BLResp resp)
+    {
+        if(StringUtils.isNotBlank(shortName))
+        {
+            BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId, managerId, startDate,
+                    endDate);
+            resp.addData(Field.RECHARGE_ALL, NumberUtils.formatAmount(allRecharge));
+        }
+        else
+        {
+            shortName = null;
+        }
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoListBy(
+                shortName, typeId, productId, managerId, startDate, endDate, page);
+        resp.addData(Field.TOTAL, productRechargeInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, productRechargeInfoListDTO.getPages());
+        resp.addData(Field.PAGE_NUM, page.getPageNum());
+        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
+        List<Map<String, Object>> list = new ArrayList<>(dataList.size());
+        if(CollectionUtils.isNotEmpty(dataList))
+        {
+            for(ProductRechargeInfoDTO pri : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.TRADE_AT, DateUtils.format(pri.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, pri.getTradeNo());
+                map.put(Field.CORP_NAME, pri.getCorpName());
+                map.put(Field.SHORT_NAME, pri.getShortName());
+                map.put(Field.USERNAME, pri.getUsername());
+                map.put(Field.PRODUCT_NAME, pri.getProductName());
+                map.put(Field.RECHARGE_TYPE, pri.getRechargeType());
+                map.put(Field.AMOUNT, NumberUtils.formatAmount(pri.getAmount()));
+                map.put(Field.BALANCE, NumberUtils.formatAmount(pri.getBalance()));
+                map.put(Field.MANAGER_NAME, pri.getManagerName());
+                map.put(Field.REMARK, pri.getRemark());
+                map.put(Field.CONTRACT_NO, pri.getContractNo());
+                list.add(map);
+            }
+        }
+        resp.addData(Field.LIST, list);
+    }
+
+    @Override
+    public XSSFWorkbook createProductRechargeInfoListXlsx(String shortName, Long typeId, Long productId, Long managerId,
+            Date startDate, Date endDate, Page page)
+    {
+        shortName = StringUtils.isNotBlank(shortName)?shortName:null;
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("充值数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("时间");
+        row.createCell(1).setCellValue("充值单号");
+        row.createCell(2).setCellValue("公司名称");
+        row.createCell(3).setCellValue("公司简称");
+        row.createCell(4).setCellValue("账号");
+        row.createCell(5).setCellValue("产品服务");
+        row.createCell(6).setCellValue("充值类型");
+        row.createCell(7).setCellValue("充值金额");
+        row.createCell(8).setCellValue("产品服务余额");
+        row.createCell(9).setCellValue("客户归属");
+        row.createCell(10).setCellValue("合同编号");
+        row.createCell(11).setCellValue("备注");
+        Row dataRow;
+        Cell cell;
+        CellStyle timeStyle = wb.createCellStyle();
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoListBy(
+                shortName, typeId, productId, managerId, startDate, endDate, page);
+        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
+        ProductRechargeInfoDTO dataInfo;
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            dataInfo = dataList.get(i);
+            dataRow = sheet.createRow(i + 1);
+            cell = dataRow.createCell(0);
+            cell.setCellValue(dataInfo.getTradeTime());
+            cell.setCellStyle(timeStyle);
+            dataRow.createCell(1).setCellValue(dataInfo.getTradeNo());
+            dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+            dataRow.createCell(3).setCellValue(dataInfo.getShortName());
+            dataRow.createCell(4).setCellValue(dataInfo.getUsername());
+            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+            dataRow.createCell(6).setCellValue(dataInfo.getRechargeType());
+            dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
+            dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+            dataRow.createCell(9).setCellValue(dataInfo.getManagerName());
+            dataRow.createCell(10).setCellValue(dataInfo.getContractNo());
+            dataRow.createCell(11).setCellValue(dataInfo.getRemark());
+        }
+        return wb;
     }
 
 }

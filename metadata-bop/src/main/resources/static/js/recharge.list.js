@@ -1,125 +1,107 @@
-$(".edit-recharge").click(function() {
-    var id = $(this).attr("recharge-id");
-    editRecharge(id);
-});
-$(".drop-recharge").click(function() {
-    var id = $(this).attr("recharge-id");
-    dropRecharge(id);
+$(function() {
+    rechargeListInit();
 });
 
-function saveNewRechargeType() {
-    var newName = $("#newName").val();
-    if(newName === '')
-    {
-        layer.msg("类型名称为必填项");
-        return;
-    }
-    var newRemark = $("#newRemark").val();
-    $.ajax({
-        type: "POST",
-        url: "/config/recharge/addition",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "name": newName,
-            "remark": newRemark
-        }),
-        success: function(data) {
-            if(data.errCode === "000000") {
-                layer.msg("添加成功!", {
-                    time: 2000
-                }, function() {
-                    window.location.href = "/config/recharge.html";
-                });
+function rechargeListInit() {
+    var obj = {
+        pageNum: 1,
+        pageSize: 10,
+        shortName: $("#shortName").val().trim(),
+        rechargeType: $("#rechargeType").val().trim(),
+        productId: $("#productId").val().trim(),
+        selectDate: $("#selectDate").val().trim(),
+        managerId: $("#managerId").val().trim()
+    };
+    getRechargeList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getRechargeList(obj);
             }
-            else {
-                layer.msg("添加失败：" + data.errMsg, {
-                    time: 2000
-                });
-            }
-        }
+        })
     });
 }
 
-function dropRecharge(id) {
-    layer.confirm('是否确定删除？', {
-        btn: ['确定', '取消'],
-        yes: function() {
-            $(this).click();
-            $.get(
-                "/config/recharge/deletion",
-                {"rechargeTypeId": id},
-                function() {
-                    layer.msg("删除成功!", {
-                        time: 2000
-                    }, function() {
-                        window.location.href = "/config/recharge.html";
-                    });
-                }
-            );
-            layer.closeAll();
-        },
-        no: function() {
-            layer.closeAll();
-        }
-    });
-}
+var rowStr = '<tr>' +
+    '<td>#{createTime}</td>' +
+    '<td>#{tradeNo}</td>' +
+    '<td>#{clientName}</td>' +
+    '<td>#{shortName}</td>' +
+    '<td>#{username}</td>' +
+    '<td>#{productName}</td>' +
+    '<td>#{rechargeType}</td>' +
+    '<td>#{amount}</td>' +
+    '<td>#{balance}</td>' +
+    '<td>#{manager}</td>' +
+    '<td>#{contractNo}</td>' +
+    '<td>#{remark}</td>' +
+    '</tr>';
 
-function editRecharge(id) {
+function getRechargeList(obj, pageFun) {
     $.get(
-        "/config/recharge/info",
-        {"rechargeTypeId": id},
+        "/finance/rechargeList",
+        {
+            "pageNum": obj['pageNum'],
+            "pageSize": obj['pageSize'],
+            "shortName": obj['shortName'],
+            "typeId": obj['rechargeType'],
+            "productId": obj['productId'],
+            "managerId": obj['managerId'],
+            "startDate": obj['selectDate'] == '' ? '' : obj['selectDate'] + " 00:00:00",
+            "endDate": obj['selectDate'] == '' ? '' : obj['selectDate'] + " 23:59:59"
+        },
         function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg(data.errMsg, {
-                    time: 2000
-                });
-            }
-            else {
-                var d = data.dataMap;
-                $("#editId").val(d.id);
-                $("#editName").val(d.name);
-                $("#editRemark").val(d.remark);
-                showEditBlock();
+            if(data.errCode === '000000') {
+                $("#showRechargeAll").text('');
+                var result = data.dataMap;
+                var total = result.total;
+                var pages = result.pages;
+                var list = data.dataMap.list;
+                $("#dataBody").empty();
+                for(var d in list) {
+                    var row = rowStr.replace("#{createTime}", list[d].tradeAt)
+                    .replace("#{tradeNo}", list[d].tradeNo)
+                    .replace("#{clientName}", list[d].corpName)
+                    .replace("#{shortName}", list[d].shortName)
+                    .replace("#{username}", list[d].username)
+                    .replace("#{productName}", list[d].productName)
+                    .replace("#{rechargeType}", list[d].rechargeType)
+                    .replace("#{amount}", list[d].amount)
+                    .replace("#{balance}", list[d].balance)
+                    .replace("#{manager}", list[d].managerName)
+                    .replace("#{contractNo}", list[d].contractNo)
+                    .replace("#{remark}", list[d].remark);
+                    $("#dataBody").append(row);
+                }
+                if(typeof pageFun === 'function') {
+                    $('#chartTitleId').text(result.title);
+                    pageFun(obj, pages, total);
+                }
+                if(obj['shortName'] != '') {
+                    $("#showRechargeAll").text("共充值了 " + data.dataMap.rechargeAll + " 元");
+                }
             }
         }
     );
 }
 
-function showEditBlock() {
-    layer.open({
-        title: false,
-        type: 1,
-        content: $('#edit-manage'),
-        area: ['500px'],
-        shadeClose: true
-    });
+function clientOutPrint() {
+    var shortName = $("#shortName").val().trim();
+    var rechargeType = $("#rechargeType").val().trim();
+    var productId = $("#productId").val().trim();
+    var managerId = $("#managerId").val().trim();
+    var selectDate = $("#selectDate").val().trim();
+    var url = '/finance/rechargeList/export?shortName=' + shortName + "&rechargeType=" + rechargeType
+        + "&productId=" + productId + "&managerId=" + managerId
+        + "&startDate=" + (selectDate == '' ? '' : selectDate + " 00:00:00")
+        + "&endDate=" + (selectDate == '' ? '' : selectDate + " 23:59:59");
+    location.href = encodeURI(url);
 }
 
-function updateRechargeType() {
-    $.ajax({
-        type: "POST",
-        url: "/config/recharge/modification",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "id": $("#editId").val(),
-            "name": $("#editName").val(),
-            "remark": $("#editRemark").val()
-        }),
-        success: function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg("修改失败:" + data.errMsg, {
-                    time: 2000
-                });
-            }
-            else {
-                layer.msg("修改成功!", {
-                    time: 2000
-                }, function() {
-                    window.location.href = "/config/recharge.html";
-                });
-            }
-        }
-    });
-}
+
+

@@ -6,14 +6,19 @@ import java.util.Date;
 public class ApiReqInfo
 {
     private Long id;
-    private Date callTime;
+    private Date createTime;
+    private Date updateTime;
+    private Long clientId;
+    private Long productId;
+    private Integer hit;
+    private String linkIp;
+    private Integer billPlan;
+    private BigDecimal unitAmt;
+    private BigDecimal balance;
     private String corpName;
     private String shortName;
     private String username;
     private String productName;
-    private Integer suc;
-    private BigDecimal unitAmt;
-    private BigDecimal balance;
 
     public Long getId()
     {
@@ -25,14 +30,94 @@ public class ApiReqInfo
         this.id = id;
     }
 
-    public Date getCallTime()
+    public Date getCreateTime()
     {
-        return callTime;
+        return createTime;
     }
 
-    public void setCallTime(Date callTime)
+    public void setCreateTime(Date createTime)
     {
-        this.callTime = callTime;
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime()
+    {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime)
+    {
+        this.updateTime = updateTime;
+    }
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
+
+    public Long getProductId()
+    {
+        return productId;
+    }
+
+    public void setProductId(Long productId)
+    {
+        this.productId = productId;
+    }
+
+    public Integer getHit()
+    {
+        return hit;
+    }
+
+    public void setHit(Integer hit)
+    {
+        this.hit = hit;
+    }
+
+    public String getLinkIp()
+    {
+        return linkIp;
+    }
+
+    public void setLinkIp(String linkIp)
+    {
+        this.linkIp = linkIp;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
+    }
+
+    public BigDecimal getUnitAmt()
+    {
+        return unitAmt;
+    }
+
+    public void setUnitAmt(BigDecimal unitAmt)
+    {
+        this.unitAmt = unitAmt;
+    }
+
+    public BigDecimal getBalance()
+    {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance)
+    {
+        this.balance = balance;
     }
 
     public String getCorpName()
@@ -73,35 +158,5 @@ public class ApiReqInfo
     public void setProductName(String productName)
     {
         this.productName = productName;
-    }
-
-    public Integer getSuc()
-    {
-        return suc;
-    }
-
-    public void setSuc(Integer suc)
-    {
-        this.suc = suc;
-    }
-
-    public BigDecimal getUnitAmt()
-    {
-        return unitAmt;
-    }
-
-    public void setUnitAmt(BigDecimal unitAmt)
-    {
-        this.unitAmt = unitAmt;
-    }
-
-    public BigDecimal getBalance()
-    {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance)
-    {
-        this.balance = balance;
     }
 }

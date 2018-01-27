@@ -474,6 +474,24 @@ public class ManagerServiceImpl implements ManagerService
         resp.addData(Field.EXIST, role == null ? 0 : 1);
     }
 
+    @Override
+    public List<Map<String, Object>> getManagerListMap(Integer enabled)
+    {
+        ManagerInfoListDTO managerInfoList = remoteManagerService.getManagerInfoList(null, enabled, null);
+        List<ManagerInfoDTO> dataList = managerInfoList.getDataList();
+        List<Map<String, Object>> dataListMap = new ArrayList<>();
+        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(dataList)){
+            Map<String, Object> dataMap;
+            for(ManagerInfoDTO item : dataList){
+                dataMap = new HashMap<>();
+                dataListMap.add(dataMap);
+                dataMap.put(Field.ID,item.getManagerId()+"");
+                dataMap.put(Field.NAME,item.getName());
+            }
+        }
+        return dataListMap;
+    }
+
     /**
      * 查询权限列表及其父级权限的ID
      */

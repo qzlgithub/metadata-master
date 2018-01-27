@@ -39,4 +39,6 @@ public interface ManagerService
     void changeManagerStatus(Long managerId, BLResp resp);
 
     void checkIfRoleNameExist(String username, BLResp resp);
+
+    List<Map<String, Object>> getManagerListMap(Integer enabled);
 }

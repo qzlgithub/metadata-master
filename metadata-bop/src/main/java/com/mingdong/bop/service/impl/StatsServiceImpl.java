@@ -105,22 +105,18 @@ public class StatsServiceImpl implements StatsService
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
         Date beforeDate;
-        if(ScopeType.MONTH == scopeTypeEnum)
-        {
-
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-        }
-        else if(ScopeType.QUARTER == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-        }
-        else
-        {
-            return resp.result(RestResult.PARAMETER_ERROR);
+        switch(scopeTypeEnum){
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case QUARTER:
+                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                return resp.result(RestResult.PARAMETER_ERROR);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
@@ -168,18 +164,18 @@ public class StatsServiceImpl implements StatsService
         row.createCell(7).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        if(ScopeType.MONTH == scopeTypeEnum)
-        {
-
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-        }
-        else if(ScopeType.QUARTER == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+        switch(scopeTypeEnum){
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case QUARTER:
+                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                break;
         }
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
         List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
@@ -217,17 +213,18 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        if(ScopeType.MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-        }
-        else if(ScopeType.QUARTER == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+        switch(scopeTypeEnum){
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case QUARTER:
+                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                break;
         }
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, null);
         List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
@@ -283,26 +280,21 @@ public class StatsServiceImpl implements StatsService
         BLResp resp = BLResp.build();
         Date currentDay = new Date();
         Date beforeDate;
-        if(ScopeType.WEEK == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-
-        }
-        else if(ScopeType.HALF_MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-        }
-        else if(ScopeType.MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-        }
-        else
-        {
-            return resp.result(RestResult.PARAMETER_ERROR);
+        switch(scopeTypeEnum){
+            case WEEK:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+                break;
+            case HALF_MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
+                break;
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                return resp.result(RestResult.PARAMETER_ERROR);
         }
         getProductRechargeInfoList(page, beforeDate, currentDay, resp);
         return resp;
@@ -325,23 +317,21 @@ public class StatsServiceImpl implements StatsService
         row.createCell(8).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = new Date();
-        if(ScopeType.WEEK == scopeTypeEnum)
-        {
-
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-
-        }
-        else if(ScopeType.HALF_MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-        }
-        else if(ScopeType.MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+        switch(scopeTypeEnum){
+            case WEEK:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+                break;
+            case HALF_MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
+                break;
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                break;
         }
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
                 beforeDate, currentDay, page);
@@ -382,21 +372,21 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
         Date beforeDate = null;
-        if(ScopeType.WEEK == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-        }
-        else if(ScopeType.HALF_MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-        }
-        else if(ScopeType.YEAR == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-        }
-        else if(ScopeType.MONTH == scopeTypeEnum)
-        {
-            beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+        switch(scopeTypeEnum){
+            case WEEK:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+                break;
+            case HALF_MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
+                break;
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                break;
         }
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
                 beforeDate, currentDay, null);
@@ -504,7 +494,7 @@ public class StatsServiceImpl implements StatsService
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
         resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
-        int pages = page.getTotalPage(total.intValue());
+        int pages = page.getTotalPage(total);
         resp.addData(Field.TOTAL, total);
         resp.addData(Field.PAGES, pages);
         if(total > 0 && page.getPageNum() <= pages)

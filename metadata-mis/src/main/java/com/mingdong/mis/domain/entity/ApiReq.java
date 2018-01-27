@@ -10,7 +10,9 @@ public class ApiReq
     private Date updateTime;
     private Long clientId;
     private Long productId;
-    private Integer suc;
+    private Integer hit;
+    private String linkIp;
+    private Integer billPlan;
     private BigDecimal unitAmt;
     private BigDecimal balance;
 
@@ -24,14 +26,34 @@ public class ApiReq
         this.clientId = clientId;
     }
 
-    public Integer getSuc()
+    public Integer getHit()
     {
-        return suc;
+        return hit;
     }
 
-    public void setSuc(Integer suc)
+    public void setHit(Integer hit)
     {
-        this.suc = suc;
+        this.hit = hit;
+    }
+
+    public String getLinkIp()
+    {
+        return linkIp;
+    }
+
+    public void setLinkIp(String linkIp)
+    {
+        this.linkIp = linkIp;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
     }
 
     public Long getId()

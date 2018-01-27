@@ -51,7 +51,7 @@
 
     <select id="countByEnabled" resultType="Integer">
         select
-        count(p.`id`) 
+        count(p.`id`)
         from `product` p left join `dict_product_type` t
         on p.type_id =
         t.id
@@ -60,7 +60,6 @@
         <where>
             <if test="enabled != null">p.`enabled` = #{enabled}</if>
         </where>
-        order by create_time desc
     </select>
 
 </mapper>

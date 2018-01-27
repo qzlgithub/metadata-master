@@ -98,4 +98,9 @@ public interface Field
     String CLIENT_COUNT_BY_MONTH_FRIST = "clientCountByMonthFrist";
     String SUB_USER_QTY = "subUserQty";
     String SERVICE_QQ = "serviceQQ";
+    String RECHARGE_TYPE_LIST = "rechargeTypeList";
+    String PRODUCT_INFO_LIST = "productInfoList";
+    String MANAGER_LIST = "managerList";
+    String TYPE_Id = "typeId";
+    String RECHARGE_ALL = "rechargeAll";
 }

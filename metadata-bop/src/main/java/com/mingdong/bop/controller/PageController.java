@@ -79,9 +79,12 @@ public class PageController
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
-        List<Map<String, Object>> productInfoListMap = productService.getProductInfoListMap(TrueOrFalse.TRUE);
+        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
+        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
 
-
+        view.addObject(Field.RECHARGE_TYPE_LIST,rechargeTypeList);
+        view.addObject(Field.PRODUCT_INFO_LIST,productInfoList);
+        view.addObject(Field.MANAGER_LIST,managerList);
         return view;
     }
 
