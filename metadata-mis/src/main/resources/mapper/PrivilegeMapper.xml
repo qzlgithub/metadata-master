@@ -112,4 +112,11 @@
         from `privilege`
         where `level` &lt;= #{level}
     </select>
+
+    <update id="updateModuleStatusByIds">
+        update `privilege` set `enabled` = #{enabled}, `update_time` = #{date} where `level` &lt;= 3 and `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

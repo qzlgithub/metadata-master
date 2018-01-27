@@ -62,4 +62,6 @@ public interface RemoteSystemService
     DictIndustryListDTO getDictIndustryInfoList();
 
     PrivilegeListDTO getPrivilegeByParent(Long parentModuleId);
+
+    void setModuleStatus(Integer status, List<Long> moduleIdList);
 }

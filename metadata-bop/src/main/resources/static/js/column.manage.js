@@ -29,15 +29,27 @@ function editColumn() {
             }
             else {
                 window.location.href = "/privilege/index.html";
-            /*    layer.msg("修改成功", {
-                    time: 2000
-                }, function() {
+                /*    layer.msg("修改成功", {
+                        time: 2000
+                    }, function() {
 
-                });*/
+                    });*/
             }
         }
     });
-
 }
 
+function changeStatus(modules, status) {
+    if(modules.length !== 0 && (status === 0 || status === 1)) {
+        $.ajax({
+            type: "post",
+            url: "system/module/status",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({"module": modules, "status": status}),
+            success: function(res) {
+            }
+        })
+    }
+}
 

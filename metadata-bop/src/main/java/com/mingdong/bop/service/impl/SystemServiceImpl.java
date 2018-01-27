@@ -584,6 +584,13 @@ public class SystemServiceImpl implements SystemService
         }
     }
 
+    @Override
+    @Transactional
+    public void setModuleStatus(List<Long> moduleIdList, Integer status, BLResp resp)
+    {
+        remoteSystemService.setModuleStatus(status, moduleIdList);
+    }
+
     private void cacheAllIndustryData()
     {
         DictIndustryListDTO dictIndustryInfoList = remoteSystemService.getDictIndustryInfoList();

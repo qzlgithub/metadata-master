@@ -59,4 +59,6 @@ public interface SystemService
     void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp);
 
     void changeIndustryStatus(Long industryTypeId, Integer enabled);
+
+    void setModuleStatus(List<Long> moduleIdList, Integer status, BLResp resp);
 }
