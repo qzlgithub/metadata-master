@@ -9,6 +9,11 @@ public class ResultDTO implements Serializable
 {
     private String code;
 
+    public ResultDTO()
+    {
+        code = RestResult.SUCCESS.getCode();
+    }
+
     public String getCode()
     {
         return code;

@@ -5,6 +5,8 @@ import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.Trade;
+import com.mingdong.bop.model.ContactVO;
+import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -20,6 +22,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ClientAccountDTO;
+import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -33,11 +36,13 @@ import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteManagerService;
@@ -160,51 +165,6 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.LIST, list);
         return resp;
-    }
-
-    @Override
-    @Transactional
-    public void addCorp(String username, String password, String corpName, String shortName, Long industryId,
-            String name, String phone, String email, String license, Integer enabled, BLResp resp)
-    {
-        Date curr = new Date();
-        UserDTO user = remoteClientService.findByUsername(username);
-        if(user != null)// 校验帐号是否重复
-        {
-            resp.result(RestResult.ACCOUNT_IS_EXIST);
-            return;
-        }
-        Long clientId = IDUtils.getClientId(param.getNodeId());
-        Long clientUserId = IDUtils.getClientUser(param.getNodeId());
-        // 创建客户主账号
-        ClientUserDTO clientUser = new ClientUserDTO();
-        clientUser.setId(clientUserId);
-        clientUser.setCreateTime(curr);
-        clientUser.setUpdateTime(curr);
-        clientUser.setClientId(clientId);
-        clientUser.setName(name);
-        clientUser.setPhone(phone);
-        clientUser.setEmail(email);
-        clientUser.setUsername(username);
-        clientUser.setPassword(password);
-        clientUser.setEnabled(enabled);
-        clientUser.setDeleted(TrueOrFalse.FALSE);
-        // 创建客户
-        ClientDTO client = new ClientDTO();
-        client.setId(clientId);
-        client.setCreateTime(curr);
-        client.setUpdateTime(curr);
-        client.setCorpName(corpName);
-        client.setShortName(shortName);
-        client.setLicense(license);
-        client.setIndustryId(industryId);
-        client.setPrimaryUserId(clientUserId);
-        client.setManagerId(RequestThread.getOperatorId());
-        client.setAccountQty(1);
-        client.setDeleted(TrueOrFalse.FALSE);
-        // 保存客户及其账号
-        remoteClientService.saveClientUser(clientUser);
-        remoteClientService.saveClient(client);
     }
 
     @Override
@@ -791,5 +751,51 @@ public class ClientServiceImpl implements ClientService
     {
         ProductRechargeDTO pr = remoteProductService.getProductRechargeByContractNo(contractNo);
         resp.addData(Field.EXIST, pr == null ? 0 : 1);
+    }
+
+    @Override
+    public void addClient(NewClientVO vo, BLResp resp)
+    {
+        if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
+                StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
+                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || CollectionUtils.isEmpty(
+                vo.getContacts()))
+        {
+            resp.result(RestResult.KEY_FIELD_MISSING);
+            return;
+        }
+        List<ClientContactDTO> contactList = new ArrayList<>(vo.getContacts().size());
+        for(ContactVO o : vo.getContacts())
+        {
+            if(StringUtils.isNullBlank(o.getName()) || StringUtils.isNullBlank(o.getPosition()) ||
+                    StringUtils.isNullBlank(o.getPhone()))
+            {
+                resp.result(RestResult.KEY_FIELD_MISSING);
+                return;
+            }
+            if(!TrueOrFalse.TRUE.equals(o.getGeneral()) && !TrueOrFalse.FALSE.equals(o.getGeneral()))
+            {
+                resp.result(RestResult.KEY_FIELD_MISSING);
+                return;
+            }
+            ClientContactDTO cd = new ClientContactDTO();
+            cd.setName(o.getName());
+            cd.setPosition(o.getPosition());
+            cd.setPhone(o.getPhone());
+            cd.setEmail(o.getEmail());
+            cd.setGeneral(o.getGeneral());
+            contactList.add(cd);
+        }
+        NewClientDTO dto = new NewClientDTO();
+        dto.setCorpName(vo.getCorpName());
+        dto.setShortName(vo.getShortName());
+        dto.setIndustryId(vo.getIndustryId());
+        dto.setLicense(vo.getLicense());
+        dto.setUsername(vo.getUsername());
+        dto.setContactList(contactList);
+        dto.setEnabled(vo.getEnabled());
+        dto.setManagerId(RequestThread.getOperatorId());
+        ResultDTO res = remoteClientService.addNewClient(dto);
+        resp.result(res.getResult());
     }
 }

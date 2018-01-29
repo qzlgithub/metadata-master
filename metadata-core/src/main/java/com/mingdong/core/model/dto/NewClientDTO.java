@@ -1,17 +1,18 @@
-package com.mingdong.bop.model;
+package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class NewClientVO
+public class NewClientDTO implements Serializable
 {
     private String corpName;
     private String shortName;
     private String license;
     private Long industryId;
     private String username;
-    private String password;
     private Integer enabled;
-    private List<ContactVO> contacts;
+    private List<ClientContactDTO> contactList;
+    private Long managerId;
 
     public String getCorpName()
     {
@@ -63,16 +64,6 @@ public class NewClientVO
         this.username = username;
     }
 
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
     public Integer getEnabled()
     {
         return enabled;
@@ -83,13 +74,23 @@ public class NewClientVO
         this.enabled = enabled;
     }
 
-    public List<ContactVO> getContacts()
+    public List<ClientContactDTO> getContactList()
     {
-        return contacts;
+        return contactList;
     }
 
-    public void setContacts(List<ContactVO> contacts)
+    public void setContactList(List<ClientContactDTO> contactList)
     {
-        this.contacts = contacts;
+        this.contactList = contactList;
+    }
+
+    public Long getManagerId()
+    {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId)
+    {
+        this.managerId = managerId;
     }
 }

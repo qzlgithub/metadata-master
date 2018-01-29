@@ -10,7 +10,25 @@
         <result column="position" property="position" jdbcType="VARCHAR" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
         <result column="email" property="email" jdbcType="VARCHAR" />
-        <result column="primary" property="primary" jdbcType="TINYINT" />
+        <result column="general" property="general" jdbcType="TINYINT" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `name`, `position`, `phone`, `email`, `general`
+        from `client_contact`
+    </sql>
+
+    <!-- @formatter:off -->
+    <insert id="addList" parameterType="List">
+        insert into
+            `client_contact`
+            (`create_time`, `update_time`, `client_id`, `name`, `position`, `phone`, `email`, `general`)
+        values
+        <foreach collection="list" item="o" separator=",">
+            (#{o.createTime}, #{o.updateTime}, #{o.clientId}, #{o.name}, #{o.position}, #{o.phone}, #{o.email},
+             #{o.general})
+        </foreach>
+    </insert>
+    <!-- @formatter:on -->
 </mapper>

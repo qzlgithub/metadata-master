@@ -34,7 +34,7 @@ public class IDUtils
         return createID(client, nodeId);
     }
 
-    public static Long getClientUser(int nodeId)
+    public static Long createUserId(int nodeId)
     {
         return createID(clientUser, nodeId);
     }

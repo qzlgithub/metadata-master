@@ -3,6 +3,47 @@ var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{phone}</td>" +
     "<td>#{email}</td>" +
     "<td>#{registerDate}</td></tr>";
+var contact_base_tr = "<tr id=\"#{id}\"><td>#{name}</td>" +
+    "<td>#{position}</td>" +
+    "<td>#{phone}</td>" +
+    "<td>#{email}</td>" +
+    "<td><span class=\"mr30\"><a href=\"#\" class=\"edit-contact\" data-id=\"#{id}\">编辑</a></span>" +
+    "<span class=\"mr30\"><a href=\"#\" class=\"del-contact\" data-id=\"#{id}\">删除</a></span>";
+var contacts = [];
+$("#add_contact").click(function() {
+    var contact = {};
+    contact.id = Math.uuidFast();
+    contact.name = $("#add-name").val();
+    contact.position = $("#add-position").val();
+    contact.phone = $("#add-phone").val();
+    contact.email = $("#add-email").val();
+    contact.general = $("#add-chief").prop("checked") ? 1 : 0;
+    contacts.push(contact);
+    var tr = contact_base_tr;
+    if(contact.general) {
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" data-id=\"#{id}\" checked=\"\"/></span>";
+    }
+    else {
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" data-id=\"#{id}\"/></span>";
+    }
+    tr = tr + "</td></tr>";
+    tr = tr.replace(/#{name}/g, contact.name).replace(/#{position}/g, contact.position)
+    .replace(/#{phone}/g, contact.phone).replace(/#{email}/g, contact.email).replace(/#{id}/g, contact.id);
+    $("#contact-list").append(tr);
+    layer.closeAll();
+    form.render();
+});
+$("#contact-list").on("click", ".edit-contact", function() {
+});
+$("#contact-list").on("click", ".del-contact", function() {
+    var id = $(this).data("id");
+    for(var o in contacts) {
+        if(contacts[o].id === id) {
+            contacts[o].deleted = true;
+        }
+    }
+    $("#" + id).remove();
+});
 $("#sameCompany").click(function() {
     var corpName = $("#corpName").val();
     $("#thisCorpName").text(corpName);
@@ -62,13 +103,17 @@ function createUser() {
     var email = $("#email").val();
     var license = $("#license").val();
     var enabled = $("input[name='enabled']:checked").val();
+    var contactList = [];
+    for(var o in contacts) {
+        if(!contacts[o].deleted) {
+            contactList.push(contacts[o]);
+        }
+    }
     console.log("account: " + username + "password: " + password + "\ncorpName: " + corpName + "\nshortName: " + shortName + "\nindustryId: "
         + industryId + "\nname: " + name + "\nphone: " + phone + "\nemail: " + email + "\nlicense: " + license
         + "\nenabled: " + enabled);
-    /*if(checkUsername()==true && checkCorpName()==true && checkCorpName() == true &&  checkContact() == true && checkPhone() == true
-        && checkEmail() == true && checkLicense() == true){}*/
     $.ajax({
-        type: "POST",
+        type: "put",
         url: "/client/addition",
         contentType: "application/json",
         dataType: "json",
@@ -78,14 +123,12 @@ function createUser() {
             "corpName": corpName,
             "shortName": shortName,
             "industryId": industryId,
-            "name": name,
-            "phone": phone,
-            "email": email,
+            "contacts": contactList,
             "license": license,
             "enabled": enabled
         }),
         success: function(data) {
-            if(data.errCode != '000000') {
+            if(data.errCode !== '000000') {
                 layer.msg("添加失败:" + data.errMsg, {
                     time: 2000
                 });

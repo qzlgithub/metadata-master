@@ -13,6 +13,7 @@ import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
@@ -23,7 +24,6 @@ import java.util.List;
 
 public interface RemoteClientService
 {
-
     UserDTO userLogin(String username, String password);
 
     ResultDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
@@ -105,4 +105,5 @@ public interface RemoteClientService
 
     BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate);
 
+    ResultDTO addNewClient(NewClientDTO dto);
 }

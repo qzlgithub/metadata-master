@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -160,19 +161,16 @@ public class ClientController
         return clientService.getSubAccountList(clientId);
     }
 
-    @RequestMapping(value = "addition", method = RequestMethod.POST)
+    @PutMapping(value = "addition")
     @ResponseBody
     public BLResp addNewClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
-        if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
+        clientService.addClient(vo, resp);
+        /*if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
-                StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()) ||
-                StringUtils.isNullBlank(vo.getEmail()) || StringUtils.isNullBlank(vo.getLicense()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        if(vo.getIndustryId() == null || vo.getIndustryId() <= 0)
+                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || CollectionUtils.isEmpty(
+                vo.getContacts()))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
@@ -181,7 +179,7 @@ public class ClientController
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         clientService.addCorp(vo.getUsername(), vo.getPassword(), vo.getCorpName(), vo.getShortName(),
-                vo.getIndustryId(), vo.getName(), vo.getPhone(), vo.getEmail(), vo.getLicense(), vo.getEnabled(), resp);
+                vo.getIndustryId(), vo.getLicense(), vo.getEnabled(), vo.getContacts(), resp);*/
         return resp;
     }
 

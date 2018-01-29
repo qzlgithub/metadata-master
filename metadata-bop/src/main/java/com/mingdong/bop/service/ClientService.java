@@ -1,5 +1,7 @@
 package com.mingdong.bop.service;
 
+import com.mingdong.bop.model.ContactVO;
+import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,9 +19,6 @@ public interface ClientService
 
     BLResp getCorp(Integer enabled, String account, String cropName, String shortName, Long parentIndustryId,
             Long industryId, Page page);
-
-    void addCorp(String username, String password, String corpName, String shortName, Long industryId, String name,
-            String phone, String email, String license, Integer enabled, BLResp resp);
 
     void editClientInfo(Long clientId, String corpName, String shortName, String license, Long industryId, String name,
             String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp);
@@ -59,4 +58,6 @@ public interface ClientService
     XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime);
 
     void checkIfContractExist(String contractNo, BLResp resp);
+
+    void addClient(NewClientVO vo, BLResp resp);
 }

@@ -67,36 +67,13 @@
                             </div>
                             <div style="width: 50%; float: left;">
                                 <select id="industryId" name="modules" class="select-list" style="width: 98%">
-                                    <option th:each="ind:${industry}" th:value="${ind.id}" th:text="${ind.name}"></option>
+                                    <option th:each="ind:${industry}" th:value="${ind.id}"
+                                            th:text="${ind.name}"></option>
                                 </select>
                             </div>
                             <i class="col3 pl10" id="parentIndustryTip" style="display: none"></i>
                         </div>
                     </div>
-                   <!-- <div class="layui-form-item">
-                        <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
-                        <div class="layui-input-block">
-                            <input type="tel" id="name" name="contact" placeholder="请输入" autocomplete="off"
-                                   class="layui-input" onblur="checkContact()"/>
-                            <i class="col3 pl10" id="contactTip" style="display: none"></i>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
-                        <div class="layui-input-block">
-                            <input type="text" id="phone" name="phone" placeholder="请输入" autocomplete="off"
-                                   class="layui-input" onblur="checkPhone()"/>
-                            <i class="col3 pl10" id="phoneTip" style="display: none"></i>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">联系邮箱：</label>
-                        <div class="layui-input-block">
-                            <input type="text" id="email" name="email" placeholder="请输入" autocomplete="off"
-                                   class="layui-input" onblur="checkEmail()"/>
-                            <i class="col3 pl10" id="emailTip" style="display: none"></i>
-                        </div>
-                    </div>-->
                     <div class="layui-form-item">
                         <label class="layui-form-label"><i class="col3">*</i>社会信用代码：</label>
                         <div class="layui-input-block">
@@ -132,32 +109,7 @@
                     <div class="layui-input-block layui-form">
                         <!--table-->
                         <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
-                            <tbody>
-                            <tr>
-                                <td>张三</td>
-                                <td>技术总监</td>
-                                <td>13567481545</td>
-                                <td>13567481545@qq.com</td>
-                                <td>
-                                    <span class="mr30"><a href="#" class="edit">编辑</a></span>
-                                    <span class="mr30"><a href="#" class="del">删除</a></span>
-                                    <span class="layui-form"><input type="radio" name="1" value="常用联系人" title="常用联系人"/>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>张三</td>
-                                <td>技术总监</td>
-                                <td>13567481545</td>
-                                <td>13567481545@qq.com</td>
-                                <td>
-                                    <span class="mr30"><a href="#" class="edit">编辑</a></span>
-                                    <span class="mr30"><a href="#" class="del">删除</a></span>
-                                    <span class="layui-form"><input type="radio" name="1" value="常用联系人" title="常用联系人"/>
-                                    </span>
-                                </td>
-                            </tr>
-                            </tbody>
+                            <tbody id="contact-list"></tbody>
                         </table>
                         <!--table end-->
                     </div>
@@ -211,64 +163,55 @@
 <!--提示层 end-->
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <!--新增联系人  提示层-->
 <div id="addcontacts-modal" class="modal">
-    <!--form-->
     <div class="layui-layer-title">添加联系人</div>
     <div class="m30">
-        <form class="layui-form">
-            <div class="m30 mt0 mr40">
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
-                    <div class="layui-input-block">
-                        <input type="tel" id="name" name="contact" placeholder="" autocomplete="off"
-                               class="layui-input" onblur="checkContact()"/>
-                        <i class="col3 pl10" id="contactTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>职位：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="phone" name="phone" placeholder="" autocomplete="off"
-                               class="layui-input" onblur="checkPhone()"/>
-                        <i class="col3 pl10" id="phoneTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="phone" name="phone" placeholder="" autocomplete="off"
-                               class="layui-input" onblur="checkPhone()"/>
-                        <i class="col3 pl10" id="phoneTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">联系邮箱：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="email" name="email" placeholder="" autocomplete="off"
-                               class="layui-input" onblur="checkEmail()"/>
-                        <i class="col3 pl10" id="emailTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">设为常用：</label>
-                    <div class="fl">
-                        <input type="checkbox" name="" title="常用联系人" lay-skin="primary"/>
-                        <i class="col3 pl10" id="emailTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="accountRecharge()">保存
-                        </button>
-                    </div>
+        <div class="m30 mt0 mr40">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
+                <div class="layui-input-block">
+                    <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-name" style="display: none"></i>
                 </div>
             </div>
-        </form>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>职位：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-position" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-phone" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系邮箱：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-email" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">设为常用：</label>
+                <div class="fl">
+                    <input type="checkbox" id="add-chief" title="常用联系人" lay-skin="primary"/>
+                    <i class="col3 pl10" id="tip-add-chief" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" id="add_contact">保存</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--form end-->
 </div>
 <!--新增联系人 提示层 end-->
 
@@ -280,16 +223,18 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" th:src="@{/js/uuid.js}"></script>
 <!--<script type="text/javascript" th:src="@{/js/random.js}"></script>-->
 <script type="text/javascript" th:src="@{/js/customer.add.js}"></script>
 <script>
-    var message;
+    var message, form;
     layui.config({
         base: '../../static/build/js/'
-    }).use(['app', 'message'], function() {
+    }).use(['app', 'message', 'form'], function() {
         var app = layui.app,
             $ = layui.jquery,
             layer = layui.layer;
+        form = layui.form;
         //将message设置为全局以便子页面调用
         message = layui.message;
         //主入口
@@ -306,6 +251,11 @@
             });
         });
         $('#addcontacts').on('click', function() {
+            $("#add-name").val("");
+            $("#add-position").val("");
+            $("#add-phone").val("");
+            $("#add-email").val("");
+            $("#add-chief").prop("checked", false);
             layer.open({
                 title: false,
                 type: 1,

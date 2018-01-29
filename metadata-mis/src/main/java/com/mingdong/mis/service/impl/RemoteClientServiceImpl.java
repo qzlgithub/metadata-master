@@ -12,6 +12,7 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientAccountDTO;
+import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -25,6 +26,7 @@ import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -37,6 +39,7 @@ import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientAccount;
+import com.mingdong.mis.domain.entity.ClientContact;
 import com.mingdong.mis.domain.entity.ClientInfo;
 import com.mingdong.mis.domain.entity.ClientMessage;
 import com.mingdong.mis.domain.entity.ClientOperateInfo;
@@ -48,6 +51,7 @@ import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientAccountMapper;
+import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientMapper;
 import com.mingdong.mis.domain.mapper.ClientMessageMapper;
@@ -78,6 +82,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ManagerMapper managerMapper;
     @Resource
     private ClientMapper clientMapper;
+    @Resource
+    private ClientContactMapper clientContactMapper;
     @Resource
     private ClientProductMapper clientProductMapper;
     @Resource
@@ -300,7 +306,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
         Date current = new Date();
         account = new ClientUser();
-        account.setId(IDUtils.getClientUser(param.getNodeId()));
+        account.setId(IDUtils.createUserId(param.getNodeId()));
         account.setCreateTime(current);
         account.setUpdateTime(current);
         account.setClientId(client.getId());
@@ -946,6 +952,68 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate)
     {
         return apiReqInfoMapper.getClientBillFeeSum(shortName, typeId, productId, startDate, endDate);
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addNewClient(NewClientDTO req)
+    {
+        ResultDTO res = new ResultDTO();
+        ClientUser user = clientUserMapper.findByUsername(req.getUsername());
+        if(user != null)
+        {
+            res.setResult(RestResult.USERNAME_EXIST);
+            return res;
+        }
+        Date current = new Date();
+        Long clientId = IDUtils.getClientId(param.getNodeId());
+        Long userId = IDUtils.createUserId(param.getNodeId());
+        // build corporation contact data list
+        List<ClientContact> contactList = new ArrayList<>();
+        for(ClientContactDTO o : req.getContactList())
+        {
+            ClientContact cc = new ClientContact();
+            cc.setCreateTime(current);
+            cc.setUpdateTime(current);
+            cc.setClientId(clientId);
+            cc.setName(o.getName());
+            cc.setPosition(o.getPosition());
+            cc.setPhone(o.getPhone());
+            cc.setEmail(o.getEmail());
+            cc.setGeneral(o.getGeneral());
+            contactList.add(cc);
+        }
+        // build client primary user
+        user = new ClientUser();
+        user.setId(userId);
+        user.setCreateTime(current);
+        user.setUpdateTime(current);
+        user.setClientId(clientId);
+        user.setName(req.getUsername());
+        user.setPhone("18812345678");
+        user.setEmail("xxxx@xxx.com");
+        user.setUsername(req.getUsername());
+        user.setPassword(Constant.DEFAULT_ENC_PWD);
+        user.setEnabled(req.getEnabled());
+        user.setDeleted(TrueOrFalse.FALSE);
+        // build client
+        Client client = new Client();
+        client.setId(clientId);
+        client.setCreateTime(current);
+        client.setUpdateTime(current);
+        client.setCorpName(req.getCorpName());
+        client.setShortName(req.getShortName());
+        client.setLicense(req.getLicense());
+        client.setIndustryId(req.getIndustryId());
+        client.setPrimaryUserId(userId);
+        client.setManagerId(req.getManagerId());
+        client.setAccountQty(1);
+        client.setDeleted(TrueOrFalse.FALSE);
+        // save data
+        clientContactMapper.addList(contactList);
+        clientUserMapper.add(user);
+        clientMapper.add(client);
+        return res;
     }
 
     /**
