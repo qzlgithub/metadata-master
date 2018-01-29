@@ -2,7 +2,7 @@ $("#all-type").click(function() {
     if(!$(this).hasClass("active")) {
         $(".c-product-type").removeClass("active");
         $(this).addClass("active");
-        fetch_product_list(1, 8);
+        do_change_parameter();
     }
 });
 $(".c-product-type").click(function() {
@@ -14,13 +14,14 @@ $(".c-product-type").click(function() {
     else {
         $(this).addClass("active");
     }
-    fetch_product_list(1, 8);
+    do_change_parameter();
 });
-$("#include-opened").click(function() {
-    fetch_product_list(1, 8);
+$("#include-opened").change(function() {
+    do_change_parameter();
 });
+
 $(function() {
-    doChangeParameter();
+    do_change_parameter();
 });
 
 function check_all_type() {
@@ -38,7 +39,7 @@ function check_all_type() {
     }
 }
 
-function fetch_product_list(pageNum, pageSize) {
+function fetch_product_list(obj, page_function) {
     var product_id_list = [];
     $(".c-product-type").each(function() {
         if($(this).hasClass("active")) {
@@ -46,27 +47,11 @@ function fetch_product_list(pageNum, pageSize) {
         }
     });
     var inc_opened = $("#include-opened").is(":checked");
-    console.log("product_id_list : " + product_id_list + "; inc_opened: " + inc_opened);
     $.get(
         "/product/allList",
         {
             "selectedType": product_id_list.join(","),
             "isOpen": inc_opened ? 1 : 0,
-            "pageNum": pageNum,
-            "pageSize": pageSize
-        },
-        function(res) {
-
-        }
-    );
-}
-
-function getAllProductList(obj, pageFun) {
-    $.get(
-        "/product/allList",
-        {
-            "selectedType": obj['selectedType'],
-            "isOpen": obj['isOpen'],
             "pageNum": obj['pageNum'],
             "pageSize": obj['pageSize']
         },
@@ -119,56 +104,29 @@ function getAllProductList(obj, pageFun) {
                     htmlStr += '</li>';
                 }
                 $("#dataBody").append(htmlStr);
-                if(typeof pageFun === 'function') {
-                    pageFun(obj, pages, total);
+                if(typeof page_function === 'function') {
+                    page_function(obj, pages, total);
                 }
             }
         }
     );
 }
 
-/*$("li").click(function() {
-    if($(this).hasClass('active')) {
-        $(this).removeClass('active');
-        doChangeParameter();
-    }
-    else {
-        $(this).addClass('active');
-        doChangeParameter();
-    }
-});*/
-function doChangeParameter() {
-    var selectedType = "";
-    $('.productTypeClass').each(function() {
-        if($(this).hasClass('active')) {
-            if(selectedType === "") {
-                selectedType += $(this).find('.productTypeIdClass').val();
-            }
-            else {
-                selectedType += "," + $(this).find('.productTypeIdClass').val();
-            }
-        }
-    });
-    var isOpen = 0;
-    if($('#isOpenId').is(':checked')) {
-        isOpen = 1;
-    }
+function do_change_parameter(){
     var obj = {
-        selectedType: selectedType,
-        isOpen: isOpen,
         pageNum: 1,
         pageSize: 8
     };
-    getAllProductList(obj, function(pageObj, pages, total) {
+    fetch_product_list(obj, function(page_obj, pages, total) {
         $('#pagination').paging({
-            initPageNo: pageObj['pageNum'],
+            initPageNo: page_obj['pageNum'],
             totalPages: pages,
             totalCount: '合计' + total + '条数据',
             slideSpeed: 600,
             jump: false,
             callback: function(currentPage) {
-                pageObj['pageNum'] = currentPage;
-                getAllProductList(pageObj);
+                page_obj['pageNum'] = currentPage;
+                fetch_product_list(page_obj);
             }
         })
     });

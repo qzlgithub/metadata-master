@@ -21,7 +21,6 @@ import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
-import com.mingdong.csp.constant.Constant;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
@@ -340,9 +339,12 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp)
     {
-        List<Integer> typeList = Arrays.asList(selectedType);
         ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen,
-                typeList.contains(Constant.All) ? null : selectedType, page);
+                selectedType, page);
+        List<Integer> typeList = new ArrayList<>();
+        if(selectedType != null){
+            typeList = Arrays.asList(selectedType);
+        }
         List<Map<String, Object>> allList = new ArrayList<>();
         Map<String, Object> map;
         if(productListDTO.getResultDTO().getResult() == RestResult.SUCCESS)
@@ -351,7 +353,7 @@ public class ProductServiceImpl implements ProductService
             for(ProductDTO d : productListDTO.getOpened())
             {
                 map = new HashMap<>();
-                if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId()))
+                if(selectedType == null || typeList.contains(d.getTypeId()))
                 {
                     allList.add(map);
                 }
@@ -380,7 +382,7 @@ public class ProductServiceImpl implements ProductService
                 for(ProductDTO d : productListDTO.getToOpen())
                 {
                     map = new HashMap<>();
-                    if(typeList.contains(Constant.All) || typeList.contains(d.getTypeId()))
+                    if(selectedType == null || typeList.contains(d.getTypeId()))
                     {
                         allList.add(map);
                     }
