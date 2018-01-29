@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./../../css/style.css" media="all"/>
     <link rel="stylesheet" href="./../../css/base.css" media="all"/>
     <link rel="stylesheet" href="./../../css/common.css" media="all"/>
+    <link th:href="@{/plugins/paging/css/paging.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -49,40 +50,7 @@
             </table>
             <!--table end-->
             <!--page-->
-            <div class="layui-table-tool mt20">
-                <div class="layui-inline layui-table-page" id="layui-table-page1">
-                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-
-                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled"
-                           data-page="0">
-                            <i class="layui-icon"></i>
-                        </a>
-                        <span id="front"></span>
-                        <span class="layui-laypage-curr">
-                            <em class="layui-laypage-em"></em>
-                            <em id="currentPage"></em>
-                        </span>
-                        <span id="next"></span>
-                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next" data-page="2">
-                            <i class="layui-icon"></i>
-                        </a>
-                        <span id="totalTxt" class="layui-laypage-count">共 0 条</span>
-                        <span id="pagesTxt" class="layui-laypage-count">共 0 页</span>
-                        <span class="layui-laypage-limits">
-                            <input type="hidden" id="pageNum" value="1"/>
-                            <input type="hidden" id="pages" value="1"/>
-                            <select id="pageSize" lay-ignore="" onchange="refreshPageSize()">
-                                <option value="15" selected="selected">15 条/页</option>
-                                <option value="30">30 条/页</option>
-                                <option value="50">50 条/页</option>
-                            </select>
-                        </span>
-                        <span class="layui-laypage-skip">
-                            到第<input type="text" id="customPageNum" min="1" value="1" class="layui-input"/>页
-                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button></span>
-                    </div>
-                </div>
-            </div>
+            <div class="box mt30" id="pagination"></div>
             <!--page end-->
         </div>
     </div>
@@ -180,6 +148,7 @@
 </script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.category.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
@@ -216,7 +185,7 @@
              });
          });*/
     });
-    var $ = layui.jquery, form = layui.form();
+    var $ = layui.jquery;
 </script>
 
 </body>

@@ -1,19 +1,42 @@
 $(function() {
-    getProductList(1, $("#pageSize").val());
+    productListInit();
 });
+
+function productListInit(){
+    var obj = {
+        pageNum: 1,
+        pageSize: 10
+    };
+    getProductList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getProductList(obj);
+            }
+        })
+    });
+}
+
 var rowTr
     =
     '<tr><td>#{code}</td><td>#{type}</td><td>#{name}</td><td id="enabledCheck#{id}">#{enabled}</td><td>#{remark}</td><td><span class="mr30"><a href="/product/edit.html?id=#{id}" class="edit">编辑</a></span> <a href="#" id="enabledTxt#{id}" onclick="changeStatus(\'#{id}\');" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabledVal}"/></td></tr>';
 
-function getProductList(pageNum, pageSize) {
+function getProductList(obj, pageFun) {
     $.get(
         "/product/product/management",
         {
-            "pageNum": pageNum,
-            "pageSize": pageSize
+            "pageNum": obj['pageNum'],
+            "pageSize": obj['pageSize']
         },
         function(data) {
             var list = data.list;
+            var total = data.total;
+            var pages = data.pages;
             $("#dataBody").empty();
             for(var i in list) {
                 var row = rowTr.replace("#{code}", list[i].code)
@@ -25,86 +48,11 @@ function getProductList(pageNum, pageSize) {
                 .replace("#{remark}", list[i].remark)
                 .replace("#{enabledTxt}", list[i].enabled == 1 ? "禁用" : "启用");
                 $("#dataBody").append(row);
-                $("#totalTxt").text("共 " + data.total + " 条");
-                $("#pagesTxt").text("共 " + data.pages + " 页");
-                $("#pages").val(data.pages);
-                $("#pageNum").val(data.pageNum);
-                $("#currentPage").text(data.pageNum);
-                if(data.pageNum === 1) {
-                    $("#prevPage").addClass("layui-disabled");
-                }
-                else {
-                    $("#prevPage").removeClass("layui-disabled");
-                }
-                if(data.pageNum === data.pages) {
-                    $("#nextPage").addClass("layui-disabled");
-                }
-                else {
-                    $("#nextPage").removeClass("layui-disabled");
-                }
-                refreshPageInfo($("#front"), $("#next"), data.pageNum, data.pages);
+            }
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
         });
-}
-function refreshPageSize() {
-    getProductList(1, $("#pageSize").val());
-}
-//<![CDATA[
-function gotoPrev() {
-    var pageNum = $("#pageNum").val();
-    if(pageNum > 1) {
-        getProductList(parseInt(pageNum) - 1, $("#pageSize").val());
-    }
-}
-
-function gotoNext() {
-    var pageNum = $("#pageNum").val();
-    var totalPage = $("#pages").val();
-    if(parseInt(pageNum) < parseInt(totalPage)) {
-        getProductList(parseInt(pageNum) + 1, $("#pageSize").val());
-    }
-}
-
-function gotoPage() {
-    var prodPageNum = $("#prodPageNum").val();
-    var pages = $("#pages").val();
-    if(parseInt(prodPageNum) > parseInt(pages)) {
-        prodPageNum = pages;
-    }
-    getProductList(prodPageNum, $("#pageSize").val());
-}
-
-function refreshPageInfo(front, next, pageNum, totalPage) {
-    var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
-    front.empty();
-    next.empty();
-    if(pageNum > 1) {
-        front.append(pageLink.replace(/#{pageNum}/g, 1));
-    }
-    if(pageNum === 3) {
-        front.append(pageLink.replace(/#{pageNum}/g, 2));
-    }
-    else if(pageNum > 3) {
-        front.append("...");
-        front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
-    }
-    if(totalPage === pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
-    }
-    else if(totalPage > pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
-        next.append("...");
-    }
-    if(pageNum < totalPage) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage));
-    }
-}
-
-//]]>
-function goPage(pageNum) {
-    var pageNumVal = pageNum;
-    var pageSizeVal = $("#pageSize").val();
-    getProductList(pageNumVal, pageSizeVal);
 }
 
 function changeStatus(id) {

@@ -90,7 +90,6 @@ function getBillList(obj, pageFun) {
                     $("#dataBody").append(row);
                 }
                 if(typeof pageFun === 'function') {
-                    $('#chartTitleId').text(result.title);
                     pageFun(obj, pages, total);
                 }
                 if(obj['shortName'] != '') {

@@ -1,87 +1,41 @@
 $(function() {
-    getRoleList(1, $("#pageSize").val());
+    roleListInit();
 });
 
-function changePageSize() {
-    var pageSizeVal = $("#pageSize").val();
-    getRoleList(1, pageSizeVal);
+function roleListInit(){
+    var obj = {
+        pageNum: 1,
+        pageSize: 10
+    };
+    getRoleList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getRechargeList(obj);
+            }
+        })
+    });
 }
 
-//<![CDATA[
-function gotoPage() {
-    var customPageNum = $("#userPageNum").val();
-    var pages = $("#totalPage").val();
-    if(parseInt(customPageNum) > parseInt(pages)) {
-        customPageNum = pages;
-    }
-    getRoleList(customPageNum, $("#pageSize").val());
-}
-
-function refreshPageInfo(front, next, pageNum, totalPage) {
-    var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
-    front.empty();
-    next.empty();
-    if(pageNum > 1) {
-        front.append(pageLink.replace(/#{pageNum}/g, 1));
-    }
-    if(pageNum === 3) {
-        front.append(pageLink.replace(/#{pageNum}/g, 2));
-    }
-    else if(pageNum > 3) {
-        front.append("...");
-        front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
-    }
-    if(totalPage === pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
-    }
-    else if(totalPage > pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
-        next.append("...");
-    }
-    if(pageNum < totalPage) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage));
-    }
-}
-
-function goPage(pageNum) {
-    var pageNumVal = pageNum;
-    var pageSizeVal = $("#pageSize").val();
-    getRoleList(pageNumVal, pageSizeVal);
-}
-
-function gotoPrev() {
-    var pageNum = $("#pageNum").val();
-    if(pageNum > 1) {
-        var pageNumVal = pageNum - 1;
-        var pageSizeVal = $("#pageSize").val();
-        getRoleList(pageNumVal, pageSizeVal);
-    }
-}
-
-function gotoNext() {
-    var pageNum = $("#pageNum").val();
-    var totalPage = $("#totalPage").val();
-    if(parseInt(pageNum) < parseInt(totalPage)) {
-        var pageNumVal = parseInt(pageNum) + 1;
-        var pageSizeVal = $("#pageSize").val();
-        getRoleList(pageNumVal, pageSizeVal);
-    }
-}
-
-//]]>
 var rowStr =
     '<tr><td>#{id}</td><td>#{name}</td><td>#{privilege}</td><td><span class="mr30"><a href="/role/edit.html?id=#{id}" class="edit">编辑</a></span><a href="#" class="del" id="enabled#{id}" onclick="changeStatus(\'#{id}\')">#{enabled}</a></td></tr>';
 
-function getRoleList(pageNumVal, pageSizeVal) {
-    $("#pageNum").val(pageNumVal);
+function getRoleList(obj, pageFun) {
     $.get(
         "/role/list",
         {
-            "pageNum": pageNumVal,
-            "pageSize": pageSizeVal
+            "pageNum": obj['pageNum'],
+            "pageSize": obj['pageSize']
         },
         function(data) {
             var list = data.list;
+            var total = data.total;
+            var pages = data.pages;
             $("#dataBody").empty();
             for(var d in list) {
                 var row = rowStr.replace(/#{id}/g, list[d].id).replace("#{name}", list[d].name)
@@ -89,23 +43,9 @@ function getRoleList(pageNumVal, pageSizeVal) {
                 .replace("#{enabled}", list[d].enabled === 1 ? "禁用" : "启用");
                 $("#dataBody").append(row);
             }
-            $("#total").text("共 " + data.total + " 条");
-            $("#pages").text("共 " + data.pages + " 页");
-            $("#totalPage").val(data.pages);
-            $("#currentPage").text(data.pageNum);
-            if(data.pageNum === 1) {
-                $("#prevPage").addClass("layui-disabled");
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
-            else {
-                $("#prevPage").removeClass("layui-disabled");
-            }
-            if(data.pageNum === data.pages) {
-                $("#nextPage").addClass("layui-disabled");
-            }
-            else {
-                $("#nextPage").removeClass("layui-disabled");
-            }
-            refreshPageInfo($("#front"), $("#next"), data.pageNum, data.pages);
         }
     );
 }
