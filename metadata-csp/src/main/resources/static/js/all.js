@@ -1,6 +1,65 @@
+$("#all-type").click(function() {
+    if(!$(this).hasClass("active")) {
+        $(".c-product-type").removeClass("active");
+        $(this).addClass("active");
+        fetch_product_list(1, 8);
+    }
+});
+$(".c-product-type").click(function() {
+    $("#all-type").removeClass("active");
+    if($(this).hasClass("active")) {
+        $(this).removeClass("active");
+        check_all_type();
+    }
+    else {
+        $(this).addClass("active");
+    }
+    fetch_product_list(1, 8);
+});
+$("#include-opened").click(function() {
+    fetch_product_list(1, 8);
+});
 $(function() {
     doChangeParameter();
 });
+
+function check_all_type() {
+    var all_checked = true;
+    $(".c-product-type").each(function() {
+        if($(this).hasClass("active")) {
+            all_checked = false;
+        }
+    });
+    if(all_checked) {
+        $("#all-type").addClass("active");
+    }
+    else {
+        $("#all-type").removeClass("active");
+    }
+}
+
+function fetch_product_list(pageNum, pageSize) {
+    var product_id_list = [];
+    $(".c-product-type").each(function() {
+        if($(this).hasClass("active")) {
+            product_id_list.push($(this).attr("data-id"));
+        }
+    });
+    var inc_opened = $("#include-opened").is(":checked");
+    console.log("product_id_list : " + product_id_list + "; inc_opened: " + inc_opened);
+    $.get(
+        "/product/allList",
+        {
+            "selectedType": product_id_list.join(","),
+            "isOpen": inc_opened ? 1 : 0,
+            "pageNum": pageNum,
+            "pageSize": pageSize
+        },
+        function(res) {
+
+        }
+    );
+}
 
 function getAllProductList(obj, pageFun) {
     $.get(
@@ -68,7 +127,7 @@ function getAllProductList(obj, pageFun) {
     );
 }
 
-$("li").click(function() {
+/*$("li").click(function() {
     if($(this).hasClass('active')) {
         $(this).removeClass('active');
         doChangeParameter();
@@ -77,8 +136,7 @@ $("li").click(function() {
         $(this).addClass('active');
         doChangeParameter();
     }
-});
-
+});*/
 function doChangeParameter() {
     var selectedType = "";
     $('.productTypeClass').each(function() {
