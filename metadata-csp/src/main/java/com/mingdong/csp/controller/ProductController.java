@@ -1,14 +1,13 @@
 package com.mingdong.csp.controller;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -118,16 +117,16 @@ public class ProductController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         BLResp resp = BLResp.build();
-        if(StringUtils.isNullBlank(selectedType))
-        {
-            resp.result(RestResult.PARAMETER_ERROR);
-            return resp;
-        }
-        String[] types = selectedType.split(",");
-        Integer[] typeInts = new Integer[types.length];
-        for(int i = 0; i < types.length; i++)
-        {
-            typeInts[i] = Integer.valueOf(types[i]);
+        Integer[] typeInts;
+        if(StringUtils.isBlank(selectedType)){
+            typeInts = null;
+        }else{
+            String[] types = selectedType.split(",");
+            typeInts = new Integer[types.length];
+            for(int i = 0; i < types.length; i++)
+            {
+                typeInts[i] = Integer.valueOf(types[i]);
+            }
         }
         productService.getProductListBy(RequestThread.getClientId(), isOpen, typeInts, new Page(pageNum, pageSize),
                 resp);
