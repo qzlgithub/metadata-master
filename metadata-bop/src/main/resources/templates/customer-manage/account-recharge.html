@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
+    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -46,7 +47,7 @@
                                           placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input search-input"/></em>-->
                 </li>
                 <li>
-                    <button class="check-button" onclick="searchAccoRechargeList();">查询</button>
+                    <button class="check-button" onclick="accoRechargeListInit();">查询</button>
                 </li>
             </ul>
             <!--搜索 end-->
@@ -82,41 +83,7 @@
             </div>
             <!--table end-->
             <!--page-->
-            <div class="layui-table-tool mt20">
-                <div class="layui-inline layui-table-page" id="layui-table-page1">
-                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                        <a id="prevPage" href="javascript:gotoPrev();" class="layui-laypage-prev layui-disabled">
-                            <i class="layui-icon">&#xe603;</i>
-                        </a>
-                        <span id="frontPages"></span>
-                        <span class="layui-laypage-curr">
-                            <em class="layui-laypage-em"></em>
-                            <em id="currentPage">1</em>
-                        </span>
-                        <span id="nextPages"></span>
-                        <a id="nextPage" href="javascript:gotoNext();" class="layui-laypage-next layui-disabled">
-                            <i class="layui-icon">&#xe602;</i>
-                        </a>
-                        <span id="total" class="layui-laypage-count">共 0 条</span>
-                        <span id="pages" class="layui-laypage-count">共 0 页</span>
-                        <input type="hidden" id="pageNum" value="1"/>
-                        <input type="hidden" id="totalPage" value="0"/>
-                        <span class="layui-laypage-limits">
-                            <select id="pageSize" lay-ignore="" onchange="searchAccoRechargeList()">
-                                <option value="15" selected="selected">15 条/页</option>
-                                <option value="30">30 条/页</option>
-                                <option value="50">50 条/页</option>
-                            </select>
-                        </span>
-                        <span class="layui-laypage-skip">
-                            到第<input type="text" id="userPageNum" min="1" value="1" class="layui-input"/>页
-                        </span>
-                        <span class="layui-laypage-skip">
-                            <button type="button" class="layui-laypage-btn" onclick="gotoPage()">确定</button>
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <div class="box mt30" id="pagination"></div>
             <!--page end-->
         </div>
     </div>
@@ -129,6 +96,7 @@
 </script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/account.recharge.list.js}"></script>
 <script>
     var message;

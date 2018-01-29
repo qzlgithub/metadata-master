@@ -1,87 +1,45 @@
 $(function() {
-    getManagerList(null, null, 1, $("#pageSize").val())
+    managerListInit();
 });
 
-function search() {
-    getManagerList($("#roleId").val(), $("#enabled").val(), 1, $("#pageSize").val());
+function managerListInit(){
+    var obj = {
+        pageNum: 1,
+        pageSize: 10,
+        roleId: $("#roleId").val(),
+        enabled: $("#enabled").val()
+    };
+    getManagerList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getManagerList(obj);
+            }
+        })
+    });
 }
 
-function resetPageSize() {
-    getManagerList($("#roleId").val(), $("#enabled").val(), 1, $("#pageSize").val());
-}
-
-function gotoPrev() {
-    var pageNum = $("#pageNum").val();
-    if(pageNum > 1) {
-        getManagerList($("#roleId").val(), $("#enabled").val(), parseInt(pageNum) - 1, $("#pageSize").val());
-    }
-}
-
-//<![CDATA[
-function gotoNext() {
-    var pageNum = $("#pageNum").val();
-    var totalPage = $("#pages").val();
-    if(parseInt(pageNum) < parseInt(totalPage)) {
-        getManagerList($("#roleId").val(), $("#enabled").val(), parseInt(pageNum) + 1, $("#pageSize").val());
-    }
-}
-
-function gotoPage() {
-    var userPageNum = $("#userPageNum").val();
-    var pages = $("#pages").val();
-    if(parseInt(userPageNum) > parseInt(pages)) {
-        userPageNum = pages;
-    }
-    getManagerList($("#roleId").val(), $("#enabled").val(), userPageNum, $("#pageSize").val());
-}
-
-function refreshPageInfo(front, next, pageNum, totalPage) {
-    var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
-    front.empty();
-    next.empty();
-    if(pageNum > 1) {
-        front.append(pageLink.replace(/#{pageNum}/g, 1));
-    }
-    if(pageNum === 3) {
-        front.append(pageLink.replace(/#{pageNum}/g, 2));
-    }
-    else if(pageNum > 3) {
-        front.append("...");
-        front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
-    }
-    if(totalPage === pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
-    }
-    else if(totalPage > pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
-        next.append("...");
-    }
-    if(pageNum < totalPage) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage));
-    }
-}
-
-function goPage(pageNum) {
-    var userPageNum = pageNum;
-    var pageSizeVal = $("#pageSize").val();
-    getManagerList($("#roleId").val(), $("#enabled").val(), userPageNum, pageSizeVal);
-}
-
-//]]>
 var rowStr =
     '<tr><td>#{id}</td><td>#{username}</td><td>#{name}</td><td>#{phone}</td><td>#{roleName}</td><td id="enabled#{id}">#{enabled}</td><td>#{registerDate}</td><td><span class="mr30"><a href="/manager/edit.html?id=#{id}" class="edit">编辑</a></span><a href="#" id="statusAction#{id}" class="del" onclick="changeStatus(\'#{id}\')">#{statusAction}</a></td></tr>';
 
-function getManagerList(roleId, enabled, pageNum, pageSize) {
+function getManagerList(obj, pageFun) {
     $.get(
         "/manager/list",
         {
-            "roleId": roleId,
-            "enabled": enabled,
-            "pageNum": pageNum,
-            "pageSize": pageSize
+            "pageNum": obj['pageNum'],
+            "pageSize": obj['pageSize'],
+            "roleId": obj['roleId'],
+            "enabled": obj['enabled']
         },
         function(data) {
             var list = data.list;
+            var total = data.total;
+            var pages = data.pages;
             $("#dataBody").empty();
             for(var d in list) {
                 var row = rowStr.replace(/#{id}/g, list[d].id).replace("#{username}", list[d].username)
@@ -92,24 +50,9 @@ function getManagerList(roleId, enabled, pageNum, pageSize) {
                 .replace("#{statusAction}", list[d].enabled === 1 ? '禁用' : '启用');
                 $("#dataBody").append(row);
             }
-            $("#totalTxt").text("共 " + data.total + " 条");
-            $("#pagesTxt").text("共 " + data.pages + " 页");
-            $("#pages").val(data.pages);
-            $("#pageNum").val(data.pageNum);
-            $("#currentPage").text(data.pageNum);
-            if(data.pageNum === 1) {
-                $("#prevPage").addClass("layui-disabled");
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
-            else {
-                $("#prevPage").removeClass("layui-disabled");
-            }
-            if(data.pageNum === data.pages) {
-                $("#nextPage").addClass("layui-disabled");
-            }
-            else {
-                $("#nextPage").removeClass("layui-disabled");
-            }
-            refreshPageInfo($("#front"), $("#next"), data.pageNum, data.pages);
         }
     );
 }

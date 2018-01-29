@@ -8,82 +8,42 @@ function showEditDiv() {
     });
 }
 
-$(function() {
-    productCategoryList(1, $("#pageSize").val());
+$(function(){
+    productCategoryListInit();
 });
 
-function refreshPageSize() {
-    productCategoryList(1, $("#pageSize").val());
+function productCategoryListInit(){
+    var obj = {
+        pageNum: 1,
+        pageSize: 10
+    };
+    getProductCategoryList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getProductCategoryList(obj);
+            }
+        })
+    });
 }
 
-//<![CDATA[
-function gotoPrev() {
-    var pageNum = $("#pageNum").val();
-    if(pageNum > 1) {
-        productCategoryList(parseInt(pageNum) - 1, $("#pageSize").val());
-    }
-}
-
-function gotoNext() {
-    var pageNum = $("#pageNum").val();
-    var totalPage = $("#pages").val();
-    if(parseInt(pageNum) < parseInt(totalPage)) {
-        productCategoryList(parseInt(pageNum) + 1, $("#pageSize").val());
-    }
-}
-
-function gotoPage() {
-    var customPageNum = $("#customPageNum").val();
-    var pages = $("#pages").val();
-    if(parseInt(customPageNum) > parseInt(pages)) {
-        customPageNum = pages;
-    }
-    productCategoryList(customPageNum, $("#pageSize").val());
-}
-
-function refreshPageInfo(front, next, pageNum, totalPage) {
-    var pageLink = '<a href="javascript:goPage(#{pageNum});">#{pageNum}</a>';
-    front.empty();
-    next.empty();
-    if(pageNum > 1) {
-        front.append(pageLink.replace(/#{pageNum}/g, 1));
-    }
-    if(pageNum === 3) {
-        front.append(pageLink.replace(/#{pageNum}/g, 2));
-    }
-    else if(pageNum > 3) {
-        front.append("...");
-        front.append(pageLink.replace(/#{pageNum}/g, pageNum - 1));
-    }
-    if(totalPage === pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage - 1));
-    }
-    else if(totalPage > pageNum + 2) {
-        next.append(pageLink.replace(/#{pageNum}/g, pageNum + 1));
-        next.append("...");
-    }
-    if(pageNum < totalPage) {
-        next.append(pageLink.replace(/#{pageNum}/g, totalPage));
-    }
-}
-
-function goPage(pageNum) {
-    var pageNumVal = pageNum;
-    var pageSizeVal = $("#pageSize").val();
-    productCategoryList(pageNumVal, pageSizeVal);
-}
-
-//]]>
 var rowTr =
     //'<tr><td>#{id}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30"><a href="#" class="edit">编辑</a></span><a href="#" class="del">停用</a></td></tr>';
     '<tr><td>#{code}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30 edit cp editclass" id="editclass#{id}" onclick="findProductCategeoryById(\'#{id}\');">编辑</span><a href="#" id="enabledTxt#{id}" onclick="updateStatus(#{id});" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabled}"/></td></tr>';
 
-function productCategoryList(pageNum, pageSize) {
+function getProductCategoryList(obj, pageFun) {
     $.get(
         "/product/productCategory/list",
-        {"pageNum": pageNum, "pageSize": pageSize},
+        {"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(data) {
             var list = data.list;
+            var total = data.total;
+            var pages = data.pages;
             $("#dataBody").empty();
             for(var i in list) {
                 //alert(list[i].name);
@@ -94,24 +54,9 @@ function productCategoryList(pageNum, pageSize) {
                 .replace("#{enabledTxt}", list[i].enabled === 1 ? "禁用" : "启用");
                 $("#dataBody").append(row);
             }
-            $("#totalTxt").text("共 " + data.total + " 条");
-            $("#pagesTxt").text("共 " + data.pages + " 页");
-            $("#pages").val(data.pages);
-            $("#pageNum").val(data.pageNum);
-            $("#currentPage").text(data.pageNum);
-            if(data.pageNum === 1) {
-                $("#prevPage").addClass("layui-disabled");
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
-            else {
-                $("#prevPage").removeClass("layui-disabled");
-            }
-            if(data.pageNum === data.pages) {
-                $("#nextPage").addClass("layui-disabled");
-            }
-            else {
-                $("#nextPage").removeClass("layui-disabled");
-            }
-            refreshPageInfo($("#front"), $("#next"), data.pageNum, data.pages);
         }
     )
 }
