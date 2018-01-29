@@ -175,6 +175,10 @@ body {
     background: url(../images/icon/icon5.png) no-repeat;
     background-size: 100%;
 }
+.icon6 {
+    background: url(../images/icon/icon6.png) no-repeat;
+    background-size: 100%;
+}
 
 .sort-icon {
     background: url(../images/icon/sort-icon.png) no-repeat;
