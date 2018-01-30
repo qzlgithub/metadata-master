@@ -8,4 +8,6 @@ import java.util.List;
 public interface ClientContactMapper
 {
     void addList(@Param("list") List<ClientContact> list);
+
+    List<ClientContact> getListByClient(@Param("clientId") Long clientId);
 }

@@ -1,6 +1,5 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
@@ -60,4 +59,6 @@ public interface ClientService
     void checkIfContractExist(String contractNo, BLResp resp);
 
     void addClient(NewClientVO vo, BLResp resp);
+
+    void findClientDetail(Long clientId, BLResp resp);
 }

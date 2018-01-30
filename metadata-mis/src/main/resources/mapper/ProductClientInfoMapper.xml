@@ -25,7 +25,7 @@
             p.`id`           as product_id,
             p.`name`         as product_name,
             p.`code`         as code,
-            p.`type_id`         as type_id,
+            p.`type_id`      as type_id,
             pt.`name`        as type_name,
             cp.`app_id`      as app_id,
             cp.`id`          as client_product_id,

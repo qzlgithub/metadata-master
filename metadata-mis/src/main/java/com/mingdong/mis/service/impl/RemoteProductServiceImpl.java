@@ -10,6 +10,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -716,6 +717,38 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         return productRechargeInfoMapper.getProductRechargeInfoSumBy(shortName, typeId, productId, managerId, startDate,
                 endDate);
+    }
+
+    @Override
+    public List<ProductClientDetailDTO> getProductInfoList(Long clientId)
+    {
+        List<ProductClientDetailDTO> list = new ArrayList<>();
+        List<ProductClientInfo> dataList = productClientInfoMapper.getListByClient(clientId);
+        for(ProductClientInfo d : dataList)
+        {
+            ProductClientDetailDTO o = new ProductClientDetailDTO();
+            o.setProductId(d.getProductId());
+            o.setName(d.getProductName());
+            if(d.getClientProductId() != null)
+            {
+                o.setClientProductId(d.getClientProductId());
+                o.setAppId(d.getAppId());
+                o.setBillPlan(d.getBillPlan());
+                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                {
+                    o.setFromDate(d.getStartDate());
+                    o.setToDate(d.getEndDate());
+                    o.setAmount(d.getAmount());
+                }
+                else
+                {
+                    o.setUnitAmt(d.getUnitAmt());
+                    o.setBalance(d.getBalance());
+                }
+            }
+            list.add(o);
+        }
+        return list;
     }
 
 }

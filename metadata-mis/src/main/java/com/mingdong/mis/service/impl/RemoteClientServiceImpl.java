@@ -14,6 +14,7 @@ import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
+import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
@@ -1013,6 +1014,72 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientContactMapper.addList(contactList);
         clientUserMapper.add(user);
         clientMapper.add(client);
+        return res;
+    }
+
+    @Override
+    public ClientDetailDTO getClientDetail(Long clientId)
+    {
+        ClientDetailDTO res = new ClientDetailDTO();
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            res.setResult(RestResult.OBJECT_NOT_FOUND);
+            return res;
+        }
+        ClientAccount clientAccount = clientAccountMapper.findById(clientId);
+        List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
+        List<ClientUser> clientUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
+        Manager manager = managerMapper.findById(client.getManagerId());
+        res.setClientId(client.getId());
+        res.setCorpName(client.getCorpName());
+        res.setShortName(client.getShortName());
+        res.setLicense(client.getLicense());
+        res.setIndustryId(client.getIndustryId());
+        res.setAddTime(client.getCreateTime());
+        res.setManagerName(manager.getName());
+        if(clientAccount == null)
+        {
+            res.setBalance(new BigDecimal(0));
+            res.setAccountStatus(TrueOrFalse.TRUE);
+        }
+        else
+        {
+            res.setBalance(clientAccount.getBalance());
+            res.setAccountStatus(clientAccount.getEnabled());
+        }
+        List<ClientContactDTO> contacts = new ArrayList<>();
+        for(ClientContact cc : clientContactList)
+        {
+            ClientContactDTO clientContactDTO = new ClientContactDTO();
+            clientContactDTO.setName(cc.getName());
+            clientContactDTO.setPosition(cc.getPosition());
+            clientContactDTO.setPhone(cc.getPhone());
+            clientContactDTO.setEmail(cc.getEmail());
+            clientContactDTO.setGeneral(cc.getGeneral());
+            contacts.add(clientContactDTO);
+        }
+        res.setContacts(contacts);
+        List<ClientUserDTO> users = new ArrayList<>();
+        for(ClientUser user : clientUserList)
+        {
+            if(client.getPrimaryUserId().equals(user.getId()))
+            {
+                res.setUsername(user.getUsername());
+                res.setUserStatus(user.getEnabled());
+            }
+            else
+            {
+                ClientUserDTO clientUserDTO = new ClientUserDTO();
+                clientUserDTO.setId(user.getId());
+                clientUserDTO.setUsername(user.getUsername());
+                clientUserDTO.setName(user.getName());
+                clientUserDTO.setPhone(user.getPhone());
+                users.add(clientUserDTO);
+            }
+        }
+        res.setUsers(users);
         return res;
     }
 

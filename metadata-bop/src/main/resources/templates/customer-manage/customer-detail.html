@@ -53,10 +53,6 @@
                             <div class="layui-input-block col2" th:text="${license}"></div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label fb">联系电话：</label>
-                            <div class="layui-input-block col2" th:text="${phone}"></div>
-                        </div>
-                        <div class="layui-form-item">
                             <label class="layui-form-label fb">商务经理：</label>
                             <div class="layui-input-block col2" th:text="${managerName}"></div>
                         </div>
@@ -68,8 +64,6 @@
                                 <i th:text="${userEnabled} eq '1' ? '启用':'禁用'"></i>
                                 <span class="log-button show-log cp ml10">操作记录</span>
                             </div>
-
-
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">公司名称：</label>
@@ -78,14 +72,6 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">类型：</label>
                             <div class="layui-input-block col2" th:text="${industryName}"></div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label fb">联系人：</label>
-                            <div class="layui-input-block col2" th:text="${name}"></div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label fb">邮箱：</label>
-                            <div class="layui-input-block col2" th:text="${email}"></div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label fb">注册时间：</label>
@@ -97,18 +83,20 @@
                     <table class="layui-table w60">
                         <thead>
                         <tr>
-                            <th class="position-r">联系人<i class="chang-icon"></i></th>
+                            <th class="position-r">联系人</th>
                             <th>职位</th>
                             <th>联系电话</th>
                             <th>联系邮箱</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>张三<i class="chang-icon"></i></td>
-                            <td>技术总监</td>
-                            <td>135781245</td>
-                            <td>zhangsan@qq.com</td>
+                        <tr th:each="o : ${contactList}">
+                            <td>
+                                <span th:text="${o.name}"></span>
+                                <i class="chang-icon" th:if="${o.isGeneral == 1}"></i></td>
+                            <td th:text="${o.position}"></td>
+                            <td th:text="${o.phone}"></td>
+                            <td th:text="${o.email}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -177,11 +165,12 @@
                     </div>
 
                 </div>
-                <div class="form-title mb20">子账号</div>
-                <div class="m30 clearfix">
+                <div class="form-title mb20" th:if="${not #lists.isEmpty(userList)}">子账号</div>
+                <div class="m30 clearfix" th:if="${not #lists.isEmpty(userList)}">
                     <table class="layui-table">
                         <thead>
                         <tr>
+                            <th>No.</th>
                             <th>账号</th>
                             <th>联系人</th>
                             <th>联系电话</th>
@@ -189,7 +178,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="user:${userList}">
+                        <tr th:each="user,index : ${userList}">
+                            <td th:text="${index.count}"></td>
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.name}"></td>
                             <td th:text="${user.phone}"></td>

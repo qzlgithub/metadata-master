@@ -4,6 +4,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientDTO;
+import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
@@ -106,4 +107,6 @@ public interface RemoteClientService
     BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate);
 
     ResultDTO addNewClient(NewClientDTO dto);
+
+    ClientDetailDTO getClientDetail(Long clientId);
 }

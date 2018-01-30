@@ -3,6 +3,7 @@ package com.mingdong.core.service;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
@@ -16,6 +17,7 @@ import com.mingdong.core.model.dto.ResultDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public interface RemoteProductService
 {
@@ -87,4 +89,6 @@ public interface RemoteProductService
 
     BigDecimal getProductRechargeInfoSumBy(String shortName, Long typeId, Long productId, Long managerId,
             Date startDate, Date endDate);
+
+    List<ProductClientDetailDTO> getProductInfoList(Long clientId);
 }

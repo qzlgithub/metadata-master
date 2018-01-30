@@ -31,4 +31,9 @@
         </foreach>
     </insert>
     <!-- @formatter:on -->
+
+    <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `client_id` = #{clientId}
+    </select>
 </mapper>

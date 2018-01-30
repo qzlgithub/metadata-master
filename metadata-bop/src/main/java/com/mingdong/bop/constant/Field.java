@@ -106,4 +106,7 @@ public interface Field
     String HIT = "hit";
     String MODULE = "module";
     String STATUS = "status";
+    String CONTACT_LIST = "contactList";
+    String POSITION = "position";
+    String IS_GENERAL = "isGeneral";
 }

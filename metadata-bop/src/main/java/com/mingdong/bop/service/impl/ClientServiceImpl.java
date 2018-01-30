@@ -24,6 +24,7 @@ import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
+import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
@@ -37,6 +38,7 @@ import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
+import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
@@ -256,9 +258,6 @@ public class ClientServiceImpl implements ClientService
         {
             // 主账号
             ClientUserDTO masterUser = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
-            map.put(Field.NAME, masterUser.getName());
-            map.put(Field.PHONE, masterUser.getPhone());
-            map.put(Field.EMAIL, masterUser.getEmail());
             map.put(Field.USERNAME, masterUser.getUsername());
             map.put(Field.USER_ENABLED, masterUser.getEnabled());
             // 子账号
@@ -797,5 +796,83 @@ public class ClientServiceImpl implements ClientService
         dto.setManagerId(RequestThread.getOperatorId());
         ResultDTO res = remoteClientService.addNewClient(dto);
         resp.result(res.getResult());
+    }
+
+    @Override
+    public void findClientDetail(Long clientId, BLResp resp)
+    {
+        ClientDetailDTO dto = remoteClientService.getClientDetail(clientId);
+        if(RestResult.SUCCESS != dto.getResult())
+        {
+            resp.result(dto.getResult());
+            return;
+        }
+        resp.addData(Field.CLIENT_ID, clientId + "");
+        resp.addData(Field.CORP_NAME, dto.getCorpName());
+        resp.addData(Field.SHORT_NAME, dto.getShortName());
+        resp.addData(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(dto.getIndustryId()));
+        resp.addData(Field.LICENSE, dto.getLicense());
+        resp.addData(Field.USERNAME, dto.getUsername());
+        resp.addData(Field.USER_ENABLED, dto.getUserStatus());
+        resp.addData(Field.ACCOUNT_ENABLED, dto.getAccountStatus());
+        resp.addData(Field.BALANCE, NumberUtils.formatAmount(dto.getBalance()));
+        resp.addData(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
+        resp.addData(Field.MANAGER_NAME, dto.getManagerName());
+        List<Map<String, Object>> userList = new ArrayList<>();
+        for(ClientUserDTO cu : dto.getUsers())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, cu.getId() + "");
+            m.put(Field.USERNAME, cu.getUsername());
+            m.put(Field.NAME, cu.getName());
+            m.put(Field.PHONE, cu.getPhone());
+            userList.add(m);
+        }
+        resp.addData(Field.USER_LIST, userList);
+        List<Map<String, Object>> contactList = new ArrayList<>();
+        for(ClientContactDTO cc : dto.getContacts())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.NAME, cc.getName());
+            m.put(Field.POSITION, cc.getPosition());
+            m.put(Field.PHONE, cc.getPhone());
+            m.put(Field.EMAIL, cc.getEmail());
+            m.put(Field.IS_GENERAL, cc.getGeneral());
+            contactList.add(m);
+        }
+        resp.addData(Field.CONTACT_LIST, contactList);
+        List<ProductClientDetailDTO> productDTOList = remoteProductService.getProductInfoList(clientId);
+        List<Map<String, Object>> opened = new ArrayList<>();
+        List<Map<String, Object>> toOpen = new ArrayList<>();
+        for(ProductClientDetailDTO d : productDTOList)
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.PRODUCT_ID, d.getProductId() + "");
+            m.put(Field.PRODUCT_NAME, d.getName());
+            if(d.getClientProductId() != null)
+            {
+                m.put(Field.CLIENT_PRODUCT_ID, d.getClientProductId() + "");
+                m.put(Field.APP_ID, d.getAppId());
+                m.put(Field.BILL_PLAN, d.getBillPlan());
+                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                {
+                    m.put(Field.START_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD));
+                    m.put(Field.END_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD));
+                    m.put(Field.AMOUNT, NumberUtils.formatAmount(d.getAmount()));
+                }
+                else
+                {
+                    m.put(Field.UNIT_AMT, NumberUtils.formatAmount(d.getUnitAmt()));
+                    m.put(Field.BALANCE, NumberUtils.formatAmount(d.getBalance()));
+                }
+                opened.add(m);
+            }
+            else
+            {
+                toOpen.add(m);
+            }
+        }
+        resp.addData(Field.OPENED, opened);
+        resp.addData(Field.TO_OPEN, toOpen);
     }
 }

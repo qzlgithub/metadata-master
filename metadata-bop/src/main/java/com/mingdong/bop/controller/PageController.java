@@ -158,9 +158,11 @@ public class PageController
     @RequestMapping(value = "/client/detail.html")
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.CLIENT_ID) Long clientId)
     {
+        BLResp resp = BLResp.build();
+        //Map<String, Object> clientMap = clientService.findClientDetail(clientId);
+        clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("customer-manage/customer-detail");
-        Map<String, Object> clientMap = clientService.findClientDetail(clientId);
-        view.addAllObjects(clientMap);
+        view.addAllObjects(resp.getDataMap());
         view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
