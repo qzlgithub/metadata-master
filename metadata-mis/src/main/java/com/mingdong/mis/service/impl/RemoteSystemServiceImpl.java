@@ -5,10 +5,12 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -416,6 +418,34 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             map.put(o.getName(), o.getValue());
         }
         return map;
+    }
+
+    @Override
+    public IndustryDTO getIndustryDictOfTarget(Long industryId)
+    {
+        IndustryDTO dto = new IndustryDTO();
+        DictIndustry self = dictIndustryMapper.findById(industryId);
+        if(self == null)
+        {
+            dto.setResult(RestResult.OBJECT_NOT_FOUND);
+            return dto;
+        }
+        dto.setParentId(self.getParentId());
+        List<DictIndustry> peerList = dictIndustryMapper.getByParentAndStatus(self.getParentId(), TrueOrFalse.TRUE);
+        List<DictDTO> peers = new ArrayList<>();
+        for(DictIndustry d : peerList)
+        {
+            peers.add(new DictDTO(d.getId() + "", d.getName()));
+        }
+        dto.setPeers(peers);
+        List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(0L, TrueOrFalse.TRUE);
+        List<DictDTO> parents = new ArrayList<>();
+        for(DictIndustry d : parentList)
+        {
+            parents.add(new DictDTO(d.getId() + "", d.getName()));
+        }
+        dto.setParents(parents);
+        return dto;
     }
 
     private void findDictIndustryDTO(List<DictIndustry> dictIndustryList, List<DictIndustryDTO> dataList)

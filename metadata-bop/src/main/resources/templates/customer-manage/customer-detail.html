@@ -141,30 +141,6 @@
 
                     </ul>
                 </div>
-
-                <div class="form-title mb20">账户余额</div>
-                <div class="m30 clearfix">
-                    <div class="w30 fl">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label fb">账户状态：</label>
-                            <div class="layui-input-block col2" th:text="${accountEnabled} eq '1' ? '正常':'禁用'">正常</div>
-                        </div>
-                    </div>
-
-                    <div class="w40 fl">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label fb">账户余额：</label>
-                            <div class="layui-input-block col2">
-                                <span th:text="${balance} + '元'">0.00元</span>
-                                <span class="add-button ml30 cp" id="recharge">账户充值</span>
-                                <a th:href="'/client/account/recharge.html?id=' + ${clientId}" class="mr30 ml20 link1">充值记录</a>
-                                <a th:href="'/client/account/consume.html?id=' + ${clientId}" class="mr30 ml20 link1">
-                                    消费记录</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
                 <div class="form-title mb20" th:if="${not #lists.isEmpty(userList)}">子账号</div>
                 <div class="m30 clearfix" th:if="${not #lists.isEmpty(userList)}">
                     <table class="layui-table">

@@ -145,9 +145,11 @@ public class PageController
     @RequestMapping(value = "/client/edit.html")
     public ModelAndView gotoClientEdit(@RequestParam(value = Field.CLIENT_ID) Long clientId)
     {
+        BLResp resp = BLResp.build();
+        clientService.getClientInfoForEdit(clientId, resp);
+        //Map<String, Object> clientMap = clientService.findClientInfo(clientId);
         ModelAndView view = new ModelAndView("customer-manage/customer-edit");
-        Map<String, Object> clientMap = clientService.findClientInfo(clientId);
-        view.addAllObjects(clientMap);
+        view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

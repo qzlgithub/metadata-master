@@ -2,7 +2,6 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
-import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -65,12 +64,6 @@ public interface RemoteClientService
 
     ResultDTO updateClientUserByUserId(ClientUserDTO clientUser);
 
-    ClientAccountDTO getClientAccountByClientId(Long clientId);
-
-    ResultDTO updateClientAccountById(ClientAccountDTO clientAccountDTO);
-
-    ResultDTO saveClientAccount(ClientAccountDTO clientAccountDTO);
-
     ResultDTO updateClientById(ClientDTO clientDTO);
 
     ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted);
@@ -109,4 +102,6 @@ public interface RemoteClientService
     ResultDTO addNewClient(NewClientDTO dto);
 
     ClientDetailDTO getClientDetail(Long clientId);
+
+    ClientDetailDTO getClientInfoForEdit(Long clientId);
 }

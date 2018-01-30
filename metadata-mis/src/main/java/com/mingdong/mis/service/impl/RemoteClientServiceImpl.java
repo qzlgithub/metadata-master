@@ -11,7 +11,6 @@ import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
-import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -39,7 +38,6 @@ import com.mingdong.mis.component.Param;
 import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
-import com.mingdong.mis.domain.entity.ClientAccount;
 import com.mingdong.mis.domain.entity.ClientContact;
 import com.mingdong.mis.domain.entity.ClientInfo;
 import com.mingdong.mis.domain.entity.ClientMessage;
@@ -51,7 +49,6 @@ import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
-import com.mingdong.mis.domain.mapper.ClientAccountMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientMapper;
@@ -95,8 +92,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private UserProductMapper userProductMapper;
     @Resource
     private ClientInfoMapper clientInfoMapper;
-    @Resource
-    private ClientAccountMapper clientAccountMapper;
     @Resource
     private ClientOperateLogMapper clientOperateLogMapper;
     @Resource
@@ -599,43 +594,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientAccountDTO getClientAccountByClientId(Long clientId)
-    {
-        ClientAccountDTO clientAccountDTO = new ClientAccountDTO();
-        ClientAccount byId = clientAccountMapper.findById(clientId);
-        if(byId == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byId, clientAccountDTO);
-        return clientAccountDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientAccountById(ClientAccountDTO clientAccountDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientAccount clientAccount = new ClientAccount();
-        EntityUtils.copyProperties(clientAccountDTO, clientAccount);
-        clientAccountMapper.updateById(clientAccount);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveClientAccount(ClientAccountDTO clientAccountDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientAccount clientAccount = new ClientAccount();
-        EntityUtils.copyProperties(clientAccountDTO, clientAccount);
-        clientAccountMapper.add(clientAccount);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     @Transactional
     public ResultDTO updateClientById(ClientDTO clientDTO)
     {
@@ -1027,7 +985,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
-        ClientAccount clientAccount = clientAccountMapper.findById(clientId);
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
         List<ClientUser> clientUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
@@ -1039,16 +996,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         res.setIndustryId(client.getIndustryId());
         res.setAddTime(client.getCreateTime());
         res.setManagerName(manager.getName());
-        if(clientAccount == null)
-        {
-            res.setBalance(new BigDecimal(0));
-            res.setAccountStatus(TrueOrFalse.TRUE);
-        }
-        else
-        {
-            res.setBalance(clientAccount.getBalance());
-            res.setAccountStatus(clientAccount.getEnabled());
-        }
         List<ClientContactDTO> contacts = new ArrayList<>();
         for(ClientContact cc : clientContactList)
         {
@@ -1080,6 +1027,41 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         res.setUsers(users);
+        return res;
+    }
+
+    @Override
+    public ClientDetailDTO getClientInfoForEdit(Long clientId)
+    {
+        ClientDetailDTO res = new ClientDetailDTO();
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            res.setResult(RestResult.OBJECT_NOT_FOUND);
+            return res;
+        }
+        res.setClientId(client.getId());
+        res.setCorpName(client.getCorpName());
+        res.setShortName(client.getShortName());
+        res.setLicense(client.getLicense());
+        res.setIndustryId(client.getIndustryId());
+        ClientUser clientUser = clientUserMapper.findById(client.getPrimaryUserId());
+        res.setUsername(clientUser.getUsername());
+        res.setUserStatus(clientUser.getEnabled());
+        List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
+        List<ClientContactDTO> contacts = new ArrayList<>();
+        for(ClientContact cc : clientContactList)
+        {
+            ClientContactDTO clientContactDTO = new ClientContactDTO();
+            clientContactDTO.setId(cc.getId());
+            clientContactDTO.setName(cc.getName());
+            clientContactDTO.setPosition(cc.getPosition());
+            clientContactDTO.setPhone(cc.getPhone());
+            clientContactDTO.setEmail(cc.getEmail());
+            clientContactDTO.setGeneral(cc.getGeneral());
+            contacts.add(clientContactDTO);
+        }
+        res.setContacts(contacts);
         return res;
     }
 

@@ -109,4 +109,9 @@ public interface Field
     String CONTACT_LIST = "contactList";
     String POSITION = "position";
     String IS_GENERAL = "isGeneral";
+    String KEY = "key";
+    String VALUE = "value";
+    String INDUSTRY_PARENT_DICT = "industryParentDict";
+    String INDUSTRY_DICT = "industryDict";
+    String CONTACTS = "contacts";
 }

@@ -4,11 +4,22 @@ import java.io.Serializable;
 
 public class ClientContactDTO implements Serializable
 {
+    private Long id;
     private String name;
     private String position;
     private String phone;
     private String email;
     private Integer general;
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
     public String getName()
     {

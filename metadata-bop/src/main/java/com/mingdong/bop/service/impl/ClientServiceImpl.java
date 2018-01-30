@@ -21,7 +21,6 @@ import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
-import com.mingdong.core.model.dto.ClientAccountDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -34,8 +33,10 @@ import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
+import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
@@ -189,24 +190,6 @@ public class ClientServiceImpl implements ClientService
         clientUser.setEmail(email);
         clientUser.setEnabled(userEnabled);
         remoteClientService.updateClientUserByUserId(clientUser);
-        // 更新客户账户状态
-        ClientAccountDTO clientAccount = remoteClientService.getClientAccountByClientId(clientId);
-        if(clientAccount != null)
-        {
-            clientAccount.setUpdateTime(current);
-            clientAccount.setEnabled(accountEnabled);
-            remoteClientService.updateClientAccountById(clientAccount);
-        }
-        else
-        {
-            clientAccount = new ClientAccountDTO();
-            clientAccount.setId(clientId);
-            clientAccount.setCreateTime(current);
-            clientAccount.setUpdateTime(current);
-            clientAccount.setBalance(new BigDecimal(0));
-            clientAccount.setEnabled(accountEnabled);
-            remoteClientService.saveClientAccount(clientAccount);
-        }
         // 更新客户信息
         client.setUpdateTime(current);
         client.setCorpName(corpName);
@@ -217,36 +200,60 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public Map<String, Object> findClientInfo(Long clientId)
+    public void getClientInfoForEdit(Long clientId, BLResp resp)
     {
-        Map<String, Object> map = new HashMap<>();
-
-        ClientDTO client = remoteClientService.getClientByClientId(clientId);
-        if(client != null)
+        ClientDetailDTO dto = remoteClientService.getClientInfoForEdit(clientId);
+        if(RestResult.SUCCESS != dto.getResult())
         {
-            ClientUserDTO user = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
-            ClientAccountDTO clientAccount = remoteClientService.getClientAccountByClientId(clientId);
-            DictIndustryDTO industry = remoteSystemService.getDictIndustryById(client.getIndustryId());
-            map.put(Field.CLIENT_ID, clientId + "");
-            map.put(Field.USERNAME, user.getUsername());
-            map.put(Field.CORP_NAME, client.getCorpName());
-            map.put(Field.SHORT_NAME, client.getShortName());
-            map.put(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
-            map.put(Field.INDUSTRY_ID, client.getIndustryId() + "");
-            map.put(Field.NAME, user.getName());
-            map.put(Field.PHONE, user.getPhone());
-            map.put(Field.EMAIL, user.getEmail());
-            map.put(Field.LICENSE, client.getLicense());
-            map.put(Field.USER_STATUS, user.getEnabled());
-            map.put(Field.ACCOUNT_STATUS, clientAccount != null ? clientAccount.getEnabled() : TrueOrFalse.TRUE);
-
-            List<Map<String, Object>> parentIndustryList = systemService.getIndustryMap(0L, TrueOrFalse.TRUE);
-            map.put(Field.PARENT_INDUSTRY_LIST, parentIndustryList);
-            List<Map<String, Object>> childIndustryList = systemService.getIndustryMap(industry.getParentId(),
-                    TrueOrFalse.TRUE);
-            map.put(Field.CHILD_INDUSTRY_LIST, childIndustryList);
+            resp.result(dto.getResult());
+            return;
         }
-        return map;
+        resp.addData(Field.CLIENT_ID, clientId + "");
+        resp.addData(Field.USERNAME, dto.getUsername());
+        resp.addData(Field.CORP_NAME, dto.getCorpName());
+        resp.addData(Field.SHORT_NAME, dto.getShortName());
+        resp.addData(Field.LICENSE, dto.getLicense());
+        resp.addData(Field.INDUSTRY_ID, dto.getIndustryId() + "");
+        resp.addData(Field.USER_STATUS, dto.getUserStatus());
+        resp.addData(Field.ACCOUNT_STATUS, dto.getAccountStatus());
+
+        List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
+        for(ClientContactDTO d : dto.getContacts())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, d.getId() + "");
+            m.put(Field.NAME, d.getName());
+            m.put(Field.POSITION, d.getPosition());
+            m.put(Field.PHONE, d.getPhone());
+            m.put(Field.EMAIL, d.getEmail());
+            m.put(Field.IS_GENERAL, d.getGeneral());
+            contacts.add(m);
+        }
+        resp.addData(Field.CONTACTS, contacts);
+
+        IndustryDTO industry = remoteSystemService.getIndustryDictOfTarget(dto.getIndustryId());
+        if(RestResult.SUCCESS == industry.getResult())
+        {
+            resp.addData(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
+            List<Map<String, Object>> industryParentDict = new ArrayList<>();
+            for(DictDTO d : industry.getParents())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.KEY, d.getKey());
+                map.put(Field.VALUE, d.getValue());
+                industryParentDict.add(map);
+            }
+            resp.addData(Field.INDUSTRY_PARENT_DICT, industryParentDict);
+            List<Map<String, Object>> industryDict = new ArrayList<>();
+            for(DictDTO d : industry.getPeers())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.KEY, d.getKey());
+                map.put(Field.VALUE, d.getValue());
+                industryDict.add(map);
+            }
+            resp.addData(Field.INDUSTRY_DICT, industryDict);
+        }
     }
 
     @Override
@@ -314,9 +321,6 @@ public class ClientServiceImpl implements ClientService
             }
             map.put(Field.OPENED, opened);
             map.put(Field.TO_OPEN, toOpen);
-            // 账户余额
-            ClientAccountDTO account = remoteClientService.getClientAccountByClientId(clientId);
-            map.put(Field.BALANCE, account == null ? "0.00" : NumberUtils.formatAmount(account.getBalance()));
             // 其他
             ManagerDTO manager = remoteManagerService.getManagerById(client.getManagerId());
             map.put(Field.CLIENT_ID, clientId + "");
@@ -324,7 +328,6 @@ public class ClientServiceImpl implements ClientService
             map.put(Field.SHORT_NAME, client.getShortName());
             map.put(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(client.getIndustryId()));
             map.put(Field.LICENSE, client.getLicense());
-            map.put(Field.ACCOUNT_ENABLED, account != null ? account.getEnabled() : TrueOrFalse.TRUE);
             map.put(Field.REGISTER_DATE, DateUtils.format(client.getCreateTime(), DateFormat.YYYY_MM_DD));
             map.put(Field.MANAGER_NAME, manager != null ? manager.getName() : "");
             map.put(Field.USER_LIST, userList);

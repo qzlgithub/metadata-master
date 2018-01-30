@@ -22,7 +22,7 @@ public interface ClientService
     void editClientInfo(Long clientId, String corpName, String shortName, String license, Long industryId, String name,
             String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp);
 
-    Map<String, Object> findClientInfo(Long clientId);
+    void getClientInfoForEdit(Long clientId, BLResp resp);
 
     Map<String, Object> findClientDetail(Long clientId);
 

@@ -5,6 +5,7 @@ import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -67,4 +68,6 @@ public interface RemoteSystemService
     void setModuleStatus(Integer status, List<Long> moduleIdList);
 
     Map<String, Object> getSettingData();
+
+    IndustryDTO getIndustryDictOfTarget(Long industryId);
 }

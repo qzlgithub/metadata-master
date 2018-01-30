@@ -277,10 +277,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         List<DictDTO> dictList = new ArrayList<>();
         for(ProductClientInfo o : dataList)
         {
-            DictDTO dd = new DictDTO();
-            dd.setKey(o.getProductId() + "");
-            dd.setValue(o.getProductName());
-            dictList.add(dd);
+            dictList.add(new DictDTO(o.getProductId() + "", o.getProductName()));
         }
         dto.setProductDictList(dictList);
         return dto;

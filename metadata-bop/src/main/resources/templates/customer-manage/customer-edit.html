@@ -20,17 +20,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a><cite>编辑客户</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--form-->
-            <!--<form id="updateForm" class="layui-form" action="">-->
             <div class="w40 m30">
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号：</label>
@@ -55,43 +50,20 @@
                     <label class="layui-form-label"><i class="col3">*</i>所属行业：</label>
                     <div class="layui-input-block clearfix">
                         <div style="width: 50%; float: left;">
-                            <select id="parentIndustry" name="parentIndustry" onchange="fetchIndustry()" class="select-list" style="width: 98%">
-                                <option th:each="parent:${parentIndustryList}" th:value="${parent.id}"
-                                        th:text="${parent.name}"
-                                        th:selected="${parent.id} eq ${parentIndustryId}"></option>
+                            <select id="parentIndustry" name="parentIndustry" onchange="fetchIndustry()"
+                                    class="select-list" style="width: 98%">
+                                <option th:each="parent:${industryParentDict}" th:value="${parent.key}"
+                                        th:text="${parent.value}"
+                                        th:selected="${parent.key} eq ${parentIndustryId}"></option>
                             </select>
                         </div>
 
                         <div style="width: 50%; float: left;">
                             <select id="industry" name="industry" class="select-list" style="width: 98%">
-                                <option th:each="child:${childIndustryList}" th:value="${child.id}"
-                                        th:text="${child.name}" th:selected="${child.id} eq ${industryId}"></option>
+                                <option th:each="child:${industryDict}" th:value="${child.key}"
+                                        th:text="${child.value}" th:selected="${child.key} eq ${industryId}"></option>
                             </select>
                         </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="name" name="name" autocomplete="off"
-                               class="layui-input" th:value="${name}" onblur="checkContact()"/>
-                        <i class="col3 pl10" id="contactTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="phone" name="phone" placeholder="请输入"
-                               autocomplete="off" class="layui-input" th:value="${phone}" onblur="checkPhone()"/>
-                        <i class="col3 pl10" id="phoneTip" style="display: none"></i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">联系邮箱：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="email" name="email" placeholder="请输入"
-                               autocomplete="off" class="layui-input" th:value="${email}" onblur="checkEmail()"/>
-                        <i class="col3 pl10" id="emailTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -118,26 +90,41 @@
                             <span>冻结</span>
                         </div>
                         <div class="col3" style="display: inline-flex; vertical-align: middle; margin-top: 5px;">
-                            (冻结后账号不可登录，服务中断)</div>
+                            (冻结后账号不可登录，服务中断)
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">账户状态：</label>
+                    <label class="layui-form-label">联系人：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="radio" name="accountEnabled" value="1" title="正常"
-                               th:checked="${accountStatus} == 1"/>
-                        <div class="layui-unselect layui-form-radio layui-form-radioed">
-                            <i class="layui-anim layui-icon layui-anim-scaleSpring"></i>
-                            <span>正常</span>
-                        </div>
-                        <input type="radio" name="accountEnabled" value="0" title="冻结"
-                               th:checked="${accountStatus} == 0"/>
-                        <div class="layui-unselect layui-form-radio">
-                            <i class="layui-anim layui-icon"></i>
-                            <span>冻结</span>
-                        </div>
-                        <div class="col3" style="display: inline-flex; vertical-align: middle; margin-top: 5px;">
-                            (冻结后账户余额不可用)</div>
+                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="addcontacts"><i
+                                class="layui-icon"></i>添加联系人</span>
+                        <em class="col3">至少添加一位联系人</em>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block layui-form">
+                        <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
+                            <tbody id="contact-list">
+                            <tr th:each="o : ${contacts}" th:id="${o.id}">
+                                <td th:text="${o.name}" th:id="'name-' + ${o.id}"></td>
+                                <td th:text="${o.position}" th:id="'position-' + ${o.id}"></td>
+                                <td th:text="${o.phone}" th:id="'phone-' + ${o.id}"></td>
+                                <td th:text="${o.email}" th:id="'email-' + ${o.id}"></td>
+                                <td>
+                                    <span class="mr30">
+                                        <a href="#" class="edit-contact" th:attr="data-id=${o.id}">编辑</a></span>
+                                    <span class="mr30">
+                                        <a href="#" class="del del-contact" th:attr="data-id=${o.id}">删除</a></span>
+                                    <span class="layui-form">
+                                        <input type="checkbox" title="常用" th:checked="${o.isGeneral == 1}"
+                                               th:id="'isGeneral-' + ${o.id}"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -147,8 +134,6 @@
                     <button class="layui-btn" onclick="editClient()" style="display: block">保存</button>
                 </div>
             </div>
-            <!--</form>-->
-            <!--form end-->
         </div>
     </div>
 
@@ -190,17 +175,61 @@
 <!--提示层 end-->
 
 <!--修改密码  提示层-->
-<div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
+<div id="div-contact" class="modal">
+    <div class="layui-layer-title">联系人</div>
+    <div class="m30">
+        <div class="m30 mt0 mr40">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
+                <div class="layui-input-block">
+                    <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-name" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>职位：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-position" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-phone" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系邮箱：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"/>
+                    <i class="col3 pl10" id="tip-add-email" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">设为常用：</label>
+                <div class="fl">
+                    <input type="checkbox" id="add-chief" title="常用联系人" lay-skin="primary"/>
+                    <i class="col3 pl10" id="tip-add-chief" style="display: none"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" id="add_contact">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript" th:src="@{/js/customer.edit.js}"></script>
+<script type="text/javascript" th:src="@{/js/client-edit.js}"></script>
 <script>
     var message;
     layui.config({

@@ -1,3 +1,17 @@
+$("#contact-list").on("click", ".edit-contact", function() {
+    var id = $(this).data("id");
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#div-contact'),
+        area: ['700px'],
+        shadeClose: true
+    });
+});
+$("#contact-list").on("click", ".del-contact", function() {
+    var id = $(this).data("id");
+    $("#" + id).remove();
+});
 var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{name}</td>" +
     "<td>#{phone}</td>" +
