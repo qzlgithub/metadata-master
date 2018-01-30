@@ -6,7 +6,6 @@ import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.DictIndustryDTO;
@@ -17,6 +16,7 @@ import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -24,7 +24,6 @@ import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -98,17 +97,10 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    @Transactional
     public void addIndustryType(Long id, String code, String name, BLResp resp)
     {
-        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code);
-        if(industry != null)
-        {
-            resp.result(RestResult.INDUSTRY_CODE_EXIST);
-            return;
-        }
         Date current = new Date();
-        industry = new DictIndustryDTO();
+        DictIndustryDTO industry = new DictIndustryDTO();
         industry.setCreateTime(current);
         industry.setUpdateTime(current);
         industry.setCode(code.toUpperCase());
@@ -116,46 +108,31 @@ public class SystemServiceImpl implements SystemService
         industry.setSeqNo(1); // TODO 序号
         industry.setParentId(id != null ? id : 0L);
         industry.setEnabled(TrueOrFalse.TRUE);
-        remoteSystemService.saveDictIndustry(industry);
+        ResultDTO resultDTO = remoteSystemService.addIndustryType(industry);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void editIndustryInfo(Long id, String code, String name, BLResp resp)
     {
-        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code);
-        if(industry != null && !id.equals(industry.getId()))
-        {
-            resp.result(RestResult.INDUSTRY_CODE_EXIST);
-            return;
-        }
-        industry = remoteSystemService.getDictIndustryById(id);
-        if(industry == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        industry = new DictIndustryDTO();
+        DictIndustryDTO industry = new DictIndustryDTO();
         industry.setId(id);
         industry.setUpdateTime(new Date());
         industry.setCode(code);
         industry.setName(name);
-        remoteSystemService.updateDictIndustrySkipNull(industry);
+        ResultDTO resultDTO = remoteSystemService.editIndustryInfo(industry);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void dropRechargeType(Long rechargeTypeId, BLResp resp)
     {
-        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
-        if(rechargeType != null && TrueOrFalse.FALSE.equals(rechargeType.getDeleted()))
-        {
-            rechargeType = new DictRechargeTypeDTO();
-            rechargeType.setId(rechargeTypeId);
-            rechargeType.setUpdateTime(new Date());
-            rechargeType.setDeleted(TrueOrFalse.TRUE);
-            remoteSystemService.updateDictRechargeTypeSkipNull(rechargeType);
-        }
+        DictRechargeTypeDTO rechargeType = new DictRechargeTypeDTO();
+        rechargeType.setId(rechargeTypeId);
+        rechargeType.setUpdateTime(new Date());
+        rechargeType.setDeleted(TrueOrFalse.TRUE);
+        ResultDTO resultDTO = remoteSystemService.dropRechargeType(rechargeType);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -297,25 +274,14 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    @Transactional
     public void editPrivilegeInfo(Long privilegeId, String name, BLResp resp)
     {
-        PrivilegeDTO privilege = remoteSystemService.getPrivilegeById(privilegeId);
-        if(privilege == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        if(name.equals(privilege.getName()))
-        {
-            return;
-        }
-        privilege = new PrivilegeDTO();
+        PrivilegeDTO privilege = new PrivilegeDTO();
         privilege.setId(privilegeId);
         privilege.setUpdateTime(new Date());
         privilege.setName(name);
-        remoteSystemService.updatePrivilegeSkipNull(privilege);
-        cacheSystemModule();
+        ResultDTO resultDTO = remoteSystemService.editPrivilegeInfo(privilege);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -381,34 +347,10 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    @Transactional
     public void addRechargeType(String name, String remark, BLResp resp)
     {
-        DictRechargeTypeDTO type = remoteSystemService.getDictRechargeTypeByName(name);
-        if(type != null && TrueOrFalse.FALSE.equals(type.getDeleted()))
-        {
-            resp.result(RestResult.CATEGORY_NAME_EXIST);
-            return;
-        }
-        Date current = new Date();
-        if(type == null)
-        {
-            type = new DictRechargeTypeDTO();
-            type.setCreateTime(current);
-            type.setUpdateTime(current);
-            type.setName(name);
-            type.setRemark(remark);
-            type.setEnabled(TrueOrFalse.TRUE);
-            type.setDeleted(TrueOrFalse.FALSE);
-            remoteSystemService.saveDictRechargeType(type);
-        }
-        else
-        {
-            type.setUpdateTime(current);
-            type.setRemark(remark);
-            type.setDeleted(TrueOrFalse.FALSE);
-            remoteSystemService.updateDictRechargeTypeById(type);
-        }
+        ResultDTO resultDTO = remoteSystemService.addOrUpdateRechargeTypeByName(name, remark);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -516,76 +458,27 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    @Transactional
-    public void setGlobalSetting(Integer subUserQty, String serviceQQ, BLResp resp)
+    public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, BLResp resp)
     {
-        Date current = new Date();
-        SysConfigDTO sysConfig = remoteSystemService.getSysConfigByName(SysParam.CLIENT_SUB_USER_QTY);
-        if(sysConfig == null)
-        {
-            sysConfig = new SysConfigDTO();
-            sysConfig.setCreateTime(current);
-            sysConfig.setUpdateTime(current);
-            sysConfig.setName(SysParam.CLIENT_SUB_USER_QTY);
-            sysConfig.setValue(subUserQty + "");
-            remoteSystemService.saveSysConfig(sysConfig);
-        }
-        else if(!sysConfig.getValue().equals(subUserQty + ""))
-        {
-            sysConfig.setUpdateTime(current);
-            sysConfig.setValue(subUserQty + "");
-            remoteSystemService.updateSysConfigById(sysConfig);
-        }
-        sysConfig = remoteSystemService.getSysConfigByName(SysParam.SERVICE_QQ);
-        if(sysConfig == null)
-        {
-            sysConfig = new SysConfigDTO();
-            sysConfig.setCreateTime(current);
-            sysConfig.setUpdateTime(current);
-            sysConfig.setName(SysParam.SERVICE_QQ);
-            sysConfig.setValue(serviceQQ);
-            remoteSystemService.saveSysConfig(sysConfig);
-        }
-        else if(!sysConfig.getValue().equals(serviceQQ))
-        {
-            sysConfig.setUpdateTime(current);
-            sysConfig.setValue(serviceQQ);
-            remoteSystemService.updateSysConfigById(sysConfig);
-        }
+        ResultDTO resultDTO = remoteSystemService.addOrUpdateSetting(sysConfigDTOList);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp)
     {
-        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
-        if(rechargeType != null && !enabled.equals(rechargeType.getEnabled()))
-        {
-            DictRechargeTypeDTO updObj = new DictRechargeTypeDTO();
-            updObj.setId(rechargeTypeId);
-            updObj.setUpdateTime(new Date());
-            updObj.setEnabled(enabled);
-            remoteSystemService.updateDictRechargeTypeSkipNull(updObj);
-        }
+        ResultDTO resultDTO = remoteSystemService.changeRechargeStatus(rechargeTypeId, enabled);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
-    public void changeIndustryStatus(Long industryTypeId, Integer enabled)
+    public void changeIndustryStatus(Long industryTypeId, Integer enabled, BLResp resp)
     {
-        DictIndustryDTO di = remoteSystemService.getDictIndustryById(industryTypeId);
-        if(di != null && !enabled.equals(di.getEnabled()))
-        {
-            DictIndustryDTO updObj = new DictIndustryDTO();
-            updObj.setId(industryTypeId);
-            updObj.setUpdateTime(new Date());
-            updObj.setEnabled(enabled);
-            remoteSystemService.updateDictIndustrySkipNull(updObj);
-        }
+        ResultDTO resultDTO = remoteSystemService.changeIndustryStatus(industryTypeId, enabled);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void setModuleStatus(List<Long> moduleIdList, Integer status, BLResp resp)
     {
         remoteSystemService.setModuleStatus(status, moduleIdList);

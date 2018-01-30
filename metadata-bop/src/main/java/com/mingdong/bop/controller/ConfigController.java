@@ -5,8 +5,10 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.SysConfigDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +64,10 @@ public class ConfigController
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         systemService.editPrivilegeInfo(privilegeId, name, resp);
+        if(RestResult.SUCCESS.getCode().equals(resp.getErrCode()))
+        {
+            systemService.cacheSystemModule();
+        }
         return resp;
     }
 
@@ -117,7 +124,7 @@ public class ConfigController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        systemService.changeIndustryStatus(id, enabled);
+        systemService.changeIndustryStatus(id, enabled, resp);
         return resp;
     }
 
@@ -214,7 +221,16 @@ public class ConfigController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        systemService.setGlobalSetting(subUserQty, serviceQQ, resp);
+        List<SysConfigDTO> sysConfigDTOList = new ArrayList<>();
+        SysConfigDTO sysConfigDTO = new SysConfigDTO();
+        sysConfigDTO.setName(SysParam.CLIENT_SUB_USER_QTY);
+        sysConfigDTO.setValue(subUserQty + "");
+        sysConfigDTOList.add(sysConfigDTO);
+        sysConfigDTO = new SysConfigDTO();
+        sysConfigDTO.setName(SysParam.SERVICE_QQ);
+        sysConfigDTO.setValue(serviceQQ + "");
+        sysConfigDTOList.add(sysConfigDTO);
+        systemService.setGlobalSetting(sysConfigDTOList, resp);
         return resp;
     }
 }

@@ -19,8 +19,11 @@ import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
+import com.mingdong.core.model.dto.NewManager;
+import com.mingdong.core.model.dto.NewRole;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
@@ -29,16 +32,13 @@ import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class ManagerServiceImpl implements ManagerService
@@ -53,7 +53,6 @@ public class ManagerServiceImpl implements ManagerService
     private RemoteSystemService remoteSystemService;
 
     @Override
-    @Transactional
     public void userLogin(String username, String password, String sessionId, BLResp resp)
     {
         // 1. 验证登陆信息正确性
@@ -89,7 +88,9 @@ public class ManagerServiceImpl implements ManagerService
         managerUpd.setId(manager.getId());
         managerUpd.setUpdateTime(current);
         managerUpd.setSessionId(sessionId);
-        remoteManagerService.updateManagerSkipNull(managerUpd);
+        NewManager newManager = new NewManager();
+        newManager.setManagerDTO(managerUpd);
+        remoteManagerService.updateManagerSkipNull(newManager);
         // 缓存用户的账号及权限
         List<String> privilegeList = getManagerPrivilegeIdList(manager.getId());
         ManagerSession ms = new ManagerSession();
@@ -106,52 +107,11 @@ public class ManagerServiceImpl implements ManagerService
         redisDao.dropManagerSession(sessionId);
     }
 
-    /*@Override
-    @Transactional
-    public BLResp changePasscode(Long userId, String password)
-    {
-        BLResp resp = BLResp.build();
-        Manager manager = managerMapper.findById(userId);
-        if(manager == null)
-        {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
-        }
-        String newPwd = Md5Utils.encrypt(password);
-        if(!newPwd.equals(manager.getPassword()))
-        {
-            manager = new Manager();
-            manager.setId(userId);
-            manager.setUpdateTime(new Date());
-            manager.setPassword(newPwd);
-            managerMapper.updateSkipNull(manager);
-        }
-        return resp;
-    }*/
-
     @Override
-    @Transactional
     public void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
-        if(manager == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        else if(!manager.getPassword().equals(Md5Utils.encrypt(oldPwd)))
-        {
-            resp.result(RestResult.INVALID_PASSCODE);
-            return;
-        }
-        String newPassword = Md5Utils.encrypt(newPwd);
-        if(!manager.getPassword().equals(newPassword))
-        {
-            manager = new ManagerDTO();
-            manager.setId(managerId);
-            manager.setUpdateTime(new Date());
-            manager.setPassword(newPassword);
-            remoteManagerService.updateManagerSkipNull(manager);
-        }
+        ResultDTO resultDTO = remoteManagerService.updateManagerPwd(managerId, newPwd, oldPwd);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -180,73 +140,35 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    @Transactional
     public void addRole(String name, List<Long> privilege, BLResp resp)
     {
-        RoleDTO role = remoteManagerService.getRoleByName(name);
-        if(role != null)
-        {
-            resp.result(RestResult.ROLE_NAME_EXIST);
-            return;
-        }
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        Date current = new Date();
+        NewRole newRole = new NewRole();
+        RoleDTO role = new RoleDTO();
         Long roleId = IDUtils.getRoleId(param.getNodeId());
-        List<RolePrivilegeDTO> toAddList = new ArrayList<>();
-        for(Long id : allPrivilegeIdList)
-        {
-            RolePrivilegeDTO rp = new RolePrivilegeDTO();
-            rp.setCreateTime(current);
-            rp.setUpdateTime(current);
-            rp.setPrivilegeId(id);
-            rp.setRoleId(roleId);
-            toAddList.add(rp);
-        }
-        remoteManagerService.saveRolePrivilegeList(toAddList);
-        role = new RoleDTO();
+        Date current = new Date();
         role.setId(roleId);
         role.setCreateTime(current);
         role.setUpdateTime(current);
         role.setName(name);
         role.setEnabled(TrueOrFalse.TRUE);
-        remoteManagerService.saveRole(role);
+        newRole.setRoleDTO(role);
+        newRole.setPrivilege(privilege);
+        ResultDTO resultDTO = remoteManagerService.addRole(newRole);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void editRole(Long roleId, String roleName, List<Long> privilege, BLResp resp)
     {
-        RoleDTO role = remoteManagerService.getRoleById(roleId);
-        if(role == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        RoleDTO org = remoteManagerService.getRoleByName(roleName);
-        if(org != null && !roleId.equals(org.getId()))
-        {
-            resp.result(RestResult.ROLE_NAME_EXIST);
-            return;
-        }
-        remoteManagerService.deleteRolePrivilegeByRoleId(roleId);
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        Date current = new Date();
-        List<RolePrivilegeDTO> toAddList = new ArrayList<>();
-        for(Long id : allPrivilegeIdList)
-        {
-            RolePrivilegeDTO rp = new RolePrivilegeDTO();
-            rp.setCreateTime(current);
-            rp.setUpdateTime(current);
-            rp.setRoleId(roleId);
-            rp.setPrivilegeId(id);
-            toAddList.add(rp);
-        }
-        remoteManagerService.saveRolePrivilegeList(toAddList);
+        NewRole newRole = new NewRole();
         RoleDTO roleUpd = new RoleDTO();
         roleUpd.setId(roleId);
         roleUpd.setUpdateTime(new Date());
         roleUpd.setName(roleName);
-        remoteManagerService.updateRoleSkipNull(roleUpd);
+        newRole.setRoleDTO(roleUpd);
+        newRole.setPrivilege(privilege);
+        ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -317,31 +239,13 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    @Transactional
     public void addManager(String username, String password, String name, String phone, String qq, Long roleId,
             Integer enabled, List<Long> privilege, BLResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
-        if(manager != null)
-        {
-            resp.result(RestResult.USERNAME_EXIST);
-            return;
-        }
-        Date current = new Date();
+        NewManager newManager = new NewManager();
+        ManagerDTO manager = new ManagerDTO();
         Long managerId = IDUtils.getManagerId(param.getNodeId());
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        List<ManagerPrivilegeDTO> list = new ArrayList<>();
-        for(Long privilegeId : allPrivilegeIdList)
-        {
-            ManagerPrivilegeDTO mp = new ManagerPrivilegeDTO();
-            mp.setUpdateTime(current);
-            mp.setCreateTime(current);
-            mp.setManagerId(managerId);
-            mp.setPrivilegeId(privilegeId);
-            list.add(mp);
-        }
-        remoteManagerService.saveManagerPrivilegeList(list);
-        manager = new ManagerDTO();
+        Date current = new Date();
         manager.setId(managerId);
         manager.setCreateTime(current);
         manager.setUpdateTime(current);
@@ -352,43 +256,30 @@ public class ManagerServiceImpl implements ManagerService
         manager.setQq(qq);
         manager.setRoleId(roleId);
         manager.setEnabled(enabled);
-        remoteManagerService.saveManager(manager);
-
+        newManager.setManagerDTO(manager);
+        newManager.setPrivilege(privilege);
+        ResultDTO resultDTO = remoteManagerService.addManager(newManager);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void editManager(Long managerId, Long roleId, String name, String phone, String qq, Integer enabled,
             List<Long> privilege, BLResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
-        if(manager == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
+        NewManager newManager = new NewManager();
+        ManagerDTO manager = new ManagerDTO();
         Date current = new Date();
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(privilege);
-        remoteManagerService.deleteManagerPrivilegeByManagerId(managerId);
-        List<ManagerPrivilegeDTO> list = new ArrayList<>();
-        for(Long privilegeId : allPrivilegeIdList)
-        {
-            ManagerPrivilegeDTO mp = new ManagerPrivilegeDTO();
-            mp.setCreateTime(current);
-            mp.setUpdateTime(current);
-            mp.setManagerId(managerId);
-            mp.setPrivilegeId(privilegeId);
-            list.add(mp);
-        }
-        remoteManagerService.saveManagerPrivilegeList(list);
-        //更新账号信息
+        manager.setId(managerId);
         manager.setUpdateTime(current);
         manager.setRoleId(roleId);
         manager.setName(name);
         manager.setPhone(phone);
         manager.setQq(qq);
         manager.setEnabled(enabled);
-        remoteManagerService.updateManagerById(manager);
+        newManager.setManagerDTO(manager);
+        newManager.setPrivilege(privilege);
+        ResultDTO resultDTO = remoteManagerService.updateManagerSkipNull(newManager);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -423,7 +314,6 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    @Transactional
     public void changeStatus(Long roleId, BLResp resp)
     {
         RoleDTO role = remoteManagerService.getRoleById(roleId);
@@ -441,7 +331,10 @@ public class ManagerServiceImpl implements ManagerService
         roleUpd.setId(roleId);
         roleUpd.setUpdateTime(new Date());
         roleUpd.setEnabled(enabled);
-        remoteManagerService.updateRoleSkipNull(roleUpd);
+        NewRole newRole = new NewRole();
+        newRole.setRoleDTO(roleUpd);
+        ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
+        resp.result(resultDTO.getResult());
         resp.addData(Field.ENABLED, enabled);
     }
 
@@ -463,7 +356,9 @@ public class ManagerServiceImpl implements ManagerService
         managerUpd.setId(managerId);
         managerUpd.setUpdateTime(new Date());
         managerUpd.setEnabled(enabled);
-        remoteManagerService.updateManagerSkipNull(managerUpd);
+        NewManager newManager = new NewManager();
+        newManager.setManagerDTO(managerUpd);
+        remoteManagerService.updateManagerSkipNull(newManager);
         resp.addData(Field.ENABLED, enabled);
     }
 
@@ -492,37 +387,6 @@ public class ManagerServiceImpl implements ManagerService
             }
         }
         return dataListMap;
-    }
-
-    /**
-     * 查询权限列表及其父级权限的ID
-     */
-    private Set<Long> getRelatedPrivilegeId(List<Long> privilege)
-    {
-        Set<Long> idSet = new HashSet<>(privilege);
-        Set<Long> parentIdSet = getParentId(idSet);
-        idSet.addAll(parentIdSet);
-        return idSet;
-    }
-
-    private Set<Long> getParentId(Set<Long> privilege)
-    {
-        Set<Long> set = new HashSet<>();
-        if(!CollectionUtils.isEmpty(privilege))
-        {
-            PrivilegeListDTO privilegeListByIds = remoteSystemService.getPrivilegeListByIds(new ArrayList<>(privilege));
-
-            List<PrivilegeDTO> privilegeList = privilegeListByIds.getDataList();
-            for(PrivilegeDTO p : privilegeList)
-            {
-                if(p.getParentId() != null && p.getParentId() != 0)
-                {
-                    set.add(p.getParentId());
-                }
-            }
-            set.addAll(getParentId(set));
-        }
-        return set;
     }
 
     private List<String> getManagerPrivilegeIdList(Long managerId)

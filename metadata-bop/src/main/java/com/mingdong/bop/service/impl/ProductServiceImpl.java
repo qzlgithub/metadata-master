@@ -5,21 +5,21 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductTxtDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.IDUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -66,61 +66,33 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    @Transactional
     public void addProdCategory(String code, String name, String remark, BLResp resp)
     {
-        DictProductTypeDTO type = remoteProductService.getDictProductTypeByCode(code);
-        if(type != null)
-        {
-            resp.result(RestResult.CATEGORY_CODE_EXIST);
-            return;
-        }
-        if(code == null)
-        {
-            resp.result(RestResult.INVALID_PRODUCT_TYPE);
-            return;
-        }
-        if(name == null)
-        {
-            resp.result(RestResult.INVALID_PRODUCT_NAME);
-            return;
-        }
+        DictProductTypeDTO type = new DictProductTypeDTO();
         Date curr = new Date();
-        type = new DictProductTypeDTO();
         type.setCreateTime(curr);
         type.setUpdateTime(curr);
         type.setCode(code);
         type.setName(name);
         type.setRemark(remark);
         type.setEnabled(TrueOrFalse.TRUE);
-        remoteProductService.saveDictProductType(type);
+        ResultDTO resultDTO = remoteProductService.addProductType(type);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public BLResp editProdCategory(Long productId, String code, String name, String remark)
     {
         BLResp resp = BLResp.build();
-        DictProductTypeDTO type = remoteProductService.getDictProductTypeById(productId);
-        if(type == null)
-        {
-            return resp.result(RestResult.OBJECT_NOT_FOUND);
-        }
-        Integer enabled = type.getEnabled();
-        type = remoteProductService.getDictProductTypeByCode(code);
-        if(type != null && !productId.equals(type.getId()))
-        {
-            return resp.result(RestResult.CATEGORY_CODE_EXIST);
-        }
-
-        type = new DictProductTypeDTO();
+        DictProductTypeDTO type = new DictProductTypeDTO();
         type.setId(productId);
         type.setUpdateTime(new Date());
         type.setCode(code);
         type.setName(name);
         type.setRemark(remark);
-        type.setEnabled(enabled);
-        remoteProductService.updateDictProductTypeSkipNull(type);
+        type.setEnabled(TrueOrFalse.TRUE);
+        ResultDTO resultDTO = remoteProductService.updateDictProductTypeSkipNull(type);
+        resp.result(resultDTO.getResult());
         return resp;
     }
 
@@ -156,43 +128,12 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    @Transactional
     public void addProduct(Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
             String remark, String content, BLResp resp)
     {
-        // 1. 校验产品类型是否有效
-        DictProductTypeDTO type = remoteProductService.getDictProductTypeById(productType);
-        if(type == null)
-        {
-            resp.result(RestResult.INVALID_PRODUCT_TYPE);
-            return;
-        }
-        // 2. 校验产品编码是否重复
-        ProductDTO product = remoteProductService.getProductByCode(code);
-        if(product != null)
-        {
-            resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
-            return;
-        }
-        // 3. 校验产品名是否重复
-        ProductDTO prod = remoteProductService.getProductByName(name);
-        if(prod != null)
-        {
-            resp.result(RestResult.PRODUCT_NAME_EXIST);
-            return;
-        }
         Long productId = IDUtils.getProductId(param.getNodeId());
         Date curr = new Date();
-        if(!StringUtils.isNullBlank(content))
-        {
-            ProductTxtDTO productTxt = new ProductTxtDTO();
-            productTxt.setId(productId);
-            productTxt.setCreateTime(curr);
-            productTxt.setUpdateTime(curr);
-            productTxt.setContent(content);
-            remoteProductService.saveProductTxt(productTxt);
-        }
-        product = new ProductDTO();
+        ProductDTO product = new ProductDTO();
         product.setId(productId);
         product.setCreateTime(curr);
         product.setUpdateTime(curr);
@@ -202,27 +143,29 @@ public class ProductServiceImpl implements ProductService
         product.setCostAmt(costAmt);
         product.setRemark(remark);
         product.setEnabled(enabled);
-        remoteProductService.saveProduct(product);
+        ProductTxtDTO productTxt = null;
+        if(!StringUtils.isNullBlank(content))
+        {
+            productTxt = new ProductTxtDTO();
+            productTxt.setId(productId);
+            productTxt.setCreateTime(curr);
+            productTxt.setUpdateTime(curr);
+            productTxt.setContent(content);
+        }
+        NewProductDTO newProductDTO = new NewProductDTO();
+        newProductDTO.setProductDTO(product);
+        newProductDTO.setProductTxtDTO(productTxt);
+        ResultDTO resultDTO = remoteProductService.addProduct(newProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
             String remark, String content, BLResp resp)
     {
-        ProductDTO prod = remoteProductService.getProductByCode(code);
-        if(prod != null && !id.equals(prod.getId()))
-        {
-            resp.result(RestResult.DUPLICATE_PRODUCT_CODE);
-
-        }
-        ProductDTO product = remoteProductService.getProductById(id);
-        if(product == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
+        NewProductDTO newProductDTO = new NewProductDTO();
         Date current = new Date();
+        ProductDTO product = new ProductDTO();
         product.setId(id);
         product.setUpdateTime(current);
         product.setTypeId(productType.intValue());
@@ -231,26 +174,15 @@ public class ProductServiceImpl implements ProductService
         product.setCostAmt(costAmt);
         product.setEnabled(enabled);
         product.setRemark(remark);
-        remoteProductService.updateProductById(product);
-        ProductTxtDTO productTxt = remoteProductService.getProductTxtById(id);
-        if(productTxt == null)
-        {
-            if(!StringUtils.isNullBlank(content))
-            {
-                productTxt = new ProductTxtDTO();
-                productTxt.setId(id);
-                productTxt.setCreateTime(current);
-                productTxt.setUpdateTime(current);
-                productTxt.setContent(content);
-                remoteProductService.saveProductTxt(productTxt);
-            }
-        }
-        else
-        {
-            productTxt.setUpdateTime(current);
-            productTxt.setContent(content);
-            remoteProductService.updateProductTxtById(productTxt);
-        }
+        newProductDTO.setProductDTO(product);
+        ProductTxtDTO productTxt = new ProductTxtDTO();
+        productTxt.setId(id);
+        productTxt.setCreateTime(current);
+        productTxt.setUpdateTime(current);
+        productTxt.setContent(content);
+        newProductDTO.setProductTxtDTO(productTxt);
+        ResultDTO resultDTO = remoteProductService.updateProduct(newProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -268,39 +200,17 @@ public class ProductServiceImpl implements ProductService
 
     //产品类别启用禁用
     @Override
-    @Transactional
     public void updateCateStatus(Long id, Integer enabled, BLResp resp)
     {
-        DictProductTypeDTO productCategory = remoteProductService.getDictProductTypeById(id);
-        if(productCategory == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        if(enabled.equals(productCategory.getEnabled()))
-        {
-            productCategory.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
-            productCategory.setUpdateTime(new Date());
-            remoteProductService.updateDictProductTypeById(productCategory);
-        }
+        ResultDTO resultDTO = remoteProductService.updateDictProductTypeStatusById(id, enabled);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void updateProdStatus(Long id, Integer enabled, BLResp resp)
     {
-        ProductDTO product = remoteProductService.getProductById(id);
-        if(product == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        if(enabled.equals(product.getEnabled()))
-        {
-            product.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
-            product.setUpdateTime(new Date());
-            remoteProductService.updateProductById(product);
-        }
+        ResultDTO resultDTO = remoteProductService.updateProductStatusById(id, enabled);
+        resp.result(resultDTO.getResult());
     }
 
     @Override

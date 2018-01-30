@@ -3,12 +3,15 @@ package com.mingdong.mis.service.impl;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
+import com.mingdong.core.model.dto.NewManager;
+import com.mingdong.core.model.dto.NewRole;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
@@ -19,18 +22,23 @@ import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.ManagerInfo;
 import com.mingdong.mis.domain.entity.ManagerPrivilege;
+import com.mingdong.mis.domain.entity.Privilege;
 import com.mingdong.mis.domain.entity.Role;
 import com.mingdong.mis.domain.entity.RolePrivilege;
 import com.mingdong.mis.domain.mapper.ManagerInfoMapper;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
 import com.mingdong.mis.domain.mapper.ManagerPrivilegeMapper;
+import com.mingdong.mis.domain.mapper.PrivilegeMapper;
 import com.mingdong.mis.domain.mapper.RoleMapper;
 import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RemoteManagerServiceImpl implements RemoteManagerService
 {
@@ -44,6 +52,8 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     private ManagerInfoMapper managerInfoMapper;
     @Resource
     private ManagerPrivilegeMapper managerPrivilegeMapper;
+    @Resource
+    private PrivilegeMapper privilegeMapper;
 
     @Override
     public ManagerDTO getManagerById(Long managerId)
@@ -62,22 +72,45 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ManagerDTO getManagerByUsername(String username)
     {
         ManagerDTO managerDTO = new ManagerDTO();
-        Manager byId = managerMapper.findByUsername(username);
-        if(byId == null)
+        Manager byUsername = managerMapper.findByUsername(username);
+        if(byUsername == null)
         {
             return null;
         }
-        EntityUtils.copyProperties(byId, managerDTO);
+        EntityUtils.copyProperties(byUsername, managerDTO);
         return managerDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO updateManagerSkipNull(ManagerDTO managerUpd)
+    public ResultDTO updateManagerSkipNull(NewManager newManager)
     {
         ResultDTO resultDTO = new ResultDTO();
+        Manager byId = managerMapper.findById(newManager.getManagerDTO().getId());
+        if(byId == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        if(newManager.getPrivilege() != null)
+        {
+            Date current = new Date();
+            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
+            managerPrivilegeMapper.deleteByManager(newManager.getManagerDTO().getId());
+            List<ManagerPrivilege> list = new ArrayList<>();
+            for(Long privilegeId : allPrivilegeIdList)
+            {
+                ManagerPrivilege mp = new ManagerPrivilege();
+                mp.setCreateTime(current);
+                mp.setUpdateTime(current);
+                mp.setManagerId(newManager.getManagerDTO().getId());
+                mp.setPrivilegeId(privilegeId);
+                list.add(mp);
+            }
+            managerPrivilegeMapper.addList(list);
+        }
         Manager manager = new Manager();
-        EntityUtils.copyProperties(managerUpd, manager);
+        EntityUtils.copyProperties(newManager.getManagerDTO(), manager);
         managerMapper.updateSkipNull(manager);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
@@ -195,11 +228,40 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO updateRoleSkipNull(RoleDTO roleDTO)
+    public ResultDTO updateRoleSkipNull(NewRole newRole)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Role role = new Role();
-        EntityUtils.copyProperties(roleDTO, role);
+        Role role = roleMapper.findById(newRole.getRoleDTO().getId());
+        if(role == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        role = roleMapper.findByName(newRole.getRoleDTO().getName());
+        if(role != null && !newRole.getRoleDTO().getId().equals(role.getId()))
+        {
+            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return resultDTO;
+        }
+        if(newRole.getPrivilege() != null)
+        {
+            rolePrivilegeMapper.deleteByRole(newRole.getRoleDTO().getId());
+            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newRole.getPrivilege());
+            Date current = new Date();
+            List<RolePrivilege> toAddList = new ArrayList<>();
+            for(Long id : allPrivilegeIdList)
+            {
+                RolePrivilege rp = new RolePrivilege();
+                rp.setCreateTime(current);
+                rp.setUpdateTime(current);
+                rp.setRoleId(newRole.getRoleDTO().getId());
+                rp.setPrivilegeId(id);
+                toAddList.add(rp);
+            }
+            rolePrivilegeMapper.addList(toAddList);
+        }
+        role = new Role();
+        EntityUtils.copyProperties(newRole.getRoleDTO(), role);
         roleMapper.updateSkipNull(role);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
@@ -339,6 +401,129 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             }
         }
         return rolePrivilegeListDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Manager manager = managerMapper.findById(managerId);
+        if(manager == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        else if(!manager.getPassword().equals(Md5Utils.encrypt(oldPwd)))
+        {
+            resultDTO.setResult(RestResult.INVALID_PASSCODE);
+            return resultDTO;
+        }
+        String newPassword = Md5Utils.encrypt(newPwd);
+        if(!manager.getPassword().equals(newPassword))
+        {
+            manager = new Manager();
+            manager.setId(managerId);
+            manager.setUpdateTime(new Date());
+            manager.setPassword(newPassword);
+            managerMapper.updateSkipNull(manager);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addRole(NewRole newRole)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = roleMapper.findByName(newRole.getRoleDTO().getName());
+        if(role != null)
+        {
+            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return resultDTO;
+        }
+        if(newRole.getPrivilege() != null)
+        {
+            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newRole.getPrivilege());
+            Date current = new Date();
+            List<RolePrivilege> toAddList = new ArrayList<>();
+            for(Long id : allPrivilegeIdList)
+            {
+                RolePrivilege rp = new RolePrivilege();
+                rp.setCreateTime(current);
+                rp.setUpdateTime(current);
+                rp.setPrivilegeId(id);
+                rp.setRoleId(newRole.getRoleDTO().getId());
+                toAddList.add(rp);
+            }
+            rolePrivilegeMapper.addList(toAddList);
+        }
+        role = new Role();
+        EntityUtils.copyProperties(newRole.getRoleDTO(), role);
+        roleMapper.add(role);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addManager(NewManager newManager)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Manager byUsername = managerMapper.findByUsername(newManager.getManagerDTO().getUsername());
+        if(byUsername != null)
+        {
+            resultDTO.setResult(RestResult.USERNAME_EXIST);
+            return resultDTO;
+        }
+        Date current = new Date();
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
+        List<ManagerPrivilege> list = new ArrayList<>();
+        for(Long privilegeId : allPrivilegeIdList)
+        {
+            ManagerPrivilege mp = new ManagerPrivilege();
+            mp.setUpdateTime(current);
+            mp.setCreateTime(current);
+            mp.setManagerId(newManager.getManagerDTO().getId());
+            mp.setPrivilegeId(privilegeId);
+            list.add(mp);
+        }
+        managerPrivilegeMapper.addList(list);
+        Manager manager = new Manager();
+        EntityUtils.copyProperties(newManager.getManagerDTO(), manager);
+        managerMapper.add(manager);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    /**
+     * 查询权限列表及其父级权限的ID
+     */
+    private Set<Long> getRelatedPrivilegeId(List<Long> privilege)
+    {
+        Set<Long> idSet = new HashSet<>(privilege);
+        Set<Long> parentIdSet = getParentId(idSet);
+        idSet.addAll(parentIdSet);
+        return idSet;
+    }
+
+    private Set<Long> getParentId(Set<Long> privilege)
+    {
+        Set<Long> set = new HashSet<>();
+        if(!CollectionUtils.isEmpty(privilege))
+        {
+            List<Privilege> privilegeList = privilegeMapper.getParentIdByChildId(new ArrayList<>(privilege));
+            for(Privilege p : privilegeList)
+            {
+                if(p.getParentId() != null && p.getParentId() != 0)
+                {
+                    set.add(p.getParentId());
+                }
+            }
+            set.addAll(getParentId(set));
+        }
+        return set;
     }
 
 }
