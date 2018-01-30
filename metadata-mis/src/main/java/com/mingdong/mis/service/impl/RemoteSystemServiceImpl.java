@@ -118,30 +118,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    @Transactional
-    public ResultDTO saveDictIndustry(DictIndustryDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(dictProductTypeDTO, dictIndustry);
-        dictIndustryMapper.add(dictIndustry);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictIndustrySkipNull(DictIndustryDTO dictIndustryDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(dictIndustryDTO, dictIndustry);
-        dictIndustryMapper.updateSkipNull(dictIndustry);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictRechargeTypeDTO getDictRechargeTypeById(Long rechargeTypeId)
     {
         DictRechargeTypeDTO dictRechargeTypeDTO = new DictRechargeTypeDTO();
@@ -152,18 +128,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         }
         EntityUtils.copyProperties(rechargeType, dictRechargeTypeDTO);
         return dictRechargeTypeDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictRechargeTypeSkipNull(DictRechargeTypeDTO dictRechargeTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictRechargeType dictRechargeType = new DictRechargeType();
-        EntityUtils.copyProperties(dictRechargeTypeDTO, dictRechargeType);
-        dictRechargeTypeMapper.updateSkipNull(dictRechargeType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -189,20 +153,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         dictRechargeTypeMapper.updateById(dictRechargeType);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
-
-    @Override
-    public PrivilegeListDTO getPrivilegeListByIds(List<Long> ids)
-    {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        privilegeListDTO.setDataList(dataList);
-        List<Privilege> privilegeList = privilegeMapper.getParentIdByChildId(ids);
-        if(CollectionUtils.isNotEmpty(privilegeList))
-        {
-            findPrivilegeDTO(privilegeList, dataList);
-        }
-        return privilegeListDTO;
     }
 
     @Override
@@ -247,18 +197,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    @Transactional
-    public ResultDTO updatePrivilegeSkipNull(PrivilegeDTO privilegeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Privilege privilege = new Privilege();
-        EntityUtils.copyProperties(privilegeDTO, privilege);
-        privilegeMapper.updateSkipNull(privilege);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted)
     {
         DictRechargeTypeListDTO dictRechargeTypeListDTO = new DictRechargeTypeListDTO();
@@ -276,18 +214,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             }
         }
         return dictRechargeTypeListDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveDictRechargeType(DictRechargeTypeDTO dictRechargeTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictRechargeType dictRechargeType = new DictRechargeType();
-        EntityUtils.copyProperties(dictRechargeTypeDTO, dictRechargeType);
-        dictRechargeTypeMapper.add(dictRechargeType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -335,43 +261,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             findPrivilegeDTO(privilegeList, dataList);
         }
         return privilegeListDTO;
-    }
-
-    @Override
-    public SysConfigDTO getSysConfigByName(String name)
-    {
-        SysConfigDTO sysConfigDTO = new SysConfigDTO();
-        SysConfig sysConfig = sysConfigMapper.findByName(name);
-        if(sysConfig == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(sysConfig, sysConfigDTO);
-        return sysConfigDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveSysConfig(SysConfigDTO sysConfigDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        SysConfig sysConfig = new SysConfig();
-        EntityUtils.copyProperties(sysConfigDTO, sysConfig);
-        sysConfigMapper.add(sysConfig);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateSysConfigById(SysConfigDTO sysConfigDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        SysConfig sysConfig = new SysConfig();
-        EntityUtils.copyProperties(sysConfigDTO, sysConfig);
-        sysConfigMapper.updateById(sysConfig);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override

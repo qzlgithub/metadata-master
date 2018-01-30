@@ -7,7 +7,6 @@ import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
-import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
@@ -170,22 +169,6 @@ public interface RemoteClientService
             List<Long> industryIdList, Page page);
 
     /**
-     * 新增客户帐号
-     *
-     * @param clientUser
-     * @return
-     */
-    ResultDTO saveClientUser(ClientUserDTO clientUser);
-
-    /**
-     * 新增客户
-     *
-     * @param client
-     * @return
-     */
-    ResultDTO saveClient(ClientDTO client);
-
-    /**
      * 根据客户id获取客户信息
      *
      * @param clientId
@@ -202,16 +185,6 @@ public interface RemoteClientService
     ClientUserDTO getClientUserByUserId(Long userId);
 
     /**
-     * 更改客户帐号信息
-     *
-     * @param clientUser
-     * @return
-     */
-    ResultDTO updateClientUserByUserId(ClientUserDTO clientUser);
-
-    ResultDTO updateClientById(ClientDTO clientDTO);
-
-    /**
      * 根据条件获取客户帐号信息列表
      *
      * @param clientId
@@ -220,32 +193,6 @@ public interface RemoteClientService
      * @return
      */
     ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted);
-
-    /**
-     * 根据客户ids获取帐号信息列表
-     *
-     * @param clientIdList
-     * @return
-     */
-    ClientUserListDTO getClientUserListByClientIds(List<Long> clientIdList);
-
-    /**
-     * 新增客户帐号操作记录
-     *
-     * @param logList
-     * @return
-     */
-    ResultDTO saveClientOperateLogList(List<ClientOperateLogDTO> logList);
-
-    /**
-     * 根据帐号ids更改帐号状态
-     *
-     * @param enabled
-     * @param date
-     * @param idList
-     * @return
-     */
-    ResultDTO updateClientUserStatusByIds(Integer enabled, Date date, List<Long> idList);
 
     /**
      * 根据客户ids软删客户
@@ -287,31 +234,6 @@ public interface RemoteClientService
      * @return
      */
     ResultDTO updateClientUserSkipNull(ClientUserDTO clientUserDTO);
-
-    /**
-     * 根据条件获取客户产品信息
-     *
-     * @param clientId
-     * @param productId
-     * @return
-     */
-    ClientProductDTO getClientProductByClientAndProduct(Long clientId, Long productId);
-
-    /**
-     * 新增客户产品信息
-     *
-     * @param clientProductDTO
-     * @return
-     */
-    ResultDTO saveClientProduct(ClientProductDTO clientProductDTO);
-
-    /**
-     * 更改客户产品信息null值不修改
-     *
-     * @param cp
-     * @return
-     */
-    ResultDTO updateClientProductSkipNull(ClientProductDTO cp);
 
     /**
      * 根据客户帐号id获取客户帐号操作记录列表

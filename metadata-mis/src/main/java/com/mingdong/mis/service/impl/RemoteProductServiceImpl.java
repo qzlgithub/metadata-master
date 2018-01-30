@@ -364,18 +364,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    @Transactional
-    public ResultDTO saveProductRecharge(ProductRechargeDTO productRechargeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductRecharge pr = new ProductRecharge();
-        EntityUtils.copyProperties(productRechargeDTO, pr);
-        productRechargeMapper.add(pr);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public ProductRechargeDTO getProductRechargeById(Long id)
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
@@ -442,31 +430,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public DictProductTypeDTO getDictProductTypeByCode(String code)
-    {
-        DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
-        DictProductType type = dictProductTypeMapper.findByCode(code);
-        if(type == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(type, dictProductTypeDTO);
-        return dictProductTypeDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveDictProductType(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, type);
-        dictProductTypeMapper.add(type);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictProductTypeDTO getDictProductTypeById(Long id)
     {
         DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
@@ -530,91 +493,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return productTxtDTO;
     }
 
-    @Override
-    public ProductDTO getProductByCode(String code)
-    {
-        ProductDTO productDTO = new ProductDTO();
-        Product product = productMapper.findByCode(code);
-        if(product == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(product, productDTO);
-        return productDTO;
-    }
-
-    @Override
-    public ProductDTO getProductByName(String name)
-    {
-        ProductDTO productDTO = new ProductDTO();
-        Product product = productMapper.findByName(name);
-        if(product == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(product, productDTO);
-        return productDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveProductTxt(ProductTxtDTO productTxtDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductTxt productTxt = new ProductTxt();
-        EntityUtils.copyProperties(productTxtDTO, productTxt);
-        productTxtMapper.add(productTxt);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveProduct(ProductDTO productDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Product product = new Product();
-        EntityUtils.copyProperties(productDTO, product);
-        productMapper.add(product);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateProductById(ProductDTO productDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Product product = new Product();
-        EntityUtils.copyProperties(productDTO, product);
-        productMapper.updateById(product);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateProductTxtById(ProductTxtDTO productTxtDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductTxt productTxt = new ProductTxt();
-        EntityUtils.copyProperties(productTxtDTO, productTxt);
-        productTxtMapper.updateById(productTxt);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictProductTypeById(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType dictProductType = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, dictProductType);
-        dictProductTypeMapper.updateById(dictProductType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
 
     @Override
     public ProductListDTO getProductListByStatus(Integer enabled)

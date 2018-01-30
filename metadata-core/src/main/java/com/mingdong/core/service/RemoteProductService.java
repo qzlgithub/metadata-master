@@ -88,14 +88,6 @@ public interface RemoteProductService
     ProductRechargeDTO getProductRechargeByContractNo(String contractNo);
 
     /**
-     * 新增充值记录
-     *
-     * @param productRechargeDTO
-     * @return
-     */
-    ResultDTO saveProductRecharge(ProductRechargeDTO productRechargeDTO);
-
-    /**
      * 根据充值记录id获取充值记录
      *
      * @param id
@@ -123,22 +115,6 @@ public interface RemoteProductService
      */
     ProductRechargeInfoListDTO getProductRechargeInfoList(Long clientId, Long productId, Date startTime, Date endTime,
             Page page);
-
-    /**
-     * 根据code获取产品类型
-     *
-     * @param code
-     * @return
-     */
-    DictProductTypeDTO getDictProductTypeByCode(String code);
-
-    /**
-     * 新增产品类型字典
-     *
-     * @param type
-     * @return
-     */
-    ResultDTO saveDictProductType(DictProductTypeDTO type);
 
     /**
      * 根据产品类型id获取产品类型
@@ -172,61 +148,6 @@ public interface RemoteProductService
      */
     ProductTxtDTO getProductTxtById(Long productId);
 
-    /**
-     * 根据code获取产品信息
-     *
-     * @param code
-     * @return
-     */
-    ProductDTO getProductByCode(String code);
-
-    /**
-     * 根据name获取产品信息
-     *
-     * @param name
-     * @return
-     */
-    ProductDTO getProductByName(String name);
-
-    /**
-     * 新增产品txt信息
-     *
-     * @param productTxt
-     * @return
-     */
-    ResultDTO saveProductTxt(ProductTxtDTO productTxt);
-
-    /**
-     * 新增产品
-     *
-     * @param product
-     * @return
-     */
-    ResultDTO saveProduct(ProductDTO product);
-
-    /**
-     * 根据产品id更改产品信息
-     *
-     * @param product
-     * @return
-     */
-    ResultDTO updateProductById(ProductDTO product);
-
-    /**
-     * 根据产品txtid更改产品txt信息
-     *
-     * @param productTxt
-     * @return
-     */
-    ResultDTO updateProductTxtById(ProductTxtDTO productTxt);
-
-    /**
-     * 根据产品类型字典id更改产品类型字典信息
-     *
-     * @param dictProductTypeDTO
-     * @return
-     */
-    ResultDTO updateDictProductTypeById(DictProductTypeDTO dictProductTypeDTO);
 
     /**
      * 根据状态获取产品信息列表

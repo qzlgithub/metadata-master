@@ -19,7 +19,6 @@ import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
-import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
@@ -539,30 +538,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    @Transactional
-    public ResultDTO saveClientUser(ClientUserDTO clientUser)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientUser cu = new ClientUser();
-        EntityUtils.copyProperties(clientUser, cu);
-        clientUserMapper.add(cu);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveClient(ClientDTO client)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Client cu = new Client();
-        EntityUtils.copyProperties(client, cu);
-        clientMapper.add(cu);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public ClientDTO getClientByClientId(Long clientId)
     {
         ClientDTO clientDTO = new ClientDTO();
@@ -589,30 +564,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    @Transactional
-    public ResultDTO updateClientUserByUserId(ClientUserDTO clientUser)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientUser cu = new ClientUser();
-        EntityUtils.copyProperties(clientUser, cu);
-        clientUserMapper.updateById(cu);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientById(ClientDTO clientDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Client client = new Client();
-        EntityUtils.copyProperties(clientDTO, client);
-        clientMapper.updateById(client);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted)
     {
         ClientUserListDTO clientUserListDTO = new ClientUserListDTO();
@@ -630,54 +581,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         return clientUserListDTO;
-    }
-
-    @Override
-    public ClientUserListDTO getClientUserListByClientIds(List<Long> clientIdList)
-    {
-        ClientUserListDTO clientUserListDTO = new ClientUserListDTO();
-        List<ClientUserDTO> dataList = new ArrayList<>();
-        clientUserListDTO.setDataList(dataList);
-        List<ClientUser> userList = clientUserMapper.getListByClientsAndPrimary(clientIdList);
-        if(CollectionUtils.isNotEmpty(userList))
-        {
-            ClientUserDTO clientUserDTO;
-            for(ClientUser item : userList)
-            {
-                clientUserDTO = new ClientUserDTO();
-                dataList.add(clientUserDTO);
-                EntityUtils.copyProperties(item, clientUserDTO);
-            }
-        }
-        return clientUserListDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveClientOperateLogList(List<ClientOperateLogDTO> logList)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        List<ClientOperateLog> clientOperateLogs = new ArrayList<>();
-        ClientOperateLog clientOperateLog;
-        for(ClientOperateLogDTO item : logList)
-        {
-            clientOperateLog = new ClientOperateLog();
-            EntityUtils.copyProperties(item, clientOperateLog);
-            clientOperateLogs.add(clientOperateLog);
-        }
-        clientOperateLogMapper.addList(clientOperateLogs);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientUserStatusByIds(Integer enabled, Date date, List<Long> idList)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        clientUserMapper.updateStatusByIds(enabled, date, idList);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -741,43 +644,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientUser cu = new ClientUser();
         EntityUtils.copyProperties(clientUserDTO, cu);
         clientUserMapper.updateSkipNull(cu);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    public ClientProductDTO getClientProductByClientAndProduct(Long clientId, Long productId)
-    {
-        ClientProductDTO clientProductDTO = new ClientProductDTO();
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(clientId, productId);
-        if(cp == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(cp, clientProductDTO);
-        return clientProductDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveClientProduct(ClientProductDTO clientProductDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientProduct cp = new ClientProduct();
-        EntityUtils.copyProperties(clientProductDTO, cp);
-        clientProductMapper.add(cp);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientProductSkipNull(ClientProductDTO clientProductDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientProduct cp = new ClientProduct();
-        EntityUtils.copyProperties(clientProductDTO, cp);
-        clientProductMapper.updateSkipNull(cp);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }

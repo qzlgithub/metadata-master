@@ -51,36 +51,12 @@ public interface RemoteSystemService
     DictIndustryDTO getDictIndustryByCode(String code);
 
     /**
-     * 新增行业分类
-     *
-     * @param industry
-     * @return
-     */
-    ResultDTO saveDictIndustry(DictIndustryDTO industry);
-
-    /**
-     * 更改行业分类信息，null值不修改
-     *
-     * @param industry
-     * @return
-     */
-    ResultDTO updateDictIndustrySkipNull(DictIndustryDTO industry);
-
-    /**
      * 根据充值类型id获取充值类型
      *
      * @param rechargeTypeId
      * @return
      */
     DictRechargeTypeDTO getDictRechargeTypeById(Long rechargeTypeId);
-
-    /**
-     * 更改充值类型，null值不修改
-     *
-     * @param rechargeType
-     * @return
-     */
-    ResultDTO updateDictRechargeTypeSkipNull(DictRechargeTypeDTO rechargeType);
 
     /**
      * 根据name获取充值类型
@@ -97,14 +73,6 @@ public interface RemoteSystemService
      * @return
      */
     ResultDTO updateDictRechargeTypeById(DictRechargeTypeDTO rechargeType);
-
-    /**
-     * 根据栏目ids获取权限信息列表
-     *
-     * @param ids
-     * @return
-     */
-    PrivilegeListDTO getPrivilegeListByIds(List<Long> ids);
 
     /**
      * 根据角色id获取权限信息列表
@@ -132,14 +100,6 @@ public interface RemoteSystemService
     PrivilegeDTO getPrivilegeById(Long id);
 
     /**
-     * 更改权限信息，null值不修改
-     *
-     * @param privilege
-     * @return
-     */
-    ResultDTO updatePrivilegeSkipNull(PrivilegeDTO privilege);
-
-    /**
      * 根据状态获取充值类型列表
      *
      * @param enabled
@@ -147,14 +107,6 @@ public interface RemoteSystemService
      * @return
      */
     DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted);
-
-    /**
-     * 新增充值类型
-     *
-     * @param type
-     * @return
-     */
-    ResultDTO saveDictRechargeType(DictRechargeTypeDTO type);
 
     /**
      * 获取行业分类列表
@@ -171,30 +123,6 @@ public interface RemoteSystemService
      * @return
      */
     PrivilegeListDTO getPrivilegeByLevel(Integer level);
-
-    /**
-     * 根据name获取系统参数
-     *
-     * @param name
-     * @return
-     */
-    SysConfigDTO getSysConfigByName(String name);
-
-    /**
-     * 新增系统参数
-     *
-     * @param sysConfig
-     * @return
-     */
-    ResultDTO saveSysConfig(SysConfigDTO sysConfig);
-
-    /**
-     * 根据系统参数id更改系统参数
-     *
-     * @param sysConfig
-     * @return
-     */
-    ResultDTO updateSysConfigById(SysConfigDTO sysConfig);
 
     /**
      * 获取行业分类列表

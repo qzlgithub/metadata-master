@@ -174,36 +174,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    @Transactional
-    public ResultDTO saveRolePrivilegeList(List<RolePrivilegeDTO> toAddList)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        List<RolePrivilege> dataList = new ArrayList<>();
-        RolePrivilege rolePrivilege;
-        for(RolePrivilegeDTO item : toAddList)
-        {
-            rolePrivilege = new RolePrivilege();
-            EntityUtils.copyProperties(item, rolePrivilege);
-            dataList.add(rolePrivilege);
-        }
-        rolePrivilegeMapper.addList(dataList);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveRole(RoleDTO roleDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Role role = new Role();
-        EntityUtils.copyProperties(roleDTO, role);
-        roleMapper.add(role);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public RoleDTO getRoleById(Long roleId)
     {
         RoleDTO roleDTO = new RoleDTO();
@@ -214,16 +184,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         EntityUtils.copyProperties(role, roleDTO);
         return roleDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO deleteRolePrivilegeByRoleId(Long roleId)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        rolePrivilegeMapper.deleteByRole(roleId);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -329,58 +289,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             }
         }
         return managerPrivilegeListDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveManagerPrivilegeList(List<ManagerPrivilegeDTO> list)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        List<ManagerPrivilege> dataList = new ArrayList<>();
-        ManagerPrivilege managerPrivilege;
-        for(ManagerPrivilegeDTO item : list)
-        {
-            managerPrivilege = new ManagerPrivilege();
-            EntityUtils.copyProperties(item, managerPrivilege);
-            dataList.add(managerPrivilege);
-        }
-        managerPrivilegeMapper.addList(dataList);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveManager(ManagerDTO managerDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Manager manager = new Manager();
-        EntityUtils.copyProperties(managerDTO, manager);
-        managerMapper.add(manager);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO deleteManagerPrivilegeByManagerId(Long managerId)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        managerPrivilegeMapper.deleteByManager(managerId);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateManagerById(ManagerDTO managerDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Manager manager = new Manager();
-        EntityUtils.copyProperties(managerDTO, manager);
-        managerMapper.updateById(manager);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
