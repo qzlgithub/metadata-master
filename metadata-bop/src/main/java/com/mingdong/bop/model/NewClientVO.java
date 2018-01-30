@@ -4,6 +4,7 @@ import java.util.List;
 
 public class NewClientVO
 {
+    private Long clientId;
     private String corpName;
     private String shortName;
     private String license;
@@ -12,6 +13,17 @@ public class NewClientVO
     private String password;
     private Integer enabled;
     private List<ContactVO> contacts;
+    private List<Long> contactDel;
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
 
     public String getCorpName()
     {
@@ -91,5 +103,15 @@ public class NewClientVO
     public void setContacts(List<ContactVO> contacts)
     {
         this.contacts = contacts;
+    }
+
+    public List<Long> getContactDel()
+    {
+        return contactDel;
+    }
+
+    public void setContactDel(List<Long> contactDel)
+    {
+        this.contactDel = contactDel;
     }
 }

@@ -760,7 +760,8 @@ public class ClientServiceImpl implements ClientService
     {
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
-                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || CollectionUtils.isEmpty(
+                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || (!TrueOrFalse.TRUE.equals(
+                vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())) || CollectionUtils.isEmpty(
                 vo.getContacts()))
         {
             resp.result(RestResult.KEY_FIELD_MISSING);
@@ -799,6 +800,49 @@ public class ClientServiceImpl implements ClientService
         dto.setManagerId(RequestThread.getOperatorId());
         ResultDTO res = remoteClientService.addNewClient(dto);
         resp.result(res.getResult());
+    }
+
+    @Override
+    public void editClient(NewClientVO vo, BLResp resp)
+    {
+        if(vo.getClientId() == null || StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(
+                vo.getShortName()) || StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
+                (!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())))
+        {
+            resp.result(RestResult.KEY_FIELD_MISSING);
+            return;
+        }
+        NewClientDTO client = new NewClientDTO();
+        client.setClientId(vo.getClientId());
+        client.setCorpName(vo.getCorpName());
+        client.setShortName(vo.getShortName());
+        client.setLicense(vo.getLicense());
+        client.setIndustryId(vo.getIndustryId());
+        client.setEnabled(vo.getEnabled());
+        List<ClientContactDTO> contactList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(vo.getContacts()))
+        {
+            for(ContactVO c : vo.getContacts())
+            {
+                if(StringUtils.isNullBlank(c.getName()) || StringUtils.isNullBlank(c.getPosition()) ||
+                        StringUtils.isNullBlank(c.getPhone()) || (!TrueOrFalse.TRUE.equals(c.getGeneral()) &&
+                        !TrueOrFalse.FALSE.equals(c.getGeneral())))
+                {
+                    resp.result(RestResult.KEY_FIELD_MISSING);
+                    return;
+                }
+                ClientContactDTO o = new ClientContactDTO();
+                o.setId(c.getId());
+                o.setName(c.getName());
+                o.setPosition(c.getPosition());
+                o.setPhone(c.getPhone());
+                o.setEmail(c.getEmail());
+                o.setGeneral(c.getGeneral());
+                contactList.add(o);
+            }
+        }
+        ResultDTO dto = remoteClientService.editClient(client, contactList, vo.getContactDel());
+        resp.result(dto.getResult());
     }
 
     @Override

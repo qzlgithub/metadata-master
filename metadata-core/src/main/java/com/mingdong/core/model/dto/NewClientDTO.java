@@ -5,6 +5,7 @@ import java.util.List;
 
 public class NewClientDTO implements Serializable
 {
+    private Long clientId;
     private String corpName;
     private String shortName;
     private String license;
@@ -13,6 +14,16 @@ public class NewClientDTO implements Serializable
     private Integer enabled;
     private List<ClientContactDTO> contactList;
     private Long managerId;
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
 
     public String getCorpName()
     {

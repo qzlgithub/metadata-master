@@ -1,5 +1,78 @@
-$("#contact-list").on("click", ".edit-contact", function() {
+var message, form;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    form = layui.form;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({type: 'iframe'}).init();
+    form.on("checkbox(general)", function() {
+        var id = $(this).data("id");
+        var obj = {};
+        var isNew = true;
+        for(var t in edit_obj) {
+            if(id === edit_obj[t].id) {
+                isNew = false;
+                edit_obj[t].name = $("#name-" + id).text();
+                edit_obj[t].position = $("#position-" + id).text();
+                edit_obj[t].phone = $("#phone-" + id).text();
+                edit_obj[t].email = $("#email-" + id).text();
+                edit_obj[t].general = $("#general-" + id).prop("checked") ? 1 : 0;
+                break;
+            }
+        }
+        if(isNew) {
+            obj.id = id;
+            obj.isAdd = false;
+            obj.name = $("#name-" + id).text();
+            obj.position = $("#position-" + id).text();
+            obj.phone = $("#phone-" + id).text();
+            obj.email = $("#email-" + id).text();
+            obj.general = $("#general-" + id).prop("checked") ? 1 : 0;
+            edit_obj.push(obj);
+        }
+        form.render();
+    });
+    $("#add-contact").on("click", function() {
+        $(".tip").text("");
+        $("#add-id").val("");
+        $("#add-name").val("");
+        $("#add-position").val("");
+        $("#add-phone").val("");
+        $("#add-email").val("");
+        $("#add-general").prop("checked", false);
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#div-contact'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+});
+var del_obj = [], edit_obj = [], contact = $("#contact-list");
+var contact_tr = "<tr id=\"#{id}\">" +
+    "<td id=\"name-#{id}\">#{name}</td>" +
+    "<td id=\"position-#{id}\">#{position}</td>" +
+    "<td id=\"phone-#{id}\">#{phone}</td>" +
+    "<td id=\"email-#{id}\">#{email}</td>" +
+    "<td><span class=\"mr30\"><a href=\"#\" class=\"edit-contact\" data-id=\"#{id}\">编辑</a></span>" +
+    "<span class=\"mr30\"><a href=\"#\" class=\"del-contact\" data-id=\"#{id}\">删除</a></span>";
+/*"<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用\" checked=\"\" id=\"isGeneral-#{id}\"/></span>" +
+"</td></tr>";*/
+contact.on("click", ".edit-contact", function() {
     var id = $(this).data("id");
+    $(".tip").text("");
+    $("#add-id").val(id);
+    $("#add-name").val($("#name-" + id).text());
+    $("#add-position").val($("#position-" + id).text());
+    $("#add-phone").val($("#phone-" + id).text());
+    $("#add-email").val($("#email-" + id).text());
+    $("#add-general").prop("checked", $("#general-" + id).prop("checked"));
     layer.open({
         title: false,
         type: 1,
@@ -8,9 +81,71 @@ $("#contact-list").on("click", ".edit-contact", function() {
         shadeClose: true
     });
 });
-$("#contact-list").on("click", ".del-contact", function() {
+contact.on("click", ".del-contact", function() {
     var id = $(this).data("id");
+    del_obj.push(id);
     $("#" + id).remove();
+});
+$("#save-contact").click(function() {
+    var id = $("#add-id").val();
+    var obj = {};
+    if(id === "") {
+        obj.id = Math.uuidFast();
+        obj.isAdd = true;
+        obj.name = $("#add-name").val();
+        obj.position = $("#add-position").val();
+        obj.phone = $("#add-phone").val();
+        obj.email = $("#add-email").val();
+        obj.general = $("#add-general").prop("checked") ? 1 : 0;
+        edit_obj.push(obj);
+        var tr = contact_tr;
+        if(obj.general === 1) {
+            tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用\" checked=\"\" id=\"general-#{id}\"/></span>"
+        }
+        else {
+            tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用\" id=\"general-#{id}\"/></span>"
+        }
+        tr = tr + "</td></tr>";
+        tr = tr.replace(/#{id}/g, obj.id).replace(/#{name}/g, obj.name).replace(/#{position}/g, obj.position)
+        .replace(/#{phone}/g, obj.phone).replace(/#{email}/g, obj.email);
+        contact.append(tr);
+    }
+    else {
+        var isNew = true;
+        for(var t in edit_obj) {
+            if(id === edit_obj[t].id) {
+                isNew = false;
+                edit_obj[t].name = $("#add-name").val();
+                edit_obj[t].position = $("#add-position").val();
+                edit_obj[t].phone = $("#add-phone").val();
+                edit_obj[t].email = $("#add-email").val();
+                edit_obj[t].general = $("#add-general").prop("checked") ? 1 : 0;
+                break;
+            }
+        }
+        if(isNew) {
+            obj.id = id;
+            obj.isAdd = false;
+            obj.name = $("#add-name").val();
+            obj.position = $("#add-position").val();
+            obj.phone = $("#add-phone").val();
+            obj.email = $("#add-email").val();
+            obj.general = $("#add-general").prop("checked") ? 1 : 0;
+            edit_obj.push(obj);
+        }
+        $("#name-" + id).text($("#add-name").val());
+        $("#position-" + id).text($("#add-position").val());
+        $("#phone-" + id).text($("#add-phone").val());
+        $("#email-" + id).text($("#add-email").val());
+        if($("#add-general").prop("checked")) {
+            $("#general-" + id).prop("checked", true);
+        }
+        else {
+            $("#general-" + id).prop("checked", false);
+        }
+    }
+    layer.closeAll();
+    form.render();
 });
 var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{name}</td>" +
@@ -61,11 +196,19 @@ function fetchIndustry() {
 }
 
 function editClient() {
-    console.log("corpName: " + $("#corpName").val() + "\nshortName: " + $("#shortName").val() + "\nindustryId: "
-        + $("#industry").val() + "\nname: " + $("#name").val() + "\nphone: " + $("#phone").val()
-        + "\nemail: " + $("#email").val() + "\nlicense: " + $("#license").val()
-        + "\nuserEnabled: " + $("input[name='clientEnabled']:checked").val()
-        + "\naccountEnabled: " + $("input[name='accountEnabled']:checked").val());
+    var update = [];
+    for(var o in edit_obj) {
+        var obj = {};
+        if(!edit_obj[o].isAdd) {
+            obj.id = edit_obj[o].id;
+        }
+        obj.name = edit_obj[o].name;
+        obj.position = edit_obj[o].position;
+        obj.phone = edit_obj[o].phone;
+        obj.email = edit_obj[o].email;
+        obj.general = edit_obj[o].general;
+        update.push(obj);
+    }
     $.ajax({
         type: "POST",
         url: "/client/modification",
@@ -75,16 +218,14 @@ function editClient() {
             "clientId": $("#clientId").val(),
             "corpName": $("#corpName").val(),
             "shortName": $("#shortName").val(),
-            "industryId": $("#industry").val(),
-            "name": $("#name").val(),
-            "phone": $("#phone").val(),
-            "email": $("#email").val(),
             "license": $("#license").val(),
-            "userEnabled": $("input[name='clientEnabled']:checked").val(),
-            "accountEnabled": $("input[name='accountEnabled']:checked").val()
+            "industryId": $("#industry").val(),
+            "contactDel": del_obj,
+            "contacts": update,
+            "enabled": $("input[name='clientEnabled']:checked").val()
         }),
         success: function(data) {
-            if(data.errCode != '000000') {
+            if(data.errCode !== '000000') {
                 layer.msg("修改失败:" + data.errMsg);
             }
             else {

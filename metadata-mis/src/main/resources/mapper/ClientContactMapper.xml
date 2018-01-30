@@ -32,6 +32,31 @@
     </insert>
     <!-- @formatter:on -->
 
+    <delete id="deleteByIds" parameterType="List">
+        delete from `client_contact` where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateById" parameterType="ClientContact">
+        update `client_contact`
+        set `create_time` = #{createTime},
+            `update_time` = #{updateTime},
+            `client_id`   = #{clientId},
+            `name`        = #{name},
+            `position`    = #{position},
+            `phone`       = #{phone},
+            `email`       = #{email},
+            `general`     = #{general}
+        where `id` = #{id}
+    </update>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
+
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `client_id` = #{clientId}

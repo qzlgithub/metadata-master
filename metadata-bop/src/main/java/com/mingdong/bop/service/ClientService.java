@@ -60,5 +60,7 @@ public interface ClientService
 
     void addClient(NewClientVO vo, BLResp resp);
 
+    void editClient(NewClientVO vo, BLResp resp);
+
     void findClientDetail(Long clientId, BLResp resp);
 }

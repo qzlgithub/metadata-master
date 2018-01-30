@@ -97,8 +97,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人：</label>
                     <div class="layui-input-block layui-form">
-                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="addcontacts"><i
-                                class="layui-icon"></i>添加联系人</span>
+                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="add-contact">
+                            <i class="layui-icon"></i>添加联系人</span>
                         <em class="col3">至少添加一位联系人</em>
                     </div>
                 </div>
@@ -116,10 +116,11 @@
                                     <span class="mr30">
                                         <a href="#" class="edit-contact" th:attr="data-id=${o.id}">编辑</a></span>
                                     <span class="mr30">
-                                        <a href="#" class="del del-contact" th:attr="data-id=${o.id}">删除</a></span>
+                                        <a href="#" class="del-contact" th:attr="data-id=${o.id}">删除</a></span>
                                     <span class="layui-form">
-                                        <input type="checkbox" title="常用" th:checked="${o.isGeneral == 1}"
-                                               th:id="'isGeneral-' + ${o.id}"/>
+                                        <input type="checkbox" title="常用" lay-filter="general"
+                                               th:checked="${o.isGeneral == 1}" th:id="'general-' + ${o.id}"
+                                               th:attr="data-id=${o.id}"/>
                                     </span>
                                 </td>
                             </tr>
@@ -139,7 +140,6 @@
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
-
 
 <!--查看公司  提示层-->
 <div id="check-company" class="modal">
@@ -166,7 +166,7 @@
             <!--table end-->
         </div>
         <div class="layui-form-item tc">
-            <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="layer.closeAll()">关闭</button>
+            <button class="layui-btn" onclick="layer.closeAll()">关闭</button>
         </div>
         <!--</form>-->
     </div>
@@ -185,75 +185,51 @@
                 <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
                 <div class="layui-input-block">
                     <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"/>
-                    <i class="col3 pl10" id="tip-add-name" style="display: none"></i>
+                    <i class="col3 pl10 tip" id="tip-add-name" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>职位：</label>
                 <div class="layui-input-block">
                     <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"/>
-                    <i class="col3 pl10" id="tip-add-position" style="display: none"></i>
+                    <i class="col3 pl10 tip" id="tip-add-position" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
                 <div class="layui-input-block">
                     <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"/>
-                    <i class="col3 pl10" id="tip-add-phone" style="display: none"></i>
+                    <i class="col3 pl10 tip" id="tip-add-phone" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">联系邮箱：</label>
                 <div class="layui-input-block">
                     <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"/>
-                    <i class="col3 pl10" id="tip-add-email" style="display: none"></i>
+                    <i class="col3 pl10 tip" id="tip-add-email" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">设为常用：</label>
                 <div class="fl">
-                    <input type="checkbox" id="add-chief" title="常用联系人" lay-skin="primary"/>
-                    <i class="col3 pl10" id="tip-add-chief" style="display: none"></i>
+                    <input type="checkbox" id="add-general" title="常用联系人" lay-skin="primary"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" id="add_contact">保存</button>
+                    <input type="hidden" id="add-id" value=""/>
+                    <button class="layui-btn" id="save-contact">保存</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/uuid.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/client-edit.js}"></script>
-<script>
-    var message;
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app', 'message'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        /*$('#checkcompany').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#check-company'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });*/
-    });
-</script>
 </body>
 </html>

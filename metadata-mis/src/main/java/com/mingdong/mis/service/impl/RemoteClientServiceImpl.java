@@ -1065,6 +1065,77 @@ public class RemoteClientServiceImpl implements RemoteClientService
         return res;
     }
 
+    @Override
+    @Transactional
+    public ResultDTO editClient(NewClientDTO dto, List<ClientContactDTO> contacts, List<Long> delIds)
+    {
+        ResultDTO res = new ResultDTO();
+        Client client = clientMapper.findById(dto.getClientId());
+        if(client == null)
+        {
+            res.setResult(RestResult.OBJECT_NOT_FOUND);
+            return res;
+        }
+        Date current = new Date();
+        Client clientUpd = new Client();
+        clientUpd.setId(dto.getClientId());
+        clientUpd.setUpdateTime(current);
+        clientUpd.setCorpName(dto.getCorpName());
+        clientUpd.setShortName(dto.getShortName());
+        clientUpd.setLicense(dto.getLicense());
+        clientUpd.setIndustryId(dto.getIndustryId());
+        clientMapper.updateSkipNull(clientUpd);
+        ClientUser userUpd = new ClientUser();
+        userUpd.setId(client.getPrimaryUserId());
+        userUpd.setUpdateTime(current);
+        userUpd.setEnabled(dto.getEnabled());
+        clientUserMapper.updateSkipNull(userUpd);
+        if(!CollectionUtils.isEmpty(delIds))
+        {
+            clientContactMapper.deleteByIds(delIds);
+        }
+        if(!CollectionUtils.isEmpty(contacts))
+        {
+            List<ClientContact> addList = new ArrayList<>();
+            for(ClientContactDTO o : contacts)
+            {
+                if(o.getId() == null)
+                {
+                    ClientContact cc = new ClientContact();
+                    cc.setCreateTime(current);
+                    cc.setUpdateTime(current);
+                    cc.setClientId(dto.getClientId());
+                    cc.setName(o.getName());
+                    cc.setPosition(o.getPosition());
+                    cc.setPhone(o.getPhone());
+                    cc.setEmail(o.getEmail());
+                    cc.setGeneral(o.getGeneral());
+                    addList.add(cc);
+                }
+                else
+                {
+                    ClientContact cc = clientContactMapper.findById(o.getId());
+                    if(cc != null)
+                    {
+                        cc.setUpdateTime(current);
+                        cc.setClientId(dto.getClientId());
+                        cc.setName(o.getName());
+                        cc.setPosition(o.getPosition());
+                        cc.setPhone(o.getPhone());
+                        cc.setEmail(o.getEmail());
+                        cc.setGeneral(o.getGeneral());
+                        clientContactMapper.updateById(cc);
+                    }
+                }
+            }
+            if(addList.size() > 0)
+            {
+                clientContactMapper.addList(addList);
+            }
+        }
+        return res;
+    }
+
     /**
      * 更新企业的子账号个数
      */

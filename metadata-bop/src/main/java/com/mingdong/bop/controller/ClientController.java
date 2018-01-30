@@ -4,7 +4,6 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.ProdRechargeVO;
 import com.mingdong.bop.model.RequestThread;
@@ -167,40 +166,15 @@ public class ClientController
     {
         BLResp resp = BLResp.build();
         clientService.addClient(vo, resp);
-        /*if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
-                StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
-                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || CollectionUtils.isEmpty(
-                vo.getContacts()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        clientService.addCorp(vo.getUsername(), vo.getPassword(), vo.getCorpName(), vo.getShortName(),
-                vo.getIndustryId(), vo.getLicense(), vo.getEnabled(), vo.getContacts(), resp);*/
         return resp;
     }
 
-    @RequestMapping(value = "modification", method = RequestMethod.POST)
+    @PostMapping(value = "modification")
     @ResponseBody
-    public BLResp editClient(@RequestBody ClientVO vo)
+    public BLResp editClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
-        if(vo.getClientId() == null || vo.getIndustryId() == null || vo.getUserEnabled() == null ||
-                vo.getAccountEnabled() == null)
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        if(StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
-                StringUtils.isNullBlank(vo.getName()))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        clientService.editClientInfo(vo.getClientId(), vo.getCorpName(), vo.getShortName(), vo.getLicense(),
-                vo.getIndustryId(), vo.getName(), vo.getPhone(), vo.getEmail(), vo.getUserEnabled(),
-                vo.getAccountEnabled(), resp);
+        clientService.editClient(vo, resp);
         return resp;
     }
 

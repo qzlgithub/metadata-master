@@ -2,6 +2,7 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
+import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -104,4 +105,6 @@ public interface RemoteClientService
     ClientDetailDTO getClientDetail(Long clientId);
 
     ClientDetailDTO getClientInfoForEdit(Long clientId);
+
+    ResultDTO editClient(NewClientDTO clientDTO, List<ClientContactDTO> contacts, List<Long> delIds);
 }
