@@ -53,7 +53,7 @@
             var that = this,
                 pageSelect = $('#pageSelect'), // ul
                 lis = pageSelect.children(), // li的集合
-                liWidth = lis[0].offsetWidth, // li的宽度
+                liWidth = lis[0].offsetWidth == 0?60:lis[0].offsetWidth, // li的宽度
                 totalPages = that.options.totalPages, // 总页数
                 pageIndex = that.options.pageNo, // 当前选择的页码
                 distance = 0, // ul移动距离
