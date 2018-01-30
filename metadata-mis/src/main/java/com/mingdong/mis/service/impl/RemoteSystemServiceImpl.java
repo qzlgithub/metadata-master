@@ -108,37 +108,13 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public DictIndustryDTO getDictIndustryByCode(String code)
     {
         DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
-        DictIndustry byId = dictIndustryMapper.findByCode(code);
-        if(byId == null)
+        DictIndustry byCode = dictIndustryMapper.findByCode(code);
+        if(byCode == null)
         {
             return null;
         }
-        EntityUtils.copyProperties(byId, dictIndustryDTO);
+        EntityUtils.copyProperties(byCode, dictIndustryDTO);
         return dictIndustryDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveDictIndustry(DictIndustryDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(dictProductTypeDTO, dictIndustry);
-        dictIndustryMapper.add(dictIndustry);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictIndustrySkipNull(DictIndustryDTO dictIndustryDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(dictIndustryDTO, dictIndustry);
-        dictIndustryMapper.updateSkipNull(dictIndustry);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -152,18 +128,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         }
         EntityUtils.copyProperties(rechargeType, dictRechargeTypeDTO);
         return dictRechargeTypeDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictRechargeTypeSkipNull(DictRechargeTypeDTO dictRechargeTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictRechargeType dictRechargeType = new DictRechargeType();
-        EntityUtils.copyProperties(dictRechargeTypeDTO, dictRechargeType);
-        dictRechargeTypeMapper.updateSkipNull(dictRechargeType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -189,20 +153,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         dictRechargeTypeMapper.updateById(dictRechargeType);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
-
-    @Override
-    public PrivilegeListDTO getPrivilegeListByIds(List<Long> ids)
-    {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        privilegeListDTO.setDataList(dataList);
-        List<Privilege> privilegeList = privilegeMapper.getParentIdByChildId(ids);
-        if(CollectionUtils.isNotEmpty(privilegeList))
-        {
-            findPrivilegeDTO(privilegeList, dataList);
-        }
-        return privilegeListDTO;
     }
 
     @Override
@@ -247,18 +197,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    @Transactional
-    public ResultDTO updatePrivilegeSkipNull(PrivilegeDTO privilegeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Privilege privilege = new Privilege();
-        EntityUtils.copyProperties(privilegeDTO, privilege);
-        privilegeMapper.updateSkipNull(privilege);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted)
     {
         DictRechargeTypeListDTO dictRechargeTypeListDTO = new DictRechargeTypeListDTO();
@@ -276,18 +214,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             }
         }
         return dictRechargeTypeListDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveDictRechargeType(DictRechargeTypeDTO dictRechargeTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictRechargeType dictRechargeType = new DictRechargeType();
-        EntityUtils.copyProperties(dictRechargeTypeDTO, dictRechargeType);
-        dictRechargeTypeMapper.add(dictRechargeType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -338,43 +264,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public SysConfigDTO getSysConfigByName(String name)
-    {
-        SysConfigDTO sysConfigDTO = new SysConfigDTO();
-        SysConfig sysConfig = sysConfigMapper.findByName(name);
-        if(sysConfig == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(sysConfig, sysConfigDTO);
-        return sysConfigDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveSysConfig(SysConfigDTO sysConfigDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        SysConfig sysConfig = new SysConfig();
-        EntityUtils.copyProperties(sysConfigDTO, sysConfig);
-        sysConfigMapper.add(sysConfig);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateSysConfigById(SysConfigDTO sysConfigDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        SysConfig sysConfig = new SysConfig();
-        EntityUtils.copyProperties(sysConfigDTO, sysConfig);
-        sysConfigMapper.updateById(sysConfig);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictIndustryListDTO getDictIndustryInfoList()
     {
         DictIndustryListDTO dictIndustryListDTO = new DictIndustryListDTO();
@@ -389,23 +278,13 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public PrivilegeListDTO getPrivilegeByParent(Long parentModuleId)
-    {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        List<Privilege> privilegeList = privilegeMapper.getByParent(parentModuleId);
-        if(CollectionUtils.isNotEmpty(privilegeList))
-        {
-            findPrivilegeDTO(privilegeList, dataList);
-        }
-        return privilegeListDTO;
-    }
-
-    @Override
     @Transactional
-    public void setModuleStatus(Integer status, List<Long> moduleIdList)
+    public ResultDTO setModuleStatus(Integer status, List<Long> moduleIdList)
     {
+        ResultDTO resultDTO = new ResultDTO();
         privilegeMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
     @Override
@@ -446,6 +325,183 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         }
         dto.setParents(parents);
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addIndustryType(DictIndustryDTO industry)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictIndustry byCode = dictIndustryMapper.findByCode(industry.getCode());
+        if(byCode != null)
+        {
+            resultDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
+            return resultDTO;
+        }
+        DictIndustry dictIndustry = new DictIndustry();
+        EntityUtils.copyProperties(industry, dictIndustry);
+        dictIndustryMapper.add(dictIndustry);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO editIndustryInfo(DictIndustryDTO industry)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictIndustry byCode = dictIndustryMapper.findByCode(industry.getCode());
+        if(byCode != null && !byCode.equals(industry.getId()))
+        {
+            resultDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
+            return resultDTO;
+        }
+        DictIndustry byId = dictIndustryMapper.findById(industry.getId());
+        if(byId == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        DictIndustry dictIndustry = new DictIndustry();
+        EntityUtils.copyProperties(industry, dictIndustry);
+        dictIndustryMapper.updateSkipNull(dictIndustry);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO dropRechargeType(DictRechargeTypeDTO dictRechargeTypeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(dictRechargeTypeDTO.getId());
+        if(rechargeType != null && TrueOrFalse.FALSE.equals(rechargeType.getDeleted()))
+        {
+            DictRechargeType dictRechargeType = new DictRechargeType();
+            EntityUtils.copyProperties(dictRechargeTypeDTO, dictRechargeType);
+            dictRechargeTypeMapper.updateSkipNull(dictRechargeType);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO editPrivilegeInfo(PrivilegeDTO privilegeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Privilege privilege = privilegeMapper.findById(privilegeDTO.getId());
+        if(privilege == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        privilege = new Privilege();
+        EntityUtils.copyProperties(privilegeDTO, privilege);
+        privilegeMapper.updateSkipNull(privilege);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addOrUpdateRechargeTypeByName(String name, String remark)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictRechargeType rechargeType = dictRechargeTypeMapper.findByName(name);
+        if(rechargeType != null && TrueOrFalse.FALSE.equals(rechargeType.getDeleted()))
+        {
+            resultDTO.setResult(RestResult.CATEGORY_NAME_EXIST);
+            return resultDTO;
+        }
+        Date current = new Date();
+        if(rechargeType == null)
+        {
+            rechargeType = new DictRechargeType();
+            rechargeType.setCreateTime(current);
+            rechargeType.setUpdateTime(current);
+            rechargeType.setName(name);
+            rechargeType.setRemark(remark);
+            rechargeType.setEnabled(TrueOrFalse.TRUE);
+            rechargeType.setDeleted(TrueOrFalse.FALSE);
+            dictRechargeTypeMapper.add(rechargeType);
+        }
+        else
+        {
+            rechargeType.setUpdateTime(current);
+            rechargeType.setRemark(remark);
+            rechargeType.setDeleted(TrueOrFalse.FALSE);
+            dictRechargeTypeMapper.updateById(rechargeType);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addOrUpdateSetting(List<SysConfigDTO> sysConfigDTOList)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Date current = new Date();
+        SysConfig sysConfig;
+        for(SysConfigDTO item : sysConfigDTOList)
+        {
+            sysConfig = sysConfigMapper.findByName(item.getName());
+            if(sysConfig == null)
+            {
+                sysConfig = new SysConfig();
+                sysConfig.setCreateTime(current);
+                sysConfig.setUpdateTime(current);
+                sysConfig.setName(item.getName());
+                sysConfig.setValue(item.getValue());
+                sysConfigMapper.add(sysConfig);
+            }
+            else if(!sysConfig.getValue().equals(sysConfig.getValue()))
+            {
+                sysConfig.setUpdateTime(current);
+                sysConfig.setValue(sysConfig.getValue());
+                sysConfigMapper.updateById(sysConfig);
+            }
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO changeRechargeStatus(Long rechargeTypeId, Integer enabled)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
+        if(rechargeType != null && !enabled.equals(rechargeType.getEnabled()))
+        {
+            DictRechargeType updObj = new DictRechargeType();
+            updObj.setId(rechargeTypeId);
+            updObj.setUpdateTime(new Date());
+            updObj.setEnabled(enabled);
+            dictRechargeTypeMapper.updateSkipNull(updObj);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO changeIndustryStatus(Long industryTypeId, Integer enabled)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictIndustry byId = dictIndustryMapper.findById(industryTypeId);
+        if(byId != null && !enabled.equals(byId.getEnabled()))
+        {
+            DictIndustry updObj = new DictIndustry();
+            updObj.setId(industryTypeId);
+            updObj.setUpdateTime(new Date());
+            updObj.setEnabled(enabled);
+            dictIndustryMapper.updateSkipNull(updObj);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
     private void findDictIndustryDTO(List<DictIndustry> dictIndustryList, List<DictIndustryDTO> dataList)

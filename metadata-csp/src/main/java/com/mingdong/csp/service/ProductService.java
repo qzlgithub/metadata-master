@@ -11,12 +11,12 @@ import java.util.Map;
 public interface ProductService
 {
     /**
-     * 获取客户项目充值记录
+     * 获取客户产品充值记录
      */
     void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, BLResp resp);
 
     /**
-     * 导出客户项目充值记录
+     * 导出客户产品充值记录
      */
     XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
 
@@ -30,13 +30,47 @@ public interface ProductService
      */
     XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
 
+    /**
+     * 根据客户id获取客户产品详细信息
+     *
+     * @param clientId
+     * @param productId
+     * @param resp
+     */
     void getClientProductDetail(Long clientId, Long productId, BLResp resp);
 
+    /**
+     * 根据客户id获取客户产品列表
+     *
+     * @param clientId
+     * @return
+     */
     List<Map<String, Object>> getClientProductList(Long clientId);
 
+    /**
+     * 根据客户id获取客户产品详细信息列表
+     *
+     * @param clientId
+     * @param resp
+     */
     void getClientProductDetailList(Long clientId, BLResp resp);
 
+    /**
+     * 根据状态获取产品类型列表
+     *
+     * @param enabled
+     * @return
+     */
     List<Map<String, Object>> getDictProductTypeList(Integer enabled);
 
+    /**
+     * 根据条件获取产品信息列表
+     *
+     * @param clientId
+     * @param isOpen
+     * @param selectedType
+     * @param page
+     * @param resp
+     */
     void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp);
 }

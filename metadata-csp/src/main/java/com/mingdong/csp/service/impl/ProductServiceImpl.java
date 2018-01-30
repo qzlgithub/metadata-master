@@ -342,7 +342,8 @@ public class ProductServiceImpl implements ProductService
         ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen,
                 selectedType, page);
         List<Integer> typeList = new ArrayList<>();
-        if(selectedType != null){
+        if(selectedType != null)
+        {
             typeList = Arrays.asList(selectedType);
         }
         List<Map<String, Object>> allList = new ArrayList<>();

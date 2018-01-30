@@ -296,7 +296,7 @@ public class TradeServiceImpl implements TradeService
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, item.getId()+"");
+                map.put(Field.TRADE_NO, item.getId() + "");
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.SHORT_NAME, item.getShortName());
                 map.put(Field.USERNAME, item.getUsername());
@@ -344,7 +344,7 @@ public class TradeServiceImpl implements TradeService
             cell = dataRow.createCell(0);
             cell.setCellValue(dataInfo.getCreateTime());
             cell.setCellStyle(timeStyle);
-            dataRow.createCell(1).setCellValue(dataInfo.getId()+"");
+            dataRow.createCell(1).setCellValue(dataInfo.getId() + "");
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
             dataRow.createCell(3).setCellValue(dataInfo.getShortName());
             dataRow.createCell(4).setCellValue(dataInfo.getUsername());

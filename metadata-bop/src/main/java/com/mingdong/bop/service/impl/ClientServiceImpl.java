@@ -29,7 +29,6 @@ import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
-import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
@@ -39,6 +38,7 @@ import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
+import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
@@ -46,6 +46,8 @@ import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.UpdateClientInfoDTO;
+import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteManagerService;
@@ -58,7 +60,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -94,10 +95,10 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getSimilarCorp(String corpName, Long clientId, BLResp resp)
+    public void getSimilarCorp(String name, Long clientId, BLResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ClientInfoListDTO similarCorpByName = remoteClientService.getSimilarCorpByName(corpName, clientId);
+        ClientInfoListDTO similarCorpByName = remoteClientService.getSimilarCorpByName(name, clientId);
         List<ClientInfoDTO> dataList = similarCorpByName.getDataList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -171,32 +172,22 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    @Transactional
     public void editClientInfo(Long clientId, String corpName, String shortName, String license, Long industryId,
             String name, String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp)
     {
-        Date current = new Date();
-        ClientDTO client = remoteClientService.getClientByClientId(clientId);
-        if(client == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        // 更新用户信息
-        ClientUserDTO clientUser = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
-        clientUser.setUpdateTime(current);
-        clientUser.setName(name);
-        clientUser.setPhone(phone);
-        clientUser.setEmail(email);
-        clientUser.setEnabled(userEnabled);
-        remoteClientService.updateClientUserByUserId(clientUser);
-        // 更新客户信息
-        client.setUpdateTime(current);
-        client.setCorpName(corpName);
-        client.setShortName(shortName);
-        client.setLicense(license);
-        client.setIndustryId(industryId);
-        remoteClientService.updateClientById(client);
+        UpdateClientInfoDTO updateClientInfoDTO = new UpdateClientInfoDTO();
+        updateClientInfoDTO.setClientId(clientId);
+        updateClientInfoDTO.setCorpName(corpName);
+        updateClientInfoDTO.setShortName(shortName);
+        updateClientInfoDTO.setLicense(license);
+        updateClientInfoDTO.setIndustryId(industryId);
+        updateClientInfoDTO.setName(name);
+        updateClientInfoDTO.setPhone(phone);
+        updateClientInfoDTO.setEmail(email);
+        updateClientInfoDTO.setUserEnabled(userEnabled);
+        updateClientInfoDTO.setAccountEnable(accountEnabled);
+        ResultDTO resultDTO = remoteClientService.updateClientInfo(updateClientInfoDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -336,51 +327,24 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    @Transactional
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
     {
-        ClientUserListDTO clientUserListByClientIds = remoteClientService.getClientUserListByClientIds(clientIdList);
-        List<ClientUserDTO> userList = clientUserListByClientIds.getDataList();
-        if(CollectionUtils.isEmpty(userList))
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        Date current = new Date();
-        List<Long> clientUserIdList = new ArrayList<>();
-        List<ClientOperateLogDTO> logList = new ArrayList<>();
-        for(ClientUserDTO user : userList)
-        {
-            if(!enabled.equals(user.getEnabled()))
-            {
-                clientUserIdList.add(user.getId());
-                ClientOperateLogDTO log = new ClientOperateLogDTO();
-                log.setCreateTime(current);
-                log.setUpdateTime(current);
-                log.setClientId(user.getClientId());
-                log.setClientUserId(user.getId());
-                log.setManagerId(managerId);
-                log.setType(enabled);
-                log.setReason(reason);
-                logList.add(log);
-            }
-        }
-        if(logList.size() > 0)
-        {
-            remoteClientService.saveClientOperateLogList(logList);
-            remoteClientService.updateClientUserStatusByIds(enabled, current, clientUserIdList);
-        }
+        UpdateClientUserStatusDTO updateClientUserStatusDTO = new UpdateClientUserStatusDTO();
+        updateClientUserStatusDTO.setClientIdList(clientIdList);
+        updateClientUserStatusDTO.setEnabled(enabled);
+        updateClientUserStatusDTO.setManagerId(managerId);
+        updateClientUserStatusDTO.setReason(reason);
+        ResultDTO resultDTO = remoteClientService.updateClientUserStatus(updateClientUserStatusDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void setClientDeleted(List<Long> idList, BLResp resp)
     {
         remoteClientService.setClientDeleted(idList);
     }
 
     @Override
-    @Transactional
     public void resetClientPassword(List<Long> idList, BLResp resp)
     {
         ClientListDTO clientListByIds = remoteClientService.getClientListByIds(idList);
@@ -439,7 +403,6 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    @Transactional
     public void resetClientUserPassword(Long clientUserId, BLResp resp)
     {
         ClientUserDTO cu = remoteClientService.getClientUserByUserId(clientUserId);
@@ -456,27 +419,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    @Transactional
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
             Integer rechargeType, BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp)
     {
-
-        Date current = new Date();
-        ClientProductDTO cp = remoteClientService.getClientProductByClientAndProduct(clientId, productId);
-        if(cp != null)
-        {
-            resp.result(RestResult.PRODUCT_OPENED);
-            return;
-        }
-        ProductRechargeDTO pro = remoteProductService.getProductRechargeByContractNo(contractNo);
-        if(pro != null)
-        {
-            resp.result(RestResult.CONTRACT_IS_EXIST);
-            return;
-        }
+        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
+        openClientProductDTO.setYear(true);
         Long clientProductId = IDUtils.getClientProductId(param.getNodeId());
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        // 保存产品的充值记录
+        Date current = new Date();
         ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
@@ -494,10 +444,8 @@ public class ClientServiceImpl implements ClientService
         pr.setEndDate(endDate);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        remoteProductService.saveProductRecharge(pr);
-
-        // 保存客户产品的账户变更信息
-        cp = new ClientProductDTO();
+        openClientProductDTO.setProductRechargeDTO(pr);
+        ClientProductDTO cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setCreateTime(current);
         cp.setUpdateTime(current);
@@ -507,24 +455,21 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
-        remoteClientService.saveClientProduct(cp);
+        openClientProductDTO.setClientProductDTO(cp);
+        ResultDTO resultDTO = remoteClientService.openClientProduct(openClientProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
             Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
     {
-        Date current = new Date();
-        ClientProductDTO cp = remoteClientService.getClientProductByClientAndProduct(clientId, productId);
-        if(cp != null)
-        {
-            resp.result(RestResult.PRODUCT_OPENED);
-            return;
-        }
+        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
+        openClientProductDTO.setYear(false);
         Long clientProductId = IDUtils.getClientProductId(param.getNodeId());
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         ProductRechargeDTO pr = new ProductRechargeDTO();
+        Date current = new Date();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
@@ -540,9 +485,8 @@ public class ClientServiceImpl implements ClientService
         pr.setUnitAmt(unitAmt);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        remoteProductService.saveProductRecharge(pr);
-        // 保存客户产品的账户变更信息
-        cp = new ClientProductDTO();
+        openClientProductDTO.setProductRechargeDTO(pr);
+        ClientProductDTO cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setCreateTime(current);
         cp.setUpdateTime(current);
@@ -552,7 +496,9 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(amount);
         cp.setLatestRechargeId(productRechargeId);
-        remoteClientService.saveClientProduct(cp);
+        openClientProductDTO.setClientProductDTO(cp);
+        ResultDTO resultDTO = remoteClientService.openClientProduct(openClientProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
@@ -565,7 +511,6 @@ public class ClientServiceImpl implements ClientService
             return;
         }
         ProductRechargeDTO pr = remoteProductService.getProductRechargeById(cp.getLatestRechargeId());
-
         if(pr == null)
         {
             resp.result(RestResult.OBJECT_NOT_FOUND);
@@ -588,26 +533,20 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    @Transactional
     public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
             BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp)
     {
+        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
+        openClientProductDTO.setYear(true);
         Date current = new Date();
-        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
-        if(cp == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        // 保存产品续费记录
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
         pr.setClientProductId(clientProductId);
-        pr.setClientId(cp.getClientId());
-        pr.setProductId(cp.getProductId());
+        //        pr.setClientId(cp.getClientId());
+        //        pr.setProductId(cp.getProductId());
         pr.setTradeNo(redisDao.createTradeNo(Trade.PRODUCT_RECHARGE));
         pr.setContractNo(contractNo);
         pr.setBillPlan(billPlan);
@@ -618,56 +557,52 @@ public class ClientServiceImpl implements ClientService
         pr.setEndDate(endDate);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        remoteProductService.saveProductRecharge(pr);
-        // 更新客户产品信息
-        cp = new ClientProductDTO();
+        openClientProductDTO.setProductRechargeDTO(pr);
+        ClientProductDTO cp = new ClientProductDTO();
         cp.setId(clientProductId);
         cp.setUpdateTime(current);
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
-        remoteClientService.updateClientProductSkipNull(cp);
+        openClientProductDTO.setClientProductDTO(cp);
+        ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override
-    @Transactional
     public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
             BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
     {
+        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
+        openClientProductDTO.setYear(false);
         Date current = new Date();
-        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
-        if(cp == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        // 保存产品续费记录
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         ProductRechargeDTO pr = new ProductRechargeDTO();
         pr.setId(productRechargeId);
         pr.setCreateTime(current);
         pr.setUpdateTime(current);
         pr.setClientProductId(clientProductId);
-        pr.setClientId(cp.getClientId());
-        pr.setProductId(cp.getProductId());
+        //        pr.setClientId(cp.getClientId());
+        //        pr.setProductId(cp.getProductId());
         pr.setTradeNo(redisDao.createTradeNo(Trade.PRODUCT_RECHARGE));
         pr.setContractNo(contractNo);
         pr.setBillPlan(billPlan);
         pr.setRechargeType(rechargeType);
         pr.setAmount(amount);
-        pr.setBalance(amount.add(cp.getBalance()));
+        //        pr.setBalance(amount.add(cp.getBalance()));
         pr.setUnitAmt(unitAmt);
         pr.setRemark(remark);
         pr.setManagerId(RequestThread.getOperatorId());
-        remoteProductService.saveProductRecharge(pr);
-        // 更新客户产品信息
+        openClientProductDTO.setProductRechargeDTO(pr);
         ClientProductDTO cpUpd = new ClientProductDTO();
         cpUpd.setId(clientProductId);
         cpUpd.setUpdateTime(current);
         cpUpd.setBillPlan(billPlan);
-        cpUpd.setBalance(amount.add(cp.getBalance()));
+        //        cpUpd.setBalance(amount.add(cp.getBalance()));
         cpUpd.setLatestRechargeId(productRechargeId);
-        remoteClientService.updateClientProductSkipNull(cpUpd);
+        openClientProductDTO.setClientProductDTO(cpUpd);
+        ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
+        resp.result(resultDTO.getResult());
     }
 
     @Override

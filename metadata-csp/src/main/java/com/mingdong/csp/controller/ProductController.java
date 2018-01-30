@@ -118,9 +118,12 @@ public class ProductController
     {
         BLResp resp = BLResp.build();
         Integer[] typeInts;
-        if(StringUtils.isBlank(selectedType)){
+        if(StringUtils.isBlank(selectedType))
+        {
             typeInts = null;
-        }else{
+        }
+        else
+        {
             String[] types = selectedType.split(",");
             typeInts = new Integer[types.length];
             for(int i = 0; i < types.length; i++)

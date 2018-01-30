@@ -7,9 +7,11 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
+import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductClientInfoDTO;
 import com.mingdong.core.model.dto.ProductClientInfoListDTO;
@@ -362,18 +364,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    @Transactional
-    public ResultDTO saveProductRecharge(ProductRechargeDTO productRechargeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductRecharge pr = new ProductRecharge();
-        EntityUtils.copyProperties(productRechargeDTO, pr);
-        productRechargeMapper.add(pr);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public ProductRechargeDTO getProductRechargeById(Long id)
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
@@ -440,31 +430,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public DictProductTypeDTO getDictProductTypeByCode(String code)
-    {
-        DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
-        DictProductType type = dictProductTypeMapper.findByCode(code);
-        if(type == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(type, dictProductTypeDTO);
-        return dictProductTypeDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveDictProductType(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, type);
-        dictProductTypeMapper.add(type);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public DictProductTypeDTO getDictProductTypeById(Long id)
     {
         DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
@@ -482,7 +447,20 @@ public class RemoteProductServiceImpl implements RemoteProductService
     public ResultDTO updateDictProductTypeSkipNull(DictProductTypeDTO dictProductTypeDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = new DictProductType();
+        DictProductType type = dictProductTypeMapper.findById(dictProductTypeDTO.getId());
+        if(type == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        dictProductTypeDTO.setEnabled(type.getEnabled());
+        type = dictProductTypeMapper.findByCode(dictProductTypeDTO.getCode());
+        if(type != null && !dictProductTypeDTO.getId().equals(type.getId()))
+        {
+            resultDTO.setResult(RestResult.CATEGORY_CODE_EXIST);
+            return resultDTO;
+        }
+        type = new DictProductType();
         EntityUtils.copyProperties(dictProductTypeDTO, type);
         dictProductTypeMapper.updateSkipNull(type);
         resultDTO.setResult(RestResult.SUCCESS);
@@ -515,91 +493,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return productTxtDTO;
     }
 
-    @Override
-    public ProductDTO getProductByCode(String code)
-    {
-        ProductDTO productDTO = new ProductDTO();
-        Product product = productMapper.findByCode(code);
-        if(product == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(product, productDTO);
-        return productDTO;
-    }
-
-    @Override
-    public ProductDTO getProductByName(String name)
-    {
-        ProductDTO productDTO = new ProductDTO();
-        Product product = productMapper.findByName(name);
-        if(product == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(product, productDTO);
-        return productDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveProductTxt(ProductTxtDTO productTxtDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductTxt productTxt = new ProductTxt();
-        EntityUtils.copyProperties(productTxtDTO, productTxt);
-        productTxtMapper.add(productTxt);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO saveProduct(ProductDTO productTxtDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Product product = new Product();
-        EntityUtils.copyProperties(productTxtDTO, product);
-        productMapper.add(product);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateProductById(ProductDTO productDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Product product = new Product();
-        EntityUtils.copyProperties(productDTO, product);
-        productMapper.updateById(product);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateProductTxtById(ProductTxtDTO productTxtDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ProductTxt productTxt = new ProductTxt();
-        EntityUtils.copyProperties(productTxtDTO, productTxt);
-        productTxtMapper.updateById(productTxt);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictProductTypeById(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType dictProductType = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, dictProductType);
-        dictProductTypeMapper.updateById(dictProductType);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
 
     @Override
     public ProductListDTO getProductListByStatus(Integer enabled)
@@ -746,6 +639,148 @@ public class RemoteProductServiceImpl implements RemoteProductService
             list.add(o);
         }
         return list;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addProductType(DictProductTypeDTO dictProductTypeDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictProductType type = dictProductTypeMapper.findByCode(dictProductTypeDTO.getCode());
+        if(type != null)
+        {
+            resultDTO.setResult(RestResult.CATEGORY_CODE_EXIST);
+            return resultDTO;
+        }
+        if(dictProductTypeDTO.getCode() == null)
+        {
+            resultDTO.setResult(RestResult.INVALID_PRODUCT_TYPE);
+            return resultDTO;
+        }
+        if(dictProductTypeDTO.getName() == null)
+        {
+            resultDTO.setResult(RestResult.INVALID_PRODUCT_NAME);
+            return resultDTO;
+        }
+        dictProductTypeMapper.add(type);
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addProduct(NewProductDTO newProductDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        // 1. 校验产品类型是否有效
+        DictProductType type = dictProductTypeMapper.findById(newProductDTO.getProductDTO().getTypeId().longValue());
+        if(type == null)
+        {
+            resultDTO.setResult(RestResult.INVALID_PRODUCT_TYPE);
+            return resultDTO;
+        }
+        // 2. 校验产品编码是否重复
+        Product product = productMapper.findByCode(newProductDTO.getProductDTO().getCode());
+        if(product != null)
+        {
+            resultDTO.setResult(RestResult.DUPLICATE_PRODUCT_CODE);
+            return resultDTO;
+        }
+        // 3. 校验产品名是否重复
+        product = productMapper.findByName(newProductDTO.getProductDTO().getName());
+        if(product != null)
+        {
+            resultDTO.setResult(RestResult.PRODUCT_NAME_EXIST);
+            return resultDTO;
+        }
+        product = new Product();
+        EntityUtils.copyProperties(newProductDTO.getProductDTO(), product);
+        productMapper.add(product);
+        if(newProductDTO.getProductTxtDTO() != null)
+        {
+            ProductTxt productTxt = new ProductTxt();
+            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
+            productTxtMapper.add(productTxt);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateProduct(NewProductDTO newProductDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Product product = productMapper.findByCode(newProductDTO.getProductDTO().getCode());
+        if(product != null && !newProductDTO.getProductDTO().getId().equals(product.getId()))
+        {
+            resultDTO.setResult(RestResult.DUPLICATE_PRODUCT_CODE);
+            return resultDTO;
+        }
+        product = productMapper.findById(newProductDTO.getProductDTO().getId());
+        if(product == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        product = new Product();
+        EntityUtils.copyProperties(newProductDTO.getProductDTO(), product);
+        productMapper.updateById(product);
+        ProductTxt productTxt = productTxtMapper.findById(newProductDTO.getProductDTO().getId());
+        if(productTxt == null)
+        {
+            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
+            productTxtMapper.add(productTxt);
+        }
+        else
+        {
+            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
+            productTxtMapper.updateById(productTxt);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateDictProductTypeStatusById(Long id, Integer enabled)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        DictProductType type = dictProductTypeMapper.findById(id);
+        if(type == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        if(enabled.equals(type.getEnabled()))
+        {
+            type.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
+            type.setUpdateTime(new Date());
+            dictProductTypeMapper.updateById(type);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO updateProductStatusById(Long id, Integer enabled)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Product product = productMapper.findById(id);
+        if(product == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        if(enabled.equals(product.getEnabled()))
+        {
+            product.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
+            product.setUpdateTime(new Date());
+            productMapper.updateById(product);
+        }
+        resultDTO.setResult(RestResult.SUCCESS);
+        return resultDTO;
     }
 
 }
