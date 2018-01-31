@@ -839,7 +839,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         client.setIndustryId(req.getIndustryId());
         client.setPrimaryUserId(userId);
         client.setManagerId(req.getManagerId());
-        client.setAccountQty(1);
+        client.setAccountQty(0);
         client.setDeleted(TrueOrFalse.FALSE);
         // save data
         clientContactMapper.addList(contactList);
