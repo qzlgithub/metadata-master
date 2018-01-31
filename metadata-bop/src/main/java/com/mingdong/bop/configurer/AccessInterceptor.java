@@ -8,12 +8,14 @@ import com.mingdong.bop.service.SystemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.Map;
 
 @Configuration
@@ -28,8 +30,14 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
+
+        RequestThread.setTimeLong(new Date().getTime());
         String path = request.getRequestURI(); // same with request.getServletPath()
-        logger.info("Request to {}", path);
+        logger.info("Request path {}", path);
+        logger.info("Request method {}", request.getMethod());
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        logger.info("HandlerMethod {}",
+                handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         ManagerSession ms = redisDao.getManagerSession(sessionId);
@@ -56,5 +64,12 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     {
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
+        long time = new Date().getTime();
+        Long timeLong = RequestThread.getTimeLong();
+        Long dif = time - timeLong;
+        Double second = dif / 1000.0;
+        logger.info("Time consuming {}", second + "s");
+        RequestThread.removeLong();
+        System.out.println("");
     }
 }

@@ -5,9 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class WebConfigBeans
@@ -28,6 +31,20 @@ public class WebConfigBeans
             GenericConversionService genericConversionService =
                     (GenericConversionService) initializer.getConversionService();
             genericConversionService.addConverter(new StringToDateConverter());
+        }
+    }
+
+    /**
+     * thymeleaf 全局静态变量设置
+     */
+    @Resource
+    private void configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
+        if(viewResolver != null) {
+            Map<String, Object> vars = new HashMap<>();
+//            vars.put("ctx", "/app/");
+//            vars.put("var1", "var1");
+//            vars.put("var2", "var2");
+            viewResolver.setStaticVariables(vars);
         }
     }
 }

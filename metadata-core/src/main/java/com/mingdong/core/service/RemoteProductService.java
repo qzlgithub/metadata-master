@@ -139,7 +139,6 @@ public interface RemoteProductService
      */
     ProductTxtDTO getProductTxtById(Long productId);
 
-
     /**
      * 根据状态获取产品信息列表
      *
