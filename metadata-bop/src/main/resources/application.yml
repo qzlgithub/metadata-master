@@ -3,12 +3,12 @@ server:
 
 spring:
   redis:
-    host: 192.168.2.139
+    host: 192.168.2.144
     port: 6379
     password: 123456
   thymeleaf:
     enabled: true
-    cache: false
+    cache: true
     check-template-location: true
     content-type: text/html
     encoding: UTF-8
@@ -20,4 +20,4 @@ node:
   id: 1
 dubbo:
   registry:
-    address: 192.168.2.139:2181
+    address: 192.168.2.144:2181
