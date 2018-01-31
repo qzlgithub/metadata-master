@@ -13,8 +13,6 @@ import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductClientInfoDTO;
-import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
@@ -331,26 +329,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductClientInfoListDTO getProductClientInfoListByClientId(Long clientId)
-    {
-        ProductClientInfoListDTO productClientInfoListDTO = new ProductClientInfoListDTO();
-        List<ProductClientInfoDTO> dataList = new ArrayList<>();
-        productClientInfoListDTO.setDataList(dataList);
-        List<ProductClientInfo> pciList = productClientInfoMapper.getListByClient(clientId);
-        if(CollectionUtils.isNotEmpty(pciList))
-        {
-            ProductClientInfoDTO productClientInfoDTO;
-            for(ProductClientInfo item : pciList)
-            {
-                productClientInfoDTO = new ProductClientInfoDTO();
-                EntityUtils.copyProperties(item, productClientInfoDTO);
-                dataList.add(productClientInfoDTO);
-            }
-        }
-        return productClientInfoListDTO;
-    }
-
-    @Override
     public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
@@ -662,6 +640,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
             resultDTO.setResult(RestResult.INVALID_PRODUCT_NAME);
             return resultDTO;
         }
+        type = new DictProductType();
+        EntityUtils.copyProperties(dictProductTypeDTO,type);
         dictProductTypeMapper.add(type);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
@@ -723,18 +703,21 @@ public class RemoteProductServiceImpl implements RemoteProductService
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        product = new Product();
-        EntityUtils.copyProperties(newProductDTO.getProductDTO(), product);
+        Product updateProduct = new Product();
+        EntityUtils.copyProperties(newProductDTO.getProductDTO(), updateProduct);
+        updateProduct.setCreateTime(product.getCreateTime());
         productMapper.updateById(product);
         ProductTxt productTxt = productTxtMapper.findById(newProductDTO.getProductDTO().getId());
         if(productTxt == null)
         {
+            productTxt = new ProductTxt();
             EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
             productTxtMapper.add(productTxt);
         }
         else
         {
-            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
+            productTxt.setUpdateTime(new Date());
+            productTxt.setContent(newProductDTO.getProductTxtDTO().getContent());
             productTxtMapper.updateById(productTxt);
         }
         resultDTO.setResult(RestResult.SUCCESS);

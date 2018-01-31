@@ -1,3 +1,96 @@
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['form', 'app', 'message'], function() {
+    var form = layui.form,
+        $ = layui.jquery,
+        layer = layui.layer;
+    message = layui.message;
+    $('#addindustry').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#add-industry'),
+            area: ['500px'],
+            shadeClose: true
+        });
+    });
+    form.on('switch(switchTest)', function() {
+        var id = $(this).parent().attr("obj-id");
+        enable_recharge_type(id, this.checked);
+    });
+});
+
+function enable_recharge_type(id, enabled) {
+    $.ajax({
+        type: "post",
+        url: "/config/industry/status",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": id,
+            "enabled": enabled ? 1 : 0
+        })
+    });
+}
+
+//展开合起
+(function() {
+    var d = document,
+        accordionToggles = d.querySelectorAll('.js-accordionTrigger'),
+        setAria,
+        setAccordionAria,
+        switchAccordion,
+        touchSupported = ('ontouchstart' in window),
+        pointerSupported = ('pointerdown' in window);
+    skipClickDelay = function(e) {
+        e.preventDefault();
+        e.target.click();
+    };
+    setAriaAttr = function(el, ariaType, newProperty) {
+        el.setAttribute(ariaType, newProperty);
+    };
+    setAccordionAria = function(el1, el2, expanded) {
+        switch(expanded) {
+            case "true":
+                setAriaAttr(el1, 'aria-expanded', 'true');
+                setAriaAttr(el2, 'aria-hidden', 'false');
+                break;
+            case "false":
+                setAriaAttr(el1, 'aria-expanded', 'false');
+                setAriaAttr(el2, 'aria-hidden', 'true');
+                break;
+            default:
+                break;
+        }
+    };
+    //function
+    switchAccordion = function(e) {
+        e.preventDefault();
+        var thisAnswer = e.target.parentNode.nextElementSibling;
+        var thisQuestion = e.target;
+        if(thisAnswer.classList.contains('is-collapsed')) {
+            setAccordionAria(thisQuestion, thisAnswer, 'true');
+        }
+        else {
+            setAccordionAria(thisQuestion, thisAnswer, 'false');
+        }
+        thisQuestion.classList.toggle('is-collapsed');
+        thisQuestion.classList.toggle('is-expanded');
+        thisAnswer.classList.toggle('is-collapsed');
+        thisAnswer.classList.toggle('is-expanded');
+        thisAnswer.classList.toggle('animateIn');
+    };
+    for(var i = 0, len = accordionToggles.length; i < len; i++) {
+        if(touchSupported) {
+            accordionToggles[i].addEventListener('touchstart', skipClickDelay, false);
+        }
+        if(pointerSupported) {
+            accordionToggles[i].addEventListener('pointerdown', skipClickDelay, false);
+        }
+        accordionToggles[i].addEventListener('click', switchAccordion, false);
+    }
+})();
 $(".add-child").on('click', function() {
     var parentId = $(this).attr("data-id");
     $("#l2-parent-id").val(parentId);

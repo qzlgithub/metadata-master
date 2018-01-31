@@ -36,18 +36,6 @@
         </trim>
     </insert>
 
-    <update id="updateById" parameterType="DictIndustry">
-        update `dict_industry`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `code`        = #{code},
-            `name`        = #{name},
-            `seq_no`      = #{seqNo},
-            `parent_id`   = #{parentId},
-            `enabled`     = #{enabled}
-        where `id` = #{id}
-    </update>
-
     <update id="updateSkipNull" parameterType="DictIndustry">
         update `dict_industry`
         <set>

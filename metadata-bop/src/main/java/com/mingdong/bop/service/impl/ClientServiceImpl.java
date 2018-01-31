@@ -36,17 +36,13 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
-import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductClientInfoDTO;
-import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.UpdateClientInfoDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
@@ -172,25 +168,6 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void editClientInfo(Long clientId, String corpName, String shortName, String license, Long industryId,
-            String name, String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp)
-    {
-        UpdateClientInfoDTO updateClientInfoDTO = new UpdateClientInfoDTO();
-        updateClientInfoDTO.setClientId(clientId);
-        updateClientInfoDTO.setCorpName(corpName);
-        updateClientInfoDTO.setShortName(shortName);
-        updateClientInfoDTO.setLicense(license);
-        updateClientInfoDTO.setIndustryId(industryId);
-        updateClientInfoDTO.setName(name);
-        updateClientInfoDTO.setPhone(phone);
-        updateClientInfoDTO.setEmail(email);
-        updateClientInfoDTO.setUserEnabled(userEnabled);
-        updateClientInfoDTO.setAccountEnable(accountEnabled);
-        ResultDTO resultDTO = remoteClientService.updateClientInfo(updateClientInfoDTO);
-        resp.result(resultDTO.getResult());
-    }
-
-    @Override
     public void getClientInfoForEdit(Long clientId, BLResp resp)
     {
         ClientDetailDTO dto = remoteClientService.getClientInfoForEdit(clientId);
@@ -245,85 +222,6 @@ public class ClientServiceImpl implements ClientService
             }
             resp.addData(Field.INDUSTRY_DICT, industryDict);
         }
-    }
-
-    @Override
-    public Map<String, Object> findClientDetail(Long clientId)
-    {
-        Map<String, Object> map = new HashMap<>();
-        ClientDTO client = remoteClientService.getClientByClientId(clientId);
-        if(client != null)
-        {
-            // 主账号
-            ClientUserDTO masterUser = remoteClientService.getClientUserByUserId(client.getPrimaryUserId());
-            map.put(Field.USERNAME, masterUser.getUsername());
-            map.put(Field.USER_ENABLED, masterUser.getEnabled());
-            // 子账号
-            ClientUserListDTO listByClientAndStatus = remoteClientService.getListByClientAndStatus(clientId,
-                    TrueOrFalse.TRUE, TrueOrFalse.FALSE);
-            List<ClientUserDTO> subUserList = listByClientAndStatus.getDataList();
-            List<Map<String, Object>> userList = new ArrayList<>();
-            for(ClientUserDTO user : subUserList)
-            {
-                if(!client.getPrimaryUserId().equals(user.getId()))
-                {
-                    Map<String, Object> m = new HashMap<>();
-                    m.put(Field.ID, user.getId());
-                    m.put(Field.USERNAME, user.getUsername());
-                    m.put(Field.NAME, user.getName());
-                    m.put(Field.PHONE, user.getPhone());
-                    userList.add(m);
-                }
-            }
-            // 开通产品
-            ProductClientInfoListDTO productClientInfoListByClientId =
-                    remoteProductService.getProductClientInfoListByClientId(clientId);
-            List<ProductClientInfoDTO> pciList = productClientInfoListByClientId.getDataList();
-            List<Map<String, Object>> opened = new ArrayList<>();
-            List<Map<String, Object>> toOpen = new ArrayList<>();
-            for(ProductClientInfoDTO pci : pciList)
-            {
-                Map<String, Object> m = new HashMap<>();
-                if(pci.getClientProductId() != null)
-                {
-                    m.put(Field.CLIENT_PRODUCT_ID, pci.getClientProductId() + "");
-                    m.put(Field.PRODUCT_NAME, pci.getProductName());
-                    m.put(Field.APP_ID, pci.getAppId());
-                    m.put(Field.BILL_PLAN, pci.getBillPlan());
-                    if(BillPlan.YEAR.getId().equals(pci.getBillPlan()))
-                    {
-                        m.put(Field.START_DATE, DateUtils.format(pci.getStartDate(), DateFormat.YYYY_MM_DD));
-                        m.put(Field.END_DATE, DateUtils.format(pci.getEndDate(), DateFormat.YYYY_MM_DD));
-                        m.put(Field.AMOUNT, NumberUtils.formatAmount(pci.getAmount()));
-                    }
-                    else
-                    {
-                        m.put(Field.BALANCE, NumberUtils.formatAmount(pci.getBalance()));
-                        m.put(Field.UNIT_AMT, NumberUtils.formatAmount(pci.getUnitAmt()));
-                    }
-                    opened.add(m);
-                }
-                else
-                {
-                    m.put(Field.PRODUCT_ID, pci.getProductId() + "");
-                    m.put(Field.PRODUCT_NAME, pci.getProductName());
-                    toOpen.add(m);
-                }
-            }
-            map.put(Field.OPENED, opened);
-            map.put(Field.TO_OPEN, toOpen);
-            // 其他
-            ManagerDTO manager = remoteManagerService.getManagerById(client.getManagerId());
-            map.put(Field.CLIENT_ID, clientId + "");
-            map.put(Field.CORP_NAME, client.getCorpName());
-            map.put(Field.SHORT_NAME, client.getShortName());
-            map.put(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(client.getIndustryId()));
-            map.put(Field.LICENSE, client.getLicense());
-            map.put(Field.REGISTER_DATE, DateUtils.format(client.getCreateTime(), DateFormat.YYYY_MM_DD));
-            map.put(Field.MANAGER_NAME, manager != null ? manager.getName() : "");
-            map.put(Field.USER_LIST, userList);
-        }
-        return map;
     }
 
     @Override

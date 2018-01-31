@@ -174,6 +174,7 @@ public class ProductServiceImpl implements ProductService
         product.setCostAmt(costAmt);
         product.setEnabled(enabled);
         product.setRemark(remark);
+        product.setUpdateTime(new Date());
         newProductDTO.setProductDTO(product);
         ProductTxtDTO productTxt = new ProductTxtDTO();
         productTxt.setId(id);

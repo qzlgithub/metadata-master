@@ -77,11 +77,6 @@
         where `name` = #{name}
     </select>
 
-    <select id="getByStatus" parameterType="Integer" resultMap="BaseResultMap">
-        select `id`, `name`, `remark`, `enabled` from `dict_recharge_type` where `deleted` = 0
-        <if test="enabled != null">and `enabled` = #{enabled}</if>
-    </select>
-
     <select id="getListByStatus" resultMap="BaseResultMap">
         <include refid="select_all"/>
         <where>

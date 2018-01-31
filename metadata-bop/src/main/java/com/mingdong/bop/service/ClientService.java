@@ -44,18 +44,7 @@ public interface ClientService
     BLResp getCorp(Integer enabled, String account, String cropName, String shortName, Long parentIndustryId,
             Long industryId, Page page);
 
-    void editClientInfo(Long clientId, String corpName, String shortName, String license, Long industryId, String name,
-            String phone, String email, Integer userEnabled, Integer accountEnabled, BLResp resp);
-
     void getClientInfoForEdit(Long clientId, BLResp resp);
-
-    /**
-     * 根据客户id获取客户详细信息（包括帐号、开通产品、账户余额）
-     *
-     * @param clientId
-     * @return
-     */
-    Map<String, Object> findClientDetail(Long clientId);
 
     /**
      * 更改客户状态同时修改帐号并新增客户帐号操作记录

@@ -1,3 +1,17 @@
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+});
 $(document).keydown(function(e) {
     if(e.keyCode === 13) {
         userLogin();

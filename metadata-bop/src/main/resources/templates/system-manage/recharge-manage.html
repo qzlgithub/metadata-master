@@ -130,47 +130,5 @@
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/recharge.manage.js}"></script>
-<script>
-    var message;
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['form', 'app', 'message'], function() {
-        var form = layui.form,
-            app = layui.app,
-            layer = layui.layer;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        $('#addclass').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#add-manage'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });
-        form.on('switch(switchTest)', function() {
-            var id = $(this).parent().attr("obj-id");
-            enable_recharge_type(id, this.checked);
-        });
-    });
-
-    function enable_recharge_type(id, enabled) {
-        $.ajax({
-            type: "post",
-            url: "/config/recharge/status",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "id": id,
-                "enabled": enabled ? 1 : 0
-            })
-        });
-    }
-</script>
 </body>
 </html>

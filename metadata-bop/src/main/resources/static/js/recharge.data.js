@@ -1,3 +1,39 @@
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message', 'laydate'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    laydate = layui.laydate;
+    //日期
+    laydate.render({
+        elem: '#date'
+    });
+    laydate.render({
+        elem: '#date1'
+    });
+});
+//对比时间
+$(document).ready(function() {
+    $(".contrast-time2").click(function() {
+        $(".time-input2").toggle();
+    });
+});
+//点击展开
+$(document).ready(function() {
+    $(".btn-slide").click(function() {
+        $("#panel").slideToggle("slow");
+        $(this).toggleClass("active");
+        return false;
+    });
+});
 $(function() {
     customerDataInit();
     showChart();

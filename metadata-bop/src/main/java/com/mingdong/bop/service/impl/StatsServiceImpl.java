@@ -376,7 +376,7 @@ public class StatsServiceImpl implements StatsService
         JSONObject rightObject = new JSONObject();
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
-        Date beforeDate = null;
+        Date beforeDate = new Date();
         switch(scopeTypeEnum)
         {
             case WEEK:

@@ -17,7 +17,5 @@ public interface DictRechargeTypeMapper
 
     void updateSkipNull(DictRechargeType dictRechargeType);
 
-    List<DictRechargeType> getByStatus(@Param("enabled") Integer enabled);
-
     List<DictRechargeType> getListByStatus(@Param("enabled") Integer enabled, @Param("deleted") Integer deleted);
 }

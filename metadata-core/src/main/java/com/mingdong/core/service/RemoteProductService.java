@@ -5,7 +5,6 @@ import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
@@ -70,14 +69,6 @@ public interface RemoteProductService
      * @return
      */
     DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page);
-
-    /**
-     * 根据客户id获取客户产品信息列表
-     *
-     * @param clientId
-     * @return
-     */
-    ProductClientInfoListDTO getProductClientInfoListByClientId(Long clientId);
 
     /**
      * 根据合同号获取充值记录

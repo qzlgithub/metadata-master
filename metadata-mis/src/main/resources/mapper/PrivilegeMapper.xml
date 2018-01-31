@@ -74,13 +74,6 @@
         from privilege
     </select>
 
-    <select id="getByParent" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `name`, `seq_no`, `enabled`
-        from privilege
-        where `parent_id` = #{parentId}
-    </select>
-
     <select id="getParentIdByChildId" parameterType="List" resultMap="BaseResultMap">
         select `parent_id` from `privilege` where `id` in
         <foreach collection="privilegeIdList" item="item" open="(" close=")" separator=",">

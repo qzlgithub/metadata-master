@@ -16,7 +16,6 @@ import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.UpdateClientInfoDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
@@ -312,14 +311,6 @@ public interface RemoteClientService
      * @return
      */
     ClientDetailDTO getClientInfoForEdit(Long clientId);
-
-    /**
-     * 更改客户信息和主帐号信息
-     *
-     * @param updateClientInfoDTO
-     * @return
-     */
-    ResultDTO updateClientInfo(UpdateClientInfoDTO updateClientInfoDTO);
 
     /**
      * 客户开通产品

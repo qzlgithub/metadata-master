@@ -2,6 +2,30 @@ $(function() {
     roleListInit();
 });
 
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    $('#pay').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: '<img src="../../static/build/images/pay.png" />',
+            area: ['500px', '250px'],
+            shadeClose: true
+        });
+    });
+});
+
 function roleListInit(){
     var obj = {
         pageNum: 1,

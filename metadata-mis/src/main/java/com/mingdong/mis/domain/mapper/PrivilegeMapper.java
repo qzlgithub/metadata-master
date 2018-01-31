@@ -10,8 +10,6 @@ public interface PrivilegeMapper
 {
     Privilege findById(Long id);
 
-    List<Privilege> getByParent(Long parentId);
-
     List<Privilege> getParentIdByChildId(@Param("privilegeIdList") List<Long> privilegeIdList);
 
     List<Privilege> getTopListByRole(Long roleId);

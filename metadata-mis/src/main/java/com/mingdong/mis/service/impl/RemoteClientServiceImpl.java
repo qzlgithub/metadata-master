@@ -29,7 +29,6 @@ import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UpdateClientInfoDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.UserListDTO;
@@ -976,37 +975,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         res.setContacts(contacts);
         return res;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientInfo(UpdateClientInfoDTO updateClientInfoDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Date current = new Date();
-        Client client = clientMapper.findById(updateClientInfoDTO.getClientId());
-        if(client == null)
-        {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
-        }
-        // 更新用户信息
-        ClientUser clientUser = clientUserMapper.findById(client.getPrimaryUserId());
-        clientUser.setUpdateTime(current);
-        clientUser.setName(updateClientInfoDTO.getName());
-        clientUser.setPhone(updateClientInfoDTO.getPhone());
-        clientUser.setEmail(updateClientInfoDTO.getEmail());
-        clientUser.setEnabled(updateClientInfoDTO.getUserEnabled());
-        clientUserMapper.updateById(clientUser);
-        // 更新客户信息
-        client.setUpdateTime(current);
-        client.setCorpName(updateClientInfoDTO.getCorpName());
-        client.setShortName(updateClientInfoDTO.getShortName());
-        client.setLicense(updateClientInfoDTO.getLicense());
-        client.setIndustryId(updateClientInfoDTO.getIndustryId());
-        clientMapper.updateById(client);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override

@@ -63,13 +63,6 @@
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
-        from `dict_product_type`
-        order by `create_time` desc
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
@@ -82,11 +75,6 @@
             `id`, `create_time`, `update_time`, `code`, `name`, `remark`, `enabled`
         from `dict_product_type`
         where `code` = #{code}
-    </select>
-
-    <select id="countAll" resultType="Integer">
-        select count(*)
-        from dict_product_type
     </select>
 
     <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">

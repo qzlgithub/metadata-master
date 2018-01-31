@@ -1,4 +1,8 @@
+var form;
 $(function() {
+    layui.use('form', function() {
+        form = layui.form;
+    });
     clientListInit();
 });
 
@@ -83,10 +87,10 @@ function getClientList(obj, pageFun) {
                 .replace("#{accountEnabled}", list[d].userEnabled === 1 ? "冻结账号" : "解冻账号");
                 $("#dataBody").append(dataTr);
             }
-            renderCheckbox();
             if(typeof pageFun === 'function') {
                 pageFun(obj, pages, total);
             }
+            renderCheckbox();
         }
     );
 }
@@ -267,7 +271,7 @@ function batchDeleted() {
                     data: JSON.stringify({"id": clientIds}),
                     success: function(data) {
                         if(data.errCode === '000000') {
-                            goPage($("#pageNum").val());
+                            clientListInit();
                             // $("#allChoose").removeAttr("checked");
                             layer.msg("账号已停用", {
                                 time: 2000
@@ -391,9 +395,6 @@ function getSubIndustry() {
 
 //重新渲染
 function renderCheckbox() {
-    ;!function() {
-        //无需再执行layui.use()方法加载模块，直接使用即可
-        var form = layui.form;
-        form.render('checkbox');
-    }();
+    //无需再执行layui.use()方法加载模块，直接使用即可
+    form.render('checkbox');
 }

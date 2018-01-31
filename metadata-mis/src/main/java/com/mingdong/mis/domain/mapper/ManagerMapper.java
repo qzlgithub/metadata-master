@@ -7,8 +7,6 @@ public interface ManagerMapper
 {
     void add(Manager manager);
 
-    void updateById(Manager manager);
-
     void updateSkipNull(Manager manager);
 
     Manager findById(Long id);

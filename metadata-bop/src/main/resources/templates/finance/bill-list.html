@@ -28,10 +28,10 @@
         <div class="p20">
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
-                    客户账号：
+                    公司简称：
                     <input type="text" id="shortName" name="shortName" placeholder="请输入" class="search-input"/>
                 </li>
-                <li>选择计费方式：
+                <li>计费方式：
                     <select name="modules" lay-verify="required" lay-search="" class="select-list" id="rechargeType">
                         <option value="">全部</option>
                         <option value="1">包年</option>
@@ -39,7 +39,7 @@
                         <option value="3">请求成功计费</option>
                     </select>
                 </li>
-                <li>选择产品：
+                <li>产品：
                     <div class="layui-inline">
                         <div class="layui-input-inline layui-form">
                             <select name="city" lay-verify="" lay-search="" class="select-list" id="productId">
@@ -102,18 +102,8 @@
 <script type="text/javascript" th:src="@{/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript" th:src="@{/js/bill.list.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
-<script>
-    layui.use('form', function() {
-        var form = layui.form;
-        //监听提交
-        form.on('submit(formDemo)', function(data) {
-            layer.msg(JSON.stringify(data.field));
-            return false;
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/bill.list.js}"></script>
 </body>
 </html>

@@ -1,4 +1,8 @@
+var form;
 $(function() {
+    layui.use('form', function() {
+        form = layui.form;
+    });
     getAccountList();
 });
 var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username}</td><td>#{name}</td><td>#{phone}</td>' +
@@ -38,7 +42,7 @@ function getAccountList() {
 
 function stopAccount(id) {
     var txt = $("#accountUserName" + id).text();
-    layer.confirm('是否确定停用' + txt + '？', {
+    layer.confirm('是否确定操作' + txt + '？', {
         btn: ['确定', '取消'],
         yes: function() {
             $(this).click();
@@ -125,20 +129,18 @@ function editAccount(id) {
                 $("#edit-name").val(obj.name);
                 $("#edit-phone").val(obj.phone);
                 $('input:radio[name="edit-enabled"]').prop("checked", false);
+                $('#account-status-div-id').html('');
+                var html = '';
                 if(obj.enabled === 1) {
-                    $('#edit-enabled-1').prop('checked', true);
-                    $('#edit-account').find('.layui-form-radio').removeClass('layui-form-radioed');
-                    $('#edit-account').find('.layui-icon').removeClass('layui-anim-scaleSpring');
-                    $('#edit-account').find('.layui-form-radio').first().addClass('layui-form-radioed');
-                    $('#edit-account').find('.layui-icon').first().addClass('layui-anim-scaleSpring');
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" checked/>';
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="停用" />';
                 }
                 else {
-                    $('#edit-enabled-0').prop('checked', false)
-                    $('#edit-account').find('.layui-form-radio').removeClass('layui-form-radioed');
-                    $('#edit-account').find('.layui-icon').removeClass('layui-anim-scaleSpring');
-                    $('#edit-account').find('.layui-form-radio:last').addClass('layui-form-radioed');
-                    $('#edit-account').find('.layui-icon:last').addClass('layui-anim-scaleSpring');
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" />';
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="停用" checked/>';
                 }
+                $('#account-status-div-id').append(html);
+                form.render('radio');
                 layer.open({
                     title: false,
                     type: 1,
@@ -229,7 +231,6 @@ function editSubmitAccount() {
             success: function(data) {
                 if(data.errCode === '000000') {
                     var obj = data.dataMap;
-                    $("#statusAction" + id).text("停用");
                     layer.msg("修改成功", {
                         time: 2000
                     }, function() {

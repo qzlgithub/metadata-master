@@ -13,13 +13,9 @@ public interface DictProductTypeMapper
 
     DictProductType findById(Long id);
 
-    List<DictProductType> getAll();
-
     DictProductType findByCode(String code);
 
     void updateSkipNull(DictProductType dictProductType);
-
-    int countAll();
 
     int countListByStatus(@Param("enabled") Integer enabled);
 

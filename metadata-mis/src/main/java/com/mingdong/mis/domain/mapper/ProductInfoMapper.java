@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface ProductInfoMapper
 {
-    List<ProductInfo> getAll();
-
-    int countAll();
 
     List<ProductInfo> getListByEnabled(@Param("enabled") Integer enabled);
 

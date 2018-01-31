@@ -347,23 +347,23 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
 
     @Override
     @Transactional
-    public ResultDTO editIndustryInfo(DictIndustryDTO industry)
+    public ResultDTO editIndustryInfo(DictIndustryDTO dictIndustryDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(industry.getCode());
-        if(byCode != null && !byCode.equals(industry.getId()))
+        DictIndustry byCode = dictIndustryMapper.findByCode(dictIndustryDTO.getCode());
+        if(byCode != null && !byCode.getId().equals(dictIndustryDTO.getId()))
         {
             resultDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
             return resultDTO;
         }
-        DictIndustry byId = dictIndustryMapper.findById(industry.getId());
+        DictIndustry byId = dictIndustryMapper.findById(dictIndustryDTO.getId());
         if(byId == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
         DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(industry, dictIndustry);
+        EntityUtils.copyProperties(dictIndustryDTO, dictIndustry);
         dictIndustryMapper.updateSkipNull(dictIndustry);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
@@ -457,10 +457,10 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
                 sysConfig.setValue(item.getValue());
                 sysConfigMapper.add(sysConfig);
             }
-            else if(!sysConfig.getValue().equals(sysConfig.getValue()))
+            else if(!sysConfig.getValue().equals(item.getValue()))
             {
                 sysConfig.setUpdateTime(current);
-                sysConfig.setValue(sysConfig.getValue());
+                sysConfig.setValue(item.getValue());
                 sysConfigMapper.updateById(sysConfig);
             }
         }
