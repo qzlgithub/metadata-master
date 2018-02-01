@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @Configuration
 public class ApiAccessInterceptor extends HandlerInterceptorAdapter
@@ -27,11 +28,16 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
+        RequestThread.setTimeLong(new Date().getTime());
         String path = request.getRequestURI(); // same with request.getServletPath()
         logger.info("Request to {}", path);
+        logger.info("Request method {}", request.getMethod());
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
-            LoginRequired annotation = ((HandlerMethod) handler).getMethod().getAnnotation(LoginRequired.class);
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            logger.info("HandlerMethod {}",
+                    handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
+            LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
             if(annotation != null)
             {
                 HttpSession session = request.getSession();
@@ -56,5 +62,12 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
     {
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
+        long time = new Date().getTime();
+        Long timeLong = RequestThread.getTimeLong();
+        Long dif = time - timeLong;
+        Double second = dif / 1000.0;
+        RequestThread.removeLong();
+        logger.info("Time consuming {}", second + "s");
+        System.out.println("");
     }
 }

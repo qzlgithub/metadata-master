@@ -9,6 +9,23 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
+    private static final ThreadLocal<Long> threadHolderLong = new ThreadLocal<>();
+
+    public static Long getTimeLong()
+    {
+        return threadHolderLong.get();
+    }
+
+    public static void setTimeLong(Long time)
+    {
+        threadHolderLong.set(time);
+    }
+
+    public static void removeLong()
+    {
+        threadHolderLong.remove();
+    }
+
     public static void set(Long clientId, Long userId, String username, Integer primary)
     {
         RequestHolder holder = new RequestHolder();

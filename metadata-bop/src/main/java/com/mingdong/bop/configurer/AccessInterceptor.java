@@ -36,8 +36,11 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
         logger.info("Request path {}", path);
         logger.info("Request method {}", request.getMethod());
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        logger.info("HandlerMethod {}",
-                handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
+        if(handler.getClass().isAssignableFrom(HandlerMethod.class))
+        {
+            logger.info("HandlerMethod {}",
+                    handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
+        }
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         ManagerSession ms = redisDao.getManagerSession(sessionId);
