@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <p id="home-greeting"></p>
                 <p class="col2 important pl25">您的服务目前各项指标正常，请放心使用~</p>
-                <p class="ml20"><span class="appid-btn">查看处理</span></p>
+                <!--p class="ml20"><span class="appid-btn">查看处理</span></p-->
             </div>
             <div class="col-md-6 bd-left pl20">
                 <p class="p0 important">
@@ -59,7 +59,7 @@
     <!--服务列表 left-->
     <div class="development-nav">
         <dl id="mms1" class="serve-list">
-            <dt>我的服务<span class="fr col3 pr10 fb-normal fz-12 important">查看全部</span></dt>
+            <dt>我的服务<a th:href="@{/product/mine.html}" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
             <dd>
                 <ul class="row mr0 ml0">
                     <li th:each="o : ${openedList}">
@@ -95,7 +95,7 @@
             </dd>
         </dl>
         <dl id="mms2" class="serve-list">
-            <dt>新服务<span class="fr col3 pr10 fb-normal fz-12 important">查看全部</span></dt>
+            <dt>新服务<a th:href="@{/product/all.html}" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
             <dd>
                 <ul class="row mr0 ml0">
                     <li th:each="o : ${toOpenList}">
