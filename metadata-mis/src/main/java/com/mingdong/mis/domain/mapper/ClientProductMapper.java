@@ -13,4 +13,5 @@ public interface ClientProductMapper
 
     ClientProduct findByClientAndProduct(@Param("clientId") Long clientId, @Param("productId") Long productId);
 
+    ClientProduct findByAppId(String appId);
 }

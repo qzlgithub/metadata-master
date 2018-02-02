@@ -30,7 +30,6 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
-
         RequestThread.setTimeLong(new Date().getTime());
         String path = request.getRequestURI(); // same with request.getServletPath()
         logger.info("Request path {}", path);

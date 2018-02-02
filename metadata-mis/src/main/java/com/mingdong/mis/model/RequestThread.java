@@ -4,13 +4,9 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(String requestIp, Long productId, Long clientId, Long userId)
+    public static void init()
     {
         RequestHolder holder = new RequestHolder();
-        holder.setRequestIp(requestIp);
-        holder.setProductId(productId);
-        holder.setClientId(clientId);
-        holder.setUserId(userId);
         threadHolder.set(holder);
     }
 
@@ -19,9 +15,14 @@ public class RequestThread
         return threadHolder.get();
     }
 
-    public static String getRequestIp()
+    public static String getIp()
     {
-        return get().getRequestIp();
+        return get().getIp();
+    }
+
+    public static void setIp(String ip)
+    {
+        get().setIp(ip);
     }
 
     public static Long getProductId()
@@ -29,14 +30,39 @@ public class RequestThread
         return get().getProductId();
     }
 
+    public static void setProductId(Long productId)
+    {
+        get().setProductId(productId);
+    }
+
     public static Long getClientId()
     {
         return get().getClientId();
     }
 
+    public static void setClientId(Long clientId)
+    {
+        get().setClientId(clientId);
+    }
+
     public static Long getUserId()
     {
         return get().getUserId();
+    }
+
+    public static void setUserId(Long userId)
+    {
+        get().setUserId(userId);
+    }
+
+    public static MetadataRes getResult()
+    {
+        return get().getRes();
+    }
+
+    public static void setResult(MetadataRes result)
+    {
+        get().setRes(result);
     }
 
     public static void cleanup()

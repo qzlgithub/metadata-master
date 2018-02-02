@@ -1,22 +1,13 @@
 package com.mingdong.mis.model;
 
-public class RequestHolder
+import com.mingdong.common.util.StringUtils;
+
+public class UserAuth
 {
-    private String ip;
     private Long productId;
     private Long clientId;
     private Long userId;
-    private MetadataRes res;
-
-    public String getIp()
-    {
-        return ip;
-    }
-
-    public void setIp(String ip)
-    {
-        this.ip = ip;
-    }
+    private String host;
 
     public Long getProductId()
     {
@@ -48,13 +39,18 @@ public class RequestHolder
         this.userId = userId;
     }
 
-    public MetadataRes getRes()
+    public String getHost()
     {
-        return res;
+        return host;
     }
 
-    public void setRes(MetadataRes res)
+    public void setHost(String host)
     {
-        this.res = res;
+        this.host = host;
+    }
+
+    public boolean auth()
+    {
+        return !StringUtils.isNullBlank(host) && productId != null && clientId != null && userId != null;
     }
 }

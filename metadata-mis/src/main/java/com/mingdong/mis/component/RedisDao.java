@@ -1,6 +1,9 @@
 package com.mingdong.mis.component;
 
+import com.alibaba.fastjson.JSON;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
+import com.mingdong.mis.model.UserAuth;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -22,9 +25,31 @@ public class RedisDao extends RedisBaseDao
         }
     }
 
+    public void saveUserAuth(String token, UserAuth userAuth, long seconds)
+    {
+        String str = JSON.toJSONString(userAuth);
+        setEx(DB.USER_AUTH, token, str, seconds);
+    }
+
+    public void dropUserAuth(String token)
+    {
+        del(DB.USER_AUTH, token);
+    }
+
+    public UserAuth findAuth(String token)
+    {
+        String str = get(DB.USER_AUTH, token);
+        if(StringUtils.isNullBlank(str))
+        {
+            return null;
+        }
+        return JSON.parseObject(str, UserAuth.class);
+    }
+
     interface DB
     {
         int LOCK_CLIENT_PRODUCT = 1;
+        int USER_AUTH = 2;
     }
 
     interface Key

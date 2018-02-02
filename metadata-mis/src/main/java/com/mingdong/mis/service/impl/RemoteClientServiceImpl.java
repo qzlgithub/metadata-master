@@ -411,7 +411,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
         if(up != null)
         {
-            dto.setAppKey(up.getAppKey());
+            dto.setAppKey(up.getAppSecret());
             dto.setReqHost(up.getReqHost());
         }
         return dto;
@@ -443,7 +443,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             up.setUpdateTime(current);
             up.setUserId(userId);
             up.setProductId(productId);
-            up.setAppKey(appKey);
+            up.setAppSecret(appKey);
             up.setReqHost(reqHost);
             userProductMapper.add(up);
         }
@@ -452,7 +452,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             UserProduct upUpd = new UserProduct();
             upUpd.setId(up.getId());
             upUpd.setUpdateTime(current);
-            upUpd.setAppKey(appKey);
+            upUpd.setAppSecret(appKey);
             upUpd.setReqHost(reqHost);
             userProductMapper.updateSkipNull(upUpd);
         }

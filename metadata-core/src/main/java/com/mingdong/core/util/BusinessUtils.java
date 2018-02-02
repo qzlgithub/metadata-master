@@ -2,6 +2,7 @@ package com.mingdong.core.util;
 
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -95,5 +96,25 @@ public class BusinessUtils
     public static boolean checkAccountValid(BigDecimal unitAmt, BigDecimal balance)
     {
         return unitAmt != null && balance != null && balance.doubleValue() >= unitAmt.doubleValue();
+    }
+
+    public static String createAccessToken()
+    {
+        String s1 = StringUtils.getRandomString(32);
+        String s2 = StringUtils.getUuid();
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < 32; i++)
+        {
+            sb.append(s1.charAt(i)).append(s2.charAt(i));
+        }
+        return sb.toString();
+    }
+
+    public static Date getTokenValidTime(Date date)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
     }
 }

@@ -13,6 +13,13 @@
         <result column="latest_recharge_id" property="latestRechargeId" jdbcType="TINYINT" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
+            `latest_recharge_id`
+        from `client_product`
+    </sql>
+
     <insert id="add" parameterType="ClientProduct">
         insert into `client_product`
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -55,19 +62,17 @@
     </update>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-            `latest_recharge_id`
-        from `client_product`
+        <include refid="select_all" />
         where `id` = #{id}
     </select>
 
     <select id="findByClientAndProduct" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-            `latest_recharge_id`
-        from `client_product`
-        where `client_id` = #{clientId}
-              and `product_id` = #{productId}
+        <include refid="select_all" />
+        where `client_id` = #{clientId} and `product_id` = #{productId}
+    </select>
+
+    <select id="findByAppId" parameterType="String" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `app_id` = #{appId}
     </select>
 </mapper>

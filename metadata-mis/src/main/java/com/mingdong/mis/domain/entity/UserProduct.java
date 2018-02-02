@@ -9,8 +9,10 @@ public class UserProduct
     private Date updateTime;
     private Long userId;
     private Long productId;
-    private String appKey;
+    private String appSecret;
     private String reqHost;
+    private String accessToken;
+    private Date validTime;
 
     public Long getId()
     {
@@ -62,14 +64,14 @@ public class UserProduct
         this.productId = productId;
     }
 
-    public String getAppKey()
+    public String getAppSecret()
     {
-        return appKey;
+        return appSecret;
     }
 
-    public void setAppKey(String appKey)
+    public void setAppSecret(String appSecret)
     {
-        this.appKey = appKey;
+        this.appSecret = appSecret;
     }
 
     public String getReqHost()
@@ -80,5 +82,25 @@ public class UserProduct
     public void setReqHost(String reqHost)
     {
         this.reqHost = reqHost;
+    }
+
+    public String getAccessToken()
+    {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken)
+    {
+        this.accessToken = accessToken;
+    }
+
+    public Date getValidTime()
+    {
+        return validTime;
+    }
+
+    public void setValidTime(Date validTime)
+    {
+        this.validTime = validTime;
     }
 }
