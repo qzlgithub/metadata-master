@@ -98,6 +98,9 @@ public class BusinessUtils
         return unitAmt != null && balance != null && balance.doubleValue() >= unitAmt.doubleValue();
     }
 
+    /**
+     * 创建一个全局唯一的用户接入凭证
+     */
     public static String createAccessToken()
     {
         String s1 = StringUtils.getRandomString(32);
