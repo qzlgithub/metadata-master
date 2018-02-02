@@ -9,6 +9,8 @@ import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
@@ -17,8 +19,6 @@ import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ProductReqInfoListDTO;
-import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
@@ -132,36 +132,35 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
                 toDate, page);
-        if(productReqListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
+        if(apiReqInfoListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(productReqListDTO.getResultDTO().getResult());
+            resp.result(apiReqInfoListDTO.getResultDTO().getResult());
             return;
         }
-        List<ProductRequestInfoDTO> dataList = productReqListDTO.getProductRequestDTOList();
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRequestInfoDTO item : dataList)
+            for(ApiReqInfoDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, item.getId());
-                map.put(Field.CALL_TIME, DateUtils.format(item.getCallTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.CORP_NAME, item.getCorpName());
-                map.put(Field.USERNAME, item.getUsername());
-                map.put(Field.PRODUCT_NAME, item.getProductName());
-                map.put(Field.SHORT_NAME, item.getShortName());
-                map.put(Field.SUC, item.getSuc() + "");
-                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getUnitAmt()));
+                map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, item.getId() + "");
+                map.put(Field.PRODUCT_NAME, item.getProductName() == null?"":item.getProductName());
+                map.put(Field.BILL_PLAN, BillPlan.getById(item.getBillPlan()).getName());
+                map.put(Field.HIT, TrueOrFalse.TRUE.equals(item.getHit())?"是":"否");
+                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getFee()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 list.add(map);
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE, productReqListDTO.getResultDTO().getCode());
-        resp.addData(Field.TOTAL, productReqListDTO.getTotal());
-        resp.addData(Field.PAGES, productReqListDTO.getPages());
+        resp.addData(Field.CODE, apiReqInfoListDTO.getResultDTO().getCode());
+        resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
+        resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
@@ -170,20 +169,22 @@ public class ProductServiceImpl implements ProductService
     public XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet("接口调用记录");
+        XSSFSheet sheet = wb.createSheet("历史消费记录");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("调用时间");
-        row.createCell(1).setCellValue("产品服务");
-        row.createCell(2).setCellValue("2");
-        row.createCell(3).setCellValue("3");
-        row.createCell(4).setCellValue("4");
+        row.createCell(0).setCellValue("时间");
+        row.createCell(1).setCellValue("消费单号");
+        row.createCell(2).setCellValue("产品服务");
+        row.createCell(3).setCellValue("计费方式");
+        row.createCell(4).setCellValue("是否成功");
+        row.createCell(5).setCellValue("消费(元)");
+        row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ProductReqInfoListDTO productReqListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
                 toDate, page);
-        List<ProductRequestInfoDTO> dataList = productReqListDTO.getProductRequestDTOList();
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
-            ProductRequestInfoDTO dataDTO;
+            ApiReqInfoDTO dataDTO;
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
@@ -193,12 +194,14 @@ public class ProductServiceImpl implements ProductService
                 dataDTO = dataList.get(i);
                 dataRow = sheet.createRow(i + 1);
                 cell = dataRow.createCell(0);
-                cell.setCellValue(dataDTO.getCallTime());
+                cell.setCellValue(dataDTO.getCreateTime());
                 cell.setCellStyle(timeStyle);
-                dataRow.createCell(1).setCellValue(dataDTO.getProductName());
-                dataRow.createCell(2).setCellValue(dataDTO.getSuc() + "");
-                dataRow.createCell(3).setCellValue(NumberUtils.formatAmount(dataDTO.getUnitAmt()));
-                dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
+                dataRow.createCell(1).setCellValue(dataDTO.getRequestNo());
+                dataRow.createCell(2).setCellValue(dataDTO.getProductName());
+                dataRow.createCell(3).setCellValue(BillPlan.getById(dataDTO.getBillPlan()).getName());
+                dataRow.createCell(4).setCellValue(TrueOrFalse.TRUE.equals(dataDTO.getHit())?"是":"否");
+                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataDTO.getFee()));
+                dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
             }
         }
         return wb;

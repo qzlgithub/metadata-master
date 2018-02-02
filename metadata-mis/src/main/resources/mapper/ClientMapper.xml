@@ -108,4 +108,9 @@
         <include refid="select_all" />
         where `primary_user_id` = #{primaryAccountId}
     </select>
+
+    <select id="findByCorpNameOrCorpLicense" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `corp_name` = #{corpName} or `license` = #{license}
+    </select>
 </mapper>

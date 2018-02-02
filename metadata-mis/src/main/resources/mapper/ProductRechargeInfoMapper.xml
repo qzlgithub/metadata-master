@@ -106,7 +106,7 @@
             left join `dict_recharge_type` rt
                 on pr.`recharge_type` = rt.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and pr.`recharge_type` = #{typeId}</if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
@@ -130,7 +130,7 @@
             left join `dict_recharge_type` rt
                 on pr.`recharge_type` = rt.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and pr.`recharge_type` = #{typeId}</if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
@@ -154,7 +154,7 @@
             left join `dict_recharge_type` rt
                 on pr.`recharge_type` = rt.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and pr.`recharge_type` = #{typeId}</if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>

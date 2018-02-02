@@ -796,6 +796,15 @@ public class RemoteClientServiceImpl implements RemoteClientService
             res.setResult(RestResult.USERNAME_EXIST);
             return res;
         }
+        Client ct = clientMapper.findByCorpNameOrCorpLicense(req.getCorpName(),req.getLicense());
+        if(ct != null && ct.getCorpName().equals(req.getCorpName())){
+            res.setResult(RestResult.CLIENT_NAME_EXIST);
+            return res;
+        }
+        if(ct != null && ct.getLicense().equals(req.getLicense())){
+            res.setResult(RestResult.CLIENT_LICENSE_EXIST);
+            return res;
+        }
         Date current = new Date();
         Long clientId = IDUtils.getClientId(param.getNodeId());
         Long userId = IDUtils.createUserId(param.getNodeId());

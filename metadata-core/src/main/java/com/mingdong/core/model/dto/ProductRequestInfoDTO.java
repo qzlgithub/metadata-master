@@ -7,14 +7,21 @@ import java.util.Date;
 public class ProductRequestInfoDTO implements Serializable
 {
     private Long id;
-    private Date callTime;
+    private Date createTime;
+    private Date updateTime;
+    private Long userId;
+    private Long clientId;
+    private Long productId;
+    private Integer hit;//成功与否
+    private Integer billPlan;//消费方式
+    private String requestIp;//连接ip
+    private BigDecimal fee;//消费金额
+    private BigDecimal balance;//余额
     private String corpName;
     private String shortName;
     private String username;
     private String productName;
-    private Integer suc;
-    private BigDecimal unitAmt;
-    private BigDecimal balance;
+    private String billPlanName;
 
     public Long getId()
     {
@@ -24,6 +31,106 @@ public class ProductRequestInfoDTO implements Serializable
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public Date getCreateTime()
+    {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime)
+    {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime()
+    {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime)
+    {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
+
+    public Long getProductId()
+    {
+        return productId;
+    }
+
+    public void setProductId(Long productId)
+    {
+        this.productId = productId;
+    }
+
+    public Integer getHit()
+    {
+        return hit;
+    }
+
+    public void setHit(Integer hit)
+    {
+        this.hit = hit;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
+    }
+
+    public String getRequestIp()
+    {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp)
+    {
+        this.requestIp = requestIp;
+    }
+
+    public BigDecimal getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee)
+    {
+        this.fee = fee;
+    }
+
+    public BigDecimal getBalance()
+    {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance)
+    {
+        this.balance = balance;
     }
 
     public String getCorpName()
@@ -56,16 +163,6 @@ public class ProductRequestInfoDTO implements Serializable
         this.username = username;
     }
 
-    public Date getCallTime()
-    {
-        return callTime;
-    }
-
-    public void setCallTime(Date callTime)
-    {
-        this.callTime = callTime;
-    }
-
     public String getProductName()
     {
         return productName;
@@ -76,33 +173,13 @@ public class ProductRequestInfoDTO implements Serializable
         this.productName = productName;
     }
 
-    public Integer getSuc()
+    public String getBillPlanName()
     {
-        return suc;
+        return billPlanName;
     }
 
-    public void setSuc(Integer suc)
+    public void setBillPlanName(String billPlanName)
     {
-        this.suc = suc;
-    }
-
-    public BigDecimal getUnitAmt()
-    {
-        return unitAmt;
-    }
-
-    public void setUnitAmt(BigDecimal unitAmt)
-    {
-        this.unitAmt = unitAmt;
-    }
-
-    public BigDecimal getBalance()
-    {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance)
-    {
-        this.balance = balance;
+        this.billPlanName = billPlanName;
     }
 }

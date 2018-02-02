@@ -112,7 +112,8 @@ public class ClientController
         // TODO FIX...
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
-        BLResp resp = tradeService.testList2(productId, clientId, time, page);
+//        BLResp resp = tradeService.testList2(productId, clientId, time, page);
+        BLResp resp = BLResp.build();
         return resp.getDataMap();
 
     }
@@ -131,7 +132,8 @@ public class ClientController
     {
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
-        BLResp resp = tradeService.testList3(clientId, time, page);
+//        BLResp resp = tradeService.testList3(clientId, time, page);
+        BLResp resp = BLResp.build();
         return resp.getDataMap();
     }
 
@@ -149,7 +151,8 @@ public class ClientController
     {
         Page page = new Page(pageNum, pageSize);
         //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
-        BLResp resp = tradeService.testList4(clientId, time, page);
+//        BLResp resp = tradeService.testList4(clientId, time, page);
+        BLResp resp = BLResp.build();
         return resp.getDataMap();
     }
 

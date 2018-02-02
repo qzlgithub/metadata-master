@@ -15,7 +15,7 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `user_id`, `product_id`, app_secret, `req_host`, `access_token`,
+            `id`, `create_time`, `update_time`, `user_id`, `product_id`, `app_secret`, `req_host`, `access_token`,
             `valid_time`
         from `user_product`
     </sql>

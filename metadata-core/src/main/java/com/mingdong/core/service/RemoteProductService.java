@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
@@ -11,7 +12,6 @@ import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ProductReqInfoListDTO;
 import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 
@@ -30,7 +30,7 @@ public interface RemoteProductService
     /**
      * 根据条件获取获取客户消费记录
      */
-    ProductReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page);
 
     /**

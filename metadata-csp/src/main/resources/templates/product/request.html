@@ -23,15 +23,8 @@
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" href="images/icon/apple-touch-icon-precomposed.png"/>
-    <link rel="shortcut icon" href="images/icon/favicon.png"/>
+    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
 
 </head>
 
@@ -44,7 +37,7 @@
 <!--advimg end-->
 <!--面包屑-->
 <div class="container mt45 mb20">
-    位置：<a href=""> 主页</a> > <a href="">我的服务</a> > <a href="">服务详情</a> > <span class="col2">历史充值</span>
+    位置：<a th:href="@{/home.html}">主页</a> > <a th:href="@{/product/mine.html}">我的服务</a> > <span class="col2">历史消费</span>
 </div>
 <!--面包屑 end-->
 <!--内容-->
@@ -57,28 +50,35 @@
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
             <!--tab-->
             <div class="mt30 pl10 pr10 pb30">
-                <div class="border-title">服务充值记录</div>
+                <div class="border-title">历史消费记录</div>
                 <!--搜索-->
                 <ul class="search-list clearfix border-b2 pb15 mt20">
                     <li>产品服务：
-                        <select name="modules" class="select-list">
+                        <select id="product-sel" name="modules" class="select-list">
                             <option value="">全部</option>
-                            <option value="1">是</option>
-                            <option value="2">否</option>
+                            <option th:each="o : ${productList}" th:value="${o.id}" th:text="${o.name}"
+                                    th:selected="${o.id} eq ${productId}"></option>
                         </select>
                     </li>
-                    <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date" id="date1"
-                                                                                autocomplete="off" class="layui-input"/></em><i
-                            class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                     <li>
-                        <button class="check-button">查询</button>
+                        统计时间：
+                        <div class="ta_date" id="div_date1">
+                            <span class="date_title" id="date"></span>
+                            <a class="opt_sel" id="input_trigger" href="#">
+                                <i class="i_orderd"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="hidden" id="from-date" th:value="${fromDate}"/>
+                        <input type="hidden" id="to-date" th:value="${toDate}"/>
+                        <button class="check-button" id="search">查询</button>
                     </li>
                 </ul>
                 <!--搜索 end-->
                 <div class="clearfix mt30">
-                    <em class="fz-14 pl15 col4 pt15">共50,000条</em>
                     <span class="fr mb10">
-                一次最多导出1000条<a href="customer-add.html" class="add-button ml10">导出</a>
+                一次最多导出1000条<a href="javascript:" class="add-button ml10" onclick="requestExport()">导出</a>
             </span>
                 </div>
                 <table class="layui-table mt10">
@@ -86,67 +86,17 @@
                     <tr>
                         <th>时间</th>
                         <th>消费单号</th>
-                        <th>账号</th>
                         <th>产品服务</th>
                         <th>计费方式</th>
                         <th>是否成功</th>
-                        <th>是否有结果</th>
-                        <th>单价(元/次)</th>
+                        <th>消费(元)</th>
                         <th>余额(元)</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>001</td>
-                        <td>admin</td>
-                        <td class="position-r">阿里巴巴<i class="child-icon">子</i></td>
-                        <td>阿里巴巴</td>
-                        <td>购物/网上商超</td>
-                        <td>张三</td>
-                        <td>18733035161</td>
-                        <td>张三</td>
-                        <td>18733035161</td>
-                    </tr>
+                    <tbody id="data-list">
                     </tbody>
                 </table>
-                <!--page-->
-                <div class="layui-table-tool mt20">
-                    <div class="layui-inline layui-table-page" id="layui-table-page1">
-                        <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                            <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
-                                <i class="layui-icon"></i>
-                            </a>
-                            <span class="layui-laypage-curr">
-                          <em class="layui-laypage-em"></em>
-                          <em>1</em>
-                      </span>
-                            <a href="javascript:;" data-page="2">2</a>
-                            <a href="javascript:;" data-page="3">3</a>
-                            <span class="layui-laypage-spr">…</span>
-                            <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
-                            <a href="javascript:;" class="layui-laypage-next" data-page="2">
-                                <i class="layui-icon"></i>
-                            </a>
-                            <span class="layui-laypage-skip">到第<input type="text" min="1" value="1" class="layui-input"/>页<button
-                                    type="button" class="layui-laypage-btn">确定</button></span>
-                            <span class="layui-laypage-count">共 1000 条</span>
-                            <span class="layui-laypage-limits">
-                          <select lay-ignore="">
-                              <option value="10">10 条/页</option>
-                              <option value="20">20 条/页</option>
-                              <option value="30" selected="">30 条/页</option>
-                              <option value="40">40 条/页</option>
-                              <option value="50">50 条/页</option>
-                              <option value="60">60 条/页</option>
-                              <option value="70">70 条/页</option>
-                              <option value="80">80 条/页</option>
-                              <option value="90">90 条/页</option>
-                          </select>
-                      </span>
-                        </div>
-                    </div>
-                </div>
-                <!--page end-->
+                <div class="box mt30" id="pagination"></div>
             </div>
             <!--tab-->
         </div>
@@ -181,30 +131,9 @@
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script>
-    var message;
-    layui.config({
-        base: '../build/js/'
-    }).use(['app', 'message', 'laydate'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        laydate = layui.laydate;
-        //日期
-        laydate.render({
-            elem: '#date'
-        });
-        laydate.render({
-            elem: '#date1'
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
+<script type="text/javascript" th:src="@{/js/request.js}"></script>
 </body>
 </html>
   

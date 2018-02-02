@@ -21,6 +21,7 @@
     <link href="../css/base.css" rel="stylesheet"/>
     <link href="../css/style.css" rel="stylesheet"/>
     <link href="../css/common.css" rel="stylesheet"/>
+    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
 </head>
 
@@ -28,7 +29,7 @@
 <div th:include="common :: top"></div>
 <div class="masthead pb0"></div>
 <div class="container mt45 mb20">
-    位置：<a href="">主页</a> > <a href="">我的服务</a> > <a href="">服务详情</a> > <span class="col2">历史充值</span>
+    位置：<a th:href="@{/home.html}">主页</a> > <a th:href="@{/product/mine.html}">我的服务</a> > <span class="col2">历史充值</span>
 </div>
 
 <div class="container mt20 mb20 bg-white">
@@ -36,9 +37,9 @@
         <div th:include="product-common :: left"></div>
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
             <div class="mt30 pl10 pr10 pb30">
-                <div class="border-title">服务充值记录</div>
+                <div class="border-title">历史充值记录</div>
                 <ul class="search-list clearfix border-b2 pb15 mt20">
-                    <li>服务名称：
+                    <li>产品服务：
                         <select id="product-sel" class="select-list">
                             <option value="">全部</option>
                             <option th:each="o : ${productList}" th:value="${o.id}" th:text="${o.name}"
@@ -55,21 +56,14 @@
                         </div>
                     </li>
                     <li>
-                        <input type="hidden" id="page-num"/>
-                        <input type="hidden" id="page-size"/>
                         <input type="hidden" id="from-date" th:value="${fromDate}"/>
                         <input type="hidden" id="to-date" th:value="${toDate}"/>
                         <button class="check-button" id="search">查询</button>
                     </li>
                 </ul>
                 <div class="clearfix mt30">
-                    <em class="fz-14 pl15 col4 pt15">
-                        共
-                        <md id="total-qty">0</md>
-                        条
-                    </em>
                     <span class="fr mb10">
-                        一次最多导出1000条<a href="customer-add.html" class="add-button ml10">导出</a>
+                        一次最多导出1000条<a href="javascript:" class="add-button ml10" onclick="rechargeExport()">导出</a>
                     </span>
                 </div>
                 <table class="layui-table mt10">
@@ -87,27 +81,7 @@
                     <tbody id="data-list">
                     </tbody>
                 </table>
-                <!--page-->
-                <div class="layui-table-tool mt20">
-                    <div class="layui-inline layui-table-page" id="layui-table-page1">
-                        <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                            <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
-                                <i class="layui-icon"></i>
-                            </a>
-                            <span class="layui-laypage-curr">
-                                <em class="layui-laypage-em"></em>
-                                <em>1</em>
-                            </span>
-                            <a href="javascript:;" data-page="2">2</a>
-                            <a href="javascript:;" data-page="3">3</a>
-                            <span class="layui-laypage-spr">…</span>
-                            <a href="javascript:;" class="layui-laypage-last" title="尾页" data-page="34">34</a>
-                            <a href="javascript:;" class="layui-laypage-next" data-page="2">
-                                <i class="layui-icon"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <div class="box mt30" id="pagination"></div>
             </div>
         </div>
     </div>
@@ -130,6 +104,7 @@
 <script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
 <script type="text/javascript" th:src="@{/js/recharge.js}"></script>
 </body>

@@ -352,7 +352,7 @@ function dropClient(id) {
                 data: JSON.stringify({"id": [id]}),
                 success: function(data) {
                     if(data.errCode === '000000') {
-                        searchClientList();
+                        clientListInit();
                         layer.msg("账号已停用", {
                             time: 2000
                         });

@@ -49,6 +49,7 @@ public class ProductController
     /**
      * 导出产品充值记录
      */
+    @LoginRequired
     @GetMapping(value = "recharge/export")
     public void exportProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
@@ -90,6 +91,7 @@ public class ProductController
     /**
      * 导出产品服务消费记录
      */
+    @LoginRequired
     @GetMapping(value = "request/export")
     public void exportProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,

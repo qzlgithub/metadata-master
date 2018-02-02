@@ -73,6 +73,7 @@ public class PageController
         clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
+        view.addObject(Field.IS_PRIMARY,TrueOrFalse.TRUE.equals(RequestThread.getPrimary()));
         return view;
     }
 
@@ -147,10 +148,18 @@ public class PageController
     public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/request");
+        List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
+        view.addObject(Field.PRODUCT_LIST, productList);
         if(productId != null)
         {
             view.addObject(Field.PRODUCT_ID, productId + "");
         }
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        Date lastWeek = calendar.getTime();
+        view.addObject(Field.FROM_DATE, DateUtils.format(lastWeek, DateFormat.YYYY_MM_DD));
+        view.addObject(Field.TO_DATE, DateUtils.format(today, DateFormat.YYYY_MM_DD));
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

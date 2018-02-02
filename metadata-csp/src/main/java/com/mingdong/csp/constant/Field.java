@@ -33,17 +33,15 @@ public interface Field
     String ID = "id";
     String TRADE_TIME = "tradeTime";
     String TRADE_NO = "tradeNo";
-    String CORP_NAME = "corpName";
-    String SHORT_NAME = "shortName";
     String PRODUCT_NAME = "productName";
     String RECHARGE_TYPE = "rechargeType";
     String AMOUNT = "amount";
     String BALANCE = "balance";
     String CONTRACT_NO = "contractNo";
     String REMARK = "remark";
-    String CALL_TIME = "callTime";
-    String SUC = "suc";
     String UNIT_AMT = "unitAmt";
+    String TRADE_AT = "tradeAt";
+    String HIT = "hit";
 
     String IMAGE_CAPTCHA = "imageCaptcha";
     String MANAGER_QQ = "managerQq";

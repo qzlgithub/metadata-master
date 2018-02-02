@@ -3,14 +3,24 @@ var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{phone}</td>" +
     "<td>#{email}</td>" +
     "<td>#{registerDate}</td></tr>";
-var contact_base_tr = "<tr id=\"#{id}\"><td>#{name}</td>" +
-    "<td>#{position}</td>" +
-    "<td>#{phone}</td>" +
-    "<td>#{email}</td>" +
+var contact_base_tr = "<tr id=\"#{id}\">" +
+    "<td id=\"name-#{id}\">#{name}</td>" +
+    "<td id=\"position-#{id}\">#{position}</td>" +
+    "<td id=\"phone-#{id}\">#{phone}</td>" +
+    "<td id=\"email-#{id}\">#{email}</td>" +
     "<td><span class=\"mr30\"><a href=\"#\" class=\"edit-contact\" data-id=\"#{id}\">编辑</a></span>" +
     "<span class=\"mr30\"><a href=\"#\" class=\"del-contact\" data-id=\"#{id}\">删除</a></span>";
 var contacts = [];
 $("#add_contact").click(function() {
+    var name = $("#add-name").val();
+    var position = $("#add-position").val();
+    var phone = $("#add-phone").val();
+    if(name == '' || position == '' || phone == ''){
+        layer.msg("关键字段不能为空！", {
+            time: 2000
+        });
+        return;
+    }
     var contact = {};
     contact.id = Math.uuidFast();
     contact.name = $("#add-name").val();
@@ -21,10 +31,10 @@ $("#add_contact").click(function() {
     contacts.push(contact);
     var tr = contact_base_tr;
     if(contact.general) {
-        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" data-id=\"#{id}\" checked=\"\"/></span>";
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" checked=\"\" id=\"general-#{id}\"/></span>";
     }
     else {
-        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" data-id=\"#{id}\"/></span>";
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" id=\"general-#{id}\"/></span>";
     }
     tr = tr + "</td></tr>";
     tr = tr.replace(/#{name}/g, contact.name).replace(/#{position}/g, contact.position)
@@ -34,6 +44,20 @@ $("#add_contact").click(function() {
     form.render();
 });
 $("#contact-list").on("click", ".edit-contact", function() {
+    var id = $(this).data("id");
+    $("#add-name").val($("#name-" + id).text());
+    $("#add-position").val($("#position-" + id).text());
+    $("#add-phone").val($("#phone-" + id).text());
+    $("#add-email").val($("#email-" + id).text());
+    $("#add-chief").prop("checked", $("#general-" + id).prop("checked"));
+    form.render();
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#addcontacts-modal'),
+        area: ['700px'],
+        shadeClose: true
+    });
 });
 $("#contact-list").on("click", ".del-contact", function() {
     var id = $(this).data("id");
@@ -98,20 +122,15 @@ function createUser() {
     var corpName = $("#corpName").val();
     var shortName = $("#shortName").val();
     var industryId = $("#industryId").val();
-    var name = $("#name").val();
-    var phone = $("#phone").val();
-    var email = $("#email").val();
     var license = $("#license").val();
     var enabled = $("input[name='enabled']:checked").val();
     var contactList = [];
     for(var o in contacts) {
         if(!contacts[o].deleted) {
+            contacts[o].id = null;
             contactList.push(contacts[o]);
         }
     }
-    console.log("account: " + username + "password: " + password + "\ncorpName: " + corpName + "\nshortName: " + shortName + "\nindustryId: "
-        + industryId + "\nname: " + name + "\nphone: " + phone + "\nemail: " + email + "\nlicense: " + license
-        + "\nenabled: " + enabled);
     $.ajax({
         type: "put",
         url: "/client/addition",

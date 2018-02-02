@@ -8,6 +8,8 @@ import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
 import com.mingdong.core.model.dto.DictProductTypeListDTO;
@@ -21,8 +23,6 @@ import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ProductReqInfoListDTO;
-import com.mingdong.core.model.dto.ProductRequestInfoDTO;
 import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
@@ -123,23 +123,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    public ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page)
     {
-        ProductReqInfoListDTO productReqListDTO = new ProductReqInfoListDTO();
-        List<ProductRequestInfoDTO> dataDtoList = new ArrayList<>();
-        productReqListDTO.setProductRequestDTOList(dataDtoList);
+        ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
+        List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
+        apiReqInfoListDTO.setDataList(apiReqInfoDTOList);
+        ApiReqInfoDTO apiReqInfoDTO;
         if(page == null)
         {
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
-            if(CollectionUtils.isNotEmpty(dataList))
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+            if(CollectionUtils.isNotEmpty(apiReqInfoList))
             {
-                ProductRequestInfoDTO dataDto;
-                for(ApiReqInfo item : dataList)
+                for(ApiReqInfo item : apiReqInfoList)
                 {
-                    dataDto = new ProductRequestInfoDTO();
-                    dataDtoList.add(dataDto);
-                    EntityUtils.copyProperties(item, dataDto);
+                    apiReqInfoDTO = new ApiReqInfoDTO();
+                    EntityUtils.copyProperties(item, apiReqInfoDTO);
+                    apiReqInfoDTOList.add(apiReqInfoDTO);
                 }
             }
         }
@@ -147,22 +147,27 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             int total = apiReqMapper.countBy(clientId, productId, fromDate, endDate);
             int pages = page.getTotalPage(total);
-            productReqListDTO.setTotal(total);
-            productReqListDTO.setPages(pages);
+            apiReqInfoListDTO.setPages(pages);
+            apiReqInfoListDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
-                ProductRequestInfoDTO dataDto;
-                for(ApiReqInfo item : dataList)
+                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+                if(CollectionUtils.isNotEmpty(apiReqInfoList))
                 {
-                    dataDto = new ProductRequestInfoDTO();
-                    dataDtoList.add(dataDto);
-                    EntityUtils.copyProperties(item, dataDto);
+                    for(ApiReqInfo item : apiReqInfoList)
+                    {
+                        apiReqInfoDTO = new ApiReqInfoDTO();
+                        apiReqInfoDTOList.add(apiReqInfoDTO);
+                        EntityUtils.copyProperties(item, apiReqInfoDTO);
+                    }
                 }
             }
         }
-        return productReqListDTO;
+        return apiReqInfoListDTO;
+
+
+
     }
 
     @Override
@@ -706,7 +711,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         Product updateProduct = new Product();
         EntityUtils.copyProperties(newProductDTO.getProductDTO(), updateProduct);
         updateProduct.setCreateTime(product.getCreateTime());
-        productMapper.updateById(product);
+        productMapper.updateById(updateProduct);
         ProductTxt productTxt = productTxtMapper.findById(newProductDTO.getProductDTO().getId());
         if(productTxt == null)
         {

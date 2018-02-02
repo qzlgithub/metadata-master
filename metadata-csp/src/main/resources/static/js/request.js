@@ -25,10 +25,10 @@ $(function() {
             toObj.val(obj.endDate);
         }
     });
-    rechargeListInit();
+    requestListInit();
 });
 
-function rechargeListInit() {
+function requestListInit() {
     var obj = {
         pageNum: 1,
         pageSize: 10,
@@ -36,7 +36,7 @@ function rechargeListInit() {
         fromDate: $("#from-date").val().trim(),
         toDate: $("#to-date").val().trim()
     };
-    getRechargeList(obj, function(pageObj, pages, total) {
+    getRequestList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
             initPageNo: pageObj['pageNum'],
             totalPages: pages,
@@ -45,24 +45,24 @@ function rechargeListInit() {
             jump: false,
             callback: function(currentPage) {
                 pageObj['pageNum'] = currentPage;
-                getRechargeList(obj);
+                getRequestList(obj);
             }
         })
     });
 }
 var template_tr = '<tr>' +
-    '<td>#{tradeTime}</td>' +
+    '<td>#{tradeAt}</td>' +
     '<td>#{tradeNo}</td>' +
     '<td>#{productName}</td>' +
-    '<td>#{rechargeType}</td>' +
-    '<td>#{amount}</td>' +
+    '<td>#{billPlan}</td>' +
+    '<td>#{hit}</td>' +
+    '<td>#{unitAmt}</td>' +
     '<td>#{balance}</td>' +
-    '<td>#{contractNo}</td>' +
     '</tr>';
 
-function getRechargeList(obj, pageFun) {
+function getRequestList(obj, pageFun) {
     $.get(
-        "/product/recharge",
+        "/product/request/list",
         {
             "pageNum": obj['pageNum'],
             "pageSize": obj['pageSize'],
@@ -79,13 +79,13 @@ function getRechargeList(obj, pageFun) {
                 var list = data.list;
                 dataList.empty();
                 for(var o in list) {
-                    var tr = template_tr.replace(/#{tradeTime}/g, list[o].tradeTime)
+                    var tr = template_tr.replace(/#{tradeAt}/g, list[o].tradeAt)
                     .replace(/#{tradeNo}/g, list[o].tradeNo)
                     .replace(/#{productName}/g, list[o].productName)
-                    .replace(/#{rechargeType}/g, list[o].rechargeType)
-                    .replace(/#{amount}/g, list[o].amount)
-                    .replace(/#{balance}/g, list[o].balance)
-                    .replace(/#{contractNo}/g, list[o].contractNo);
+                    .replace(/#{billPlan}/g, list[o].billPlan)
+                    .replace(/#{hit}/g, list[o].hit)
+                    .replace(/#{unitAmt}/g, list[o].unitAmt)
+                    .replace(/#{balance}/g, list[o].balance);
                     dataList.append(tr);
                 }
                 if(typeof pageFun === 'function') {
@@ -97,14 +97,14 @@ function getRechargeList(obj, pageFun) {
 }
 
 $("#search").click(function() {
-    rechargeListInit();
+    requestListInit();
 });
 
-function rechargeExport() {
+function requestExport() {
     var productId = $("#product-sel").val();
     var fromDate = $("#from-date").val();
     var toDate = $("#to-date").val();
-    var url = '/product/recharge/export?productId=' + productId
+    var url = '/product/request/export?productId=' + productId
         + "&fromDate=" + (fromDate == '' ? '' : fromDate + " 00:00:00")
         + "&toDate=" + (toDate == '' ? '' : toDate + " 23:59:59");
     location.href = encodeURI(url);

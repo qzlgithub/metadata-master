@@ -13,6 +13,7 @@ public class ApiReqInfo
     private Long productId;
     private Integer hit;//成功与否
     private Integer billPlan;//消费方式
+    private String requestNo;//消费单号
     private String requestIp;//连接ip
     private BigDecimal fee;//消费金额
     private BigDecimal balance;//余额
@@ -21,6 +22,16 @@ public class ApiReqInfo
     private String username;
     private String productName;
     private String billPlanName;
+
+    public String getRequestIp()
+    {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp)
+    {
+        this.requestIp = requestIp;
+    }
 
     public BigDecimal getFee()
     {
@@ -32,14 +43,14 @@ public class ApiReqInfo
         this.fee = fee;
     }
 
-    public String getRequestIp()
+    public String getRequestNo()
     {
-        return requestIp;
+        return requestNo;
     }
 
-    public void setRequestIp(String requestIp)
+    public void setRequestNo(String requestNo)
     {
-        this.requestIp = requestIp;
+        this.requestNo = requestNo;
     }
 
     public Long getUserId()

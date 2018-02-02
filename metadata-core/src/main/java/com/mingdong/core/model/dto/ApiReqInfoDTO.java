@@ -14,6 +14,7 @@ public class ApiReqInfoDTO implements Serializable
     private Long productId;
     private Integer hit;//成功与否
     private Integer billPlan;//消费方式
+    private String requestNo;//消费单号
     private String requestIp;//连接ip
     private BigDecimal fee;//消费金额
     private BigDecimal balance;//余额
@@ -22,6 +23,16 @@ public class ApiReqInfoDTO implements Serializable
     private String username;
     private String productName;
     private String billPlanName;
+
+    public String getRequestNo()
+    {
+        return requestNo;
+    }
+
+    public void setRequestNo(String requestNo)
+    {
+        this.requestNo = requestNo;
+    }
 
     public BigDecimal getFee()
     {

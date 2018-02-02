@@ -36,7 +36,7 @@
                 <p class="col2 important pl25">您的服务目前各项指标正常，请放心使用~</p>
                 <!--p class="ml20"><span class="appid-btn">查看处理</span></p-->
             </div>
-            <div class="col-md-6 bd-left pl20">
+            <div class="col-md-6 bd-left pl20" th:if="${isPrimary}">
                 <p class="p0 important">
                     账号管理
                     共<i class="col5 fz-20" th:text="${subUserList.size()}"></i>个，

@@ -46,7 +46,6 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
-import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
@@ -78,8 +77,6 @@ public class ClientServiceImpl implements ClientService
     private RemoteClientService remoteClientService;
     @Resource
     private RemoteProductService remoteProductService;
-    @Resource
-    private RemoteManagerService remoteManagerService;
     @Resource
     private RemoteSystemService remoteSystemService;
 

@@ -21,4 +21,6 @@ public interface ClientMapper
     List<Client> getListByIdList(@Param("idList") List<Long> idList);
 
     Client findByPrimaryAccount(Long primaryAccountId);
+
+    Client findByCorpNameOrCorpLicense(@Param("corpName") String corpName,@Param("license") String license);
 }

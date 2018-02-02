@@ -6,6 +6,8 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
@@ -38,105 +40,105 @@ public class TradeServiceImpl implements TradeService
     @Resource
     private RemoteClientService remoteClientService;
 
-    @Override
-    public BLResp testList2(Long productId, Long clientId, Date time, Page page)
-    {
-        BLResp resp = BLResp.build();
-        int total = 10;
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
-            map.put("tradeNo", "123456");
-            map.put("clientName", "荣耀科技");
-            map.put("shortName", "荣科");
-            map.put("username", "王科");
-            map.put("productName", "白名单");
-            map.put("pillBlan", "包年");
-            map.put("enabled", "0");
-            map.put("unitAmt", "10.00");
-            map.put("amount", "150000.00");
-            list.add(map);
-        }
-
-        resp.addData(Field.LIST, list);
-        return resp;
-    }
-
-    /**
-     * 测试数据
-     */
-    @Override
-    public BLResp testList3(Long clientId, Date time, Page page)
-    {
-        BLResp resp = BLResp.build();
-        int total = 10;
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
-            map.put("tradeNo", "123456");
-            map.put("clientName", "辉煌科技");
-            map.put("shortName", "辉科");
-            map.put("username", "李辉");
-            map.put("amount", "10.50");
-            map.put("rechargeType", "代充");
-            map.put("balance", "100000.00");
-            map.put("manager", "商务经理");
-            map.put("remark", "荣耀科技公司的充值记录");
-            list.add(map);
-        }
-
-        resp.addData(Field.LIST, list);
-        return resp;
-    }
-
-    @Override
-    public BLResp testList4(Long clientId, Date time, Page page)
-    {
-        BLResp resp = BLResp.build();
-        int total = 10;
-        int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
-            map.put("tradeNo", "123456");
-            map.put("clientName", "辉煌科技");
-            map.put("shortName", "辉科");
-            map.put("username", "李辉");
-            map.put("purpose", "续费");
-            map.put("productName", "白名单");
-            map.put("consume", "2000.00");
-            map.put("balance", "100000.00");
-            list.add(map);
-        }
-
-        resp.addData(Field.LIST, list);
-        return resp;
-    }
+//    @Override
+//    public BLResp testList2(Long productId, Long clientId, Date time, Page page)
+//    {
+//        BLResp resp = BLResp.build();
+//        int total = 10;
+//        int pages = page.getTotalPage(total);
+//        resp.addData(Field.TOTAL, total);
+//        resp.addData(Field.PAGES, pages);
+//        resp.addData(Field.PAGE_NUM, page.getPageNum());
+//        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+//
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        for(int i = 0; i < 10; i++)
+//        {
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
+//            map.put("tradeNo", "123456");
+//            map.put("clientName", "荣耀科技");
+//            map.put("shortName", "荣科");
+//            map.put("username", "王科");
+//            map.put("productName", "白名单");
+//            map.put("pillBlan", "包年");
+//            map.put("enabled", "0");
+//            map.put("unitAmt", "10.00");
+//            map.put("amount", "150000.00");
+//            list.add(map);
+//        }
+//
+//        resp.addData(Field.LIST, list);
+//        return resp;
+//    }
+//
+//    /**
+//     * 测试数据
+//     */
+//    @Override
+//    public BLResp testList3(Long clientId, Date time, Page page)
+//    {
+//        BLResp resp = BLResp.build();
+//        int total = 10;
+//        int pages = page.getTotalPage(total);
+//        resp.addData(Field.TOTAL, total);
+//        resp.addData(Field.PAGES, pages);
+//        resp.addData(Field.PAGE_NUM, page.getPageNum());
+//        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+//
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        for(int i = 0; i < 10; i++)
+//        {
+//
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
+//            map.put("tradeNo", "123456");
+//            map.put("clientName", "辉煌科技");
+//            map.put("shortName", "辉科");
+//            map.put("username", "李辉");
+//            map.put("amount", "10.50");
+//            map.put("rechargeType", "代充");
+//            map.put("balance", "100000.00");
+//            map.put("manager", "商务经理");
+//            map.put("remark", "荣耀科技公司的充值记录");
+//            list.add(map);
+//        }
+//
+//        resp.addData(Field.LIST, list);
+//        return resp;
+//    }
+//
+//    @Override
+//    public BLResp testList4(Long clientId, Date time, Page page)
+//    {
+//        BLResp resp = BLResp.build();
+//        int total = 10;
+//        int pages = page.getTotalPage(total);
+//        resp.addData(Field.TOTAL, total);
+//        resp.addData(Field.PAGES, pages);
+//        resp.addData(Field.PAGE_NUM, page.getPageNum());
+//        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+//
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        for(int i = 0; i < 10; i++)
+//        {
+//
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("createTime", DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:mm"));
+//            map.put("tradeNo", "123456");
+//            map.put("clientName", "辉煌科技");
+//            map.put("shortName", "辉科");
+//            map.put("username", "李辉");
+//            map.put("purpose", "续费");
+//            map.put("productName", "白名单");
+//            map.put("consume", "2000.00");
+//            map.put("balance", "100000.00");
+//            list.add(map);
+//        }
+//
+//        resp.addData(Field.LIST, list);
+//        return resp;
+//    }
 
     /**
      * 产品充值列表
@@ -163,7 +165,7 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.CORP_NAME, pri.getCorpName());
                 map.put(Field.SHORT_NAME, pri.getShortName());
                 map.put(Field.USERNAME, pri.getUsername());
-                map.put(Field.PRODUCT_NAME, pri.getProductName());
+                map.put(Field.PRODUCT_NAME, pri.getProductName() == null?"":pri.getProductName());
                 map.put(Field.RECHARGE_TYPE, pri.getRechargeType());
                 map.put(Field.AMOUNT, NumberUtils.formatAmount(pri.getAmount()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(pri.getBalance()));
@@ -184,7 +186,7 @@ public class TradeServiceImpl implements TradeService
         {
             BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId,
                     managerId, startDate, endDate);
-            resp.addData(Field.SHOW_STATS, "共充值了 " + NumberUtils.formatAmount(allRecharge) + " 元");
+            resp.addData(Field.SHOW_STATS, "共充值了 " + (allRecharge == null? 0 : NumberUtils.formatAmount(allRecharge)) + " 元");
         }
         else
         {
@@ -208,7 +210,7 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.CORP_NAME, pri.getCorpName());
                 map.put(Field.SHORT_NAME, pri.getShortName());
                 map.put(Field.USERNAME, pri.getUsername());
-                map.put(Field.PRODUCT_NAME, pri.getProductName());
+                map.put(Field.PRODUCT_NAME, pri.getProductName() == null?"":pri.getProductName());
                 map.put(Field.RECHARGE_TYPE, pri.getRechargeType());
                 map.put(Field.AMOUNT, NumberUtils.formatAmount(pri.getAmount()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(pri.getBalance()));
@@ -260,7 +262,7 @@ public class TradeServiceImpl implements TradeService
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
             dataRow.createCell(3).setCellValue(dataInfo.getShortName());
             dataRow.createCell(4).setCellValue(dataInfo.getUsername());
-            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+            dataRow.createCell(5).setCellValue(dataInfo.getProductName() == null?"":dataInfo.getProductName());
             dataRow.createCell(6).setCellValue(dataInfo.getRechargeType());
             dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
             dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
@@ -279,7 +281,7 @@ public class TradeServiceImpl implements TradeService
         {
             BigDecimal billFeeSum = remoteClientService.getClientBillFeeSum(shortName, typeId, productId, startDate,
                     endDate);
-            resp.addData(Field.SHOW_STATS, "计次消耗 " + billFeeSum + " 元");
+            resp.addData(Field.SHOW_STATS, "计次消耗 " + (billFeeSum == null? 0 : NumberUtils.formatAmount(billFeeSum)) + " 元");
         }
         shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
         ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId,
@@ -300,9 +302,9 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.SHORT_NAME, item.getShortName());
                 map.put(Field.USERNAME, item.getUsername());
-                map.put(Field.PRODUCT_NAME, item.getProductName());
-                map.put(Field.BILL_PLAN, item.getBillPlanName());
-                map.put(Field.HIT, item.getHit());
+                map.put(Field.PRODUCT_NAME, item.getProductName() == null?"":item.getProductName());
+                map.put(Field.BILL_PLAN, BillPlan.getById(item.getBillPlan()).getName());
+                map.put(Field.HIT, TrueOrFalse.TRUE.equals(item.getHit())?"是":"否");
                 map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getFee()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 list.add(map);
@@ -348,9 +350,9 @@ public class TradeServiceImpl implements TradeService
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
             dataRow.createCell(3).setCellValue(dataInfo.getShortName());
             dataRow.createCell(4).setCellValue(dataInfo.getUsername());
-            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
-            dataRow.createCell(6).setCellValue(dataInfo.getBillPlanName());
-            dataRow.createCell(7).setCellValue(dataInfo.getHit());
+            dataRow.createCell(5).setCellValue(dataInfo.getProductName() == null?"":dataInfo.getProductName());
+            dataRow.createCell(6).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
+            dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit())?"是":"否");
             dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
             dataRow.createCell(9).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
         }

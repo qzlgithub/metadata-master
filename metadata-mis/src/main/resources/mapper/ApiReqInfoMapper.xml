@@ -9,6 +9,7 @@
         <result column="client_id" property="clientId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="hit" property="hit" jdbcType="TINYINT" />
+        <result column="request_no" property="requestNo" jdbcType="VARCHAR" />
         <result column="request_ip" property="requestIp" jdbcType="VARCHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
         <result column="fee" property="fee" jdbcType="DECIMAL" />
@@ -28,6 +29,7 @@
         ar.`client_id` as client_id,
         ar.`product_id` as product_id,
         ar.`hit`         as hit,
+        ar.`request_no`     as request_no,
         ar.`request_ip`     as request_ip,
         ar.`bill_plan`     as bill_plan,
         ar.`fee`     as fee,
@@ -63,7 +65,7 @@
         left join `product` p
         on ar.`product_id` = p.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
             <if test="productId != null">and ar.`product_id` >= #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
@@ -81,6 +83,7 @@
         ar.`client_id` as client_id,
         ar.`product_id` as product_id,
         ar.`hit`         as hit,
+        ar.`request_no`     as request_no,
         ar.`request_ip`     as request_ip,
         ar.`bill_plan`     as bill_plan,
         ar.`fee`     as fee,
@@ -97,7 +100,7 @@
         left join `product` p
         on ar.`product_id` = p.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
             <if test="productId != null">and ar.`product_id` >= #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
@@ -117,7 +120,7 @@
         left join `product` p
         on ar.`product_id` = p.`id`
         <where>
-            <if test="shortName != null">c.`short_name` = #{shortName}</if>
+            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
             <if test="productId != null">and ar.`product_id` >= #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
