@@ -1,6 +1,8 @@
 package com.mingdong.mis.util;
 
+import com.alibaba.fastjson.JSON;
 import com.mingdong.common.constant.Charset;
+import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,9 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
 
 public class SignUtils
 {
@@ -51,5 +56,19 @@ public class SignUtils
             sb.append(s);
         }
         return sb.toString().toLowerCase();
+    }
+
+    public static void main(String[] args) throws MetadataCoreException
+    {
+        Map<String, Object> m = new HashMap<>();
+        m.put("idNo", "330721198910115417");
+        m.put("name", "祝俊");
+        m.put("phone", "18868429798");
+        m.put("timestamp", 1234567890);
+        SortedMap sm = MapUtils.sortKey(m);
+        String str = JSON.toJSONString(sm);
+        System.out.println("str: " + str);
+        String sign = sign(str, "0E76CCA40CB84C95A667A7219A67FE95");
+        System.out.println("sign: " + sign);
     }
 }

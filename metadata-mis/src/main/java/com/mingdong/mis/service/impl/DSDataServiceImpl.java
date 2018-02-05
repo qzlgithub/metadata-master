@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Map;
 
 @Service
 public class DSDataServiceImpl implements DSDataService
@@ -131,9 +130,8 @@ public class DSDataServiceImpl implements DSDataService
                     apiReq.setBalance(productRecharge.getBalance().subtract(fee));
                 }
                 apiReqMapper.add(apiReq);
-                Map<String, Object> result = data.response();
-                result.put(Field.REQUEST_NO, reqNo);
-                res.add(Field.RESULT, result);
+                res.add(Field.REQUEST_NO, reqNo);
+                res.addAll(data.response());
             }
             else
             {

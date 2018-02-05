@@ -42,7 +42,6 @@ public class Blacklist implements IMetadata
     public Map<String, Object> response()
     {
         Map<String, Object> m = new HashMap<>();
-        m.put(Field.ORDER_NO, orderNo);
         m.put(Field.IS_HIT, hit);
         return m;
     }

@@ -26,7 +26,7 @@ public class DSDataController
     public MetadataRes callBlacklistService(@RequestBody AccessVO<BlacklistVO> accessVO)
     {
         MetadataRes res = RequestThread.getResult();
-        if(accessVO.checkSign(RequestThread.getAppSecret()))
+        if(!accessVO.checkSign(RequestThread.getAppSecret()))
         {
             res.setResult(MetadataResult.RC_9);
             return res;

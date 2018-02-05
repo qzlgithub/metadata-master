@@ -63,4 +63,16 @@ public class MetadataRes
         }
         metadata.put(k, v);
     }
+
+    public void addAll(Map<String, Object> map)
+    {
+        if(metadata == null)
+        {
+            metadata = map;
+        }
+        else
+        {
+            metadata.putAll(map);
+        }
+    }
 }
