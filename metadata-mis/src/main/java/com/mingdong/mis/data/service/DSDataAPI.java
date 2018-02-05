@@ -81,7 +81,7 @@ public class DSDataAPI
         body.put("idCard", idNo);
         body.put("phone", phone);
         Map<String, String> header = getHeader();
-        header.put("auth_token", getAuthToken(false));
+        header.put("auth_token", getAuthToken());
         try
         {
             HttpEntity entity = HttpUtils.postData(GENERALIZE_BLACK_API, header, JSON.toJSONString(body));
@@ -90,7 +90,7 @@ public class DSDataAPI
             JSONObject res = JSON.parseObject(resp);
             if(res.getIntValue("code") == 102)
             {
-                // 如果token过期则刷新后再请求一次
+                // 如果token过期则强制刷新后再请求一次
                 header.put("auth_token", refreshAuthToken());
                 entity = HttpUtils.postData(GENERALIZE_BLACK_API, header, JSON.toJSONString(body));
                 resp = EntityUtils.toString(entity, Charset.UTF_8);
@@ -164,24 +164,14 @@ public class DSDataAPI
     }
 
     /**
-     * 获取大圣数据的请求凭证
-     *
-     * @param refresh 是否强制刷新。false：先在缓存中查找，未找到才强制刷新；true：直接调用大圣数据接口获取新的请求凭证并缓存
+     * 获取大圣数据的请求凭证，先在缓存中查找，未找到才强制刷新
      */
-    private String getAuthToken(boolean refresh) throws MetadataAPIException
+    private String getAuthToken() throws MetadataAPIException
     {
-        String token;
-        if(!refresh)
+        String token = redisDao.getDSAuthToken();
+        if(StringUtils.isNullBlank(token))
         {
-            token = redisDao.getDSAuthToken();
-            if(StringUtils.isNullBlank(token))
-            {
-                // 如果缓存中未找到大圣数据的请求凭证，则强制刷新
-                token = refreshAuthToken();
-            }
-        }
-        else
-        {
+            // 如果缓存中未找到大圣数据的请求凭证，则强制刷新
             token = refreshAuthToken();
         }
         return token;
