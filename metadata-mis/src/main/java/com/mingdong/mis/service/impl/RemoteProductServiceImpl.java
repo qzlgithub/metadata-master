@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
+import com.mingdong.core.constant.Custom;
+import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -205,7 +207,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
                     d.setCode(info.getCode());
-                    d.setTypeId(info.getTypeId());
+                    d.setType(info.getTypeId());
                     d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
                     if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
@@ -234,7 +236,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setRemark(info.getRemark());
                     d.setCode(info.getCode());
                     d.setTypeName(info.getTypeName());
-                    d.setTypeId(info.getTypeId());
+                    d.setType(info.getTypeId());
                     toOpen.add(d);
                 }
             }
@@ -510,6 +512,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     productInfoDTO = new ProductInfoDTO();
                     EntityUtils.copyProperties(item, productInfoDTO);
+                    productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()).getName());
+                    productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()).getName());
                     dataList.add(productInfoDTO);
                 }
             }
@@ -531,6 +535,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
                         productInfoDTO = new ProductInfoDTO();
                         dataList.add(productInfoDTO);
                         EntityUtils.copyProperties(item, productInfoDTO);
+                        productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()).getName());
+                        productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()).getName());
                     }
                 }
             }
@@ -655,7 +661,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     {
         ResultDTO resultDTO = new ResultDTO();
         // 1. 校验产品类型是否有效
-        DictProductType type = dictProductTypeMapper.findById(newProductDTO.getProductDTO().getTypeId().longValue());
+        DictProductType type = dictProductTypeMapper.findById(newProductDTO.getProductDTO().getType().longValue());
         if(type == null)
         {
             resultDTO.setResult(RestResult.INVALID_PRODUCT_TYPE);
@@ -690,7 +696,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
 
     @Override
     @Transactional
-    public ResultDTO updateProduct(NewProductDTO newProductDTO)
+    public ResultDTO updateProductSkipNull(NewProductDTO newProductDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
         Product product = productMapper.findByCode(newProductDTO.getProductDTO().getCode());
@@ -707,8 +713,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         Product updateProduct = new Product();
         EntityUtils.copyProperties(newProductDTO.getProductDTO(), updateProduct);
-        updateProduct.setCreateTime(product.getCreateTime());
-        productMapper.updateById(updateProduct);
+        productMapper.updateSkipNull(updateProduct);
         ProductTxt productTxt = productTxtMapper.findById(newProductDTO.getProductDTO().getId());
         if(productTxt == null)
         {

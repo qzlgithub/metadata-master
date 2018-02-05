@@ -8,12 +8,23 @@ public class Product
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Integer typeId;
+    private Integer type;
     private String code;
     private String name;
     private BigDecimal costAmt;
     private String remark;
     private Integer enabled;
+    private Integer custom;
+
+    public Integer getCustom()
+    {
+        return custom;
+    }
+
+    public void setCustom(Integer custom)
+    {
+        this.custom = custom;
+    }
 
     public Long getId()
     {
@@ -45,14 +56,14 @@ public class Product
         this.updateTime = updateTime;
     }
 
-    public Integer getTypeId()
+    public Integer getType()
     {
-        return typeId;
+        return type;
     }
 
-    public void setTypeId(Integer typeId)
+    public void setType(Integer type)
     {
-        this.typeId = typeId;
+        this.type = type;
     }
 
     public String getCode()

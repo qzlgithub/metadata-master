@@ -57,7 +57,6 @@ function editProduct() {
         dataType: "json",
         data: JSON.stringify({
             "id": $("#product-id").val(),
-            "productType": $("#product-type").val(),
             "code": $("#product-code").val(),
             "name": $("#product-name").val(),
             "costAmt": $("#product-cost").val(),

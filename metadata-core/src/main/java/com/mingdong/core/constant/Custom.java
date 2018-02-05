@@ -5,30 +5,27 @@ import com.mingdong.core.model.dto.DictDTO;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum BillPlan
+public enum Custom
 {
-    YEAR(1, "包年"),
-    REQ(2, "请求计费"),
-    RES(3, "请求成功计费");
+    COMMON(0,"普通"),
+    CUSTOMIZATION(1,"定制");
 
     private Integer id;
     private String name;
 
-    BillPlan(Integer id, String name)
-    {
+    Custom(Integer id,String name){
         this.id = id;
         this.name = name;
     }
 
-    public static BillPlan getById(Integer id)
-    {
+    public static Custom getById(Integer id){
         if(id != null)
         {
-            for(BillPlan billPlan : BillPlan.values())
+            for(Custom productGroupType : Custom.values())
             {
-                if(id.equals(billPlan.id))
+                if(id.equals(productGroupType.id))
                 {
-                    return billPlan;
+                    return productGroupType;
                 }
             }
         }
@@ -37,9 +34,9 @@ public enum BillPlan
 
     public static List<DictDTO> getAllList(){
         List<DictDTO> dictDTOList = new ArrayList<>();
-        for(BillPlan billPlan : BillPlan.values())
+        for(Custom productGroupType : Custom.values())
         {
-            dictDTOList.add(new DictDTO(billPlan.id+"",billPlan.name));
+            dictDTOList.add(new DictDTO(productGroupType.id+"",productGroupType.name));
         }
         return dictDTOList;
     }

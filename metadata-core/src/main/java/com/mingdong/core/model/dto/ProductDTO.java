@@ -22,10 +22,21 @@ public class ProductDTO implements Serializable
     private Date fromDate;
     private Date toDate;
     private String code;
-    private Integer typeId;
+    private Integer type;
     private Integer enabled;
+    private Integer custom;
     private Date createTime;
     private Date updateTime;
+
+    public Integer getCustom()
+    {
+        return custom;
+    }
+
+    public void setCustom(Integer custom)
+    {
+        this.custom = custom;
+    }
 
     public ProductDTO()
     {
@@ -177,14 +188,14 @@ public class ProductDTO implements Serializable
         return RestResult.getByCode(errCode);
     }
 
-    public Integer getTypeId()
+    public Integer getType()
     {
-        return typeId;
+        return type;
     }
 
-    public void setTypeId(Integer typeId)
+    public void setType(Integer type)
     {
-        this.typeId = typeId;
+        this.type = type;
     }
 
     public Integer getEnabled()

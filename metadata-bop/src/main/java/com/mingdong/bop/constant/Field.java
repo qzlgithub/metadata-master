@@ -37,8 +37,6 @@ public interface Field
     String EMAIL = "email";
     String TYPE_NAME = "typeName";
     String SUB_LIST = "subList";
-    String SUB_MODULE = "subModule";
-    String MODULE_ID = "moduleId";
     String TRADE_AT = "tradeAt";
     String MANAGER_ID = "managerId";
     String IMAGE_CAPTCHA = "imageCaptcha";
@@ -54,8 +52,6 @@ public interface Field
     String CLIENT_ID = "clientId";
     String USER_STATUS = "userStatus";
     String ACCOUNT_STATUS = "accountStatus";
-    String PARENT_INDUSTRY_LIST = "parentIndustryList";
-    String CHILD_INDUSTRY_LIST = "childIndustryList";
     String PARENT_ID = "parentId";
     String INDUSTRY_NAME = "industryName";
     String USER_ENABLED = "userEnabled";
@@ -114,4 +110,9 @@ public interface Field
     String INDUSTRY_PARENT_DICT = "industryParentDict";
     String INDUSTRY_DICT = "industryDict";
     String CONTACTS = "contacts";
+    String CUSTOM = "custom";
+    String CUSTOM_LIST = "customList";
+    String PROD_TYPE_DICT = "prodTypeDict";
+
+
 }

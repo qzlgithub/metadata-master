@@ -5,7 +5,8 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="type_id" property="typeId" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="custom" property="custom" jdbcType="TINYINT" />
         <result column="code" property="code" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="cost_amt" property="costAmt" jdbcType="DECIMAL" />
@@ -16,15 +17,10 @@
     </resultMap>
 
     <select id="getListByEnabled" resultMap="BaseResultMap">
-        select
-            p.`id`   as id, p.`create_time` as create_time, p.`update_time` as update_time, p.`type_id` as type_id,
-            p.`code` as code, p.`name` as name, p.`cost_amt` as cost_amt, p.`remark` as remark, p.`enabled` as enabled,
-            t.`name` as type_name, pt.`content` as content
-        from `product` p left join `dict_product_type` t
-                on p.type_id =
-                   t.id
-            left join `product_txt` pt
-                on p.id = pt.id
+        select p.`id` as id, p.`create_time` as create_time, p.`update_time` as update_time, p.`type` as type,
+        p.`code` as code, p.`name` as name, p.`cost_amt` as cost_amt, p.`remark` as remark, p.`enabled` as
+        enabled,p.`custom` as custom, t.`name` as type_name, pt.`content` as content from `product` p left join
+        `dict_product_type` t on p.type = t.id left join `product_txt` pt on p.id = pt.id
         <where>
             <if test="enabled != null">p.`enabled` = #{enabled}</if>
         </where>
@@ -32,13 +28,8 @@
     </select>
 
     <select id="countByEnabled" resultType="Integer">
-        select
-        count(p.`id`)
-        from `product` p left join `dict_product_type` t
-        on p.type_id =
-        t.id
-        left join `product_txt` pt
-        on p.id = pt.id
+        select count(p.`id`) from `product` p left join `dict_product_type` t on p.type = t.id left join
+        `product_txt` pt on p.id = pt.id
         <where>
             <if test="enabled != null">p.`enabled` = #{enabled}</if>
         </where>

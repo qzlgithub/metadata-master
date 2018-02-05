@@ -5,6 +5,8 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.Custom;
+import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.DictProductTypeDTO;
@@ -105,7 +107,8 @@ public class ProductServiceImpl implements ProductService
         if(product != null)
         {
             ProductTxtDTO productTxt = remoteProductService.getProductTxtById(productId);
-            map.put(Field.TYPE, product.getTypeId() + "");
+            map.put(Field.TYPE, ProdType.getById(product.getType()).getName());
+            map.put(Field.CUSTOM,Custom.getById(product.getCustom()).getName());
             map.put(Field.CODE, product.getCode());
             map.put(Field.NAME, product.getName());
             map.put(Field.COST_AMT, product.getCostAmt());
@@ -124,12 +127,14 @@ public class ProductServiceImpl implements ProductService
             productType.add(m);
         }
         map.put(Field.PRODUCT_TYPE_DICT, productType);
+        map.put(Field.CUSTOM_LIST, Custom.getAllList());
+        map.put(Field.PROD_TYPE_DICT, ProdType.getProdTypeDict());
         return map;
     }
 
     @Override
-    public void addProduct(Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            String remark, String content, BLResp resp)
+    public void addProduct(Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            Integer custom, String remark, String content, BLResp resp)
     {
         Long productId = IDUtils.getProductId(param.getNodeId());
         Date curr = new Date();
@@ -137,12 +142,13 @@ public class ProductServiceImpl implements ProductService
         product.setId(productId);
         product.setCreateTime(curr);
         product.setUpdateTime(curr);
-        product.setTypeId(productType.intValue());
+        product.setType(productType);
         product.setCode(code);
         product.setName(name);
         product.setCostAmt(costAmt);
         product.setRemark(remark);
         product.setEnabled(enabled);
+        product.setCustom(custom);
         ProductTxtDTO productTxt = null;
         if(!StringUtils.isNullBlank(content))
         {
@@ -160,21 +166,21 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            String remark, String content, BLResp resp)
+    public void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            Integer custom, String remark, String content, BLResp resp)
     {
         NewProductDTO newProductDTO = new NewProductDTO();
         Date current = new Date();
         ProductDTO product = new ProductDTO();
         product.setId(id);
         product.setUpdateTime(current);
-        product.setTypeId(productType.intValue());
+        product.setType(productType);
         product.setCode(code);
         product.setName(name);
         product.setCostAmt(costAmt);
         product.setEnabled(enabled);
         product.setRemark(remark);
-        product.setUpdateTime(new Date());
+        product.setCustom(custom);
         newProductDTO.setProductDTO(product);
         ProductTxtDTO productTxt = new ProductTxtDTO();
         productTxt.setId(id);
@@ -182,7 +188,7 @@ public class ProductServiceImpl implements ProductService
         productTxt.setUpdateTime(current);
         productTxt.setContent(content);
         newProductDTO.setProductTxtDTO(productTxt);
-        ResultDTO resultDTO = remoteProductService.updateProduct(newProductDTO);
+        ResultDTO resultDTO = remoteProductService.updateProductSkipNull(newProductDTO);
         resp.result(resultDTO.getResult());
     }
 
@@ -269,6 +275,7 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.ENABLED, productInfo.getEnabled() + "");
                 map.put(Field.TYPE_NAME, productInfo.getTypeName());
                 map.put(Field.COST_AMT, productInfo.getCostAmt());
+                map.put(Field.CUSTOM,productInfo.getCustomName());
                 list.add(map);
             }
         }
