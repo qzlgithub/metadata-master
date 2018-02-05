@@ -28,6 +28,11 @@ public class ProductDTO implements Serializable
     private Date createTime;
     private Date updateTime;
 
+    public ProductDTO()
+    {
+        errCode = "000000";
+    }
+
     public Integer getCustom()
     {
         return custom;
@@ -36,11 +41,6 @@ public class ProductDTO implements Serializable
     public void setCustom(Integer custom)
     {
         this.custom = custom;
-    }
-
-    public ProductDTO()
-    {
-        errCode = "000000";
     }
 
     public String getCode()

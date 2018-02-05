@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService
         {
             ProductTxtDTO productTxt = remoteProductService.getProductTxtById(productId);
             map.put(Field.TYPE, ProdType.getById(product.getType()).getName());
-            map.put(Field.CUSTOM,Custom.getById(product.getCustom()).getName());
+            map.put(Field.CUSTOM, Custom.getById(product.getCustom()).getName());
             map.put(Field.CODE, product.getCode());
             map.put(Field.NAME, product.getName());
             map.put(Field.COST_AMT, product.getCostAmt());
@@ -204,12 +204,12 @@ public class ProductServiceImpl implements ProductService
     }*/
 
     //产品类别启用禁用
-//    @Override
-//    public void updateCateStatus(Long id, Integer enabled, BLResp resp)
-//    {
-//        ResultDTO resultDTO = remoteProductService.updateDictProductTypeStatusById(id, enabled);
-//        resp.result(resultDTO.getResult());
-//    }
+    //    @Override
+    //    public void updateCateStatus(Long id, Integer enabled, BLResp resp)
+    //    {
+    //        ResultDTO resultDTO = remoteProductService.updateDictProductTypeStatusById(id, enabled);
+    //        resp.result(resultDTO.getResult());
+    //    }
 
     @Override
     public void updateProdStatus(Long id, Integer enabled, BLResp resp)
@@ -273,7 +273,7 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.ENABLED, productInfo.getEnabled() + "");
                 map.put(Field.TYPE_NAME, productInfo.getTypeName());
                 map.put(Field.COST_AMT, productInfo.getCostAmt());
-                map.put(Field.CUSTOM,productInfo.getCustomName());
+                map.put(Field.CUSTOM, productInfo.getCustomName());
                 list.add(map);
             }
         }

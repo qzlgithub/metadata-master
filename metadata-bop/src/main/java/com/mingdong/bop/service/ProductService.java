@@ -15,7 +15,7 @@ public interface ProductService
      * @param page
      * @return
      */
-//    BLResp getProdCategory(Page page);
+    //    BLResp getProdCategory(Page page);
 
     /**
      * 新增产品类型信息
@@ -25,7 +25,7 @@ public interface ProductService
      * @param remark
      * @param resp
      */
-//    void addProdCategory(String code, String name, String remark, BLResp resp);
+    //    void addProdCategory(String code, String name, String remark, BLResp resp);
 
     /**
      * 修改产品类型信息
@@ -36,7 +36,7 @@ public interface ProductService
      * @param remark
      * @return
      */
-//    BLResp editProdCategory(Long productId, String code, String name, String remark);
+    //    BLResp editProdCategory(Long productId, String code, String name, String remark);
 
     /**
      * 根据产品id获取产品信息
@@ -48,7 +48,8 @@ public interface ProductService
 
     /**
      * 新增产品
-     *  @param productType
+     *
+     * @param productType
      * @param code
      * @param name
      * @param costAmt
@@ -63,7 +64,8 @@ public interface ProductService
 
     /**
      * 修改产品
-     *  @param id
+     *
+     * @param id
      * @param productType
      * @param code
      * @param name
@@ -83,7 +85,7 @@ public interface ProductService
      * @param id
      * @return
      */
-//    BLResp getProductCategoryInfo(Long id);
+    //    BLResp getProductCategoryInfo(Long id);
 
     /**
      * 更改产品类型信息
@@ -92,7 +94,7 @@ public interface ProductService
      * @param enabled
      * @param resp
      */
-//    void updateCateStatus(Long id, Integer enabled, BLResp resp);
+    //    void updateCateStatus(Long id, Integer enabled, BLResp resp);
 
     /**
      * 更改产品信息
@@ -116,7 +118,7 @@ public interface ProductService
      * @param enabled
      * @return
      */
-//    List<Map<String, Object>> getProductTypeDict(Integer enabled);
+    //    List<Map<String, Object>> getProductTypeDict(Integer enabled);
 
     /**
      * 获取产品信息列表

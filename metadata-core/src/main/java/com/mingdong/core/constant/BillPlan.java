@@ -35,11 +35,12 @@ public enum BillPlan
         return null;
     }
 
-    public static List<DictDTO> getAllList(){
+    public static List<DictDTO> getAllList()
+    {
         List<DictDTO> dictDTOList = new ArrayList<>();
         for(BillPlan billPlan : BillPlan.values())
         {
-            dictDTOList.add(new DictDTO(billPlan.id+"",billPlan.name));
+            dictDTOList.add(new DictDTO(billPlan.id + "", billPlan.name));
         }
         return dictDTOList;
     }

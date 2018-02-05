@@ -7,18 +7,20 @@ import java.util.List;
 
 public enum Custom
 {
-    COMMON(0,"普通"),
-    CUSTOMIZATION(1,"定制");
+    COMMON(0, "普通"),
+    CUSTOMIZATION(1, "定制");
 
     private Integer id;
     private String name;
 
-    Custom(Integer id,String name){
+    Custom(Integer id, String name)
+    {
         this.id = id;
         this.name = name;
     }
 
-    public static Custom getById(Integer id){
+    public static Custom getById(Integer id)
+    {
         if(id != null)
         {
             for(Custom productGroupType : Custom.values())
@@ -32,11 +34,12 @@ public enum Custom
         return null;
     }
 
-    public static List<DictDTO> getAllList(){
+    public static List<DictDTO> getAllList()
+    {
         List<DictDTO> dictDTOList = new ArrayList<>();
         for(Custom productGroupType : Custom.values())
         {
-            dictDTOList.add(new DictDTO(productGroupType.id+"",productGroupType.name));
+            dictDTOList.add(new DictDTO(productGroupType.id + "", productGroupType.name));
         }
         return dictDTOList;
     }

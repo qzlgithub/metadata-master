@@ -34,9 +34,7 @@
                 <li>计费方式：
                     <select name="modules" lay-verify="required" lay-search="" class="select-list" id="rechargeType">
                         <option value="">全部</option>
-                        <option value="1">包年</option>
-                        <option value="2">请求计费</option>
-                        <option value="3">请求成功计费</option>
+                        <option th:each="o : ${billPlanList}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                 </li>
                 <li>产品：

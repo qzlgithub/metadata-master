@@ -733,8 +733,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate,
-            Date endDate, Page page)
+    public ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long clientId, Long userId,
+            Long productId, Date startDate, Date endDate, Page page)
     {
         ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
         List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
@@ -742,8 +742,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ApiReqInfoDTO apiReqInfoDTO;
         if(page == null)
         {
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId,
-                    startDate, endDate);
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId, userId,
+                    productId, startDate, endDate);
             if(CollectionUtils.isNotEmpty(apiReqInfoList))
             {
                 for(ApiReqInfo item : apiReqInfoList)
@@ -756,15 +756,16 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         else
         {
-            int total = apiReqInfoMapper.countClientBillListBy(shortName, typeId, productId, startDate, endDate);
+            int total = apiReqInfoMapper.countClientBillListBy(shortName, typeId, clientId, userId, productId,
+                    startDate, endDate);
             int pages = page.getTotalPage(total);
             apiReqInfoListDTO.setPages(pages);
             apiReqInfoListDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, productId,
-                        startDate, endDate);
+                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId,
+                        userId, productId, startDate, endDate);
                 if(CollectionUtils.isNotEmpty(apiReqInfoList))
                 {
                     for(ApiReqInfo item : apiReqInfoList)
@@ -780,9 +781,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate)
+    public BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long clientId, Long userId, Long productId,
+            Date startDate, Date endDate)
     {
-        return apiReqInfoMapper.getClientBillFeeSum(shortName, typeId, productId, startDate, endDate);
+        return apiReqInfoMapper.getClientBillFeeSum(shortName, typeId, clientId, userId, productId, startDate, endDate);
     }
 
     @Override

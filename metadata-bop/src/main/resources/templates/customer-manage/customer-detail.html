@@ -141,6 +141,10 @@
 
                     </ul>
                 </div>
+
+
+
+
                 <div class="form-title mb20" th:if="${not #lists.isEmpty(userList)}">子账号</div>
                 <div class="m30 clearfix" th:if="${not #lists.isEmpty(userList)}">
                     <table class="layui-table">
@@ -150,7 +154,7 @@
                             <th>账号</th>
                             <th>联系人</th>
                             <th>联系电话</th>
-                            <th>操作</th>
+                            <!--th>操作</th-->
                         </tr>
                         </thead>
                         <tbody>
@@ -159,7 +163,7 @@
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.name}"></td>
                             <td th:text="${user.phone}"></td>
-                            <td><span><a href="customer-edit.html" class="edit">查看消费详情</a></span></td>
+                            <!--td><span><a href="customer-edit.html" class="edit">查看消费详情</a></span></td-->
                         </tr>
                         </tbody>
                     </table>
@@ -226,11 +230,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
                 <div class="layui-input-block renew-input-block tl">
-                    <select name="modules" id="renew-bill-plan" onchange="change()" class="select-list"
-                            onblur="checkSelectBill()">
-                        <option value="1">包年</option>
-                        <option value="2">请求计费</option>
-                        <option value="3">请求成功计费</option>
+                    <select name="modules" id="renew-bill-plan" onchange="change()" class="select-list">
+                        <option th:each="o : ${billPlanList}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                     <i class="col3 pl10" id="selectBillTip" style="display: none"></i>
                 </div>
@@ -312,10 +313,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
                 <div class="layui-input-block renew-input-block tl">
-                    <select id="open-charge" class="select-list" onchange="change()">
-                        <option value="1">包年</option>
-                        <option value="2">请求计费</option>
-                        <option value="3">请求成功计费</option>
+                    <select id="open-charge" class="select-list">
+                        <option th:each="o : ${billPlanList}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                 </div>
             </div>

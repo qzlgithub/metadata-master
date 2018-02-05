@@ -10,6 +10,7 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -80,6 +81,7 @@ public class PageController
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         view.addObject(Field.START_DATE, sdf.format(beforeDayDate));
         view.addObject(Field.END_DATE, sdf.format(date));
+        view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
         return view;
     }
 
@@ -166,6 +168,7 @@ public class PageController
         ModelAndView view = new ModelAndView("customer-manage/customer-detail");
         view.addAllObjects(resp.getDataMap());
         view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
+        view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -299,7 +302,7 @@ public class PageController
     public ModelAndView productAddition()
     {
         ModelAndView view = new ModelAndView("product-manage/product-add");
-//        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
+        //        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

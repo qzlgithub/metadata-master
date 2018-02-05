@@ -168,16 +168,16 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Map<String, Object>> getProductListMap()
     {
-//        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
-//        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
+        //        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
+        //        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-//        for(DictProductTypeDTO dictProductType : dataList)
-//        {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put(Field.TYPE_NAME, dictProductType.getName());
-//            map.put(Field.ID, dictProductType.getId());
-//            list.add(map);
-//        }
+        //        for(DictProductTypeDTO dictProductType : dataList)
+        //        {
+        //            Map<String, Object> map = new HashMap<>();
+        //            map.put(Field.TYPE_NAME, dictProductType.getName());
+        //            map.put(Field.ID, dictProductType.getId());
+        //            list.add(map);
+        //        }
         return list;
     }
 
