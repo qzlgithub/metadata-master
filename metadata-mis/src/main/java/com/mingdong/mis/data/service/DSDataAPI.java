@@ -1,29 +1,25 @@
 package com.mingdong.mis.data.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.constant.Charset;
+import com.mingdong.common.util.MapUtils;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.exception.MetadataAPIException;
-import com.mingdong.core.exception.MetadataHttpException;
+import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.model.metadata.Blacklist;
 import com.mingdong.mis.util.HttpUtils;
+import com.mingdong.mis.util.SignUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 @Component
 public class DSDataAPI
@@ -43,47 +39,6 @@ public class DSDataAPI
         return header;
     }
 
-    private static String sortMapToString(Map<String, Object> map)
-    {
-        if(map != null)
-        {
-            List<String> keyList = new ArrayList<>(map.keySet());
-            Collections.sort(keyList);
-            SortedMap<String, Object> sortedMap = new TreeMap<>();
-            for(String k : keyList)
-            {
-                sortedMap.put(k, map.get(k));
-            }
-            return JSON.toJSONString(sortedMap);
-        }
-        return null;
-    }
-
-    private static String sign(String data) throws NoSuchAlgorithmException, InvalidKeyException
-    {
-        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-        SecretKeySpec spec = new SecretKeySpec(SECURITY_KEY.getBytes(), "HmacSHA256");
-        hmacSHA256.init(spec);
-        byte[] encData = hmacSHA256.doFinal(data.getBytes());
-        return byteArrayToHexString(encData);
-    }
-
-    private static String byteArrayToHexString(byte[] data)
-    {
-        StringBuilder hs = new StringBuilder();
-        String s;
-        for(int n = 0; data != null && n < data.length; n++)
-        {
-            s = Integer.toHexString(data[n] & 0XFF);
-            if(s.length() == 1)
-            {
-                hs.append('0');
-            }
-            hs.append(s);
-        }
-        return hs.toString().toLowerCase();
-    }
-
     public Blacklist callBlacklist(String idNo, String name, String phone) throws MetadataAPIException
     {
         Map<String, Object> body = new HashMap<>();
@@ -97,13 +52,24 @@ public class DSDataAPI
         {
             HttpEntity entity = HttpUtils.postData(GENERALIZE_BLACK_API, header, JSON.toJSONString(body));
             String resp = EntityUtils.toString(entity, Charset.UTF_8);
-            return JSON.parseObject(resp, Blacklist.class);
+            logger.info("DS API response: {}", resp);
+            JSONObject res = JSON.parseObject(resp);
+            if(res.getIntValue("code") == 200)
+            {
+                String orderNo = res.getString("orderNo");
+                JSONObject data = res.getJSONObject("res");
+                Integer stat = data.getInteger("stat");
+                Blacklist blacklist = new Blacklist();
+                blacklist.setOrderNo(orderNo);
+                blacklist.setHit(TrueOrFalse.TRUE.equals(stat) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+                return blacklist;
+            }
         }
-        catch(MetadataHttpException | IOException e)
+        catch(Exception e)
         {
             logger.error("Failed to revoke DaSheng blacklist api: {}", e.getMessage());
-            throw new MetadataAPIException("error to revoke DaSheng data api");
         }
+        throw new MetadataAPIException("error to revoke DaSheng data api");
     }
 
     public Blacklist callMultiAppApiS1(String idNo, String name, String phone)
@@ -120,10 +86,11 @@ public class DSDataAPI
         Map<String, Object> signMap = new HashMap<>();
         signMap.putAll(body);
         signMap.putAll(payload);
-        String orgStr = sortMapToString(signMap);
+        SortedMap sortedMap = MapUtils.sortKey(signMap);
+        String orgStr = JSON.toJSONString(sortedMap);
         try
         {
-            String sign = sign(orgStr);
+            String sign = SignUtils.sign(orgStr, SECURITY_KEY);
             body.put("payload", payload);
             body.put("sign", sign);
             HttpEntity entity = HttpUtils.postData(MULTIPLE_APP_API, getHeader(), JSON.toJSONString(body));
@@ -137,14 +104,16 @@ public class DSDataAPI
         return null;
     }
 
-    public void callMultiAppApiS2(String orderNo) throws InvalidKeyException, NoSuchAlgorithmException, IOException
+    public void callMultiAppApiS2(String orderNo) throws MetadataCoreException, IOException
     {
         Map<String, Object> body = new HashMap<>();
         body.put("apiKey", APP_KEY);
         body.put("orderNo", orderNo);
         body.put("timestamp", System.currentTimeMillis());
-        String orgStr = sortMapToString(body);
-        body.put("sign", sign(orgStr));
+
+        SortedMap sortedMap = MapUtils.sortKey(body);
+        String orgStr = JSON.toJSONString(sortedMap);
+        body.put("sign", SignUtils.sign(orgStr, SECURITY_KEY));
 
         HttpEntity entity = HttpUtils.get(MULTIPLE_APP_API_2, null, body);
         String resp = EntityUtils.toString(entity, "UTF-8");
