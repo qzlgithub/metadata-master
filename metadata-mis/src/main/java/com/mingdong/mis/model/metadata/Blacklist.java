@@ -27,15 +27,15 @@ public class Blacklist implements IMetadata
         return hit;
     }
 
-    public void setHit(Integer hit)
-    {
-        this.hit = hit;
-    }
-
     @Override
     public boolean isHit()
     {
         return TrueOrFalse.TRUE.equals(hit);
+    }
+
+    public void setHit(Integer hit)
+    {
+        this.hit = hit;
     }
 
     @Override

@@ -26,8 +26,9 @@
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
-            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
-            <a><cite>消费明细</cite></a>
+            <a class="cp" th:href="'/client/detail.html?clientId=' + ${clientId}" th:text="${corpName}">
+            </a>
+            <a><span class="layui-box mr5">&gt;</span><cite>消费明细</cite></a>
         </div>
         <!--面包屑 end-->
         <div class="p20">
@@ -42,11 +43,16 @@
                 </li>
                 <li>时间：
                     <input type="hidden" id="client-id" th:value="${clientId}"/>
-                    <em class="fr"><input type="text" name="date" id="date1" lay-verify="date" placeholder="yyyy-MM-dd"
-                                          autocomplete="off" class="layui-input search-input"/></em>
+                    <em style="display: inline-block;">
+                        <input type="text" id="start-date" lay-verify="date" placeholder="yyyy-MM-dd"
+                               autocomplete="off" class="layui-input search-input"/></em>
+                    -
+                    <em style="display: inline-block;">
+                        <input type="text" id="end-date" lay-verify="date" placeholder="yyyy-MM-dd"
+                               autocomplete="off" class="layui-input search-input"/></em>
                 </li>
                 <li>
-                    <button class="check-button" onclick="searchProdConsumeList();">查询</button>
+                    <button class="check-button" onclick="prodConsumeListInit();">查询</button>
                 </li>
             </ul>
             <!--搜索 end-->
@@ -54,7 +60,7 @@
             <div class="clearfix mt30 mb40">
                     <span class="fr">
                         一次最多导出1000条
-                        <a href="customer-add.html" class="add-button" id="exportProdCons">导出</a>
+                        <a href="javascript:" class="add-button" onclick="consumeOutPrint()">导出</a>
                     </span>
             </div>
             <!--功能操作 end-->
@@ -71,7 +77,7 @@
                         <th>产品服务</th>
                         <th>计费方式</th>
                         <th>是否成功</th>
-                        <th>单价(元/次)</th>
+                        <th>消费(元)</th>
                         <th>金额(元)</th>
                     </tr>
                     </thead>
@@ -88,48 +94,14 @@
     </div>
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
-    <script type="text/javascript">
-        var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-        document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-    </script>
+<script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+</script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.consume.list.js}"></script>
-    <script>
-        var message;
-        layui.config({
-            base: '../../static/build/js/'
-        }).use(['app', 'message', 'laydate'], function() {
-            var app = layui.app,
-                $ = layui.jquery,
-                layer = layui.layer;
-            laydate = layui.laydate;
-            //将message设置为全局以便子页面调用
-            message = layui.message;
-            //主入口
-            app.set({
-                type: 'iframe'
-            }).init();
-            $('#pay').on('click', function() {
-                layer.open({
-                    title: false,
-                    type: 1,
-                    content: '<img src="../../static/build/images/pay.png" />',
-                    area: ['500px', '250px'],
-                    shadeClose: true
-                });
-            });
-            //日期
-            laydate.render({
-                elem: '#date'
-            });
-            laydate.render({
-                elem: '#date1'
-            });
-        });
-
-    </script>
 </body>
 </html>
 

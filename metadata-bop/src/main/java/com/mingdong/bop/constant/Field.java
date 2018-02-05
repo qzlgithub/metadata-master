@@ -113,6 +113,6 @@ public interface Field
     String CUSTOM = "custom";
     String CUSTOM_LIST = "customList";
     String PROD_TYPE_DICT = "prodTypeDict";
-
+    String BILL_PLAN_LIST = "billPlanList";
 
 }

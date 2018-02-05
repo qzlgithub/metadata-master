@@ -1,4 +1,34 @@
 // $(".date").datepicker({dateFormat: "yy-mm-dd"});
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message', 'laydate'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    laydate = layui.laydate;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    $('#pay').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: '<img src="../../static/build/images/pay.png"/>',
+            area: ['500px', '250px'],
+            shadeClose: true
+        });
+    });
+    laydate.render({
+        elem: '#start-time'
+    });
+    laydate.render({
+        elem: '#end-time'
+    });
+});
 var dateFormat = "yy-mm-dd",
     from = $("#start-time").datepicker({
         dateFormat: dateFormat,

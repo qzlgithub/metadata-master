@@ -259,26 +259,31 @@ public interface RemoteClientService
      *
      * @param shortName
      * @param typeId
+     * @param clientId
+     * @param userId
      * @param productId
      * @param startDate
      * @param endDate
      * @param page
      * @return
      */
-    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long productId, Date startDate, Date endDate,
-            Page page);
+    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long clientId, Long userId, Long productId,
+            Date startDate, Date endDate, Page page);
 
     /**
      * 根据条件获取总消费数额
      *
      * @param shortName
      * @param typeId
+     * @param clientId
+     * @param userId
      * @param productId
      * @param startDate
      * @param endDate
      * @return
      */
-    BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long productId, Date startDate, Date endDate);
+    BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long clientId, Long userId, Long productId,
+            Date startDate, Date endDate);
 
     /**
      * 新增客户

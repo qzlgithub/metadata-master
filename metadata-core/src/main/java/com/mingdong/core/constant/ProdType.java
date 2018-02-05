@@ -18,19 +18,12 @@ public enum ProdType
         this.name = name;
     }
 
-    public int getId()
+    public static ProdType getById(int id)
     {
-        return id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public static ProdType getById(int id){
-        for(ProdType item : ProdType.values()){
-            if(id == item.id){
+        for(ProdType item : ProdType.values())
+        {
+            if(id == item.id)
+            {
                 return item;
             }
         }
@@ -45,5 +38,15 @@ public enum ProdType
             list.add(new DictDTO(o.getId() + "", o.getName()));
         }
         return list;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

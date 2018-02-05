@@ -13,11 +13,14 @@ public interface ApiReqInfoMapper
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     int countClientBillListBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
-            @Param("productId") Long productId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+            @Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
+            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     List<ApiReqInfo> getClientBillListBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
-            @Param("productId") Long productId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+            @Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
+            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     BigDecimal getClientBillFeeSum(@Param("shortName") String shortName, @Param("typeId") Long typeId,
-            @Param("productId") Long productId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+            @Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
+            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

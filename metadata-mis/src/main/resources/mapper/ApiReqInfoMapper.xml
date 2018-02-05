@@ -47,6 +47,8 @@
         on ar.`product_id` = p.`id`
         <where>
             <if test="clientId != null">ar.`client_id` = #{clientId}</if>
+            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
+            <if test="userId != null">and ar.`user_id` = #{userId}</if>
             <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
             <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
@@ -67,7 +69,7 @@
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
             <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
@@ -102,7 +104,9 @@
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
+            <if test="userId != null">and ar.`user_id` = #{userId}</if>
+            <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
             <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
@@ -122,7 +126,9 @@
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="productId != null">and ar.`product_id` >= #{productId}</if>
+            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
+            <if test="userId != null">and ar.`user_id` = #{userId}</if>
+            <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
             <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>

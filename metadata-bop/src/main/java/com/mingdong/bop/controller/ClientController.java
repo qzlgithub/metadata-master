@@ -103,19 +103,36 @@ public class ClientController
 
     @RequestMapping(value = "consumeList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getConsumeList(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.CLIENT_ID, required = false) Long clientId,
-            @RequestParam(value = Field.CREATE_TIME, required = false) Date time,
+    public Map<String, Object> getConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
+            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        // TODO FIX...
-        Page page = new Page(pageNum, pageSize);
-        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
-        //        BLResp resp = tradeService.testList2(productId, clientId, time, page);
         BLResp resp = BLResp.build();
+        tradeService.getClientBillList(null, null, clientId, null, productId, startTime, endTime,
+                new Page(pageNum, pageSize), resp);
         return resp.getDataMap();
 
+    }
+
+    @GetMapping(value = "/consumeList/export")
+    public void exportBillList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
+            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
+            throws IOException
+    {
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(null, null, clientId, null, productId, startTime,
+                endTime, new Page(1, 1000));
+        String filename = new String("消费记录".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
     }
 
     /**

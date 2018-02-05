@@ -69,8 +69,8 @@ public class FinanceController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         BLResp resp = BLResp.build();
-        tradeService.getClientBillList(shortName, typeId, productId, startDate, endDate, new Page(pageNum, pageSize),
-                resp);
+        tradeService.getClientBillList(shortName, typeId, null, null, productId, startDate, endDate,
+                new Page(pageNum, pageSize), resp);
         return resp;
     }
 
@@ -82,8 +82,8 @@ public class FinanceController
             @RequestParam(value = Field.END_DATE, required = false) Date endDate, HttpServletResponse response)
             throws IOException
     {
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(shortName, typeId, productId, startDate, endDate,
-                new Page(1, 1000));
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(shortName, typeId, null, null, productId, startDate,
+                endDate, new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");

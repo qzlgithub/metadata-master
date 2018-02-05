@@ -275,19 +275,19 @@ public class TradeServiceImpl implements TradeService
     }
 
     @Override
-    public void getClientBillList(String shortName, Long typeId, Long productId, Date startDate, Date endDate,
-            Page page, BLResp resp)
+    public void getClientBillList(String shortName, Long typeId, Long clientId, Long userId, Long productId,
+            Date startDate, Date endDate, Page page, BLResp resp)
     {
         if(StringUtils.isNotBlank(shortName))
         {
-            BigDecimal billFeeSum = remoteClientService.getClientBillFeeSum(shortName, typeId, productId, startDate,
-                    endDate);
+            BigDecimal billFeeSum = remoteClientService.getClientBillFeeSum(shortName, typeId, clientId, userId,
+                    productId, startDate, endDate);
             resp.addData(Field.SHOW_STATS,
                     "计次消耗 " + (billFeeSum == null ? 0 : NumberUtils.formatAmount(billFeeSum)) + " 元");
         }
         shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
-        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId,
-                startDate, endDate, page);
+        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, clientId,
+                userId, productId, startDate, endDate, page);
         resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
         resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
@@ -316,8 +316,8 @@ public class TradeServiceImpl implements TradeService
     }
 
     @Override
-    public XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long productId, Date startDate,
-            Date endDate, Page page)
+    public XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long clientId, Long userId,
+            Long productId, Date startDate, Date endDate, Page page)
     {
         shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -337,8 +337,8 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, productId,
-                startDate, endDate, page);
+        ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, clientId,
+                userId, productId, startDate, endDate, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         ApiReqInfoDTO dataInfo;
         for(int i = 0; i < dataList.size(); i++)
