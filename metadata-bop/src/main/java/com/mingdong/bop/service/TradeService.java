@@ -11,11 +11,11 @@ public interface TradeService
     /**
      * 测试数据
      */
-//    BLResp testList2(Long productId, Long clientId, Date time, Page page);
-//
-//    BLResp testList3(Long clientId, Date time, Page page);
-//
-//    BLResp testList4(Long clientId, Date time, Page page);
+    //    BLResp testList2(Long productId, Long clientId, Date time, Page page);
+    //
+    //    BLResp testList3(Long clientId, Date time, Page page);
+    //
+    //    BLResp testList4(Long clientId, Date time, Page page);
 
     /**
      * 根据条件获取充值记录列表

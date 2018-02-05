@@ -6,5 +6,5 @@ public interface IMetadata
 {
     boolean isHit();
 
-    Map<String,Object> response();
+    Map<String, Object> response();
 }

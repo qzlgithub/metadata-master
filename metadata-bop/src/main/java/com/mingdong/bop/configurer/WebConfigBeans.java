@@ -38,12 +38,14 @@ public class WebConfigBeans
      * thymeleaf 全局静态变量设置
      */
     @Resource
-    private void configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
-        if(viewResolver != null) {
+    private void configureThymeleafStaticVars(ThymeleafViewResolver viewResolver)
+    {
+        if(viewResolver != null)
+        {
             Map<String, Object> vars = new HashMap<>();
-//            vars.put("ctx", "/app/");
-//            vars.put("var1", "var1");
-//            vars.put("var2", "var2");
+            //            vars.put("ctx", "/app/");
+            //            vars.put("var1", "var1");
+            //            vars.put("var2", "var2");
             viewResolver.setStaticVariables(vars);
         }
     }

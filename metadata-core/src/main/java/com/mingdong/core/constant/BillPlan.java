@@ -2,14 +2,14 @@ package com.mingdong.core.constant;
 
 public enum BillPlan
 {
-    YEAR(1,"包年"),
-    REQ(2,"请求计费"),
-    RES(3,"请求成功计费");
+    YEAR(1, "包年"),
+    REQ(2, "请求计费"),
+    RES(3, "请求成功计费");
 
     private Integer id;
     private String name;
 
-    BillPlan(Integer id,String name)
+    BillPlan(Integer id, String name)
     {
         this.id = id;
         this.name = name;

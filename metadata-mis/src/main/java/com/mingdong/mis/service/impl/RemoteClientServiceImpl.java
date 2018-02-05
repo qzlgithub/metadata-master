@@ -796,12 +796,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
             res.setResult(RestResult.USERNAME_EXIST);
             return res;
         }
-        Client ct = clientMapper.findByCorpNameOrCorpLicense(req.getCorpName(),req.getLicense());
-        if(ct != null && ct.getCorpName().equals(req.getCorpName())){
+        Client ct = clientMapper.findByCorpNameOrCorpLicense(req.getCorpName(), req.getLicense());
+        if(ct != null && ct.getCorpName().equals(req.getCorpName()))
+        {
             res.setResult(RestResult.CLIENT_NAME_EXIST);
             return res;
         }
-        if(ct != null && ct.getLicense().equals(req.getLicense())){
+        if(ct != null && ct.getLicense().equals(req.getLicense()))
+        {
             res.setResult(RestResult.CLIENT_LICENSE_EXIST);
             return res;
         }

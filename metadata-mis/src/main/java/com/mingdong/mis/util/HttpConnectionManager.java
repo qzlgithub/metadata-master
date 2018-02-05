@@ -23,6 +23,11 @@ public class HttpConnectionManager
 {
     private static PoolingHttpClientConnectionManager connectionManager;
 
+    public static CloseableHttpClient getHttpClient()
+    {
+        return HttpClients.custom().setConnectionManager(connectionManager).build();
+    }
+
     @PostConstruct
     private void init()
     {
@@ -50,10 +55,5 @@ public class HttpConnectionManager
         {
             e.printStackTrace();
         }
-    }
-
-    public static CloseableHttpClient getHttpClient()
-    {
-        return HttpClients.custom().setConnectionManager(connectionManager).build();
     }
 }

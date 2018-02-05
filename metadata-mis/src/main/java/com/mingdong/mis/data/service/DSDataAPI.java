@@ -28,14 +28,61 @@ import java.util.TreeMap;
 @Component
 public class DSDataAPI
 {
-    private static Logger logger = LoggerFactory.getLogger(DSDataAPI.class);
     private static final String GENERALIZE_BLACK_API = "https://api.dsdatas.com/blackData/fireGeneralizeBlack";
     private static final String MULTIPLE_APP_API = "https://api.dsdatas.com/credit/api/v1/query";
     private static final String MULTIPLE_APP_API_2 =
             "https://api.dsdatas.com/notify/fire/multipleApplications/report/v1";
-
     private static final String APP_KEY = "e7e552ec9d83114ee17b81fa04230200";
     private static final String SECURITY_KEY = "cb17fe4f427c8eaf232f37ab3cfa2ab6c204f670";
+    private static Logger logger = LoggerFactory.getLogger(DSDataAPI.class);
+
+    private static Map<String, String> getHeader()
+    {
+        Map<String, String> header = new HashMap<>();
+        header.put("Content-Type", "application/json;charset=UTF-8");
+        return header;
+    }
+
+    private static String sortMapToString(Map<String, Object> map)
+    {
+        if(map != null)
+        {
+            List<String> keyList = new ArrayList<>(map.keySet());
+            Collections.sort(keyList);
+            SortedMap<String, Object> sortedMap = new TreeMap<>();
+            for(String k : keyList)
+            {
+                sortedMap.put(k, map.get(k));
+            }
+            return JSON.toJSONString(sortedMap);
+        }
+        return null;
+    }
+
+    private static String sign(String data) throws NoSuchAlgorithmException, InvalidKeyException
+    {
+        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
+        SecretKeySpec spec = new SecretKeySpec(SECURITY_KEY.getBytes(), "HmacSHA256");
+        hmacSHA256.init(spec);
+        byte[] encData = hmacSHA256.doFinal(data.getBytes());
+        return byteArrayToHexString(encData);
+    }
+
+    private static String byteArrayToHexString(byte[] data)
+    {
+        StringBuilder hs = new StringBuilder();
+        String s;
+        for(int n = 0; data != null && n < data.length; n++)
+        {
+            s = Integer.toHexString(data[n] & 0XFF);
+            if(s.length() == 1)
+            {
+                hs.append('0');
+            }
+            hs.append(s);
+        }
+        return hs.toString().toLowerCase();
+    }
 
     public Blacklist callBlacklist(String idNo, String name, String phone) throws MetadataAPIException
     {
@@ -110,53 +157,5 @@ public class DSDataAPI
     private String getAuthToken()
     {
         return null;
-    }
-
-    private static Map<String, String> getHeader()
-    {
-        Map<String, String> header = new HashMap<>();
-        header.put("Content-Type", "application/json;charset=UTF-8");
-        return header;
-    }
-
-    private static String sortMapToString(Map<String, Object> map)
-    {
-        if(map != null)
-        {
-            List<String> keyList = new ArrayList<>(map.keySet());
-            Collections.sort(keyList);
-            SortedMap<String, Object> sortedMap = new TreeMap<>();
-            for(String k : keyList)
-            {
-                sortedMap.put(k, map.get(k));
-            }
-            return JSON.toJSONString(sortedMap);
-        }
-        return null;
-    }
-
-    private static String sign(String data) throws NoSuchAlgorithmException, InvalidKeyException
-    {
-        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-        SecretKeySpec spec = new SecretKeySpec(SECURITY_KEY.getBytes(), "HmacSHA256");
-        hmacSHA256.init(spec);
-        byte[] encData = hmacSHA256.doFinal(data.getBytes());
-        return byteArrayToHexString(encData);
-    }
-
-    private static String byteArrayToHexString(byte[] data)
-    {
-        StringBuilder hs = new StringBuilder();
-        String s;
-        for(int n = 0; data != null && n < data.length; n++)
-        {
-            s = Integer.toHexString(data[n] & 0XFF);
-            if(s.length() == 1)
-            {
-                hs.append('0');
-            }
-            hs.append(s);
-        }
-        return hs.toString().toLowerCase();
     }
 }

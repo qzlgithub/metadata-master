@@ -22,5 +22,5 @@ public interface ClientMapper
 
     Client findByPrimaryAccount(Long primaryAccountId);
 
-    Client findByCorpNameOrCorpLicense(@Param("corpName") String corpName,@Param("license") String license);
+    Client findByCorpNameOrCorpLicense(@Param("corpName") String corpName, @Param("license") String license);
 }

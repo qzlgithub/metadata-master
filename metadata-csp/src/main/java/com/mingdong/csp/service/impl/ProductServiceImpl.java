@@ -132,8 +132,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
-                toDate, page);
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
+                page);
         if(apiReqInfoListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(apiReqInfoListDTO.getResultDTO().getResult());
@@ -149,9 +149,9 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.ID, item.getId());
                 map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
                 map.put(Field.TRADE_NO, item.getId() + "");
-                map.put(Field.PRODUCT_NAME, item.getProductName() == null?"":item.getProductName());
+                map.put(Field.PRODUCT_NAME, item.getProductName() == null ? "" : item.getProductName());
                 map.put(Field.BILL_PLAN, BillPlan.getById(item.getBillPlan()).getName());
-                map.put(Field.HIT, TrueOrFalse.TRUE.equals(item.getHit())?"是":"否");
+                map.put(Field.HIT, TrueOrFalse.TRUE.equals(item.getHit()) ? "是" : "否");
                 map.put(Field.UNIT_AMT, NumberUtils.formatAmount(item.getFee()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 list.add(map);
@@ -179,8 +179,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate,
-                toDate, page);
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, productId, fromDate, toDate,
+                page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {
@@ -199,7 +199,7 @@ public class ProductServiceImpl implements ProductService
                 dataRow.createCell(1).setCellValue(dataDTO.getRequestNo());
                 dataRow.createCell(2).setCellValue(dataDTO.getProductName());
                 dataRow.createCell(3).setCellValue(BillPlan.getById(dataDTO.getBillPlan()).getName());
-                dataRow.createCell(4).setCellValue(TrueOrFalse.TRUE.equals(dataDTO.getHit())?"是":"否");
+                dataRow.createCell(4).setCellValue(TrueOrFalse.TRUE.equals(dataDTO.getHit()) ? "是" : "否");
                 dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataDTO.getFee()));
                 dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
             }

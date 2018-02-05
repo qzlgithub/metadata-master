@@ -73,7 +73,7 @@ public class PageController
         clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
-        view.addObject(Field.IS_PRIMARY,TrueOrFalse.TRUE.equals(RequestThread.getPrimary()));
+        view.addObject(Field.IS_PRIMARY, TrueOrFalse.TRUE.equals(RequestThread.getPrimary()));
         return view;
     }
 

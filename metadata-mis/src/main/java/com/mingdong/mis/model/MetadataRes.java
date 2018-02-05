@@ -12,6 +12,14 @@ public class MetadataRes
     private Date timestamp;
     private Map<String, Object> metadata;
 
+    public static MetadataRes create()
+    {
+        MetadataRes o = new MetadataRes();
+        o.setCode(MetadataResult.RC_0.getCode());
+        o.setTimestamp(new Date());
+        return o;
+    }
+
     public int getCode()
     {
         return code;
@@ -54,13 +62,5 @@ public class MetadataRes
             metadata = new HashMap<>();
         }
         metadata.put(k, v);
-    }
-
-    public static MetadataRes create()
-    {
-        MetadataRes o = new MetadataRes();
-        o.setCode(MetadataResult.RC_0.getCode());
-        o.setTimestamp(new Date());
-        return o;
     }
 }

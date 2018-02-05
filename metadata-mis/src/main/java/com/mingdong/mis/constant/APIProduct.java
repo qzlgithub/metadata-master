@@ -11,11 +11,6 @@ public enum APIProduct
         this.code = code;
     }
 
-    public String getCode()
-    {
-        return code;
-    }
-
     public static APIProduct getByCode(String code)
     {
         if(code != null)
@@ -29,5 +24,10 @@ public enum APIProduct
             }
         }
         return null;
+    }
+
+    public String getCode()
+    {
+        return code;
     }
 }

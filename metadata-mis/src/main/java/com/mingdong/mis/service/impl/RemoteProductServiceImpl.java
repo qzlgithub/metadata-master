@@ -166,8 +166,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         return apiReqInfoListDTO;
 
-
-
     }
 
     @Override
@@ -476,7 +474,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return productTxtDTO;
     }
 
-
     @Override
     public ProductListDTO getProductListByStatus(Integer enabled)
     {
@@ -646,7 +643,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
             return resultDTO;
         }
         type = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO,type);
+        EntityUtils.copyProperties(dictProductTypeDTO, type);
         dictProductTypeMapper.add(type);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
