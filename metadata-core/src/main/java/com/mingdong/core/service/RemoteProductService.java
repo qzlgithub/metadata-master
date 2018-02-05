@@ -2,8 +2,6 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
-import com.mingdong.core.model.dto.DictProductTypeDTO;
-import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -67,7 +65,7 @@ public interface RemoteProductService
      * @param page
      * @return
      */
-    DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page);
+//    DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page);
 
     /**
      * 根据合同号获取充值记录
@@ -112,7 +110,7 @@ public interface RemoteProductService
      * @param id
      * @return
      */
-    DictProductTypeDTO getDictProductTypeById(Long id);
+//    DictProductTypeDTO getDictProductTypeById(Long id);
 
     /**
      * 更改产品类型字典，null值不修改
@@ -120,7 +118,7 @@ public interface RemoteProductService
      * @param type
      * @return
      */
-    ResultDTO updateDictProductTypeSkipNull(DictProductTypeDTO type);
+//    ResultDTO updateDictProductTypeSkipNull(DictProductTypeDTO type);
 
     /**
      * 根据产品id获取产品信息
@@ -198,7 +196,7 @@ public interface RemoteProductService
      * @param type
      * @return
      */
-    ResultDTO addProductType(DictProductTypeDTO type);
+//    ResultDTO addProductType(DictProductTypeDTO type);
 
     /**
      * 新增产品，校验
@@ -223,7 +221,7 @@ public interface RemoteProductService
      * @param enabled
      * @return
      */
-    ResultDTO updateDictProductTypeStatusById(Long id, Integer enabled);
+//    ResultDTO updateDictProductTypeStatusById(Long id, Integer enabled);
 
     /**
      * 根据产品id修改产品状态

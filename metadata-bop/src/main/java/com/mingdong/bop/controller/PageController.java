@@ -299,7 +299,7 @@ public class PageController
     public ModelAndView productAddition()
     {
         ModelAndView view = new ModelAndView("product-manage/product-add");
-        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
+//        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

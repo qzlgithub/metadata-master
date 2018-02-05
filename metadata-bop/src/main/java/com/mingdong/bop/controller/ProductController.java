@@ -33,7 +33,8 @@ public class ProductController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         Page page = new Page(pageNum, pageSize);
-        BLResp resp = productService.getProdCategory(page);
+//        BLResp resp = productService.getProdCategory(page);
+        BLResp resp = BLResp.build();
         return resp.getDataMap();
     }
 
@@ -49,7 +50,7 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        productService.addProdCategory(code, name, remark, resp);
+//        productService.addProdCategory(code, name, remark, resp);
         return resp;
     }
 
@@ -68,7 +69,7 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        productService.updateCateStatus(id, enabled, resp);
+//        productService.updateCateStatus(id, enabled, resp);
         return resp;
     }
 
@@ -95,7 +96,8 @@ public class ProductController
     @ResponseBody
     public Map<String, Object> initFormDat(@RequestParam(Field.ID) Long id)
     {
-        BLResp resp = productService.getProductCategoryInfo(id);
+//        BLResp resp = productService.getProductCategoryInfo(id);
+        BLResp resp = BLResp.build();
         if(id == null)
         {
             resp.result(RestResult.KEY_FIELD_MISSING);
@@ -120,7 +122,7 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        resp = productService.editProdCategory(id, code, name, remark);
+//        resp = productService.editProdCategory(id, code, name, remark);
 
         return resp;
 
