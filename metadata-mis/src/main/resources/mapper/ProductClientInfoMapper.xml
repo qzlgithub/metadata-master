@@ -5,7 +5,6 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
         <result column="code" property="code" jdbcType="VARCHAR" />
-        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
         <result column="app_id" property="appId" jdbcType="VARCHAR" />
         <result column="client_product_id" property="clientProductId" jdbcType="BIGINT" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
@@ -24,7 +23,6 @@
             p.`id`           as product_id,
             p.`name`         as product_name,
             p.`code`         as code,
-            pt.`name`        as type_name,
             cp.`app_id`      as app_id,
             cp.`id`          as client_product_id,
             cp.`bill_plan`   as bill_plan,
@@ -67,7 +65,6 @@
         p.`id`           as product_id,
         p.`name`         as product_name,
         p.`code`         as code,
-        pt.`name`        as type_name,
         cp.`app_id`      as app_id,
         cp.`id`          as client_product_id,
         cp.`bill_plan`   as bill_plan,
