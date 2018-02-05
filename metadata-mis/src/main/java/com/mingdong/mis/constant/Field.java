@@ -14,4 +14,7 @@ public interface Field
     String REFRESH = "refresh";
     String ACCESS_TOKEN = "accessToken";
     String EXPIRATION = "expiration";
+    String ORDER_NO = "orderNo";
+    String IS_HIT = "isHit";
+    String REQUEST_NO = "requestNo";
 }

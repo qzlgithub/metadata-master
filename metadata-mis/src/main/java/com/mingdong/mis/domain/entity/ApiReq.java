@@ -9,6 +9,7 @@ public class ApiReq
     private Date createTime;
     private Date updateTime;
     private String requestNo;
+    private String thirdNo;
     private Long productId;
     private Long clientId;
     private Long userId;
@@ -56,6 +57,16 @@ public class ApiReq
     public void setRequestNo(String requestNo)
     {
         this.requestNo = requestNo;
+    }
+
+    public String getThirdNo()
+    {
+        return thirdNo;
+    }
+
+    public void setThirdNo(String thirdNo)
+    {
+        this.thirdNo = thirdNo;
     }
 
     public Long getProductId()

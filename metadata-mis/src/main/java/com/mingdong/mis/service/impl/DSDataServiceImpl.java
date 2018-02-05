@@ -26,9 +26,11 @@ import com.mingdong.mis.service.DSDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Service
 public class DSDataServiceImpl implements DSDataService
@@ -50,6 +52,7 @@ public class DSDataServiceImpl implements DSDataService
     private ProductMapper productMapper;
 
     @Override
+    @Transactional
     public void getBlacklistData(Long productId, Long clientId, Long userId, String ip, BlacklistVO request,
             MetadataRes res)
     {
@@ -87,12 +90,14 @@ public class DSDataServiceImpl implements DSDataService
                 }
                 IMetadata data = dataAPIProcessor.revokeDataAPI(product.getCode(), request);
 
-                ApiReq apiReq = new ApiReq();
                 Long id = IDUtils.getApiReqId(param.getNodeId());
+                String reqNo = "RQ" + id;
+                ApiReq apiReq = new ApiReq();
                 apiReq.setId(id);
                 apiReq.setCreateTime(res.getTimestamp());
                 apiReq.setUpdateTime(res.getTimestamp());
-                apiReq.setRequestNo("RQ" + id);
+                apiReq.setRequestNo(reqNo);
+                apiReq.setThirdNo(data.getRequestNo());
                 apiReq.setProductId(productId);
                 apiReq.setClientId(clientId);
                 apiReq.setUserId(userId);
@@ -126,7 +131,9 @@ public class DSDataServiceImpl implements DSDataService
                     apiReq.setBalance(productRecharge.getBalance().subtract(fee));
                 }
                 apiReqMapper.add(apiReq);
-                res.add(Field.RESULT, data.response());
+                Map<String, Object> result = data.response();
+                result.put(Field.REQUEST_NO, reqNo);
+                res.add(Field.RESULT, result);
             }
             else
             {
