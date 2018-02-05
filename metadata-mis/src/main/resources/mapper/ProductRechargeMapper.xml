@@ -71,6 +71,29 @@
         </trim>
     </insert>
 
+    <update id="updateSkipNull" parameterType="ProductRecharge">
+        update `product_recharge`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="clientProductId != null">`client_product_id` = #{clientProductId},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="tradeNo != null">`trade_no` = #{tradeNo},</if>
+            <if test="contractNo != null">`contract_no` = #{contractNo},</if>
+            <if test="billPlan != null">`bill_plan` = #{billPlan},</if>
+            <if test="rechargeType != null">`recharge_type` = #{rechargeType},</if>
+            <if test="amount != null">`amount` = #{amount},</if>
+            <if test="balance != null">`balance` = #{balance},</if>
+            <if test="startDate != null">`start_date` = #{startDate},</if>
+            <if test="endDate != null">`end_date` = #{endDate},</if>
+            <if test="unitAmt != null">`unit_amt` = #{unitAmt},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="managerId != null">`manager_id` = #{managerId},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}

@@ -91,7 +91,7 @@ public class BusinessUtils
                 return false;
             }
             String end = DateUtils.format(endDate, DateFormat.YYYY_MM_DD);
-            endDate = DateUtils.parseToDate(end, DateFormat.YYYY_MM_DD_HH_MM_SS);
+            endDate = DateUtils.parseToDate(end + " 23:59:59", DateFormat.YYYY_MM_DD_HH_MM_SS);
             return !now.after(endDate);
         }
         catch(ParseException e)

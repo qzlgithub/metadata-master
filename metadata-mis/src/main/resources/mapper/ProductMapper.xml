@@ -76,8 +76,7 @@
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="custom != null">`custom` = #{custom},</if>
         </set>
-        where `id` =
-        #{id}
+        where `id` = #{id}
     </update>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
