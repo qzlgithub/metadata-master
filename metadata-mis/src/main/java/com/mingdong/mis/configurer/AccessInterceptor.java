@@ -63,6 +63,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                 RequestThread.setProductId(auth.getProductId());
                 RequestThread.setClientId(auth.getClientId());
                 RequestThread.setUserId(auth.getUserId());
+                RequestThread.setAppSecret(auth.getAppSecret());
             }
         }
         RequestThread.setResult(res);

@@ -2,7 +2,7 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    DS_DATA_BLACKLIST("DS-BLACKLIST");
+    DS_DATA_BLACKLIST("DS-FHMD");
 
     private final String code;
 
