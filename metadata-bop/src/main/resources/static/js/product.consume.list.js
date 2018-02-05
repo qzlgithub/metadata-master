@@ -23,10 +23,10 @@ layui.config({
     });
     //日期
     laydate.render({
-        elem: '#start-date'
+        elem: '#start-time'
     });
     laydate.render({
-        elem: '#end-date'
+        elem: '#end-time'
     });
 });
 
@@ -78,8 +78,8 @@ function getProdConsumeList(obj, pageFun) {
             "pageSize": obj['pageSize'],
             "productId": obj['productId'],
             "clientId": obj['clientId'],
-            "startDate": obj['startDate'] == '' ? '' : obj['startDate'] + " 00:00:00",
-            "endDate": obj['endDate'] == '' ? '' : obj['endDate'] + " 23:59:59"
+            "startTime": obj['startTime'] == '' ? '' : obj['startTime'] + " 00:00:00",
+            "endTime": obj['endTime'] == '' ? '' : obj['endTime'] + " 23:59:59"
         }
         , function(data) {
             var list = data.list;
@@ -108,10 +108,10 @@ function getProdConsumeList(obj, pageFun) {
 function consumeOutPrint() {
     var productId = $("#product").val().trim();
     var clientId = $("#client-id").val().trim();
-    var startDate = $("#start-date").val().trim();
-    var endDate = $("#end-date").val().trim();
+    var startDate = $("#start-time").val().trim();
+    var endDate = $("#end-time").val().trim();
     var url = '/client/consumeList/export?clientId=' + clientId + "&productId=" + productId
-        + "&startDate=" + (startDate == '' ? '' : startDate + " 00:00:00")
-        + "&endDate=" + (endDate == '' ? '' : endDate + " 23:59:59");
+        + "&startTime=" + (startDate == '' ? '' : startDate + " 00:00:00")
+        + "&endTime=" + (endDate == '' ? '' : endDate + " 23:59:59");
     location.href = encodeURI(url);
 }
