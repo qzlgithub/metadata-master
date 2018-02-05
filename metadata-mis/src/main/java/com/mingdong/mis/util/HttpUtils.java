@@ -1,5 +1,6 @@
 package com.mingdong.mis.util;
 
+import com.mingdong.core.exception.MetadataHttpException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -10,15 +11,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HttpUtils
 {
+    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     private HttpUtils()
@@ -60,7 +63,8 @@ public class HttpUtils
         return response.getEntity();
     }
 
-    public static HttpEntity postData(String uri, Map<String, String> headers, String content) throws IOException
+    public static HttpEntity postData(String uri, Map<String, String> headers, String content)
+            throws MetadataHttpException
     {
         HttpClient client = HttpConnectionManager.getHttpClient();
         HttpPost post = new HttpPost(uri);
@@ -72,17 +76,15 @@ public class HttpUtils
                 post.addHeader(entry.getKey(), entry.getValue());
             }
         }
-        HttpResponse response = client.execute(post);
-        return response.getEntity();
-    }
-
-    public static void main(String[] args) throws IOException
-    {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
-        headers.put("auth_token", "sdf23j4klksdjflksd903248529483");
-        HttpEntity entity = postData("https://api.dsdatas.com/blackData/fireGeneralizeBlack", headers,
-                "{\"timestamp\":12141321312,\"name\":\"祝俊\",\"idCard\":\"330721198910115417\",\"phone\":\"18868429798\"}");
-        System.out.println(EntityUtils.toString(entity, DEFAULT_CHARSET));
+        try
+        {
+            HttpResponse response = client.execute(post);
+            return response.getEntity();
+        }
+        catch(IOException e)
+        {
+            logger.error("Failed to do http post request to {}", uri);
+            throw new MetadataHttpException("error to do http post request");
+        }
     }
 }

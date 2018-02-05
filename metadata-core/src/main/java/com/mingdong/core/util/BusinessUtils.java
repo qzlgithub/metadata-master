@@ -79,18 +79,25 @@ public class BusinessUtils
         return null;
     }
 
-    public static boolean checkAccountValid(Date startDate, Date endDate) throws ParseException
+    public static boolean checkAccountValid(Date startDate, Date endDate)
     {
         Date now = new Date();
-        String start = DateUtils.format(startDate, DateFormat.YYYY_MM_DD);
-        startDate = DateUtils.parseToDate(start, DateFormat.YYYY_MM_DD);
-        if(now.before(startDate))
+        try
+        {
+            String start = DateUtils.format(startDate, DateFormat.YYYY_MM_DD);
+            startDate = DateUtils.parseToDate(start, DateFormat.YYYY_MM_DD);
+            if(now.before(startDate))
+            {
+                return false;
+            }
+            String end = DateUtils.format(endDate, DateFormat.YYYY_MM_DD);
+            endDate = DateUtils.parseToDate(end, DateFormat.YYYY_MM_DD_HH_MM_SS);
+            return !now.after(endDate);
+        }
+        catch(ParseException e)
         {
             return false;
         }
-        String end = DateUtils.format(endDate, DateFormat.YYYY_MM_DD);
-        endDate = DateUtils.parseToDate(end, DateFormat.YYYY_MM_DD_HH_MM_SS);
-        return !now.after(endDate);
     }
 
     public static boolean checkAccountValid(BigDecimal unitAmt, BigDecimal balance)

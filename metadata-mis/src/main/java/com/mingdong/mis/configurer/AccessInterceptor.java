@@ -38,7 +38,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
             AuthRequired annotation = ((HandlerMethod) handler).getMethod().getAnnotation(AuthRequired.class);
             if(annotation != null)
             {
-                String token = request.getHeader(Field.HEADER_METADATA_TOKEN);
+                String token = request.getHeader(Field.HEADER_ACCESS_TOKEN);
                 if(StringUtils.isNullBlank(token))
                 {
                     res.setResult(MetadataResult.RC_1);

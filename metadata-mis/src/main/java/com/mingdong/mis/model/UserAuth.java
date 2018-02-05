@@ -7,6 +7,7 @@ public class UserAuth
     private Long productId;
     private Long clientId;
     private Long userId;
+    private String appSecret;
     private String host;
 
     public Long getProductId()
@@ -37,6 +38,16 @@ public class UserAuth
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public String getAppSecret()
+    {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret)
+    {
+        this.appSecret = appSecret;
     }
 
     public String getHost()

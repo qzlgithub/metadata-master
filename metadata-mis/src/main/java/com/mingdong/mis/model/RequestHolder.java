@@ -2,21 +2,12 @@ package com.mingdong.mis.model;
 
 public class RequestHolder
 {
-    private String ip;
     private Long productId;
     private Long clientId;
     private Long userId;
+    private String appSecret;
+    private String ip;
     private MetadataRes res;
-
-    public String getIp()
-    {
-        return ip;
-    }
-
-    public void setIp(String ip)
-    {
-        this.ip = ip;
-    }
 
     public Long getProductId()
     {
@@ -46,6 +37,26 @@ public class RequestHolder
     public void setUserId(Long userId)
     {
         this.userId = userId;
+    }
+
+    public String getAppSecret()
+    {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret)
+    {
+        this.appSecret = appSecret;
+    }
+
+    public String getIp()
+    {
+        return ip;
+    }
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
     }
 
     public MetadataRes getRes()

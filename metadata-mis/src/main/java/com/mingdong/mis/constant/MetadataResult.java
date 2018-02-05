@@ -10,7 +10,11 @@ public enum MetadataResult
     RC_5(5, "无效的用户名"),
     RC_6(6, "请求账号未配置接入凭证"),
     RC_7(7, "无效的请求密钥"),
-    RC_8(8, "该账号已被禁用");
+    RC_8(8, "该账号已被禁用"),
+    RC_9(9, "验签失败"),
+    RC_10(10, "账户余额不足"),
+    RC_11(11, "系统繁忙，请稍后重试"),
+    RC_12(12, "该服务已被禁用");
 
     private final int code;
     private final String message;

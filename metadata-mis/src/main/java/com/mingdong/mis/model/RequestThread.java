@@ -15,16 +15,6 @@ public class RequestThread
         return threadHolder.get();
     }
 
-    public static String getIp()
-    {
-        return get().getIp();
-    }
-
-    public static void setIp(String ip)
-    {
-        get().setIp(ip);
-    }
-
     public static Long getProductId()
     {
         return get().getProductId();
@@ -53,6 +43,26 @@ public class RequestThread
     public static void setUserId(Long userId)
     {
         get().setUserId(userId);
+    }
+
+    public static String getAppSecret()
+    {
+        return get().getAppSecret();
+    }
+
+    public static void setAppSecret(String appSecret)
+    {
+        get().setAppSecret(appSecret);
+    }
+
+    public static String getIp()
+    {
+        return get().getIp();
+    }
+
+    public static void setIp(String ip)
+    {
+        get().setIp(ip);
     }
 
     public static MetadataRes getResult()

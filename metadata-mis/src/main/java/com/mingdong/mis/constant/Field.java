@@ -2,7 +2,7 @@ package com.mingdong.mis.constant;
 
 public interface Field
 {
-    String HEADER_METADATA_TOKEN = "Metadata-Token";
+    String HEADER_ACCESS_TOKEN = "Access-Token";
     String APP_ID = "appId";
     String APP_KEY = "appKey";
     String PHONE = "phone";

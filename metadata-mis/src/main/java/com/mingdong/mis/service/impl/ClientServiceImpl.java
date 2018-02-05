@@ -113,6 +113,7 @@ public class ClientServiceImpl implements ClientService
         userAuth.setProductId(clientProduct.getProductId());
         userAuth.setClientId(clientProduct.getClientId());
         userAuth.setUserId(user.getId());
+        userAuth.setAppSecret(userProduct.getAppSecret());
         userAuth.setHost(userProduct.getReqHost());
         redisDao.saveUserAuth(accessToken, userAuth, seconds);
         res.add(Field.ACCESS_TOKEN, accessToken);
