@@ -58,8 +58,8 @@ public class ClientServiceImpl implements ClientService
         else
         {
             user = clientUserMapper.findByUsername(username);
-            if(user == null || !TrueOrFalse.TRUE.equals(user.getDeleted()) || !client.getId().equals(
-                    user.getClientId()))
+            if(user == null || !TrueOrFalse.FALSE.equals(user.getDeleted()) || !TrueOrFalse.TRUE.equals(
+                    user.getEnabled()) || !client.getId().equals(user.getClientId()))
             {
                 res.setResult(MetadataResult.RC_5);
                 return;

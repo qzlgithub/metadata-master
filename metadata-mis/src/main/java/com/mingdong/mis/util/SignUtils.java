@@ -37,36 +37,19 @@ public class SignUtils
         }
     }
 
-    public static boolean checkSign(String content, String key, String sign)
-    {
-        try
-        {
-            Mac hmacSHA256 = Mac.getInstance(HMAC_SHA_256);
-            SecretKeySpec spec = new SecretKeySpec(key.getBytes(), HMAC_SHA_256);
-            hmacSHA256.init(spec);
-            byte[] encData = hmacSHA256.doFinal(content.getBytes(Charset.UTF_8));
-            return sign.equals(byteArrayToHexString(encData));
-        }
-        catch(NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e)
-        {
-            logger.error("Error to check sign: content={}, key={}, sign={}", content, key, sign);
-        }
-        return false;
-    }
-
     private static String byteArrayToHexString(byte[] data)
     {
-        StringBuilder hs = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         String s;
         for(int n = 0; data != null && n < data.length; n++)
         {
             s = Integer.toHexString(data[n] & 0XFF);
             if(s.length() == 1)
             {
-                hs.append('0');
+                sb.append('0');
             }
-            hs.append(s);
+            sb.append(s);
         }
-        return hs.toString().toLowerCase();
+        return sb.toString().toLowerCase();
     }
 }
