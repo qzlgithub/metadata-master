@@ -61,7 +61,7 @@ public interface ProductService
      * @param enabled
      * @return
      */
-    List<Map<String, Object>> getDictProductTypeList(Integer enabled);
+//    List<Map<String, Object>> getDictProductTypeList(Integer enabled);
 
     /**
      * 根据条件获取产品信息列表

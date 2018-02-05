@@ -9,8 +9,6 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
-import com.mingdong.core.model.dto.DictProductTypeDTO;
-import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
@@ -39,7 +37,7 @@ public class ProductServiceImpl implements ProductService
     @Resource
     private RemoteProductService remoteProductService;
 
-    @Override
+    /*@Override
     public BLResp getProdCategory(Page page)
     {
         BLResp resp = BLResp.build();
@@ -96,7 +94,7 @@ public class ProductServiceImpl implements ProductService
         ResultDTO resultDTO = remoteProductService.updateDictProductTypeSkipNull(type);
         resp.result(resultDTO.getResult());
         return resp;
-    }
+    }*/
 
     @Override
     public Map<String, Object> getProductInfo(Long productId)
@@ -116,7 +114,7 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.ENABLED, product.getEnabled());
             map.put(Field.CONTENT, productTxt == null ? "" : productTxt.getContent());
         }
-        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
+        /*DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
         List<DictProductTypeDTO> dictType = dictProductTypeList.getDataList();
         List<Map<String, Object>> productType = new ArrayList<>();
         for(DictProductTypeDTO type : dictType)
@@ -126,7 +124,7 @@ public class ProductServiceImpl implements ProductService
             m.put(Field.NAME, type.getName());
             productType.add(m);
         }
-        map.put(Field.PRODUCT_TYPE_DICT, productType);
+        map.put(Field.PRODUCT_TYPE_DICT, productType);*/
         map.put(Field.CUSTOM_LIST, Custom.getAllList());
         map.put(Field.PROD_TYPE_DICT, ProdType.getProdTypeDict());
         return map;
@@ -192,7 +190,7 @@ public class ProductServiceImpl implements ProductService
         resp.result(resultDTO.getResult());
     }
 
-    @Override
+    /*@Override
     public BLResp getProductCategoryInfo(Long id)
     {
         BLResp resp = BLResp.build();
@@ -203,15 +201,15 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.REMARK, dictProductType.getRemark());
         return resp;
 
-    }
+    }*/
 
     //产品类别启用禁用
-    @Override
-    public void updateCateStatus(Long id, Integer enabled, BLResp resp)
-    {
-        ResultDTO resultDTO = remoteProductService.updateDictProductTypeStatusById(id, enabled);
-        resp.result(resultDTO.getResult());
-    }
+//    @Override
+//    public void updateCateStatus(Long id, Integer enabled, BLResp resp)
+//    {
+//        ResultDTO resultDTO = remoteProductService.updateDictProductTypeStatusById(id, enabled);
+//        resp.result(resultDTO.getResult());
+//    }
 
     @Override
     public void updateProdStatus(Long id, Integer enabled, BLResp resp)
@@ -236,7 +234,7 @@ public class ProductServiceImpl implements ProductService
         return list;
     }
 
-    @Override
+    /*@Override
     public List<Map<String, Object>> getProductTypeDict(Integer enabled)
     {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -250,7 +248,7 @@ public class ProductServiceImpl implements ProductService
             list.add(m);
         }
         return list;
-    }
+    }*/
 
     @Override
     public BLResp getProductInfoList(Page page)

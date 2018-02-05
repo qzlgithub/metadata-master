@@ -12,8 +12,6 @@ import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
-import com.mingdong.core.model.dto.DictProductTypeDTO;
-import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
@@ -316,7 +314,7 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.NORMAL_LIST, productList);
     }
 
-    @Override
+    /*@Override
     public List<Map<String, Object>> getDictProductTypeList(Integer enabled)
     {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -337,7 +335,7 @@ public class ProductServiceImpl implements ProductService
             }
         }
         return list;
-    }
+    }*/
 
     @Override
     public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp)

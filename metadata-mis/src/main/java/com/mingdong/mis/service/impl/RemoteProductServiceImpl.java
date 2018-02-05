@@ -13,8 +13,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
-import com.mingdong.core.model.dto.DictProductTypeDTO;
-import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -288,7 +286,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return dto;
     }
 
-    @Override
+    /*@Override
     public DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page)
     {
 
@@ -331,7 +329,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
             }
         }
         return dictProductTypeListDTO;
-    }
+    }*/
 
     @Override
     public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
@@ -412,7 +410,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return productRechargeInfoListDTO;
     }
 
-    @Override
+    /*@Override
     public DictProductTypeDTO getDictProductTypeById(Long id)
     {
         DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
@@ -448,7 +446,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         dictProductTypeMapper.updateSkipNull(type);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
+    }*/
 
     @Override
     public ProductDTO getProductById(Long productId)
@@ -627,7 +625,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return list;
     }
 
-    @Override
+    /*@Override
     @Transactional
     public ResultDTO addProductType(DictProductTypeDTO dictProductTypeDTO)
     {
@@ -653,7 +651,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         dictProductTypeMapper.add(type);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
+    }*/
 
     @Override
     @Transactional
@@ -731,7 +729,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return resultDTO;
     }
 
-    @Override
+    /*@Override
     @Transactional
     public ResultDTO updateDictProductTypeStatusById(Long id, Integer enabled)
     {
@@ -750,7 +748,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
-    }
+    }*/
 
     @Override
     @Transactional

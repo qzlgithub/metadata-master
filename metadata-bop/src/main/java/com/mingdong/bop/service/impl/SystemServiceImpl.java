@@ -10,8 +10,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
-import com.mingdong.core.model.dto.DictProductTypeDTO;
-import com.mingdong.core.model.dto.DictProductTypeListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
@@ -170,16 +168,16 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Map<String, Object>> getProductListMap()
     {
-        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
-        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
+//        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
+//        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(DictProductTypeDTO dictProductType : dataList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.TYPE_NAME, dictProductType.getName());
-            map.put(Field.ID, dictProductType.getId());
-            list.add(map);
-        }
+//        for(DictProductTypeDTO dictProductType : dataList)
+//        {
+//            Map<String, Object> map = new HashMap<>();
+//            map.put(Field.TYPE_NAME, dictProductType.getName());
+//            map.put(Field.ID, dictProductType.getId());
+//            list.add(map);
+//        }
         return list;
     }
 
