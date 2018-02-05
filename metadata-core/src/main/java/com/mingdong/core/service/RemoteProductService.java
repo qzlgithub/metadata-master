@@ -214,7 +214,7 @@ public interface RemoteProductService
      * @param newProductDTO
      * @return
      */
-    ResultDTO updateProduct(NewProductDTO newProductDTO);
+    ResultDTO updateProductSkipNull(NewProductDTO newProductDTO);
 
     /**
      * 根据产品类型id修改产品类型状态

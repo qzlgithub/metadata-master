@@ -137,7 +137,7 @@ public class ProductController
         return resp.getDataMap();
     }
 
-    @PostMapping(value = "/addition")
+   /* @PostMapping(value = "/addition")
     @ResponseBody
     public BLResp addNewProduct(@RequestBody ProductVO vo)
     {
@@ -147,23 +147,23 @@ public class ProductController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        productService.addProduct(vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(), vo.getEnabled(),
+        productService.addProduct(vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(), vo.getEnabled(), vo.getCustom(),
                 vo.getRemark(), vo.getContent(), resp);
         return resp;
-    }
+    }*/
 
     @PostMapping(value = "modification")
     @ResponseBody
     public BLResp editClient(@RequestBody ProductVO vo)
     {
         BLResp resp = BLResp.build();
-        if(vo.getId() == null || vo.getProductType() == null || StringUtils.isNullBlank(vo.getCode()) ||
-                StringUtils.isNullBlank(vo.getName()) || vo.getCostAmt() == null || vo.getEnabled() == null)
+        if(vo.getId() == null || StringUtils.isNullBlank(vo.getName()) ||
+                vo.getCostAmt() == null || vo.getEnabled() == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         productService.editProduct(vo.getId(), vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(),
-                vo.getEnabled(), vo.getRemark(), vo.getContent(), resp);
+                vo.getEnabled(), vo.getCustom(), vo.getRemark(), vo.getContent(), resp);
         return resp;
     }
 }

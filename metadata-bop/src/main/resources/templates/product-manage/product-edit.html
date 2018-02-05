@@ -28,30 +28,25 @@
         <!-- 内容主体区域 -->
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/">首页<span class="layui-box">&gt;</span></a>
-            <a href="/demo/">演示<span class="layui-box">&gt;</span></a>
+            <a th:href="@{/}">首页<span class="layui-box">&gt;</span></a>
+            <a th:href="@{/product/index.html}">产品列表<span class="layui-box">&gt;</span></a>
             <a><cite>导航元素</cite></a>
         </div>
         <!--面包屑 end-->
         <div class="p20">
             <div class="w60 m30">
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>产品类别：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品分组：</label>
                     <div class="layui-input-block w40">
-                        <select id="product-type" class="select-list">
-                            <option th:each="o : ${productTypeDict}" th:value="${o.id}"
-                                    th:text="${o.name}" th:selected="${type} == ${o.id}"></option>
-                        </select>
+                        <span th:text="${custom}"></span>
                     </div>
-                    <input type="hidden" id="product-id" th:value="${id}"/>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>产品编号：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>产品类别：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-code" onblur="checkProdNo();" placeholder="请输入" autocomplete="off" class="layui-input"
-                               th:value="${code}"/>
-                        <i class="col3 pl10" id="prodNoTip" style="display: none"></i>
+                        <span th:text="${type}"></span>
                     </div>
+                    <input type="hidden" id="product-id" th:value="${id}"/>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>

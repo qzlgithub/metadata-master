@@ -38,7 +38,7 @@ function productListInit(){
 
 var rowTr
     =
-    '<tr><td>#{code}</td><td>#{type}</td><td>#{name}</td><td id="enabledCheck#{id}">#{enabled}</td><td>#{remark}</td><td><span class="mr30"><a href="/product/edit.html?id=#{id}" class="edit">编辑</a></span> <a href="#" id="enabledTxt#{id}" onclick="changeStatus(\'#{id}\');" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabledVal}"/></td></tr>';
+    '<tr><td>#{custom}</td><td>#{type}</td><td>#{name}</td><td id="enabledCheck#{id}">#{enabled}</td><td>#{remark}</td><td><span class="mr30"><a href="/product/edit.html?id=#{id}" class="edit">编辑</a></span> <a href="#" id="enabledTxt#{id}" onclick="changeStatus(\'#{id}\');" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabledVal}"/></td></tr>';
 
 function getProductList(obj, pageFun) {
     $.get(
@@ -53,10 +53,10 @@ function getProductList(obj, pageFun) {
             var pages = data.pages;
             $("#dataBody").empty();
             for(var i in list) {
-                var row = rowTr.replace("#{code}", list[i].code)
-                .replace("#{enabledVal}", list[i].enabled)
+                var row = rowTr.replace("#{enabledVal}", list[i].enabled)
                 .replace(/#{id}/g, list[i].id)
                 .replace("#{type}", list[i].typeName)
+                .replace("#{custom}", list[i].custom)
                 .replace("#{name}", list[i].name)
                 .replace(/#{enabled}/g, list[i].enabled == 1 ? "否" : "是")
                 .replace("#{remark}", list[i].remark)
@@ -73,7 +73,7 @@ function changeStatus(id) {
     //alert(id);
     var enabled = $("#enabled" + id).val();
     var txt = ($("#enabledTxt" + id).text());
-    layer.confirm('是否确定' + txt + '？', {
+    layer.confirm('是否确定' + txt + '？请谨慎操作！', {
         btn: ['确定', '取消'],
         //Align: 'c',
         yes: function() {

@@ -7,16 +7,38 @@ import java.util.Date;
 public class ProductInfoDTO implements Serializable
 {
     private Long id;
-    private Long typeId;
+    private Integer type;
     private Date createTime;
     private Date updateTime;
     private String name;
     private String code;
     private BigDecimal costAmt;
     private Integer enabled;
+    private Integer custom;
     private String content;
     private String remark;
     private String typeName;
+    private String customName;
+
+    public Integer getCustom()
+    {
+        return custom;
+    }
+
+    public void setCustom(Integer custom)
+    {
+        this.custom = custom;
+    }
+
+    public String getCustomName()
+    {
+        return customName;
+    }
+
+    public void setCustomName(String customName)
+    {
+        this.customName = customName;
+    }
 
     public Long getId()
     {
@@ -28,14 +50,14 @@ public class ProductInfoDTO implements Serializable
         this.id = id;
     }
 
-    public Long getTypeId()
+    public Integer getType()
     {
-        return typeId;
+        return type;
     }
 
-    public void setTypeId(Long typeId)
+    public void setType(Integer type)
     {
-        this.typeId = typeId;
+        this.type = type;
     }
 
     public Date getCreateTime()

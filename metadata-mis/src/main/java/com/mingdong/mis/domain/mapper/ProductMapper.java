@@ -17,4 +17,6 @@ public interface ProductMapper
     List<Product> getListByStatus(Integer enabled);
 
     Product findByName(String name);
+
+    void updateSkipNull(Product product);
 }

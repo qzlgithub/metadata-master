@@ -48,34 +48,34 @@ public interface ProductService
 
     /**
      * 新增产品
-     *
-     * @param productType
+     *  @param productType
      * @param code
      * @param name
      * @param costAmt
      * @param enabled
+     * @param custom
      * @param remark
      * @param content
      * @param resp
      */
-    void addProduct(Long productType, String code, String name, BigDecimal costAmt, Integer enabled, String remark,
-            String content, BLResp resp);
+    void addProduct(Integer productType, String code, String name, BigDecimal costAmt, Integer enabled, Integer custom,
+            String remark, String content, BLResp resp);
 
     /**
      * 修改产品
-     *
-     * @param id
+     *  @param id
      * @param productType
      * @param code
      * @param name
      * @param costAmt
      * @param enabled
+     * @param custom
      * @param remark
      * @param content
      * @param resp
      */
-    void editProduct(Long id, Long productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            String remark, String content, BLResp resp);
+    void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
+            Integer custom, String remark, String content, BLResp resp);
 
     /**
      * 根据产品类型id获取产品类型信息

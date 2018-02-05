@@ -357,7 +357,7 @@ public class ProductServiceImpl implements ProductService
             for(ProductDTO d : productListDTO.getOpened())
             {
                 map = new HashMap<>();
-                if(selectedType == null || typeList.contains(d.getTypeId()))
+                if(selectedType == null || typeList.contains(d.getType()))
                 {
                     allList.add(map);
                 }
@@ -386,7 +386,7 @@ public class ProductServiceImpl implements ProductService
                 for(ProductDTO d : productListDTO.getToOpen())
                 {
                     map = new HashMap<>();
-                    if(selectedType == null || typeList.contains(d.getTypeId()))
+                    if(selectedType == null || typeList.contains(d.getType()))
                     {
                         allList.add(map);
                     }
