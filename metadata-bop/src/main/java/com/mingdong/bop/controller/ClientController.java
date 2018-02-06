@@ -117,8 +117,24 @@ public class ClientController
 
     }
 
+    @RequestMapping(value = "userConsumeList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
+            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        BLResp resp = BLResp.build();
+        tradeService.getClientBillList(null, null, null, userId, productId, startTime, endTime,
+                new Page(pageNum, pageSize), resp);
+        return resp.getDataMap();
+
+    }
+
     @GetMapping(value = "/consumeList/export")
-    public void exportBillList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public void exportConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
@@ -129,6 +145,24 @@ public class ClientController
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
+    }
+
+    @GetMapping(value = "/userConsumeList/export")
+    public void exportUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
+            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
+            throws IOException
+    {
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(null, null, null, userId, productId, startTime, endTime,
+                new Page(1, 1000));
+        String filename = new String("消费记录".getBytes(), "ISO8859-1");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        response.setContentType("application/vnd.ms-excel");
         OutputStream os = response.getOutputStream();
         wb.write(os);
         os.flush();

@@ -129,6 +129,19 @@ public class PageController
     }
 
     /**
+     * 页面：客户帐号消费列表
+     */
+    @RequestMapping(value = "/client/user/consume.html")
+    public ModelAndView clientUserConsumeIndexPage(@RequestParam(value = Field.USER_ID) Long userId)
+    {
+        ModelAndView view = new ModelAndView("customer-manage/product-user-consume");
+        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
+        view.addObject(Field.USER_ID, userId);
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    /**
      * 页面：客户添加页面
      */
     @RequestMapping(value = "/client/addition.html")

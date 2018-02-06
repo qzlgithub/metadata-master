@@ -114,5 +114,6 @@ public interface Field
     String CUSTOM_LIST = "customList";
     String PROD_TYPE_DICT = "prodTypeDict";
     String BILL_PLAN_LIST = "billPlanList";
+    String USER_ID = "userId";
 
 }

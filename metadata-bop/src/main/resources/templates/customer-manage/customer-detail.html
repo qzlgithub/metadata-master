@@ -143,8 +143,6 @@
                 </div>
 
 
-
-
                 <div class="form-title mb20" th:if="${not #lists.isEmpty(userList)}">子账号</div>
                 <div class="m30 clearfix" th:if="${not #lists.isEmpty(userList)}">
                     <table class="layui-table">
@@ -154,7 +152,7 @@
                             <th>账号</th>
                             <th>联系人</th>
                             <th>联系电话</th>
-                            <!--th>操作</th-->
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -163,7 +161,9 @@
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.name}"></td>
                             <td th:text="${user.phone}"></td>
-                            <!--td><span><a href="customer-edit.html" class="edit">查看消费详情</a></span></td-->
+                            <td><span><a th:href="'/client/user/consume.html?userId=' + ${user.id}" class="edit">查看消费详情
+                            </a></span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

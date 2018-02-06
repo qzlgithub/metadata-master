@@ -6,7 +6,7 @@ $(function() {
     clientListInit();
 });
 
-function clientListInit(){
+function clientListInit() {
     var obj = {
         pageNum: 1,
         pageSize: 10,
@@ -118,7 +118,9 @@ function resetChildPwd(id) {
 }
 
 var childTr =
-    '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td><td><span class="mr30"><a href="javascript:resetChildPwd(\'#{id}\')" class="edit">重置密码</a></span><a href="/client/edit.html?clientId=#{id}" class="edit">查看消费</a></td></tr>';
+    '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td>' +
+    '<td><span class="mr30"><a href="javascript:resetChildPwd(\'#{id}\')" class="edit">重置密码</a></span>' +
+    '<a href="/client/user/consume.html?userId=#{id}" class="edit">查看消费</a></td></tr>';
 
 function showChild(id) {
     $.get(
