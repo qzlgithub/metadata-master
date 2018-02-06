@@ -2,34 +2,29 @@ package com.mingdong.mis.service.impl;
 
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
-import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.exception.MetadataAPIException;
-import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
+import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.constant.MetadataResult;
 import com.mingdong.mis.data.DataAPIProcessor;
-import com.mingdong.mis.domain.entity.ApiReq;
 import com.mingdong.mis.domain.entity.ClientProduct;
-import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductRecharge;
-import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
-import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.model.IMetadata;
 import com.mingdong.mis.model.MetadataRes;
 import com.mingdong.mis.model.vo.BlacklistVO;
+import com.mingdong.mis.service.ChargeService;
 import com.mingdong.mis.service.DSDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
+import java.util.Date;
 
 @Service
 public class DSDataServiceImpl implements DSDataService
@@ -38,106 +33,56 @@ public class DSDataServiceImpl implements DSDataService
     @Resource
     private Param param;
     @Resource
-    private DataAPIProcessor dataAPIProcessor;
-    @Resource
     private RedisDao redisDao;
+    @Resource
+    private ChargeService chargeService;
+    @Resource
+    private DataAPIProcessor dataAPIProcessor;
     @Resource
     private ClientProductMapper clientProductMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
-    @Resource
-    private ApiReqMapper apiReqMapper;
-    @Resource
-    private ProductMapper productMapper;
 
     @Override
-    @Transactional
-    public void getBlacklistData(Long productId, Long clientId, Long userId, String ip, BlacklistVO request,
+    public void getBlacklistData(Long accountId, Long clientId, Long userId, String ip, BlacklistVO req,
             MetadataRes res)
     {
-        Product product = productMapper.findById(productId);
-        if(product == null || !TrueOrFalse.TRUE.equals(product.getEnabled()))
-        {
-            res.setResult(MetadataResult.RC_12);
-            return;
-        }
-        ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
-        String lockName = StringUtils.getUuid();
+        APIProduct product = APIProduct.DS_DATA_BLACKLIST;
+        String lockAccount = product.name() + "-C" + clientId;
+        String lockUUID = StringUtils.getUuid();
+        boolean locked = false;
         try
         {
-            // 锁定客户产品账户
-            if(redisDao.lockClientProduct(clientProduct.getId(), lockName))
+            // 锁定产品账户
+            locked = redisDao.lockProductAccount(lockAccount, lockUUID);
+            if(!locked)
             {
-                ProductRecharge productRecharge = productRechargeMapper.findById(clientProduct.getLatestRechargeId());
-                // 验证账户有效性
-                BillPlan billPlan = BillPlan.getById(productRecharge.getBillPlan());
-                boolean isAcctValid;
-                if(BillPlan.YEAR == billPlan)
-                {
-                    isAcctValid = BusinessUtils.checkAccountValid(productRecharge.getStartDate(),
-                            productRecharge.getEndDate());
-                }
-                else
-                {
-                    isAcctValid = BusinessUtils.checkAccountValid(productRecharge.getUnitAmt(),
-                            productRecharge.getBalance());
-                }
-                if(!isAcctValid)
-                {
-                    res.setResult(MetadataResult.RC_10);
-                    return;
-                }
-                IMetadata data = dataAPIProcessor.revokeDataAPI(product.getCode(), request);
-
-                Long id = IDUtils.getApiReqId(param.getNodeId());
-                String reqNo = "RQ" + id;
-                ApiReq apiReq = new ApiReq();
-                apiReq.setId(id);
-                apiReq.setCreateTime(res.getTimestamp());
-                apiReq.setUpdateTime(res.getTimestamp());
-                apiReq.setRequestNo(reqNo);
-                apiReq.setThirdNo(data.getRequestNo());
-                apiReq.setProductId(productId);
-                apiReq.setClientId(clientId);
-                apiReq.setUserId(userId);
-                apiReq.setRequestIp(ip);
-                apiReq.setHit(data.isHit() ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-                apiReq.setBillPlan(billPlan.getId());
-                if(BillPlan.REQ == billPlan)
-                {
-                    BigDecimal balance = productRecharge.getBalance().subtract(productRecharge.getUnitAmt());
-                    apiReq.setFee(productRecharge.getUnitAmt());
-                    apiReq.setBalance(balance);
-                    ProductRecharge prUpd = new ProductRecharge();
-                    prUpd.setId(productRecharge.getId());
-                    prUpd.setUpdateTime(res.getTimestamp());
-                    prUpd.setBalance(balance);
-                    productRechargeMapper.updateSkipNull(prUpd);
-                }
-                else if(BillPlan.RES == billPlan)
-                {
-                    BigDecimal fee = new BigDecimal(0); // 本次请求的费用
-                    if(data.isHit()) // 成功击中结果
-                    {
-                        fee = productRecharge.getUnitAmt();
-                        ProductRecharge prUpd = new ProductRecharge();
-                        prUpd.setId(productRecharge.getId());
-                        prUpd.setUpdateTime(res.getTimestamp());
-                        prUpd.setBalance(productRecharge.getBalance().subtract(fee));
-                        productRechargeMapper.updateSkipNull(prUpd);
-                    }
-                    apiReq.setFee(fee);
-                    apiReq.setBalance(productRecharge.getBalance().subtract(fee));
-                }
-                apiReqMapper.add(apiReq);
-                res.add(Field.REQUEST_NO, reqNo);
-                res.addAll(data.response());
-            }
-            else
-            {
-                logger.warn("Failed to lock client product account, client: {}, product: {}", clientId, productId);
+                logger.warn("Failed to lock product account, client: {}, product: {}", clientId, product.name());
                 res.setResult(MetadataResult.RC_11);
+                return;
             }
+            // 查询计费方式，如果按时间计费则即时释放账户锁
+            ClientProduct account = clientProductMapper.findById(accountId);
+            BillPlan billPlan = BillPlan.getById(account.getBillPlan());
+            if(BillPlan.BY_TIME == billPlan)
+            {
+                redisDao.freeProductAccount(lockAccount, lockUUID);
+                locked = false;
+            }
+            // 查询当前有效的充值记录，并验证账户有效性
+            ProductRecharge recharge = productRechargeMapper.findById(account.getLatestRechargeId());
+            if(!checkAccountIsAvailable(recharge, res.getTimestamp()))
+            {
+                res.setResult(MetadataResult.RC_10);
+                return;
+            }
+            IMetadata data = dataAPIProcessor.revokeDataAPI(product, req);
+            // 保存本次请求记录，并更新产品账余额
+            Long reqId = IDUtils.getApiReqId(param.getNodeId());
+            chargeService.chargeAndLog(reqId, account, userId, recharge, billPlan, ip, data.getThirdNo(), data.isHit(),
+                    res.getTimestamp());
+            res.add(Field.REQUEST_NO, "RQ" + reqId);
+            res.addAll(data.response());
         }
         catch(MetadataAPIException e)
         {
@@ -146,7 +91,27 @@ public class DSDataServiceImpl implements DSDataService
         }
         finally
         {
-            redisDao.freeClientProduct(clientProduct.getId(), lockName);
+            if(locked)
+            {
+                redisDao.freeProductAccount(lockAccount, lockUUID);
+            }
         }
+    }
+
+    private boolean checkAccountIsAvailable(ProductRecharge recharge, Date current)
+    {
+        BillPlan billPlan = BillPlan.getById(recharge.getBillPlan());
+        if(BillPlan.BY_TIME == billPlan)
+        {
+            long time = current.getTime();
+            long start = recharge.getStartDate().getTime();
+            long end = recharge.getEndDate().getTime() + 86400000L;
+            return time >= start && time < end;
+        }
+        else if(BillPlan.PER_USE == billPlan || BillPlan.PER_HIT == billPlan)
+        {
+            return recharge.getBalance().doubleValue() >= recharge.getUnitAmt().doubleValue();
+        }
+        return false;
     }
 }

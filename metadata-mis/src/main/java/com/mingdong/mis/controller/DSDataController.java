@@ -26,12 +26,13 @@ public class DSDataController
     public MetadataRes callBlacklistService(@RequestBody AccessVO<BlacklistVO> accessVO)
     {
         MetadataRes res = RequestThread.getResult();
+        // 数据验签
         if(!accessVO.checkSign(RequestThread.getAppSecret()))
         {
             res.setResult(MetadataResult.RC_9);
             return res;
         }
-        dsDataService.getBlacklistData(RequestThread.getProductId(), RequestThread.getClientId(),
+        dsDataService.getBlacklistData(RequestThread.getAccountId(), RequestThread.getClientId(),
                 RequestThread.getUserId(), RequestThread.getIp(), accessVO.getPayload(), res);
         return res;
     }

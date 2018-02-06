@@ -4,20 +4,21 @@ import com.mingdong.common.util.StringUtils;
 
 public class UserAuth
 {
-    private Long productId;
+    private String product;
     private Long clientId;
+    private Long accountId;
     private Long userId;
     private String appSecret;
-    private String host;
+    private String validIP;
 
-    public Long getProductId()
+    public String getProduct()
     {
-        return productId;
+        return product;
     }
 
-    public void setProductId(Long productId)
+    public void setProduct(String product)
     {
-        this.productId = productId;
+        this.product = product;
     }
 
     public Long getClientId()
@@ -28,6 +29,16 @@ public class UserAuth
     public void setClientId(Long clientId)
     {
         this.clientId = clientId;
+    }
+
+    public Long getAccountId()
+    {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId)
+    {
+        this.accountId = accountId;
     }
 
     public Long getUserId()
@@ -50,18 +61,19 @@ public class UserAuth
         this.appSecret = appSecret;
     }
 
-    public String getHost()
+    public String getValidIP()
     {
-        return host;
+        return validIP;
     }
 
-    public void setHost(String host)
+    public void setValidIP(String validIP)
     {
-        this.host = host;
+        this.validIP = validIP;
     }
 
     public boolean auth()
     {
-        return !StringUtils.isNullBlank(host) && productId != null && clientId != null && userId != null;
+        return !StringUtils.isNullBlank(validIP) && !StringUtils.isNullBlank(product) && clientId != null &&
+                accountId != null && userId != null;
     }
 }

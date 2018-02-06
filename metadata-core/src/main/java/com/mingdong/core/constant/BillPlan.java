@@ -7,9 +7,9 @@ import java.util.List;
 
 public enum BillPlan
 {
-    YEAR(1, "包年"),
-    REQ(2, "请求计费"),
-    RES(3, "请求成功计费");
+    BY_TIME(1, "按时间计费"),
+    PER_USE(2, "按次计费"),
+    PER_HIT(3, "按击中计费");
 
     private Integer id;
     private String name;

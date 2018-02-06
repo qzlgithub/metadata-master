@@ -47,7 +47,7 @@ public class Blacklist implements IMetadata
     }
 
     @Override
-    public String getRequestNo()
+    public String getThirdNo()
     {
         return orderNo;
     }

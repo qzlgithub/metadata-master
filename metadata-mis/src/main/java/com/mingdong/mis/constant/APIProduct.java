@@ -2,32 +2,18 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    DS_DATA_BLACKLIST("DS-FHMD");
+    DS_DATA_BLACKLIST("/ds-data/blacklist"),
+    DS_DATA_MULTI_APP("/ds-data/multi-app");
 
-    private final String code;
+    private final String uri;
 
-    APIProduct(String code)
+    APIProduct(String uri)
     {
-        this.code = code;
+        this.uri = uri;
     }
 
-    public static APIProduct getByCode(String code)
+    public String getUri()
     {
-        if(code != null)
-        {
-            for(APIProduct product : APIProduct.values())
-            {
-                if(code.equals(product.code))
-                {
-                    return product;
-                }
-            }
-        }
-        return null;
-    }
-
-    public String getCode()
-    {
-        return code;
+        return uri;
     }
 }

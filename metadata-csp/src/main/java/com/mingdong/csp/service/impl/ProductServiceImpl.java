@@ -217,7 +217,7 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.PRODUCT_ID, dto.getId() + "");
         resp.addData(Field.PRODUCT_NAME, dto.getName());
         resp.addData(Field.BILL_PLAN, dto.getBillPlan());
-        if(BillPlan.YEAR.getId().equals(dto.getBillPlan()))
+        if(BillPlan.BY_TIME.getId().equals(dto.getBillPlan()))
         {
             resp.addData(Field.STATUS, ProductStatus.getStatusByDate(dto.getFromDate(), dto.getToDate()));
             resp.addData(Field.FROM_DATE, DateUtils.format(dto.getFromDate(), DateFormat.YYYY_MM_DD_2));
@@ -266,7 +266,7 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.PRODUCT_ID, o.getId() + "");
             map.put(Field.PRODUCT_NAME, o.getName());
             map.put(Field.BILL_PLAN, o.getBillPlan());
-            if(BillPlan.YEAR.getId().equals(o.getBillPlan()))
+            if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
             {
                 status = ProductStatus.getStatusByDate(o.getFromDate(), o.getToDate());
                 map.put(Field.FROM_DATE, DateUtils.format(o.getFromDate(), DateFormat.YYYY_MM_DD_2));
@@ -367,7 +367,7 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.NAME, d.getName());
                 map.put(Field.STATUS, d.getStatus());
                 map.put(Field.BILL_PLAN, d.getBillPlan());
-                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                if(BillPlan.BY_TIME.getId().equals(d.getBillPlan()))
                 {
                     map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(d.getFromDate(), d.getToDate()) + "");
                     map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
