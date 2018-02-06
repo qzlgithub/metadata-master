@@ -208,7 +208,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setType(info.getTypeId());
                     d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
-                    if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
+                    if(BillPlan.BY_TIME.getId().equals(info.getBillPlan()))
                     {
                         d.setStatus(ProductStatus.getStatusByDate(info.getStartDate(), info.getEndDate()));
                         d.setFromDate(info.getStartDate());
@@ -259,7 +259,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         dto.setName(info.getProductName());
         dto.setContent(info.getContent());
         dto.setBillPlan(info.getBillPlan());
-        if(BillPlan.YEAR.getId().equals(info.getBillPlan()))
+        if(BillPlan.BY_TIME.getId().equals(info.getBillPlan()))
         {
             dto.setFromDate(info.getStartDate());
             dto.setToDate(info.getEndDate());
@@ -608,7 +608,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 o.setClientProductId(d.getClientProductId());
                 o.setAppId(d.getAppId());
                 o.setBillPlan(d.getBillPlan());
-                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                if(BillPlan.BY_TIME.getId().equals(d.getBillPlan()))
                 {
                     o.setFromDate(d.getStartDate());
                     o.setToDate(d.getEndDate());

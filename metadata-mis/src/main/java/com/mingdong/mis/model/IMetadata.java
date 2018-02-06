@@ -17,5 +17,5 @@ public interface IMetadata
     /**
      * 获取第三方接口的请求编号
      */
-    String getRequestNo();
+    String getThirdNo();
 }

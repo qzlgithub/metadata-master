@@ -2,21 +2,21 @@ package com.mingdong.mis.model;
 
 public class RequestHolder
 {
-    private Long productId;
+    private Long accountId;
     private Long clientId;
     private Long userId;
     private String appSecret;
     private String ip;
     private MetadataRes res;
 
-    public Long getProductId()
+    public Long getAccountId()
     {
-        return productId;
+        return accountId;
     }
 
-    public void setProductId(Long productId)
+    public void setAccountId(Long accountId)
     {
-        this.productId = productId;
+        this.accountId = accountId;
     }
 
     public Long getClientId()

@@ -1,6 +1,6 @@
 package com.mingdong.mis.model.vo;
 
-public class BlacklistVO extends AbstractAccessBean
+public class BlacklistVO extends AbsRequest
 {
     private String idNo;
     private String name;

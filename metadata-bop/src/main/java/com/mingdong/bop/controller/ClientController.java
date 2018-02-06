@@ -319,7 +319,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(billPlan == BillPlan.YEAR)
+        if(billPlan == BillPlan.BY_TIME)
         {
             if(vo.getStartDate() == null || vo.getEndDate() == null)
             {
@@ -355,7 +355,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(billPlan == BillPlan.YEAR)
+        if(billPlan == BillPlan.BY_TIME)
         {
             if(vo.getStartDate() == null || vo.getEndDate() == null)
             {

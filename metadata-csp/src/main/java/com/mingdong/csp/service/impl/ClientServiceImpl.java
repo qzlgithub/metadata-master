@@ -167,7 +167,7 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.NAME, d.getName());
                 map.put(Field.STATUS, d.getStatus());
                 map.put(Field.BILL_PLAN, d.getBillPlan());
-                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                if(BillPlan.BY_TIME.getId().equals(d.getBillPlan()))
                 {
                     map.put(Field.FROM_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD_2));
                     map.put(Field.TO_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD_2));

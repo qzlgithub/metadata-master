@@ -9,19 +9,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RedisDao extends RedisBaseDao
 {
-    public boolean lockClientProduct(Long clientProductId, String lockName)
+    public boolean lockProductAccount(String account, String lockName)
     {
-        setExNx(DB.LOCK_CLIENT_PRODUCT, clientProductId + "", lockName, 60);
-        String name = get(DB.LOCK_CLIENT_PRODUCT, clientProductId + "");
+        setExNx(DB.LOCK_CLIENT_PRODUCT, account, lockName, 60);
+        String name = get(DB.LOCK_CLIENT_PRODUCT, account);
         return lockName.equals(name);
     }
 
-    public void freeClientProduct(Long clientProductId, String lockName)
+    public void freeProductAccount(String account, String lockName)
     {
-        String name = get(DB.LOCK_CLIENT_PRODUCT, clientProductId + "");
+        String name = get(DB.LOCK_CLIENT_PRODUCT, account);
         if(lockName.equals(name))
         {
-            del(DB.LOCK_CLIENT_PRODUCT, clientProductId + "");
+            del(DB.LOCK_CLIENT_PRODUCT, account);
         }
     }
 

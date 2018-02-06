@@ -15,14 +15,14 @@ public class RequestThread
         return threadHolder.get();
     }
 
-    public static Long getProductId()
+    public static Long getAccountId()
     {
-        return get().getProductId();
+        return get().getAccountId();
     }
 
-    public static void setProductId(Long productId)
+    public static void setAccountId(Long accountId)
     {
-        get().setProductId(productId);
+        get().setAccountId(accountId);
     }
 
     public static Long getClientId()

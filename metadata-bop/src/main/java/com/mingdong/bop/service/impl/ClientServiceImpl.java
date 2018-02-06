@@ -412,7 +412,7 @@ public class ClientServiceImpl implements ClientService
             return;
         }
         resp.addData(Field.BILL_PLAN, pr.getBillPlan());
-        if(BillPlan.YEAR.getId().equals(pr.getBillPlan()))
+        if(BillPlan.BY_TIME.getId().equals(pr.getBillPlan()))
         {
             resp.addData(Field.START_DATE, DateUtils.format(pr.getStartDate(), DateFormat.YYYY_MM_DD));
             resp.addData(Field.END_DATE, DateUtils.format(pr.getEndDate(), DateFormat.YYYY_MM_DD));
@@ -731,7 +731,7 @@ public class ClientServiceImpl implements ClientService
                 m.put(Field.CLIENT_PRODUCT_ID, d.getClientProductId() + "");
                 m.put(Field.APP_ID, d.getAppId());
                 m.put(Field.BILL_PLAN, d.getBillPlan());
-                if(BillPlan.YEAR.getId().equals(d.getBillPlan()))
+                if(BillPlan.BY_TIME.getId().equals(d.getBillPlan()))
                 {
                     m.put(Field.START_DATE, DateUtils.format(d.getFromDate(), DateFormat.YYYY_MM_DD));
                     m.put(Field.END_DATE, DateUtils.format(d.getToDate(), DateFormat.YYYY_MM_DD));
