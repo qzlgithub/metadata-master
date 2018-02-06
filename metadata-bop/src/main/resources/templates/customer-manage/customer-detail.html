@@ -102,7 +102,6 @@
                     </table>
                 </div>
                 <div class="form-title mb20">产品服务</div>
-
                 <div class="m30">
                     <ul class="customer-detail clearfix">
 
@@ -141,8 +140,32 @@
 
                     </ul>
                 </div>
-
-
+                <div class="form-title mb20">定制服务展示</div>
+                <div class="m30">
+                    <div class="mt10 mb10"><a class="add-button" id="service">添加</a></div>
+                    <table class="layui-table mt25">
+                        <thead>
+                        <tr>
+                            <th>产品编号</th>
+                            <th>产品名称</th>
+                            <th>所属类别</th>
+                            <th>产品状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user,index : ${userList}">
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.phone}"></td>
+                            <td th:text="${user.phone}"></td>
+                            <td><span class="edit">移除</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="form-title mb20" th:if="${not #lists.isEmpty(userList)}">子账号</div>
                 <div class="m30 clearfix" th:if="${not #lists.isEmpty(userList)}">
                     <table class="layui-table">
@@ -384,55 +407,110 @@
 <!--提示层 end-->
 
 
-<!--账户充值  提示层-->
-<div id="recharge-modal" class="modal">
+<!--添加定制服务  提示层-->
+<div id="service-modal" class="modal">
     <!--form-->
-    <div class="layui-layer-title">账户充值</div>
+    <div class="layui-layer-title">添加定制服务</div>
     <div class="m30">
-        <form class="layui-form" action="">
-            <div class="m30 mt0 mr40">
-                <div class="layui-form-item">
-                    <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
-                    <div class="layui-input-block renew-input-block">
-                        <input type="text" id="account-recharge-amt" name="username" lay-verify="required"
-                               placeholder="请输入" autocomplete="off"
-                               class="layui-input" style="width:65%; display: inline; float: left;"
-                               onblur="checkRechargeAmt()"/> 元
-                        <i class="col3 pl10" id="rechargeAmtTip" style="display: none"></i>
-                    </div>
+        <ul class="search-list clearfix pb25">
+            <li>
+                <div class="layui-input-inline layui-form">
+                    <select name="modules" lay-verify="required" lay-search="">
+                        <option value="">输入产品名称或者编号</option>
+                        <option value="1">layer</option>
+                        <option value="2">form</option>
+                        <option value="3">layim</option>
+                        <option value="4">element</option>
+                        <option value="4">element</option>
+                    </select>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
-                    <div class="layui-input-block renew-input-block">
-                        <select name="modules" id="account-recharge-type" lay-verify="required" lay-search=""
-                                class="select-list">
-                            <option value="1">代客户充值</option>
-                            <option value="2">赔偿</option>
-                            <option value="3">借用</option>
-                            <option value="4">返还</option>
-                            <option value="5">活动赠送</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label renew-form-label">备注：</label>
-                    <div class="layui-input-block renew-input-block">
-                        <textarea name="desc" id="account-recharge-remark" placeholder="请输入内容"
-                                  class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="accountRecharge()">保存
-                        </button>
-                    </div>
-                </div>
+            </li>
+
+            <li>
+                <button type="button" class="check-button" onclick="clientListInit()">查询</button>
+            </li>
+            <li class="fr">
+                <button type="button" class="check-button" onclick="clientListInit()">确认添加</button>
+            </li>
+        </ul>
+        <div style="width: 100%;">
+            <div class="table-head">
+                <table class="scroll-table">
+                    <colgroup>
+                        <col style="width: 100%;" />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>产品编号</th>
+                            <th>产品名称</th>
+                            <th>所属类别</th>
+                            <th>产品状态</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-        </form>
+            <div class="table-body">
+                <table class="scroll-table" style="width: 100%; border: 1px solid #e2e2e2;">
+                    <colgroup><col style="width: 100%;" /><col /></colgroup>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox"  checked=""/></td>
+                        <td>产品编号</td>
+                        <td>产品名称</td>
+                        <td>所属类别</td>
+                        <td>产品状态</td>
+                        <td>备注</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"  checked=""/></td>
+                        <td>产品编号</td>
+                        <td>产品名称</td>
+                        <td>所属类别</td>
+                        <td>产品状态</td>
+                        <td>备注</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"  checked=""/></td>
+                        <td>产品编号</td>
+                        <td>产品名称</td>
+                        <td>所属类别</td>
+                        <td>产品状态</td>
+                        <td>备注</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"  checked=""/></td>
+                        <td>产品编号</td>
+                        <td>产品名称</td>
+                        <td>所属类别</td>
+                        <td>产品状态</td>
+                        <td>备注</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"  checked=""/></td>
+                        <td>产品编号</td>
+                        <td>产品名称</td>
+                        <td>所属类别</td>
+                        <td>产品状态</td>
+                        <td>备注</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ul class="service-list clearfix">
+            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
+            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
+            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
+            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
+
+        </ul>
     </div>
     <!--form end-->
 </div>
-<!--提示层 end-->
+<!--添加定制服务 提示层 end-->
 
 
 <script src="../../static/plugins/layui/layui.js"></script>
@@ -447,7 +525,7 @@
     var message;
     layui.config({
         base: '../../static/build/js/'
-    }).use(['app', 'message', 'laydate'], function() {
+    }).use(['app', 'message', 'laydate', 'table'], function() {
         var app = layui.app,
             $ = layui.jquery,
             layer = layui.layer;
@@ -525,11 +603,11 @@
                 shadeClose: true
             });
         });
-        $('#recharge').on('click', function() {
+        $('#service').on('click', function() {
             layer.open({
                 title: false,
                 type: 1,
-                content: $('#recharge-modal'),
+                content: $('#service-modal'),
                 area: ['700px'],
                 shadeClose: true
             });
