@@ -121,7 +121,7 @@ public class PageController
     @RequestMapping(value = "/client/index.html")
     public ModelAndView clientIndexPage()
     {
-        ModelAndView view = new ModelAndView("customer-manage/customer-index");
+        ModelAndView view = new ModelAndView("client/list");
         List<Map<String, Object>> industryList = systemService.getIndustryList(0L, TrueOrFalse.TRUE);
         view.addObject(Field.INDUSTRY_LIST, industryList);
         view.addAllObjects(RequestThread.getMap());
