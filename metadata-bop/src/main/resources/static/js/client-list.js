@@ -427,17 +427,18 @@ function getSubIndustry() {
             "/system/industry/childList",
             {"industryId": parentId},
             function(data) {
-                $("#industryId").empty();
-                $("#industryId").append('<option value="">全部</option>');
+                var target = $("#industryId");
+                target.empty();
+                target.append('<option value="">全部</option>');
                 for(var d in data) {
-                    $("#industryId").append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
+                    target.append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
                 }
             }
         )
     }
     else {
-        $("#industryId").empty();
-        $("#industryId").append('<option value="">全部</option>');
+        target.empty();
+        target.append('<option value="">全部</option>');
     }
 }
 
