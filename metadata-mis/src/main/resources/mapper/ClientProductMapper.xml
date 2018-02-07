@@ -9,6 +9,7 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="app_id" property="appId" jdbcType="CHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
+        <result column="is_opened" property="isOpened" jdbcType="TINYINT" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="latest_recharge_id" property="latestRechargeId" jdbcType="TINYINT" />
     </resultMap>
@@ -16,7 +17,7 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-            `latest_recharge_id`
+            `latest_recharge_id`, `is_opened`
         from `client_product`
     </sql>
 
@@ -32,6 +33,7 @@
             <if test="billPlan != null">`bill_plan`,</if>
             <if test="balance != null">`balance`,</if>
             <if test="latestRechargeId != null">`latest_recharge_id`,</if>
+            <if test="isOpened != null">`is_opened`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -43,6 +45,7 @@
             <if test="billPlan != null">#{billPlan},</if>
             <if test="balance != null">#{balance},</if>
             <if test="latestRechargeId != null">#{latestRechargeId},</if>
+            <if test="isOpened != null">#{isOpened},</if>
         </trim>
     </insert>
 
@@ -57,6 +60,7 @@
             <if test="billPlan != null">`bill_plan` = #{billPlan},</if>
             <if test="balance != null">`balance` = #{balance},</if>
             <if test="latestRechargeId != null">`latest_recharge_id` = #{latestRechargeId},</if>
+            <if test="isOpened != null">`is_opened` = #{isOpened},</if>
         </set>
         where `id` = #{id}
     </update>
@@ -75,4 +79,20 @@
         <include refid="select_all" />
         where `app_id` = #{appId}
     </select>
+
+    <delete id="deleteByIds">
+        delete from client_product where id
+        <foreach collection="ids" item="itemId" open="in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </delete>
+
+    <insert id="addAll" parameterType="List">
+        insert into `client_product` (`id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`,
+        `bill_plan`, `balance`, `latest_recharge_id`,`is_opened`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id},#{item.createTime},#{item.updateTime},#{item.clientId},
+            #{item.productId},#{item.appId},#{item.billPlan},#{item.balance}, #{item.latestRechargeId},#{item.isOpened})
+        </foreach>
+    </insert>
 </mapper>

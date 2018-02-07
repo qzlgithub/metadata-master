@@ -6,6 +6,7 @@ import com.mingdong.mis.domain.entity.ApiReq;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
+import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class ChargeServiceImpl implements ChargeService
     private ApiReqMapper apiReqMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
+    @Resource
+    private ClientProductMapper clientProductMapper;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -61,5 +64,13 @@ public class ChargeServiceImpl implements ChargeService
             apiReq.setBalance(recharge.getBalance().subtract(fee));
         }
         apiReqMapper.add(apiReq);
+    }
+
+    @Override
+    @Transactional
+    public void renewClientProduct(ProductRecharge pr, ClientProduct cp)
+    {
+        productRechargeMapper.add(pr);
+        clientProductMapper.updateSkipNull(cp);
     }
 }

@@ -7,7 +7,12 @@ import java.util.Date;
 public class ProductClientDetailDTO implements Serializable
 {
     private Long productId;
+    private Integer custom;
+    private Integer productType;
+    private String code;
+    private String remark;
     private Long clientProductId;
+    private Integer isOpened;
     private String name;
     private String appId;
     private Integer billPlan;
@@ -16,6 +21,56 @@ public class ProductClientDetailDTO implements Serializable
     private BigDecimal amount;
     private BigDecimal unitAmt;
     private BigDecimal balance;
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public Integer getProductType()
+    {
+        return productType;
+    }
+
+    public void setProductType(Integer productType)
+    {
+        this.productType = productType;
+    }
+
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+
+    public Integer getCustom()
+    {
+        return custom;
+    }
+
+    public void setCustom(Integer custom)
+    {
+        this.custom = custom;
+    }
+
+    public Integer getIsOpened()
+    {
+        return isOpened;
+    }
+
+    public void setIsOpened(Integer isOpened)
+    {
+        this.isOpened = isOpened;
+    }
 
     public Long getProductId()
     {

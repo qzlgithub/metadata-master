@@ -263,6 +263,7 @@
         });
         $("#ref-app-key").click(function() {
             var uuid = Math.uuidFast();
+            var uuid = uuid.toLocaleLowerCase();
             $("#app-key").val(uuid.replace(/-/g, ''));
         });
         $('#next-step').on('click', function() {

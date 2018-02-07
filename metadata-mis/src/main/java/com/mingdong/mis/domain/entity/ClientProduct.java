@@ -13,7 +13,18 @@ public class ClientProduct
     private String appId;
     private Integer billPlan;
     private BigDecimal balance;
+    private Integer isOpened;
     private Long latestRechargeId;
+
+    public Integer getIsOpened()
+    {
+        return isOpened;
+    }
+
+    public void setIsOpened(Integer isOpened)
+    {
+        this.isOpened = isOpened;
+    }
 
     public Long getId()
     {

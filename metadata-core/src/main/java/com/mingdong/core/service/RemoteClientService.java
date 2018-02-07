@@ -334,4 +334,8 @@ public interface RemoteClientService
     ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO);
 
     ResultDTO editClient(NewClientDTO clientDTO, List<ClientContactDTO> contacts, List<Long> delIds);
+
+    ResultDTO selectCustomProduct(Long clientId, List<Long> productIds);
+
+    ResultDTO removeCustomClientProduct(Long clientProductId);
 }

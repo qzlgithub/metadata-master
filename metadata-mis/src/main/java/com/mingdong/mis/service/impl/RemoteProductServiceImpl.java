@@ -1,6 +1,7 @@
 package com.mingdong.mis.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.constant.BillPlan;
@@ -27,6 +28,7 @@ import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.EntityUtils;
+import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.DictProductType;
@@ -36,6 +38,7 @@ import com.mingdong.mis.domain.entity.ProductInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
+import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
@@ -46,6 +49,7 @@ import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.ProductTxtMapper;
+import com.mingdong.mis.domain.mapper.UserProductMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -76,6 +80,10 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private ProductTxtMapper productTxtMapper;
     @Resource
     private ProductInfoMapper productInfoMapper;
+    @Resource
+    private UserProductMapper userProductMapper;
+    @Resource
+    private RedisDao redisDao;
 
     @Override
     public ProductRechargeInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
@@ -197,7 +205,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         List<ProductDTO> toOpen = new ArrayList<>();
         for(ProductClientInfo info : dataList)
         {
-            if(info.getClientProductId() != null)
+            if(info.getClientProductId() != null && TrueOrFalse.TRUE.equals(info.getIsOpened()))
             {
                 if(opened.size() < Constant.HOME_PRODUCT_QTY)
                 {
@@ -205,7 +213,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
                     d.setCode(info.getCode());
-                    d.setType(info.getTypeId());
+                    d.setType(info.getType());
                     d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
                     if(BillPlan.BY_TIME.getId().equals(info.getBillPlan()))
@@ -234,7 +242,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setRemark(info.getRemark());
                     d.setCode(info.getCode());
                     d.setTypeName(info.getTypeName());
-                    d.setType(info.getTypeId());
+                    d.setType(info.getType());
                     toOpen.add(d);
                 }
             }
@@ -603,8 +611,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
             ProductClientDetailDTO o = new ProductClientDetailDTO();
             o.setProductId(d.getProductId());
             o.setName(d.getProductName());
+            o.setCustom(d.getCustom());
+            o.setProductType(d.getType());
+            o.setRemark(d.getRemark());
+            o.setCode(d.getCode());
             if(d.getClientProductId() != null)
             {
+                o.setIsOpened(d.getIsOpened());
                 o.setClientProductId(d.getClientProductId());
                 o.setAppId(d.getAppId());
                 o.setBillPlan(d.getBillPlan());
@@ -766,6 +779,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
             product.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             product.setUpdateTime(new Date());
             productMapper.updateById(product);
+        }
+        List<UserProduct> userProductList = userProductMapper.findListBy(null, id);
+        if(CollectionUtils.isNotEmpty(userProductList)){
+            List<Long> ids  = new ArrayList<>();
+            List<String> removeToken = new ArrayList<>();
+            for(UserProduct item : userProductList){
+                if(StringUtils.isNotEmpty(item.getAccessToken())){
+                    removeToken.add(item.getAccessToken());
+                    ids.add(item.getId());
+                }
+            }
+            if(CollectionUtils.isNotEmpty(ids)){
+                userProductMapper.updateToken(new Date(),null,ids);
+                for(String item : removeToken){
+                    redisDao.dropUserAuth(item);
+                }
+            }
         }
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;

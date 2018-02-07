@@ -1,3 +1,108 @@
+$(".date").datepicker({dateFormat: "yy-mm-dd"});
+var message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message', 'laydate', 'table'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    laydate = layui.laydate;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    $('#pay').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            /*content: '<img src="../../static/build/images/pay.png" />',*/
+            content: $('#key-modal'),
+            /*area: ['500px', '250px'],*/
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+    $('.app-id').on('click', function() {
+        var appId = $(this).attr("app-id");
+        var appName = $(this).attr("app-name");
+        $("#app-id-prod").text(appName);
+        $("#app-id-val").text(appId);
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#key-modal'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+    $('.renew').on('click', function() {
+        var clientProductId = $(this).attr("client-product-id");
+        $("#renew-client-product-id").val(clientProductId);
+        if($(this).hasClass('is-selected-class')) {
+            $("#renew-info").empty();
+            $("#renew-server-id").html("开通服务");
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#renew-modal'),
+                area: ['700px'],
+                shadeClose: true
+            });
+            return;
+        }
+        $("#renew-server-id").html("续费服务");
+        $.get(
+            "/client/product/renewInfo",
+            {"clientProductId": clientProductId},
+            function(res) {
+                $("#renew-info").empty();
+                var row1 =
+                    '<li>服务时间：#{startDate} - #{endDate}</li><li>客户价：#{amount}元</li><li>总充值：#{totalAmt}元</li>';
+                var row2 =
+                    '<li>当前余额：#{balance}元</li><li>客价：#{unitAmt}元/次</li><li>总充值：#{totalAmt}元</li>';
+                var row;
+                if(res.billPlan === 1) {
+                    row = row1.replace("#{startDate}", res.startDate).replace("#{endDate}", res.endDate)
+                    .replace("#{amount}", res.amount).replace("#{totalAmt}", res.totalAmt);
+                }
+                else {
+                    row = row2.replace("#{balance}", res.balance).replace("#{unitAmt}", res.unitAmt)
+                    .replace("#{totalAmt}", res.totalAmt);
+                }
+                $("#renew-info").append(row);
+                layer.open({
+                    title: false,
+                    type: 1,
+                    content: $('#renew-modal'),
+                    area: ['700px'],
+                    shadeClose: true
+                });
+            }
+        );
+    });
+    $('.open-product').on('click', function() {
+        var productId = $(this).attr("data-product-id");
+        $("#open-product-id").val(productId);
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#openServe-modal'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+    $('#service').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#service-modal'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+});
 var logTr = '<ul class="log"><li><div class="title-log pt10 pb10 clearfix">' +
     '<span class="w50 tl">#{type}</span>' +
     '<span class="w25 tr">#{managerName}</span>' +
@@ -9,7 +114,7 @@ $(".show-log").click(function() {
         pageNum: 1,
         pageSize: 5
     };
-    getOperateLogList(obj,function(pageObj, pages, total) {
+    getOperateLogList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
             initPageNo: pageObj['pageNum'],
             totalPages: pages,
@@ -21,7 +126,7 @@ $(".show-log").click(function() {
                 getOperateLogList(pageObj);
             }
         })
-    },function(){
+    }, function() {
         layer.open({
             title: false,
             type: 1,
@@ -32,7 +137,7 @@ $(".show-log").click(function() {
     });
 });
 
-function getOperateLogList(obj,pageFun,openLayerFun) {
+function getOperateLogList(obj, pageFun, openLayerFun) {
     $.get(
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
@@ -55,7 +160,7 @@ function getOperateLogList(obj,pageFun,openLayerFun) {
                         div.append(tr);
                     }
                     if(typeof pageFun === 'function') {
-                        pageFun(obj,pages,total);
+                        pageFun(obj, pages, total);
                     }
                 }
                 else {
@@ -160,40 +265,6 @@ function renewProduct() {
     });
 }
 
-function accountRecharge() {
-    var clientId = $("#client-id").val();
-    var amount = $("#account-recharge-amt").val();
-    var rechargeType = $("#account-recharge-type").val();
-    var remark = $("#account-recharge-remark").val();
-    $.ajax({
-        type: "post",
-        url: "/client/account/recharge",//此处缺少账户充值方法
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "clientId": clientId,
-            "amount": amount,
-            "rechargeType": rechargeType,
-            "remark": remark
-        }),
-        success: function(data) {
-
-            if(data.errCode !== '000000') {
-                layer.msg("充值失败:" + data.errMsg, {
-                    time: 2000
-                });
-            }
-            else {
-                layer.msg("充值成功", {
-                    time: 2000
-                }, function() {
-                    window.location.href = "/client/detail.html?clientId=" + $("#client-id").val();
-                });
-            }
-        }
-    });
-}
-
 //开通服务切换
 $(document).ready(function() {
     $("#open-charge").on("change", function() {
@@ -234,25 +305,13 @@ $(document).ready(function() {
         }
     });
 });
-//续费js
-/*function checkSelectBill() {
-    var selectBill = $("#renew-bill-plan").val();
-    if(selectBill !== "") {
-        $("#selectBillTip").text("");
-        $("#selectBillTip").hide();
-    }
-    else {
-        $("#selectBillTip").text("请选择计费模式！");
-        $("#selectBillTip").show();
-    }
-}*/
+
 function checkStartTime() {
     var startTime = $("#renew-start").val();
-    console.log("startTime",startTime);
+    console.log("startTime", startTime);
     var reg = new RegExp(
         "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-
-    if(startTime !=="") {
+    if(startTime !== "") {
         if(reg.test(startTime)) {
             $("#startTimeTip").text("");
             $("#startTimeTip").hide();
@@ -275,7 +334,7 @@ function checkEndTime() {
     var reg =
         new
         RegExp("^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    console.log("endTime",endTime);
+    console.log("endTime", endTime);
     if(endTime) {
         if(reg.test(endTime)) {
             if(getDate(startTime) - getDate(endTime) > 0) {
@@ -346,17 +405,6 @@ function checkRecharge() {
     }
 }
 
-/*function checkRechargeType() {
-    var rechargeType = $("#renew-recharge-type").val();
-    if(rechargeType !== "") {
-        $("#rechargeTypeTip").text("");
-        $("#rechargeTypeTip").hide();
-    }
-    else {
-        $("#rechargeTypeTip").text("请选择充值类型！");
-        $("#rechargeTypeTip").show();
-    }
-}*/
 function checkContNumber() {
     var contNumber = $("#renew-contract").val();
     if(contNumber !== "") {
@@ -482,22 +530,97 @@ function checkOpenContract() {
     }
 }
 
-//账户充值js
-function checkRechargeAmt() {
-    var recharge = $("#account-recharge-amt").val();
-    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 充值金额价格(保留小数点后两位)
-    if(recharge !== "") {
-        if(reg.test(recharge)) {
-            $("#rechargeAmtTip").text("");
-            $("#rechargeAmtTip").hide();
-        }
-        else {
-            $("#rechargeAmtTip").text("充值金额格式错误");
-            $("#rechargeAmtTip").show();
-        }
+$("#all-product").on("change", ".product-checkbox-class", function() {
+    var productId = $(this).attr("value");
+    var productName = $(this).parents("tr").find("#productName-" + productId).html();
+    if($(this).is(':checked')) {
+        var html = '<li id="ul-li-' + productId + '"><span >' + productName + '</span><i class="layui-icon fz-14 ul-li-class" value="' + productId + '">&#x1006;</i></li>';
+        $("#selected-product").append(html);
     }
     else {
-        $("#rechargeAmtTip").text("请填写充值金额！");
-        $("#rechargeAmtTip").show();
+        $("#ul-li-" + productId).remove();
     }
+});
+$("#selected-product").on("click", ".ul-li-class", function() {
+    var productId = $(this).attr("value");
+    $("#checkbox-" + productId).prop("checked", false);
+    $("#ul-li-" + productId).remove();
+});
+$(".remove-class").on("click", function() {
+    var clientProductId = $(this).attr("value");
+    layer.confirm('是否确定移除？（已被开通的项目无法移除）', {
+        btn: ['确定', '取消'],
+        yes: function() {
+            $(this).click();
+            $.ajax({
+                type: "POST",
+                url: "/client/product/remove",
+                data: {"id": clientProductId},
+                success: function(data) {
+                    if(data.errCode !== '000000') {
+                        layer.msg("移除失败:" + data.errMsg, {
+                            time: 2000
+                        });
+                    }
+                    else {
+                        layer.msg("移除成功", {
+                            time: 1000
+                        }, function() {
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
+            layer.closeAll();
+        },
+        btn2: function() {
+            layer.closeAll();
+        }
+    });
+});
+
+function findProductTr() {
+    var selectProductId = $("#select-product").val();
+    $("#all-product").find("tr").each(function() {
+        if(selectProductId == "" || selectProductId == $(this).attr("value")) {
+            $(this).show();
+        }
+        else {
+            $(this).hide();
+        }
+    });
+}
+
+var isSubmit = false;
+
+function selectProductSave() {
+    if(isSubmit) {
+        return;
+    }
+    isSubmit = true;
+    var ids = [];
+    $("input[class=product-checkbox-class]:checked").each(function() {
+        ids.push($(this).val());
+    });
+    var clientId = $("#client-id").val();
+    $.ajax({
+        type: "post",
+        url: "/client/product/select",
+        data: {clientId: clientId, ids: ids.join(",")},
+        success: function(data) {
+            if(data.errCode !== '000000') {
+                layer.msg("添加失败:" + data.errMsg, {
+                    time: 2000
+                });
+                isSubmit = false;
+            }
+            else {
+                layer.msg("添加成功", {
+                    time: 2000
+                }, function() {
+                    window.location.reload();
+                });
+            }
+        }
+    });
 }

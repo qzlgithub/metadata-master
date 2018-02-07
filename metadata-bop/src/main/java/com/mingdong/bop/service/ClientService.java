@@ -202,4 +202,8 @@ public interface ClientService
     void editClient(NewClientVO vo, BLResp resp);
 
     void findClientDetail(Long clientId, BLResp resp);
+
+    void selectCustomProduct(Long clientId, List<Long> productIds, BLResp resp);
+
+    void removeCustomClientProduct(Long clientProductId, BLResp resp);
 }

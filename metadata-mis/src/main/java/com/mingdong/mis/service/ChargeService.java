@@ -10,4 +10,6 @@ public interface ChargeService
 {
     void chargeAndLog(Long requestId, ClientProduct account, Long userId, ProductRecharge recharge, BillPlan billPlan,
             String ip, String thirdNo, boolean hit, Date date);
+
+    void renewClientProduct(ProductRecharge pr,ClientProduct cp);
 }

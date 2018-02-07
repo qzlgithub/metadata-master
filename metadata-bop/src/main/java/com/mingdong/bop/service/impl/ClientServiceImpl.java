@@ -18,6 +18,8 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
+import com.mingdong.core.constant.Custom;
+import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -350,6 +352,7 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
+        cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
         ResultDTO resultDTO = remoteClientService.openClientProduct(openClientProductDTO);
         resp.result(resultDTO.getResult());
@@ -391,6 +394,7 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(amount);
         cp.setLatestRechargeId(productRechargeId);
+        cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
         ResultDTO resultDTO = remoteClientService.openClientProduct(openClientProductDTO);
         resp.result(resultDTO.getResult());
@@ -459,6 +463,7 @@ public class ClientServiceImpl implements ClientService
         cp.setBillPlan(billPlan);
         cp.setBalance(new BigDecimal(0));
         cp.setLatestRechargeId(productRechargeId);
+        cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
         ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
         resp.result(resultDTO.getResult());
@@ -495,6 +500,7 @@ public class ClientServiceImpl implements ClientService
         cpUpd.setBillPlan(billPlan);
         //        cpUpd.setBalance(amount.add(cp.getBalance()));
         cpUpd.setLatestRechargeId(productRechargeId);
+        cpUpd.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cpUpd);
         ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
         resp.result(resultDTO.getResult());
@@ -721,12 +727,17 @@ public class ClientServiceImpl implements ClientService
         List<ProductClientDetailDTO> productDTOList = remoteProductService.getProductInfoList(clientId);
         List<Map<String, Object>> opened = new ArrayList<>();
         List<Map<String, Object>> toOpen = new ArrayList<>();
+        List<Map<String, Object>> custom = new ArrayList<>();
         for(ProductClientDetailDTO d : productDTOList)
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.PRODUCT_ID, d.getProductId() + "");
             m.put(Field.PRODUCT_NAME, d.getName());
-            if(d.getClientProductId() != null)
+            m.put(Field.CUSTOM, d.getCustom());
+            m.put(Field.TYPE_NAME, ProdType.getById(d.getProductType()).getName());
+            m.put(Field.CODE, d.getCode());
+            m.put(Field.REMARK, d.getRemark());
+            if(d.getClientProductId() != null && TrueOrFalse.TRUE.equals(d.getIsOpened()))
             {
                 m.put(Field.CLIENT_PRODUCT_ID, d.getClientProductId() + "");
                 m.put(Field.APP_ID, d.getAppId());
@@ -744,12 +755,46 @@ public class ClientServiceImpl implements ClientService
                 }
                 opened.add(m);
             }
-            else
+            else if(d.getClientProductId() != null && TrueOrFalse.FALSE.equals(d.getIsOpened()))
             {
+                m.put(Field.IS_SELECTED, TrueOrFalse.TRUE);
                 toOpen.add(m);
+            }
+            else if(Custom.COMMON == Custom.getById(d.getCustom()))
+            {
+                m.put(Field.IS_SELECTED, TrueOrFalse.FALSE);
+                toOpen.add(m);
+            }
+            if(TrueOrFalse.TRUE.equals(d.getCustom()))
+            {
+                if(d.getClientProductId() != null)
+                {
+                    m.put(Field.CLIENT_PRODUCT_ID, d.getClientProductId() + "");
+                    m.put(Field.IS_SELECTED, TrueOrFalse.TRUE);
+                }
+                else
+                {
+                    m.put(Field.IS_SELECTED, TrueOrFalse.FALSE);
+                }
+                custom.add(m);
             }
         }
         resp.addData(Field.OPENED, opened);
         resp.addData(Field.TO_OPEN, toOpen);
+        resp.addData(Field.PRODUCT_CUSTOM_LIST, custom);
+    }
+
+    @Override
+    public void selectCustomProduct(Long clientId, List<Long> productIds, BLResp resp)
+    {
+        ResultDTO resultDTO = remoteClientService.selectCustomProduct(clientId, productIds);
+        resp.result(resultDTO.getResult());
+    }
+
+    @Override
+    public void removeCustomClientProduct(Long clientProductId, BLResp resp)
+    {
+        ResultDTO resultDTO = remoteClientService.removeCustomClientProduct(clientProductId);
+        resp.result(resultDTO.getResult());
     }
 }

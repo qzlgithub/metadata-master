@@ -36,6 +36,8 @@ import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
+import com.mingdong.mis.component.RedisDao;
+import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
@@ -47,6 +49,7 @@ import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.Manager;
+import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.entity.UserProduct;
@@ -60,10 +63,12 @@ import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
+import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
 import com.mingdong.mis.domain.mapper.UserProductMapper;
+import com.mingdong.mis.service.ChargeService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -77,6 +82,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Resource
     private Param param;
+    @Resource
+    private RedisDao redisDao;
     @Resource
     private SysConfigMapper sysConfigMapper;
     @Resource
@@ -105,6 +112,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ApiReqInfoMapper apiReqInfoMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
+    @Resource
+    private ProductClientInfoMapper productClientInfoMapper;
+    @Resource
+    private ChargeService chargeService;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -998,7 +1009,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientProduct cp = clientProductMapper.findByClientAndProduct(
                 openClientProductDTO.getProductRechargeDTO().getClientId(),
                 openClientProductDTO.getProductRechargeDTO().getProductId());
-        if(cp != null)
+        if(cp != null && TrueOrFalse.TRUE.equals(cp.getIsOpened()))
         {
             resultDTO.setResult(RestResult.PRODUCT_OPENED);
             return resultDTO;
@@ -1021,32 +1032,53 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    @Transactional
     public ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        ClientProduct cp = clientProductMapper.findById(
-                openClientProductDTO.getProductRechargeDTO().getClientProductId());
-        if(cp == null)
+        APIProduct product = APIProduct.DS_DATA_BLACKLIST;
+        String lockAccount = product.name() + "-C" + openClientProductDTO.getProductRechargeDTO().getClientId();
+        String lockUUID = StringUtils.getUuid();
+        boolean locked = false;
+        try{
+            while(!locked){
+                locked = redisDao.lockProductAccount(lockAccount, lockUUID);
+                if(!locked){
+                    Thread.sleep(100);
+                    continue;
+                }
+                ClientProduct cp = clientProductMapper.findById(
+                        openClientProductDTO.getProductRechargeDTO().getClientProductId());
+                if(cp == null)
+                {
+                    resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+                    redisDao.freeProductAccount(lockAccount, lockUUID);
+                    return resultDTO;
+                }
+                openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
+                openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
+                if(!openClientProductDTO.isYear())
+                {
+                    openClientProductDTO.getProductRechargeDTO().setBalance(
+                            openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
+                    openClientProductDTO.getClientProductDTO().setBalance(
+                            openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
+                }
+                ProductRecharge pr = new ProductRecharge();
+                EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
+                cp = new ClientProduct();
+                EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
+                chargeService.renewClientProduct(pr,cp);
+                break;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            if(locked)
+            {
+                redisDao.freeProductAccount(lockAccount, lockUUID);
+            }
         }
-        openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
-        openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
-        if(!openClientProductDTO.isYear())
-        {
-            openClientProductDTO.getProductRechargeDTO().setBalance(
-                    openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
-            openClientProductDTO.getClientProductDTO().setBalance(
-                    openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
-        }
-        ProductRecharge pr = new ProductRecharge();
-        EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
-        productRechargeMapper.add(pr);
-        cp = new ClientProduct();
-        EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
-        clientProductMapper.updateSkipNull(cp);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
@@ -1119,6 +1151,85 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 clientContactMapper.addList(addList);
             }
         }
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO selectCustomProduct(Long clientId, List<Long> productIds)
+    {
+        ResultDTO res = new ResultDTO();
+        List<ProductClientInfo> productClientInfoList = productClientInfoMapper.getClientProductCustomBy(clientId);
+        if(productIds == null)
+        {
+            productIds = new ArrayList<>();
+        }
+        boolean canDelete = true;
+        List<ClientProduct> addList = new ArrayList<>();
+        List<Long> deleteIds = new ArrayList<>();
+        ClientProduct clientProduct;
+        for(ProductClientInfo item : productClientInfoList)
+        {
+            if(!productIds.contains(item.getProductId()))
+            {
+                deleteIds.add(item.getClientProductId());
+                if(TrueOrFalse.TRUE.equals(item.getCustom()) && TrueOrFalse.TRUE.equals(item.getIsOpened()))
+                {
+                    canDelete = false;
+                    break;
+                }
+            }else{
+                productIds.remove(item.getProductId());
+            }
+        }
+        if(canDelete)
+        {
+            if(CollectionUtils.isNotEmpty(deleteIds))
+            {
+                clientProductMapper.deleteByIds(deleteIds.toArray(new Long[0]));
+            }
+            if(CollectionUtils.isNotEmpty(productIds))
+            {
+                Date date = new Date();
+                for(Long productId : productIds)
+                {
+                    clientProduct = new ClientProduct();
+                    clientProduct.setId(IDUtils.getClientProductId(1));
+                    clientProduct.setClientId(clientId);
+                    clientProduct.setProductId(productId);
+                    clientProduct.setIsOpened(TrueOrFalse.FALSE);
+                    clientProduct.setCreateTime(date);
+                    clientProduct.setUpdateTime(date);
+                    clientProduct.setAppId(StringUtils.getUuid());
+                    addList.add(clientProduct);
+                }
+                clientProductMapper.addAll(addList);
+            }
+        }
+        else
+        {
+            res.setResult(RestResult.CLIENT_PRODUCT_NO_DELETE);
+        }
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO removeCustomClientProduct(Long clientProductId)
+    {
+        ResultDTO res = new ResultDTO();
+        ProductClientInfo clientProductInfo = productClientInfoMapper.getClientProductInfo(clientProductId);
+        if(clientProductInfo == null)
+        {
+            res.setResult(RestResult.OBJECT_NOT_FOUND);
+            return res;
+        }
+        if(TrueOrFalse.TRUE.equals(clientProductInfo.getIsOpened()))
+        {
+            res.setResult(RestResult.CLIENT_PRODUCT_NO_DELETE);
+            return res;
+        }
+        clientProductMapper.deleteByIds(new Long[]{clientProductId});
         return res;
     }
 

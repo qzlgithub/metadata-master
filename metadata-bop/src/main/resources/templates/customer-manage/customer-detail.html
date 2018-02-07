@@ -134,7 +134,12 @@
                             <p class="tc mt15"><img src="../../static/images/icon/check-icon.png"/></p>
                             <p class="tc mt5" th:text="${prod.productName}"></p>
                             <p class="mt40 tr">
-                                <span class="cp open-product" th:attr="data-product-id = ${prod.productId}">开通</span>
+                                <span th:if="${prod.isSelected == 0}" class="cp open-product"
+                                      th:attr="data-product-id = ${prod.productId}">开通
+                                </span>
+                                <span th:if="${prod.isSelected == 1}" class="renew is-selected-class"
+                                      th:attr="client-product-id=${prod.clientProductId}">开通
+                                </span>
                             </p>
                         </li>
 
@@ -146,22 +151,19 @@
                     <table class="layui-table mt25">
                         <thead>
                         <tr>
-                            <th>产品编号</th>
-                            <th>产品名称</th>
                             <th>所属类别</th>
-                            <th>产品状态</th>
+                            <th>产品名称</th>
                             <th>备注</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="user,index : ${userList}">
-                            <td th:text="${index.count}"></td>
-                            <td th:text="${user.username}"></td>
-                            <td th:text="${user.name}"></td>
-                            <td th:text="${user.phone}"></td>
-                            <td th:text="${user.phone}"></td>
-                            <td><span class="edit">移除</span></td>
+                        <tr th:each="pro : ${productCustomList}" th:if="${pro.isSelected == 1}">
+                            <td th:text="${pro.typeName}"></td>
+                            <td th:text="${pro.productName}"></td>
+                            <td th:text="${pro.remark}"></td>
+                            <td><a href="javascript:" class="edit remove-class" th:value="${pro.clientProductId}">移除
+                            </a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -245,7 +247,7 @@
 <!--续签  提示层-->
 <div id="renew-modal" class="modal">
     <!--form-->
-    <div class="layui-layer-title">续费服务</div>
+    <div class="layui-layer-title" id="renew-server-id">续费服务</div>
     <div class="mb30">
         <ul class="renew-inf-list clearfix" id="renew-info"></ul>
         <!--<form class="layui-form" action="">-->
@@ -415,97 +417,60 @@
         <ul class="search-list clearfix pb25">
             <li>
                 <div class="layui-input-inline layui-form">
-                    <select name="modules" lay-verify="required" lay-search="">
-                        <option value="">输入产品名称或者编号</option>
-                        <option value="1">layer</option>
-                        <option value="2">form</option>
-                        <option value="3">layim</option>
-                        <option value="4">element</option>
-                        <option value="4">element</option>
+                    <select name="modules" lay-verify="required" lay-search="" id="select-product">
+                        <option value="">全部</option>
+                        <option th:each="o : ${productCustomList}" th:value="${o.productId}"
+                                th:text="${o.productName}"></option>
                     </select>
                 </div>
             </li>
-
             <li>
-                <button type="button" class="check-button" onclick="clientListInit()">查询</button>
+                <button type="button" class="check-button" onclick="findProductTr()">查询</button>
             </li>
             <li class="fr">
-                <button type="button" class="check-button" onclick="clientListInit()">确认添加</button>
+                <button type="button" class="check-button" onclick="selectProductSave()">确认添加</button>
             </li>
         </ul>
         <div style="width: 100%;">
             <div class="table-head">
                 <table class="scroll-table">
                     <colgroup>
-                        <col style="width: 100%;" />
-                        <col />
+                        <col style="width: 100%;"/>
+                        <col/>
                     </colgroup>
                     <thead>
-                        <tr>
-                            <th>选择</th>
-                            <th>产品编号</th>
-                            <th>产品名称</th>
-                            <th>所属类别</th>
-                            <th>产品状态</th>
-                            <th>备注</th>
-                        </tr>
+                    <tr>
+                        <th>选择</th>
+                        <th>所属类别</th>
+                        <th>产品名称</th>
+                        <th>备注</th>
+                    </tr>
                     </thead>
                 </table>
             </div>
-            <div class="table-body">
+            <div class="table-body" id="all-product">
                 <table class="scroll-table" style="width: 100%; border: 1px solid #e2e2e2;">
-                    <colgroup><col style="width: 100%;" /><col /></colgroup>
+                    <colgroup>
+                        <col style="width: 100%;"/>
+                        <col/>
+                    </colgroup>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox"  checked=""/></td>
-                        <td>产品编号</td>
-                        <td>产品名称</td>
-                        <td>所属类别</td>
-                        <td>产品状态</td>
-                        <td>备注</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"  checked=""/></td>
-                        <td>产品编号</td>
-                        <td>产品名称</td>
-                        <td>所属类别</td>
-                        <td>产品状态</td>
-                        <td>备注</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"  checked=""/></td>
-                        <td>产品编号</td>
-                        <td>产品名称</td>
-                        <td>所属类别</td>
-                        <td>产品状态</td>
-                        <td>备注</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"  checked=""/></td>
-                        <td>产品编号</td>
-                        <td>产品名称</td>
-                        <td>所属类别</td>
-                        <td>产品状态</td>
-                        <td>备注</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"  checked=""/></td>
-                        <td>产品编号</td>
-                        <td>产品名称</td>
-                        <td>所属类别</td>
-                        <td>产品状态</td>
-                        <td>备注</td>
+                    <tr th:each="pro : ${productCustomList}" th:value="${pro.productId}">
+                        <td><input type="checkbox" class="product-checkbox-class" th:id="'checkbox-'+${pro.productId}"
+                                   th:checked="${pro.isSelected == 1}" th:value="${pro.productId}"/></td>
+                        <td th:text="${pro.typeName}"></td>
+                        <td th:text="${pro.productName}" th:id="'productName-'+${pro.productId}"></td>
+                        <td th:text="${pro.remark}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <ul class="service-list clearfix">
-            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
-            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
-            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
-            <li>金融还款能力<i class="layui-icon fz-14">&#x1006;</i></li>
-
+        <ul class="service-list clearfix" id="selected-product">
+            <li th:each="pro : ${productCustomList}"
+                th:if="${pro.isSelected == 1}" th:id="'ul-li-'+${pro.productId}"><span
+                    th:text="${pro.productName}"></span><i
+                    class="layui-icon fz-14 ul-li-class" th:value="${pro.productId}">&#x1006;</i></li>
         </ul>
     </div>
     <!--form end-->
@@ -518,101 +483,7 @@
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript" th:src="@{/js/customer.detail.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
-<script>
-    $(".date").datepicker({dateFormat: "yy-mm-dd"});
-    var message;
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app', 'message', 'laydate', 'table'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        laydate = layui.laydate;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        $('#pay').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                /*content: '<img src="../../static/build/images/pay.png" />',*/
-                content: $('#key-modal'),
-                /*area: ['500px', '250px'],*/
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-        $('.app-id').on('click', function() {
-            var appId = $(this).attr("app-id");
-            var appName = $(this).attr("app-name");
-            $("#app-id-prod").text(appName);
-            $("#app-id-val").text(appId);
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#key-modal'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-        $('.renew').on('click', function() {
-            var clientProductId = $(this).attr("client-product-id");
-            $.get(
-                "/client/product/renewInfo",
-                {"clientProductId": clientProductId},
-                function(res) {
-                    $("#renew-client-product-id").val(clientProductId);
-                    $("#renew-info").empty();
-                    var row1 =
-                        '<li>服务时间：#{startDate} - #{endDate}</li><li>客户价：#{amount}元</li><li>总充值：#{totalAmt}元</li>';
-                    var row2 =
-                        '<li>当前余额：#{balance}元</li><li>客价：#{unitAmt}元/次</li><li>总充值：#{totalAmt}元</li>';
-                    var row;
-                    if(res.billPlan === 1) {
-                        row = row1.replace("#{startDate}", res.startDate).replace("#{endDate}", res.endDate)
-                        .replace("#{amount}", res.amount).replace("#{totalAmt}", res.totalAmt);
-                    }
-                    else {
-                        row = row2.replace("#{balance}", res.balance).replace("#{unitAmt}", res.unitAmt)
-                        .replace("#{totalAmt}", res.totalAmt);
-                    }
-                    $("#renew-info").append(row);
-                    layer.open({
-                        title: false,
-                        type: 1,
-                        content: $('#renew-modal'),
-                        area: ['700px'],
-                        shadeClose: true
-                    });
-                }
-            );
-        });
-        $('.open-product').on('click', function() {
-            var productId = $(this).attr("data-product-id");
-            $("#open-product-id").val(productId);
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#openServe-modal'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-        $('#service').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#service-modal'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/customer.detail.js}"></script>
 </body>
 </html>

@@ -30,6 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -337,6 +338,35 @@ public class ClientController
             clientService.openProductService(vo.getClientId(), vo.getProductId(), vo.getContractNo(), vo.getBillPlan(),
                     vo.getRechargeType(), vo.getAmount(), vo.getUnitAmt(), vo.getRemark(), resp);
         }
+        return resp;
+    }
+
+    @PostMapping(value = "product/select")
+    @ResponseBody
+    public BLResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.IDS) String ids)
+    {
+        BLResp resp = BLResp.build();
+        String[] split = null;
+        List<Long> productIds = new ArrayList<>();
+        if(org.apache.commons.lang3.StringUtils.isNotBlank(ids))
+        {
+            split = ids.split(",");
+            for(String item : split)
+            {
+                productIds.add(Long.valueOf(item));
+            }
+        }
+        clientService.selectCustomProduct(clientId, productIds, resp);
+        return resp;
+    }
+
+    @PostMapping(value = "product/remove")
+    @ResponseBody
+    public BLResp productRemove(@RequestParam(value = Field.ID) Long id)
+    {
+        BLResp resp = BLResp.build();
+        clientService.removeCustomClientProduct(id, resp);
         return resp;
     }
 

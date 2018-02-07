@@ -17,12 +17,23 @@ public class ClientProductDTO implements Serializable
     private Integer billPlan;
     private BigDecimal balance;
     private Long latestRechargeId;
+    private Integer isOpened;
     private ResultDTO resultDTO;
 
     public ClientProductDTO()
     {
         this.resultDTO = new ResultDTO();
         resultDTO.setResult(RestResult.SUCCESS);
+    }
+
+    public Integer getIsOpened()
+    {
+        return isOpened;
+    }
+
+    public void setIsOpened(Integer isOpened)
+    {
+        this.isOpened = isOpened;
     }
 
     public ResultDTO getResultDTO()

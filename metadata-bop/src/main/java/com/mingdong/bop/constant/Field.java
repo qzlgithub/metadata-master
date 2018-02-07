@@ -3,6 +3,7 @@ package com.mingdong.bop.constant;
 public interface Field
 {
     String ID = "id";
+    String IDS = "ids";
     String CODE = "code";
     String NAME = "name";
     String REMARK = "remark";
@@ -115,5 +116,7 @@ public interface Field
     String PROD_TYPE_DICT = "prodTypeDict";
     String BILL_PLAN_LIST = "billPlanList";
     String USER_ID = "userId";
+    String PRODUCT_CUSTOM_LIST = "productCustomList";
+    String IS_SELECTED = "isSelected";
 
 }

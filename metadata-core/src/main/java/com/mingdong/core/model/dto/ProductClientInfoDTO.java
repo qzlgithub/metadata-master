@@ -12,6 +12,7 @@ public class ProductClientInfoDTO implements Serializable
     private String appId;
     private Long clientProductId;
     private Integer billPlan;
+    private Integer isOpened;
     private Date startDate;
     private Date endDate;
     private BigDecimal amount;
@@ -21,7 +22,28 @@ public class ProductClientInfoDTO implements Serializable
     private String remark;
     private String content;
     private String code;
-    private Integer typeId;
+    private Integer type;
+    private Integer custom;
+
+    public Integer getCustom()
+    {
+        return custom;
+    }
+
+    public void setCustom(Integer custom)
+    {
+        this.custom = custom;
+    }
+
+    public Integer getIsOpened()
+    {
+        return isOpened;
+    }
+
+    public void setIsOpened(Integer isOpened)
+    {
+        this.isOpened = isOpened;
+    }
 
     public String getCode()
     {
@@ -173,13 +195,13 @@ public class ProductClientInfoDTO implements Serializable
         this.content = content;
     }
 
-    public Integer getTypeId()
+    public Integer getType()
     {
-        return typeId;
+        return type;
     }
 
-    public void setTypeId(Integer typeId)
+    public void setType(Integer type)
     {
-        this.typeId = typeId;
+        this.type = type;
     }
 }
