@@ -76,6 +76,7 @@ public class DSDataServiceImpl implements DSDataService
                 res.setResult(MetadataResult.RC_10);
                 return;
             }
+            // 调取数据API
             IMetadata data = dataAPIProcessor.revokeDataAPI(product, req);
             // 保存本次请求记录，并更新产品账余额
             Long reqId = IDUtils.getApiReqId(param.getNodeId());

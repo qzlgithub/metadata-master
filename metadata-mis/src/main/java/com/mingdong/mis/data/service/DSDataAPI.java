@@ -28,8 +28,11 @@ import java.util.SortedMap;
 @Component
 public class DSDataAPI
 {
+    // 获取接入凭证
     private static final String AUTH_TOKEN_API = "https://api.dsdatas.com/credit/api/token";
-    private static final String GENERALIZE_BLACK_API = "https://api.dsdatas.com/blackData/fireGeneralizeBlack";
+    // API - 泛黑名单
+    private static final String GENERALIZE_BLACKLIST_API = "https://api.dsdatas.com/blackData/fireGeneralizeBlack";
+    // API - 常贷客
     private static final String MULTIPLE_APP_API = "https://api.dsdatas.com/credit/api/v1/query";
     private static final String MULTIPLE_APP_API_2 =
             "https://api.dsdatas.com/notify/fire/multipleApplications/report/v1";
@@ -84,7 +87,7 @@ public class DSDataAPI
         header.put("auth_token", getAuthToken());
         try
         {
-            HttpEntity entity = HttpUtils.postData(GENERALIZE_BLACK_API, header, JSON.toJSONString(body));
+            HttpEntity entity = HttpUtils.postData(GENERALIZE_BLACKLIST_API, header, JSON.toJSONString(body));
             String resp = EntityUtils.toString(entity, Charset.UTF_8);
             logger.info("DS API response: {}", resp);
             JSONObject res = JSON.parseObject(resp);
@@ -92,7 +95,7 @@ public class DSDataAPI
             {
                 // 如果token过期则强制刷新后再请求一次
                 header.put("auth_token", refreshAuthToken());
-                entity = HttpUtils.postData(GENERALIZE_BLACK_API, header, JSON.toJSONString(body));
+                entity = HttpUtils.postData(GENERALIZE_BLACKLIST_API, header, JSON.toJSONString(body));
                 resp = EntityUtils.toString(entity, Charset.UTF_8);
                 logger.info("DS API response: {}", resp);
                 res = JSON.parseObject(resp);

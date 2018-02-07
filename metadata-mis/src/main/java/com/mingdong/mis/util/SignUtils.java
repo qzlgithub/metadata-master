@@ -60,7 +60,6 @@ public class SignUtils
 
     public static void main(String[] args) throws MetadataCoreException
     {
-        // 4564E0F2A1A84C22962DCA40974B82C3
         Map<String, Object> m = new HashMap<>();
         m.put("idNo", "330721198910115417");
         m.put("name", "祝俊");
@@ -69,7 +68,7 @@ public class SignUtils
         SortedMap sm = MapUtils.sortKey(m);
         String str = JSON.toJSONString(sm);
         System.out.println("str: " + str);
-        String sign = sign(str, "4564E0F2A1A84C22962DCA40974B82C3");
+        String sign = sign(str, "9D5EA8B417C540C5A23412463A5C12E9");
         System.out.println("sign: " + sign);
     }
 }
