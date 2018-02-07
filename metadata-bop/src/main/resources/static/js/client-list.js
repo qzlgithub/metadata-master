@@ -1,8 +1,54 @@
-var form;
-$(function() {
-    layui.use('form', function() {
-        form = layui.form;
+var form, message;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    $('#chridAccount').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#chrid-account'),
+            area: ['700px'],
+            shadeClose: true
+        });
     });
+});
+layui.use(['form', 'layer', 'jquery', 'laypage'], function() {
+    var layer = parent.layer === undefined ? layui.layer : parent.layer,
+        laypage = layui.laypage,
+        $ = layui.jquery;
+    form = layui.form;
+    //全选
+    form.on('checkbox(allChoose)', function(data) {
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
+        child.each(function(index, item) {
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+    //通过判断文章是否全部选中来确定全选按钮是否选中
+    form.on("checkbox(choose)", function(data) {
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
+        var childChecked =
+            $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"]):checked');
+        if(childChecked.length === child.length) {
+            $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = true;
+        }
+        else {
+            $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = false;
+        }
+        form.render('checkbox');
+    })
+});
+$(function() {
     clientListInit();
 });
 
