@@ -61,15 +61,15 @@
                 </li>
             </ul>
             <div class="clearfix mt20">
-                <a href="#" class="cz-button ml5" onclick="change_status(0)"
-                   th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
-                <a href="#" class="cz-button ml10 mr10" onclick="change_status(1)"
+                <a href="#" class="layui-btn layui-btn-normal" onclick="change_status(1)"
                    th:if="${#lists.contains(i_privilege, '31105')}">解冻账号</a>
-                <a href="#" class="cz-button mr10" onclick="del_client()"
-                   th:if="${#lists.contains(i_privilege, '31106')}">停用</a>
-                <a href="#" class="cz-button" onclick="reset_password()"
+                <a href="#" class="layui-btn layui-btn-danger" onclick="change_status(0)"
+                   th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
+                <a href="#" class="layui-btn layui-btn-danger" onclick="del_client()"
+                   th:if="${#lists.contains(i_privilege, '31106')}">停用账号</a>
+                <a href="#" class="layui-btn layui-btn-danger" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
-                <a th:href="@{/client/addition.html}" class="fr add-button"
+                <a th:href="@{/client/addition.html}" class="layui-btn"
                    th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
             </div>
             <div class="layui-form">
