@@ -249,12 +249,6 @@ a:hover.key-button, a:hover.add-button {
     color: #ff0000;
 }
 
-.layui-btn {
-    background-color: #3c9fe2;
-    padding: 0px 35px;
-    font-size: 16px;
-}
-
 /****table****/
 .layui-table td, .layui-table th {
     text-align: center;

@@ -15,8 +15,10 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,9 +67,9 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     @ResponseBody
-    public Map<String, Object> getList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
+    public ListRes getList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
             @RequestParam(value = Field.CORP_NAME, required = false) String corpName,
@@ -76,6 +78,7 @@ public class ClientController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
+        ListRes res = new ListRes();
         Page page = new Page(pageNum, pageSize);
         if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
         {
@@ -84,8 +87,8 @@ public class ClientController
         corpName = StringUtils.isNullBlank(corpName) ? null : corpName.trim();
         shortName = StringUtils.isNullBlank(shortName) ? null : shortName.trim();
         username = StringUtils.isNullBlank(username) ? null : username.trim();
-        BLResp resp = clientService.getCorp(enabled, username, corpName, shortName, parentIndustryId, industryId, page);
-        return resp.getDataMap();
+        clientService.getCorp(enabled, username, corpName, shortName, parentIndustryId, industryId, page, res);
+        return res;
     }
 
     @RequestMapping(value = "rechargeList", method = RequestMethod.GET)
@@ -233,27 +236,27 @@ public class ClientController
         return resp;
     }
 
-    @RequestMapping(value = "changeStatus", method = RequestMethod.POST)
+    @PostMapping(value = "status")
     @ResponseBody
     private BLResp changeStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
         List<Long> idList = idArr.toJavaList(Long.class);
-        Integer enabled = jsonReq.getInteger(Field.ENABLED);
+        Integer status = jsonReq.getInteger(Field.STATUS);
         String reason = jsonReq.getString(Field.REASON);
-        if(CollectionUtils.isEmpty(idList) || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(
-                enabled)) || StringUtils.isNullBlank(reason))
+        if(CollectionUtils.isEmpty(idList) || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(status)) ||
+                StringUtils.isNullBlank(reason))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.changeClientStatus(idList, enabled, reason, RequestThread.getOperatorId(), resp);
+        clientService.changeClientStatus(idList, status, reason, RequestThread.getOperatorId(), resp);
         return resp;
     }
 
-    @RequestMapping(value = "deletion", method = RequestMethod.POST)
+    @DeleteMapping(value = "")
     @ResponseBody
-    private BLResp setClientDeleted(@RequestBody JSONObject jsonReq)
+    private BLResp deleteClient(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
@@ -262,7 +265,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.setClientDeleted(idList, resp);
+        clientService.deleteClient(idList, resp);
         return resp;
     }
 
@@ -276,9 +279,9 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @RequestMapping(value = "resetPwd", method = RequestMethod.POST)
+    @PostMapping(value = "reset")
     @ResponseBody
-    private BLResp resetClientPassword(@RequestBody JSONObject jsonReq)
+    private BLResp resetPassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
@@ -287,7 +290,7 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.resetClientPassword(idList, resp);
+        clientService.resetPassword(idList, resp);
         return resp;
     }
 

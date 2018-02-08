@@ -1,208 +1,100 @@
-var form, message;
+var form, message, table, main_table;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'message'], function() {
-    var app = layui.app,
-        $ = layui.jquery,
-        layer = layui.layer;
-    //将message设置为全局以便子页面调用
+}).use(['app', 'form', 'table', 'message'], function() {
+    var app = layui.app;
+    app.set({type: 'iframe'}).init();
     message = layui.message;
-    //主入口
-    app.set({
-        type: 'iframe'
-    }).init();
-    $('#chridAccount').on('click', function() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: $('#chrid-account'),
-            area: ['700px'],
-            shadeClose: true
-        });
-    });
-});
-layui.use(['form', 'layer', 'jquery', 'laypage'], function() {
-    var layer = parent.layer === undefined ? layui.layer : parent.layer,
-        laypage = layui.laypage,
-        $ = layui.jquery;
     form = layui.form;
-    //全选
-    form.on('checkbox(allChoose)', function(data) {
-        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
-        child.each(function(index, item) {
-            item.checked = data.elem.checked;
-        });
-        form.render('checkbox');
-    });
-    //通过判断文章是否全部选中来确定全选按钮是否选中
-    form.on("checkbox(choose)", function(data) {
-        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"])');
-        var childChecked =
-            $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([corpName="show"]):checked');
-        if(childChecked.length === child.length) {
-            $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = true;
-        }
-        else {
-            $(data.elem).parents('table').find('thead input#allChoose').get(0).checked = false;
-        }
-        form.render('checkbox');
-    })
-});
-$(function() {
-    clientListInit();
-});
-
-function clientListInit() {
-    var obj = {
-        pageNum: 1,
-        pageSize: 10,
-        enabled: $("#enabled").val(),
-        username: $("#username").val(),
-        corpName: $("#corpName").val(),
-        shortName: $("#shortName").val(),
-        parentIndustryId: $("#parentIndustryId").val(),
-        industryId: $("#industryId").val()
-    };
-    getClientList(obj, function(pageObj, pages, total) {
-        $('#pagination').paging({
-            initPageNo: pageObj['pageNum'],
-            totalPages: pages,
-            totalCount: '合计' + total + '条数据',
-            slideSpeed: 600,
-            jump: false,
-            callback: function(currentPage) {
-                pageObj['pageNum'] = currentPage;
-                getClientList(obj);
-            }
-        })
-    });
-}
-
-var tr1
-    =
-    '<tr><td><div class="layui-form"><input class="obj-checkbox" type="checkbox" name="checked"  lay-skin="primary" id="checkbox-#{id}" lay-filter="choose" data-id="#{id}"/><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>' +
-    '<td>#{id}</td>' +
-    '<td>#{username}</td>' +
-    '<td>#{corpName}</td>' +
-    '<td>#{shortName}</td>' +
-    '<td>#{industry}</td>' +
-    '<td>#{contact}</td>' +
-    '<td>#{phone}</td>' +
-    '<td>#{managerName}</td>';
-var tr21 = '<td><span class="cp col3" onclick="showChild(\'#{id}\')">#{accountQty}</span></td>';
-var tr22 = '<td>0</td>';
-var tr3 = '<td>#{registerDate}</td>' +
-    '<td><span class="mr30">' +
-    '<a href="/client/edit.html?clientId=#{id}" class="edit">编辑</a></span>' +
-    '<span class="mr30"><a href="/client/detail.html?clientId=#{id}" class="edit">查看</a></span>' +
-    '<span class="mr30"><a href="#" id="accountEnabled#{id}" obj-enabled="#{enabled}" class="edit" onclick="changeStatus(\'#{id}\')">#{accountEnabled}</a></span>' +
-    '<a href="#" class="del" onclick="dropClient(\'#{id}\')">停用</a>' +
-    '</td></tr>';
-
-function getClientList(obj, pageFun) {
-    $.get(
-        "/client/list",
-        {
-            enabled: obj['enabled'],
-            username: obj['username'],
-            corpName: obj['corpName'],
-            shortName: obj['shortName'],
-            industryId: obj['industryId'],
-            parentIndustryId: obj['parentIndustryId'],
-            pageNum: obj['pageNum'],
-            pageSize: obj['pageSize']
+    table = layui.table;
+    main_table = table.render({
+        elem: '#data-table',
+        page: true,
+        limit: 3,
+        limits: [3, 15, 30, 50],
+        url: '/client/list',
+        where: {
+            enabled: $("#enabled").val(),
+            username: $("#username").val(),
+            corpName: $("#corpName").val(),
+            shortName: $("#shortName").val(),
+            industryId: $("#industryId").val(),
+            parentIndustryId: $("#parentIndustryId").val()
         },
-        function(data) {
-            var list = data.list;
-            var total = data.total;
-            var pages = data.pages;
-            $("#dataBody").empty();
-            for(var d in list) {
-                var dataTr = tr1.replace(/#{id}/g, list[d].id).replace("#{username}", list[d].username)
-                .replace("#{corpName}", list[d].corpName).replace("#{shortName}", list[d].shortName)
-                .replace("#{industry}", list[d].industry).replace("#{contact}", list[d].name)
-                .replace("#{phone}", list[d].phone).replace("#{managerName}", list[d].managerName);
-                if(list[d].accountQty > 0) {
-                    dataTr = dataTr + tr21.replace(/#{id}/g, list[d].id).replace("#{accountQty}", list[d].accountQty);
-                }
-                else {
-                    dataTr = dataTr + tr22;
-                }
-                dataTr = dataTr + tr3.replace(/#{id}/g, list[d].id).replace("#{registerDate}", list[d].registerDate)
-                .replace("#{enabled}", list[d].userEnabled)
-                .replace("#{accountEnabled}", list[d].userEnabled === 1 ? "冻结账号" : "解冻账号");
-                $("#dataBody").append(dataTr);
-            }
-            if(typeof pageFun === 'function') {
-                pageFun(obj, pages, total);
-            }
-            renderCheckbox();
+        cols: [[
+            {type: 'checkbox', fixed: 'left', width: 50},
+            {field: 'id', title: '编号', width: 180},
+            {field: 'username', title: '用户名', width: 160},
+            {field: 'corpName', title: '公司全称', width: 200},
+            {field: 'shortName', title: '公司简称', width: 120},
+            {field: 'industry', title: '所属行业', width: 160},
+            {field: 'managerName', title: '商务经理', width: 120},
+            {title: '子账号个数', sort: true, width: 110, toolbar: '#sub-user-bar'},
+            {field: 'registerDate', title: '注册日期', sort: true, width: 110},
+            {title: '状态', width: 110, templet: "#status-tpl"},
+            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right', width: 240}
+        ]],
+        request: {
+            pageName: 'pageNum', limitName: 'pageSize'
+        },
+        response: {
+            statusName: 'code',
+            statusCode: 0,
+            msgName: 'message',
+            countName: 'total',
+            dataName: 'list'
         }
-    );
-}
+    });
+});
 
-function resetChildPwd(id) {
-    $.ajax({
-        type: "post",
-        url: "/client/user/resetPwd",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({"id": id}),
-        success: function(data) {
-            if(data.errCode === '000000') {
-                layer.msg("账号密码已重置", {
-                    time: 2000
-                });
-            }
-            else {
-                layer.msg("操作失败:" + data.errMsg, {
-                    time: 2000
-                });
-            }
+/**
+ * 列表查询
+ */
+function search() {
+    main_table.reload({
+        where: {
+            enabled: $("#enabled").val(),
+            username: $("#username").val(),
+            corpName: $("#corpName").val(),
+            shortName: $("#shortName").val(),
+            industryId: $("#industryId").val(),
+            parentIndustryId: $("#parentIndustryId").val()
+        },
+        page: {
+            curr: 1
         }
     });
 }
 
-var childTr =
-    '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td>' +
-    '<td><span class="mr30"><a href="javascript:resetChildPwd(\'#{id}\')" class="edit">重置密码</a></span>' +
-    '<a href="/client/user/consume.html?userId=#{id}" class="edit">查看消费</a></td></tr>';
-
-function showChild(id) {
-    $.get(
-        "/client/subAccount/list",
-        {"id": id},
-        function(data) {
-            $("#child-account-body").empty();
-            for(var d in data) {
-                var tr = childTr.replace(/#{id}/g, data[d].id).replace(/#{username}/g, data[d].username)
-                .replace(/#{name}/g, data[d].name).replace(/#{phone}/g, data[d].phone);
-                $("#child-account-body").append(tr);
-            }
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#child-account'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        }
-    );
-}
-
-function changeStatus(id) {
-    $("#ban-type").val("single");
-    var obj = $("#accountEnabled" + id);
-    var enabled = obj.attr("obj-enabled");
-    if(enabled === "1") {
-        $("#ban-title").text("冻结账号");
-        $("#ban-client-enabled").val(0);
+function check_reason() {
+    var reason = $("#ban-reason").val();
+    var tip = $("#tip-reason");
+    if(reason === '') {
+        tip.text("原因不能为空");
+        tip.show();
+        return false;
     }
     else {
-        $("#ban-title").text("解冻账号");
-        $("#ban-client-enabled").val(1);
+        tip.hide();
+        return true;
     }
-    $("#ban-client-id").val(id);
+}
+
+function change_status(status) {
+    var selected = table.checkStatus('data-table');
+    var rows = selected.data;
+    if(rows.length === 0) {
+        layer.msg("请至少选择一个客户", {time: 1000});
+        return;
+    }
+    if(status === 1) {
+        $("#ban-title").text("解冻账号");
+        $("#ban-status").val(1);
+    }
+    else {
+        $("#ban-title").text("冻结账号");
+        $("#ban-status").val(0);
+    }
     layer.open({
         title: false,
         type: 1,
@@ -212,203 +104,74 @@ function changeStatus(id) {
     });
 }
 
-function batchChangeStatus(enabled) {
-    var objs = $(".obj-checkbox");
-    var clientIds = [];
-    for(var o in objs) {
-        if(objs[o].checked) {
-            clientIds.push($(objs[o]).attr("data-id"));
-        }
-    }
-    if(clientIds.length === 0) {
-        layer.msg("请至少选择一个客户", {
-            time: 2000
-        });
-    }
-    else {
-        $("#ban-type").val("batch");
-        if(enabled === 1) {
-            $("#ban-title").text("解冻账号");
-            $("#ban-client-enabled").val(1);
-        }
-        else {
-            $("#ban-title").text("冻结账号");
-            $("#ban-client-enabled").val(0);
-        }
-        layer.open({
-            title: false,
-            type: 1,
-            content: $('#ban-div'),
-            area: ['700px'],
-            shadeClose: true
-        });
-    }
-}
-
-function banClient() {
-    var reason = $("#ban-reason").val();
-    if(reason === '') {
-        layer.msg("原因不能为空", {time: 2000});
+/**
+ * 变更客户状态
+ */
+function post_client_status() {
+    if(!check_reason()) {
         return;
     }
-    var banType = $("#ban-type").val();
-    var clients = [];
-    if(banType === 'batch') {
-        var objs = $(".obj-checkbox");
-        for(var o in objs) {
-            if(objs[o].checked) {
-                clients.push($(objs[o]).attr("data-id"));
-            }
+    var status = $("#ban-status").val();
+    var selected = table.checkStatus('data-table');
+    var rows = selected.data;
+    if(rows.length > 0) {
+        var to_deal_client = [];
+        for(var i in rows) {
+            to_deal_client.push(rows[i].id);
         }
-    }
-    else if(banType === 'single') {
-        clients.push($("#ban-client-id").val());
-    }
-    else {
-        return;
-    }
-    var enabled = $("#ban-client-enabled").val();
-    $.ajax({
-        type: "POST",
-        url: "/client/changeStatus",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({"id": clients, "enabled": enabled, "reason": reason}),
-        success: function(res) {
-            if(res.errCode === '000000') {
-                $("#ban-reason").val('');
-                layer.closeAll();
-                for(var o in clients) {
-                    var obj = $("#accountEnabled" + clients[o]);
-                    obj.attr("obj-enabled", enabled);
-                    obj.text(enabled === '1' ? "冻结账号" : "解冻账号");
+        $.ajax({
+            type: "POST",
+            url: "/client/status",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({"id": to_deal_client, "status": status, "reason": $("#ban-reason").val()}),
+            success: function(res) {
+                if(res.errCode === '000000') {
+                    layer.closeAll();
+                    $("#ban-reason").val('');
+                    $("#ban-status").val('');
+                    main_table.reload();
                 }
-                $("div").removeClass('layui-form-checked');
-                layer.msg(enabled === '1' ? "账号已解冻" : "账号已冻结", {time: 2000});
+                else {
+                    layer.msg("操作失败：" + res.errMsg, {time: 2000});
+                }
             }
-            else {
-                layer.msg("操作失败：" + res.errMsg, {time: 2000});
-            }
-        }
-    });
-}
-
-function batchDeleted() {
-    var objs = $(".obj-checkbox");
-    var clientIds = [];
-    for(var o in objs) {
-        if(objs[o].checked) {
-            clientIds.push($(objs[o]).attr("data-id"));
-        }
-    }
-    if(clientIds.length === 0) {
-        layer.msg("请至少选择一个客户", {
-            time: 2000
         });
     }
     else {
-        layer.confirm('是否确定批量停用？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/deletion",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            clientListInit();
-                            // $("#allChoose").removeAttr("checked");
-                            layer.msg("账号已停用", {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            layer.msg("操作失败:" + data.errMsg, {
-                                time: 2000
-                            });
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
-        });
+        layer.closeAll();
     }
 }
 
-function batchResetPwd() {
-    var objs = $(".obj-checkbox");
-    var clientIds = [];
-    for(var o in objs) {
-        if(objs[o].checked) {
-            clientIds.push($(objs[o]).attr("data-id"));
-        }
+/**
+ * 删除客户
+ */
+function del_client() {
+    var selected = table.checkStatus('data-table');
+    var rows = selected.data;
+    if(rows.length === 0) {
+        layer.msg("请至少选择一个客户", {time: 1000});
+        return;
     }
-    if(clientIds.length === 0) {
-        layer.msg("请至少选择一个客户", {
-            time: 2000
-        });
-    }
-    else {
-        layer.confirm('是否确定批量重置密码？', {
-            btn: ['确定', '取消'],
-            yes: function() {
-                $(this).click();
-                $.ajax({
-                    type: "POST",
-                    url: "/client/resetPwd",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({"id": clientIds}),
-                    success: function(data) {
-                        if(data.errCode === '000000') {
-                            layer.msg("账号密码已重置", {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            layer.msg("操作失败:" + data.errMsg, {
-                                time: 2000
-                            });
-                        }
-                    }
-                });
-                layer.closeAll();
-            },
-            no: function() {
-                layer.closeAll();
-            }
-        });
-    }
-}
-
-function dropClient(id) {
-    layer.confirm('是否确定停用账户？', {
+    layer.confirm('是否确定停用所选定的客户？', {
         btn: ['确定', '取消'],
         yes: function() {
-            $(this).click();
+            var to_deal_client = [];
+            for(var i in rows) {
+                to_deal_client.push(rows[i].id);
+            }
             $.ajax({
-                type: "POST",
-                url: "/client/deletion",
+                type: "DELETE",
+                url: "/client",
                 dataType: "json",
                 contentType: "application/json",
-                data: JSON.stringify({"id": [id]}),
+                data: JSON.stringify({"id": to_deal_client}),
                 success: function(data) {
                     if(data.errCode === '000000') {
-                        clientListInit();
-                        layer.msg("账号已停用", {
-                            time: 2000
-                        });
+                        main_table.reload();
                     }
                     else {
-                        layer.msg("操作失败:" + data.errMsg, {
-                            time: 2000
-                        });
+                        layer.msg("操作失败:" + data.errMsg, {time: 2000});
                     }
                 }
             });
@@ -420,14 +183,57 @@ function dropClient(id) {
     });
 }
 
-function getSubIndustry() {
+/**
+ * 重置主账号密码
+ */
+function reset_password() {
+    var selected = table.checkStatus('data-table');
+    var rows = selected.data;
+    if(rows.length === 0) {
+        layer.msg("请至少选择一个客户", {time: 1000});
+        return;
+    }
+    layer.confirm('是否确定重置选定客户的主账号密码？', {
+        btn: ['确定', '取消'],
+        yes: function() {
+            var to_deal_client = [];
+            for(var i in rows) {
+                to_deal_client.push(rows[i].id);
+            }
+            $.ajax({
+                type: "POST",
+                url: "/client/reset",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({"id": to_deal_client}),
+                success: function(data) {
+                    if(data.errCode === '000000') {
+                        layer.msg("主账号密码已重置", {time: 2000});
+                    }
+                    else {
+                        layer.msg("操作失败:" + data.errMsg, {time: 2000});
+                    }
+                }
+            });
+            layer.closeAll();
+        },
+        no: function() {
+            layer.closeAll();
+        }
+    });
+}
+
+/**
+ * 刷新子行业下拉选项
+ */
+function refresh_industry_dict() {
     var parentId = $("#parentIndustryId").val();
+    var target = $("#industryId");
     if(parentId !== "") {
         $.get(
             "/system/industry/childList",
             {"industryId": parentId},
             function(data) {
-                var target = $("#industryId");
                 target.empty();
                 target.append('<option value="">全部</option>');
                 for(var d in data) {
@@ -442,8 +248,31 @@ function getSubIndustry() {
     }
 }
 
-//重新渲染
-function renderCheckbox() {
-    //无需再执行layui.use()方法加载模块，直接使用即可
-    form.render('checkbox');
+/**
+ * 显示指定客户的子账号列表
+ */
+function show_sub_account(id) {
+    $.get(
+        "/client/subAccount/list",
+        {"id": id},
+        function(data) {
+            var obj = $("#child-account-body");
+            var sub_acct_tr =
+                '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td>' +
+                '<td><a href="/client/user/consume.html?userId=#{id}" class="edit">查看消费</a></td></tr>';
+            obj.empty();
+            for(var d in data) {
+                var tr = sub_acct_tr.replace(/#{id}/g, data[d].id).replace(/#{username}/g, data[d].username)
+                .replace(/#{name}/g, data[d].name).replace(/#{phone}/g, data[d].phone);
+                obj.append(tr);
+            }
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#child-account'),
+                area: ['700px'],
+                shadeClose: true
+            });
+        }
+    );
 }

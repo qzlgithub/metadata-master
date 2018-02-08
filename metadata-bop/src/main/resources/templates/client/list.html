@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
     <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
@@ -41,7 +41,7 @@
                 <li>
                     所在行业：
                     <select id="parentIndustryId" name="parentIndustryId" class="select-list"
-                            onchange="getSubIndustry()">
+                            onchange="refresh_industry_dict()">
                         <option value="">全部</option>
                         <option th:each="o : ${industryList}" th:value="${o.id}" th:text="${o.name}"></option>
                     </select>
@@ -57,42 +57,23 @@
                     </select>
                 </li>
                 <li>
-                    <button type="button" class="check-button" onclick="clientListInit()">查询</button>
+                    <button type="button" class="check-button" onclick="search()">查询</button>
                 </li>
             </ul>
             <div class="clearfix mt20">
-                <a href="#" class="cz-button ml5" onclick="batchChangeStatus(0)"
+                <a href="#" class="cz-button ml5" onclick="change_status(0)"
                    th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
-                <a href="#" class="cz-button ml10 mr10" onclick="batchChangeStatus(1)"
+                <a href="#" class="cz-button ml10 mr10" onclick="change_status(1)"
                    th:if="${#lists.contains(i_privilege, '31105')}">解冻账号</a>
-                <a href="#" class="cz-button mr10" onclick="batchDeleted()"
+                <a href="#" class="cz-button mr10" onclick="del_client()"
                    th:if="${#lists.contains(i_privilege, '31106')}">停用</a>
-                <a href="#" class="cz-button" onclick="batchResetPwd()"
+                <a href="#" class="cz-button" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
                 <a th:href="@{/client/addition.html}" class="fr add-button"
                    th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
             </div>
             <div class="layui-form">
-                <table class="layui-table">
-                    <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" id="allChoose"/>
-                        </th>
-                        <th>编号</th>
-                        <th>客户账号</th>
-                        <th>公司名称</th>
-                        <th>公司简称</th>
-                        <th>所在行业</th>
-                        <th>联系人</th>
-                        <th>联系电话</th>
-                        <th>商务经理</th>
-                        <th>子账号(个)</th>
-                        <th>注册日期</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataBody"></tbody>
+                <table class="layui-table" id="data-table">
                 </table>
             </div>
             <div class="box mt30" id="pagination"></div>
@@ -136,7 +117,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">原因：</label>
                 <div class="layui-input-block">
-                    <textarea id="ban-reason" placeholder="请输入原因" class="layui-textarea"></textarea>
+                    <textarea id="ban-reason" placeholder="请输入原因" class="layui-textarea"
+                              onblur="check_reason()"></textarea>
+                    <p class="col3 mt5" id="tip-reason"></p>
                 </div>
             </div>
         </div>
@@ -144,8 +127,8 @@
             <div class="layui-input-block">
                 <input type="hidden" id="ban-client-id"/>
                 <input type="hidden" id="ban-client-enabled"/>
-                <input type="hidden" id="ban-type"/>
-                <button class="layui-btn" onclick="banClient()">确定</button>
+                <input type="hidden" id="ban-status"/>
+                <button class="layui-btn" onclick="post_client_status()">确定</button>
             </div>
         </div>
     </div>
@@ -154,11 +137,35 @@
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="/static/plugins/layui/layui.js"></script>
+<script type="text/javascript" th:src="@{/static/layui-v2.2.5/layui.js}"></script>
 <script type="text/javascript" th:src="@{/js/logout.js}"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/client-list.js}"></script>
+<script type="text/html" id="operation-bar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" href="/client/detail.html?clientId={{d.id}}">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/client/edit.html?clientId={{d.id}}">编辑</a>
+    <!--{{# if(d.userEnabled === 1) { }}
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="disable" data-id="{{d.id}}">禁用</a>
+    {{# } else { }}
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="enable" data-id="{{d.id}}">启用</a>
+    {{# } }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="{{d.id}}">停用</a>-->
+</script>
+<script type="text/html" id="sub-user-bar">
+    {{# if(d.accountQty > 0){ }}
+    <li><a href="#" onclick="show_sub_account('{{d.id}}')">{{d.accountQty}}</a></li>
+    {{# } else { }}
+    <li>{{d.accountQty}}</li>
+    {{# } }}
+</script>
+<script type="text/html" id="status-tpl">
+    {{# if(d.userEnabled === 1){ }}
+    <div>正常</div>
+    {{# } else { }}
+    <div>已冻结</div>
+    {{# } }}
+</script>
 </body>
 </html>

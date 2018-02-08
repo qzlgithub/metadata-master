@@ -12,10 +12,6 @@ body#login {
     background: #579fe9 url('../images/login-bg.png') no-repeat center 120px;
 }
 
-#login-wrapper {
-    background: url('../images/bg-login-top.gif') top left repeat-x;
-}
-
 #login-wrapper #login-top {
     height: 103px;
     text-align: center;

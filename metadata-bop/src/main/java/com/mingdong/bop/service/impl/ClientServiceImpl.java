@@ -23,6 +23,7 @@ import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -113,10 +114,9 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public BLResp getCorp(Integer enabled, String username, String cropName, String shortName, Long parentIndustryId,
-            Long industryId, Page page)
+    public void getCorp(Integer enabled, String username, String cropName, String shortName, Long parentIndustryId,
+            Long industryId, Page page, ListRes res)
     {
-        BLResp resp = BLResp.build();
         List<Long> industryList = new ArrayList<>();
         if(industryId == null)
         {
@@ -137,10 +137,7 @@ public class ClientServiceImpl implements ClientService
         }
         ClientInfoListDTO clinetInfoListBy = remoteClientService.getClientInfoListBy(enabled, username, cropName,
                 shortName, industryList, page);
-        resp.addData(Field.TOTAL, clinetInfoListBy.getTotal());
-        resp.addData(Field.PAGES, clinetInfoListBy.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        res.setTotal(clinetInfoListBy.getTotal());
         List<ClientInfoDTO> clientInfoList = clinetInfoListBy.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(clientInfoList))
@@ -162,8 +159,7 @@ public class ClientServiceImpl implements ClientService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
-        return resp;
+        res.setList(list);
     }
 
     @Override
@@ -236,13 +232,13 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void setClientDeleted(List<Long> idList, BLResp resp)
+    public void deleteClient(List<Long> idList, BLResp resp)
     {
         remoteClientService.setClientDeleted(idList);
     }
 
     @Override
-    public void resetClientPassword(List<Long> idList, BLResp resp)
+    public void resetPassword(List<Long> idList, BLResp resp)
     {
         ClientListDTO clientListByIds = remoteClientService.getClientListByIds(idList);
         List<ClientDTO> clientList = clientListByIds.getDataList();
