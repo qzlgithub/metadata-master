@@ -882,8 +882,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return res;
         }
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
-        List<ClientUser> clientUserList = clientUserMapper.getListByClientAndStatus(clientId, TrueOrFalse.TRUE,
-                TrueOrFalse.FALSE);
+        List<ClientUser> clientUserList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
         Manager manager = managerMapper.findById(client.getManagerId());
         res.setClientId(client.getId());
         res.setCorpName(client.getCorpName());
@@ -1039,10 +1038,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
         String lockAccount = product.name() + "-C" + openClientProductDTO.getProductRechargeDTO().getClientId();
         String lockUUID = StringUtils.getUuid();
         boolean locked = false;
-        try{
-            while(!locked){
+        try
+        {
+            while(!locked)
+            {
                 locked = redisDao.lockProductAccount(lockAccount, lockUUID);
-                if(!locked){
+                if(!locked)
+                {
                     Thread.sleep(100);
                     continue;
                 }
@@ -1067,12 +1069,15 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
                 cp = new ClientProduct();
                 EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
-                chargeService.renewClientProduct(pr,cp);
+                chargeService.renewClientProduct(pr, cp);
                 break;
             }
-        }catch(Exception e){
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
-        }finally
+        }
+        finally
         {
             if(locked)
             {
@@ -1178,7 +1183,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
                     canDelete = false;
                     break;
                 }
-            }else{
+            }
+            else
+            {
                 productIds.remove(item.getProductId());
             }
         }

@@ -158,12 +158,11 @@ public class PageController
      * 页面：客户编辑页面
      */
     @RequestMapping(value = "/client/edit.html")
-    public ModelAndView gotoClientEdit(@RequestParam(value = Field.CLIENT_ID) Long clientId)
+    public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
     {
         BLResp resp = BLResp.build();
         clientService.getClientInfoForEdit(clientId, resp);
-        //Map<String, Object> clientMap = clientService.findClientInfo(clientId);
-        ModelAndView view = new ModelAndView("customer-manage/customer-edit");
+        ModelAndView view = new ModelAndView("client/edit");
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getMap());
         return view;
@@ -173,12 +172,11 @@ public class PageController
      * 页面：客户详情页面
      */
     @RequestMapping(value = "/client/detail.html")
-    public ModelAndView gotoClientDetail(@RequestParam(value = Field.CLIENT_ID) Long clientId)
+    public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
         BLResp resp = BLResp.build();
-        //Map<String, Object> clientMap = clientService.findClientDetail(clientId);
         clientService.findClientDetail(clientId, resp);
-        ModelAndView view = new ModelAndView("customer-manage/customer-detail");
+        ModelAndView view = new ModelAndView("client/detail");
         view.addAllObjects(resp.getDataMap());
         view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
         view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());

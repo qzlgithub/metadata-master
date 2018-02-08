@@ -1,7 +1,6 @@
 package com.mingdong.core.model.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,9 +12,7 @@ public class ClientDetailDTO extends ResultDTO implements Serializable
     private String license;
     private Long industryId;
     private String username;
-    private BigDecimal balance;
     private Integer userStatus;
-    private Integer accountStatus;
     private List<ClientContactDTO> contacts;
     private List<ClientUserDTO> users;
     private Date addTime;
@@ -81,16 +78,6 @@ public class ClientDetailDTO extends ResultDTO implements Serializable
         this.username = username;
     }
 
-    public BigDecimal getBalance()
-    {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance)
-    {
-        this.balance = balance;
-    }
-
     public Integer getUserStatus()
     {
         return userStatus;
@@ -99,16 +86,6 @@ public class ClientDetailDTO extends ResultDTO implements Serializable
     public void setUserStatus(Integer userStatus)
     {
         this.userStatus = userStatus;
-    }
-
-    public Integer getAccountStatus()
-    {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(Integer accountStatus)
-    {
-        this.accountStatus = accountStatus;
     }
 
     public List<ClientContactDTO> getContacts()

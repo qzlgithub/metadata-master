@@ -178,7 +178,6 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.LICENSE, dto.getLicense());
         resp.addData(Field.INDUSTRY_ID, dto.getIndustryId() + "");
         resp.addData(Field.USER_STATUS, dto.getUserStatus());
-        resp.addData(Field.ACCOUNT_STATUS, dto.getAccountStatus());
 
         List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
         for(ClientContactDTO d : dto.getContacts())
@@ -693,8 +692,6 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.LICENSE, dto.getLicense());
         resp.addData(Field.USERNAME, dto.getUsername());
         resp.addData(Field.USER_ENABLED, dto.getUserStatus());
-        resp.addData(Field.ACCOUNT_ENABLED, dto.getAccountStatus());
-        resp.addData(Field.BALANCE, NumberUtils.formatAmount(dto.getBalance()));
         resp.addData(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
         resp.addData(Field.MANAGER_NAME, dto.getManagerName());
         List<Map<String, Object>> userList = new ArrayList<>();
