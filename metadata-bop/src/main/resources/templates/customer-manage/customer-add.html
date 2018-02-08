@@ -29,14 +29,14 @@
         </div>
         <!--面包屑 end-->
         <div class="p20">
-            <div class="w60">
+            <div class="w60" id="data-div-id">
                 <div class="w40 m30">
                     <div class="layui-form-item">
                         <label class="layui-form-label"><i class="col3">*</i>账号：</label>
-                        <div class="layui-input-block">
+                        <div class="layui-input-block" id="username-div-id">
                             <input type="text" id="username" name="username" placeholder="4到16位（字母，数字，下划线，减号）"
-                                   autocomplete="off"
-                                   class="layui-input" onblur="checkUsername()"/>
+                                   autocomplete="off" class="layui-input" datatype="username" datames="帐号"
+                                   notnull="true" onblur="checkUsername()" maxlength="16"/>
                             <i class="col3 pl10" id="usernameTip" style="display: none"></i>
                         </div>
                     </div>
@@ -44,16 +44,16 @@
                         <label class="layui-form-label"><i class="col3">*</i>公司名称：</label>
                         <div class="layui-input-block">
                             <input type="text" id="corpName" name="corpName" placeholder="请输入" autocomplete="off"
-                                   class="layui-input" onblur="checkCorpName()"/>
+                                   class="layui-input" datames="公司名称" notnull="true" maxlength="50"/>
                             <i class="col3 pl10" id="corpNameTip" style="display: none"></i>
-                            <i class="col3 pl10 cp" id="sameCompany">查看5家相似的公司</i>
+                            <i class="col4 pl10 cp" id="sameCompany">查看5家相似的公司</i>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label"><i class="col3">*</i>公司简称：</label>
                         <div class="layui-input-block">
                             <input type="text" id="shortName" name="shortName" placeholder="请输入" autocomplete="off"
-                                   class="layui-input"/>
+                                   datames="公司简称" notnull="true" maxlength="50" class="layui-input"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -67,7 +67,8 @@
                                 </select>
                             </div>
                             <div style="width: 50%; float: left;">
-                                <select id="industryId" name="modules" class="select-list" style="width: 98%">
+                                <select id="industryId" name="modules" datames="所属行业" notnull="true" class="select-list"
+                                        style="width: 98%">
                                     <option th:each="ind:${industry}" th:value="${ind.id}"
                                             th:text="${ind.name}"></option>
                                 </select>
@@ -79,7 +80,8 @@
                         <label class="layui-form-label"><i class="col3">*</i>社会信用代码：</label>
                         <div class="layui-input-block">
                             <input type="text" id="license" name="license" placeholder="请输入" autocomplete="off"
-                                   class="layui-input" onblur="checkLicense()"/>
+                                   class="layui-input" datatype="socialCreditCode" datames="社会信用代码" maxlength="18"
+                                   notnull="true"/>
                             <i class="col3 pl10" id="licenseTip" style="display: none"></i>
                         </div>
                     </div>
@@ -154,7 +156,7 @@
                 <!--table end-->
             </div>
             <div class="layui-form-item tc">
-                <button class="layui-btn" lay-submit="" onclick="layer.closeAll()" lay-filter="demo1">关闭</button>
+                <a class="layui-btn" lay-submit="" onclick="layer.closeAll()" lay-filter="demo1">关闭</a>
             </div>
         </form>
     </div>
@@ -174,28 +176,32 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
                 <div class="layui-input-block">
-                    <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"
+                           maxlength="20" datames="联系人" notnull="true"/>
                     <i class="col3 pl10" id="tip-add-name" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>职位：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"
+                           datames="职位" notnull="true" maxlength="30"/>
                     <i class="col3 pl10" id="tip-add-position" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"
+                           datatype="phoneOrMobile" datames="联系电话" notnull="true" maxlength="20"/>
                     <i class="col3 pl10" id="tip-add-phone" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">联系邮箱：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"
+                           datatype="email" datames="联系邮箱" notnull="true" maxlength="40"/>
                     <i class="col3 pl10" id="tip-add-email" style="display: none"></i>
                 </div>
             </div>
@@ -214,17 +220,13 @@
         </div>
     </div>
 </div>
-<!--新增联系人 提示层 end-->
 
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/uuid.js}"></script>
+<script type="text/javascript" th:src="@{/js/validate.js}"></script>
 <!--<script type="text/javascript" th:src="@{/js/random.js}"></script>-->
 <script type="text/javascript" th:src="@{/js/client-add.js}"></script>
 <script>

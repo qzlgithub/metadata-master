@@ -87,6 +87,9 @@ contact.on("click", ".del-contact", function() {
     $("#" + id).remove();
 });
 $("#save-contact").click(function() {
+    if(!checkDataValid("#div-contact")){
+        return;
+    }
     var name = $("#add-name").val();
     var position = $("#add-position").val();
     var phone = $("#add-phone").val();
@@ -203,8 +206,16 @@ function fetchIndustry() {
         }
     )
 }
-
+var isSubmit = false;
 function editClient() {
+    if(isSubmit){
+        return;
+    }
+    isSubmit = true;
+    if(!checkDataValid("#data-div-id")){
+        isSubmit = false;
+        return;
+    }
     var update = [];
     for(var o in edit_obj) {
         var obj = {};
@@ -236,6 +247,7 @@ function editClient() {
         success: function(data) {
             if(data.errCode !== '000000') {
                 layer.msg("修改失败:" + data.errMsg);
+                isSubmit = false;
             }
             else {
                 layer.msg("修改成功", {
@@ -246,82 +258,4 @@ function editClient() {
             }
         }
     });
-}
-
-function checkCorpName() {
-    var corpName = $("#corpName").val();
-    if(corpName == "") {
-        $("#corpNameTip").text("公司名称不能为空！");
-        $("#corpNameTip").show();
-    }
-    else {
-        $("#corpNameTip").text("");
-        $("#corpNameTip").hide();
-    }
-}
-
-function checkContact() {
-    var contact = $("#name").val();
-    if(contact == "") {
-        $("#contactTip").text("联系人不能为空！");
-        $("#contactTip").show();
-    }
-    else {
-        $("#contactTip").text("");
-        $("#contactTip").hide();
-    }
-}
-
-function checkPhone() {
-    var phone = $("#phone").val();
-    var reg1 = new RegExp("^([0-9]{3,4}-)?[0-9]{7,8}$");//检测固话
-    var reg2 = new RegExp("^1[34578]\\d{9}$");//检测移动电话
-    if(phone !== "") {
-        if(reg1.test(phone) || reg2.test(phone)) {
-            $("#phoneTip").text("");
-            $("#phoneTip").hide();
-        }
-        else {
-            $("#phoneTip").text("联系电话格式错误！");
-            $("#phoneTip").show();
-        }
-    }
-    else {
-        $("#phoneTip").text("联系电话不能为空！");
-        $("#phoneTip").show();
-    }
-}
-
-function checkEmail() {
-    var email = $("#email").val();
-    var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-    if(email !== "") {
-        if(reg.test(email)) {
-            $("#emailTip").text("");
-            $("#emailTip").hide();
-        }
-        else {
-            $("#emailTip").text("邮箱格式不正确！");
-            $("#emailTip").show();
-        }
-    }
-}
-
-function checkLicense() {
-    var email = $("#license").val();
-    var reg = new RegExp("^[0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}$");
-    if(email !== "") {
-        if(reg.test(email)) {
-            $("#licenseTip").text("");
-            $("#licenseTip").hide();
-        }
-        else {
-            $("#licenseTip").text("社会信用代码格式不正确！");
-            $("#licenseTip").show();
-        }
-    }
-    else {
-        $("#licenseTip").text("社会信用代码不能为空！");
-        $("#licenseTip").show();
-    }
 }
