@@ -26,7 +26,7 @@
             <a><cite>编辑客户</cite></a>
         </div>
         <div class="p20">
-            <div class="w40 m30">
+            <div class="w40 m30" id="data-div-id">
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号：</label>
                     <div class="layui-input-block col2" th:text="${username}">账号</div>
@@ -35,7 +35,8 @@
                     <label class="layui-form-label"><i class="col3">*</i>公司名称：</label>
                     <div class="layui-input-block">
                         <input type="text" id="corpName" name="corpName" placeholder="请输入"
-                               autocomplete="off" class="layui-input" th:value="${corpName}" onblur="checkCorpName()"/>
+                               autocomplete="off" class="layui-input" datames="公司名称" notnull="true" maxlength="50"
+                               th:value="${corpName}"/>
                         <i class="col3 pl10" id="corpNameTip" style="display: none"></i>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                     <label class="layui-form-label"><i class="col3">*</i>公司简称：</label>
                     <div class="layui-input-block">
                         <input type="text" id="shortName" name="shortName" placeholder="请输入" th:value="${shortName}"
-                               autocomplete="off" class="layui-input"/>
+                               autocomplete="off" datames="公司简称" notnull="true" maxlength="50" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -59,7 +60,8 @@
                         </div>
 
                         <div style="width: 50%; float: left;">
-                            <select id="industry" name="industry" class="select-list" style="width: 98%">
+                            <select id="industry" name="industry" class="select-list" datames="所属行业" notnull="true"
+                                    style="width: 98%">
                                 <option th:each="child:${industryDict}" th:value="${child.key}"
                                         th:text="${child.value}" th:selected="${child.key} eq ${industryId}"></option>
                             </select>
@@ -70,7 +72,8 @@
                     <label class="layui-form-label"><i class="col3">*</i>社会信用代码：</label>
                     <div class="layui-input-block">
                         <input type="text" id="license" name="license" placeholder="请输入"
-                               autocomplete="off" class="layui-input" th:value="${license}" onblur="checkLicense()"/>
+                               autocomplete="off" class="layui-input" datatype="socialCreditCode" datames="社会信用代码"
+                               maxlength="18" notnull="true" th:value="${license}"/>
                         <i class="col3 pl10" id="licenseTip" style="display: none"></i>
                     </div>
                 </div>
@@ -166,7 +169,7 @@
             <!--table end-->
         </div>
         <div class="layui-form-item tc">
-            <button class="layui-btn" onclick="layer.closeAll()">关闭</button>
+            <a class="layui-btn" onclick="layer.closeAll()">关闭</a>
         </div>
         <!--</form>-->
     </div>
@@ -184,28 +187,32 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
                 <div class="layui-input-block">
-                    <input type="tel" id="add-name" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="tel" id="add-name" placeholder="" autocomplete="off" maxlength="20" datames="联系人"
+                           notnull="true" class="layui-input"/>
                     <i class="col3 pl10 tip" id="tip-add-name" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>职位：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-position" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-position" placeholder="" autocomplete="off" datames="职位" notnull="true"
+                           maxlength="30" class="layui-input"/>
                     <i class="col3 pl10 tip" id="tip-add-position" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-phone" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-phone" placeholder="" autocomplete="off" datatype="phoneOrMobile"
+                           datames="联系电话" notnull="true" maxlength="20" class="layui-input"/>
                     <i class="col3 pl10 tip" id="tip-add-phone" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">联系邮箱：</label>
                 <div class="layui-input-block">
-                    <input type="text" id="add-email" placeholder="" autocomplete="off" class="layui-input"/>
+                    <input type="text" id="add-email" placeholder="" autocomplete="off" datatype="email" datames="联系邮箱"
+                           notnull="true" maxlength="40" class="layui-input"/>
                     <i class="col3 pl10 tip" id="tip-add-email" style="display: none"></i>
                 </div>
             </div>
@@ -229,6 +236,7 @@
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
 <script type="text/javascript" th:src="@{/js/uuid.js}"></script>
+<script type="text/javascript" th:src="@{/js/validate.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/client-edit.js}"></script>
 </body>

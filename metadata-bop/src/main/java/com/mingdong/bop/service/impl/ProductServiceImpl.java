@@ -4,6 +4,7 @@ import com.mingdong.bop.component.Param;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
@@ -109,7 +110,7 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.CUSTOM, Custom.getById(product.getCustom()).getName());
             map.put(Field.CODE, product.getCode());
             map.put(Field.NAME, product.getName());
-            map.put(Field.COST_AMT, product.getCostAmt());
+            map.put(Field.COST_AMT, NumberUtils.formatAmount(product.getCostAmt()));
             map.put(Field.REMARK, product.getRemark());
             map.put(Field.ENABLED, product.getEnabled());
             map.put(Field.CONTENT, productTxt == null ? "" : productTxt.getContent());

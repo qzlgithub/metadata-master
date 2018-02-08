@@ -34,7 +34,7 @@
         </div>
         <!--面包屑 end-->
         <div class="p20">
-            <div class="w60 m30">
+            <div class="w60 m30" id="data-div-id">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品分组：</label>
                     <div class="layui-input-block w40">
@@ -51,17 +51,16 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>产品名称：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-name" onblur="checkProdName();" autocomplete="off"
-                               class="layui-input" th:value="${name}"/>
+                        <input type="text" id="product-name" autocomplete="off"
+                               class="layui-input" th:value="${name}" datames="产品名称" notnull="true" maxlength="15"/>
                         <i class="col3 pl10" id="prodNameTip" style="display: none"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>成本价格：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>成本价格（元）：</label>
                     <div class="layui-input-block w40">
-                        <input type="text" id="product-cost" onblur="checkCostAmt();" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
-                               class="layui-input" style="width: 80%; display: inline-block;"/>
-                        <i class="col3">元</i>
+                        <input type="text" id="product-cost" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
+                               class="layui-input" datatype="double1" datames="成本价格" notnull="true" maxlength="8" style="width: 80%; display: inline-block;"/>
                         <i class="col3 pl10" id="costAmtTip" style="display: none"></i>
                     </div>
                 </div>
@@ -81,7 +80,7 @@
                     <label class="layui-form-label">产品介绍：</label>
                     <div class="layui-input-block">
                         <textarea id="product-txt" cols="100" rows="8" th:text="${content}"
-                                  style="width:700px;height:200px;visibility:hidden;" title="产品介绍"></textarea>
+                                  style="width:700px;height:200px;visibility:hidden;" title="产品介绍" maxlength="240"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -105,14 +104,10 @@
 
 <!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
-
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1264021086'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1264021086%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
-</script>
 <script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" th:src="@{/js/validate.js}"></script>
 <script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.edit.js}"></script>
 </body>
