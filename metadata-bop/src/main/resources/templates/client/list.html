@@ -50,11 +50,13 @@
                     </select>
                 </li>
                 <li>账号状态：
-                    <select id="enabled" name="enabled" class="select-list">
-                        <option value="" selected="selected">全部</option>
-                        <option value="1">启用</option>
-                        <option value="0">禁用</option>
-                    </select>
+                    <div class="layui-form inline-flex">
+                        <select id="enabled" name="enabled" class="select-list">
+                            <option value="" selected="selected">全部</option>
+                            <option value="1">启用</option>
+                            <option value="0">禁用</option>
+                        </select>
+                    </div>
                 </li>
                 <li>
                     <button type="button" class="check-button" onclick="search()">查询</button>
@@ -69,7 +71,7 @@
                    th:if="${#lists.contains(i_privilege, '31106')}">停用账号</a>
                 <a href="#" class="layui-btn layui-btn-danger" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
-                <a th:href="@{/client/addition.html}" class="layui-btn"
+                <a th:href="@{/client/addition.html}" class="layui-btn fr layui-btn-normal"
                    th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
             </div>
             <div class="layui-form">

@@ -668,3 +668,4 @@ body {
 .scroll-table th{line-height: 38px;font-size: 14px; border: 1px solid #e2e2e2; text-align: center; border-bottom: 0px;}
 .scroll-table td{line-height: 38px;font-size: 14px; border-bottom: 1px solid #e2e2e2; text-align: center}
 .scroll-table thead tr{background-color: #f2f2f2;}
+.layui-btn{background-color: #1E9FFF;}
