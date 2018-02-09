@@ -26,8 +26,7 @@ public interface ClientService
     /**
      * 根据条件获取客户信息列表
      */
-    void getCorp(Integer enabled, String account, String cropName, String shortName, Long parentIndustryId,
-            Long industryId, Page page, ListRes res);
+    void getCorp(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res);
 
     void getClientInfoForEdit(Long clientId, BLResp resp);
 

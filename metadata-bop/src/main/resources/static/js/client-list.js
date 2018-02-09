@@ -15,9 +15,7 @@ layui.config({
         url: '/client/list',
         where: {
             enabled: $("#enabled").val(),
-            username: $("#username").val(),
-            corpName: $("#corpName").val(),
-            shortName: $("#shortName").val(),
+            keyword: $("#keyword").val(),
             industryId: $("#industryId").val(),
             parentIndustryId: $("#parentIndustryId").val()
         },
@@ -45,26 +43,44 @@ layui.config({
             dataName: 'list'
         }
     });
-});
-
-/**
- * 列表查询
- */
-function search() {
-    main_table.reload({
-        where: {
-            enabled: $("#enabled").val(),
-            username: $("#username").val(),
-            corpName: $("#corpName").val(),
-            shortName: $("#shortName").val(),
-            industryId: $("#industryId").val(),
-            parentIndustryId: $("#parentIndustryId").val()
-        },
-        page: {
-            curr: 1
+    form.on('submit(search)', function(data) {
+        var params = data.field;
+        main_table.reload({
+            where: {
+                enabled: params['enabled'],
+                keyword: params['keyword'],
+                industryId: params['industry'],
+                parentIndustryId: params['parent-industry']
+            },
+            page: {
+                curr: 1
+            }
+        });
+    });
+    form.on('select(parent-industry)', function(obj) {
+        var parent_industry_id = obj.value;
+        var target = $("#industry");
+        if(parent_industry_id !== "") {
+            $.get(
+                "/system/industry/childList",
+                {"industryId": parent_industry_id},
+                function(data) {
+                    target.empty();
+                    target.append(new Option('全部', ''));
+                    for(var d in data) {
+                        target.append(new Option(data[d].name, data[d].id));
+                    }
+                    form.render('select');
+                }
+            )
+        }
+        else {
+            target.empty();
+            target.append(new Option('全部', ''));
+            form.render('select');
         }
     });
-}
+});
 
 function check_reason() {
     var reason = $("#ban-reason").val();
@@ -221,31 +237,6 @@ function reset_password() {
             layer.closeAll();
         }
     });
-}
-
-/**
- * 刷新子行业下拉选项
- */
-function refresh_industry_dict() {
-    var parentId = $("#parentIndustryId").val();
-    var target = $("#industryId");
-    if(parentId !== "") {
-        $.get(
-            "/system/industry/childList",
-            {"industryId": parentId},
-            function(data) {
-                target.empty();
-                target.append('<option value="">全部</option>');
-                for(var d in data) {
-                    target.append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
-                }
-            }
-        )
-    }
-    else {
-        target.empty();
-        target.append('<option value="">全部</option>');
-    }
 }
 
 /**

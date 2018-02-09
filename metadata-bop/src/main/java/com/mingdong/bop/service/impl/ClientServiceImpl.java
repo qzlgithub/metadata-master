@@ -39,6 +39,7 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
@@ -114,8 +115,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getCorp(Integer enabled, String username, String cropName, String shortName, Long parentIndustryId,
-            Long industryId, Page page, ListRes res)
+    public void getCorp(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res)
     {
         List<Long> industryList = new ArrayList<>();
         if(industryId == null)
@@ -135,10 +135,10 @@ public class ClientServiceImpl implements ClientService
         {
             industryList.add(industryId);
         }
-        ClientInfoListDTO clinetInfoListBy = remoteClientService.getClientInfoListBy(enabled, username, cropName,
-                shortName, industryList, page);
-        res.setTotal(clinetInfoListBy.getTotal());
-        List<ClientInfoDTO> clientInfoList = clinetInfoListBy.getDataList();
+        ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword, industryList,
+                enabled, page);
+        res.setTotal(clientInfoListDTO.getTotal());
+        List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(clientInfoList))
         {
@@ -154,7 +154,7 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.PHONE, clientInfo.getPhone());
                 map.put(Field.MANAGER_NAME, clientInfo.getManagerName());
                 map.put(Field.ACCOUNT_QTY, clientInfo.getAccountQty());
-                map.put(Field.REGISTER_DATE, DateUtils.format(clientInfo.getRegisterTime(), "yyyy-MM-dd"));
+                map.put(Field.REGISTER_DATE, DateUtils.format(clientInfo.getRegisterTime(), DateFormat.YYYY_MM_DD));
                 map.put(Field.USER_ENABLED, clientInfo.getUserEnabled());
                 list.add(map);
             }
@@ -221,12 +221,12 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
     {
-        UpdateClientUserStatusDTO updateClientUserStatusDTO = new UpdateClientUserStatusDTO();
-        updateClientUserStatusDTO.setClientIdList(clientIdList);
-        updateClientUserStatusDTO.setEnabled(enabled);
-        updateClientUserStatusDTO.setManagerId(managerId);
-        updateClientUserStatusDTO.setReason(reason);
-        ResultDTO resultDTO = remoteClientService.updateClientUserStatus(updateClientUserStatusDTO);
+        UpdateClientUserStatusDTO dto = new UpdateClientUserStatusDTO();
+        dto.setClientIdList(clientIdList);
+        dto.setEnabled(enabled);
+        dto.setManagerId(managerId);
+        dto.setReason(reason);
+        ResultDTO resultDTO = remoteClientService.updateClientUserStatus(dto);
         resp.result(resultDTO.getResult());
     }
 

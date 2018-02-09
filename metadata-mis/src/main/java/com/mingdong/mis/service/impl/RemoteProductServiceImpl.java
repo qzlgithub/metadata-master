@@ -1,9 +1,8 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
@@ -14,6 +13,7 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -96,7 +96,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
                     endDate);
-            if(CollectionUtils.isNotEmpty(dataList))
+            if(!CollectionUtils.isEmpty(dataList))
             {
                 ProductRechargeInfoDTO productRechargeDTO;
                 for(ProductRechargeInfo item : dataList)
@@ -141,7 +141,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         if(page == null)
         {
             List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
-            if(CollectionUtils.isNotEmpty(apiReqInfoList))
+            if(!CollectionUtils.isEmpty(apiReqInfoList))
             {
                 for(ApiReqInfo item : apiReqInfoList)
                 {
@@ -161,7 +161,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
-                if(CollectionUtils.isNotEmpty(apiReqInfoList))
+                if(!CollectionUtils.isEmpty(apiReqInfoList))
                 {
                     for(ApiReqInfo item : apiReqInfoList)
                     {
@@ -383,7 +383,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId, productId,
                     startTime, endTime);
-            if(CollectionUtils.isNotEmpty(productRechargeInfos))
+            if(!CollectionUtils.isEmpty(productRechargeInfos))
             {
                 for(ProductRechargeInfo item : productRechargeInfos)
                 {
@@ -404,7 +404,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId,
                         productId, startTime, endTime);
-                if(CollectionUtils.isNotEmpty(productRechargeInfos))
+                if(!CollectionUtils.isEmpty(productRechargeInfos))
                 {
                     for(ProductRechargeInfo item : productRechargeInfos)
                     {
@@ -490,7 +490,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         productListDTO.setDataList(dataList);
         ProductDTO productDTO;
         List<Product> productList = productMapper.getListByStatus(enabled);
-        if(CollectionUtils.isNotEmpty(productList))
+        if(!CollectionUtils.isEmpty(productList))
         {
             for(Product item : productList)
             {
@@ -512,7 +512,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         if(page == null)
         {
             List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
-            if(CollectionUtils.isNotEmpty(productInfoList))
+            if(!CollectionUtils.isEmpty(productInfoList))
             {
                 for(ProductInfo item : productInfoList)
                 {
@@ -534,7 +534,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
-                if(CollectionUtils.isNotEmpty(productInfoList))
+                if(!CollectionUtils.isEmpty(productInfoList))
                 {
                     for(ProductInfo item : productInfoList)
                     {
@@ -765,46 +765,77 @@ public class RemoteProductServiceImpl implements RemoteProductService
 
     @Override
     @Transactional
-    public ResultDTO updateProductStatusById(Long id, Integer enabled)
+    public ResultDTO changeProductStatus(Long productId, Integer enabled)
     {
-        ResultDTO resultDTO = new ResultDTO();
-        Product product = productMapper.findById(id);
+        ResultDTO dto = new ResultDTO();
+        Product product = productMapper.findById(productId);
         if(product == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            dto.setResult(RestResult.OBJECT_NOT_FOUND);
+            return dto;
         }
         if(enabled.equals(product.getEnabled()))
         {
-            product.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
-            product.setUpdateTime(new Date());
-            productMapper.updateById(product);
+            return dto;
         }
-        List<UserProduct> userProductList = userProductMapper.findListBy(null, id);
-        if(CollectionUtils.isNotEmpty(userProductList))
+        // 更新产品状态
+        product.setEnabled(enabled);
+        product.setUpdateTime(new Date());
+        productMapper.updateById(product);
+        // 如果设置为禁用则需清空客户关于该产品的请求凭证
+        if(!TrueOrFalse.TRUE.equals(enabled))
         {
-            List<Long> ids = new ArrayList<>();
-            List<String> removeToken = new ArrayList<>();
-            for(UserProduct item : userProductList)
+            List<UserProduct> userProductList = userProductMapper.getListByProduct(productId);
+            if(!CollectionUtils.isEmpty(userProductList))
             {
-                if(StringUtils.isNotEmpty(item.getAccessToken()))
+                List<Long> idList = new ArrayList<>();
+                List<String> tokenList = new ArrayList<>();
+                for(UserProduct o : userProductList)
                 {
-                    removeToken.add(item.getAccessToken());
-                    ids.add(item.getId());
+                    if(o.getAccessToken() != null)
+                    {
+                        idList.add(o.getId());
+                        tokenList.add(o.getAccessToken());
+                    }
                 }
-            }
-            if(CollectionUtils.isNotEmpty(ids))
-            {
-                userProductMapper.updateToken(new Date(), null, ids);
-                for(String item : removeToken)
+                if(idList.size() > 0)
                 {
-                    redisDao.dropUserAuth(item);
+                    userProductMapper.clearAccessToken(new Date(), idList);
+                    redisDao.dropUserAuth(tokenList.toArray(new String[tokenList.size()]));
                 }
             }
         }
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        return dto;
     }
 
+    @Override
+    public ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page)
+    {
+        ListDTO<ProductDTO> dto = new ListDTO<>();
+        int total = productMapper.countBy(keyword, type, custom, status);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<Product> dataList = productMapper.getListBy(keyword, type, custom, status);
+            List<ProductDTO> list = new ArrayList<>();
+            for(Product o : dataList)
+            {
+                ProductDTO pd = new ProductDTO();
+                pd.setId(o.getId());
+                pd.setCreateTime(o.getCreateTime());
+                pd.setCode(o.getCode());
+                pd.setName(o.getName());
+                pd.setType(o.getType());
+                pd.setCustom(o.getCustom());
+                pd.setCostAmt(o.getCostAmt());
+                pd.setRemark(o.getRemark());
+                pd.setEnabled(o.getEnabled());
+                list.add(pd);
+            }
+            dto.setList(list);
+        }
+        return dto;
+    }
 }
-

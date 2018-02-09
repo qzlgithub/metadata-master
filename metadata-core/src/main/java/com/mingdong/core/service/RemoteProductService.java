@@ -2,6 +2,7 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -225,10 +226,8 @@ public interface RemoteProductService
 
     /**
      * 根据产品id修改产品状态
-     *
-     * @param id
-     * @param enabled
-     * @return
      */
-    ResultDTO updateProductStatusById(Long id, Integer enabled);
+    ResultDTO changeProductStatus(Long productId, Integer enabled);
+
+    ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
 }

@@ -5,19 +5,18 @@ import java.util.Date;
 public class ClientInfo
 {
     private Long clientId;
-    private Date registerTime; // 注册时间
-    private String corpName; // 公司名称
-    private String shortName; // 公司简称
-    private String license; // 组织机构代码
-    private Long industryId; // 客户类型
-    private String name; // 联系人
-    private String phone; // 联系电话
-    private String email; // 邮箱
-    private String username; // 客户账号
-    private String managerName; // 商务经理
-    private Integer accountQty; // 子账号（个）
-    private Integer accountEnabled; // 账户状态
-    private Integer userEnabled; // 账号状态
+    private Date registerTime;
+    private String corpName;
+    private String shortName;
+    private String license;
+    private Long industryId;
+    private String name;
+    private String phone;
+    private String email;
+    private String username;
+    private String managerName;
+    private Integer accountQty;
+    private Integer userEnabled;
 
     public Long getClientId()
     {
@@ -137,16 +136,6 @@ public class ClientInfo
     public void setLicense(String license)
     {
         this.license = license;
-    }
-
-    public Integer getAccountEnabled()
-    {
-        return accountEnabled;
-    }
-
-    public void setAccountEnabled(Integer accountEnabled)
-    {
-        this.accountEnabled = accountEnabled;
     }
 
     public Integer getUserEnabled()

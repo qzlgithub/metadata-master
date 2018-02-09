@@ -17,7 +17,6 @@ public class ClientInfoDTO implements Serializable
     private String username; // 客户账号
     private String managerName; // 商务经理
     private Integer accountQty; // 子账号（个）
-    private Integer accountEnabled; // 账户状态
     private Integer userEnabled; // 账号状态
 
     public Long getClientId()
@@ -138,16 +137,6 @@ public class ClientInfoDTO implements Serializable
     public void setAccountQty(Integer accountQty)
     {
         this.accountQty = accountQty;
-    }
-
-    public Integer getAccountEnabled()
-    {
-        return accountEnabled;
-    }
-
-    public void setAccountEnabled(Integer accountEnabled)
-    {
-        this.accountEnabled = accountEnabled;
     }
 
     public Integer getUserEnabled()

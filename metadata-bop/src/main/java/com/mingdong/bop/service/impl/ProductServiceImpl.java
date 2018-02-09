@@ -3,13 +3,17 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
+import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
@@ -213,9 +217,9 @@ public class ProductServiceImpl implements ProductService
     //    }
 
     @Override
-    public void updateProdStatus(Long id, Integer enabled, BLResp resp)
+    public void changeProductStatus(Long productId, Integer enabled, BLResp resp)
     {
-        ResultDTO resultDTO = remoteProductService.updateProductStatusById(id, enabled);
+        ResultDTO resultDTO = remoteProductService.changeProductStatus(productId, enabled);
         resp.result(resultDTO.getResult());
     }
 
@@ -304,5 +308,31 @@ public class ProductServiceImpl implements ProductService
             }
         }
         return list;
+    }
+
+    @Override
+    public void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, ListRes res)
+    {
+        ListDTO<ProductDTO> dto = remoteProductService.getProductList(keyword, type, custom, status, page);
+        res.setTotal(dto.getTotal());
+        if(!CollectionUtils.isEmpty(dto.getList()))
+        {
+            List<Map<String, Object>> list = new ArrayList<>(dto.getList().size());
+            for(ProductDTO o : dto.getList())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, o.getId() + "");
+                map.put(Field.ADD_DATE, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD));
+                map.put(Field.CODE, o.getCode());
+                map.put(Field.NAME, o.getName());
+                map.put(Field.TYPE, ProdType.getNameById(o.getType()));
+                map.put(Field.CUSTOM, o.getCustom());
+                map.put(Field.COST_AMT, o.getCostAmt());
+                map.put(Field.REMARK, o.getRemark());
+                map.put(Field.STATUS, o.getEnabled());
+                list.add(map);
+            }
+            res.setList(list);
+        }
     }
 }

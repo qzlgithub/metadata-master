@@ -2,6 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -99,11 +100,11 @@ public interface ProductService
     /**
      * 更改产品信息
      *
-     * @param id
+     * @param productId
      * @param enabled
      * @param resp
      */
-    void updateProdStatus(Long id, Integer enabled, BLResp resp);
+    void changeProductStatus(Long productId, Integer enabled, BLResp resp);
 
     /**
      * 获取产品信息列表
@@ -135,4 +136,6 @@ public interface ProductService
      * @return
      */
     List<Map<String, Object>> getProductInfoListMap(Integer enabled);
+
+    void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, ListRes res);
 }

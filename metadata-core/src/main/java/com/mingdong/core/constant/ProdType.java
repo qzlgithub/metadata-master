@@ -30,6 +30,18 @@ public enum ProdType
         return null;
     }
 
+    public static String getNameById(int id)
+    {
+        for(ProdType o : ProdType.values())
+        {
+            if(id == o.id)
+            {
+                return o.name;
+            }
+        }
+        return null;
+    }
+
     public static List<DictDTO> getProdTypeDict()
     {
         List<DictDTO> list = new ArrayList<>();

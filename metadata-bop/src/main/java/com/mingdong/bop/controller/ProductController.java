@@ -9,6 +9,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,22 +74,19 @@ public class ProductController
         return resp;
     }
 
-    @PostMapping(value = "/updateProdStatus")
+    @PostMapping(value = "status")
     @ResponseBody
-    public BLResp updateProdStatus(@RequestBody JSONObject jsonReq)
+    public BLResp changeProductStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        Long id = jsonReq.getLong(Field.ID);
+        Long productId = jsonReq.getLong(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
-        if(id == null || id <= 0)
+        if(productId == null || productId <= 0 || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(
+                enabled)))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        productService.updateProdStatus(id, enabled, resp);
+        productService.changeProductStatus(productId, enabled, resp);
         return resp;
     }
 
@@ -128,18 +126,31 @@ public class ProductController
 
     }
 
-    @GetMapping(value = "/product/management")
+    @GetMapping(value = "list")
     @ResponseBody
-    public Map<String, Object> gotoProductManagementPage(
+    public ListRes getProductList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
+            @RequestParam(value = Field.TYPE, required = false) Integer type,
+            @RequestParam(value = Field.CUSTOM, required = false) Integer custom,
+            @RequestParam(value = Field.STATUS, required = false) Integer status,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
+        ListRes res = new ListRes();
         Page page = new Page(pageNum, pageSize);
-        BLResp resp = productService.getProductInfoList(page);
-        return resp.getDataMap();
+        keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
+        if(!TrueOrFalse.TRUE.equals(custom) && !TrueOrFalse.FALSE.equals(custom))
+        {
+            custom = null;
+        }
+        if(!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(status))
+        {
+            status = null;
+        }
+        productService.getProductList(keyword, type, custom, status, page, res);
+        return res;
     }
 
-   /* @PostMapping(value = "/addition")
+    /* @PostMapping(value = "/addition")
     @ResponseBody
     public BLResp addNewProduct(@RequestBody ProductVO vo)
     {

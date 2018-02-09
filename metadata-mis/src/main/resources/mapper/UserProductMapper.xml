@@ -61,6 +61,13 @@
         where `id` = #{id}
     </update>
 
+    <update id="clearAccessToken">
+        update `user_product` set `update_time` = #{date}, `access_token` = null where `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
     <select id="findByUserAndProduct" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `user_id` = #{userId} and `product_id` = #{productId}
@@ -80,4 +87,9 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="getListByProduct" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `product_id` = #{productId}
+    </select>
 </mapper>

@@ -31,7 +31,7 @@ public class RedisDao extends RedisBaseDao
         setEx(DB.USER_AUTH, token, str, seconds);
     }
 
-    public void dropUserAuth(String token)
+    public void dropUserAuth(String... token)
     {
         del(DB.USER_AUTH, token);
     }

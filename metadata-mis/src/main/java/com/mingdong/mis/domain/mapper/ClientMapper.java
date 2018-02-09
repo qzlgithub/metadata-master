@@ -23,4 +23,10 @@ public interface ClientMapper
     Client findByPrimaryAccount(Long primaryAccountId);
 
     Client findByCorpNameOrCorpLicense(@Param("corpName") String corpName, @Param("license") String license);
+
+    int countBy(@Param("keyword") String keyword, @Param("industryList") List<Long> industryList,
+            @Param("enabled") Integer enabled);
+
+    void updateStatusByIds(@Param("enabled") Integer enabled, @Param("date") Date date,
+            @Param("idList") List<Long> idList);
 }

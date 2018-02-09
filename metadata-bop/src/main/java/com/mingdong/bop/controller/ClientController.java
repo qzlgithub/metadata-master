@@ -69,12 +69,10 @@ public class ClientController
 
     @GetMapping(value = "list")
     @ResponseBody
-    public ListRes getList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
+    public ListRes getClientList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
-            @RequestParam(value = Field.CORP_NAME, required = false) String corpName,
-            @RequestParam(value = Field.SHORT_NAME, required = false) String shortName,
-            @RequestParam(value = Field.USERNAME, required = false) String username,
+            @RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
@@ -84,10 +82,8 @@ public class ClientController
         {
             enabled = null;
         }
-        corpName = StringUtils.isNullBlank(corpName) ? null : corpName.trim();
-        shortName = StringUtils.isNullBlank(shortName) ? null : shortName.trim();
-        username = StringUtils.isNullBlank(username) ? null : username.trim();
-        clientService.getCorp(enabled, username, corpName, shortName, parentIndustryId, industryId, page, res);
+        keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
+        clientService.getCorp(keyword, parentIndustryId, industryId, enabled, page, res);
         return res;
     }
 
@@ -238,7 +234,7 @@ public class ClientController
 
     @PostMapping(value = "status")
     @ResponseBody
-    private BLResp changeStatus(@RequestBody JSONObject jsonReq)
+    private BLResp changeClientStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);

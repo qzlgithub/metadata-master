@@ -16,7 +16,7 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `type`, `code`, `name`, `cost_amt`, `remark`, `enabled`,`custom`
+            `id`, `create_time`, `update_time`, `type`, `code`, `name`, `cost_amt`, `remark`, `enabled`, `custom`
         from `product`
     </sql>
 
@@ -52,13 +52,13 @@
         update `product`
         set `create_time` = #{createTime},
             `update_time` = #{updateTime},
-            `type`     = #{type},
+            `type`        = #{type},
             `code`        = #{code},
             `name`        = #{name},
             `cost_amt`    = #{costAmt},
             `remark`      = #{remark},
             `enabled`     = #{enabled},
-            `custom`     = #{custom}
+            `custom`      = #{custom}
         where `id` =
               #{id}
     </update>
@@ -97,5 +97,26 @@
     <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `enabled` = #{enabled}
+    </select>
+
+    <select id="countBy" resultType="int">
+        select count(*) from `product`
+        <where>
+            <if test="keyword != null">`name` like '%${keyword}%' or `code` like '%${keyword}%'</if>
+            <if test="type != null">and `type` = #{type}</if>
+            <if test="custom != null">and `custom` = #{custom}</if>
+            <if test="enabled != null">and `enabled` = #{enabled}</if>
+        </where>
+    </select>
+
+    <select id="getListBy" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        <where>
+            <if test="keyword != null">`name` like '%${keyword}%' or `code` like '%${keyword}%'</if>
+            <if test="type != null">and `type` = #{type}</if>
+            <if test="custom != null">and `custom` = #{custom}</if>
+            <if test="enabled != null">and `enabled` = #{enabled}</if>
+        </where>
+        order by `create_time` asc
     </select>
 </mapper>

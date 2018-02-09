@@ -119,4 +119,6 @@ public interface Field
     String PRODUCT_CUSTOM_LIST = "productCustomList";
     String IS_SELECTED = "isSelected";
 
+    String ADD_DATE = "addDate";
+    String KEYWORD = "keyword";
 }

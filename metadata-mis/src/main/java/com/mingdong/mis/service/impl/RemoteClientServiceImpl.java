@@ -23,6 +23,7 @@ import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -504,47 +505,35 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientInfoListDTO getClientInfoListBy(Integer enabled, String username, String cropName, String shortName,
-            List<Long> industryIdList, Page page)
+    public ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, List<Long> industryList, Integer enabled,
+            Page page)
     {
-        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
-        List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
-        clientInfoListDTO.setDataList(clientInfoDTOList);
-        ClientInfoDTO clientInfoDTO;
-        if(page == null)
+        ListDTO<ClientInfoDTO> dto = new ListDTO<>();
+        int total = clientMapper.countBy(keyword, industryList, enabled);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
-            List<ClientInfo> clientInfoList = clientInfoMapper.getListBy(enabled, username, cropName, shortName,
-                    industryIdList);
-            if(CollectionUtils.isNotEmpty(clientInfoList))
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryList, enabled);
+            List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
+            for(ClientInfo o : dataList)
             {
-                for(ClientInfo item : clientInfoList)
-                {
-                    clientInfoDTO = new ClientInfoDTO();
-                    EntityUtils.copyProperties(item, clientInfoDTO);
-                    clientInfoDTOList.add(clientInfoDTO);
-                }
+                ClientInfoDTO ci = new ClientInfoDTO();
+                ci.setClientId(o.getClientId());
+                ci.setRegisterTime(o.getRegisterTime());
+                ci.setCorpName(o.getCorpName());
+                ci.setShortName(o.getShortName());
+                ci.setIndustryId(o.getIndustryId());
+                ci.setUsername(o.getUsername());
+                ci.setAccountQty(o.getAccountQty());
+                ci.setManagerName(o.getManagerName());
+                ci.setUserEnabled(o.getUserEnabled());
+                list.add(ci);
             }
+            dto.setList(list);
         }
-        else
-        {
-            int total = clientInfoMapper.countBy(enabled, username, cropName, shortName, industryIdList);
-            int pages = page.getTotalPage(total);
-            clientInfoListDTO.setPages(pages);
-            clientInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ClientInfo> clientInfoList = clientInfoMapper.getListBy(enabled, username, cropName, shortName,
-                        industryIdList);
-                for(ClientInfo item : clientInfoList)
-                {
-                    clientInfoDTO = new ClientInfoDTO();
-                    EntityUtils.copyProperties(item, clientInfoDTO);
-                    clientInfoDTOList.add(clientInfoDTO);
-                }
-            }
-        }
-        return clientInfoListDTO;
+        return dto;
     }
 
     @Override
@@ -930,38 +919,39 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ResultDTO updateClientUserStatus(UpdateClientUserStatusDTO updateClientUserStatusDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        List<ClientUser> userList = clientUserMapper.getListByClientsAndPrimary(
-                updateClientUserStatusDTO.getClientIdList());
-        if(CollectionUtils.isEmpty(userList))
+        List<Client> clientList = clientMapper.getListByIdList(updateClientUserStatusDTO.getClientIdList());
+        if(CollectionUtils.isEmpty(clientList))
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
         Date current = new Date();
-        List<Long> clientUserIdList = new ArrayList<>();
-        List<ClientOperateLog> logList = new ArrayList<>();
-        for(ClientUser user : userList)
+        Integer enabled = updateClientUserStatusDTO.getEnabled();
+        List<Long> clientIdList = new ArrayList<>();
+        List<Long> userIdList = new ArrayList<>();
+        List<ClientOperateLog> logList = new ArrayList<>(clientIdList.size());
+        for(Client o : clientList)
         {
-            if(!updateClientUserStatusDTO.getEnabled().equals(user.getEnabled()))
+            if(!enabled.equals(o.getEnabled()))
             {
-                clientUserIdList.add(user.getId());
+                clientIdList.add(o.getId());
+                userIdList.add(o.getPrimaryUserId());
                 ClientOperateLog log = new ClientOperateLog();
                 log.setCreateTime(current);
                 log.setUpdateTime(current);
-                log.setClientId(user.getClientId());
-                log.setClientUserId(user.getId());
+                log.setClientId(o.getId());
+                log.setClientUserId(o.getPrimaryUserId());
                 log.setManagerId(updateClientUserStatusDTO.getManagerId());
                 log.setType(updateClientUserStatusDTO.getEnabled());
                 log.setReason(updateClientUserStatusDTO.getReason());
                 logList.add(log);
             }
         }
-        if(logList.size() > 0)
+        if(clientIdList.size() > 0)
         {
             clientOperateLogMapper.addList(logList);
-            clientUserMapper.updateStatusByIds(updateClientUserStatusDTO.getEnabled(), current, clientUserIdList);
+            clientUserMapper.updateStatusByIds(enabled, current, userIdList);
+            clientMapper.updateStatusByIds(enabled, current, clientIdList);
         }
-        resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
 

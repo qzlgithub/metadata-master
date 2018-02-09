@@ -5,6 +5,7 @@ import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
+import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
@@ -12,6 +13,7 @@ import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
@@ -156,17 +158,8 @@ public interface RemoteClientService
 
     /**
      * 根据条件获取客户信息
-     *
-     * @param enabled
-     * @param account
-     * @param cropName
-     * @param shortName
-     * @param industryIdList
-     * @param page
-     * @return
      */
-    ClientInfoListDTO getClientInfoListBy(Integer enabled, String account, String cropName, String shortName,
-            List<Long> industryIdList, Page page);
+    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, List<Long> industryList, Integer enabled, Page page);
 
     /**
      * 根据客户id获取客户信息

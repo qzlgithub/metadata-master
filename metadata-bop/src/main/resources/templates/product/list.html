@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="product :: top"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/product/index.html">产品管理</a>
+            <a href="/product/index.html">产品管理</a>
+            <a><cite>产品管理</cite></a>
+        </div>
+        <div class="p20 layui-form">
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    <input type="text" id="keyword" placeholder="请输入：产品编码/产品名称" class="layui-input"
+                           style="width: 240px"/>
+                </li>
+                <li>
+                    类别：
+                    <div class="inline-flex" style="width: 180px">
+                        <select id="type">
+                            <option value="" selected="selected">全部</option>
+                            <option th:each="o : ${productTypeDict}" th:value="${o.key}" th:text="${o.value}"></option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    种类：
+                    <div class="inline-flex" style="width: 120px">
+                        <select id="custom">
+                            <option value="" selected="selected">全部</option>
+                            <option value="1">定制</option>
+                            <option value="0">普通</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    状态：
+                    <div class="inline-flex" style="width: 120px">
+                        <select id="status" title="状态">
+                            <option value="" selected="selected">全部</option>
+                            <option value="1">正常</option>
+                            <option value="0">已禁用</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <button type="button" class="layui-btn" onclick="search()">查询</button>
+                </li>
+            </ul>
+            <div class="layui-form">
+                <table class="layui-table" id="data-table" lay-filter="main"></table>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/js/product-list.js"></script>
+<script type="text/html" id="operation-bar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/product/edit.html?id={{d.id}}">编辑</a>
+    {{# if(d.status === 1) { }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
+    {{# } else { }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
+    {{# } }}
+</script>
+<script type="text/html" id="custom-tpl">
+    {{# if(d.custom === 1){ }}
+    <div>定制</div>
+    {{# } else { }}
+    <div>普通</div>
+    {{# } }}
+</script>
+<script type="text/html" id="status-tpl">
+    {{# if(d.status === 1){ }}
+    <div>正常</div>
+    {{# } else { }}
+    <div>已禁用</div>
+    {{# } }}
+</script>
+</body>
+</html>

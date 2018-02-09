@@ -12,6 +12,7 @@ import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
+import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
@@ -304,7 +305,8 @@ public class PageController
     @GetMapping(value = "/product/index.html")
     public ModelAndView productIndex()
     {
-        ModelAndView view = new ModelAndView("product-manage/product-index");
+        ModelAndView view = new ModelAndView("product/list");
+        view.addObject(Field.PRODUCT_TYPE_DICT, ProdType.getProdTypeDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
