@@ -159,7 +159,7 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息
      */
-    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, List<Long> industryList, Integer enabled, Page page);
+    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Page page);
 
     /**
      * 根据客户id获取客户信息

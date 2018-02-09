@@ -49,6 +49,7 @@ import com.mingdong.mis.domain.entity.ClientOperateInfo;
 import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
+import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
@@ -63,6 +64,7 @@ import com.mingdong.mis.domain.mapper.ClientOperateInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
+import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
@@ -87,6 +89,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private RedisDao redisDao;
     @Resource
     private SysConfigMapper sysConfigMapper;
+    @Resource
+    private DictIndustryMapper dictIndustryMapper;
     @Resource
     private ManagerMapper managerMapper;
     @Resource
@@ -505,17 +509,37 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, List<Long> industryList, Integer enabled,
-            Page page)
+    public ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Page page)
     {
+        List<Long> industryIdList = new ArrayList<>();
+        if(industryId != null)
+        {
+            DictIndustry industry = dictIndustryMapper.findById(industryId);
+            if(industry != null)
+            {
+                if(industry.getParentId() != 0L)
+                {
+                    industryIdList.add(industryId);
+                }
+                else
+                {
+                    List<DictIndustry> industryList = dictIndustryMapper.getByParentAndStatus(industryId,
+                            TrueOrFalse.TRUE);
+                    for(DictIndustry o : industryList)
+                    {
+                        industryIdList.add(o.getId());
+                    }
+                }
+            }
+        }
         ListDTO<ClientInfoDTO> dto = new ListDTO<>();
-        int total = clientMapper.countBy(keyword, industryList, enabled);
+        int total = clientMapper.countBy(keyword, industryIdList, enabled);
         int pages = page.getTotalPage(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryList, enabled);
+            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled);
             List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
             for(ClientInfo o : dataList)
             {

@@ -36,8 +36,6 @@ import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.DictDTO;
-import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -113,28 +111,11 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res)
+    public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page,
+            ListRes res)
     {
-        List<Long> industryList = new ArrayList<>();
-        if(industryId == null)
-        {
-            if(parentIndustryId != null)
-            {
-                DictIndustryListDTO byParentAndStatus = remoteSystemService.getDictIndustryListByParentAndStatus(
-                        parentIndustryId, TrueOrFalse.TRUE);
-                List<DictIndustryDTO> parentList = byParentAndStatus.getDataList();
-                for(DictIndustryDTO d : parentList)
-                {
-                    industryList.add(d.getId());
-                }
-            }
-        }
-        else
-        {
-            industryList.add(industryId);
-        }
-        ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword, industryList,
-                enabled, page);
+        ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword,
+                industryId == null ? parentIndustryId : industryId, enabled, page);
         res.setTotal(clientInfoListDTO.getTotal());
         List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
