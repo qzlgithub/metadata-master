@@ -34,8 +34,7 @@ public class StatsController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        BLResp resp = statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize));
-        return resp;
+        return statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize));
     }
 
     @GetMapping(value = "client/clientList/export")

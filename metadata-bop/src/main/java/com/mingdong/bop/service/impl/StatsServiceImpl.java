@@ -139,9 +139,6 @@ public class StatsServiceImpl implements StatsService
             map.put(Field.CORP_NAME, item.getCorpName());
             map.put(Field.SHORT_NAME, item.getShortName());
             map.put(Field.USERNAME, item.getUsername());
-            map.put(Field.NAME, item.getName());
-            map.put(Field.PHONE, item.getPhone());
-            map.put(Field.EMAIL, item.getEmail());
             map.put(Field.MANAGER_NAME, item.getManagerName());
             dataList.add(map);
         }
@@ -159,9 +156,6 @@ public class StatsServiceImpl implements StatsService
         row.createCell(1).setCellValue("公司名称");
         row.createCell(2).setCellValue("公司简称");
         row.createCell(3).setCellValue("账号");
-        row.createCell(4).setCellValue("联系人");
-        row.createCell(5).setCellValue("联系方式");
-        row.createCell(6).setCellValue("邮箱");
         row.createCell(7).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = new Date();
@@ -199,9 +193,6 @@ public class StatsServiceImpl implements StatsService
                 dataRow.createCell(1).setCellValue(dataInfo.getCorpName());
                 dataRow.createCell(2).setCellValue(dataInfo.getShortName());
                 dataRow.createCell(3).setCellValue(dataInfo.getUsername());
-                dataRow.createCell(4).setCellValue(dataInfo.getName());
-                dataRow.createCell(5).setCellValue(dataInfo.getPhone());
-                dataRow.createCell(6).setCellValue(dataInfo.getEmail());
                 dataRow.createCell(7).setCellValue(dataInfo.getManagerName());
             }
         }

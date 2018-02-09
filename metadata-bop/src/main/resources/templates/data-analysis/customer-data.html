@@ -5,14 +5,13 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
-    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
-    <!--<script src="../../static/js/jquery-1.11.1.min.js"></script>-->
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+    <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -23,8 +22,8 @@
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
-            <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
+            <a href="/stats/index.html">数据统计管理<span class="layui-box">&gt;</span></a>
+            <a href="/stats/index.html">运营数据管理<span class="layui-box">&gt;</span></a>
             <a><cite>客户数据</cite></a>
         </div>
         <div class="p20">
@@ -82,9 +81,6 @@
                             <th>公司名称</th>
                             <th>公司简称</th>
                             <th>账号</th>
-                            <th>联系人</th>
-                            <th>联系方式</th>
-                            <th>邮箱</th>
                             <th>商务经理</th>
                         </tr>
                         </thead>
@@ -102,13 +98,13 @@
 </div>
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
+<script src="/static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/echarts/echarts.common.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/customer.data.js}"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
+<script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
+<script type="text/javascript" src="/static/js/customer.data.js"></script>
 </body>
 
 </html>

@@ -108,9 +108,6 @@ var rowStr = '<tr>' +
     '<td>#{corpName}</td>' +
     '<td>#{shortName}</td>' +
     '<td>#{username}</td>' +
-    '<td>#{name}</td>' +
-    '<td>#{phone}</td>' +
-    '<td>#{email}</td>' +
     '<td>#{managerName}</td>' +
     '</tr>';
 
@@ -131,9 +128,6 @@ function getClientList(obj, pageFun) {
                     .replace("#{corpName}", list[d].corpName)
                     .replace("#{shortName}", list[d].shortName)
                     .replace("#{username}", list[d].username)
-                    .replace("#{name}", list[d].name)
-                    .replace("#{phone}", list[d].phone)
-                    .replace("#{email}", list[d].email)
                     .replace("#{managerName}", list[d].managerName);
                     $("#dataBody").append(row);
                 }

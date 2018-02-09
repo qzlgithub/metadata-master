@@ -11,9 +11,6 @@ public class ClientInfoDTO implements Serializable
     private String shortName; // 公司简称
     private String license; // 组织机构代码
     private Long industryId; // 客户类型
-    private String name; // 联系人
-    private String phone; // 联系电话
-    private String email; // 邮箱
     private String username; // 客户账号
     private String managerName; // 商务经理
     private Integer accountQty; // 子账号（个）
@@ -77,36 +74,6 @@ public class ClientInfoDTO implements Serializable
     public void setIndustryId(Long industryId)
     {
         this.industryId = industryId;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
     }
 
     public String getUsername()

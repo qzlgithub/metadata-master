@@ -69,10 +69,10 @@ public class ClientController
 
     @GetMapping(value = "list")
     @ResponseBody
-    public ListRes getClientList(@RequestParam(value = Field.ENABLED, required = false) Integer enabled,
+    public ListRes getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
-            @RequestParam(value = Field.KEYWORD, required = false) String keyword,
+            @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
@@ -83,7 +83,7 @@ public class ClientController
             enabled = null;
         }
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
-        clientService.getCorp(keyword, parentIndustryId, industryId, enabled, page, res);
+        clientService.getClientList(keyword, parentIndustryId, industryId, enabled, page, res);
         return res;
     }
 
@@ -182,7 +182,7 @@ public class ClientController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         Page page = new Page(pageNum, pageSize);
-        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
+        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
         //        BLResp resp = tradeService.testList3(clientId, time, page);
         BLResp resp = BLResp.build();
         return resp.getDataMap();
@@ -201,7 +201,7 @@ public class ClientController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         Page page = new Page(pageNum, pageSize);
-        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getCorp(username, corpName, shortNamepage);
+        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
         //        BLResp resp = tradeService.testList4(clientId, time, page);
         BLResp resp = BLResp.build();
         return resp.getDataMap();

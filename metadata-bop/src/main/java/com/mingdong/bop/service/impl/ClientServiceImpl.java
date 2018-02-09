@@ -103,9 +103,7 @@ public class ClientServiceImpl implements ClientService
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.CORP_NAME, client.getCorpName());
-                map.put(Field.NAME, client.getName());
-                map.put(Field.PHONE, client.getPhone());
-                map.put(Field.EMAIL, client.getEmail());
+                map.put(Field.LICENSE, client.getLicense());
                 map.put(Field.REGISTER_DATE, DateUtils.format(client.getRegisterTime(), DateFormat.YYYY_MM_DD));
                 list.add(map);
             }
@@ -115,7 +113,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getCorp(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res)
+    public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res)
     {
         List<Long> industryList = new ArrayList<>();
         if(industryId == null)
@@ -150,8 +148,6 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.CORP_NAME, clientInfo.getCorpName());
                 map.put(Field.SHORT_NAME, clientInfo.getShortName());
                 map.put(Field.INDUSTRY, systemService.getIndustryName(clientInfo.getIndustryId()));
-                map.put(Field.NAME, clientInfo.getName());
-                map.put(Field.PHONE, clientInfo.getPhone());
                 map.put(Field.MANAGER_NAME, clientInfo.getManagerName());
                 map.put(Field.ACCOUNT_QTY, clientInfo.getAccountQty());
                 map.put(Field.REGISTER_DATE, DateUtils.format(clientInfo.getRegisterTime(), DateFormat.YYYY_MM_DD));
