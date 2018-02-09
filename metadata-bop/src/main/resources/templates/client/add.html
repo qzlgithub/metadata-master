@@ -20,14 +20,11 @@
     <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
             <a><cite>添加客户</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
             <div class="w60" id="data-div-id">
                 <div class="w40 m30">
@@ -110,11 +107,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
                     <div class="layui-input-block layui-form">
-                        <!--table-->
                         <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                             <tbody id="contact-list"></tbody>
                         </table>
-                        <!--table end-->
                     </div>
                 </div>
             </div>
@@ -131,9 +126,7 @@
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--查看公司  提示层-->
 <div id="check-company" class="modal">
-    <!--form-->
     <div class="layui-layer-title">相似企业</div>
     <div class="mb30">
         <form class="layui-form" action="">
@@ -153,22 +146,16 @@
                     </thead>
                     <tbody id="sameCompanyBody"></tbody>
                 </table>
-                <!--table end-->
             </div>
             <div class="layui-form-item tc">
                 <a class="layui-btn" lay-submit="" onclick="layer.closeAll()" lay-filter="demo1">关闭</a>
             </div>
         </form>
     </div>
-    <!--form end-->
 </div>
 
-<!--提示层 end-->
-
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<!--新增联系人  提示层-->
 <div id="addcontacts-modal" class="modal">
     <div class="layui-layer-title">添加联系人</div>
     <div class="m30">

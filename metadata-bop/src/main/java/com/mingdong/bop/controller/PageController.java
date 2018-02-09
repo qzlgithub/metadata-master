@@ -148,7 +148,7 @@ public class PageController
     @RequestMapping(value = "/client/addition.html")
     public ModelAndView gotoClientAddition()
     {
-        ModelAndView view = new ModelAndView("customer-manage/customer-add");
+        ModelAndView view = new ModelAndView("client/add");
         view.addAllObjects(systemService.getInitIndustryMap());
         view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
         view.addAllObjects(RequestThread.getMap());
@@ -311,19 +311,10 @@ public class PageController
         return view;
     }
 
-    @GetMapping(value = "/product/addition.html")
-    public ModelAndView productAddition()
-    {
-        ModelAndView view = new ModelAndView("product-manage/product-add");
-        //        view.addObject(Field.PRODUCT_TYPE_DICT, productService.getProductTypeDict(TrueOrFalse.TRUE));
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
     @GetMapping(value = "/product/edit.html")
     public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
     {
-        ModelAndView view = new ModelAndView("product-manage/product-edit");
+        ModelAndView view = new ModelAndView("product/edit");
         Map<String, Object> map = productService.getProductInfo(id);
         view.addAllObjects(map);
         view.addAllObjects(RequestThread.getMap());
@@ -333,7 +324,7 @@ public class PageController
     @GetMapping(value = "/product/category/index.html")
     public ModelAndView productCategoryIndex()
     {
-        ModelAndView view = new ModelAndView("product-manage/product-category");
+        ModelAndView view = new ModelAndView("product/category");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
