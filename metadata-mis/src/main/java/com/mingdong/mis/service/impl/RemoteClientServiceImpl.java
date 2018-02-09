@@ -857,9 +857,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
         user.setCreateTime(current);
         user.setUpdateTime(current);
         user.setClientId(clientId);
-        user.setName(req.getUsername());
-        user.setPhone("18812345678");
-        user.setEmail("xxxx@xxx.com");
+        user.setName("");
+        user.setPhone("");
+        user.setEmail("");
         user.setUsername(req.getUsername());
         user.setPassword(Constant.DEFAULT_ENC_PWD);
         user.setEnabled(req.getEnabled());
@@ -874,8 +874,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
         client.setLicense(req.getLicense());
         client.setIndustryId(req.getIndustryId());
         client.setPrimaryUserId(userId);
+        client.setUsername(req.getUsername());
         client.setManagerId(req.getManagerId());
         client.setAccountQty(0);
+        client.setEnabled(TrueOrFalse.TRUE);
         client.setDeleted(TrueOrFalse.FALSE);
         // save data
         clientContactMapper.addList(contactList);
