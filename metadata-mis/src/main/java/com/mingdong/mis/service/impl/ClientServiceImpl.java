@@ -91,11 +91,11 @@ public class ClientServiceImpl implements ClientService
             return;
         }
         // 验证请求密钥
-        if(!checkAccessKey(userProduct.getAppSecret(), timestamp, accessKey))
-        {
-            res.setResult(MetadataResult.RC_7);
-            return;
-        }
+        //        if(!checkAccessKey(userProduct.getAppSecret(), timestamp, accessKey))
+        //        {
+        //            res.setResult(MetadataResult.RC_7);
+        //            return;
+        //        }
         String accessToken;
         Date validTime;
         if(!TrueOrFalse.TRUE.equals(refresh) && userProduct.getAccessToken() != null &&

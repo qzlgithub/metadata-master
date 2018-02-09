@@ -26,9 +26,9 @@ function isSocialCreditCode(obj){
         return true;
     }
 }
-//匹配double精度为1的正数
-function isDouble1(obj){
-    reg = /^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1})?$/;
+//匹配double精度为2的正数
+function isDouble2(obj){
+    reg = /^[0-9]+(.[0-9]{1,2})?$/;
     if (!reg.test(obj) && obj != '0') {
         return false;
     } else {
@@ -89,6 +89,7 @@ function judgeValidate(obj){
     var validateFlag = true;
     var tgs = ["INPUT:not(:file)", "SELECT", "TEXTAREA"];
     var len = tgs.length;
+    var errorIndex = 0;
     for (var j = 0; j < len; j++) {
         $(obj).find(tgs[j]).each(function () {
             var value = $.trim($(this).val());
@@ -101,7 +102,7 @@ function judgeValidate(obj){
                 if(!isNotNull(value)){
                     validateMsg = (typeof($(this).attr("datames")) != "undefined"?$(this).attr("datames"):"") + "不能为空！\n";
                     validateFlag = false;
-                    tipCss($(this), validateMsg);
+                    tipCss($(this), validateMsg,errorIndex++);
                     return true;
                 }
             }
@@ -114,49 +115,49 @@ function judgeValidate(obj){
                     if (!isUsername(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
-                case "double1":
-                    if (!isDouble1(value)) {
-                        validateMsg = $(this).attr("datames") + "格式不匹配，最多一位小数的正数！\n";
+                case "double2":
+                    if (!isDouble2(value)) {
+                        validateMsg = $(this).attr("datames") + "格式不匹配，最多两位小数的正数！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 case "phone":
                     if (!isTelephone(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 case "mobile":
                     if (!isMobile(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 case "phoneOrMobile":
                     if (!isMobileOrPhone(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 case "email":
                     if (!isEmail(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 case "socialCreditCode":
                     if (!isSocialCreditCode(value)) {
                         validateMsg = $(this).attr("datames") + "格式不匹配！\n";
                         validateFlag = false;
-                        tipCss($(this), validateMsg);
+                        tipCss($(this), validateMsg,errorIndex++);
                     }
                     return true;
                 default:
@@ -167,7 +168,9 @@ function judgeValidate(obj){
     return validateFlag;
 }
 
-function tipCss(obj,validateMsg){
+function tipCss(obj,validateMsg,errorIndex){
+    if(errorIndex == 0)
+        $(obj).focus();
     var id = $(obj).attr("id");
     $(obj).after('<span id="span-id-'+id+'" style="color:red">'+validateMsg+'</span>');
 }

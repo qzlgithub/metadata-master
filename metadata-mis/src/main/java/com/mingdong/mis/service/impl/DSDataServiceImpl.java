@@ -3,6 +3,7 @@ package com.mingdong.mis.service.impl;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.exception.MetadataAPIException;
+import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
@@ -16,7 +17,7 @@ import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.model.IMetadata;
 import com.mingdong.mis.model.MetadataRes;
-import com.mingdong.mis.model.vo.BlacklistVO;
+import com.mingdong.mis.model.vo.AbsRequest;
 import com.mingdong.mis.service.ChargeService;
 import com.mingdong.mis.service.DSDataService;
 import org.slf4j.Logger;
@@ -44,10 +45,9 @@ public class DSDataServiceImpl implements DSDataService
     private ProductRechargeMapper productRechargeMapper;
 
     @Override
-    public void getBlacklistData(Long accountId, Long clientId, Long userId, String ip, BlacklistVO req,
-            MetadataRes res)
+    public <T extends AbsRequest> void getData(APIProduct product, Long accountId, Long clientId, Long userId,
+            String ip, T req, MetadataRes res)
     {
-        APIProduct product = APIProduct.DS_DATA_BLACKLIST;
         String lockAccount = product.name() + "-C" + clientId;
         String lockUUID = StringUtils.getUuid();
         boolean locked = false;
@@ -78,14 +78,22 @@ public class DSDataServiceImpl implements DSDataService
             }
             // 调取数据API
             IMetadata data = dataAPIProcessor.revokeDataAPI(product, req);
-            // 保存本次请求记录，并更新产品账余额
-            Long reqId = IDUtils.getApiReqId(param.getNodeId());
-            chargeService.chargeAndLog(reqId, account, userId, recharge, billPlan, ip, data.getThirdNo(), data.isHit(),
-                    res.getTimestamp());
-            res.add(Field.REQUEST_NO, "RQ" + reqId);
+            if(data.isSaveLog())
+            {
+                // 保存本次请求记录，并更新产品账余额
+                Long reqId = IDUtils.getApiReqId(param.getNodeId());
+                chargeService.chargeAndLog(reqId, account, userId, recharge, billPlan, ip, data.getThirdNo(),
+                        data.isHit(), res.getTimestamp());
+                res.add(Field.REQUEST_NO, "RQ" + reqId);
+            }
             res.addAll(data.response());
         }
         catch(MetadataAPIException e)
+        {
+            logger.error("Failed to revoke data api: {}", e.getMessage());
+            res.setResult(MetadataResult.RC_11);
+        }
+        catch(MetadataCoreException e)
         {
             logger.error("Failed to revoke data api: {}", e.getMessage());
             res.setResult(MetadataResult.RC_11);

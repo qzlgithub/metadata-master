@@ -18,4 +18,9 @@ public interface IMetadata
      * 获取第三方接口的请求编号
      */
     String getThirdNo();
+
+    /**
+     * 判断是否需要保存
+     */
+    boolean isSaveLog();
 }

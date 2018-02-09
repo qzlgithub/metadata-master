@@ -16,5 +16,5 @@ public interface UserProductMapper
 
     List<UserProduct> findListBy(@Param("userId") Long userId, @Param("productId") Long productId);
 
-    void updateToken(@Param("updateDate") Date updateDate,@Param("token") String token,@Param("ids") List<Long> ids);
+    void updateToken(@Param("updateDate") Date updateDate, @Param("token") String token, @Param("ids") List<Long> ids);
 }

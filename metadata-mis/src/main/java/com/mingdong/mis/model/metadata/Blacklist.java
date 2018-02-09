@@ -51,4 +51,10 @@ public class Blacklist implements IMetadata
     {
         return orderNo;
     }
+
+    @Override
+    public boolean isSaveLog()
+    {
+        return true;
+    }
 }

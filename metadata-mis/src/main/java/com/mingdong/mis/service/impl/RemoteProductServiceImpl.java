@@ -781,18 +781,23 @@ public class RemoteProductServiceImpl implements RemoteProductService
             productMapper.updateById(product);
         }
         List<UserProduct> userProductList = userProductMapper.findListBy(null, id);
-        if(CollectionUtils.isNotEmpty(userProductList)){
-            List<Long> ids  = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(userProductList))
+        {
+            List<Long> ids = new ArrayList<>();
             List<String> removeToken = new ArrayList<>();
-            for(UserProduct item : userProductList){
-                if(StringUtils.isNotEmpty(item.getAccessToken())){
+            for(UserProduct item : userProductList)
+            {
+                if(StringUtils.isNotEmpty(item.getAccessToken()))
+                {
                     removeToken.add(item.getAccessToken());
                     ids.add(item.getId());
                 }
             }
-            if(CollectionUtils.isNotEmpty(ids)){
-                userProductMapper.updateToken(new Date(),null,ids);
-                for(String item : removeToken){
+            if(CollectionUtils.isNotEmpty(ids))
+            {
+                userProductMapper.updateToken(new Date(), null, ids);
+                for(String item : removeToken)
+                {
                     redisDao.dropUserAuth(item);
                 }
             }

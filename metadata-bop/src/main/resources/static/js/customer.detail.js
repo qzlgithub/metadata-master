@@ -215,7 +215,7 @@ function openProduct() {
                 layer.msg("开通成功", {
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 }, function() {
-                    window.location.href = "/client/detail.html?clientId=" + clientId;
+                    window.location.href = "/client/detail.html?id=" + clientId;
                 });
             }
         }
@@ -258,7 +258,7 @@ function renewProduct() {
                 layer.msg("续费成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/client/detail.html?clientId=" + $("#client-id").val();
+                    window.location.href = "/client/detail.html?id=" + $("#client-id").val();
                 });
             }
         }
