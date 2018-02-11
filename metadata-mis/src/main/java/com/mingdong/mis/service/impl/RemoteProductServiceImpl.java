@@ -3,6 +3,7 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
@@ -29,6 +30,7 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.component.RedisDao;
+import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.DictProductType;
@@ -821,7 +823,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<Product> dataList = productMapper.getListBy(keyword, type, custom, status);
-            List<ProductDTO> list = new ArrayList<>();
+            List<ProductDTO> list = new ArrayList<>(dataList.size());
             for(Product o : dataList)
             {
                 ProductDTO pd = new ProductDTO();
@@ -835,6 +837,45 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 pd.setRemark(o.getRemark());
                 pd.setEnabled(o.getEnabled());
                 list.add(pd);
+            }
+            dto.setList(list);
+        }
+        return dto;
+    }
+
+    @Override
+    public ListDTO<ProductRechargeInfoDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
+            Long rechargeType, Date fromDate, Date toDate, Page page)
+    {
+        ListDTO<ProductRechargeInfoDTO> dto = new ListDTO<>();
+        int total = productRechargeInfoMapper.countBy1(keyword, productId, managerId, rechargeType, fromDate, toDate);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        BigDecimal totalAmt = productRechargeInfoMapper.sumRechargeAmountBy(keyword, productId, managerId, rechargeType,
+                fromDate, toDate);
+        dto.addExtra(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy1(keyword, productId, managerId,
+                    rechargeType, fromDate, toDate);
+            List<ProductRechargeInfoDTO> list = new ArrayList<>(dataList.size());
+            for(ProductRechargeInfo o : dataList)
+            {
+                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                pri.setTradeTime(o.getTradeTime());
+                pri.setTradeNo(o.getTradeNo());
+                pri.setCorpName(o.getCorpName());
+                pri.setShortName(o.getShortName());
+                pri.setUsername(o.getUsername());
+                pri.setProductName(o.getProductName());
+                pri.setRechargeType(o.getRechargeType());
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                pri.setManagerName(o.getManagerName());
+                pri.setContractNo(o.getContractNo());
+                pri.setRemark(o.getRemark());
+                list.add(pri);
             }
             dto.setList(list);
         }

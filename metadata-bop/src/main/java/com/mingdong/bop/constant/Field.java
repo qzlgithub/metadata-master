@@ -121,4 +121,14 @@ public interface Field
 
     String ADD_DATE = "addDate";
     String KEYWORD = "keyword";
+    String PRODUCT = "product";
+    String MANAGER = "manager";
+    String FROM_DATE = "fromDate";
+    String TO_DATE = "toDate";
+    String RECHARGE_TIME = "rechargeTime";
+    String RECHARGE_AT = "rechargeAt";
+    String FEE = "fee";
+    String IS_HIT = "isHit";
+    String REQUEST_AT = "requestAt";
+    String TOTAL_FEE = "totalFee";
 }

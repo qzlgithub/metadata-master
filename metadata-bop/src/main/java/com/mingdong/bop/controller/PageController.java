@@ -17,7 +17,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
-import com.mingdong.core.util.DateCalculateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +27,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,24 +69,17 @@ public class PageController
     @RequestMapping(value = "/finance/bill.html")
     public ModelAndView gotoBillListPage()
     {
-        ModelAndView view = new ModelAndView("finance/bill-list");
+        ModelAndView view = new ModelAndView("finance/bill");
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-
-        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
-        Date date = new Date();
-        Date beforeDayDate = DateCalculateUtils.getBeforeDayDate(date, 30, true);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view.addObject(Field.START_DATE, sdf.format(beforeDayDate));
-        view.addObject(Field.END_DATE, sdf.format(date));
-        view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
+        view.addObject(Field.PRODUCT_DICT, productInfoList);
         return view;
     }
 
     @RequestMapping(value = "/finance/recharge.html")
     public ModelAndView gotoRechargeListPage()
     {
-        ModelAndView view = new ModelAndView("finance/recharge-list");
+        ModelAndView view = new ModelAndView("finance/recharge");
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
@@ -99,11 +89,6 @@ public class PageController
         view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addObject(Field.MANAGER_LIST, managerList);
-        Date date = new Date();
-        Date beforeDayDate = DateCalculateUtils.getBeforeDayDate(date, 30, true);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view.addObject(Field.START_DATE, sdf.format(beforeDayDate));
-        view.addObject(Field.END_DATE, sdf.format(date));
         return view;
     }
 

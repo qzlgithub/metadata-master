@@ -23,4 +23,13 @@ public interface ApiReqInfoMapper
     BigDecimal getClientBillFeeSum(@Param("shortName") String shortName, @Param("typeId") Long typeId,
             @Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
             @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    int countBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    BigDecimal sumFeeBy(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    List<ApiReqInfo> getListBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

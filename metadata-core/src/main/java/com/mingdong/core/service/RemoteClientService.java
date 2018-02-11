@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
@@ -331,4 +332,7 @@ public interface RemoteClientService
     ResultDTO selectCustomProduct(Long clientId, List<Long> productIds);
 
     ResultDTO removeCustomClientProduct(Long clientProductId);
+
+    ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
+            Date toDate, Page page);
 }
