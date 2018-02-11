@@ -9,6 +9,6 @@ public interface ApiReqMapper
 {
     void add(ApiReq obj);
 
-    int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
+    int countBy(@Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

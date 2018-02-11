@@ -69,7 +69,15 @@ public class SignUtils
         SortedMap sm = MapUtils.sortKey(m);
         String str = JSON.toJSONString(sm);
         System.out.println("str: " + str);
-        String sign = sign(str, "8a4b2c4dbaa8441da4bcf960a9fc6bb6");
-        System.out.println("sign: " + sign);
+        String[] keys = {"8a4b2c4dbaa8441da4bcf960a9fc6bb6", "ae4424f35023493ebeb2b395bf4319b7",
+                "35e57260f7134c73a687018c8e3362b4", "3478c0f522404708aee59c0f851021cb",
+                "bc550ba163fd4dca86f94a531757a318", "093d2fa5d213409d8b169f50861040f2",
+                "78b49616e5c34940997bc7d15d350c24", "33ed867e46cc45ef94fcb171926636a8",
+                "71740c1021954947a26fba0cdb79a556", "eea8b73ae58a4fc4b952df1a0d8e15e9"};
+        for(String key : keys)
+        {
+            String sign = sign(str, key);
+            System.out.println("sign: " + sign);
+        }
     }
 }

@@ -5,12 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
     <link th:href="@{/plugins/paging/css/paging.css}" rel="stylesheet"/>
 </head>
 
@@ -25,8 +25,8 @@
         <!-- 内容主体区域 -->
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
-            <a href="/client/index.html">客户管理<span class="layui-box">&gt;</span></a>
+            <a href="/client/index.html">客户管理</a>
+            <a href="/client/index.html">客户管理</a>
             <a><cite>用户消费明细</cite></a>
         </div>
         <!--面包屑 end-->
@@ -34,7 +34,7 @@
             <!--搜索-->
             <ul class="search-list clearfix border-b2 pb25">
                 <li>产品名称：
-                    <select name="modules" lay-verify="required" lay-search="" class="select-list" id="product">
+                    <select name="product" lay-verify="required" lay-search="" class="select-list" id="product">
                         <option value="">全部</option>
                         <option th:each="p : ${productDict}" th:value="${p.id}" th:text="${p.name}"
                                 th:selected="${p.id eq productId}"></option>
@@ -94,8 +94,11 @@
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.user.consume.js}"></script>
 </body>

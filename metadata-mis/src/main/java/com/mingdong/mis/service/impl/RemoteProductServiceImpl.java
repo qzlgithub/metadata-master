@@ -131,8 +131,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date endDate,
-            Page page)
+    public ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+            Date endDate, Page page)
     {
         ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
         List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
@@ -140,7 +140,8 @@ public class RemoteProductServiceImpl implements RemoteProductService
         ApiReqInfoDTO apiReqInfoDTO;
         if(page == null)
         {
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
+                    endDate);
             if(!CollectionUtils.isEmpty(apiReqInfoList))
             {
                 for(ApiReqInfo item : apiReqInfoList)
@@ -153,14 +154,15 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         else
         {
-            int total = apiReqMapper.countBy(clientId, productId, fromDate, endDate);
+            int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
             int pages = page.getTotalPage(total);
             apiReqInfoListDTO.setPages(pages);
             apiReqInfoListDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, productId, fromDate, endDate);
+                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
+                        endDate);
                 if(!CollectionUtils.isEmpty(apiReqInfoList))
                 {
                     for(ApiReqInfo item : apiReqInfoList)

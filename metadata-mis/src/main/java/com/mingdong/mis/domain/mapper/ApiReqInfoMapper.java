@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ApiReqInfoMapper
 {
-    List<ApiReqInfo> getListBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
-            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    List<ApiReqInfo> getListBy(@Param("clientId") Long clientId, @Param("userId") Long userId,
+            @Param("productId") Long productId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     int countClientBillListBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
             @Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,

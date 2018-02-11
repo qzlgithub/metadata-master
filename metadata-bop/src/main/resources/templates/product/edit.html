@@ -5,12 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
     <link rel="stylesheet" th:href="@{/kindeditor/themes/default/default.css}"/>
     <link rel="stylesheet" th:href="@{/kindeditor/plugins/code/prettify.css}"/>
     <script charset="utf-8" th:src="@{/kindeditor/kindeditor-all-min.js}"></script>
@@ -28,8 +28,8 @@
         <!-- 内容主体区域 -->
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a th:href="@{/}">首页<span class="layui-box">&gt;</span></a>
-            <a th:href="@{/product/index.html}">产品列表<span class="layui-box">&gt;</span></a>
+            <a th:href="@{/}">首页</a>
+            <a th:href="@{/product/index.html}">产品列表</a>
             <a><cite>导航元素</cite></a>
         </div>
         <!--面包屑 end-->
@@ -103,13 +103,14 @@
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
-<script src="../../static/plugins/layui/layui.js"></script>
+
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" th:src="@{/js/validate.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript" th:src="@{/js/product.edit.js}"></script>
 </body>
 </html>
