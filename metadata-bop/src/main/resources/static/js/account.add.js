@@ -22,7 +22,7 @@ layui.config({
     });
 });
 $(function() {
-    resetPrivilege();
+    //resetPrivilege();
 });
 $(".parent-privilege").click(function() {
     var pid = $(this).attr("id");

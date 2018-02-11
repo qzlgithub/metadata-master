@@ -5,12 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 </head>
 
@@ -24,8 +24,8 @@
         <!-- 内容主体区域 -->
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/stats/Index.html">数据统计管理<span class="layui-box">&gt;</span></a>
-            <a href="/stats/Index.html">运营数据管理<span class="layui-box">&gt;</span></a>
+            <a href="/stats/Index.html">数据统计管理</a>
+            <a href="/stats/Index.html">运营数据管理</a>
             <a><cite>运营数据统计</cite></a>
         </div>
         <!--面包屑 end-->
@@ -133,7 +133,7 @@
                         <li class="mt10"><label class="contrast-time"><input type="checkbox" name=""/></label>对比时间</li>
                         <li class="position-r time-input timeinput">
                             <em class="inline-block">
-                                <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/>
+                                <input type="text" name="date" id="date2" autocomplete="off" class="layui-input"/>
                             </em>
                             <i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                         <li>
@@ -196,12 +196,12 @@
                             <span>近30天</span>
                         </li>
                         <li class="position-r">统计时间：<em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <input type="text" name="date" id="date3" autocomplete="off" class="layui-input"/></em>
                             <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
                         </li>
                         <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>对比时间</li>
                         <li class="position-r timeinput time-input2"><em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <input type="text" name="date" id="date4" autocomplete="off" class="layui-input"/></em>
                             <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
                         </li>
                         <li class="product-fx mt10 clearfix">
@@ -249,11 +249,11 @@
                             <span>近一年</span>
                         </li>
                         <li class="position-r">统计时间：<em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                            <input type="text" name="date" id="date5" autocomplete="off" class="layui-input"/></em><i
                                 class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                         <li class="mt10"><label class="contrast-time"><input type="checkbox" name=""/></label>对比时间</li>
                         <li class="position-r time-input timeinput"><em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                            <input type="text" name="date" id="date6" autocomplete="off" class="layui-input"/></em><i
                                 class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                         <li>
                             <div class="product-tjnav">
@@ -308,11 +308,11 @@
                             <span>近一年</span>
                         </li>
                         <li class="position-r">统计时间：<em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em>
+                            <input type="text" name="date" id="date7" autocomplete="off" class="layui-input"/></em>
                             <i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                         <li class="mt10"><label class="contrast-time2"><input type="checkbox" name=""/></label>对比时间</li>
                         <li class="position-r timeinput time-input2"><em class="inline-block">
-                            <input type="text" name="date" id="date1" autocomplete="off" class="layui-input"/></em><i
+                            <input type="text" name="date" id="date8" autocomplete="off" class="layui-input"/></em><i
                                 class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
                         <li class="product-fx mt10 clearfix">
                             <span class="active">按月</span>
@@ -343,12 +343,12 @@
 <!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" th:src="@{/js/account.add.js}"></script>
-<!--<script type="text/javascript" th:src="@{/js/manager.add.js}"></script>-->
 <script>
     var message;
     layui.config({
@@ -371,13 +371,6 @@
                 area: ['500px'],
                 shadeClose: true
             });
-        });
-        //日期
-        laydate.render({
-            elem: '#date'
-        });
-        laydate.render({
-            elem: '#date1'
         });
     });
     //统计产品 点击下拉

@@ -9,6 +9,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,14 +95,14 @@ public class RoleController
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getManagerRoleList(
+    public ListRes getManagerRoleList(
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        ListRes res = new ListRes();
         Page page = new Page(pageNum, pageSize);
-        managerService.getRoleList(page, resp);
-        return resp.getDataMap();
+        managerService.getRoleList(page, res);
+        return res;
     }
 
     @RequestMapping(value = "check", method = RequestMethod.GET)

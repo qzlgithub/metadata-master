@@ -5,13 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
-    <!--<script src="../../static/js/jquery-1.11.1.min.js"></script>-->
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
 </head>
 
 <body>
@@ -83,7 +82,7 @@
                         </li>
                         <li class="position-r timeinput time-input2"><em class="inline-block"><input type="text"
                                                                                                      name="date"
-                                                                                                     id="date1"
+                                                                                                     id="date2"
                                                                                                      autocomplete="off"
                                                                                                      class="layui-input"/></em><i
                                 class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
@@ -196,10 +195,11 @@
 <!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script>
     var message;
     layui.config({

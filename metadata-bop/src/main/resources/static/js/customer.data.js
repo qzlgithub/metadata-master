@@ -1,3 +1,57 @@
+var form, message, table, main_table;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'form', 'table', 'message'], function() {
+    var app = layui.app;
+    app.set({type: 'iframe'}).init();
+    message = layui.message;
+    form = layui.form;
+    table = layui.table;
+    main_table = table.render({
+        elem: '#data-table',
+        page: true,
+        limit: 3,
+        limits: [3, 15, 30, 50],
+        url: '/manager/list',
+        where: {
+            roleId: $("#roleId").val(),
+            enabled: $("#enabled").val()
+        },
+        cols: [[
+            {field: 'id', title: '编号', width: '15%'},
+            {field: 'username', title: '用户名', width: '10%'},
+            {field: 'name', title: '姓名', width: '15%'},
+            {field: 'phone', title: '联系电话', width: '10%'},
+            {field: 'roleName', title: '角色', width: '15%'},
+            {title: '状态', width: '10%',templet: "#status-tpl"},
+            {field: 'registerDate', title: '注册日期', sort: true, width: '10%'},
+            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right'}
+        ]],
+        request: {
+            pageName: 'pageNum', limitName: 'pageSize'
+        },
+        response: {
+            statusName: 'code',
+            statusCode: 0,
+            msgName: 'message',
+            countName: 'total',
+            dataName: 'list'
+        }
+    });
+    form.on('submit(search)', function(data) {
+        var params = data.field;
+        main_table.reload({
+            where: {
+                roleId: params["roleId"],
+                enabled: params['enabled']
+            },
+            page: {
+                curr: 1
+            }
+        });
+    });
+});
+
 var message;
 layui.config({
     base: '../../static/build/js/'
@@ -12,19 +66,6 @@ layui.config({
         type: 'iframe'
     }).init();
     laydate = layui.laydate;
-    //日期
-    laydate.render({
-        elem: '#date'
-    });
-    laydate.render({
-        elem: '#date1'
-    });
-});
-//对比时间
-$(document).ready(function() {
-    $(".contrast-time2").click(function() {
-        $(".time-input2").toggle();
-    });
 });
 //点击展开
 $(document).ready(function() {

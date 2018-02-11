@@ -5,12 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
 </head>
 
 <body>
@@ -20,12 +20,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/manager/index.html">系统管理<span class="layui-box">&gt;</span></a>
-            <a href="/privilege/index.html">系统配置<span class="layui-box">&gt;</span></a>
+            <a href="/manager/index.html">系统管理</a>
+            <a href="/privilege/index.html">系统配置</a>
             <a><cite>行业分类</cite></a>
         </div>
         <div class="p20">
-            <div class="clearfix mt20"><span class="fr add-button cp" id="addindustry">添加一级行业</span></div>
+            <div class="clearfix mt20"><span class="layui-btn fr layui-btn-normal" id="addindustry">添加一级行业</span></div>
             <dl class="jurisdiction-list mt10">
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
@@ -173,9 +173,10 @@
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/plugins/layui/layui.js}"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" th:src="@{/js/modernizr.js}"></script>
 <script type="text/javascript" th:src="@{/js/industry.manage.js}"></script>
 

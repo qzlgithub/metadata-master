@@ -11,6 +11,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "manager")
@@ -65,12 +65,12 @@ public class ManagerController
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
+    public ListRes getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        ListRes res = new ListRes();
         // 校验各个字段值
         if(roleId != null && roleId <= 0)
         {
@@ -81,8 +81,8 @@ public class ManagerController
             enabled = null;
         }
         Page page = new Page(pageNum, pageSize);
-        managerService.getManagerList(roleId, enabled, page, resp);
-        return resp.getDataMap();
+        managerService.getManagerList(roleId, enabled, page, res);
+        return res;
     }
 
     /**

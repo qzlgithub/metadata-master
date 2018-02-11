@@ -14,6 +14,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -115,13 +116,10 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getRoleList(Page page, BLResp resp)
+    public void getRoleList(Page page, ListRes res)
     {
         RoleListDTO roleListDTO = remoteManagerService.getRoleList(page);
-        resp.addData(Field.TOTAL, roleListDTO.getTotal());
-        resp.addData(Field.PAGES, roleListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        res.setTotal(roleListDTO.getTotal());
         List<RoleDTO> roleList = roleListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(roleList.size());
         if(CollectionUtils.isNotEmpty(roleList))
@@ -136,7 +134,7 @@ public class ManagerServiceImpl implements ManagerService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override
@@ -172,13 +170,10 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getManagerList(Long roleId, Integer enabled, Page page, BLResp resp)
+    public void getManagerList(Long roleId, Integer enabled, Page page, ListRes res)
     {
         ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleId, enabled, page);
-        resp.addData(Field.TOTAL, managerListDTO.getTotal());
-        resp.addData(Field.PAGES, managerListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        res.setTotal(managerListDTO.getTotal());
         List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(managerList.size());
         if(CollectionUtils.isNotEmpty(managerList))
@@ -196,7 +191,7 @@ public class ManagerServiceImpl implements ManagerService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override
