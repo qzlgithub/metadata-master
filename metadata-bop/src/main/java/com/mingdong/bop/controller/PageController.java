@@ -89,7 +89,7 @@ public class PageController
     @RequestMapping(value = "/finance/recharge.html")
     public ModelAndView gotoRechargeListPage()
     {
-        ModelAndView view = new ModelAndView("finance/recharge-list");
+        ModelAndView view = new ModelAndView("finance/recharge");
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);

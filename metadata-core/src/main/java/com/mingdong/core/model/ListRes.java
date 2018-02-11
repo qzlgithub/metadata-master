@@ -1,5 +1,6 @@
 package com.mingdong.core.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ public class ListRes
     private String message;
     private int total;
     private List<Map<String, Object>> list;
+    private Map<String, Object> extradata;
 
     public ListRes()
     {
@@ -53,5 +55,24 @@ public class ListRes
     public void setList(List<Map<String, Object>> list)
     {
         this.list = list;
+    }
+
+    public Map<String, Object> getExtradata()
+    {
+        return extradata;
+    }
+
+    public void setExtradata(Map<String, Object> extradata)
+    {
+        this.extradata = extradata;
+    }
+
+    public void addExtra(String k, Object v)
+    {
+        if(extradata == null)
+        {
+            extradata = new HashMap<>();
+        }
+        extradata.put(k, v);
     }
 }

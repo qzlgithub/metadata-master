@@ -6,14 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
-    <link href="../plugins/paging/css/paging.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
-
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
 </head>
 
 <body>
@@ -21,8 +18,8 @@
     <div th:include="common :: top"></div>
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="javascript:">财务管理<span class="layui-box">&gt;</span></a>
-            <a href="javascript:">核对管理<span class="layui-box">&gt;</span></a>
+            <a href="/finance/recharge.html">财务管理</a>
+            <a href="/finance/recharge.html">核对管理</a>
             <a><cite>充值记录</cite></a>
         </div>
         <div class="p20">
@@ -32,7 +29,7 @@
                     <input type="text" id="shortName" name="shortName" placeholder="请输入" class="search-input"/>
                 </li>
                 <li>充值类型：
-                    <select name="modules" lay-verify="required" lay-search="" class="select-list" id="rechargeType">
+                    <select name="modules" class="select-list" id="rechargeType">
                         <option value="">全部</option>
                         <option th:each="item:${rechargeTypeList}" th:value="${item.id}"
                                 th:text="${item.name}"></option>
@@ -105,16 +102,11 @@
     </div>
     <div class="layui-side layui-bg-black kit-side" th:include="finance :: left"></div>
 </div>
-<script src="../../static/plugins/layui/layui.js"></script>
-<script src="/plugins/layui/lay/modules/laydate.js"></script>
-<!--<script src="http://www.jq22.com/jquery/1.8.3/jquery.min.js"></script>-->
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-<script type="text/javascript" src="/plugins/js/jquery.date_input.pack.js"></script>
-<script type="text/javascript" th:src="@{/js/logout.js}"></script>
-<script type="text/javascript" th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
-<script type="text/javascript" th:src="@{/picker-date-range/dateRange.js}"></script>
-<script type="text/javascript" th:src="@{/js/recharge.list.js}"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/js/recharge.list.js"></script>
 </body>
 </html>

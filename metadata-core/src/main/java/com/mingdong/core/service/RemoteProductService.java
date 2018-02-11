@@ -10,6 +10,7 @@ import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -230,4 +231,7 @@ public interface RemoteProductService
     ResultDTO changeProductStatus(Long productId, Integer enabled);
 
     ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
+
+    ListDTO<ProductRechargeInfoDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
+            Long rechargeType, Date fromDate, Date toDate, Page page);
 }

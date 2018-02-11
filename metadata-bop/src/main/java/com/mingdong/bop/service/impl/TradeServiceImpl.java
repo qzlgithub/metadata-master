@@ -9,8 +9,10 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.service.RemoteClientService;
@@ -179,56 +181,41 @@ public class TradeServiceImpl implements TradeService
     }
 
     @Override
-    public void getProductRechargeInfoList(String shortName, Long typeId, Long productId, Long managerId,
-            Date startDate, Date endDate, Page page, BLResp resp)
+    public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
+            Date fromDate, Date toDate, Page page, ListRes res)
     {
-        if(StringUtils.isNotBlank(shortName))
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
+                managerId, rechargeType, fromDate, toDate, page);
+        res.setTotal(listDTO.getTotal());
+        res.addExtra(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
+        if(listDTO.getList() != null)
         {
-            BigDecimal allRecharge = remoteProductService.getProductRechargeInfoSumBy(shortName, typeId, productId,
-                    managerId, startDate, endDate);
-            resp.addData(Field.SHOW_STATS,
-                    "共充值了 " + (allRecharge == null ? 0 : NumberUtils.formatAmount(allRecharge)) + " 元");
-        }
-        else
-        {
-            shortName = null;
-        }
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoListBy(
-                shortName, typeId, productId, managerId, startDate, endDate, page);
-        resp.addData(Field.TOTAL, productRechargeInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, productRechargeInfoListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-        if(CollectionUtils.isNotEmpty(dataList))
-        {
-            for(ProductRechargeInfoDTO pri : dataList)
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(ProductRechargeInfoDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.TRADE_AT, DateUtils.format(pri.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, pri.getTradeNo());
-                map.put(Field.CORP_NAME, pri.getCorpName());
-                map.put(Field.SHORT_NAME, pri.getShortName());
-                map.put(Field.USERNAME, pri.getUsername());
-                map.put(Field.PRODUCT_NAME, pri.getProductName() == null ? "" : pri.getProductName());
-                map.put(Field.RECHARGE_TYPE, pri.getRechargeType());
-                map.put(Field.AMOUNT, NumberUtils.formatAmount(pri.getAmount()));
-                map.put(Field.BALANCE, NumberUtils.formatAmount(pri.getBalance()));
-                map.put(Field.MANAGER_NAME, pri.getManagerName());
-                map.put(Field.REMARK, pri.getRemark());
-                map.put(Field.CONTRACT_NO, pri.getContractNo());
+                map.put(Field.RECHARGE_AT, DateUtils.format(o.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, o.getTradeNo());
+                map.put(Field.CORP_NAME, o.getCorpName());
+                map.put(Field.SHORT_NAME, o.getShortName());
+                map.put(Field.USERNAME, o.getUsername());
+                map.put(Field.PRODUCT, o.getProductName());
+                map.put(Field.RECHARGE_TYPE, o.getRechargeType());
+                map.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
+                map.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                map.put(Field.MANAGER, o.getManagerName());
+                map.put(Field.CONTRACT_NO, o.getContractNo());
+                map.put(Field.REMARK, o.getRemark());
                 list.add(map);
             }
+            res.setList(list);
         }
-        resp.addData(Field.LIST, list);
     }
 
     @Override
-    public XSSFWorkbook createProductRechargeInfoListXlsx(String shortName, Long typeId, Long productId, Long managerId,
-            Date startDate, Date endDate, Page page)
+    public XSSFWorkbook createProductRechargeInfoListXlsx(String keyword, Long productId, Long managerId,
+            Long rechargeType, Date fromDate, Date toDate, Page page)
     {
-        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值数据");
         Row row = sheet.createRow(0);
@@ -248,9 +235,9 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoListBy(
-                shortName, typeId, productId, managerId, startDate, endDate, page);
-        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
+                managerId, rechargeType, fromDate, toDate, page);
+        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         ProductRechargeInfoDTO dataInfo;
         for(int i = 0; i < dataList.size(); i++)
         {

@@ -27,4 +27,16 @@ public interface ProductRechargeInfoMapper
     BigDecimal getProductRechargeInfoSumBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
             @Param("productId") Long productId, @Param("managerId") Long managerId, @Param("startDate") Date startDate,
             @Param("endDate") Date endDate);
+
+    int countBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("managerId") Long managerId, @Param("rechargeType") Long rechargeType,
+            @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    BigDecimal sumRechargeAmountBy(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("managerId") Long managerId, @Param("rechargeType") Long rechargeType,
+            @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    List<ProductRechargeInfo> getListBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("managerId") Long managerId, @Param("rechargeType") Long rechargeType,
+            @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

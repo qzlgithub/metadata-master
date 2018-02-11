@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+
+    <div th:include="common :: top"></div>
+    <div class="layui-side layui-bg-black kit-side" th:include="finance :: left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/finance/recharge.html">财务管理</a>
+            <a href="/finance/recharge.html">核对管理</a>
+            <a><cite>充值记录</cite></a>
+        </div>
+
+        <div class="p20 layui-form">
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    <input type="text" name="keyword" id="keyword" placeholder="请输入：公司名称/公司简称/账号"
+                           class="layui-input" style="width: 240px"/>
+                </li>
+                <li>
+                    <label class="layui-form-label">产品：</label>
+                    <div class="layui-inline" style="width: 160px">
+                        <select name="product" id="product" title="产品">
+                            <option value="">全部</option>
+                            <option th:each="o:${productInfoList}" th:value="${o.id}" th:text="${o.name}"></option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <label class="layui-form-label">充值类型：</label>
+                    <div class="layui-inline" style="width: 120px">
+                        <select name="recharge-type" id="rechargeType" title="充值类型">
+                            <option value="">全部</option>
+                            <option th:each="o : ${rechargeTypeList}" th:value="${o.id}" th:text="${o.name}"></option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <label class="layui-form-label">充值时间：</label>
+                    <div class="layui-input-inline" style="width: 100px">
+                        <input name="recharge-from" id="fromDate" lay-verify="none_date" placeholder="yyyy-MM-dd"
+                               autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                    -
+                    <div class="layui-input-inline" style="width: 100px">
+                        <input name="recharge-to" id="toDate" lay-verify="none_date" placeholder="yyyy-MM-dd"
+                               autocomplete="off" class="layui-input" type="text"/>
+                    </div>
+                </li>
+                <li>
+                    <label class="layui-form-label">商务经理：</label>
+                    <div class="layui-input-inline" style="width: 120px">
+                        <select name="manager" id="manager" title="商务经理">
+                            <option value="">全部</option>
+                            <option th:each="o:${managerList}" th:value="${o.id}" th:text="${o.name}"></option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
+                </li>
+            </ul>
+            <div class="clearfix mt20">
+                <em id="total-amt"></em>
+                <span class="fr">
+                    <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
+                    <a href="javascript:" class="add-button" onclick="exportXlsx()">导出</a>
+                </span>
+            </div>
+            <div class="layui-form mt20">
+                <table class="layui-table" id="data-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/js/recharge-list.js"></script>
+</body>
+</html>
