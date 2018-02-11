@@ -19,15 +19,15 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
             status: $("#status").val()
         },
         cols: [[
-            {field: 'id', title: 'No.', width: 80},
-            {field: 'code', title: '编号', width: 200},
-            {field: 'name', title: '名称', width: 200},
-            {field: 'type', title: '类别', width: 200},
-            {title: '种类', width: 160, templet: '#custom-tpl'},
-            {field: 'costAmt', title: '成本价', width: 160},
-            {title: '状态', width: 160, templet: "#status-tpl"},
-            {field: 'remark', title: '备注说明', width: 240},
-            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right', width: 180}
+            {field: 'id', title: 'No.'},
+            {field: 'code', title: '编号'},
+            {field: 'name', title: '名称'},
+            {field: 'type', title: '类别'},
+            {title: '种类', templet: '#custom-tpl'},
+            {field: 'costAmt', title: '成本价'},
+            {title: '状态', templet: "#status-tpl"},
+            {field: 'remark', title: '备注说明'},
+            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'

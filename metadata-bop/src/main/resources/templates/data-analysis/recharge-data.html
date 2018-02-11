@@ -62,13 +62,14 @@
                 <dt>客户数据统计</dt>
                 <dd class="layui-row">
                     <ul class="clearfix p10 product-fx-warp">
-                        <li class="product-fx mt10 clearfix" id="scopeId">
+                        <li class="product-fx mt10 clearfix" id="scopeLiId">
                             <span class="active" otherVal="2">近7天</span>
                             <span otherVal="3">近15天</span>
                             <span otherVal="4">近30天</span>
                             <span otherVal="6">近一年</span>
                         </li>
                     </ul>
+                    <input type="hidden" id="scopeType" name="scopeType" value="2"/>
                     <p class="tc pt20 pb20 col4 fz-16" id="chartTitleId"></p>
                     <div class="layui-row tc mt20 mb20" id="panel" style="height:500px;display: block;">
                         <div class="layui-col-md4" id="leftPanel" style="height:500px;">
@@ -82,29 +83,10 @@
             <dl class="public-data">
                 <dt class="clearfix">
                     <span class="fr mb10">
-                            <a href="javascript:" class="add-button" onclick="clientOutPrint()">导出</a>
+                            <a href="javascript:" class="layui-btn fr layui-btn-normal" onclick="clientOutPrint()">导出</a>
                         </span>
                 </dt>
-                <dd class="layui-row">
-                    <table class="layui-table">
-                        <thead>
-                        <tr>
-                            <th>时间</th>
-                            <th>公司名称</th>
-                            <th>公司简称</th>
-                            <th>账号</th>
-                            <th>产品</th>
-                            <th>金额(元)</th>
-                            <th>充值类型</th>
-                            <th>账户余额(不包含服务)</th>
-                            <th>经手人</th>
-                        </tr>
-                        </thead>
-                        <tbody id="dataBody">
-                        </tbody>
-                    </table>
-                    <div class="box mt30" id="pagination"></div>
-                </dd>
+                <table class="layui-table" id="data-table"></table>
             </dl>
         </div>
     </div>

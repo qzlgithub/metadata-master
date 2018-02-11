@@ -1,31 +1,61 @@
-var message;
+var form, message, table, main_table;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'message', 'laydate'], function() {
-    var app = layui.app,
-        $ = layui.jquery,
-        layer = layui.layer;
-    //将message设置为全局以便子页面调用
+}).use(['app', 'form', 'table', 'message'], function() {
+    var app = layui.app;
+    app.set({type: 'iframe'}).init();
     message = layui.message;
-    //主入口
-    app.set({
-        type: 'iframe'
-    }).init();
-    laydate = layui.laydate;
-    //日期
-    laydate.render({
-        elem: '#date'
+    form = layui.form;
+    table = layui.table;
+    main_table = table.render({
+        elem: '#data-table',
+        page: true,
+        limit: 3,
+        limits: [3, 15, 30, 50],
+        url: '/stats/client/rechargeList',
+        where: {
+            scopeType: $("#scopeType").val()
+        },
+        cols: [[
+            {field: 'tradeTime', title: '时间'},
+            {field: 'corpName', title: '公司名称'},
+            {field: 'shortName', title: '公司简称'},
+            {field: 'username', title: '账号'},
+            {field: 'productName', title: '产品'},
+            {field: 'amount', title: '金额（元）'},
+            {field: 'rechargeType', title: '充值类型'},
+            {field: 'balance', title: '账户余额（不包含服务）'},
+            {field: 'managerName', title: '经手人'},
+        ]],
+        request: {
+            pageName: 'pageNum', limitName: 'pageSize'
+        },
+        response: {
+            statusName: 'code',
+            statusCode: 0,
+            msgName: 'message',
+            countName: 'total',
+            dataName: 'list'
+        },
+        done: function(res, curr, count){
+            var result = res.dataMap;
+            $('#chartTitleId').text(result.title);
+        }
     });
-    laydate.render({
-        elem: '#date1'
+    form.on('submit(search)', function(data) {
+        var params = data.field;
+        main_table.reload({
+            where: {
+                roleId: params["roleId"],
+                enabled: params['enabled']
+            },
+            page: {
+                curr: 1
+            }
+        });
     });
 });
-//对比时间
-$(document).ready(function() {
-    $(".contrast-time2").click(function() {
-        $(".time-input2").toggle();
-    });
-});
+
 //点击展开
 $(document).ready(function() {
     $(".btn-slide").click(function() {
@@ -35,13 +65,12 @@ $(document).ready(function() {
     });
 });
 $(function() {
-    customerDataInit();
     showChart();
 });
 function showChart(){
     var leftChart = echarts.init(document.getElementById('leftPanel'));
     var rightChart = echarts.init(document.getElementById('rightPanel'));
-    var scopeType = $('#scopeId').find('.active').attr('otherVal');
+    var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
     $.get('/stats/client/rechargeListJson',
         {"scopeType": scopeType},
         function (data) {
@@ -161,81 +190,24 @@ function showChart(){
         });
 }
 
-function customerDataInit(){
-    var obj = {
-        pageNum: 1,
-        pageSize: 10
-    };
-    getClientList(obj, function(pageObj, pages, total) {
-        $('#pagination').paging({
-            initPageNo: pageObj['pageNum'],
-            totalPages: pages,
-            totalCount: '合计' + total + '条数据',
-            slideSpeed: 600,
-            jump: false,
-            callback: function(currentPage) {
-                pageObj['pageNum'] = currentPage;
-                getClientList(obj);
-            }
-        })
-    });
-}
-var rowStr = '<tr>' +
-    '<td>#{tradeTime}</td>' +
-    '<td>#{corpName}</td>' +
-    '<td>#{shortName}</td>' +
-    '<td>#{username}</td>' +
-    '<td>#{productName}</td>' +
-    '<td>#{amount}</td>' +
-    '<td>#{rechargeType}</td>' +
-    '<td>#{balance}</td>' +
-    '<td>#{managerName}</td>' +
-    '</tr>';
-
-function getClientList(obj, pageFun) {
-    var scopeType = $('#scopeId').find('.active').attr('otherVal');
-    $.get(
-        "/stats/client/rechargeList",
-        {"pageNum": obj['pageNum'], "pageSize": obj['pageSize'], "scopeType": scopeType},
-        function(data) {
-            if(data.errCode === '000000') {
-                var result = data.dataMap;
-                var total = result.total;
-                var pages = result.pages;
-                var list = data.dataMap.list;
-                $("#dataBody").empty();
-                for(var d in list) {
-                    var row = rowStr.replace("#{tradeTime}", list[d].tradeTime)
-                    .replace("#{corpName}", list[d].corpName)
-                    .replace("#{shortName}", list[d].shortName)
-                    .replace("#{username}", list[d].username)
-                    .replace("#{productName}", list[d].productName)
-                    .replace("#{amount}", list[d].amount)
-                    .replace("#{rechargeType}", list[d].rechargeType)
-                    .replace("#{balance}", list[d].balance)
-                    .replace("#{managerName}", list[d].managerName);
-                    $("#dataBody").append(row);
-                }
-                if(typeof pageFun === 'function') {
-                    $('#chartTitleId').text(result.title);
-                    pageFun(obj,pages,total);
-                }
-            }
-        }
-    );
-}
-
-$('#scopeId span').click(function(){
-    $('#scopeId span').each(function(){
+$('#scopeLiId span').click(function(){
+    $('#scopeLiId span').each(function(){
         $(this).removeClass('active');
     });
     $(this).addClass('active');
-    customerDataInit();
     showChart();
+    main_table.reload({
+        where: {
+            scopeType: $("#scopeType").val()
+        }
+        , page: {
+            curr: 1
+        }
+    });
 });
 
 function clientOutPrint(){
-    var scopeType = $('#scopeId').find('.active').attr('otherVal');
+    var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
     location.href='/stats/client/rechargeList/export?scopeType='+scopeType;
 }
 
