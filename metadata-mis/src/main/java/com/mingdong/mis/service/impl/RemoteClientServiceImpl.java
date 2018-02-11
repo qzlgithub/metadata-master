@@ -4,6 +4,7 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
@@ -39,6 +40,7 @@ import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
+import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
@@ -1254,6 +1256,41 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         clientProductMapper.deleteByIds(new Long[]{clientProductId});
         return res;
+    }
+
+    @Override
+    public ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
+            Date toDate, Page page)
+    {
+        ListDTO<ApiReqInfoDTO> dto = new ListDTO<>();
+        int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate);
+        int pages = page.getTotalPage(total);
+        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate);
+        dto.setTotal(total);
+        dto.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy1(keyword, productId, billPlan, fromDate, toDate);
+            List<ApiReqInfoDTO> list = new ArrayList<>(dataList.size());
+            for(ApiReqInfo o : dataList)
+            {
+                ApiReqInfoDTO ari = new ApiReqInfoDTO();
+                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestNo(o.getRequestNo());
+                ari.setCorpName(o.getCorpName());
+                ari.setShortName(o.getShortName());
+                ari.setUsername(o.getUsername());
+                ari.setProductName(o.getProductName());
+                ari.setBillPlan(o.getBillPlan());
+                ari.setHit(o.getHit());
+                ari.setFee(o.getFee());
+                ari.setBalance(o.getBalance());
+                list.add(ari);
+            }
+            dto.setList(list);
+        }
+        return dto;
     }
 
     /**

@@ -127,4 +127,8 @@ public interface Field
     String TO_DATE = "toDate";
     String RECHARGE_TIME = "rechargeTime";
     String RECHARGE_AT = "rechargeAt";
+    String FEE = "fee";
+    String IS_HIT = "isHit";
+    String REQUEST_AT = "requestAt";
+    String TOTAL_FEE = "totalFee";
 }

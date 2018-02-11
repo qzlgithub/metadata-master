@@ -35,6 +35,21 @@ public enum BillPlan
         return null;
     }
 
+    public static String getNameById(Integer id)
+    {
+        if(id != null)
+        {
+            for(BillPlan o : BillPlan.values())
+            {
+                if(id.equals(o.id))
+                {
+                    return o.name;
+                }
+            }
+        }
+        return null;
+    }
+
     public static List<DictDTO> getAllList()
     {
         List<DictDTO> dictDTOList = new ArrayList<>();

@@ -169,6 +169,44 @@ public class ClientController
         os.close();
     }
 
+    /**
+     * 账户充值列表
+     */
+
+    @RequestMapping(value = "account/rechargeList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getAccountRechargeList(
+            @RequestParam(value = Field.CLIENT_ID, required = false) Long clientId,
+            @RequestParam(value = Field.CREATE_TIME, required = false) Date time,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        Page page = new Page(pageNum, pageSize);
+        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
+        //        BLResp resp = tradeService.testList3(clientId, time, page);
+        BLResp resp = BLResp.build();
+        return resp.getDataMap();
+    }
+
+    /**
+     * 账户消费列表
+     */
+
+    @RequestMapping(value = "account/consumeList", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getAccountconsumeList(
+            @RequestParam(value = Field.CLIENT_ID, required = false) Long clientId,
+            @RequestParam(value = Field.CREATE_TIME, required = false) Date time,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        Page page = new Page(pageNum, pageSize);
+        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
+        //        BLResp resp = tradeService.testList4(clientId, time, page);
+        BLResp resp = BLResp.build();
+        return resp.getDataMap();
+    }
+
     @RequestMapping(value = "subAccount/list", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> getSubAccountList(@RequestParam(value = Field.ID) Long clientId)

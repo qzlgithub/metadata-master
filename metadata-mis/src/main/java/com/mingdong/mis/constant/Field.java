@@ -18,4 +18,5 @@ public interface Field
     String IS_HIT = "isHit";
     String REQUEST_NO = "requestNo";
     String TOTAL_AMT = "totalAmt";
+    String TOTAL_FEE = "totalFee";
 }

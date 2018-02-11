@@ -50,7 +50,7 @@ layui.use(['table', 'form', 'laydate'], function() {
             dataName: 'list'
         },
         done: function(res) {
-            $("#total-amt").text("充值总额：￥" + res.extradata.totalAmt);
+            $("#summary").text("充值总额：￥" + res.extradata.totalAmt);
         }
     });
     form.on('submit(search)', function(data) {

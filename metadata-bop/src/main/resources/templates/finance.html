@@ -6,8 +6,10 @@
         <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
         <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'51000')}">
-                <a class="" href="#"><i class="icon icon6" aria-hidden="true"></i><em
-                        th:text="${i_system.m51000}">核对管理mingdong.net</em></a>
+                <a class="" href="#">
+                    <i class="icon icon6" aria-hidden="true"></i>
+                    <em th:text="${i_system.m51000}">核对管理mingdong.net</em>
+                </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'finance_recharge'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'51100')}">

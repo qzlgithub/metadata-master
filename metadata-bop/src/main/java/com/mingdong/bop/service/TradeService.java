@@ -60,17 +60,13 @@ public interface TradeService
 
     /**
      * 根据条件导出客户消费记录列表
-     *
-     * @param shortName
-     * @param typeId
-     * @param clientId
-     * @param userId
-     * @param productId
-     * @param startDate
-     * @param endDate
-     * @param page
-     * @return
      */
     XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long clientId, Long userId, Long productId,
             Date startDate, Date endDate, Page page);
+
+    void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate, Page page,
+            ListRes res);
+
+    XSSFWorkbook createClientBillListXlsx(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
+            Page page);
 }
