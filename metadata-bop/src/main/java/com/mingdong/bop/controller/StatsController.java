@@ -6,7 +6,7 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +29,14 @@ public class StatsController
 
     @RequestMapping(value = "/client/clientList", method = RequestMethod.GET)
     @ResponseBody
-    public BLResp getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public ListRes getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
+        ListRes res = new ListRes();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        return statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize));
+        statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize), res);
+        return res;
     }
 
     @GetMapping(value = "client/clientList/export")
@@ -63,13 +65,14 @@ public class StatsController
 
     @RequestMapping(value = "/client/rechargeList", method = RequestMethod.GET)
     @ResponseBody
-    public BLResp getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public ListRes getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
+        ListRes res = new ListRes();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        BLResp resp = statsService.getRechargeList(scopeTypeEnum, new Page(pageNum, pageSize));
-        return resp;
+        statsService.getRechargeList(scopeTypeEnum, new Page(pageNum, pageSize), res);
+        return res;
     }
 
     @GetMapping(value = "client/rechargeList/export")

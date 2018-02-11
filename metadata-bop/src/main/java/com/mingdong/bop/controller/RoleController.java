@@ -95,8 +95,7 @@ public class RoleController
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public ListRes getManagerRoleList(
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+    public ListRes getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ListRes res = new ListRes();

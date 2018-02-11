@@ -3,7 +3,7 @@ package com.mingdong.core.model;
 import java.util.List;
 import java.util.Map;
 
-public class ListRes
+public class ListRes extends BLResp
 {
     private int code;
     private String message;

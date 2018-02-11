@@ -10,9 +10,9 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
@@ -98,13 +98,10 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public BLResp getClientList(ScopeType scopeTypeEnum, Page page)
+    public void getClientList(ScopeType scopeTypeEnum, Page page, ListRes res)
     {
-        BLResp resp = BLResp.build();
         Date currentDay = new Date();
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        Date beforeDate;
+        Date beforeDate = new Date();
         switch(scopeTypeEnum)
         {
             case MONTH:
@@ -117,19 +114,16 @@ public class StatsServiceImpl implements StatsService
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
                 break;
             default:
-                return resp.result(RestResult.PARAMETER_ERROR);
+                break;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
         ClientInfoListDTO clientInfoListDTO = remoteClientService.getClientInfoListByDate(beforeDate, currentDay, page);
-        resp.addData(Field.TOTAL, clientInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, clientInfoListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<ClientInfoDTO> clientInfoListByDate = clientInfoListDTO.getDataList();
         Integer total = clientInfoListDTO.getTotal();
-        resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
+        res.setTotal(total);
+        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
         List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
         Map<String, Object> map;
         for(ClientInfoDTO item : clientInfoListByDate)
@@ -142,8 +136,7 @@ public class StatsServiceImpl implements StatsService
             map.put(Field.MANAGER_NAME, item.getManagerName());
             dataList.add(map);
         }
-        resp.addData(Field.LIST, dataList);
-        return resp;
+        res.setList(dataList);
     }
 
     @Override
@@ -269,11 +262,11 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public BLResp getRechargeList(ScopeType scopeTypeEnum, Page page)
+    public void getRechargeList(ScopeType scopeTypeEnum, Page page, ListRes res)
     {
         BLResp resp = BLResp.build();
         Date currentDay = new Date();
-        Date beforeDate;
+        Date beforeDate = new Date();
         switch(scopeTypeEnum)
         {
             case WEEK:
@@ -289,10 +282,9 @@ public class StatsServiceImpl implements StatsService
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
                 break;
             default:
-                return resp.result(RestResult.PARAMETER_ERROR);
+                break;
         }
-        getProductRechargeInfoList(page, beforeDate, currentDay, resp);
-        return resp;
+        getProductRechargeInfoList(page, beforeDate, currentDay, res);
     }
 
     @Override
@@ -483,21 +475,22 @@ public class StatsServiceImpl implements StatsService
         return jsonObject;
     }
 
-    private void getProductRechargeInfoList(Page page, Date date, Date currentDay, BLResp resp)
+    private void getProductRechargeInfoList(Page page, Date date, Date currentDay, ListRes res)
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Integer total = remoteStatsService.getClientRechargeCountByDate(date, currentDay);
         BigDecimal sumRec = remoteStatsService.getClientRechargeStatsByDate(date, currentDay);
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
-        resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
+        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
         int pages = page.getTotalPage(total);
-        resp.addData(Field.TOTAL, total);
-        resp.addData(Field.PAGES, pages);
+        res.setTotal(total);
+        List<Map<String, Object>> list = new ArrayList<>();
         if(total > 0 && page.getPageNum() <= pages)
         {
-            resp.addData(Field.LIST, getProductRechargeInfoList(page, date, currentDay));
+            list = getProductRechargeInfoList(page, date, currentDay);
         }
+        res.setList(list);
     }
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)

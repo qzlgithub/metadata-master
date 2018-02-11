@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/css/base.css" media="all"/>
     <link rel="stylesheet" href="/static/css/common.css" media="all"/>
-    <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -26,7 +25,7 @@
             <a href="/stats/index.html">运营数据管理</a>
             <a><cite>客户数据</cite></a>
         </div>
-        <div class="p20">
+        <div class="p20 layui-form">
             <dl class="public-data">
                 <dt class="mt0 important">客户数据</dt>
                 <dd>
@@ -56,12 +55,13 @@
                 <dt>客户数据统计</dt>
                 <dd class="layui-row">
                     <ul class="clearfix p10 product-fx-warp">
-                        <li class="product-fx mt10 clearfix" id="scopeId">
+                        <li class="product-fx mt10 clearfix" id="scopeLiId">
                             <span class="active" otherVal="4">近30天</span>
                             <span otherVal="5">本季度</span>
                             <span otherVal="6">近一年</span>
                         </li>
                     </ul>
+                    <input type="hidden" id="scopeType" name="scopeType" value="4"/>
                     <p class="tc pt20 pb20 col4 fz-16" id="chartTitleId"></p>
                     <div class="tc mt20 mb20" id="panel" style="height:500px;display: block;"></div>
                     <p class="slide"><a href="javascript:;" class="btn-slide">统计图</a></p>
@@ -70,26 +70,10 @@
             <dl class="public-data">
                 <dt class="clearfix">
                     <span class="fr mb10">
-                            <a href="javascript:" class="add-button" onclick="clientOutPrint()">导出</a>
+                            <a href="javascript:" class="layui-btn fr layui-btn-normal" onclick="clientOutPrint()">导出</a>
                         </span>
                 </dt>
-                <dd class="layui-row">
-                    <table class="layui-table">
-                        <thead>
-                        <tr>
-                            <th>时间</th>
-                            <th>公司名称</th>
-                            <th>公司简称</th>
-                            <th>账号</th>
-                            <th>商务经理</th>
-                        </tr>
-                        </thead>
-                        <tbody id="dataBody">
-
-                        </tbody>
-                    </table>
-                    <div class="box mt30" id="pagination"></div>
-                </dd>
+                <table class="layui-table" id="data-table"></table>
             </dl>
         </div>
     </div>
@@ -103,7 +87,6 @@
 <script type="text/javascript" src="/static/js/logout.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
-<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/js/customer.data.js"></script>
 </body>

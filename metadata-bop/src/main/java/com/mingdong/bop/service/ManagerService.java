@@ -38,7 +38,8 @@ public interface ManagerService
 
     /**
      * 获取角色列表
-     *  @param page
+     *
+     * @param page
      * @param res
      */
     void getRoleList(Page page, ListRes res);
@@ -64,7 +65,8 @@ public interface ManagerService
 
     /**
      * 根据条件获取管理员列表
-     *  @param roleId
+     *
+     * @param roleId
      * @param enabled
      * @param page
      * @param res

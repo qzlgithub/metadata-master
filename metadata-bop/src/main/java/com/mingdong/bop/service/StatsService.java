@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public interface StatsService
@@ -28,9 +29,10 @@ public interface StatsService
      *
      * @param scopeTypeEnum
      * @param page
+     * @param res
      * @return
      */
-    BLResp getClientList(ScopeType scopeTypeEnum, Page page);
+    void getClientList(ScopeType scopeTypeEnum, Page page, ListRes res);
 
     /**
      * 导出客户列表
@@ -61,9 +63,10 @@ public interface StatsService
      *
      * @param scopeTypeEnum
      * @param page
+     * @param res
      * @return
      */
-    BLResp getRechargeList(ScopeType scopeTypeEnum, Page page);
+    void getRechargeList(ScopeType scopeTypeEnum, Page page, ListRes res);
 
     /**
      * 导出充值列表
