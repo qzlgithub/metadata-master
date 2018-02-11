@@ -16,6 +16,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
+import com.mingdong.core.util.BusinessUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -89,47 +90,51 @@ public class ClientController
 
     @RequestMapping(value = "rechargeList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
-        tradeService.getProductRechargeList(clientId, productId, startTime, endTime, new Page(pageNum, pageSize), resp);
-        return resp.getDataMap();
+        ListRes res = new ListRes();
+        tradeService.getProductRechargeList(clientId, productId, startTime, endTime, new Page(pageNum, pageSize), res);
+        return res;
     }
 
     @RequestMapping(value = "consumeList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public ListRes getConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        ListRes res = new ListRes();
+        startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
+        endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
         tradeService.getClientBillList(null, null, clientId, null, productId, startTime, endTime,
-                new Page(pageNum, pageSize), resp);
-        return resp.getDataMap();
+                new Page(pageNum, pageSize), res);
+        return res;
 
     }
 
     @RequestMapping(value = "userConsumeList", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
+    public ListRes getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        ListRes res = new ListRes();
+        startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
+        endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
         tradeService.getClientBillList(null, null, null, userId, productId, startTime, endTime,
-                new Page(pageNum, pageSize), resp);
-        return resp.getDataMap();
+                new Page(pageNum, pageSize), res);
+        return res;
 
     }
 

@@ -123,7 +123,7 @@ public class StatsServiceImpl implements StatsService
         List<ClientInfoDTO> clientInfoListByDate = clientInfoListDTO.getDataList();
         Integer total = clientInfoListDTO.getTotal();
         res.setTotal(total);
-        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
+        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
         List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
         Map<String, Object> map;
         for(ClientInfoDTO item : clientInfoListByDate)
@@ -482,7 +482,7 @@ public class StatsServiceImpl implements StatsService
         BigDecimal sumRec = remoteStatsService.getClientRechargeStatsByDate(date, currentDay);
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
-        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
+        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
         int pages = page.getTotalPage(total);
         res.setTotal(total);
         List<Map<String, Object>> list = new ArrayList<>();

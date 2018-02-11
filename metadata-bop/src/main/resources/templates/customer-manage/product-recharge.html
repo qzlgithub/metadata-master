@@ -5,14 +5,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" href="../../static/plugins/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link rel="stylesheet" href="../../static/build/css/app.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/style.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/base.css" media="all"/>
-    <link rel="stylesheet" href="../../static/css/common.css" media="all"/>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
-    <link th:href="@{/plugins/paging/css/paging.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
 </head>
 <body>
 <div class="layui-layout layui-layout-admin kit-layout-admin">
@@ -25,95 +23,59 @@
         <!-- 内容主体区域 -->
         <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/client/index.html">客户管理
-                <span class="layui-box">&gt;</span>
-            </a>
-            <a class="cp" th:href="'/client/detail.html?clientId=' + ${clientId}" th:text="${corpName}">
-            </a>
-            <a><span class="layui-box mr5">&gt;</span><cite>充值记录</cite></a>
+            <a href="/client/index.html">客户管理</a>
+            <a class="cp" th:href="'/client/detail.html?clientId=' + ${clientId}" th:text="${corpName}"></a>
+            <a><cite>充值记录</cite></a>
         </div>
         <!--面包屑 end-->
-        <div class="p20">
+        <div class="p20 layui-form">
             <!--搜索-->
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
-                    产品名称：<select class="select-list" id="product">
-                    <option value="">全部</option>
-                    <option th:each="p : ${productDict}" th:value="${p.id}" th:text="${p.name}"
-                            th:selected="${p.id eq productId}"></option>
-                </select>
+                    产品名称：
+                    <div class="inline-flex" style="width: 180px">
+                    <select class="select-list" name="product" id="product">
+                        <option value="">全部</option>
+                        <option th:each="p : ${productDict}" th:value="${p.id}" th:text="${p.name}"
+                                th:selected="${p.id eq productId}"></option>
+                    </select>
+                    </div>
                 </li>
                 <li class="clearfix">
                     时间：
-                    <em style="display: inline-block;">
-                        <input type="text" id="start-time" lay-verify="date" placeholder="yyyy-MM-dd"
-                                          autocomplete="off" class="layui-input search-input"/></em>
+                    <div class="layui-inline">
+                        <input type="text" class="layui-input" name="start-time" id="start-time" placeholder="yyyy-MM-dd"/>
+                    </div>
                     -
-                    <em style="display: inline-block;">
-                        <input type="text" id="end-time" lay-verify="date" placeholder="yyyy-MM-dd"
-                               autocomplete="off" class="layui-input search-input"/></em>
-
-
-
-                    <!--em style="display: inline-block;">
-                        <input type="text" id="start-time" placeholder="yyyy-MM-dd" autocomplete="off"
-                               class="layui-input search-input date"/></em>
-                    -
-                    <em style="display: inline-block;">
-                        <input type="text" id="end-time" placeholder="yyyy-MM-dd" autocomplete="off"
-                               class="layui-input search-input date"/></em-->
+                    <div class="layui-inline">
+                        <input type="text" class="layui-input" name="end-time" id="end-time" placeholder="yyyy-MM-dd"/>
+                    </div>
                 </li>
                 <li>
-                    <input type="hidden" id="client-id" th:value="${clientId}"/>
-                    <button class="check-button" onclick="prodRechargeListInit()">查询</button>
+                    <input type="hidden" name="client-id" id="client-id" th:value="${clientId}"/>
+                    <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
             <!--搜索 end-->
             <!--功能操作-->
-            <div class="clearfix mt30 mb40">
+            <div class="clearfix mt20">
                 <span class="fr">
                     一次最多导出1000条
                     <a href="#" class="add-button" onclick="exportToExcel()">导出</a>
                 </span>
             </div>
-            <!--功能操作 end-->
-            <!--table-->
-            <div class="layui-form">
-                <table class="layui-table">
-                    <thead>
-                    <tr>
-                        <th>时间</th>
-                        <th>充值单号</th>
-                        <th>公司名称</th>
-                        <th>公司简称</th>
-                        <th>账号</th>
-                        <th>产品服务</th>
-                        <th>充值类型</th>
-                        <th>充值金额</th>
-                        <th>产品服务余额</th>
-                        <th>经手人</th>
-                        <th>合同编号</th>
-                        <th>备注</th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataBody">
-                    </tbody>
-                </table>
-            </div>
-            <!--table end-->
-            <!--page-->
-            <div class="box mt30" id="pagination"></div>
-            <!--page end-->
+            <table class="layui-table" id="data-table"></table>
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<script src="../../static/plugins/layui/layui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" th:src="@{/plugins/paging/js/paging.js}"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" th:src="@{/js/product.recharge.list.js}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListRes extends BLResp
+public class ListRes
 {
     private int code;
     private String message;

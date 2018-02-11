@@ -1,12 +1,18 @@
-var form, message, table, main_table;
+var form, message, table, main_table,laydate;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'form', 'table', 'message'], function() {
+}).use(['app', 'form', 'table', 'message','laydate'], function() {
     var app = layui.app;
     app.set({type: 'iframe'}).init();
     message = layui.message;
     form = layui.form;
     table = layui.table;
+    laydate = layui.laydate;
+    laydate.render({
+        elem: '#start-time'
+    });laydate.render({
+        elem: '#end-time'
+    });
     main_table = table.render({
         elem: '#data-table',
         page: true,
@@ -19,29 +25,17 @@ layui.config({
             startTime: $("#start-time").val(),
             endTime: $("#end-time").val()
         },
-        //var rowStr = '<tr>' +
-        //    '<td>#{createTime}</td>' +
-        //    '<td>#{tradeNo}</td>' +
-        //    '<td>#{clientName}</td>' +
-        //    '<td>#{shortName}</td>' +
-        //    '<td>#{username}</td>' +
-        //    '<td>#{productName}</td>' +
-        //    '<td>#{billPlan}</td>' +
-        //    '<td>#{hit}</td>' +
-        //    '<td>#{unitAmt}</td>' +
-        //    '<td>#{balance}</td>' +
-        //    '</tr>';
         cols: [[
             {field: 'tradeAt', title: '时间'},
             {field: 'tradeNo', title: '消费单号'},
-            {field: 'clientName', title: '公司'},
+            {field: 'corpName', title: '公司'},
             {field: 'shortName', title: '公司简称'},
             {field: 'username', title: '账号'},
             {field: 'productName', title: '产品服务'},
             {field: 'billPlan', title: '计费方式'},
-            {title: 'hit', title: '是否成功'},
-            {field: 'unitAmt', title: '消费(元)'},
-            {title: 'balance', title: '金额(元)'},
+            {field: 'hit', title: '是否击中'},
+            {field: 'unitAmt', title: '消费（元）'},
+            {field: 'balance', title: '金额（元）'},
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'

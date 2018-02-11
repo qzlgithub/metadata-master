@@ -8,7 +8,6 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
@@ -27,7 +26,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -147,14 +145,11 @@ public class TradeServiceImpl implements TradeService
      */
     @Override
     public void getProductRechargeList(Long clientId, Long productId, Date startTime, Date endTime, Page page,
-            BLResp resp)
+            ListRes res)
     {
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeInfoList(
                 clientId, productId, startTime, endTime, page);
-        resp.addData(Field.TOTAL, productRechargeInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, productRechargeInfoListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        res.setTotal(productRechargeInfoListDTO.getTotal());
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(dataList.size());
         if(CollectionUtils.isNotEmpty(dataList))
@@ -177,7 +172,7 @@ public class TradeServiceImpl implements TradeService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override
@@ -263,22 +258,12 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public void getClientBillList(String shortName, Long typeId, Long clientId, Long userId, Long productId,
-            Date startDate, Date endDate, Page page, BLResp resp)
+            Date startDate, Date endDate, Page page, ListRes res)
     {
-        if(StringUtils.isNotBlank(shortName))
-        {
-            BigDecimal billFeeSum = remoteClientService.getClientBillFeeSum(shortName, typeId, clientId, userId,
-                    productId, startDate, endDate);
-            resp.addData(Field.SHOW_STATS,
-                    "计次消耗 " + (billFeeSum == null ? 0 : NumberUtils.formatAmount(billFeeSum)) + " 元");
-        }
         shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
         ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, clientId,
                 userId, productId, startDate, endDate, page);
-        resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        res.setTotal(apiReqInfoListDTO.getTotal());
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(dataList.size());
         if(CollectionUtils.isNotEmpty(dataList))
@@ -299,7 +284,7 @@ public class TradeServiceImpl implements TradeService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override
@@ -317,7 +302,7 @@ public class TradeServiceImpl implements TradeService
         row.createCell(4).setCellValue("账号");
         row.createCell(5).setCellValue("产品服务");
         row.createCell(6).setCellValue("计费方式");
-        row.createCell(7).setCellValue("是否成功");
+        row.createCell(7).setCellValue("是否击中");
         row.createCell(8).setCellValue("消费(元)");
         row.createCell(9).setCellValue("余额(元)");
         Row dataRow;

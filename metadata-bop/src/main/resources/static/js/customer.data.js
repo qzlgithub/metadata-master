@@ -34,7 +34,7 @@ layui.config({
             dataName: 'list'
         },
         done: function(res, curr, count){
-            var result = res.dataMap;
+            var result = res.extradata;
             $('#chartTitleId').text(result.title);
         }
     });
