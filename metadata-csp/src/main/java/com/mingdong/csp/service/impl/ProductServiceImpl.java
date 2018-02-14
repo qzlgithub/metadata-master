@@ -132,8 +132,8 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             BLResp resp)
     {
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId,null, productId, fromDate, toDate,
-                page);
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
+                toDate, page);
         if(apiReqInfoListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.result(apiReqInfoListDTO.getResultDTO().getResult());
@@ -179,8 +179,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId,null, productId, fromDate, toDate,
-                page);
+        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
+                toDate, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         if(CollectionUtils.isNotEmpty(dataList))
         {

@@ -21,19 +21,13 @@
     <div class="layui-side layui-bg-black kit-side" th:include="product::top"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/product/index.html">产品管理<span class="layui-box">&gt;</span></a>
             <a href="/product/index.html">产品管理<span class="layui-box">&gt;</span></a>
             <a><cite>产品类别管理</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--功能操作-->
             <div class="clearfix mt20"><span id="productclass" class="fr add-button cp">产品类别添加</span></div>
-            <!--功能操作 end-->
-            <!--table-->
             <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                 <thead>
                 <tr>
@@ -43,24 +37,17 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-
                 <tbody id="dataBody">
-
                 </tbody>
             </table>
-            <!--table end-->
-            <!--page-->
             <div class="box mt30" id="pagination"></div>
-            <!--page end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--提示层-->
 <div id="product-class" class="modal">
-    <!--//<form>-->
     <div class="layui-layer-title">类别添加</div>
     <div class="mb30">
         <div class="m30">
@@ -94,11 +81,8 @@
             </div>
         </div>
     </div>
-    <!--</form>-->
 </div>
-<!--编辑 提示层-->
 <div id="edit-class" class="modal">
-    <!--//<form>-->
     <div class="layui-layer-title">类别编辑</div>
     <div class="mb30">
         <div class="m30">
@@ -133,13 +117,8 @@
             </div>
         </div>
     </div>
-    <!--</form>-->
 </div>
 
-
-<!--提示层 end-->
-
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
 
 <script src="../../static/plugins/layui/layui.js"></script>

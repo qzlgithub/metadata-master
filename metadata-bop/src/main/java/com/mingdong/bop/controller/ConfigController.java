@@ -10,10 +10,10 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,7 +30,7 @@ public class ConfigController
     @Resource
     private SystemService systemService;
 
-    @RequestMapping(value = "industry", method = RequestMethod.GET)
+    @GetMapping(value = "industry")
     @ResponseBody
     public List<Map<String, Object>> configIndustry(
             @RequestParam(value = Field.PARENT_ID, defaultValue = "0") Long parentId)
@@ -38,21 +38,21 @@ public class ConfigController
         return systemService.getIndustryMap(parentId, TrueOrFalse.TRUE);
     }
 
-    @RequestMapping(value = "industryInfo", method = RequestMethod.GET)
+    @GetMapping(value = "industryInfo")
     @ResponseBody
     public Map<String, String> getIndustryInfo(@RequestParam(value = Field.ID) Long id)
     {
         return systemService.getIndustryInfo(id);
     }
 
-    @RequestMapping(value = "columnInfo", method = RequestMethod.GET)
+    @GetMapping(value = "columnInfo")
     @ResponseBody
     public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id)
     {
         return systemService.getPrivilegeInfo(id);
     }
 
-    @RequestMapping(value = "column/modification", method = RequestMethod.POST)
+    @PostMapping(value = "column/modification")
     @ResponseBody
     public BLResp editColumnInfo(@RequestBody JSONObject jsonReq)
     {
@@ -71,7 +71,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "industry/checkCode", method = RequestMethod.GET)
+    @GetMapping(value = "industry/checkCode")
     @ResponseBody
     public Map<String, Integer> configIndustry(@RequestParam(value = Field.CODE) String code)
     {
@@ -81,7 +81,7 @@ public class ConfigController
         return map;
     }
 
-    @RequestMapping(value = "industry/addition", method = RequestMethod.POST)
+    @PostMapping(value = "industry/addition")
     @ResponseBody
     public BLResp addIndustryType(@RequestBody JSONObject jsonReq)
     {
@@ -97,7 +97,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "industry/modification", method = RequestMethod.POST)
+    @PostMapping(value = "industry/modification")
     @ResponseBody
     public BLResp editIndustryInfo(@RequestBody JSONObject jsonReq)
     {
@@ -128,16 +128,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "recharge/list", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getRechargeList()
-    {
-        BLResp resp = BLResp.build();
-        systemService.getRechargeTypeList(null, resp);
-        return resp.getDataMap();
-    }
-
-    @RequestMapping(value = "recharge/addition", method = RequestMethod.POST)
+    @PostMapping(value = "recharge/addition")
     @ResponseBody
     public BLResp addNewRechargeType(@RequestBody JSONObject jsonReq)
     {
@@ -152,7 +143,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "recharge/deletion", method = RequestMethod.GET)
+    @GetMapping(value = "recharge/deletion")
     @ResponseBody
     public BLResp dropRechargeType(@RequestParam(value = Field.RECHARGE_TYPE_ID) Long rechargeTypeId)
     {
@@ -161,7 +152,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "recharge/info", method = RequestMethod.GET)
+    @GetMapping(value = "recharge/info")
     @ResponseBody
     public BLResp getRechargeTypeInfo(@RequestParam(value = Field.RECHARGE_TYPE_ID) Long rechargeTypeId)
     {
@@ -170,7 +161,7 @@ public class ConfigController
         return resp;
     }
 
-    @RequestMapping(value = "recharge/modification", method = RequestMethod.POST)
+    @PostMapping(value = "recharge/modification")
     @ResponseBody
     public BLResp updateRechargeType(@RequestBody JSONObject jsonReq)
     {
@@ -200,14 +191,6 @@ public class ConfigController
         }
         systemService.changeRechargeStatus(id, enabled, resp);
         return resp;
-
-    }
-
-    @RequestMapping(value = "productTypeList", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Map<String, Object>> configTypeList()
-    {
-        return systemService.getProductListMap();
     }
 
     @PostMapping(value = "global/setting")

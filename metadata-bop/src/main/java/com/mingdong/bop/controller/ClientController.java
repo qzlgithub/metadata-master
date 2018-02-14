@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,7 +46,7 @@ public class ClientController
     @Resource
     private TradeService tradeService;
 
-    @RequestMapping(value = "check", method = RequestMethod.GET)
+    @GetMapping(value = "check")
     @ResponseBody
     public Map<String, Object> getList(@RequestParam(value = Field.USERNAME) String username)
     {
@@ -59,7 +58,7 @@ public class ClientController
     /**
      * 判断合同编号唯一性
      */
-    @RequestMapping(value = "checkContract", method = RequestMethod.GET)
+    @GetMapping(value = "checkContract")
     @ResponseBody
     public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
@@ -88,7 +87,7 @@ public class ClientController
         return res;
     }
 
-    @RequestMapping(value = "rechargeList", method = RequestMethod.GET)
+    @GetMapping(value = "rechargeList")
     @ResponseBody
     public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -102,7 +101,7 @@ public class ClientController
         return res;
     }
 
-    @RequestMapping(value = "consumeList", method = RequestMethod.GET)
+    @GetMapping(value = "consumeList")
     @ResponseBody
     public ListRes getConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -120,7 +119,7 @@ public class ClientController
 
     }
 
-    @RequestMapping(value = "userConsumeList", method = RequestMethod.GET)
+    @GetMapping(value = "userConsumeList")
     @ResponseBody
     public ListRes getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -174,45 +173,7 @@ public class ClientController
         os.close();
     }
 
-    /**
-     * 账户充值列表
-     */
-
-    @RequestMapping(value = "account/rechargeList", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getAccountRechargeList(
-            @RequestParam(value = Field.CLIENT_ID, required = false) Long clientId,
-            @RequestParam(value = Field.CREATE_TIME, required = false) Date time,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
-    {
-        Page page = new Page(pageNum, pageSize);
-        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
-        //        BLResp resp = tradeService.testList3(clientId, time, page);
-        BLResp resp = BLResp.build();
-        return resp.getDataMap();
-    }
-
-    /**
-     * 账户消费列表
-     */
-
-    @RequestMapping(value = "account/consumeList", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getAccountconsumeList(
-            @RequestParam(value = Field.CLIENT_ID, required = false) Long clientId,
-            @RequestParam(value = Field.CREATE_TIME, required = false) Date time,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
-    {
-        Page page = new Page(pageNum, pageSize);
-        //BLResp resp = productRechargeService.getProductRechargeList(productId,clientId,time,page);//clientService.getClientList(username, corpName, shortNamepage);
-        //        BLResp resp = tradeService.testList4(clientId, time, page);
-        BLResp resp = BLResp.build();
-        return resp.getDataMap();
-    }
-
-    @RequestMapping(value = "subAccount/list", method = RequestMethod.GET)
+    @GetMapping(value = "subAccount/list")
     @ResponseBody
     public List<Map<String, Object>> getSubAccountList(@RequestParam(value = Field.ID) Long clientId)
     {
@@ -266,11 +227,11 @@ public class ClientController
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        clientService.deleteClient(idList, resp);
+        clientService.deleteClient(idList);
         return resp;
     }
 
-    @RequestMapping(value = "same", method = RequestMethod.GET)
+    @GetMapping(value = "same")
     @ResponseBody
     private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
@@ -292,20 +253,6 @@ public class ClientController
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         clientService.resetPassword(idList, resp);
-        return resp;
-    }
-
-    @RequestMapping(value = "user/resetPwd", method = RequestMethod.POST)
-    @ResponseBody
-    private BLResp resetClientUserPassword(@RequestBody JSONObject jsonReq)
-    {
-        BLResp resp = BLResp.build();
-        Long clientUserId = jsonReq.getLong(Field.ID);
-        if(clientUserId == null)
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        clientService.resetClientUserPassword(clientUserId, resp);
         return resp;
     }
 
@@ -351,9 +298,9 @@ public class ClientController
             @RequestParam(value = Field.IDS) String ids)
     {
         BLResp resp = BLResp.build();
-        String[] split = null;
+        String[] split;
         List<Long> productIds = new ArrayList<>();
-        if(org.apache.commons.lang3.StringUtils.isNotBlank(ids))
+        if(!StringUtils.isNullBlank(ids))
         {
             split = ids.split(",");
             for(String item : split)

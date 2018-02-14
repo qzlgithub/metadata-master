@@ -8,9 +8,8 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -26,7 +25,7 @@ public class AccountController
     /**
      * 账号登录
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     @ResponseBody
     public BLResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
@@ -47,7 +46,7 @@ public class AccountController
         return resp;
     }
 
-    @RequestMapping(value = "changePwd", method = RequestMethod.POST)
+    @PostMapping(value = "changePwd")
     @ResponseBody
     public BLResp changePwd(@RequestBody JSONObject jsonReq)
     {

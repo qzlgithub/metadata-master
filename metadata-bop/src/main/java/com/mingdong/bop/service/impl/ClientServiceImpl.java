@@ -13,7 +13,6 @@ import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
-import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -56,6 +55,8 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -69,6 +70,7 @@ import java.util.Map;
 @Service
 public class ClientServiceImpl implements ClientService
 {
+    private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
     @Resource
     private Param param;
     @Resource
@@ -208,9 +210,10 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void deleteClient(List<Long> idList, BLResp resp)
+    public void deleteClient(List<Long> idList)
     {
-        remoteClientService.setClientDeleted(idList);
+        ResultDTO dto = remoteClientService.setClientDeleted(idList);
+        logger.info("set client[{}] deleted: ", idList, dto.getCode());
     }
 
     @Override
@@ -225,7 +228,8 @@ public class ClientServiceImpl implements ClientService
             {
                 clientUserIdList.add(client.getPrimaryUserId());
             }
-            remoteClientService.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, clientUserIdList);
+            ResultDTO dto = remoteClientService.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, clientUserIdList);
+            logger.info("set client[{}] deleted: ", idList, dto.getCode());
         }
     }
 
@@ -269,22 +273,6 @@ public class ClientServiceImpl implements ClientService
             }
         }
         return list;
-    }
-
-    @Override
-    public void resetClientUserPassword(Long clientUserId, BLResp resp)
-    {
-        ClientUserDTO cu = remoteClientService.getClientUserByUserId(clientUserId);
-        if(cu == null)
-        {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        cu = new ClientUserDTO();
-        cu.setId(clientUserId);
-        cu.setUpdateTime(new Date());
-        cu.setPassword(Md5Utils.encrypt(Md5Utils.encrypt(Constant.DEFAULT_PASSWORD)));
-        remoteClientService.updateClientUserSkipNull(cu);
     }
 
     @Override

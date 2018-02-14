@@ -52,18 +52,6 @@ public class FinanceController
         return res;
     }
 
-    private Date setToTomorrow(Date date)
-    {
-        if(date != null)
-        {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            return calendar.getTime();
-        }
-        return null;
-    }
-
     @GetMapping(value = "recharge/export")
     public void exportRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,
@@ -150,4 +138,15 @@ public class FinanceController
         os.close();
     }
 
+    private Date setToTomorrow(Date date)
+    {
+        if(date != null)
+        {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            return calendar.getTime();
+        }
+        return null;
+    }
 }

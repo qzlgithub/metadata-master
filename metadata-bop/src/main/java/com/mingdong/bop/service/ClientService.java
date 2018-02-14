@@ -38,7 +38,7 @@ public interface ClientService
     /**
      * 根据客户ids软删客户
      */
-    void deleteClient(List<Long> idList, BLResp resp);
+    void deleteClient(List<Long> idList);
 
     /**
      * 根据客户ids重置主帐号的密码
@@ -54,11 +54,6 @@ public interface ClientService
      * 根据客户id获取帐号列表
      */
     List<Map<String, Object>> getSubAccountList(Long clientId);
-
-    /**
-     * 重置帐号的密码
-     */
-    void resetClientUserPassword(Long clientUserId, BLResp resp);
 
     /**
      * 客户开通产品包时间形式，新增充值记录和客户产品记录

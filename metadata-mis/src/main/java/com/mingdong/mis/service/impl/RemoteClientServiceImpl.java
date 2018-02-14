@@ -580,19 +580,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientUserDTO getClientUserByUserId(Long userId)
-    {
-        ClientUserDTO userDTO = new ClientUserDTO();
-        ClientUser user = clientUserMapper.findById(userId);
-        if(user == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(user, userDTO);
-        return userDTO;
-    }
-
-    @Override
     public ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted)
     {
         ClientUserListDTO clientUserListDTO = new ClientUserListDTO();
@@ -644,10 +631,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public ResultDTO resetPasswordByIds(String pwd, List<Long> idList)
+    public ResultDTO resetPasswordByIds(String newPassword, List<Long> idList)
     {
         ResultDTO resultDTO = new ResultDTO();
-        clientUserMapper.resetPasswordByIds(pwd, new Date(), idList);
+        clientUserMapper.resetPasswordByIds(newPassword, new Date(), idList);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
@@ -663,18 +650,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         EntityUtils.copyProperties(cp, clientProductDTO);
         return clientProductDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateClientUserSkipNull(ClientUserDTO clientUserDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientUser cu = new ClientUser();
-        EntityUtils.copyProperties(clientUserDTO, cu);
-        clientUserMapper.updateSkipNull(cu);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -808,13 +783,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         return apiReqInfoListDTO;
-    }
-
-    @Override
-    public BigDecimal getClientBillFeeSum(String shortName, Long typeId, Long clientId, Long userId, Long productId,
-            Date startDate, Date endDate)
-    {
-        return apiReqInfoMapper.getClientBillFeeSum(shortName, typeId, clientId, userId, productId, startDate, endDate);
     }
 
     @Override
@@ -1058,17 +1026,20 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ResultDTO resultDTO = new ResultDTO();
         ClientProduct clientProduct = clientProductMapper.findById(
                 openClientProductDTO.getProductRechargeDTO().getClientProductId());
-        if(clientProduct == null){
+        if(clientProduct == null)
+        {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
         Product productById = productMapper.findById(clientProduct.getProductId());
-        if(productById == null){
+        if(productById == null)
+        {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
         APIProduct product = APIProduct.getByCode(productById.getCode());
-        if(product == null){
+        if(product == null)
+        {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }

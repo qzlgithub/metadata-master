@@ -18,7 +18,6 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
-import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -37,8 +36,6 @@ public class SystemServiceImpl implements SystemService
     private RedisDao redisDao;
     @Resource
     private RemoteSystemService remoteSystemService;
-    @Resource
-    private RemoteProductService remoteProductService;
 
     @Override
     public List<Map<String, Object>> getValidRole()
@@ -166,22 +163,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public List<Map<String, Object>> getProductListMap()
-    {
-        //        DictProductTypeListDTO dictProductTypeList = remoteProductService.getDictProductTypeList(null, null);
-        //        List<DictProductTypeDTO> dataList = dictProductTypeList.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>();
-        //        for(DictProductTypeDTO dictProductType : dataList)
-        //        {
-        //            Map<String, Object> map = new HashMap<>();
-        //            map.put(Field.TYPE_NAME, dictProductType.getName());
-        //            map.put(Field.ID, dictProductType.getId());
-        //            list.add(map);
-        //        }
-        return list;
-    }
-
-    @Override
     public List<Map<String, Object>> getHierarchyIndustry()//TODO HERE
     {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -297,32 +278,6 @@ public class SystemServiceImpl implements SystemService
             list.add(map);
         }
         return list;
-    }
-
-    @Override
-    public void getRechargeTypeList(Integer enabled, BLResp resp)
-    {
-        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(enabled,
-                null);
-        List<DictRechargeTypeDTO> dataList = dictRechargeTypeListDTO.getDataList();
-        resp.addData(Field.TOTAL, dataList.size());
-        if(CollectionUtils.isNotEmpty(dataList))
-        {
-            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(DictRechargeTypeDTO type : dataList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, type.getId() + "");
-                map.put(Field.NAME, type.getName());
-                if(enabled == null)
-                {
-                    map.put(Field.REMARK, type.getRemark());
-                    map.put(Field.ENABLED, type.getEnabled());
-                }
-                list.add(map);
-            }
-            resp.addData(Field.LIST, list);
-        }
     }
 
     @Override

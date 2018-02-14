@@ -13,9 +13,10 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,7 +32,7 @@ public class ManagerController
     /**
      * 添加新账号
      */
-    @RequestMapping(value = "addition", method = RequestMethod.POST)
+    @PostMapping(value = "addition")
     @ResponseBody
     public BLResp addNewManager(@RequestBody NewManagerVO vo)
     {
@@ -63,7 +64,7 @@ public class ManagerController
     /**
      * 获取管理账号列表
      */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     @ResponseBody
     public ListRes getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
@@ -88,7 +89,7 @@ public class ManagerController
     /**
      * 编辑账号信息
      */
-    @RequestMapping(value = "modification", method = RequestMethod.POST)
+    @PostMapping(value = "modification")
     @ResponseBody
     public BLResp editManager(@RequestBody ManagerVO vo)
     {
@@ -110,7 +111,7 @@ public class ManagerController
         return resp;
     }
 
-    @RequestMapping(value = "changeStatus", method = RequestMethod.POST)
+    @PostMapping(value = "changeStatus")
     @ResponseBody
     public BLResp changeStatus(@RequestBody JSONObject jsonReq)
     {
