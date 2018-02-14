@@ -298,51 +298,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         return dto;
     }
 
-    /*@Override
-    public DictProductTypeListDTO getDictProductTypeList(Integer enabled, Page page)
-    {
-
-        DictProductTypeListDTO dictProductTypeListDTO = new DictProductTypeListDTO();
-        List<DictProductTypeDTO> dataDtoList = new ArrayList<>();
-        dictProductTypeListDTO.setDataList(dataDtoList);
-        DictProductTypeDTO dictProductTypeDTO;
-        if(page == null)
-        {
-            List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
-            if(CollectionUtils.isNotEmpty(dataList))
-            {
-                for(DictProductType item : dataList)
-                {
-                    dictProductTypeDTO = new DictProductTypeDTO();
-                    dataDtoList.add(dictProductTypeDTO);
-                    EntityUtils.copyProperties(item, dictProductTypeDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = dictProductTypeMapper.countListByStatus(enabled);
-            int pages = page.getTotalPage(total);
-            dictProductTypeListDTO.setTotal(total);
-            dictProductTypeListDTO.setPages(pages);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<DictProductType> dataList = dictProductTypeMapper.getListByStatus(enabled);
-                if(CollectionUtils.isNotEmpty(dataList))
-                {
-                    for(DictProductType item : dataList)
-                    {
-                        dictProductTypeDTO = new DictProductTypeDTO();
-                        EntityUtils.copyProperties(item, dictProductTypeDTO);
-                        dataDtoList.add(dictProductTypeDTO);
-                    }
-                }
-            }
-        }
-        return dictProductTypeListDTO;
-    }*/
-
     @Override
     public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
     {
@@ -421,44 +376,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         return productRechargeInfoListDTO;
     }
-
-    /*@Override
-    public DictProductTypeDTO getDictProductTypeById(Long id)
-    {
-        DictProductTypeDTO dictProductTypeDTO = new DictProductTypeDTO();
-        DictProductType type = dictProductTypeMapper.findById(id);
-        if(type == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(type, dictProductTypeDTO);
-        return dictProductTypeDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateDictProductTypeSkipNull(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = dictProductTypeMapper.findById(dictProductTypeDTO.getId());
-        if(type == null)
-        {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
-        }
-        dictProductTypeDTO.setEnabled(type.getEnabled());
-        type = dictProductTypeMapper.findByCode(dictProductTypeDTO.getCode());
-        if(type != null && !dictProductTypeDTO.getId().equals(type.getId()))
-        {
-            resultDTO.setResult(RestResult.CATEGORY_CODE_EXIST);
-            return resultDTO;
-        }
-        type = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, type);
-        dictProductTypeMapper.updateSkipNull(type);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }*/
 
     @Override
     public ProductDTO getProductById(Long productId)
@@ -555,57 +472,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductRechargeInfoListDTO getProductRechargeInfoListBy(String shortName, Long typeId, Long productId,
-            Long managerId, Date startDate, Date endDate, Page page)
-    {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
-        List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
-        productRechargeInfoListDTO.setDataList(dataList);
-        ProductRechargeInfoDTO productRechargeInfoDTO;
-        if(page == null)
-        {
-            List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getProductRechargeInfoListBy(
-                    shortName, typeId, productId, managerId, startDate, endDate);
-            for(ProductRechargeInfo item : productRechargeInfoList)
-            {
-                productRechargeInfoDTO = new ProductRechargeInfoDTO();
-                EntityUtils.copyProperties(item, productRechargeInfoDTO);
-                dataList.add(productRechargeInfoDTO);
-            }
-        }
-        else
-        {
-            int total = productRechargeInfoMapper.countProductRechargeInfoBy(shortName, typeId, productId, managerId,
-                    startDate, endDate);
-            int pages = page.getTotalPage(total);
-            productRechargeInfoListDTO.setPages(pages);
-            productRechargeInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductRechargeInfo> productRechargeInfoList =
-                        productRechargeInfoMapper.getProductRechargeInfoListBy(shortName, typeId, productId, managerId,
-                                startDate, endDate);
-                for(ProductRechargeInfo item : productRechargeInfoList)
-                {
-                    productRechargeInfoDTO = new ProductRechargeInfoDTO();
-                    EntityUtils.copyProperties(item, productRechargeInfoDTO);
-                    dataList.add(productRechargeInfoDTO);
-                }
-            }
-        }
-        return productRechargeInfoListDTO;
-    }
-
-    @Override
-    public BigDecimal getProductRechargeInfoSumBy(String shortName, Long typeId, Long productId, Long managerId,
-            Date startDate, Date endDate)
-    {
-        return productRechargeInfoMapper.getProductRechargeInfoSumBy(shortName, typeId, productId, managerId, startDate,
-                endDate);
-    }
-
-    @Override
     public List<ProductClientDetailDTO> getProductInfoList(Long clientId)
     {
         List<ProductClientDetailDTO> list = new ArrayList<>();
@@ -641,34 +507,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         return list;
     }
-
-    /*@Override
-    @Transactional
-    public ResultDTO addProductType(DictProductTypeDTO dictProductTypeDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = dictProductTypeMapper.findByCode(dictProductTypeDTO.getCode());
-        if(type != null)
-        {
-            resultDTO.setResult(RestResult.CATEGORY_CODE_EXIST);
-            return resultDTO;
-        }
-        if(dictProductTypeDTO.getCode() == null)
-        {
-            resultDTO.setResult(RestResult.INVALID_PRODUCT_TYPE);
-            return resultDTO;
-        }
-        if(dictProductTypeDTO.getName() == null)
-        {
-            resultDTO.setResult(RestResult.INVALID_PRODUCT_NAME);
-            return resultDTO;
-        }
-        type = new DictProductType();
-        EntityUtils.copyProperties(dictProductTypeDTO, type);
-        dictProductTypeMapper.add(type);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }*/
 
     @Override
     @Transactional
@@ -745,27 +583,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
-
-    /*@Override
-    @Transactional
-    public ResultDTO updateDictProductTypeStatusById(Long id, Integer enabled)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        DictProductType type = dictProductTypeMapper.findById(id);
-        if(type == null)
-        {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
-        }
-        if(enabled.equals(type.getEnabled()))
-        {
-            type.setEnabled(TrueOrFalse.TRUE.equals(enabled) ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
-            type.setUpdateTime(new Date());
-            dictProductTypeMapper.updateById(type);
-        }
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }*/
 
     @Override
     @Transactional
