@@ -5,7 +5,7 @@ public class MultipleAppVO extends AbsRequest
     private String idNo;
     private String name;
     private String phone;
-    private String orderNo;
+    private String orderNo;//以这个是否有值来判定是否获取报告
 
     public String getOrderNo()
     {
