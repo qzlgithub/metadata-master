@@ -501,7 +501,7 @@ public class MultipleApp implements IMetadata
     public Map<String, Object> response()
     {
         Map<String, Object> map = new HashMap<>();
-        if(-1 != hit.intValue())
+        if(-1 != hit)
         {
             map.put("hit", hit);
             map.put("orderNo", orderNo);

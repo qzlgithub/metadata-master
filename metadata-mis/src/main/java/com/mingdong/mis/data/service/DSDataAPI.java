@@ -227,14 +227,14 @@ public class DSDataAPI
                         JSONArray jsonArray = (JSONArray) res.get("platformDetails");
                         List<Map<String, Object>> list = new ArrayList<>();
                         Map<String, Object> mapTemp;
-                        JSONObject jsonObjectTemp;
-                        for(int i = 0; i < jsonArray.size(); i++)
+                        JSONObject json;
+                        for(Object o : jsonArray)
                         {
                             mapTemp = new HashMap<>();
-                            jsonObjectTemp = (JSONObject) jsonArray.get(i);
-                            mapTemp.put("platformNo", jsonObjectTemp.getString("platformNo"));
-                            mapTemp.put("platformNo", jsonObjectTemp.getString("idCardTime"));
-                            mapTemp.put("platformNo", jsonObjectTemp.getString("phoneTime"));
+                            json = (JSONObject) o;
+                            mapTemp.put("platformNo", json.getString("platformNo"));
+                            mapTemp.put("platformNo", json.getString("idCardTime"));
+                            mapTemp.put("platformNo", json.getString("phoneTime"));
                             list.add(mapTemp);
                         }
                         multipleApp.setPlatformDetails(list);
