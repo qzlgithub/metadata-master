@@ -9,15 +9,15 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="app_id" property="appId" jdbcType="CHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
-        <result column="is_opened" property="isOpened" jdbcType="TINYINT" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="latest_recharge_id" property="latestRechargeId" jdbcType="TINYINT" />
+        <result column="opened" property="opened" jdbcType="TINYINT" />
     </resultMap>
 
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-            `latest_recharge_id`, `is_opened`
+            `latest_recharge_id`, `opened`
         from `client_product`
     </sql>
 
@@ -33,7 +33,7 @@
             <if test="billPlan != null">`bill_plan`,</if>
             <if test="balance != null">`balance`,</if>
             <if test="latestRechargeId != null">`latest_recharge_id`,</if>
-            <if test="isOpened != null">`is_opened`,</if>
+            <if test="opened != null">`opened`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -45,7 +45,7 @@
             <if test="billPlan != null">#{billPlan},</if>
             <if test="balance != null">#{balance},</if>
             <if test="latestRechargeId != null">#{latestRechargeId},</if>
-            <if test="isOpened != null">#{isOpened},</if>
+            <if test="opened != null">#{opened},</if>
         </trim>
     </insert>
 
@@ -60,7 +60,7 @@
             <if test="billPlan != null">`bill_plan` = #{billPlan},</if>
             <if test="balance != null">`balance` = #{balance},</if>
             <if test="latestRechargeId != null">`latest_recharge_id` = #{latestRechargeId},</if>
-            <if test="isOpened != null">`is_opened` = #{isOpened},</if>
+            <if test="opened != null">`opened` = #{opened},</if>
         </set>
         where `id` = #{id}
     </update>
@@ -88,11 +88,14 @@
     </delete>
 
     <insert id="addAll" parameterType="List">
-        insert into `client_product` (`id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`,
-        `bill_plan`, `balance`, `latest_recharge_id`,`is_opened`) values
+        insert into
+            `client_product`
+            (`id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
+             `latest_recharge_id`, `opened`)
+        values
         <foreach collection="list" item="item" separator=",">
-            (#{item.id},#{item.createTime},#{item.updateTime},#{item.clientId},
-            #{item.productId},#{item.appId},#{item.billPlan},#{item.balance}, #{item.latestRechargeId},#{item.isOpened})
+            (#{item.id}, #{item.createTime}, #{item.updateTime}, #{item.clientId}, #{item.productId}, #{item.appId},
+             #{item.billPlan}, #{item.balance}, #{item.latestRechargeId}, #{item.opened})
         </foreach>
     </insert>
 </mapper>

@@ -1026,7 +1026,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientProduct cp = clientProductMapper.findByClientAndProduct(
                 openClientProductDTO.getProductRechargeDTO().getClientId(),
                 openClientProductDTO.getProductRechargeDTO().getProductId());
-        if(cp != null && TrueOrFalse.TRUE.equals(cp.getIsOpened()))
+        if(cp != null && TrueOrFalse.TRUE.equals(cp.getOpened()))
         {
             resultDTO.setResult(RestResult.PRODUCT_OPENED);
             return resultDTO;
@@ -1196,7 +1196,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             if(!productIds.contains(item.getProductId()))
             {
                 deleteIds.add(item.getClientProductId());
-                if(TrueOrFalse.TRUE.equals(item.getCustom()) && TrueOrFalse.TRUE.equals(item.getIsOpened()))
+                if(TrueOrFalse.TRUE.equals(item.getCustom()) && TrueOrFalse.TRUE.equals(item.getOpened()))
                 {
                     canDelete = false;
                     break;
@@ -1222,7 +1222,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
                     clientProduct.setId(IDUtils.getClientProductId(1));
                     clientProduct.setClientId(clientId);
                     clientProduct.setProductId(productId);
-                    clientProduct.setIsOpened(TrueOrFalse.FALSE);
+                    clientProduct.setOpened(TrueOrFalse.FALSE);
                     clientProduct.setCreateTime(date);
                     clientProduct.setUpdateTime(date);
                     clientProduct.setAppId(StringUtils.getUuid());
@@ -1249,7 +1249,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
-        if(TrueOrFalse.TRUE.equals(clientProductInfo.getIsOpened()))
+        if(TrueOrFalse.TRUE.equals(clientProductInfo.getOpened()))
         {
             res.setResult(RestResult.CLIENT_PRODUCT_NO_DELETE);
             return res;

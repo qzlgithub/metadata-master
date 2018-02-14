@@ -13,18 +13,8 @@ public class ClientProduct
     private String appId;
     private Integer billPlan;
     private BigDecimal balance;
-    private Integer isOpened;
     private Long latestRechargeId;
-
-    public Integer getIsOpened()
-    {
-        return isOpened;
-    }
-
-    public void setIsOpened(Integer isOpened)
-    {
-        this.isOpened = isOpened;
-    }
+    private Integer opened;
 
     public Long getId()
     {
@@ -114,6 +104,16 @@ public class ClientProduct
     public void setLatestRechargeId(Long latestRechargeId)
     {
         this.latestRechargeId = latestRechargeId;
+    }
+
+    public Integer getOpened()
+    {
+        return opened;
+    }
+
+    public void setOpened(Integer opened)
+    {
+        this.opened = opened;
     }
 }
 

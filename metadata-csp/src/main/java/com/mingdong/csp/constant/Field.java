@@ -64,4 +64,7 @@ public interface Field
 
     String SELECTED_TYPE = "selectedType";
     String IS_OPEN = "isOpen";
+    String PRODUCT_TYPE = "productType";
+    String INC_OPENED = "incOpened";
+    String IS_OPENED = "isOpened";
 }

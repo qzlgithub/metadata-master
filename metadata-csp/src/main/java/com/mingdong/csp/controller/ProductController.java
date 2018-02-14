@@ -3,6 +3,7 @@ package com.mingdong.csp.controller;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -18,7 +19,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "product")
@@ -112,29 +115,29 @@ public class ProductController
     }
 
     @LoginRequired
-    @GetMapping(value = "allList")
-    public BLResp getProductByParam(@RequestParam(value = Field.SELECTED_TYPE, required = false) String selectedType,
-            @RequestParam(value = Field.IS_OPEN, required = false) Integer isOpen,
+    @GetMapping(value = "all")
+    public ListRes getProductByParam(@RequestParam(value = Field.PRODUCT_TYPE, required = false) String productType,
+            @RequestParam(value = Field.INC_OPENED, required = false) Integer incOpened,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
-        Integer[] typeInts;
-        if(StringUtils.isBlank(selectedType))
+        ListRes res = new ListRes();
+        List<Integer> productTypeList;
+        if(StringUtils.isBlank(productType))
         {
-            typeInts = null;
+            productTypeList = null;
         }
         else
         {
-            String[] types = selectedType.split(",");
-            typeInts = new Integer[types.length];
-            for(int i = 0; i < types.length; i++)
+            String[] types = productType.split(",");
+            productTypeList = new ArrayList<>();
+            for(String s : types)
             {
-                typeInts[i] = Integer.valueOf(types[i]);
+                productTypeList.add(Integer.valueOf(s));
             }
         }
-        productService.getProductListBy(RequestThread.getClientId(), isOpen, typeInts, new Page(pageNum, pageSize),
-                resp);
-        return resp;
+        productService.getProductListBy(RequestThread.getClientId(), productTypeList, incOpened,
+                new Page(pageNum, pageSize), res);
+        return res;
     }
 }

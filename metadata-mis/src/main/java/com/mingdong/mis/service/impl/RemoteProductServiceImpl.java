@@ -209,7 +209,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         List<ProductDTO> toOpen = new ArrayList<>();
         for(ProductClientInfo info : dataList)
         {
-            if(info.getClientProductId() != null && TrueOrFalse.TRUE.equals(info.getIsOpened()))
+            if(info.getClientProductId() != null && TrueOrFalse.TRUE.equals(info.getOpened()))
             {
                 if(opened.size() < Constant.HOME_PRODUCT_QTY)
                 {
@@ -621,7 +621,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
             o.setCode(d.getCode());
             if(d.getClientProductId() != null)
             {
-                o.setIsOpened(d.getIsOpened());
+                o.setIsOpened(d.getOpened());
                 o.setClientProductId(d.getClientProductId());
                 o.setAppId(d.getAppId());
                 o.setBillPlan(d.getBillPlan());
@@ -876,6 +876,59 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 pri.setContractNo(o.getContractNo());
                 pri.setRemark(o.getRemark());
                 list.add(pri);
+            }
+            dto.setList(list);
+        }
+        return dto;
+    }
+
+    @Override
+    public ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page)
+    {
+        ListDTO<ProductDTO> dto = new ListDTO<>();
+        incOpened = TrueOrFalse.TRUE.equals(incOpened) ? incOpened : null;
+        int total = productClientInfoMapper.countBy(clientId, typeList, incOpened);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ProductClientInfo> dataList = productClientInfoMapper.getListBy(clientId, typeList, incOpened);
+            List<ProductDTO> list = new ArrayList<>(dataList.size());
+            for(ProductClientInfo o : dataList)
+            {
+                ProductDTO p = new ProductDTO();
+                p.setId(o.getProductId());
+                p.setName(o.getProductName());
+                if(o.getClientProductId() != null)
+                {
+                    if(TrueOrFalse.TRUE.equals(o.getOpened()))
+                    {
+                        p.setOpened(TrueOrFalse.TRUE);
+                        p.setBillPlan(o.getBillPlan());
+                        if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
+                        {
+                            p.setFromDate(o.getStartDate());
+                            p.setToDate(o.getEndDate());
+                        }
+                        else
+                        {
+                            p.setCostAmt(o.getUnitAmt());
+                            p.setBalance(o.getBalance());
+                        }
+                    }
+                    else
+                    {
+                        p.setOpened(TrueOrFalse.FALSE);
+                        p.setRemark(o.getRemark());
+                    }
+                }
+                else
+                {
+                    p.setOpened(TrueOrFalse.FALSE);
+                    p.setRemark(o.getRemark());
+                }
+                list.add(p);
             }
             dto.setList(list);
         }

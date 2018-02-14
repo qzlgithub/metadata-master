@@ -23,6 +23,7 @@ public class ProductDTO implements Serializable
     private Date toDate;
     private String code;
     private Integer type;
+    private Integer opened;
     private Integer enabled;
     private Integer custom;
     private Date createTime;
@@ -196,6 +197,16 @@ public class ProductDTO implements Serializable
     public void setType(Integer type)
     {
         this.type = type;
+    }
+
+    public Integer getOpened()
+    {
+        return opened;
+    }
+
+    public void setOpened(Integer opened)
+    {
+        this.opened = opened;
     }
 
     public Integer getEnabled()

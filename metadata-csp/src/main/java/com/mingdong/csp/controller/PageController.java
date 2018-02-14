@@ -84,7 +84,6 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("/product/all");
         view.addAllObjects(RequestThread.getPageData());
-        //        List<Map<String, Object>> productTypeList = productService.getDictProductTypeList(TrueOrFalse.TRUE);
         view.addObject(Field.PRODUCT_TYPE_LIST, ProdType.getProdTypeDict());
         return view;
     }

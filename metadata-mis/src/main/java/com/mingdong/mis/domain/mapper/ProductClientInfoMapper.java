@@ -20,4 +20,10 @@ public interface ProductClientInfoMapper
             @Param("selectedType") Integer[] selectedType);
 
     List<ProductClientInfo> getClientProductCustomBy(Long clientId);
+
+    int countBy(@Param("clientId") Long clientId, @Param("typeIdList") List<Integer> typeIdList,
+            @Param("incOpened") Integer incOpened);
+
+    List<ProductClientInfo> getListBy(@Param("clientId") Long clientId, @Param("typeIdList") List<Integer> typeIdList,
+            @Param("incOpened") Integer incOpened);
 }

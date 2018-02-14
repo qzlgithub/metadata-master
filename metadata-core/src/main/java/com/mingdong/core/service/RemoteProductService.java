@@ -235,4 +235,6 @@ public interface RemoteProductService
 
     ListDTO<ProductRechargeInfoDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
             Long rechargeType, Date fromDate, Date toDate, Page page);
+
+    ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
 }

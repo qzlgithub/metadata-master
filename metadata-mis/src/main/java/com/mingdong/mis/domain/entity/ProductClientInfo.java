@@ -11,7 +11,7 @@ public class ProductClientInfo
     private String appId;
     private Long clientProductId;
     private Integer billPlan;
-    private Integer isOpened;
+    private Integer opened;
     private Date startDate;
     private Date endDate;
     private BigDecimal amount;
@@ -34,14 +34,14 @@ public class ProductClientInfo
         this.custom = custom;
     }
 
-    public Integer getIsOpened()
+    public Integer getOpened()
     {
-        return isOpened;
+        return opened;
     }
 
-    public void setIsOpened(Integer isOpened)
+    public void setOpened(Integer opened)
     {
-        this.isOpened = isOpened;
+        this.opened = opened;
     }
 
     public String getCode()
