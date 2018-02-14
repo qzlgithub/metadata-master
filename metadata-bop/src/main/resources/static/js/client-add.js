@@ -12,13 +12,13 @@ var contact_base_tr = "<tr id=\"#{id}\">" +
     "<span class=\"mr30\"><a href=\"#\" class=\"del-contact\" data-id=\"#{id}\">删除</a></span>";
 var contacts = [];
 $("#add_contact").click(function() {
-    if(!checkDataValid("#addcontacts-modal")){
+    if(!checkDataValid("#addcontacts-modal")) {
         return;
     }
     var name = $("#add-name").val();
     var position = $("#add-position").val();
     var phone = $("#add-phone").val();
-    if(name == '' || position == '' || phone == ''){
+    if(name === '' || position === '' || phone === '') {
         layer.msg("关键字段不能为空！", {
             time: 2000
         });
@@ -118,13 +118,15 @@ function getSubIndustry() {
         $("#industryId").empty();
     }
 }
+
 var isSubmit = false;
+
 function createUser() {
-    if(isSubmit){
+    if(isSubmit) {
         return;
     }
     isSubmit = true;
-    if(!checkDataValid("#data-div-id")){
+    if(!checkDataValid("#data-div-id")) {
         isSubmit = false;
         return;
     }
@@ -177,7 +179,7 @@ function createUser() {
 
 function checkUsername() {
     $("#usernameTip").hide();
-    if(!checkDataValid("#username-div-id")){
+    if(!checkDataValid("#username-div-id")) {
         return;
     }
     var username = $("#username").val();

@@ -93,7 +93,7 @@ $("#save-contact").click(function() {
     var name = $("#add-name").val();
     var position = $("#add-position").val();
     var phone = $("#add-phone").val();
-    if(name == '' || position == '' || phone == ''){
+    if(name === '' || position === '' || phone === ''){
         layer.msg("关键字段不能为空！", {
             time: 2000
         });

@@ -32,64 +32,11 @@ layui.config({
     });
 });
 
-//$(function() {
-//    roleListInit();
-//});
-//
-//function roleListInit(){
-//    var obj = {
-//        pageNum: 1,
-//        pageSize: 10
-//    };
-//    getRoleList(obj, function(pageObj, pages, total) {
-//        $('#pagination').paging({
-//            initPageNo: pageObj['pageNum'],
-//            totalPages: pages,
-//            totalCount: '合计' + total + '条数据',
-//            slideSpeed: 600,
-//            jump: false,
-//            callback: function(currentPage) {
-//                pageObj['pageNum'] = currentPage;
-//                getRechargeList(obj);
-//            }
-//        })
-//    });
-//}
-//
-//var rowStr =
-//    '<tr><td>#{id}</td><td>#{name}</td><td>#{privilege}</td><td><span class="mr30"><a href="/role/edit.html?id=#{id}" class="edit">编辑</a></span><a href="#" class="del" id="enabled#{id}" onclick="changeStatus(\'#{id}\')">#{enabled}</a></td></tr>';
-//
-//function getRoleList(obj, pageFun) {
-//    $.get(
-//        "/role/list",
-//        {
-//            "pageNum": obj['pageNum'],
-//            "pageSize": obj['pageSize']
-//        },
-//        function(data) {
-//            var list = data.list;
-//            var total = data.total;
-//            var pages = data.pages;
-//            $("#dataBody").empty();
-//            for(var d in list) {
-//                var row = rowStr.replace(/#{id}/g, list[d].id).replace("#{name}", list[d].name)
-//                .replace("#{privilege}", list[d].privilege)
-//                .replace("#{enabled}", list[d].enabled === 1 ? "禁用" : "启用");
-//                $("#dataBody").append(row);
-//            }
-//            if(typeof pageFun === 'function') {
-//                pageFun(obj, pages, total);
-//            }
-//        }
-//    );
-//}
-
 function changeStatus(id) {
     layer.confirm('是否确定？', {
         btn: ['确定', '取消'],
         yes: function() {
             $(this).click();
-
             $.ajax({
                 type: "POST",
                 url: "/role/changeStatus",
@@ -100,12 +47,12 @@ function changeStatus(id) {
                     if(data.errCode === '000000') {
                         var obj = data.dataMap;
                         if(obj.enabled === 1) {
-                            layer.msg("启用成功",{
+                            layer.msg("启用成功", {
                                 time: 2000
                             });
                         }
                         else {
-                            layer.msg("禁用成功",{
+                            layer.msg("禁用成功", {
                                 time: 2000
                             });
                         }
@@ -113,7 +60,6 @@ function changeStatus(id) {
                     }
                 }
             });
-
             layer.closeAll();
         },
         btn2: function() {
