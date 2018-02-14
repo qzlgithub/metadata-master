@@ -53,6 +53,7 @@ import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.Manager;
+import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.SysConfig;
@@ -69,6 +70,7 @@ import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
+import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
@@ -123,6 +125,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
     private ChargeService chargeService;
+    @Resource
+    private ProductMapper productMapper;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -1052,13 +1056,28 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        APIProduct product = APIProduct.DS_DATA_BLACKLIST;
+        ClientProduct clientProduct = clientProductMapper.findById(
+                openClientProductDTO.getProductRechargeDTO().getClientProductId());
+        if(clientProduct == null){
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        Product productById = productMapper.findById(clientProduct.getProductId());
+        if(productById == null){
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        APIProduct product = APIProduct.getByCode(productById.getCode());
+        if(product == null){
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
         String lockAccount = product.name() + "-C" + openClientProductDTO.getProductRechargeDTO().getClientId();
         String lockUUID = StringUtils.getUuid();
         boolean locked = false;
         try
         {
-            while(!locked)
+            while(true)
             {
                 locked = redisDao.lockProductAccount(lockAccount, lockUUID);
                 if(!locked)

@@ -233,8 +233,8 @@ public class DSDataAPI
                             mapTemp = new HashMap<>();
                             json = (JSONObject) o;
                             mapTemp.put("platformNo", json.getString("platformNo"));
-                            mapTemp.put("platformNo", json.getString("idCardTime"));
-                            mapTemp.put("platformNo", json.getString("phoneTime"));
+                            mapTemp.put("idCardTime", json.getString("idCardTime"));
+                            mapTemp.put("phoneTime", json.getString("phoneTime"));
                             list.add(mapTemp);
                         }
                         multipleApp.setPlatformDetails(list);
