@@ -196,30 +196,6 @@ public class PageController
         return view;
     }
 
-    /**
-     * 账户充值
-     */
-    @RequestMapping(value = "/client/account/recharge.html")
-    public ModelAndView gotoAccountRecharge(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/account-recharge");
-        view.addObject(Field.CLIENT_ID, id);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 账户消费
-     */
-    @RequestMapping(value = "/client/account/consume.html")
-    public ModelAndView gotoAccountConsumption(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/account-consume");
-        view.addObject(Field.CLIENT_ID, id);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
     @RequestMapping(value = "/config/recharge.html")
     public ModelAndView configRecharge()
     {

@@ -14,8 +14,8 @@ layui.use(['form', 'table', 'laydate'], function() {
     var main_table = table.render({
         elem: '#dataTable',
         page: true,
-        limit: 15,
-        limits: [15, 30, 50],
+        limit: 10,
+        limits: [10, 15, 30, 50],
         url: '/finance/bill',
         where: {
             keyword: $("#keyword").val(),
