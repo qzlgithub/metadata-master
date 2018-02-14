@@ -23,7 +23,7 @@ layui.config({
             {field: 'name', title: '姓名', width: '15%'},
             {field: 'phone', title: '联系电话', width: '10%'},
             {field: 'roleName', title: '角色', width: '15%'},
-            {title: '状态', width: '10%',templet: "#status-tpl"},
+            {title: '状态', width: '10%', templet: "#status-tpl"},
             {field: 'registerDate', title: '注册日期', sort: true, width: '10%'},
             {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right'}
         ]],

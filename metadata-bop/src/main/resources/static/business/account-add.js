@@ -21,9 +21,6 @@ layui.config({
         });
     });
 });
-$(function() {
-    //resetPrivilege();
-});
 $(".parent-privilege").click(function() {
     var pid = $(this).attr("id");
     if(!$(this).is(":checked")) {

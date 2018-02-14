@@ -252,7 +252,7 @@ public class PageController
     @RequestMapping(value = "/manager/index.html")
     public ModelAndView gotoManagerManagement()
     {
-        ModelAndView view = new ModelAndView("system-manage/account-management");
+        ModelAndView view = new ModelAndView("account/list");
         view.addObject(Field.ROLE_LIST, systemService.getValidRole());
         view.addAllObjects(RequestThread.getMap());
         return view;
@@ -261,7 +261,7 @@ public class PageController
     @RequestMapping(value = "/manager/addition.html")
     public ModelAndView gotoManagerAdditionPage()
     {
-        ModelAndView view = new ModelAndView("system-manage/account-add");
+        ModelAndView view = new ModelAndView("account/add");
         view.addObject(Field.ROLE_LIST, systemService.getValidRole());
         view.addAllObjects(RequestThread.getMap());
         return view;
@@ -272,7 +272,7 @@ public class PageController
     {
         BLResp resp = BLResp.build();
         managerService.getManagerInfo(managerId, resp);
-        ModelAndView view = new ModelAndView("system-manage/account-edit");
+        ModelAndView view = new ModelAndView("account/edit");
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getMap());
         return view;
