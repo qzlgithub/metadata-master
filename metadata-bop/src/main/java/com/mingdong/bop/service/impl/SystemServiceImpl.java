@@ -3,7 +3,6 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.SystemService;
-import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -321,33 +320,6 @@ public class SystemServiceImpl implements SystemService
             list.add(map);
         }
         return list;
-    }
-
-    @Override
-    public BLResp getIndustryList(Page page)
-    {
-        BLResp resp = BLResp.build();
-        DictIndustryListDTO dictIndustryList = remoteSystemService.getDictIndustryList(page);
-        resp.addData(Field.TOTAL, dictIndustryList.getTotal());
-        resp.addData(Field.PAGES, dictIndustryList.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        List<DictIndustryDTO> industryList = dictIndustryList.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>(industryList.size());
-        if(CollectionUtils.isNotEmpty(industryList))
-        {
-            for(DictIndustryDTO industry : industryList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, industry.getId() + "");
-                map.put(Field.ENABLED, industry.getEnabled() + "");
-                map.put(Field.PARENT_ID, industry.getParentId() + "");
-                map.put(Field.NAME, industry.getName());
-                list.add(map);
-            }
-        }
-        resp.addData(Field.LIST, list);
-        return resp;
     }
 
     @Override

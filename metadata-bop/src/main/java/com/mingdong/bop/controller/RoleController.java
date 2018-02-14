@@ -11,9 +11,10 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,14 +29,14 @@ public class RoleController
     @Resource
     private ManagerService managerService;
 
-    @RequestMapping(value = "privilege", method = RequestMethod.GET)
+    @GetMapping(value = "privilege")
     @ResponseBody
     public List<String> getRolePrivilege(@RequestParam(value = Field.ROLE_ID) Long roleId)
     {
         return managerService.getRolePrivilege(roleId);
     }
 
-    @RequestMapping(value = "addition", method = RequestMethod.POST)
+    @PostMapping(value = "addition")
     @ResponseBody
     public BLResp addRole(@RequestBody JSONObject jsonReq)
     {
@@ -55,7 +56,7 @@ public class RoleController
         return resp;
     }
 
-    @RequestMapping(value = "modification", method = RequestMethod.POST)
+    @PostMapping(value = "modification")
     @ResponseBody
     public BLResp editRole(@RequestBody JSONObject jsonReq)
     {
@@ -76,7 +77,7 @@ public class RoleController
         return resp;
     }
 
-    @RequestMapping(value = "changeStatus", method = RequestMethod.POST)
+    @PostMapping(value = "changeStatus")
     @ResponseBody
     public BLResp changeStatus(@RequestBody JSONObject jsonReq)
     {
@@ -93,7 +94,7 @@ public class RoleController
     /**
      * 获取管理账号角色列表
      */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     @ResponseBody
     public ListRes getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
@@ -104,7 +105,7 @@ public class RoleController
         return res;
     }
 
-    @RequestMapping(value = "check", method = RequestMethod.GET)
+    @GetMapping(value = "check")
     @ResponseBody
     public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
     {

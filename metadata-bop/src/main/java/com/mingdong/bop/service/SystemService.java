@@ -1,6 +1,5 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.common.model.Page;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
@@ -93,11 +92,6 @@ public interface SystemService
      * 根据条件获取行业分类列表
      */
     List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled);
-
-    /**
-     * 获取行业分类列表
-     */
-    BLResp getIndustryList(Page page);
 
     /**
      * 获取行业分类列表

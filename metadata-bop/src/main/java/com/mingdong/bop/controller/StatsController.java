@@ -11,7 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,7 +26,7 @@ public class StatsController
     @Resource
     private StatsService statsService;
 
-    @RequestMapping(value = "/client/clientList", method = RequestMethod.GET)
+    @GetMapping(value = "/client/clientList")
     @ResponseBody
     public ListRes getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
@@ -63,7 +62,7 @@ public class StatsController
         return jsonArray.toJSONString();
     }
 
-    @RequestMapping(value = "/client/rechargeList", method = RequestMethod.GET)
+    @GetMapping(value = "/client/rechargeList")
     @ResponseBody
     public ListRes getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
