@@ -76,7 +76,6 @@ function editProduct() {
         success: function(data) {
             if(data.errCode !== '000000') {
                 layer.msg(data.errMsg, {time: 2000});
-                isSubmit = false;
             }
             else {
                 layer.msg("修改成功", {
@@ -85,6 +84,7 @@ function editProduct() {
                     window.location.href = "/product/index.html";
                 });
             }
+            isSubmit = false;
         }
     });
 }
