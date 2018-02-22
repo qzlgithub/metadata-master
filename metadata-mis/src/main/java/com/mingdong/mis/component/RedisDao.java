@@ -1,10 +1,15 @@
 package com.mingdong.mis.component;
 
 import com.alibaba.fastjson.JSON;
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
+import com.mingdong.mis.constant.Trade;
 import com.mingdong.mis.model.UserAuth;
 import org.springframework.stereotype.Repository;
+
+import java.util.Date;
 
 @Repository
 public class RedisDao extends RedisBaseDao
@@ -59,8 +64,26 @@ public class RedisDao extends RedisBaseDao
         setEx(DB.THIRD_INFO, Key.DS_API_TOKEN, token, seconds);
     }
 
+    /**
+     * 生成交易流水号
+     *
+     * @param trade 交易类型
+     * @return 交易流水号
+     */
+    public String createTradeNo(Trade trade)
+    {
+        String dateStr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
+        Long num = incr(DB.SYSTEM, trade.getCode() + dateStr);
+        if(num == 1)
+        {
+            expire(DB.SYSTEM, trade.getCode() + dateStr, 86500L);
+        }
+        return trade.getCode() + dateStr + String.format("%06d", num);
+    }
+
     interface DB
     {
+        int SYSTEM = 0;
         int LOCK_CLIENT_PRODUCT = 1;
         int USER_AUTH = 2;
         int THIRD_INFO = 3;

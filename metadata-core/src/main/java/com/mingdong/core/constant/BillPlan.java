@@ -69,4 +69,9 @@ public enum BillPlan
     {
         return name;
     }
+
+    public boolean equals(Integer id)
+    {
+        return id != null && id.equals(this.id);
+    }
 }

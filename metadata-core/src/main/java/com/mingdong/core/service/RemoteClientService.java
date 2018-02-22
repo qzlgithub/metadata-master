@@ -17,6 +17,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
+import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -165,11 +166,6 @@ public interface RemoteClientService
     ClientDetailDTO getClientInfoForEdit(Long clientId);
 
     /**
-     * 客户开通产品
-     */
-    ResultDTO openClientProduct(OpenClientProductDTO openClientProductDTO);
-
-    /**
      * 客户续费产品
      */
     ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO);
@@ -182,4 +178,9 @@ public interface RemoteClientService
 
     ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
             Date toDate, Page page);
+
+    /**
+     * 开通客户产品服务
+     */
+    ResultDTO openProduct(ProductOpenDTO dto);
 }

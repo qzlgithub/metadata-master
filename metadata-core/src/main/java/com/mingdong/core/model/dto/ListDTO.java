@@ -36,6 +36,7 @@ public class ListDTO<T> implements Serializable
         return extradata;
     }
 
+    @SuppressWarnings("unused")
     public void setExtradata(Map<String, String> extradata)
     {
         this.extradata = extradata;

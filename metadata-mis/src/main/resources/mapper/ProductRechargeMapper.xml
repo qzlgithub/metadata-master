@@ -29,7 +29,7 @@
         from `product_recharge`
     </sql>
 
-    <insert id="add" parameterType="ProductRecharge">
+    <insert id="add" parameterType="ProductRecharge" useGeneratedKeys="true" keyProperty="id">
         insert into `product_recharge`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

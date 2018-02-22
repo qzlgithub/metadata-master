@@ -7,17 +7,15 @@ import org.springframework.cglib.beans.BeanMap;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class EntityUtils
 {
 
     /**
      * 类属性复制
      *
-     * @param source
-     * @param target
      * @param ignoreNull ，如果为true，则将源对象中属性为null的值不进行复制，
      *                   如果是整个对象属性一致的，则调用其他copyProperties方法，以提高效率
-     * @return
      */
     public static <T, K> K copyProperties(T source, K target, boolean ignoreNull)
     {
@@ -56,10 +54,6 @@ public class EntityUtils
 
     /**
      * 复制对象属性
-     *
-     * @param source
-     * @param target
-     * @return
      */
     public static <T, K> K copyProperties(T source, K target)
     {
@@ -86,10 +80,6 @@ public class EntityUtils
 
     /**
      * 复制对象属性
-     *
-     * @param source
-     * @param targetClass
-     * @return
      */
     public static <T, K> K copyProperties(T source, Class<K> targetClass)
     {

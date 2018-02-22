@@ -6,6 +6,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
@@ -30,6 +31,7 @@ import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -41,6 +43,7 @@ import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
+import com.mingdong.mis.constant.Trade;
 import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
@@ -991,36 +994,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    @Transactional
-    public ResultDTO openClientProduct(OpenClientProductDTO openClientProductDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(
-                openClientProductDTO.getProductRechargeDTO().getClientId(),
-                openClientProductDTO.getProductRechargeDTO().getProductId());
-        if(cp != null && TrueOrFalse.TRUE.equals(cp.getOpened()))
-        {
-            resultDTO.setResult(RestResult.PRODUCT_OPENED);
-            return resultDTO;
-        }
-        ProductRecharge pro = productRechargeMapper.findByContractNo(
-                openClientProductDTO.getProductRechargeDTO().getContractNo());
-        if(pro != null)
-        {
-            resultDTO.setResult(RestResult.CONTRACT_IS_EXIST);
-            return resultDTO;
-        }
-        ProductRecharge pr = new ProductRecharge();
-        EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
-        productRechargeMapper.add(pr);
-        cp = new ClientProduct();
-        EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
-        clientProductMapper.add(cp);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
     public ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
@@ -1281,6 +1254,101 @@ public class RemoteClientServiceImpl implements RemoteClientService
             dto.setList(list);
         }
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO openProduct(ProductOpenDTO dto)
+    {
+        Date current = new Date();
+        ResultDTO res = new ResultDTO();
+        Product p = productMapper.findById(dto.getProductId());
+        // 判断产品是否存在
+        if(p == null)
+        {
+            res.setResult(RestResult.PRODUCT_NOT_EXIST);
+            return res;
+        }
+        ClientProduct cp = clientProductMapper.findByClientAndProduct(dto.getClientId(), dto.getProductId());
+        // 判断客户是否已开通该产品
+        if(cp != null && TrueOrFalse.TRUE.equals(cp.getOpened()))
+        {
+            res.setResult(RestResult.PRODUCT_OPENED);
+            return res;
+        }
+        // 判断客户是否有权开通该产品
+        if(TrueOrFalse.TRUE.equals(p.getCustom()) && cp == null)
+        {
+            res.setResult(RestResult.SPECIFIED_PRODUCT);
+            return res;
+        }
+        Long clientProductId = cp != null ? cp.getId() : IDUtils.getClientProductId(param.getNodeId());
+        ProductRecharge recharge = new ProductRecharge();
+        recharge.setCreateTime(current);
+        recharge.setUpdateTime(current);
+        recharge.setClientProductId(clientProductId);
+        recharge.setClientId(dto.getClientId());
+        recharge.setProductId(dto.getProductId());
+        recharge.setTradeNo(redisDao.createTradeNo(Trade.OPEN));
+        recharge.setContractNo(dto.getContractNo());
+        recharge.setBillPlan(dto.getBillPlan());
+        recharge.setRechargeType(dto.getRechargeType());
+        recharge.setAmount(dto.getAmount());
+        recharge.setRemark(dto.getRemark());
+        recharge.setManagerId(dto.getManagerId());
+        if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+        {
+            recharge.setBalance(new BigDecimal(0));
+            recharge.setStartDate(dto.getFromDate());
+            recharge.setEndDate(dto.getToDate());
+        }
+        else
+        {
+            recharge.setBalance(dto.getAmount());
+            recharge.setUnitAmt(dto.getUnitAmt());
+        }
+        productRechargeMapper.add(recharge);
+        if(cp == null)
+        {
+            cp = new ClientProduct();
+            cp.setId(clientProductId);
+            cp.setCreateTime(current);
+            cp.setUpdateTime(current);
+            cp.setClientId(dto.getClientId());
+            cp.setProductId(dto.getProductId());
+            cp.setAppId(StringUtils.getUuid());
+            cp.setBillPlan(dto.getBillPlan());
+            cp.setLatestRechargeId(recharge.getId());
+            cp.setOpened(TrueOrFalse.TRUE);
+            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+            {
+                cp.setBalance(new BigDecimal(0));
+            }
+            else
+            {
+                cp.setBalance(dto.getAmount());
+            }
+            clientProductMapper.add(cp);
+        }
+        else
+        {
+            ClientProduct cpUpd = new ClientProduct();
+            cpUpd.setId(clientProductId);
+            cpUpd.setUpdateTime(current);
+            cpUpd.setBillPlan(dto.getBillPlan());
+            cpUpd.setLatestRechargeId(recharge.getId());
+            cpUpd.setOpened(TrueOrFalse.TRUE);
+            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+            {
+                cpUpd.setBalance(new BigDecimal(0));
+            }
+            else
+            {
+                cpUpd.setBalance(dto.getAmount());
+            }
+            clientProductMapper.updateSkipNull(cpUpd);
+        }
+        return res;
     }
 
     /**
