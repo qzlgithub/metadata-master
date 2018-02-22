@@ -1,21 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>客户中心 - 元数据</title>
     <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/static/css/site.min.css" rel="stylesheet"/>
-    <link href="/static/css/animate.min.css" rel="stylesheet"/>
-    <link href="/static/css/base.css" rel="stylesheet"/>
-    <link href="/static/css/common.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/site.min.css"/>
+    <link rel="stylesheet" href="/static/css/animate.min.css"/>
+    <link rel="stylesheet" href="/static/css/base.css"/>
+    <link rel="stylesheet" href="/static/css/common.css"/>
     <link rel="stylesheet" href="/static/css/login.css" media="all"/>
 </head>
 <body id="login" style="background-color:#2273c6">
 <div id="login-wrapper" class="png_bg">
-    <!--header-->
     <div class="navbar navbar-inverse navbar-fixed-top mb0 header1" style="background: none;border-bottom-width:0px;">
         <div class="container header-mt10">
             <div class="navbar-header">
@@ -32,29 +31,29 @@
             </div>
         </div>
     </div>
-    <!--header end-->
     <div id="login-top"></div>
     <div id="login-content" class="pt35 important">
         <div class="tc fz-24 mb15">登录</div>
         <p class="clearfix">
             <label>用户名：</label>
-            <input class="text-input" type="text" id="username"/>
+            <input class="text-input" type="text" id="username" title=""/>
         </p>
         <p class="clearfix mt25 mb25 position-r" id="pwd-show">
             <label>密　码：</label>
-            <input class="text-input" type="password" id="enc-passcode" value=""/>
+            <input class="text-input" type="password" id="enc-passcode" title=""/>
             <i class="close-eye icon" id="hide-pass" style="right: 11px;"></i>
         </p>
         <p class="clearfix mt25 mb25 position-r" id="pwd-hide" style="display: none;">
             <label>密　码：</label>
-            <input class="text-input" type="text" id="dec-passcode" value=""/>
+            <input class="text-input" type="text" id="dec-passcode" title=""/>
             <i class="open-eye icon" id="show-pass" style="right: 11px;"></i>
         </p>
         <p class="clearfix">
             <label>验证码：</label>
-            <input type="text" id="captcha-code" class="text-input text_auth" maxlength="6"/>
+            <input type="text" id="captcha-code" class="text-input text_auth" maxlength="6" title=""/>
             <a class="img_auth">
-                <img id='captcha' align='absmiddle' onclick="changeImage()" th:src="${imageCaptcha}"/></a>
+                <img id='captcha' align='absmiddle' onclick="changeImage()" th:src="${imageCaptcha}"/>
+            </a>
         </p>
         <p class="mt20" style="padding-left: 66px;">
             <input id="user-login" class="button" type="button" value="登 录"

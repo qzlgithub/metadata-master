@@ -1,25 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8"/>
     <title>客户中心 - 元数据</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
-    <meta name="author" content=""/>
-    <meta name="robots" content="index,follow"/>
-    <meta name="application-name" content="bootcss.com"/>
-    <meta property="qc:admins" content="1603466166416277433363757477167"/>
-    <!-- Site CSS -->
     <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/static/css/site.min.css" rel="stylesheet"/>
-    <link href="/static/css/animate.min.css" rel="stylesheet"/>
-    <link href="/static/css/base.css" rel="stylesheet"/>
-    <link href="/static/css/style.css" rel="stylesheet"/>
-    <link href="/static/css/common.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/site.min.css"/>
+    <link rel="stylesheet" href="/static/css/animate.min.css"/>
+    <link rel="stylesheet" href="/static/css/base.css"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <link rel="stylesheet" href="/static/css/common.css"/>
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
@@ -44,7 +36,7 @@
                 </p>
                 <ul class="user-list clearfix">
                     <li th:each="o : ${subUserList}">
-                        <p><img src="../images/account-img.png"/></p>
+                        <p><img src="../images/account-img.png" alt=""/></p>
                         <p th:text="${o.name}"></p>
                     </li>
                 </ul>
@@ -86,7 +78,8 @@
                         <p class="fz-20 col5 tc important" th:if="${o.billPlan != 1}"
                            th:text="${o.unitAmt} + '元/次'"></p>
                         <p class="tc mb15 mt10">
-                            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes">
+                            <a target="_blank"
+                               href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes">
                                 <i class="icon kefu mr5"></i>续约</a> ｜
                             <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
                     </li>
@@ -99,7 +92,7 @@
                 <ul class="row mr0 ml0">
                     <li th:each="o : ${toOpenList}">
                         <div class="serve-list-title">
-                            <md th:text="${o.name}"></md>
+                            <span th:text="${o.name}"></span>
                             <span class="fr">未开通</span></div>
                         <p class="col2 tl fz-14 p10 important" th:text="${o.remark}"></p>
                         <p class="tc mb15 mt10">
