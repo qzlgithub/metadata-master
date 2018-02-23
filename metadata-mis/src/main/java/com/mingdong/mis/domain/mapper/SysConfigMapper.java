@@ -13,4 +13,6 @@ public interface SysConfigMapper
     SysConfig findByName(String name);
 
     List<SysConfig> getAll();
+
+    String getSubAccountMaximum();
 }

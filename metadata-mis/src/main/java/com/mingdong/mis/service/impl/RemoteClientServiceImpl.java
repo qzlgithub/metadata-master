@@ -34,7 +34,6 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
@@ -259,39 +258,33 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public UserListDTO getSubUserList(Long clientId, Long primaryUserId)
+    public ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId)
     {
+        ListDTO<SubUserDTO> res = new ListDTO<>();
+        // 查询子账号个数限制
+        String max = sysConfigMapper.getSubAccountMaximum();
+        res.addExtra(Field.SUB_ACCOUNT_MAX, max);
+
         Client client = clientMapper.findById(clientId);
-        UserListDTO userListDTO = new UserListDTO();
-        if(client == null)
+        if(client == null || !userId.equals(client.getPrimaryUserId()))
         {
-            userListDTO.getResultDTO().setResult(RestResult.INTERNAL_ERROR);
-            return userListDTO;
+            return res.createDefault();
         }
-        else if(!primaryUserId.equals(client.getPrimaryUserId()))
-        {
-            userListDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
-            return userListDTO;
-        }
+        List<ClientUser> userList = clientUserMapper.getAvailableListByClient(clientId);
         List<SubUserDTO> list = new ArrayList<>();
-        List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
-        for(ClientUser cu : userList)
+        for(ClientUser o : userList)
         {
-            if(!cu.getId().equals(client.getPrimaryUserId()))
-            {
-                SubUserDTO dto = new SubUserDTO();
-                dto.setUserId(cu.getId());
-                dto.setUsername(cu.getUsername());
-                dto.setName(cu.getName());
-                dto.setPhone(cu.getPhone());
-                dto.setEnabled(cu.getEnabled());
-                list.add(dto);
-            }
+            SubUserDTO su = new SubUserDTO();
+            su.setUserId(o.getId());
+            su.setUsername(o.getUsername());
+            su.setName(o.getName());
+            su.setPhone(o.getPhone());
+            su.setEnabled(o.getEnabled());
+            list.add(su);
         }
-        SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
-        userListDTO.setAllowedQty(config == null ? 5 : Integer.parseInt(config.getValue()));
-        userListDTO.setUserList(list);
-        return userListDTO;
+        res.setTotal(userList.size());
+        res.setList(list);
+        return res;
     }
 
     @Override

@@ -19,4 +19,5 @@ public interface Field
     String REQUEST_NO = "requestNo";
     String TOTAL_AMT = "totalAmt";
     String TOTAL_FEE = "totalFee";
+    String SUB_ACCOUNT_MAX = "subAccountMax";
 }

@@ -19,9 +19,9 @@ import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.model.dto.UserListDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -49,9 +49,12 @@ public interface RemoteClientService
     ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
 
     /**
-     * 获取客户子帐号列表
+     * 查询客户子账号列表
+     *
+     * @param clientId 客户ID
+     * @param userId   客户账户ID，非客户主账号返回空列表
      */
-    UserListDTO getSubUserList(Long clientId, Long primaryUserId);
+    ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId);
 
     /**
      * 新增客户子帐号

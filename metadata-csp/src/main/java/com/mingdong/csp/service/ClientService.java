@@ -29,7 +29,7 @@ public interface ClientService
     /**
      * 子账号列表
      */
-    void getAccountList(Long clientId, Long primaryUserId, BLResp resp);
+    void getClientSubAccountList(ListRes res);
 
     /**
      * 禁用启用子账号

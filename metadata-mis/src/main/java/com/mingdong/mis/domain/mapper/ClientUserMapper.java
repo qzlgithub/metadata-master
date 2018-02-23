@@ -31,4 +31,6 @@ public interface ClientUserMapper
             @Param("idList") List<Long> idList);
 
     List<ClientUser> getListByClientsAndPrimary(@Param("clientIdList") List<Long> clientIdList);
+
+    List<ClientUser> getAvailableListByClient(Long clientId);
 }

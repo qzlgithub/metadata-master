@@ -17,7 +17,6 @@ import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.model.dto.UserListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
@@ -83,16 +82,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getAccountList(Long clientId, Long primaryUserId, BLResp resp)
+    public void getClientSubAccountList(ListRes res)
     {
-        UserListDTO dto = clientApi.getSubUserList(clientId, primaryUserId);
-        if(dto.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.result(dto.getResultDTO().getResult());
-            return;
-        }
+        ListDTO<SubUserDTO> listDTO = clientApi.getSubAccountList(RequestThread.getClientId(),
+                RequestThread.getUserId());
+        res.addExtra(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
+        res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
-        for(SubUserDTO o : dto.getUserList())
+        for(SubUserDTO o : listDTO.getList())
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.USER_ID, o.getUserId() + "");
@@ -102,8 +99,7 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.ENABLED, o.getEnabled());
             list.add(m);
         }
-        resp.addData(Field.ALLOWED_QTY, dto.getAllowedQty());
-        resp.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override
@@ -145,16 +141,17 @@ public class ClientServiceImpl implements ClientService
     {
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
-            UserListDTO userListDTO = clientApi.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
-            List<Map<String, Object>> subUserList = new ArrayList<>();
-            for(SubUserDTO u : userListDTO.getUserList())
+            ListDTO<SubUserDTO> subUserList = clientApi.getSubAccountList(RequestThread.getClientId(),
+                    RequestThread.getUserId());
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(SubUserDTO u : subUserList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.NAME, u.getName());
-                subUserList.add(map);
+                list.add(map);
             }
-            resp.addData(Field.ALLOWED_QTY, userListDTO.getAllowedQty());
-            resp.addData(Field.SUB_USER_LIST, subUserList);
+            resp.addData(Field.ALLOWED_QTY, subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX));
+            resp.addData(Field.SUB_USER_LIST, list);
         }
         ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), null, null, null);
         List<Map<String, Object>> opened = new ArrayList<>();

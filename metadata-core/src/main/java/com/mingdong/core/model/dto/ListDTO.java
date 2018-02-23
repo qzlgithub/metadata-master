@@ -1,6 +1,7 @@
 package com.mingdong.core.model.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,5 +50,12 @@ public class ListDTO<T> implements Serializable
             extradata = new HashMap<>();
         }
         extradata.put(k, v);
+    }
+
+    public ListDTO<T> createDefault()
+    {
+        total = 0;
+        list = new ArrayList<>();
+        return this;
     }
 }

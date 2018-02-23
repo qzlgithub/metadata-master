@@ -140,12 +140,12 @@ public class ClientController
      * 获取子账号列表
      */
     @LoginRequired
-    @GetMapping(value = "account/list")
-    public BLResp getAccountList()
+    @GetMapping(value = "/sub-account/list")
+    public ListRes getClientSubAccountList()
     {
-        BLResp resp = BLResp.build();
-        clientService.getAccountList(RequestThread.getClientId(), RequestThread.getUserId(), resp);
-        return resp;
+        ListRes res = new ListRes();
+        clientService.getClientSubAccountList(res);
+        return res;
     }
 
     /**

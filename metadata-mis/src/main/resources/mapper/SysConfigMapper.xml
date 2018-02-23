@@ -50,4 +50,10 @@
     <select id="getAll" resultMap="BaseResultMap">
         <include refid="select_all" />
     </select>
+
+    <select id="getSubAccountMaximum" resultType="String">
+        select `value`
+        from `sys_config`
+        where `name` = 'CLIENT_SUB_USER_QTY'
+    </select>
 </mapper>

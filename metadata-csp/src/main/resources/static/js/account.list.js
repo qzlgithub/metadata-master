@@ -14,7 +14,7 @@ var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username
 
 function getAccountList() {
     $.get(
-        "/client/account/list",
+        "/client/sub-account/list",
         {},
         function(data) {
             if(data.errCode === '000000') {

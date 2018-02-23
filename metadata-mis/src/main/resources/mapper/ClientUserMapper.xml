@@ -136,4 +136,9 @@
         <if test="enabled != null">and `enabled` = #{enabled}</if>
         <if test="deleted != null">and `deleted` = #{deleted}</if>
     </select>
+
+    <select id="getAvailableListByClient" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `client_id` = #{clientId} and `deleted` = 0
+    </select>
 </mapper>
