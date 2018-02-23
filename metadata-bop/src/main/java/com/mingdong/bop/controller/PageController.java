@@ -158,7 +158,7 @@ public class PageController
      * 页面：客户详情页面
      */
     @RequestMapping(value = "/client/detail.html")
-    public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
+    public ModelAndView gotoClientDetail(@RequestParam(value = Field.CLIENT_ID) Long clientId)
     {
         BLResp resp = BLResp.build();
         clientService.findClientDetail(clientId, resp);

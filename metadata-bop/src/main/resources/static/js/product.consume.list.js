@@ -1,7 +1,7 @@
-var form, message, table, main_table,laydate;
+var form, message, table, main_table, laydate;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'form', 'table', 'message','laydate'], function() {
+}).use(['app', 'form', 'table', 'message', 'laydate'], function() {
     var app = layui.app;
     app.set({type: 'iframe'}).init();
     message = layui.message;
@@ -10,14 +10,15 @@ layui.config({
     laydate = layui.laydate;
     laydate.render({
         elem: '#start-time'
-    });laydate.render({
+    });
+    laydate.render({
         elem: '#end-time'
     });
     main_table = table.render({
         elem: '#data-table',
         page: true,
-        limit: 3,
-        limits: [3, 15, 30, 50],
+        limit: 10,
+        limits: [10, 15, 30, 50],
         url: '/client/consumeList',
         where: {
             productId: $("#product").val(),
@@ -63,7 +64,6 @@ layui.config({
         });
     });
 });
-
 //var message;
 //layui.config({
 //    base: '../../static/build/js/'
@@ -170,7 +170,6 @@ layui.config({
 //            }
 //        });
 //}
-
 function consumeOutPrint() {
     var productId = $("#product").val().trim();
     var clientId = $("#client-id").val().trim();
