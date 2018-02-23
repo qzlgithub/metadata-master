@@ -195,6 +195,8 @@ $('#scopeLiId span').click(function(){
         $(this).removeClass('active');
     });
     $(this).addClass('active');
+    var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
+    $("#scopeType").val(scopeType);
     showChart();
     main_table.reload({
         where: {

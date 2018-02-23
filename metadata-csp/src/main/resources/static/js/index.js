@@ -7,9 +7,9 @@ layui.config({
     //将message设置为全局以便子页面调用
     message = layui.message;
     //主入口
-    app.set({
-        type: 'iframe'
-    }).init();
+    //app.set({
+    //    type: 'iframe'
+    //}).init();
 });
 $(document).keydown(function(e) {
     if(e.keyCode === 13) {

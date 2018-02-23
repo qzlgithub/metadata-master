@@ -1,6 +1,5 @@
 package com.mingdong.bop.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
@@ -51,6 +50,7 @@ import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
