@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DictRechargeTypeDTO implements Serializable
 {
-    private Long id;
+    private Integer id;
     private Date createTime;
     private Date updateTime;
     private String name;
@@ -27,12 +27,12 @@ public class DictRechargeTypeDTO implements Serializable
         return resultDTO;
     }
 
-    public Long getId()
+    public Integer getId()
     {
         return id;
     }
 
-    public void setId(Long id)
+    public void setId(Integer id)
     {
         this.id = id;
     }

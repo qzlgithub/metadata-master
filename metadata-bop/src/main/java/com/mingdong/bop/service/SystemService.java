@@ -1,6 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
 import java.util.List;
@@ -41,17 +42,22 @@ public interface SystemService
     /**
      * 软删充值类型
      */
-    void dropRechargeType(Long rechargeTypeId, BLResp resp);
+    void dropRechargeType(Integer rechargeTypeId);
 
     /**
      * 根据充值类型id获取充值类型信息
      */
-    void getRechargeTypeInfo(Long rechargeTypeId, BLResp resp);
+    void getRechargeTypeInfo(Integer rechargeTypeId, BLResp resp);
 
     /**
      * 根据充值类型id更改充值类型信息
      */
-    void updateRechargeType(Long id, String name, String remark, BLResp resp);
+    void editRechargeType(Integer rechargeTypeId, String name, String remark, BLResp resp);
+
+    /**
+     * 修改充值类型状态
+     */
+    void enableRechargeType(Integer rechargeTypeId, Integer enabled, BLResp resp);
 
     /**
      * 获取顶级的行业分类列表
@@ -114,11 +120,6 @@ public interface SystemService
     void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, BLResp resp);
 
     /**
-     * 修改充值类型状态
-     */
-    void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp);
-
-    /**
      * 根据行业分类id更改状态
      */
     void changeIndustryStatus(Long industryTypeId, Integer enabled, BLResp resp);
@@ -132,4 +133,9 @@ public interface SystemService
      * 获取系统参数
      */
     Map<String, Object> getSettings();
+
+    /**
+     * 获取系统配置-充值类型字典列表
+     */
+    void getRechargeTypeList(ListRes res);
 }

@@ -26,52 +26,17 @@
             <a><cite>充值类型</cite></a>
         </div>
         <div class="p20">
-            <div class="clearfix mt20"><span href="account-add.html" class="fr add-button cp" id="addclass">添加类型</span>
+            <div class="clearfix mt20">
+                <span class="fr add-button cp" id="addBt">添加类型</span>
             </div>
-            <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
-                <thead>
-                <tr>
-                    <th>编号</th>
-                    <th>类型名称</th>
-                    <th>备注说明</th>
-                    <th>是否显示</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="dataBody">
-                <tr th:each="o : ${list}">
-                    <td th:text="${o.id}"></td>
-                    <td th:text="${o.name}"></td>
-                    <td th:text="${o.remark}"></td>
-                    <td>
-                        <div class="layui-form" th:attr="obj-id=${o.id}">
-                            <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                   th:checked="${o.enabled == 1}"/>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="mr30">
-                            <em href="#" class="edit cp edit-recharge" th:attr="recharge-id=${o.id}">编辑</em>
-                        </span>
-                        <a href="#" class="del drop-recharge" th:attr="recharge-id=${o.id}">删除</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="layui-table-tool mt20">
-                <div class="layui-inline layui-table-page" id="layui-table-page1">
-                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
-                        <span id="totalTxt" class="layui-laypage-count" th:text="'共 ' + ${total} + '条'"></span>
-                    </div>
-                </div>
-            </div>
+            <table class="layui-table" lay-filter="main-table" id="dataTable"></table>
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<div id="add-manage" class="modal">
+<div id="addDiv" class="modal">
     <div class="layui-layer-title">新增类型</div>
     <div class="mb30 layui-form">
         <div class="m30">
@@ -91,13 +56,13 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" onclick="saveNewRechargeType()">添加</button>
+                <button class="layui-btn" onclick="add_recharge_type()">添加</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="edit-manage" class="modal">
+<div id="editDiv" class="modal">
     <div class="layui-layer-title">编辑类型</div>
     <div class="mb30">
         <div class="m30">
@@ -117,7 +82,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" id="editId"/>
-                <button class="layui-btn" onclick="updateRechargeType()">保存</button>
+                <button class="layui-btn" onclick="edit_recharge_type()">保存</button>
             </div>
         </div>
     </div>
@@ -130,6 +95,18 @@
 <script type="text/javascript" src="/static/js/logout.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
-<script type="text/javascript" src="/static/js/recharge.manage.js"></script>
+<script type="text/javascript" src="/static/business/dict-recharge.js"></script>
+
+<script type="text/html" id="statusTpl">
+    {{# if(d.status === 1){ }}
+    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}" checked=""/>
+    {{# } else { }}
+    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}"/>
+    {{# } }}
+</script>
+<script type="text/html" id="operationBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 </body>
 </html>

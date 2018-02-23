@@ -14,8 +14,8 @@ layui.use(['table', 'form', 'laydate'], function() {
     main_table = table.render({
         elem: '#data-table',
         page: true,
-        limit: 15,
-        limits: [15, 30, 50],
+        limit: 10,
+        limits: [10, 15, 30, 50],
         url: '/finance/recharge',
         where: {
             keyword: $("#keyword").val(),

@@ -1,13 +1,14 @@
 package com.mingdong.core.service;
 
-import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -40,17 +41,7 @@ public interface RemoteSystemService
     /**
      * 根据充值类型id获取充值类型
      */
-    DictRechargeTypeDTO getDictRechargeTypeById(Long rechargeTypeId);
-
-    /**
-     * 根据name获取充值类型
-     */
-    DictRechargeTypeDTO getDictRechargeTypeByName(String name);
-
-    /**
-     * 根据充值类型id更改充值类型
-     */
-    ResultDTO updateDictRechargeTypeById(DictRechargeTypeDTO rechargeType);
+    DictRechargeTypeDTO getDictRechargeTypeById(Integer rechargeTypeId);
 
     /**
      * 根据角色id获取权限信息列表
@@ -71,11 +62,6 @@ public interface RemoteSystemService
      * 根据状态获取充值类型列表
      */
     DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted);
-
-    /**
-     * 获取行业分类列表
-     */
-    DictIndustryListDTO getDictIndustryList(Page page);
 
     /**
      * 根据级数获取权限列表
@@ -112,7 +98,7 @@ public interface RemoteSystemService
     /**
      * 软删充值类型
      */
-    ResultDTO dropRechargeType(DictRechargeTypeDTO rechargeType);
+    void setRechargeTypeDeleted(Integer rechargeTypeId);
 
     /**
      * 修改权限信息
@@ -122,7 +108,7 @@ public interface RemoteSystemService
     /**
      * 新增or修改充值类型备注
      */
-    ResultDTO addOrUpdateRechargeTypeByName(String name, String remark);
+    ResultDTO addRechargeType(String name, String remark);
 
     /**
      * 新增or修改系统参数
@@ -130,12 +116,17 @@ public interface RemoteSystemService
     ResultDTO addOrUpdateSetting(List<SysConfigDTO> sysConfigDTOList);
 
     /**
-     * 修改充值类型状态
-     */
-    ResultDTO changeRechargeStatus(Long rechargeTypeId, Integer enabled);
-
-    /**
      * 修改行业分类状态
      */
     ResultDTO changeIndustryStatus(Long industryTypeId, Integer enabled);
+
+    /**
+     * 查询充值类型列表
+     */
+    ListDTO<RechargeTypeDTO> getRechargeList();
+
+    /**
+     * 根据ID编辑充值类型
+     */
+    ResultDTO editRechargeType(RechargeTypeDTO rechargeTypeDTO);
 }

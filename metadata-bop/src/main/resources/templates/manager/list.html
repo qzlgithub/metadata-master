@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta corpName="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/manager/index.html">系统管理</a>
+            <a href="/manager/index.html">账户管理</a>
+            <a><cite>账户管理</cite></a>
+        </div>
+        <div class="p20 layui-form">
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    角色：
+                    <div class="inline-flex" style="width: 180px">
+                    <select id="roleId" name="roleId" class="select-list">
+                        <option value="">全部</option>
+                        <option th:each="role:${roleList}" th:value="${role.roleId}"
+                                th:text="${role.roleName}"></option>
+                    </select>
+                    </div>
+                </li>
+                <li>
+                    状态：
+                    <div class="inline-flex" style="width: 120px">
+                    <select id="enabled" name="enabled" class="select-list">
+                        <option value="">全部</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                    </div>
+                </li>
+                <li>
+                    <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
+                </li>
+            </ul>
+            <div class="clearfix mt20"><a th:href="@{/manager/addition.html}" class="layui-btn fr layui-btn-normal">添加账号</a></div>
+            <table class="layui-table" id="data-table"></table>
+        </div>
+    </div>
+
+    <div class="layui-footer" th:include="common :: copyright"></div>
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/js/account.management.js"></script>
+<script type="text/html" id="operation-bar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/manager/edit.html?id={{d.id}}">编辑</a>
+    {{# if(d.enabled === 1) { }}
+    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs"
+       lay-event="disable" data-id="{{d.id}}">禁用
+    </a>
+    {{# } else { }}
+    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="enable"
+       data-id="{{d.id}}">启用
+    </a>
+    {{# } }}
+</script>
+<script type="text/html" id="status-tpl">
+    {{# if(d.enabled === 1){ }}
+    <div>正常</div>
+    {{# } else { }}
+    <div>已禁用</div>
+    {{# } }}
+</script>
+
+</body>
+</html>

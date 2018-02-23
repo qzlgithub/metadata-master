@@ -3,16 +3,20 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
+import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleListDTO;
@@ -119,18 +123,13 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void dropRechargeType(Long rechargeTypeId, BLResp resp)
+    public void dropRechargeType(Integer rechargeTypeId)
     {
-        DictRechargeTypeDTO rechargeType = new DictRechargeTypeDTO();
-        rechargeType.setId(rechargeTypeId);
-        rechargeType.setUpdateTime(new Date());
-        rechargeType.setDeleted(TrueOrFalse.TRUE);
-        ResultDTO resultDTO = remoteSystemService.dropRechargeType(rechargeType);
-        resp.result(resultDTO.getResult());
+        remoteSystemService.setRechargeTypeDeleted(rechargeTypeId);
     }
 
     @Override
-    public void getRechargeTypeInfo(Long rechargeTypeId, BLResp resp)
+    public void getRechargeTypeInfo(Integer rechargeTypeId, BLResp resp)
     {
         DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
         resp.addData(Field.ID, rechargeTypeId + "");
@@ -142,23 +141,24 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void updateRechargeType(Long id, String name, String remark, BLResp resp)
+    public void editRechargeType(Integer rechargeTypeId, String name, String remark, BLResp resp)
     {
-        DictRechargeTypeDTO org = remoteSystemService.getDictRechargeTypeByName(name);
-        if(org != null && !id.equals(org.getId()))
-        {
-            resp.result(RestResult.CATEGORY_NAME_EXIST);
-            return;
-        }
-        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(id);
-        if(rechargeType != null)
-        {
-            rechargeType.setUpdateTime(new Date());
-            rechargeType.setName(name);
-            rechargeType.setRemark(remark);
-            remoteSystemService.updateDictRechargeTypeById(rechargeType);
-        }
+        RechargeTypeDTO rt = new RechargeTypeDTO();
+        rt.setId(rechargeTypeId);
+        rt.setName(name);
+        rt.setRemark(remark);
+        ResultDTO res = remoteSystemService.editRechargeType(rt);
+        resp.result(res.getResult());
+    }
 
+    @Override
+    public void enableRechargeType(Integer rechargeTypeId, Integer enabled, BLResp resp)
+    {
+        RechargeTypeDTO rt = new RechargeTypeDTO();
+        rt.setId(rechargeTypeId);
+        rt.setEnabled(enabled);
+        ResultDTO res = remoteSystemService.editRechargeType(rt);
+        resp.result(res.getResult());
     }
 
     @Override
@@ -301,8 +301,8 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addRechargeType(String name, String remark, BLResp resp)
     {
-        ResultDTO resultDTO = remoteSystemService.addOrUpdateRechargeTypeByName(name, remark);
-        resp.result(resultDTO.getResult());
+        ResultDTO res = remoteSystemService.addRechargeType(name, remark);
+        resp.result(res.getResult());
     }
 
     @Override
@@ -390,13 +390,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void changeRechargeStatus(Long rechargeTypeId, Integer enabled, BLResp resp)
-    {
-        ResultDTO resultDTO = remoteSystemService.changeRechargeStatus(rechargeTypeId, enabled);
-        resp.result(resultDTO.getResult());
-    }
-
-    @Override
     public void changeIndustryStatus(Long industryTypeId, Integer enabled, BLResp resp)
     {
         ResultDTO resultDTO = remoteSystemService.changeIndustryStatus(industryTypeId, enabled);
@@ -413,6 +406,25 @@ public class SystemServiceImpl implements SystemService
     public Map<String, Object> getSettings()
     {
         return remoteSystemService.getSettingData();
+    }
+
+    @Override
+    public void getRechargeTypeList(ListRes res)
+    {
+        ListDTO<RechargeTypeDTO> dto = remoteSystemService.getRechargeList();
+        res.setTotal(dto.getTotal());
+        List<Map<String, Object>> list = new ArrayList<>();
+        for(RechargeTypeDTO o : dto.getList())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, o.getId());
+            m.put(Field.NAME, o.getName());
+            m.put(Field.REMARK, o.getRemark());
+            m.put(Field.STATUS, o.getEnabled());
+            m.put(Field.ADD_AT, DateUtils.format(o.getAddAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            list.add(m);
+        }
+        res.setList(list);
     }
 
     private void cacheAllIndustryData()

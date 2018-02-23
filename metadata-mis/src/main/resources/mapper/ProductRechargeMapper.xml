@@ -11,7 +11,7 @@
         <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
         <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
-        <result column="recharge_type" property="rechargeType" jdbcType="TINYINT" />
+        <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mingdong.mis.domain.mapper.DictRechargeTypeMapper">
     <resultMap id="BaseResultMap" type="DictRechargeType">
-        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="INTEGER" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <result column="name" property="name" jdbcType="VARCHAR" />
@@ -63,7 +63,7 @@
         where `id` = #{id}
     </update>
 
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+    <select id="findById" parameterType="Integer" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `name`, `remark`, `enabled`, `deleted`
         from `dict_recharge_type`
@@ -78,10 +78,15 @@
     </select>
 
     <select id="getListByStatus" resultMap="BaseResultMap">
-        <include refid="select_all"/>
+        <include refid="select_all" />
         <where>
             <if test="enabled != null">`enabled` = #{enabled}</if>
             <if test="deleted != null">and `deleted` = #{deleted}</if>
         </where>
+    </select>
+
+    <select id="getAvailableList" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `deleted` = 0 order by `create_time` asc
     </select>
 </mapper>

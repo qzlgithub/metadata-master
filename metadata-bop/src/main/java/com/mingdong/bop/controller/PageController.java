@@ -199,10 +199,7 @@ public class PageController
     @RequestMapping(value = "/config/recharge.html")
     public ModelAndView configRecharge()
     {
-        ModelAndView view = new ModelAndView("system-manage/recharge-manage");
-        List<Map<String, Object>> list = systemService.getRechargeTypeList(null, TrueOrFalse.FALSE);
-        view.addObject(Field.LIST, list);
-        view.addObject(Field.TOTAL, list.size());
+        ModelAndView view = new ModelAndView("dict/recharge");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

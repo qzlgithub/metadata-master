@@ -95,11 +95,6 @@ public interface RemoteProductService
     List<ProductClientDetailDTO> getProductInfoList(Long clientId);
 
     /**
-     * 新增产品，校验
-     */
-    ResultDTO addProduct(NewProductDTO newProductDTO);
-
-    /**
      * 修改产品，校验
      */
     ResultDTO updateProductSkipNull(NewProductDTO newProductDTO);

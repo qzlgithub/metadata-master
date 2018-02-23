@@ -1,16 +1,15 @@
-package com.mingdong.mis.domain.entity;
+package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DictRechargeType
+public class RechargeTypeDTO implements Serializable
 {
     private Integer id;
-    private Date createTime;
-    private Date updateTime;
     private String name;
     private String remark;
     private Integer enabled;
-    private Integer deleted;
+    private Date addAt;
 
     public Integer getId()
     {
@@ -20,26 +19,6 @@ public class DictRechargeType
     public void setId(Integer id)
     {
         this.id = id;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
     }
 
     public String getName()
@@ -72,15 +51,13 @@ public class DictRechargeType
         this.enabled = enabled;
     }
 
-    public Integer getDeleted()
+    public Date getAddAt()
     {
-        return deleted;
+        return addAt;
     }
 
-    public void setDeleted(Integer deleted)
+    public void setAddAt(Date addAt)
     {
-        this.deleted = deleted;
+        this.addAt = addAt;
     }
 }
-
-

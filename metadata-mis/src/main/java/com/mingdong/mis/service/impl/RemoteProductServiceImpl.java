@@ -33,7 +33,6 @@ import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
-import com.mingdong.mis.domain.entity.DictProductType;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductInfo;
@@ -506,45 +505,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
             list.add(o);
         }
         return list;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO addProduct(NewProductDTO newProductDTO)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        // 1. 校验产品类型是否有效
-        DictProductType type = dictProductTypeMapper.findById(newProductDTO.getProductDTO().getType().longValue());
-        if(type == null)
-        {
-            resultDTO.setResult(RestResult.INVALID_PRODUCT_TYPE);
-            return resultDTO;
-        }
-        // 2. 校验产品编码是否重复
-        Product product = productMapper.findByCode(newProductDTO.getProductDTO().getCode());
-        if(product != null)
-        {
-            resultDTO.setResult(RestResult.DUPLICATE_PRODUCT_CODE);
-            return resultDTO;
-        }
-        // 3. 校验产品名是否重复
-        product = productMapper.findByName(newProductDTO.getProductDTO().getName());
-        if(product != null)
-        {
-            resultDTO.setResult(RestResult.PRODUCT_NAME_EXIST);
-            return resultDTO;
-        }
-        product = new Product();
-        EntityUtils.copyProperties(newProductDTO.getProductDTO(), product);
-        productMapper.add(product);
-        if(newProductDTO.getProductTxtDTO() != null)
-        {
-            ProductTxt productTxt = new ProductTxt();
-            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
-            productTxtMapper.add(productTxt);
-        }
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
