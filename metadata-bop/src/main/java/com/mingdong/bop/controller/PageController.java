@@ -290,7 +290,7 @@ public class PageController
     @RequestMapping(value = "/role/index.html")
     public ModelAndView gotoRoleIndex()
     {
-        ModelAndView view = new ModelAndView("system-manage/group-manage");
+        ModelAndView view = new ModelAndView("role/list");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -298,7 +298,7 @@ public class PageController
     @RequestMapping(value = "/role/addition.html")
     public ModelAndView gotoRoleAddition()
     {
-        ModelAndView view = new ModelAndView("system-manage/group-add");
+        ModelAndView view = new ModelAndView("role/add");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -306,7 +306,7 @@ public class PageController
     @RequestMapping(value = "/role/edit.html")
     public ModelAndView gotoRoleEdit(@RequestParam(value = Field.ID) Long id)
     {
-        ModelAndView view = new ModelAndView("system-manage/group-edit");
+        ModelAndView view = new ModelAndView("role/edit");
         view.addAllObjects(managerService.getRolePrivilegeDetail(id));
         view.addAllObjects(RequestThread.getMap());
         return view;

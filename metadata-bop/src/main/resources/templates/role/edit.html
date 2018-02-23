@@ -20,17 +20,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/manager/index.html">系统管理</a>
             <a href="/manager/index.html">账户管理</a>
             <a><cite>编辑分组</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--form-->
-            <!--<form class="layui-form" action="">-->
             <div class="form-title mb20">分组名称</div>
             <div class="w40 m30">
                 <div class="layui-form-item">
@@ -42,7 +37,6 @@
             </div>
             <div class="form-title mb20">设置权限</div>
             <div class="m30">
-                <!--table-->
                 <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                     <thead>
                     <tr>
@@ -278,7 +272,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--table end-->
             </div>
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
@@ -286,15 +279,12 @@
                     <button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="saveRole()">保存</button>
                 </div>
             </div>
-            <!--</form>-->
-            <!--form end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include = "resetPoint :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -302,6 +292,6 @@
 <script type="text/javascript" src="/static/js/logout.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
-<script type="text/javascript" src="/static/js/group.edit.js"></script>
+<script type="text/javascript" src="/static/business/role-edit.js"></script>
 </body>
 </html>
