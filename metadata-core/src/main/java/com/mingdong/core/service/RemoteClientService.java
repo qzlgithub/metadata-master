@@ -14,7 +14,7 @@ import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.MessageListDTO;
+import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
@@ -41,7 +41,7 @@ public interface RemoteClientService
     /**
      * 根据客户id获取客户消息列表
      */
-    MessageListDTO getClientMessage(Long clientId, Page page);
+    ListDTO<MessageDTO> getClientMessage(Long clientId, Page page);
 
     /**
      * 软删客户子帐号

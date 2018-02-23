@@ -27,7 +27,6 @@ import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
-import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
@@ -200,29 +199,28 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public MessageListDTO getClientMessage(Long clientId, Page page)
+    public ListDTO<MessageDTO> getClientMessage(Long clientId, Page page)
     {
-        MessageListDTO dto = new MessageListDTO();
+        ListDTO<MessageDTO> listDTO = new ListDTO<>();
         int total = clientMessageMapper.countByClient(clientId);
         int pages = page.getTotalPage(total);
-        dto.setTotal(total);
-        dto.setPages(pages);
+        listDTO.setTotal(total);
         List<MessageDTO> list = new ArrayList<>();
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ClientMessage> messageList = clientMessageMapper.getListByClient(clientId);
-            for(ClientMessage cm : messageList)
+            for(ClientMessage o : messageList)
             {
-                MessageDTO o = new MessageDTO();
-                o.setAddAt(cm.getCreateTime());
-                o.setType(cm.getType());
-                o.setContent(cm.getContent());
-                list.add(o);
+                MessageDTO m = new MessageDTO();
+                m.setAddAt(o.getCreateTime());
+                m.setType(o.getType());
+                m.setContent(o.getContent());
+                list.add(m);
             }
         }
-        dto.setMessages(list);
-        return dto;
+        listDTO.setList(list);
+        return listDTO;
     }
 
     @Override

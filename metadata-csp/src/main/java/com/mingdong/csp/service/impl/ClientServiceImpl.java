@@ -8,9 +8,10 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
-import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -195,28 +196,20 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientMessage(Long clientId, Page page, BLResp resp)
+    public void getClientMessageList(Page page, ListRes res)
     {
-        MessageListDTO dto = clientApi.getClientMessage(clientId, page);
-        if(dto.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.result(dto.getResultDTO().getResult());
-            return;
-        }
-        resp.addData(Field.TOTAL, dto.getTotal());
-        resp.addData(Field.PAGES, dto.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        ListDTO<MessageDTO> listDTO = clientApi.getClientMessage(RequestThread.getClientId(), page);
         List<Map<String, Object>> list = new ArrayList<>();
-        for(MessageDTO m : dto.getMessages())
+        for(MessageDTO o : listDTO.getList())
         {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ADD_AT, DateUtils.format(m.getAddAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            map.put(Field.TYPE, m.getType());
-            map.put(Field.CONTENT, m.getContent());
-            list.add(map);
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ADD_AT, DateUtils.format(o.getAddAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            m.put(Field.TYPE, o.getType());
+            m.put(Field.CONTENT, o.getContent());
+            list.add(m);
         }
-        resp.addData(Field.LIST, list);
+        res.setTotal(listDTO.getTotal());
+        res.setList(list);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.ListRes;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ClientService;
@@ -196,9 +197,6 @@ public class ClientController
         return resp;
     }
 
-    /**
-     * 删除子账号
-     */
     @LoginRequired
     @PostMapping(value = "user/deletion")
     public BLResp dropSubUser(@RequestBody JSONObject jsonReq)
@@ -215,12 +213,12 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "message")
-    public BLResp getClientMessage(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+    public ListRes getClientMessageList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
-        clientService.getClientMessage(RequestThread.getClientId(), new Page(pageNum, pageSize), resp);
-        return resp;
+        ListRes res = new ListRes();
+        clientService.getClientMessageList(new Page(pageNum, pageSize), res);
+        return res;
     }
 
 }

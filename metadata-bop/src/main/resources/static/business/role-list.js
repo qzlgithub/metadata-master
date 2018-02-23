@@ -10,8 +10,8 @@ layui.config({
     main_table = table.render({
         elem: '#data-table',
         page: true,
-        limit: 3,
-        limits: [3, 15, 30, 50],
+        limit: 10,
+        limits: [10, 15, 30, 50],
         url: '/role/list',
         cols: [[
             {field: 'id', title: '编号', width: '15%'},

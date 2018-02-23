@@ -3,7 +3,7 @@ $(function() {
         pageNum: 1,
         pageSize: 10
     };
-    getMessageList(obj,function(pageObj, pages, total) {
+    getMessageList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
             initPageNo: pageObj['pageNum'],
             totalPages: pages,
@@ -17,20 +17,17 @@ $(function() {
         })
     });
 });
-
 var rowStr = '<tr><td>#{addAt}</td><td>#{typeName}</td><td>#{content}</td></tr>';
 
-function getMessageList(obj, pageFun){
+function getMessageList(obj, pageFun) {
     $.get(
         "/client/message",
         {"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
-        function(data) {
-            if(data.errCode === '000000') {
-                var result = data.dataMap;
-                var total = result.total;
-                var pages = result.pages;
-                var pageNum = result.pageNum;
-                var list = data.dataMap.list;
+        function(res) {
+            if(res.code === 0) {
+                var total = res.total;
+                var pages = (total - 1) / obj['pageSize'] + 1;
+                var list = res.list;
                 $("#dataBody").empty();
                 for(var d in list) {
                     var row = rowStr.replace("#{addAt}", list[d].addAt)
@@ -39,7 +36,7 @@ function getMessageList(obj, pageFun){
                     $("#dataBody").append(row);
                 }
                 if(typeof pageFun === 'function') {
-                    pageFun(obj,pages,total);
+                    pageFun(obj, pages, total);
                 }
             }
         }
