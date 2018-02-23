@@ -8,7 +8,7 @@ layui.config({
     //将message设置为全局以便子页面调用
     message = layui.message;
     //主入口
-    app.set({type: 'iframe'}).init();
+    //app.set({type: 'iframe'}).init();
     $("#home-greeting").text(getGreeting());
     var first = sessionStorage.getItem("first_login");
     if(first === "1") {
