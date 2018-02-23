@@ -8,6 +8,7 @@ import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -25,7 +26,6 @@ import com.mingdong.core.service.RemoteStatsService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.core.util.DateCalculateUtils;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -169,7 +169,7 @@ public class StatsServiceImpl implements StatsService
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
         List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
 
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
             Cell cell;
@@ -324,7 +324,7 @@ public class StatsServiceImpl implements StatsService
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
                 beforeDate, currentDay, page);
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
             Cell cell;

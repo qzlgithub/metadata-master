@@ -11,6 +11,7 @@ import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
@@ -50,7 +51,6 @@ import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -122,7 +122,7 @@ public class ClientServiceImpl implements ClientService
         res.setTotal(clientInfoListDTO.getTotal());
         List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(clientInfoList))
+        if(!CollectionUtils.isEmpty(clientInfoList))
         {
             for(ClientInfoDTO clientInfo : clientInfoList)
             {
@@ -436,7 +436,7 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
         List<ClientOperateInfoDTO> dataList = clientOperateInfoListByUserId.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             for(ClientOperateInfoDTO info : dataList)
             {

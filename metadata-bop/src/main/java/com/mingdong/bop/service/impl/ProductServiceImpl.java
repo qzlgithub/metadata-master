@@ -4,6 +4,7 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.Custom;
@@ -20,7 +21,6 @@ import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -116,7 +116,7 @@ public class ProductServiceImpl implements ProductService
         ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(enabled, null);
         List<ProductInfoDTO> productInfoList = productInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
-        if(CollectionUtils.isNotEmpty(productInfoList))
+        if(!CollectionUtils.isEmpty(productInfoList))
         {
             for(ProductInfoDTO productInfo : productInfoList)
             {

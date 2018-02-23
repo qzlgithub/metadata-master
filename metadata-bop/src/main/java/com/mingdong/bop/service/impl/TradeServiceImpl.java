@@ -4,8 +4,10 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.ListRes;
@@ -16,8 +18,6 @@ import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -52,7 +52,7 @@ public class TradeServiceImpl implements TradeService
         res.setTotal(productRechargeInfoListDTO.getTotal());
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             for(ProductRechargeInfoDTO pri : dataList)
             {
@@ -160,13 +160,13 @@ public class TradeServiceImpl implements TradeService
     public void getClientBillList(String shortName, Long typeId, Long clientId, Long userId, Long productId,
             Date startDate, Date endDate, Page page, ListRes res)
     {
-        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
+        shortName = StringUtils.isNullBlank(shortName) ? null : shortName;
         ApiReqInfoListDTO apiReqInfoListDTO = remoteClientService.getClientBillListBy(shortName, typeId, clientId,
                 userId, productId, startDate, endDate, page);
         res.setTotal(apiReqInfoListDTO.getTotal());
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             for(ApiReqInfoDTO item : dataList)
             {
@@ -191,7 +191,7 @@ public class TradeServiceImpl implements TradeService
     public XSSFWorkbook createClientBillListXlsx(String shortName, Long typeId, Long clientId, Long userId,
             Long productId, Date startDate, Date endDate, Page page)
     {
-        shortName = StringUtils.isNotBlank(shortName) ? shortName : null;
+        shortName = StringUtils.isNullBlank(shortName) ? null : shortName;
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("消费数据");
         Row row = sheet.createRow(0);

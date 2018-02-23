@@ -1,8 +1,8 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
@@ -51,7 +51,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         if(page == null)
         {
             List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            if(CollectionUtils.isNotEmpty(clientInfoList))
+            if(!CollectionUtils.isEmpty(clientInfoList))
             {
                 findClientInfoDTO(clientInfoList, dataList);
             }
@@ -66,7 +66,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-                if(CollectionUtils.isNotEmpty(clientInfoList))
+                if(!CollectionUtils.isEmpty(clientInfoList))
                 {
                     findClientInfoDTO(clientInfoList, dataList);
                 }
@@ -97,7 +97,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         {
             List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null, date,
                     currentDay);
-            if(CollectionUtils.isNotEmpty(productRechargeInfoList))
+            if(!CollectionUtils.isEmpty(productRechargeInfoList))
             {
                 findProductRechargeInfoDTO(productRechargeInfoList, dataList);
             }
@@ -113,7 +113,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null,
                         date, currentDay);
-                if(CollectionUtils.isNotEmpty(productRechargeInfoList))
+                if(!CollectionUtils.isEmpty(productRechargeInfoList))
                 {
                     findProductRechargeInfoDTO(productRechargeInfoList, dataList);
                 }

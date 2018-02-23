@@ -1,6 +1,6 @@
 package com.mingdong.mis.constant;
 
-import org.apache.commons.lang3.StringUtils;
+import com.mingdong.common.util.StringUtils;
 
 public enum APIProduct
 {
@@ -18,7 +18,7 @@ public enum APIProduct
 
     public static APIProduct getByCode(String code)
     {
-        if(StringUtils.isNotBlank(code))
+        if(!StringUtils.isNullBlank(code))
         {
             for(APIProduct item : APIProduct.values())
             {

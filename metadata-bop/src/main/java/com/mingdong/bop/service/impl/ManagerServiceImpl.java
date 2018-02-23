@@ -7,6 +7,7 @@ import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
@@ -31,7 +32,6 @@ import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -122,7 +122,7 @@ public class ManagerServiceImpl implements ManagerService
         res.setTotal(roleListDTO.getTotal());
         List<RoleDTO> roleList = roleListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(roleList.size());
-        if(CollectionUtils.isNotEmpty(roleList))
+        if(!CollectionUtils.isEmpty(roleList))
         {
             for(RoleDTO role : roleList)
             {
@@ -176,7 +176,7 @@ public class ManagerServiceImpl implements ManagerService
         res.setTotal(managerListDTO.getTotal());
         List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(managerList.size());
-        if(CollectionUtils.isNotEmpty(managerList))
+        if(!CollectionUtils.isEmpty(managerList))
         {
             for(ManagerInfoDTO manager : managerList)
             {
@@ -370,7 +370,7 @@ public class ManagerServiceImpl implements ManagerService
         ManagerInfoListDTO managerInfoList = remoteManagerService.getManagerInfoList(null, enabled, null);
         List<ManagerInfoDTO> dataList = managerInfoList.getDataList();
         List<Map<String, Object>> dataListMap = new ArrayList<>();
-        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             Map<String, Object> dataMap;
             for(ManagerInfoDTO item : dataList)
