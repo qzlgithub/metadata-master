@@ -1,6 +1,6 @@
 package com.mingdong.core.component;
 
-import org.apache.commons.lang3.StringUtils;
+import com.mingdong.common.util.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 
 import java.text.SimpleDateFormat;
@@ -17,7 +17,7 @@ public class StringToDateConverter implements Converter<String, Date>
     @Override
     public Date convert(String source)
     {
-        if(StringUtils.isBlank(source))
+        if(StringUtils.isNullBlank(source))
         {
             return null;
         }

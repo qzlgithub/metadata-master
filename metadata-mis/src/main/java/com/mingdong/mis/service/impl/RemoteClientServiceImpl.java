@@ -1,8 +1,8 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
@@ -30,8 +30,8 @@ import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.MessageListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
-import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -504,7 +504,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
         List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
         clientInfoListDTO.setDataList(clientInfoDTOList);
-        if(CollectionUtils.isNotEmpty(similarCorpByName))
+        if(!CollectionUtils.isEmpty(similarCorpByName))
         {
             ClientInfoDTO clientInfoDTO;
             for(ClientInfo item : similarCorpByName)
@@ -589,7 +589,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         List<ClientUserDTO> dataList = new ArrayList<>();
         clientUserListDTO.setDataList(dataList);
         List<ClientUser> subUserList = clientUserMapper.getListByClientAndStatus(clientId, enabled, deleted);
-        if(CollectionUtils.isNotEmpty(subUserList))
+        if(!CollectionUtils.isEmpty(subUserList))
         {
             ClientUserDTO clientUserDTO;
             for(ClientUser item : subUserList)
@@ -619,7 +619,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         List<ClientDTO> dataList = new ArrayList<>();
         clientListDTO.setDataList(dataList);
         List<Client> clientList = clientMapper.getListByIdList(idList);
-        if(CollectionUtils.isNotEmpty(clientList))
+        if(!CollectionUtils.isEmpty(clientList))
         {
             ClientDTO clientDTO;
             for(Client item : clientList)
@@ -665,7 +665,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         if(page == null)
         {
             List<ClientOperateInfo> clientOperateInfos = clientOperateInfoMapper.getListByClientUser(userId);
-            if(CollectionUtils.isNotEmpty(clientOperateInfos))
+            if(!CollectionUtils.isEmpty(clientOperateInfos))
             {
                 for(ClientOperateInfo item : clientOperateInfos)
                 {
@@ -685,7 +685,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ClientOperateInfo> clientOperateInfos = clientOperateInfoMapper.getListByClientUser(userId);
-                if(CollectionUtils.isNotEmpty(clientOperateInfos))
+                if(!CollectionUtils.isEmpty(clientOperateInfos))
                 {
                     for(ClientOperateInfo item : clientOperateInfos)
                     {
@@ -709,7 +709,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         if(page == null)
         {
             List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            if(CollectionUtils.isNotEmpty(clientInfoList))
+            if(!CollectionUtils.isEmpty(clientInfoList))
             {
                 for(ClientInfo item : clientInfoList)
                 {
@@ -752,7 +752,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         {
             List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId, userId,
                     productId, startDate, endDate);
-            if(CollectionUtils.isNotEmpty(apiReqInfoList))
+            if(!CollectionUtils.isEmpty(apiReqInfoList))
             {
                 for(ApiReqInfo item : apiReqInfoList)
                 {
@@ -774,7 +774,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId,
                         userId, productId, startDate, endDate);
-                if(CollectionUtils.isNotEmpty(apiReqInfoList))
+                if(!CollectionUtils.isEmpty(apiReqInfoList))
                 {
                     for(ApiReqInfo item : apiReqInfoList)
                     {
@@ -1172,11 +1172,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         if(canDelete)
         {
-            if(CollectionUtils.isNotEmpty(deleteIds))
+            if(!CollectionUtils.isEmpty(deleteIds))
             {
                 clientProductMapper.deleteByIds(deleteIds.toArray(new Long[0]));
             }
-            if(CollectionUtils.isNotEmpty(productIds))
+            if(!CollectionUtils.isEmpty(productIds))
             {
                 Date date = new Date();
                 for(Long productId : productIds)

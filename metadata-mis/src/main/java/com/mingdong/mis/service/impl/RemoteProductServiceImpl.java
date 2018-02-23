@@ -43,7 +43,6 @@ import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
-import com.mingdong.mis.domain.mapper.DictProductTypeMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
@@ -73,8 +72,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private ApiReqInfoMapper apiReqInfoMapper;
     @Resource
     private ClientProductMapper clientProductMapper;
-    @Resource
-    private DictProductTypeMapper dictProductTypeMapper;
     @Resource
     private ProductMapper productMapper;
     @Resource

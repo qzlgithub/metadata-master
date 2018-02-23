@@ -1,6 +1,7 @@
 package com.mingdong.csp.controller;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
@@ -8,7 +9,6 @@ import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,7 +123,7 @@ public class ProductController
     {
         ListRes res = new ListRes();
         List<Integer> productTypeList;
-        if(StringUtils.isBlank(productType))
+        if(StringUtils.isNullBlank(productType))
         {
             productTypeList = null;
         }

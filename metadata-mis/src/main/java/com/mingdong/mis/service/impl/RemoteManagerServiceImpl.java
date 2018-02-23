@@ -1,8 +1,8 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ManagerDTO;
@@ -126,7 +126,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         if(page == null)
         {
             List<Role> roleList = roleMapper.getList();
-            if(CollectionUtils.isNotEmpty(roleList))
+            if(!CollectionUtils.isEmpty(roleList))
             {
                 for(Role item : roleList)
                 {
@@ -146,7 +146,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<Role> roleList = roleMapper.getList();
-                if(CollectionUtils.isNotEmpty(roleList))
+                if(!CollectionUtils.isEmpty(roleList))
                 {
                     for(Role item : roleList)
                     {
@@ -237,7 +237,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         if(page == null)
         {
             List<ManagerInfo> managerInfoList = managerInfoMapper.getListBy(roleId, enabled);
-            if(CollectionUtils.isNotEmpty(managerInfoList))
+            if(!CollectionUtils.isEmpty(managerInfoList))
             {
                 for(ManagerInfo item : managerInfoList)
                 {
@@ -257,7 +257,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<ManagerInfo> managerInfoList = managerInfoMapper.getListBy(roleId, enabled);
-                if(CollectionUtils.isNotEmpty(managerInfoList))
+                if(!CollectionUtils.isEmpty(managerInfoList))
                 {
                     for(ManagerInfo item : managerInfoList)
                     {
@@ -279,7 +279,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         managerPrivilegeListDTO.setDataList(dataList);
         List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getPrivilegeIdListByManager(managerId);
         ManagerPrivilegeDTO managerPrivilegeDTO;
-        if(CollectionUtils.isNotEmpty(managerPrivilegeList))
+        if(!CollectionUtils.isEmpty(managerPrivilegeList))
         {
             for(ManagerPrivilege item : managerPrivilegeList)
             {
@@ -299,7 +299,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         rolePrivilegeListDTO.setDataList(dataList);
         RolePrivilegeDTO rolePrivilegeDTO;
         List<RolePrivilege> rolePrivileges = rolePrivilegeMapper.getByRole(roleId);
-        if(CollectionUtils.isNotEmpty(rolePrivileges))
+        if(!CollectionUtils.isEmpty(rolePrivileges))
         {
             for(RolePrivilege item : rolePrivileges)
             {

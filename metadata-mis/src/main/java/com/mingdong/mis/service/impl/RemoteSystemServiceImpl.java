@@ -1,6 +1,6 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -60,7 +60,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         roleListDTO.setDataList(dataList);
         RoleDTO roleDTO;
         List<Role> roleList = roleMapper.getByStatus(TrueOrFalse.TRUE);
-        if(CollectionUtils.isNotEmpty(roleList))
+        if(!CollectionUtils.isEmpty(roleList))
         {
             for(Role item : roleList)
             {
@@ -79,7 +79,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         List<DictIndustryDTO> dataList = new ArrayList<>();
         dictIndustryListDTO.setDataList(dataList);
         List<DictIndustry> dictIndustryList = dictIndustryMapper.getByParentAndStatus(parentIndustryId, trueOrFalse);
-        if(CollectionUtils.isNotEmpty(dictIndustryList))
+        if(!CollectionUtils.isEmpty(dictIndustryList))
         {
             DictIndustryDTO dictIndustryDTO;
             for(DictIndustry item : dictIndustryList)
@@ -138,7 +138,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         List<PrivilegeDTO> dataList = new ArrayList<>();
         privilegeListDTO.setDataList(dataList);
         List<Privilege> privilegeList = privilegeMapper.getTopListByRole(roleId);
-        if(CollectionUtils.isNotEmpty(privilegeList))
+        if(!CollectionUtils.isEmpty(privilegeList))
         {
             findPrivilegeDTO(privilegeList, dataList);
         }
@@ -152,7 +152,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         List<PrivilegeDTO> dataList = new ArrayList<>();
         privilegeListDTO.setDataList(dataList);
         List<Privilege> privilegeList = privilegeMapper.getByParentAndStatus(parentId, enabled);
-        if(CollectionUtils.isNotEmpty(privilegeList))
+        if(!CollectionUtils.isEmpty(privilegeList))
         {
             findPrivilegeDTO(privilegeList, dataList);
         }
@@ -180,7 +180,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         dictRechargeTypeListDTO.setDataList(dataList);
         DictRechargeTypeDTO dictRechargeTypeDTO;
         List<DictRechargeType> rechargeTypeList = dictRechargeTypeMapper.getListByStatus(enabled, deleted);
-        if(CollectionUtils.isNotEmpty(rechargeTypeList))
+        if(!CollectionUtils.isEmpty(rechargeTypeList))
         {
             for(DictRechargeType item : rechargeTypeList)
             {
@@ -199,7 +199,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         List<PrivilegeDTO> dataList = new ArrayList<>();
         privilegeListDTO.setDataList(dataList);
         List<Privilege> privilegeList = privilegeMapper.getListByLevel(level);
-        if(CollectionUtils.isNotEmpty(privilegeList))
+        if(!CollectionUtils.isEmpty(privilegeList))
         {
             findPrivilegeDTO(privilegeList, dataList);
         }
@@ -213,7 +213,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         List<DictIndustryDTO> dataList = new ArrayList<>();
         dictIndustryListDTO.setDataList(dataList);
         List<DictIndustry> dictIndustryList = dictIndustryMapper.getIndustryInfo();
-        if(CollectionUtils.isNotEmpty(dictIndustryList))
+        if(!CollectionUtils.isEmpty(dictIndustryList))
         {
             findDictIndustryDTO(dictIndustryList, dataList);
         }

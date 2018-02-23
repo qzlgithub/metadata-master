@@ -2,6 +2,7 @@ package com.mingdong.csp.service.impl;
 
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -24,7 +25,6 @@ import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService
             return;
         }
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
             for(ProductRechargeInfoDTO item : dataList)
@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService
         ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
                 fromDate, toDate, page);
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             ProductRechargeInfoDTO dataDTO;
             Row dataRow;
@@ -140,7 +140,7 @@ public class ProductServiceImpl implements ProductService
             return;
         }
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
             for(ApiReqInfoDTO item : dataList)
@@ -182,7 +182,7 @@ public class ProductServiceImpl implements ProductService
         ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
                 toDate, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dataList))
         {
             ApiReqInfoDTO dataDTO;
             Row dataRow;
