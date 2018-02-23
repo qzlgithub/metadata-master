@@ -33,7 +33,7 @@ layui.config({
             countName: 'total',
             dataName: 'list'
         },
-        done: function(res, curr, count){
+        done: function(res, curr, count) {
             var result = res.extradata;
             $('#chartTitleId').text(result.title);
         }
@@ -51,7 +51,6 @@ layui.config({
         });
     });
 });
-
 //点击展开
 $(document).ready(function() {
     $(".btn-slide").click(function() {
@@ -63,19 +62,20 @@ $(document).ready(function() {
 $(function() {
     showChart();
 });
-function showChart(){
+
+function showChart() {
     var myChart = echarts.init(document.getElementById('panel'));
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
     $.get('/stats/client/clientListJson',
         {"scopeType": scopeType},
-        function (data) {
-            var data = eval("("+data+")");
+        function(data) {
+            var data = eval("(" + data + ")");
             myChart.setOption(option = {
                 tooltip: {
                     trigger: 'axis'
                 },
                 xAxis: {
-                    data: data.map(function (item) {
+                    data: data.map(function(item) {
                         return item[0];
                     })
                 },
@@ -101,7 +101,7 @@ function showChart(){
                 }],
                 series: {
                     type: 'line',
-                    data: data.map(function (item) {
+                    data: data.map(function(item) {
                         return item[1];
                     })
                 }
@@ -109,8 +109,8 @@ function showChart(){
         });
 }
 
-$('#scopeLiId span').click(function(){
-    $('#scopeLiId span').each(function(){
+$('#scopeLiId span').click(function() {
+    $('#scopeLiId span').each(function() {
         $(this).removeClass('active');
     });
     $(this).addClass('active');
@@ -127,9 +127,9 @@ $('#scopeLiId span').click(function(){
     });
 });
 
-function clientOutPrint(){
+function clientOutPrint() {
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
-    location.href='/stats/client/clientList/export?scopeType='+scopeType;
+    location.href = '/stats/client/clientList/export?scopeType=' + scopeType;
 }
 
 

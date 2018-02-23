@@ -315,7 +315,7 @@ public class PageController
     @RequestMapping(value = "/stats/index.html")
     public ModelAndView gotoStatsIndex()
     {
-        ModelAndView view = new ModelAndView("data-analysis/data-index");
+        ModelAndView view = new ModelAndView("stats/index");
         view.addAllObjects(RequestThread.getMap());
         BLResp resp = statsService.getIndexStats();
         view.addAllObjects(resp.getDataMap());
@@ -325,7 +325,7 @@ public class PageController
     @RequestMapping(value = "/stats/customer.html")
     public ModelAndView gotoStatsCustomer()
     {
-        ModelAndView view = new ModelAndView("data-analysis/customer-data");
+        ModelAndView view = new ModelAndView("stats/client");
         view.addAllObjects(RequestThread.getMap());
         BLResp resp = statsService.getClientIndexStats();
         view.addAllObjects(resp.getDataMap());
@@ -335,7 +335,7 @@ public class PageController
     @RequestMapping(value = "/stats/revenue.html")
     public ModelAndView gotoStatsRevenue()
     {
-        ModelAndView view = new ModelAndView("data-analysis/revenue-data");
+        ModelAndView view = new ModelAndView("stats/revenue");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -343,7 +343,7 @@ public class PageController
     @RequestMapping(value = "/stats/request.html")
     public ModelAndView gotoStatsRequest()
     {
-        ModelAndView view = new ModelAndView("data-analysis/product-data-request");
+        ModelAndView view = new ModelAndView("stats/request");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -351,7 +351,7 @@ public class PageController
     @RequestMapping(value = "/stats/recharge.html")
     public ModelAndView gotoStatsRecharge()
     {
-        ModelAndView view = new ModelAndView("data-analysis/recharge-data");
+        ModelAndView view = new ModelAndView("stats/recharge");
         view.addAllObjects(RequestThread.getMap());
         BLResp resp = statsService.getRechargeIndexStats();
         view.addAllObjects(resp.getDataMap());

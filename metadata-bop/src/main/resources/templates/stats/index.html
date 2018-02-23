@@ -21,16 +21,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="data::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/stats/Index.html">数据统计管理</a>
-            <a href="/stats/Index.html">运营数据管理</a>
+            <a href="/stats/index.html">数据统计管理</a>
+            <a href="/stats/index.html">运营数据管理</a>
             <a><cite>运营数据统计</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--运营汇总-->
             <dl class="public-data">
                 <dt class="mt0 important">运营数据汇总</dt>
                 <dd>
@@ -39,8 +35,8 @@
                             <span class="layui-col-md3 mt25"><img src="../../static/images/img1.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">新增客户</p>
-                                <p class="col4 mt10">近30天： <span th:text="${clientCountByDate}"/>位 </p>
-                                <p class="mt10 col2">总客户： <span th:text="${allClientCount}"/>位 </p>
+                                <p class="col4 mt10">近30天： <span th:text="${clientCountByDate}"></span>位 </p>
+                                <p class="mt10 col2">总客户： <span th:text="${allClientCount}"></span>位 </p>
                                 <p class="mt10 tr fz-12"><a href="/stats/customer.html">查看明细</a></p>
                             </div>
                         </li>
@@ -48,8 +44,8 @@
                             <span class="layui-col-md3 mt25"><img src="../../static/images/img2.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">客户充值</p>
-                                <p class="col4 mt10">近7天充值： <span th:text="${clientRechargeByWeek}"/>元 </p>
-                                <p class="mt10 col2">近30天充值： <span th:text="${clientRechargeByMonth}"/>元 </p>
+                                <p class="col4 mt10">近7天充值： <span th:text="${clientRechargeByWeek}"></span>元 </p>
+                                <p class="mt10 col2">近30天充值： <span th:text="${clientRechargeByMonth}"></span>元 </p>
                                 <p class="mt10 tr fz-12"><a href="/stats/recharge.html">查看明细</a></p>
                             </div>
                         </li>
@@ -65,8 +61,6 @@
                     </ul>
                 </dd>
             </dl>
-            <!--运营汇总 end-->
-            <!--产品查询-->
             <dl class="public-data">
                 <dt>产品查询</dt>
                 <dd class="product-check m20 layui-row">
@@ -115,8 +109,6 @@
                     </div>
                 </dd>
             </dl>
-            <!--产品查询 end-->
-            <!--产品分析-->
             <dl class="public-data">
                 <dt>产品分析</dt>
                 <dd class="layui-row">
@@ -164,27 +156,16 @@
                                     <option value="2">收入-产品占比</option>
                                 </select>
                             </p>
-                            <!--<p class="tc"><img src="../../static/images/data-img1.png"/></p>-->
-                            <!--产品分析统计图-->
                             <div id="productAnalysis" style="height:300px;width: 600px"></div>
-                            <!-- ECharts单文件引入 -->
-
                             <script type="text/javascript" th:src="@{/statisticalChart/productAnalysis.js}"></script>
-                            <!--统计图end-->
                         </div>
                         <div class="layui-col-md8 p30 tc">
-                            <!-- <p class="tc"><img src="../../static/images/data-img2.png"/></p>-->
-                            <!--产品统计柱状图-->
                             <div id="productBar" style="height:400px;width: 750px"></div>
-                            <!-- ECharts单文件引入 -->
                             <script type="text/javascript" th:src="@{/statisticalChart/productBar.js}"></script>
-                            <!--统计图end-->
                         </div>
                     </div>
                 </dd>
             </dl>
-            <!--产品分析 end-->
-            <!--收入统计-->
             <dl class="public-data">
                 <dt>收入统计</dt>
                 <dd class="layui-row">
@@ -227,17 +208,11 @@
                             <p class="add-button pt5 pb5 important mt10 tc nav-close2 cp">确定</p>
                         </div>
                     </div>
-                    <!--<div class="tc mt20 mb20"><img src="../../static/images/data-img3.png"/></div>-->
-                    <!--收入统计图-->
                     <div id="incomeLine" class="tc mt20 mb20" style="height:270px;width: 850px;margin: 0 auto"></div>
-                    <!-- ECharts单文件引入 -->
                     <script type="text/javascript" th:src="@{/statisticalChart/incomeLine.js}"></script>
-                    <!--统计图end-->
                     <p class="tc pt20 pb20">217/10/1-2017/11/1 总收入:1,989,900元</p>
                 </dd>
             </dl>
-            <!--收入统计 end-->
-            <!--充值统计-->
             <dl class="public-data">
                 <dt>充值统计</dt>
                 <dd class="layui-row">
@@ -278,26 +253,16 @@
                     <div class="tc col4 pt20 pb20 fz-16">2017/10/1-2017/11/1总充值：20030 元</div>
                     <div class="layui-row">
                         <div class="layui-col-md4">
-                            <!-- <p class="tc"><img src="../../static/images/data-img1.png"/></p>-->
-                            <!--充值统计图-->
                             <div id="rechargePie" style="height:300px;width: 600px"></div>
-                            <!-- ECharts单文件引入 -->
                             <script type="text/javascript" th:src="@{/statisticalChart/rechargePie.js}"></script>
-                            <!--充值统计图end-->
                         </div>
                         <div class="layui-col-md8 p30 tc">
-                            <!--<p class="tc"><img src="../../static/images/data-img4.png"/></p>-->
-                            <!--充值柱状图-->
                             <div id="rechargeBar" style="height:400px;width: 700px"></div>
-                            <!-- ECharts单文件引入 -->
                             <script type="text/javascript" th:src="@{/statisticalChart/rechargeBar.js}"></script>
-                            <!--充值柱状图end-->
                         </div>
                     </div>
                 </dd>
             </dl>
-            <!--充值统计 end-->
-            <!--客户数据统计-->
             <dl class="public-data">
                 <dt>客户数据统计</dt>
                 <dd class="layui-row">
@@ -322,25 +287,17 @@
                         </li>
                         <li class="mt10"><span class="add-button pt10 pb10 important mt10 cp">导出</span></li>
                     </ul>
-                    <!--客户数据统计图-->
-                    <!--<div class="tc mt20 mb20"><img src="../../static/images/data-img3.png"/></div>-->
                     <div id="customerLine" class="tc mt20 mb20" style="height:270px;width: 850px;margin: 0 auto"></div>
-                    <!-- ECharts单文件引入 -->
                     <script type="text/javascript" th:src="@{/statisticalChart/customerLine.js}"></script>
-                    <!--客户数据统计图end-->
-
                     <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
                 </dd>
             </dl>
-            <!--客户数据统计 end-->
         </div>
     </div>
 
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
-<!--提示层 end-->
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
