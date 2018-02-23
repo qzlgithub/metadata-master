@@ -22,16 +22,12 @@
     <div class="layui-side layui-bg-black kit-side" th:include="customer::left"></div>
 
     <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <!--面包屑-->
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/client/index.html">客户管理</a>
             <a href="/client/index.html">客户管理</a>
             <a><cite>客户详情</cite></a>
         </div>
-        <!--面包屑 end-->
         <div class="p20">
-            <!--form-->
             <form class="layui-form" action="">
                 <div class="form-title mb20">基础信息<input type="hidden" id="client-id" th:value="${clientId}"/></div>
                 <div class="m30 clearfix">
