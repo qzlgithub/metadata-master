@@ -20,4 +20,5 @@ public interface Field
     String TOTAL_AMT = "totalAmt";
     String TOTAL_FEE = "totalFee";
     String SUB_ACCOUNT_MAX = "subAccountMax";
+    String MISS_COUNT = "missCount";
 }

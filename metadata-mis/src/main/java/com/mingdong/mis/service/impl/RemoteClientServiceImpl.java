@@ -1220,7 +1220,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
         int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate);
         int pages = page.getTotalPage(total);
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate);
+        int missCount = apiReqInfoMapper.countMiss(keyword, productId, billPlan, fromDate, toDate);
         dto.setTotal(total);
+        dto.addExtra(Field.MISS_COUNT, missCount+"");
         dto.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         if(total > 0 && page.getPageNum() <= pages)
         {

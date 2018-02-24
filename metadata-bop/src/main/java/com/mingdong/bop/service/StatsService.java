@@ -55,4 +55,14 @@ public interface StatsService
      */
     JSONObject getRechargeListJson(ScopeType scopeTypeEnum);
 
+    /**
+     * 获取产品请求数据
+     */
+    void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, ListRes res);
+
+    XSSFWorkbook createRequestListXlsx(ScopeType scopeTypeEnum, Page page, String name, Long productId);
+
+    JSONArray getRequestListJson(ScopeType scopeTypeEnum, String name, Long productId);
+
+    BLResp getRequestIndexStats();
 }

@@ -11,15 +11,19 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteStatsService;
@@ -101,21 +105,7 @@ public class StatsServiceImpl implements StatsService
     public void getClientList(ScopeType scopeTypeEnum, Page page, ListRes res)
     {
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case QUARTER:
-                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
@@ -151,21 +141,7 @@ public class StatsServiceImpl implements StatsService
         row.createCell(3).setCellValue("账号");
         row.createCell(7).setCellValue("商务经理");
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case QUARTER:
-                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
         List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
 
@@ -198,21 +174,7 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArray = new JSONArray();
         JSONArray jsonArraySec;
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case QUARTER:
-                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, null);
         List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -264,26 +226,8 @@ public class StatsServiceImpl implements StatsService
     @Override
     public void getRechargeList(ScopeType scopeTypeEnum, Page page, ListRes res)
     {
-        BLResp resp = BLResp.build();
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case WEEK:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-                break;
-            case HALF_MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-                break;
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         getProductRechargeInfoList(page, beforeDate, currentDay, res);
     }
 
@@ -293,34 +237,18 @@ public class StatsServiceImpl implements StatsService
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值数据");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("时间");
-        row.createCell(1).setCellValue("公司名称");
-        row.createCell(2).setCellValue("公司简称");
-        row.createCell(3).setCellValue("账号");
-        row.createCell(4).setCellValue("产品");
-        row.createCell(5).setCellValue("金额(元)");
-        row.createCell(6).setCellValue("充值类型");
-        row.createCell(7).setCellValue("账户余额(不包含服务)");
-        row.createCell(8).setCellValue("经手人");
+        row.createCell(0).setCellValue("充值时间");
+        row.createCell(1).setCellValue("充值单号");
+        row.createCell(2).setCellValue("公司名称");
+        row.createCell(3).setCellValue("公司简称");
+        row.createCell(4).setCellValue("账号");
+        row.createCell(5).setCellValue("产品");
+        row.createCell(6).setCellValue("金额(元)");
+        row.createCell(7).setCellValue("充值类型");
+        row.createCell(8).setCellValue("账户余额(不包含服务)");
+        row.createCell(9).setCellValue("经手人");
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case WEEK:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-                break;
-            case HALF_MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-                break;
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
                 beforeDate, currentDay, page);
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
@@ -338,14 +266,15 @@ public class StatsServiceImpl implements StatsService
                 cell = dataRow.createCell(0);
                 cell.setCellValue(dataInfo.getTradeTime());
                 cell.setCellStyle(timeStyle);
-                dataRow.createCell(1).setCellValue(dataInfo.getCorpName());
-                dataRow.createCell(2).setCellValue(dataInfo.getShortName());
-                dataRow.createCell(3).setCellValue(dataInfo.getUsername());
-                dataRow.createCell(4).setCellValue(dataInfo.getProductName());
-                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
-                dataRow.createCell(6).setCellValue(dataInfo.getRechargeType());
-                dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
-                dataRow.createCell(8).setCellValue(dataInfo.getManagerName());
+                dataRow.createCell(1).setCellValue(dataInfo.getTradeNo());
+                dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+                dataRow.createCell(3).setCellValue(dataInfo.getShortName());
+                dataRow.createCell(4).setCellValue(dataInfo.getUsername());
+                dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+                dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
+                dataRow.createCell(7).setCellValue(dataInfo.getRechargeType());
+                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+                dataRow.createCell(9).setCellValue(dataInfo.getManagerName());
             }
         }
         return wb;
@@ -359,24 +288,7 @@ public class StatsServiceImpl implements StatsService
         JSONObject rightObject = new JSONObject();
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
-        Date beforeDate = new Date();
-        switch(scopeTypeEnum)
-        {
-            case WEEK:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-                break;
-            case HALF_MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
-                break;
-            case MONTH:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
-                break;
-            case YEAR:
-                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
-                break;
-            default:
-                break;
-        }
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
                 beforeDate, currentDay, null);
         List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
@@ -475,6 +387,194 @@ public class StatsServiceImpl implements StatsService
         return jsonObject;
     }
 
+    @Override
+    public void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, ListRes res)
+    {
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String dateStr = sdf.format(beforeDate);
+        String currentDayStr = sdf.format(currentDay);
+        ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(name, productId, null, beforeDate,
+                currentDay, page);
+        res.setTotal(listDTO.getTotal());
+        res.addExtra(Field.MISS_COUNT,listDTO.getExtradata().get(Field.MISS_COUNT));
+        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
+        if(listDTO.getList() != null)
+        {
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(ApiReqInfoDTO o : listDTO.getList())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.REQUEST_AT, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, o.getRequestNo());
+                map.put(Field.CORP_NAME, o.getCorpName());
+                map.put(Field.USERNAME, o.getUsername());
+                map.put(Field.SHORT_NAME, o.getShortName());
+                map.put(Field.PRODUCT, o.getProductName());
+                map.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
+                if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
+                {
+                    map.put(Field.BALANCE, "/");
+                    map.put(Field.FEE, "/");
+                }
+                else
+                {
+                    map.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                    map.put(Field.FEE, NumberUtils.formatAmount(o.getFee()));
+                }
+                map.put(Field.IS_HIT, o.getHit());
+                list.add(map);
+            }
+            res.setList(list);
+        }
+    }
+
+    @Override
+    public XSSFWorkbook createRequestListXlsx(ScopeType scopeTypeEnum, Page page, String name, Long productId)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("产品请求数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("请求时间");
+        row.createCell(1).setCellValue("消费单号");
+        row.createCell(2).setCellValue("公司名称");
+        row.createCell(3).setCellValue("公司简称");
+        row.createCell(4).setCellValue("公司账号");
+        row.createCell(5).setCellValue("产品服务");
+        row.createCell(6).setCellValue("计费方式");
+        row.createCell(7).setCellValue("是否击中");
+        row.createCell(8).setCellValue("利润（元）");
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(name, productId, null, beforeDate,
+                currentDay, page);
+        List<ApiReqInfoDTO> dataList = listDTO.getList();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            Row dataRow;
+            Cell cell;
+            CellStyle timeStyle = wb.createCellStyle();
+            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+            ApiReqInfoDTO dataInfo;
+            for(int i = 0; i < dataList.size(); i++)
+            {
+                dataInfo = dataList.get(i);
+                dataRow = sheet.createRow(i + 1);
+                cell = dataRow.createCell(0);
+                cell.setCellValue(dataInfo.getCreateTime());
+                cell.setCellStyle(timeStyle);
+                dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
+                dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+                dataRow.createCell(3).setCellValue(dataInfo.getShortName());
+                dataRow.createCell(4).setCellValue(dataInfo.getUsername());
+                dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+                dataRow.createCell(6).setCellValue(BillPlan.getNameById(dataInfo.getBillPlan()));
+                dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit())?"击中":"未击中");
+                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+            }
+        }
+        return wb;
+    }
+
+    @Override
+    public JSONArray getRequestListJson(ScopeType scopeTypeEnum, String name, Long productId)
+    {
+        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArraySec;
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        ListDTO<StatsDateInfoDTO> listDTO = remoteStatsService.getRequestListStats(beforeDate, currentDay,name,productId);
+        List<StatsDateInfoDTO> list = listDTO.getList();
+        Map<String,Integer> dateIntMap = new HashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(!CollectionUtils.isEmpty(list)){
+            for(StatsDateInfoDTO item : list){
+                dateIntMap.put(sdf.format(item.getDate()),item.getCount());
+            }
+        }
+        Map<String, Integer> dateMap = new LinkedHashMap<>();
+        Calendar c = Calendar.getInstance();
+        c.setTime(beforeDate);
+        int difInt = (int) BusinessUtils.getDayDiff(beforeDate, currentDay) + 1;
+        for(int i = 0; i < difInt; i++)
+        {
+            String dateStr = sdf.format(c.getTime());
+            Integer integer = dateIntMap.get(dateStr);
+            if(integer != null){
+                dateMap.put(dateStr, integer);
+            }else{
+                dateMap.put(dateStr, 0);
+            }
+            c.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        for(Map.Entry<String, Integer> entry : dateMap.entrySet())
+        {
+            jsonArraySec = new JSONArray();
+            jsonArraySec.add(entry.getKey());
+            jsonArraySec.add(entry.getValue());
+            jsonArray.add(jsonArraySec);
+        }
+        return jsonArray;
+    }
+
+    @Override
+    public BLResp getRequestIndexStats()
+    {
+        BLResp blResp = new BLResp();
+        ListDTO<StatsDateInfoDTO> requestListStats = remoteStatsService.getRequestListStats(null, null, null, null);
+        List<StatsDateInfoDTO> list = requestListStats.getList();
+        Date currentDay = new Date();
+        Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
+        Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
+        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
+        Map<String,Integer> dataMap = new HashMap<>();
+        dataMap.put(Field.TODAY_COUNT,0);
+        dataMap.put(Field.TODAY_MISS_COUNT,0);
+        dataMap.put(Field.YESTERDAY_COUNT,0);
+        dataMap.put(Field.YESTERDAY_MISS_COUNT,0);
+        dataMap.put(Field.MONTH_COUNT,0);
+        dataMap.put(Field.MONTH_MISS_COUNT,0);
+        dataMap.put(Field.ALL_COUNT,0);
+        dataMap.put(Field.ALL_MISS_COUNT,0);
+        for(StatsDateInfoDTO item : list){
+            if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate())){
+                Integer count = dataMap.get(Field.TODAY_COUNT);
+                dataMap.put(Field.TODAY_COUNT,count+item.getCount());
+                if(item.getMissCount() != null){
+                    Integer missCount = dataMap.get(Field.TODAY_MISS_COUNT);
+                    dataMap.put(Field.TODAY_MISS_COUNT,missCount+item.getMissCount());
+                }
+            }
+            if(yesterdayDate.equals(item.getDate()) || (yesterdayDate.before(item.getDate()) && nowDate.after(item.getDate()))){
+                Integer count = dataMap.get(Field.YESTERDAY_COUNT);
+                dataMap.put(Field.YESTERDAY_COUNT,count+item.getCount());
+                if(item.getMissCount() != null){
+                    Integer missCount = dataMap.get(Field.YESTERDAY_MISS_COUNT);
+                    dataMap.put(Field.YESTERDAY_MISS_COUNT,missCount+item.getMissCount());
+                }
+            }
+            if(monthFirst.equals(item.getDate()) || monthFirst.before(item.getDate())){
+                Integer count = dataMap.get(Field.MONTH_COUNT);
+                dataMap.put(Field.MONTH_COUNT,count+item.getCount());
+                if(item.getMissCount() != null){
+                    Integer missCount = dataMap.get(Field.MONTH_MISS_COUNT);
+                    dataMap.put(Field.MONTH_MISS_COUNT,missCount+item.getMissCount());
+                }
+            }
+            Integer count = dataMap.get(Field.ALL_COUNT);
+            dataMap.put(Field.ALL_COUNT,count+item.getCount());
+            if(item.getMissCount() != null){
+                Integer missCount = dataMap.get(Field.ALL_MISS_COUNT);
+                dataMap.put(Field.ALL_MISS_COUNT,missCount+item.getMissCount());
+            }
+        }
+        for(Map.Entry<String,Integer> entry : dataMap.entrySet()){
+            blResp.addData(entry.getKey(),entry.getValue()+"");
+        }
+        return blResp;
+    }
+
     private void getProductRechargeInfoList(Page page, Date date, Date currentDay, ListRes res)
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -510,6 +610,7 @@ public class StatsServiceImpl implements StatsService
             map = new HashMap<>();
             dataList.add(map);
             map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            map.put(Field.TRADE_NO, item.getTradeNo());
             map.put(Field.CORP_NAME, item.getCorpName());
             map.put(Field.SHORT_NAME, item.getShortName());
             map.put(Field.USERNAME, item.getUsername());
@@ -520,6 +621,38 @@ public class StatsServiceImpl implements StatsService
             map.put(Field.MANAGER_NAME, item.getManagerName());
         }
         return dataList;
+    }
+
+    private Date findDateByScopeType(ScopeType scopeType, Date currentDay)
+    {
+        Date beforeDate = new Date();
+        switch(scopeType)
+        {
+            case NOW:
+                beforeDate = DateCalculateUtils.getCurrentDate(currentDay);
+                break;
+            case YESTERDAY:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
+                break;
+            case WEEK:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+                break;
+            case HALF_MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
+                break;
+            case MONTH:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
+                break;
+            case QUARTER:
+                beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
+                break;
+            case YEAR:
+                beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
+                break;
+            default:
+                break;
+        }
+        return beforeDate;
     }
 
 }

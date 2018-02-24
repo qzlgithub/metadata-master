@@ -344,7 +344,11 @@ public class PageController
     public ModelAndView gotoStatsRequest()
     {
         ModelAndView view = new ModelAndView("stats/request");
+        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
+        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addAllObjects(RequestThread.getMap());
+        BLResp resp = statsService.getRequestIndexStats();
+        view.addAllObjects(resp.getDataMap());
         return view;
     }
 

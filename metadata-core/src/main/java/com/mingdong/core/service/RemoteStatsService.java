@@ -2,7 +2,9 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.StatsDateInfoDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -43,4 +45,6 @@ public interface RemoteStatsService
      * 根据日期获取客户充值次数
      */
     Integer getClientRechargeCountByDate(Date date, Date currentDay);
+
+    ListDTO<StatsDateInfoDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId);
 }

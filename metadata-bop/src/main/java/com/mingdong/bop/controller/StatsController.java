@@ -98,4 +98,46 @@ public class StatsController
         return jsonObject.toJSONString();
     }
 
+    @GetMapping(value = "/client/requestList")
+    @ResponseBody
+    public ListRes getRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.NAME, required = false) String name,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        ListRes res = new ListRes();
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        statsService.getRequestList(scopeTypeEnum, new Page(pageNum, pageSize), name, productId, res);
+        return res;
+    }
+
+    @GetMapping(value = "client/requestList/export")
+    public void exportRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.NAME, required = false) String name,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId, HttpServletResponse response)
+            throws IOException
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        XSSFWorkbook wb = statsService.createRequestListXlsx(scopeTypeEnum, new Page(1, 1000),name, productId);
+        String filename = new String("产品请求数据".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
+    }
+
+    @GetMapping(value = "client/requestListJson")
+    @ResponseBody
+    public String getRequestListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.NAME, required = false) String name,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        JSONArray jsonArray = statsService.getRequestListJson(scopeTypeEnum,name, productId);
+        return jsonArray.toJSONString();
+    }
+
 }

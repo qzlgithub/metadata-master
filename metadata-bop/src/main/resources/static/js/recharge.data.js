@@ -10,14 +10,15 @@ layui.config({
     main_table = table.render({
         elem: '#data-table',
         page: true,
-        limit: 3,
-        limits: [3, 15, 30, 50],
+        limit: 10,
+        limits: [10, 15, 30, 50],
         url: '/stats/client/rechargeList',
         where: {
             scopeType: $("#scopeType").val()
         },
         cols: [[
-            {field: 'tradeTime', title: '时间'},
+            {field: 'tradeTime', title: '充值时间'},
+            {field: 'tradeNo', title: '充值单号'},
             {field: 'corpName', title: '公司名称'},
             {field: 'shortName', title: '公司简称'},
             {field: 'username', title: '账号'},

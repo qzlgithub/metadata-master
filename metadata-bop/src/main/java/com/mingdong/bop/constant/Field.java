@@ -132,4 +132,15 @@ public interface Field
     String REQUEST_AT = "requestAt";
     String TOTAL_FEE = "totalFee";
     String ADD_AT = "addAt";
+    String MISS_COUNT = "missCount";
+
+    String TODAY_COUNT = "todayCount";
+    String TODAY_MISS_COUNT = "todayMissCount";
+    String YESTERDAY_COUNT = "yesterdayCount";
+    String YESTERDAY_MISS_COUNT = "yesterdayMissCount";
+    String MONTH_COUNT = "monthCount";
+    String MONTH_MISS_COUNT = "monthMissCount";
+    String ALL_COUNT = "allCount";
+    String ALL_MISS_COUNT = "allMissCount";
+
 }

@@ -5,12 +5,15 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteStatsService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.ClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
+import com.mingdong.mis.domain.entity.StatsDateInfo;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
@@ -126,6 +129,25 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     public Integer getClientRechargeCountByDate(Date date, Date currentDay)
     {
         return statsClientMapper.countClientRechargeByDate(date, currentDay);
+    }
+
+    @Override
+    public ListDTO<StatsDateInfoDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId)
+    {
+        List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name,
+                productId);
+        ListDTO<StatsDateInfoDTO> listDTO = new ListDTO<>();
+        List<StatsDateInfoDTO> listData = new ArrayList<>();
+        StatsDateInfoDTO statsDateDTO;
+        for(StatsDateInfo item : list){
+            statsDateDTO = new StatsDateInfoDTO();
+            statsDateDTO.setDate(item.getDate());
+            statsDateDTO.setCount(item.getCount());
+            statsDateDTO.setMissCount(item.getMissCount());
+            listData.add(statsDateDTO);
+        }
+        listDTO.setList(listData);
+        return listDTO;
     }
 
     private void findClientInfoDTO(List<ClientInfo> clientInfoList, List<ClientInfoDTO> dataList)
