@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class RechargeDTO
+public class RechargeDTO implements Serializable
 {
     private Date rechargeAt;
     private String rechargeNo;

@@ -87,7 +87,7 @@ public class ClientPageController
     /**
      * 产品充值记录
      */
-    @RequestMapping(value = "/client/product/recharge.html")
+    @RequestMapping(value = "/client/recharge.html")
     public ModelAndView gotoClientRecharge(@RequestParam(value = Field.C) Long clientId,
             @RequestParam(value = Field.P, required = false) Long productId)
     {
