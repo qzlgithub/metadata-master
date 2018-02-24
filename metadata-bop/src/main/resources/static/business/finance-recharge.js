@@ -1,5 +1,7 @@
 var table, main_table;
-layui.use(['table', 'form', 'laydate'], function() {
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app','table', 'form', 'laydate'], function() {
     table = layui.table;
     var form = layui.form, laydate = layui.laydate;
     laydate.render({elem: '#fromDate'});

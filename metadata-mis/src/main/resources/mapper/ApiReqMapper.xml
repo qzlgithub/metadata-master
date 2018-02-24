@@ -15,17 +15,16 @@
         <result column="hit" property="hit" jdbcType="TINYINT" />
         <result column="fee" property="fee" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
-        <result column="cost" property="cost" jdbcType="DECIMAL" />
     </resultMap>
 
     <insert id="add" parameterType="ApiReq">
         insert into
             `api_req`
             (`id`, `create_time`, `update_time`, `request_no`, `third_no`, `product_id`, `client_id`, `user_id`,
-             `bill_plan`, `request_ip`, `hit`, `fee`, `balance`,`cost`)
+             `bill_plan`, `request_ip`, `hit`, `fee`, `balance`)
         values
             (#{id}, #{createTime}, #{updateTime}, #{requestNo}, #{thirdNo}, #{productId}, #{clientId}, #{userId},
-             #{billPlan}, #{requestIp}, #{hit}, #{fee}, #{balance},#{cost})
+             #{billPlan}, #{requestIp}, #{hit}, #{fee}, #{balance})
     </insert>
 
     <select id="countBy" resultType="int">

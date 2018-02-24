@@ -4,11 +4,9 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.mis.domain.entity.ApiReq;
 import com.mingdong.mis.domain.entity.ClientProduct;
-import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
-import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.stereotype.Service;
@@ -28,8 +26,6 @@ public class ChargeServiceImpl implements ChargeService
     private ProductRechargeMapper productRechargeMapper;
     @Resource
     private ClientProductMapper clientProductMapper;
-    @Resource
-    private ProductMapper productMapper;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -44,7 +40,6 @@ public class ChargeServiceImpl implements ChargeService
             rechargeUpd.setBalance(recharge.getBalance().subtract(recharge.getUnitAmt()));
             productRechargeMapper.updateSkipNull(rechargeUpd);
         }
-        Product product = productMapper.findById(account.getProductId());
         ApiReq apiReq = new ApiReq();
         apiReq.setId(requestId);
         apiReq.setCreateTime(date);
@@ -55,7 +50,6 @@ public class ChargeServiceImpl implements ChargeService
         apiReq.setClientId(account.getClientId());
         apiReq.setUserId(userId);
         apiReq.setRequestIp(ip);
-        apiReq.setCost(product.getCostAmt());//这里产品默认按计次计算成本
         apiReq.setHit(hit ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
         apiReq.setBillPlan(billPlan.getId());
         if(BillPlan.PER_USE == billPlan || BillPlan.PER_HIT == billPlan)

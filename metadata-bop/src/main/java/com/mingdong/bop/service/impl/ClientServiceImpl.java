@@ -647,7 +647,9 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.PRODUCT_ID, d.getProductId() + "");
             m.put(Field.PRODUCT_NAME, d.getName());
             m.put(Field.CUSTOM, d.getCustom());
-            m.put(Field.TYPE_NAME, ProdType.getById(d.getProductType()).getName());
+            m.put(Field.TYPE_NAME,
+                    ProdType.getById(d.getProductType()) != null ? ProdType.getById(d.getProductType()).getName() :
+                            null);
             m.put(Field.CODE, d.getCode());
             m.put(Field.REMARK, d.getRemark());
             if(d.getClientProductId() != null && TrueOrFalse.TRUE.equals(d.getIsOpened()))
