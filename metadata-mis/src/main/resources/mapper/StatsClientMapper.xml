@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mingdong.mis.domain.mapper.StatsClientMapper">
+    <resultMap id="BaseResultMap" type="StatsDateInfo">
+        <result column="date" property="date" jdbcType="TIMESTAMP" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="miss_count" property="missCount" jdbcType="INTEGER" />
+    </resultMap>
 
     <select id="getAllClientCount" resultType="Integer">
         select count(*) from `client`
@@ -40,6 +45,24 @@
         </if>
     </select>
 
-
+    <select id="getRequestListStats" resultMap="BaseResultMap">
+        select
+        date_format(ar.`create_time`,"%Y-%m-%d") as date,
+        count(ar.`id`) as count,
+        count(case when ar.`hit` = 0 then ar.`hit` end) as miss_count
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id` and ar.`hit` = 0
+        <where>
+            <if test="keyword != null">
+                (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
+            </if>
+            <if test="productId != null">and ar.`product_id` = #{productId}</if>
+            <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+        </where>
+        group by date_format(ar.`create_time`,"%Y-%m-%d")
+        order by date_format(ar.`create_time`,"%Y-%m-%d") asc
+    </select>
 
 </mapper>

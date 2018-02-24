@@ -32,4 +32,7 @@ public interface ApiReqInfoMapper
 
     List<ApiReqInfo> getListBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
             @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    int countMiss(@Param("keyword") String keyword, @Param("productId") Long productId,
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

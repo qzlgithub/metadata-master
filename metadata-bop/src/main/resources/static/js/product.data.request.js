@@ -12,16 +12,22 @@ layui.config({
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
-        url: '/stats/client/clientList',
+        url: '/stats/client/requestList',
         where: {
-            scopeType: $("#scopeType").val()
+            scopeType: $("#scopeType").val(),
+            name: $.trim($("#name").val()),
+            productId: $("#product").val()
         },
         cols: [[
-            {field: 'registerDate', title: '时间'},
-            {field: 'corpName', title: '公司名称'},
+            {field: 'requestAt', title: '请求时间'},
+            {field: 'tradeNo', title: '消费单号'},
+            {field: 'corpName', title: '公司全称'},
             {field: 'shortName', title: '公司简称'},
-            {field: 'username', title: '账号'},
-            {field: 'managerName', title: '商务经理'},
+            {field: 'username', title: '公司账号'},
+            {field: 'product', title: '产品服务'},
+            {field: 'billPlan', title: '计费方式'},
+            {title: '是否击中', templet: "#hittpl"},
+            {field: 'fee', title: '利润（元）'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'
@@ -33,17 +39,21 @@ layui.config({
             countName: 'total',
             dataName: 'list'
         },
-        done: function(res, curr, count) {
+        done: function(res, curr, count){
             var result = res.extradata;
             $('#chartTitleId').text(result.title);
+            $('#miss-number').text(result.missCount);
+            $('#query-number').text(count);
         }
     });
     form.on('submit(search)', function(data) {
+        showChart();
         var params = data.field;
         main_table.reload({
             where: {
-                roleId: params["roleId"],
-                enabled: params['enabled']
+                scopeType: params["scopeType"],
+                name: $.trim(params["name"]),
+                productId: params["product"]
             },
             page: {
                 curr: 1
@@ -51,6 +61,7 @@ layui.config({
         });
     });
 });
+
 //点击展开
 $(document).ready(function() {
     $(".btn-slide").click(function() {
@@ -62,20 +73,21 @@ $(document).ready(function() {
 $(function() {
     showChart();
 });
-
-function showChart() {
+function showChart(){
     var myChart = echarts.init(document.getElementById('panel'));
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
-    $.get('/stats/client/clientListJson',
-        {"scopeType": scopeType},
-        function(data) {
-            var data = eval("(" + data + ")");
+    var name = $.trim($("#name").val());
+    var productId = $("#product").val();
+    $.get('/stats/client/requestListJson',
+        {"scopeType": scopeType,"name":name,"productId":productId},
+        function (data) {
+            var data = eval("("+data+")");
             myChart.setOption(option = {
                 tooltip: {
                     trigger: 'axis'
                 },
                 xAxis: {
-                    data: data.map(function(item) {
+                    data: data.map(function (item) {
                         return item[0];
                     })
                 },
@@ -102,7 +114,7 @@ function showChart() {
                 }],
                 series: {
                     type: 'line',
-                    data: data.map(function(item) {
+                    data: data.map(function (item) {
                         return item[1];
                     })
                 }
@@ -110,8 +122,8 @@ function showChart() {
         });
 }
 
-$('#scopeLiId span').click(function() {
-    $('#scopeLiId span').each(function() {
+$('#scopeLiId span').click(function(){
+    $('#scopeLiId span').each(function(){
         $(this).removeClass('active');
     });
     $(this).addClass('active');
@@ -120,7 +132,9 @@ $('#scopeLiId span').click(function() {
     showChart();
     main_table.reload({
         where: {
-            scopeType: $("#scopeType").val()
+            scopeType: $("#scopeType").val(),
+            name: $.trim($("#name").val()),
+            productId: $("#product").val()
         }
         , page: {
             curr: 1
@@ -128,9 +142,11 @@ $('#scopeLiId span').click(function() {
     });
 });
 
-function clientOutPrint() {
+function clientOutPrint(){
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
-    location.href = '/stats/client/clientList/export?scopeType=' + scopeType;
+    var name = $.trim($("#name").val());
+    var productId = $("#product").val();
+    location.href='/stats/client/requestList/export?scopeType='+scopeType+'&name='+name+'&productId='+productId;
 }
 
 
