@@ -75,14 +75,14 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>查询次数</td>
-                                <td>100000次</td>
-                                <td>100000次</td>
+                                <td>请求次数</td>
+                                <td><span th:text="${todayCount}"></span></td>
+                                <td><span th:text="${todayMissCount}"></span></td>
                             </tr>
                             <tr>
-                                <td>失败次数</td>
-                                <td>100000次</td>
-                                <td>100000次</td>
+                                <td>未击中次数</td>
+                                <td><span th:text="${yesterdayCount}"></span></td>
+                                <td><span th:text="${yesterdayMissCount}"></span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -97,12 +97,12 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>100000次</td>
-                                <td>100000次</td>
+                                <td><span th:text="${monthCount}"></span></td>
+                                <td><span th:text="${monthMissCount}"></span></td>
                             </tr>
                             <tr>
-                                <td>100000次</td>
-                                <td>100000次</td>
+                                <td><span th:text="${allCount}"></span></td>
+                                <td><span th:text="${allMissCount}"></span></td>
                             </tr>
                             </tbody>
                         </table>
