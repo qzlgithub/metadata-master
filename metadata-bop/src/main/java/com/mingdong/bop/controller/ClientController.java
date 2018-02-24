@@ -32,13 +32,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "client")
+@RequestMapping(value = "/client")
 public class ClientController
 {
     @Resource
     private ClientService clientService;
 
-    @GetMapping(value = "check")
+    @GetMapping(value = "/check")
     public Map<String, Object> getList(@RequestParam(value = Field.USERNAME) String username)
     {
         BLResp resp = BLResp.build();
@@ -49,7 +49,7 @@ public class ClientController
     /**
      * 判断合同编号唯一性
      */
-    @GetMapping(value = "checkContract")
+    @GetMapping(value = "/checkContract")
     public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
         BLResp resp = BLResp.build();
@@ -57,7 +57,10 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @GetMapping(value = "list")
+    /**
+     * 客户列表
+     */
+    @GetMapping(value = "/list")
     public ListRes getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
@@ -77,7 +80,7 @@ public class ClientController
     }
 
     /**
-     * 客户充值记录
+     * 客户产品充值记录
      */
     @GetMapping(value = "/recharge/list")
     public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
@@ -93,7 +96,6 @@ public class ClientController
         clientService.getProductRechargeList(clientId, productId, fromDate, toDate, new Page(pageNum, pageSize), res);
         return res;
     }
-
 
     /**
      * 客户接口请求记录
