@@ -116,13 +116,13 @@ public class ClientController
 
     }
 
-    @GetMapping(value = "sub-user/list")
+    @GetMapping(value = "/sub-user/list")
     public List<Map<String, Object>> getClientSubUserList(@RequestParam(value = Field.ID) Long clientId)
     {
         return clientService.getClientSubUserList(clientId);
     }
 
-    @PutMapping(value = "addition")
+    @PutMapping(value = "/addition")
     public BLResp addNewClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
@@ -130,7 +130,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "modification")
+    @PostMapping(value = "/modification")
     public BLResp editClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
@@ -138,7 +138,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "status")
+    @PostMapping(value = "/status")
     private BLResp changeClientStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -169,7 +169,7 @@ public class ClientController
         return resp;
     }
 
-    @GetMapping(value = "same")
+    @GetMapping(value = "/same")
     private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
     {
@@ -178,7 +178,7 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @PostMapping(value = "reset")
+    @PostMapping(value = "/reset")
     private BLResp resetPassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -192,7 +192,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "product/open")
+    @PostMapping(value = "/product/open")
     public BLResp openProductService(@RequestBody ProdRechargeVO vo)
     {
         BLResp resp = BLResp.build();
@@ -227,7 +227,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "product/select")
+    @PostMapping(value = "/product/select")
     public BLResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.IDS) String ids)
     {
@@ -246,7 +246,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "product/remove")
+    @PostMapping(value = "/product/remove")
     public BLResp productRemove(@RequestParam(value = Field.ID) Long id)
     {
         BLResp resp = BLResp.build();
@@ -254,7 +254,7 @@ public class ClientController
         return resp;
     }
 
-    @PostMapping(value = "product/renew")
+    @PostMapping(value = "/product/renew")
     public BLResp renewProductService(@RequestBody ProdRechargeVO vo)
     {
         BLResp resp = BLResp.build();
@@ -289,7 +289,7 @@ public class ClientController
         return resp;
     }
 
-    @GetMapping(value = "product/renewInfo")
+    @GetMapping(value = "/product/renewInfo")
     public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_PRODUCT_ID) Long clientProductId)
     {
         BLResp resp = BLResp.build();
@@ -297,7 +297,7 @@ public class ClientController
         return resp.getDataMap();
     }
 
-    @GetMapping(value = "operate/log")
+    @GetMapping(value = "/operate/log")
     public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
