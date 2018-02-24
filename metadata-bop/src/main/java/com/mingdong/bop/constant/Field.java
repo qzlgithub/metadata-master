@@ -151,4 +151,5 @@ public interface Field
     String ACCOUNT = "account";
     String RECHARGE_NO = "rechargeNo";
     String RECHARGE_TYPE_NAME = "rechargeTypeName";
+    String BILL_PLAN_NAME = "billPlanName";
 }

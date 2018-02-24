@@ -1438,6 +1438,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 r.setRechargeNo(o.getTradeNo());
                 r.setProductName(o.getProductName());
                 r.setRechargeTypeName(o.getRechargeType());
+                r.setBillPlan(o.getBillPlan());
                 r.setAmount(o.getAmount());
                 r.setBalance(o.getBalance());
                 r.setManagerName(o.getManagerName());

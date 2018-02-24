@@ -261,6 +261,7 @@
             pr.`trade_no`    as trade_no,
             p.`name`         as product_name,
             drt.`name`       as recharge_type,
+            pr.`bill_plan`   as bill_plan,
             pr.`amount`      as amount,
             pr.`balance`     as balance,
             m.`name`         as manager_name,

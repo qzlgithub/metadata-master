@@ -10,6 +10,7 @@ public class RechargeDTO implements Serializable
     private String rechargeNo;
     private String productName;
     private String rechargeTypeName;
+    private Integer billPlan;
     private BigDecimal amount;
     private BigDecimal balance;
     private String managerName;
@@ -53,6 +54,16 @@ public class RechargeDTO implements Serializable
     public void setRechargeTypeName(String rechargeTypeName)
     {
         this.rechargeTypeName = rechargeTypeName;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
     }
 
     public BigDecimal getAmount()

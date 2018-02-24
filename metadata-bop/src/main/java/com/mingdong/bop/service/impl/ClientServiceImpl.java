@@ -719,6 +719,7 @@ public class ClientServiceImpl implements ClientService
                 m.put(Field.RECHARGE_NO, o.getRechargeNo());
                 m.put(Field.PRODUCT_NAME, o.getProductName());
                 m.put(Field.RECHARGE_TYPE_NAME, o.getRechargeTypeName());
+                m.put(Field.BILL_PLAN_NAME, BillPlan.getNameById(o.getBillPlan()));
                 m.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
                 m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
                 m.put(Field.MANAGER_NAME, o.getManagerName());
@@ -789,10 +790,11 @@ public class ClientServiceImpl implements ClientService
         row.createCell(1).setCellValue("充值单号");
         row.createCell(2).setCellValue("产品服务");
         row.createCell(3).setCellValue("充值类型");
-        row.createCell(4).setCellValue("充值金额");
-        row.createCell(5).setCellValue("产品余额");
-        row.createCell(6).setCellValue("经手人");
-        row.createCell(7).setCellValue("合同编号");
+        row.createCell(4).setCellValue("计费方式");
+        row.createCell(5).setCellValue("充值金额");
+        row.createCell(6).setCellValue("产品余额");
+        row.createCell(7).setCellValue("经手人");
+        row.createCell(8).setCellValue("合同编号");
 
         ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, startTime,
                 endTime, page);
@@ -812,10 +814,11 @@ public class ClientServiceImpl implements ClientService
                 dataRow.createCell(1).setCellValue(pri.getRechargeNo());
                 dataRow.createCell(2).setCellValue(pri.getProductName());
                 dataRow.createCell(3).setCellValue(pri.getRechargeTypeName());
-                dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(pri.getAmount()));
-                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(pri.getBalance()));
-                dataRow.createCell(6).setCellValue(pri.getManagerName());
-                dataRow.createCell(7).setCellValue(pri.getContractNo());
+                dataRow.createCell(4).setCellValue(BillPlan.getNameById(pri.getBillPlan()));
+                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(pri.getAmount()));
+                dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(pri.getBalance()));
+                dataRow.createCell(7).setCellValue(pri.getManagerName());
+                dataRow.createCell(8).setCellValue(pri.getContractNo());
             }
         }
         return wb;
