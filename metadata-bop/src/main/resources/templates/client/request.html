@@ -82,6 +82,14 @@
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/client-request.js"></script>
+
+<script type="text/html" id="hitTpl">
+    {{# if(d.isHit === 1){ }}
+    <div>击中</div>
+    {{# } else { }}
+    <div>未击中</div>
+    {{# } }}
+</script>
 </body>
 </html>
 

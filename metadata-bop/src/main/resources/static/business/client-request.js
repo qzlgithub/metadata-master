@@ -33,7 +33,7 @@ layui.config({
             {field: 'username', title: '客户账号'},
             {field: 'productName', title: '产品服务'},
             {field: 'billPlan', title: '计费方式'},
-            {field: 'isHit', title: '是否击中'},
+            {field: 'isHit', title: '是否击中', templet: "#hitTpl"},
             {field: 'fee', title: '费用（元）'},
             {field: 'balance', title: '余额（元）'}
         ]],
