@@ -344,7 +344,7 @@ public class ClientServiceImpl implements ClientService
         pr.setBillPlan(billPlan);
         pr.setRechargeType(rechargeType);
         pr.setAmount(amount);
-        pr.setBalance(new BigDecimal(0));
+//        pr.setBalance(amount);
         pr.setStartDate(startDate);
         pr.setEndDate(endDate);
         pr.setRemark(remark);
@@ -354,7 +354,7 @@ public class ClientServiceImpl implements ClientService
         cp.setId(clientProductId);
         cp.setUpdateTime(current);
         cp.setBillPlan(billPlan);
-        cp.setBalance(new BigDecimal(0));
+//        cp.setBalance(amount);
         cp.setLatestRechargeId(productRechargeId);
         cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);

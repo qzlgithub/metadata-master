@@ -1078,12 +1078,19 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 }
                 openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
                 openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
-                if(!openClientProductDTO.isYear())
+                if(!BillPlan.BY_TIME.equals(cp.getBillPlan()))
                 {
+                    //上一次非包年形式-余额相加
                     openClientProductDTO.getProductRechargeDTO().setBalance(
                             openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
                     openClientProductDTO.getClientProductDTO().setBalance(
                             openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
+                }else{
+                    //上一次为包年形式-余额重置
+                    openClientProductDTO.getProductRechargeDTO().setBalance(
+                            openClientProductDTO.getProductRechargeDTO().getAmount());
+                    openClientProductDTO.getClientProductDTO().setBalance(
+                            openClientProductDTO.getProductRechargeDTO().getAmount());
                 }
                 ProductRecharge pr = new ProductRecharge();
                 EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
@@ -1361,14 +1368,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
             cp.setBillPlan(dto.getBillPlan());
             cp.setLatestRechargeId(recharge.getId());
             cp.setOpened(TrueOrFalse.TRUE);
-            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-            {
-                cp.setBalance(new BigDecimal(0));
-            }
-            else
-            {
+//            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+//            {
+//                cp.setBalance(new BigDecimal(0));
+//            }
+//            else
+//            {
                 cp.setBalance(dto.getAmount());
-            }
+//            }
             clientProductMapper.add(cp);
         }
         else
@@ -1379,14 +1386,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
             cpUpd.setBillPlan(dto.getBillPlan());
             cpUpd.setLatestRechargeId(recharge.getId());
             cpUpd.setOpened(TrueOrFalse.TRUE);
-            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-            {
-                cpUpd.setBalance(new BigDecimal(0));
-            }
-            else
-            {
+//            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+//            {
+//                cpUpd.setBalance(new BigDecimal(0));
+//            }
+//            else
+//            {
                 cpUpd.setBalance(dto.getAmount());
-            }
+//            }
             clientProductMapper.updateSkipNull(cpUpd);
         }
         return res;
