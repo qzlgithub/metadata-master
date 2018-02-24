@@ -1067,7 +1067,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 }
                 openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
                 openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
-                if(BillPlan.getById(cp.getBillPlan()) != BillPlan.BY_TIME)
+                if(!BillPlan.BY_TIME.equals(cp.getBillPlan()))
                 {
                     //上一次非包年形式-余额相加
                     openClientProductDTO.getProductRechargeDTO().setBalance(
