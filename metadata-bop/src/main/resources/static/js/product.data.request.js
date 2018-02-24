@@ -47,6 +47,7 @@ layui.config({
         }
     });
     form.on('submit(search)', function(data) {
+        showChart();
         var params = data.field;
         main_table.reload({
             where: {
