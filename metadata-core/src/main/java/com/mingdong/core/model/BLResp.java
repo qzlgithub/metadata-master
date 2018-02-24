@@ -74,4 +74,13 @@ public class BLResp
         }
         dataMap.put(k, v);
     }
+
+    public void addAllData(Map<String,Object> map){
+        if(map == null){
+            return;
+        }
+        for(Map.Entry<String,Object> entry : map.entrySet()){
+            addData(entry.getKey(),entry.getValue());
+        }
+    }
 }

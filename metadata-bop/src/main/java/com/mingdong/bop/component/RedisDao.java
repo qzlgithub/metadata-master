@@ -2,6 +2,9 @@ package com.mingdong.bop.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.mingdong.bop.constant.Trade;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.common.constant.DateFormat;
@@ -20,6 +23,26 @@ public class RedisDao extends RedisBaseDao
     public String getIndustryInfo(Long industryId)
     {
         return hGet(DB.SYSTEM, Key.INDUSTRY, industryId + "");
+    }
+
+    public <T> T getObject(String key, int seconds, TypeReference<T> type,
+            DataAbstract<T> da) {
+        String value = get(DB.SYSTEM,key);
+        if(value == null){
+            T t = da.queryData();
+            if(t == null){
+                return null;
+            }
+            value = JSON.toJSONString(t, SerializerFeature.EMPTY);
+            if (seconds > 0) {
+                setEx(DB.SYSTEM, key, value, seconds);
+            } else {
+                set(DB.SYSTEM, key, value);
+            }
+            return t;
+        }else{
+            return JSON.parseObject(value, type, Feature.IgnoreNotMatch);
+        }
     }
 
     public void saveIndustryInfo(Long industryId, String industryName)

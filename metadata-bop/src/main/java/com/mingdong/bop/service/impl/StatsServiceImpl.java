@@ -2,6 +2,8 @@ package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.mingdong.bop.component.DataAbstract;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
@@ -64,24 +66,43 @@ public class StatsServiceImpl implements StatsService
     @Resource
     private RemoteClientService remoteClientService;
 
+    private String INDEX_STATS_KEY = "indexStatsKey";
+    private String CLIENT_INDEX_STATS_KEY = "clientIndexStatsKey";
+    private String RECHARGE_INDEX_STATS_KEY = "rechargeIndexStatsKey";
+    private String REQUEST_INDEX_STATS_KEY = "requestIndexStatsKey";
+    private Integer SECONDS = 60;
+
     @Override
     public BLResp getIndexStats()
     {
         BLResp resp = BLResp.build();
-        Date currentDay = new Date();
-        Date nowDay = DateCalculateUtils.getCurrentDate(currentDay);//今日00:00:00
-        Date previousDay = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);//昨天00:00:00
-        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
-        Date monthDay = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);//近30天00:00:00
-        Integer allClientCount = remoteStatsService.getAllClientCount();
-        Integer clientCountByDate = remoteStatsService.getClientCountByDate(monthDay, currentDay);
-        BigDecimal clientRechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay, currentDay);
-        BigDecimal clientRechargeByMonth = remoteStatsService.getClientRechargeStatsByDate(monthDay, currentDay);
-        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount + "");
-        resp.addData(Field.CLIENT_COUNT_BY_DATE, clientCountByDate + "");
-        resp.addData(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(clientRechargeByWeek));
-        resp.addData(Field.CLIENT_RECHARGE_BY_MONTH, NumberUtils.formatAmount(clientRechargeByMonth));
-
+        Map<String, Object> objectMap = redisDao.getObject(INDEX_STATS_KEY, SECONDS,
+                new TypeReference<Map<String, Object>>()
+                {
+                }, new DataAbstract<Map<String, Object>>()
+                {
+                    @Override
+                    public Map<String, Object> queryData()
+                    {
+                        Map<String, Object> map = new HashMap<>();
+                        Date currentDay = new Date();
+                        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
+                        Date monthDay = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);//近30天00:00:00
+                        Integer allClientCount = remoteStatsService.getAllClientCount();
+                        Integer clientCountByDate = remoteStatsService.getClientCountByDate(monthDay, currentDay);
+                        BigDecimal clientRechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay,
+                                currentDay);
+                        BigDecimal clientRechargeByMonth = remoteStatsService.getClientRechargeStatsByDate(monthDay,
+                                currentDay);
+                        map.put(Field.ALL_CLIENT_COUNT, allClientCount + "");
+                        map.put(Field.CLIENT_COUNT_BY_DATE, clientCountByDate + "");
+                        map.put(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(clientRechargeByWeek));
+                        map.put(Field.CLIENT_RECHARGE_BY_MONTH, NumberUtils.formatAmount(clientRechargeByMonth));
+                        return map;
+                    }
+                });
+        resp.addAllData(objectMap);
+        getRequestQuery(resp);
         return resp;
     }
 
@@ -89,15 +110,29 @@ public class StatsServiceImpl implements StatsService
     public BLResp getClientIndexStats()
     {
         BLResp resp = BLResp.build();
-        Date currentDay = new Date();
-        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
-        Date monthFrist = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);//当前月第一天00:00:00
-        Integer allClientCount = remoteStatsService.getAllClientCount();
-        Integer clientCountByWeek = remoteStatsService.getClientCountByDate(weekDay, currentDay);
-        Integer clientCountByMonthFrist = remoteStatsService.getClientCountByDate(monthFrist, currentDay);
-        resp.addData(Field.ALL_CLIENT_COUNT, allClientCount + "");
-        resp.addData(Field.CLIENT_COUNT_BY_WEEK, clientCountByWeek + "");
-        resp.addData(Field.CLIENT_COUNT_BY_MONTH_FRIST, clientCountByMonthFrist + "");
+        Map<String, Object> objectMap = redisDao.getObject(CLIENT_INDEX_STATS_KEY, SECONDS,
+                new TypeReference<Map<String, Object>>()
+                {
+                }, new DataAbstract<Map<String, Object>>()
+                {
+                    @Override
+                    public Map<String, Object> queryData()
+                    {
+                        Map<String, Object> map = new HashMap<>();
+                        Date currentDay = new Date();
+                        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);//近7天00:00:00
+                        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);//当前月第一天00:00:00
+                        Integer allClientCount = remoteStatsService.getAllClientCount();
+                        Integer clientCountByWeek = remoteStatsService.getClientCountByDate(weekDay, currentDay);
+                        Integer clientCountByMonthFirst = remoteStatsService.getClientCountByDate(monthFirst,
+                                currentDay);
+                        map.put(Field.ALL_CLIENT_COUNT, allClientCount + "");
+                        map.put(Field.CLIENT_COUNT_BY_WEEK, clientCountByWeek + "");
+                        map.put(Field.CLIENT_COUNT_BY_MONTH_FRIST, clientCountByMonthFirst + "");
+                        return map;
+                    }
+                });
+        resp.addAllData(objectMap);
         return resp;
     }
 
@@ -208,18 +243,33 @@ public class StatsServiceImpl implements StatsService
     public BLResp getRechargeIndexStats()
     {
         BLResp resp = BLResp.build();
-        Date currentDay = new Date();
-        Date nowDay = DateCalculateUtils.getCurrentDate(currentDay);
-        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
-        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
-        BigDecimal rechargeByNow = remoteStatsService.getClientRechargeStatsByDate(nowDay, currentDay);
-        BigDecimal rechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay, currentDay);
-        BigDecimal rechargeByMonthFirst = remoteStatsService.getClientRechargeStatsByDate(monthFirst, currentDay);
-        BigDecimal rechargeByAll = remoteStatsService.getClientRechargeStatsAll();
-        resp.addData(Field.CLIENT_RECHARGE_BY_NOW, NumberUtils.formatAmount(rechargeByNow));
-        resp.addData(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(rechargeByWeek));
-        resp.addData(Field.CLIENT_RECHARGE_BY_MONTH_FIRST, NumberUtils.formatAmount(rechargeByMonthFirst));
-        resp.addData(Field.CLIENT_RECHARGE_BY_ALL, NumberUtils.formatAmount(rechargeByAll));
+        Map<String, Object> objectMap = redisDao.getObject(RECHARGE_INDEX_STATS_KEY, SECONDS,
+                new TypeReference<Map<String, Object>>()
+                {
+                }, new DataAbstract<Map<String, Object>>()
+                {
+                    @Override
+                    public Map<String, Object> queryData()
+                    {
+                        Map<String, Object> map = new HashMap<>();
+                        Date currentDay = new Date();
+                        Date nowDay = DateCalculateUtils.getCurrentDate(currentDay);
+                        Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
+                        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
+                        BigDecimal rechargeByNow = remoteStatsService.getClientRechargeStatsByDate(nowDay, currentDay);
+                        BigDecimal rechargeByWeek = remoteStatsService.getClientRechargeStatsByDate(weekDay,
+                                currentDay);
+                        BigDecimal rechargeByMonthFirst = remoteStatsService.getClientRechargeStatsByDate(monthFirst,
+                                currentDay);
+                        BigDecimal rechargeByAll = remoteStatsService.getClientRechargeStatsAll();
+                        map.put(Field.CLIENT_RECHARGE_BY_NOW, NumberUtils.formatAmount(rechargeByNow));
+                        map.put(Field.CLIENT_RECHARGE_BY_WEEK, NumberUtils.formatAmount(rechargeByWeek));
+                        map.put(Field.CLIENT_RECHARGE_BY_MONTH_FIRST, NumberUtils.formatAmount(rechargeByMonthFirst));
+                        map.put(Field.CLIENT_RECHARGE_BY_ALL, NumberUtils.formatAmount(rechargeByAll));
+                        return map;
+                    }
+                });
+        resp.addAllData(objectMap);
         return resp;
     }
 
@@ -390,8 +440,9 @@ public class StatsServiceImpl implements StatsService
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(name, productId, null, beforeDate,
                 currentDay, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.MISS_COUNT,listDTO.getExtradata().get(Field.MISS_COUNT));
-        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
+        res.addExtra(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
+        res.addExtra(Field.TITLE,
+                dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
@@ -462,7 +513,7 @@ public class StatsServiceImpl implements StatsService
                 dataRow.createCell(4).setCellValue(dataInfo.getUsername());
                 dataRow.createCell(5).setCellValue(dataInfo.getProductName());
                 dataRow.createCell(6).setCellValue(BillPlan.getNameById(dataInfo.getBillPlan()));
-                dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit())?"击中":"未击中");
+                dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
                 dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
             }
         }
@@ -476,13 +527,16 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<StatsDateInfoDTO> listDTO = remoteStatsService.getRequestListStats(beforeDate, currentDay,name,productId);
+        ListDTO<StatsDateInfoDTO> listDTO = remoteStatsService.getRequestListStats(beforeDate, currentDay, name,
+                productId);
         List<StatsDateInfoDTO> list = listDTO.getList();
-        Map<String,Integer> dateIntMap = new HashMap<>();
+        Map<String, Integer> dateIntMap = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(!CollectionUtils.isEmpty(list)){
-            for(StatsDateInfoDTO item : list){
-                dateIntMap.put(sdf.format(item.getDate()),item.getCount());
+        if(!CollectionUtils.isEmpty(list))
+        {
+            for(StatsDateInfoDTO item : list)
+            {
+                dateIntMap.put(sdf.format(item.getDate()), item.getCount());
             }
         }
         Map<String, Integer> dateMap = new LinkedHashMap<>();
@@ -493,9 +547,12 @@ public class StatsServiceImpl implements StatsService
         {
             String dateStr = sdf.format(c.getTime());
             Integer integer = dateIntMap.get(dateStr);
-            if(integer != null){
+            if(integer != null)
+            {
                 dateMap.put(dateStr, integer);
-            }else{
+            }
+            else
+            {
                 dateMap.put(dateStr, 0);
             }
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -514,57 +571,86 @@ public class StatsServiceImpl implements StatsService
     public BLResp getRequestIndexStats()
     {
         BLResp blResp = new BLResp();
-        ListDTO<StatsDateInfoDTO> requestListStats = remoteStatsService.getRequestListStats(null, null, null, null);
-        List<StatsDateInfoDTO> list = requestListStats.getList();
-        Date currentDay = new Date();
-        Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
-        Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
-        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
-        Map<String,Integer> dataMap = new HashMap<>();
-        dataMap.put(Field.TODAY_COUNT,0);
-        dataMap.put(Field.TODAY_MISS_COUNT,0);
-        dataMap.put(Field.YESTERDAY_COUNT,0);
-        dataMap.put(Field.YESTERDAY_MISS_COUNT,0);
-        dataMap.put(Field.MONTH_COUNT,0);
-        dataMap.put(Field.MONTH_MISS_COUNT,0);
-        dataMap.put(Field.ALL_COUNT,0);
-        dataMap.put(Field.ALL_MISS_COUNT,0);
-        for(StatsDateInfoDTO item : list){
-            if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate())){
-                Integer count = dataMap.get(Field.TODAY_COUNT);
-                dataMap.put(Field.TODAY_COUNT,count+item.getCount());
-                if(item.getMissCount() != null){
-                    Integer missCount = dataMap.get(Field.TODAY_MISS_COUNT);
-                    dataMap.put(Field.TODAY_MISS_COUNT,missCount+item.getMissCount());
-                }
-            }
-            if(yesterdayDate.equals(item.getDate()) || (yesterdayDate.before(item.getDate()) && nowDate.after(item.getDate()))){
-                Integer count = dataMap.get(Field.YESTERDAY_COUNT);
-                dataMap.put(Field.YESTERDAY_COUNT,count+item.getCount());
-                if(item.getMissCount() != null){
-                    Integer missCount = dataMap.get(Field.YESTERDAY_MISS_COUNT);
-                    dataMap.put(Field.YESTERDAY_MISS_COUNT,missCount+item.getMissCount());
-                }
-            }
-            if(monthFirst.equals(item.getDate()) || monthFirst.before(item.getDate())){
-                Integer count = dataMap.get(Field.MONTH_COUNT);
-                dataMap.put(Field.MONTH_COUNT,count+item.getCount());
-                if(item.getMissCount() != null){
-                    Integer missCount = dataMap.get(Field.MONTH_MISS_COUNT);
-                    dataMap.put(Field.MONTH_MISS_COUNT,missCount+item.getMissCount());
-                }
-            }
-            Integer count = dataMap.get(Field.ALL_COUNT);
-            dataMap.put(Field.ALL_COUNT,count+item.getCount());
-            if(item.getMissCount() != null){
-                Integer missCount = dataMap.get(Field.ALL_MISS_COUNT);
-                dataMap.put(Field.ALL_MISS_COUNT,missCount+item.getMissCount());
-            }
-        }
-        for(Map.Entry<String,Integer> entry : dataMap.entrySet()){
-            blResp.addData(entry.getKey(),entry.getValue()+"");
-        }
+        getRequestQuery(blResp);
         return blResp;
+    }
+
+    private void getRequestQuery(BLResp blResp)
+    {
+        Map<String, Object> objectMap = redisDao.getObject(REQUEST_INDEX_STATS_KEY, SECONDS,
+                new TypeReference<Map<String, Object>>()
+                {
+                }, new DataAbstract<Map<String, Object>>()
+                {
+                    @Override
+                    public Map<String, Object> queryData()
+                    {
+                        Map<String, Object> map = new HashMap<>();
+                        ListDTO<StatsDateInfoDTO> requestListStats = remoteStatsService.getRequestListStats(null, null,
+                                null, null);
+                        List<StatsDateInfoDTO> list = requestListStats.getList();
+                        Date currentDay = new Date();
+                        Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
+                        Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
+                        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
+                        Map<String, Integer> dataMap = new HashMap<>();
+                        dataMap.put(Field.TODAY_COUNT, 0);
+                        dataMap.put(Field.TODAY_MISS_COUNT, 0);
+                        dataMap.put(Field.YESTERDAY_COUNT, 0);
+                        dataMap.put(Field.YESTERDAY_MISS_COUNT, 0);
+                        dataMap.put(Field.MONTH_COUNT, 0);
+                        dataMap.put(Field.MONTH_MISS_COUNT, 0);
+                        dataMap.put(Field.ALL_COUNT, 0);
+                        dataMap.put(Field.ALL_MISS_COUNT, 0);
+                        for(StatsDateInfoDTO item : list)
+                        {
+                            if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate()))
+                            {
+                                Integer count = dataMap.get(Field.TODAY_COUNT);
+                                dataMap.put(Field.TODAY_COUNT, count + item.getCount());
+                                if(item.getMissCount() != null)
+                                {
+                                    Integer missCount = dataMap.get(Field.TODAY_MISS_COUNT);
+                                    dataMap.put(Field.TODAY_MISS_COUNT, missCount + item.getMissCount());
+                                }
+                            }
+                            if(yesterdayDate.equals(item.getDate()) || (yesterdayDate.before(item.getDate()) &&
+                                    nowDate.after(item.getDate())))
+                            {
+                                Integer count = dataMap.get(Field.YESTERDAY_COUNT);
+                                dataMap.put(Field.YESTERDAY_COUNT, count + item.getCount());
+                                if(item.getMissCount() != null)
+                                {
+                                    Integer missCount = dataMap.get(Field.YESTERDAY_MISS_COUNT);
+                                    dataMap.put(Field.YESTERDAY_MISS_COUNT, missCount + item.getMissCount());
+                                }
+                            }
+                            if(monthFirst.equals(item.getDate()) || monthFirst.before(item.getDate()))
+                            {
+                                Integer count = dataMap.get(Field.MONTH_COUNT);
+                                dataMap.put(Field.MONTH_COUNT, count + item.getCount());
+                                if(item.getMissCount() != null)
+                                {
+                                    Integer missCount = dataMap.get(Field.MONTH_MISS_COUNT);
+                                    dataMap.put(Field.MONTH_MISS_COUNT, missCount + item.getMissCount());
+                                }
+                            }
+                            Integer count = dataMap.get(Field.ALL_COUNT);
+                            dataMap.put(Field.ALL_COUNT, count + item.getCount());
+                            if(item.getMissCount() != null)
+                            {
+                                Integer missCount = dataMap.get(Field.ALL_MISS_COUNT);
+                                dataMap.put(Field.ALL_MISS_COUNT, missCount + item.getMissCount());
+                            }
+                        }
+                        for(Map.Entry<String, Integer> entry : dataMap.entrySet())
+                        {
+                            map.put(entry.getKey(), entry.getValue() + "");
+                        }
+                        return map;
+                    }
+                });
+        blResp.addAllData(objectMap);
     }
 
     private void getProductRechargeInfoList(Page page, Date date, Date currentDay, ListRes res)
