@@ -46,7 +46,8 @@ public class ProductServiceImpl implements ProductService
         if(product != null)
         {
             ProductTxtDTO productTxt = remoteProductService.getProductTxtById(productId);
-            map.put(Field.TYPE, ProdType.getById(product.getType()).getName());
+            map.put(Field.TYPE,
+                    ProdType.getById(product.getType()) != null ? ProdType.getById(product.getType()).getName() : null);
             map.put(Field.CUSTOM, Custom.getById(product.getCustom()).getName());
             map.put(Field.CODE, product.getCode());
             map.put(Field.NAME, product.getName());

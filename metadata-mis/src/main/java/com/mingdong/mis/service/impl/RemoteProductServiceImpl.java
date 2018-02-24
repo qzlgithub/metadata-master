@@ -435,8 +435,10 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 {
                     productInfoDTO = new ProductInfoDTO();
                     EntityUtils.copyProperties(item, productInfoDTO);
-                    productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()).getName());
-                    productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()).getName());
+                    productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()) != null ?
+                            Custom.getById(productInfoDTO.getCustom()).getName() : null);
+                    productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()) != null ?
+                            ProdType.getById(productInfoDTO.getType()).getName() : null);
                     dataList.add(productInfoDTO);
                 }
             }
@@ -458,8 +460,10 @@ public class RemoteProductServiceImpl implements RemoteProductService
                         productInfoDTO = new ProductInfoDTO();
                         dataList.add(productInfoDTO);
                         EntityUtils.copyProperties(item, productInfoDTO);
-                        productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()).getName());
-                        productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()).getName());
+                        productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()) != null ?
+                                Custom.getById(productInfoDTO.getCustom()).getName() : null);
+                        productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()) != null ?
+                                ProdType.getById(productInfoDTO.getType()).getName() : null);
                     }
                 }
             }

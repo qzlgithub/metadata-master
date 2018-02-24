@@ -18,17 +18,6 @@ public class ApiReq
     private Integer hit;
     private BigDecimal fee;
     private BigDecimal balance;
-    private BigDecimal cost;
-
-    public BigDecimal getCost()
-    {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost)
-    {
-        this.cost = cost;
-    }
 
     public Long getId()
     {

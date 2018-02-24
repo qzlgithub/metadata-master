@@ -316,10 +316,7 @@ public class StatsServiceImpl implements StatsService
             jsonObjectTemp.put("value", entry.getValue());
             jsonArrayTemp.add(jsonObjectTemp);
         }
-        for(String item : setTemp)
-        {
-            jsonArrayTemp1.add(item);
-        }
+        jsonArrayTemp1.addAll(setTemp);
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
@@ -363,12 +360,7 @@ public class StatsServiceImpl implements StatsService
             bigMapTemp = entry.getValue();
             for(Map.Entry<String, BigDecimal> entrySec : bigMapTemp.entrySet())
             {
-                bigListTemp = nameBigDecMap.get(entrySec.getKey());
-                if(bigListTemp == null)
-                {
-                    bigListTemp = new ArrayList<>();
-                    nameBigDecMap.put(entrySec.getKey(), bigListTemp);
-                }
+                bigListTemp = nameBigDecMap.computeIfAbsent(entrySec.getKey(), k -> new ArrayList<>());
                 bigListTemp.add(entrySec.getValue());
             }
         }
