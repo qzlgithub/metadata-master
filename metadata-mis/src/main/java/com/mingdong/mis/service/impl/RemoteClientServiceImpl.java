@@ -282,13 +282,16 @@ public class RemoteClientServiceImpl implements RemoteClientService
         List<SubUserDTO> list = new ArrayList<>();
         for(ClientUser o : userList)
         {
-            SubUserDTO su = new SubUserDTO();
-            su.setUserId(o.getId());
-            su.setUsername(o.getUsername());
-            su.setName(o.getName());
-            su.setPhone(o.getPhone());
-            su.setEnabled(o.getEnabled());
-            list.add(su);
+            if(!client.getPrimaryUserId().equals(o.getId()))
+            {
+                SubUserDTO su = new SubUserDTO();
+                su.setUserId(o.getId());
+                su.setUsername(o.getUsername());
+                su.setName(o.getName());
+                su.setPhone(o.getPhone());
+                su.setEnabled(o.getEnabled());
+                list.add(su);
+            }
         }
         res.setTotal(userList.size());
         res.setList(list);
@@ -299,6 +302,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ListDTO<SubUserDTO> getSubUserList(Long clientId, boolean includeDeleted)
     {
         ListDTO<SubUserDTO> res = new ListDTO<>();
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            return res;
+        }
         List<ClientUser> userList;
         if(includeDeleted)
         {
@@ -311,13 +319,16 @@ public class RemoteClientServiceImpl implements RemoteClientService
         List<SubUserDTO> list = new ArrayList<>();
         for(ClientUser o : userList)
         {
-            SubUserDTO su = new SubUserDTO();
-            su.setUserId(o.getId());
-            su.setUsername(o.getUsername());
-            su.setName(o.getName());
-            su.setPhone(o.getPhone());
-            su.setDeleted(o.getDeleted());
-            list.add(su);
+            if(!client.getPrimaryUserId().equals(o.getId()))
+            {
+                SubUserDTO su = new SubUserDTO();
+                su.setUserId(o.getId());
+                su.setUsername(o.getUsername());
+                su.setName(o.getName());
+                su.setPhone(o.getPhone());
+                su.setDeleted(o.getDeleted());
+                list.add(su);
+            }
         }
         res.setTotal(userList.size());
         res.setList(list);
