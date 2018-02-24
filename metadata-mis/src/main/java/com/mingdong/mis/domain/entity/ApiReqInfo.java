@@ -17,11 +17,22 @@ public class ApiReqInfo
     private String requestIp;//连接ip
     private BigDecimal fee;//消费金额
     private BigDecimal balance;//余额
+    private BigDecimal cost;//成本
     private String corpName;
     private String shortName;
     private String username;
     private String productName;
     private String billPlanName;
+
+    public BigDecimal getCost()
+    {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost)
+    {
+        this.cost = cost;
+    }
 
     public String getRequestIp()
     {

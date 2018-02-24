@@ -14,6 +14,7 @@
         <result column="bill_plan" property="billPlan" jdbcType="TINYINT" />
         <result column="fee" property="fee" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="cost" property="cost" jdbcType="DECIMAL" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
@@ -79,7 +80,8 @@
             ar.`bill_plan`   as bill_plan,
             ar.`hit`         as hit,
             ar.`fee`         as fee,
-            ar.`balance`     as balance
+            ar.`balance`     as balance,
+            ar.`cost`        as cost
         from `api_req` ar
             left join `client` c
                 on ar.`client_id` = c.`id`
@@ -113,6 +115,7 @@
         ar.`bill_plan`     as bill_plan,
         ar.`fee`     as fee,
         ar.`balance`     as balance,
+        ar.`cost`        as cost,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
         cu.`username`    as username,
@@ -170,6 +173,7 @@
         ar.`bill_plan`     as bill_plan,
         ar.`fee`     as fee,
         ar.`balance`     as balance,
+        ar.`cost`        as cost,
         c.`corp_name`    as corp_name,
         c.`short_name`   as short_name,
         cu.`username`    as username,
