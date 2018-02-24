@@ -23,8 +23,10 @@ import com.mingdong.core.model.dto.ClientOperateInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
+import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -1340,6 +1342,33 @@ public class RemoteClientServiceImpl implements RemoteClientService
             clientProductMapper.updateSkipNull(cpUpd);
         }
         return res;
+    }
+
+    @Override
+    public ClientUserDictDTO getClientAccountDict(Long clientId)
+    {
+        ClientUserDictDTO res = new ClientUserDictDTO();
+        Client client = clientMapper.findById(clientId);
+        if(client == null)
+        {
+            return res;
+        }
+        res.setCorpName(client.getCorpName());
+        List<ClientUser> userList = clientUserMapper.getAvailableListByClient(clientId);
+        List<DictDTO> userDict = new ArrayList<>();
+        for(ClientUser o : userList)
+        {
+            if(o.getId().equals(client.getPrimaryUserId()))
+            {
+                userDict.add(new DictDTO(o.getId() + "", "主账号"));
+            }
+            else
+            {
+                userDict.add(new DictDTO(o.getId() + "", o.getName()));
+            }
+        }
+        res.setUserDict(userDict);
+        return null;
     }
 
     /**

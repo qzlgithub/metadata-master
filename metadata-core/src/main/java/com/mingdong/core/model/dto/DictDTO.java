@@ -7,6 +7,10 @@ public class DictDTO implements Serializable
     private String key;
     private String value;
 
+    public DictDTO()
+    {
+    }
+
     public DictDTO(String key, String value)
     {
         this.key = key;
