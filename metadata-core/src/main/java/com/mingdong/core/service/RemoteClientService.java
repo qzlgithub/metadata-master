@@ -11,6 +11,7 @@ import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
+import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -186,4 +187,6 @@ public interface RemoteClientService
      * 开通客户产品服务
      */
     ResultDTO openProduct(ProductOpenDTO dto);
+
+    ClientUserDictDTO getClientAccountDict(Long clientId);
 }
