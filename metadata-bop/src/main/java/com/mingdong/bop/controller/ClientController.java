@@ -138,15 +138,17 @@ public class ClientController
 
     }
 
-    @GetMapping(value = "/consumeList/export")
+    @GetMapping(value = "/request/export")
     public void exportConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
+            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
             throws IOException
     {
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(null, null, clientId, null, productId, startTime,
-                endTime, new Page(1, 1000));
+
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(clientId, userId, productId, fromDate, toDate,
+                new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");

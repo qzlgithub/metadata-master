@@ -16,6 +16,7 @@ import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import org.apache.poi.ss.usermodel.Cell;
@@ -314,6 +315,55 @@ public class TradeServiceImpl implements TradeService
             {
                 dataRow.createCell(8).setCellValue("/");
                 dataRow.createCell(9).setCellValue("/");
+            }
+            else
+            {
+                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+                dataRow.createCell(9).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+            }
+        }
+        return wb;
+    }
+
+    @Override
+    public XSSFWorkbook createClientBillListXlsx(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
+            Page page)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("消费数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("请求时间");
+        row.createCell(1).setCellValue("请求单号");
+        row.createCell(4).setCellValue("客户账号");
+        row.createCell(5).setCellValue("产品服务");
+        row.createCell(6).setCellValue("计费方式");
+        row.createCell(7).setCellValue("是否击中");
+        row.createCell(8).setCellValue("费用(元)");
+        row.createCell(9).setCellValue("余额(元)");
+        Row dataRow;
+        Cell cell;
+        CellStyle timeStyle = wb.createCellStyle();
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
+        ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, fromDate,
+                toDate, page);
+        List<RequestDTO> list = listDTO.getList();
+        RequestDTO dataInfo;
+        for(int i = 0; i < list.size(); i++)
+        {
+            dataInfo = list.get(i);
+            dataRow = sheet.createRow(i + 1);
+            cell = dataRow.createCell(0);
+            cell.setCellValue(dataInfo.getRequestAt());
+            cell.setCellStyle(timeStyle);
+            dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
+            dataRow.createCell(4).setCellValue(dataInfo.getUsername());
+            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
+            dataRow.createCell(6).setCellValue(BillPlan.getNameById(dataInfo.getBillPlan()));
+            dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
+            if(BillPlan.BY_TIME.getId().equals(dataInfo.getBillPlan()))
+            {
+                dataRow.createCell(8).setCellValue("-");
+                dataRow.createCell(9).setCellValue("-");
             }
             else
             {

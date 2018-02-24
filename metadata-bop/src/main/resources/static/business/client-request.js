@@ -63,15 +63,22 @@ layui.config({
             }
         });
     });
+    form.on('submit(export)', function(data) {
+        var params = data.field;
+        var uri = "/client/request/export?clientId=" + params["client-id"] + "&userId=" + params['user-id']
+            + "&productId=" + params['product-id'] + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
+        location.href = encodeURI(uri);
+    });
 });
-
-function consumeOutPrint() {
-    var productId = $("#product").val().trim();
-    var clientId = $("#client-id").val().trim();
+/*
+$("#output").on("click", function() {
+    var uri = "/client/request/export?c=" + $("#clientId").val();
+    var productId = $("#productId").val();
+    var userId = $("#userId").val().trim();
     var startDate = $("#start-time").val().trim();
     var endDate = $("#end-time").val().trim();
     var url = '/client/consumeList/export?clientId=' + clientId + "&productId=" + productId
         + "&startTime=" + (startDate == '' ? '' : startDate + " 00:00:00")
         + "&endTime=" + (endDate == '' ? '' : endDate + " 23:59:59");
     location.href = encodeURI(url);
-}
+});*/
