@@ -276,7 +276,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         Client client = clientMapper.findById(clientId);
         if(client == null || !userId.equals(client.getPrimaryUserId()))
         {
-            return res.createDefault();
+            return res;
         }
         List<ClientUser> userList = clientUserMapper.getAvailableListByClient(clientId);
         List<SubUserDTO> list = new ArrayList<>();

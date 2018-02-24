@@ -2,6 +2,7 @@ package com.mingdong.csp.service.impl;
 
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -84,20 +85,22 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientSubAccountList(ListRes res)
     {
-        ListDTO<SubUserDTO> listDTO = clientApi.getSubUserList(RequestThread.getClientId(),
-                RequestThread.getUserId());
+        ListDTO<SubUserDTO> listDTO = clientApi.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
         res.addExtra(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
-        res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
-        for(SubUserDTO o : listDTO.getList())
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            Map<String, Object> m = new HashMap<>();
-            m.put(Field.USER_ID, o.getUserId() + "");
-            m.put(Field.USERNAME, o.getUsername());
-            m.put(Field.NAME, o.getName());
-            m.put(Field.PHONE, o.getPhone());
-            m.put(Field.ENABLED, o.getEnabled());
-            list.add(m);
+            res.setTotal(listDTO.getTotal());
+            for(SubUserDTO o : listDTO.getList())
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.USER_ID, o.getUserId() + "");
+                m.put(Field.USERNAME, o.getUsername());
+                m.put(Field.NAME, o.getName());
+                m.put(Field.PHONE, o.getPhone());
+                m.put(Field.ENABLED, o.getEnabled());
+                list.add(m);
+            }
         }
         res.setList(list);
     }
