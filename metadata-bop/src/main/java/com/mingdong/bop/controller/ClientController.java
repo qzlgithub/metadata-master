@@ -17,7 +17,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.util.BusinessUtils;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -87,20 +83,29 @@ public class ClientController
         return res;
     }
 
-    @GetMapping(value = "rechargeList")
+    /**
+     * 客户充值记录
+     */
+    @GetMapping(value = "/recharge/list")
     @ResponseBody
     public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
+            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ListRes res = new ListRes();
-        tradeService.getProductRechargeList(clientId, productId, startTime, endTime, new Page(pageNum, pageSize), res);
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
+        clientService.getProductRechargeList(clientId, productId, fromDate, toDate, new Page(pageNum, pageSize), res);
         return res;
     }
 
+
+    /**
+     * 客户接口请求记录
+     */
     @GetMapping(value = "/request/list")
     @ResponseBody
     public ListRes getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
@@ -118,62 +123,6 @@ public class ClientController
                 res);
         return res;
 
-    }
-
-    @GetMapping(value = "userConsumeList")
-    @ResponseBody
-    public ListRes getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
-    {
-        ListRes res = new ListRes();
-        startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
-        endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
-        tradeService.getClientBillList(null, null, null, userId, productId, startTime, endTime,
-                new Page(pageNum, pageSize), res);
-        return res;
-
-    }
-
-    @GetMapping(value = "/request/export")
-    public void exportConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
-            @RequestParam(value = Field.USER_ID, required = false) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
-            throws IOException
-    {
-
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(clientId, userId, productId, fromDate, toDate,
-                new Page(1, 1000));
-        String filename = new String("消费记录".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "/userConsumeList/export")
-    public void exportUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
-            throws IOException
-    {
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(null, null, null, userId, productId, startTime, endTime,
-                new Page(1, 1000));
-        String filename = new String("消费记录".getBytes(), "ISO8859-1");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        response.setContentType("application/vnd.ms-excel");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
     }
 
     @GetMapping(value = "subAccount/list")
@@ -378,22 +327,5 @@ public class ClientController
         BLResp resp = BLResp.build();
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
-    }
-
-    @GetMapping(value = "product/recharge/export")
-    public void exportProductRechargeRecord(@RequestParam(value = Field.CLIENT_ID) Long clientId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
-            throws IOException
-    {
-        XSSFWorkbook wb = clientService.createProductRechargeXlsx(clientId, productId, startTime, endTime);
-        String filename = new String("产品充值记录".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream outputStream = response.getOutputStream();
-        wb.write(outputStream);
-        outputStream.flush();
-        outputStream.close();
     }
 }

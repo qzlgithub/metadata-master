@@ -70,15 +70,3 @@ layui.config({
         location.href = encodeURI(uri);
     });
 });
-/*
-$("#output").on("click", function() {
-    var uri = "/client/request/export?c=" + $("#clientId").val();
-    var productId = $("#productId").val();
-    var userId = $("#userId").val().trim();
-    var startDate = $("#start-time").val().trim();
-    var endDate = $("#end-time").val().trim();
-    var url = '/client/consumeList/export?clientId=' + clientId + "&productId=" + productId
-        + "&startTime=" + (startDate == '' ? '' : startDate + " 00:00:00")
-        + "&endTime=" + (endDate == '' ? '' : endDate + " 23:59:59");
-    location.href = encodeURI(url);
-});*/

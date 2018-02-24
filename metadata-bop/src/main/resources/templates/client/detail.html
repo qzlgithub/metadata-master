@@ -118,8 +118,6 @@
                             </p>
                             <p class="mt40 customer-detail-menu">
                                 <a th:href="'/client/product/recharge.html?id=' + ${cp.clientProductId}">充值记录</a>
-                                <!--<a th:href="'/client/product/consume.html?id=' + ${cp.clientProductId}" class="tc">
-                                    消费记录</a>-->
                                 <a th:href="'/client/request.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}"
                                    class="tc">消费记录</a>
                                 <a class="cp">
@@ -184,8 +182,11 @@
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.name}"></td>
                             <td th:text="${user.phone}"></td>
-                            <td><span><a th:href="'/client/user/consume.html?userId=' + ${user.id}" class="edit">查看消费详情
-                            </a></span>
+                            <td>
+                                <span>
+                                    <a th:href="'/client/request.html?c=' + ${clientId} + '&u=' + ${user.id}"
+                                       class="edit">查看消费详情</a>
+                                </span>
                             </td>
                         </tr>
                         </tbody>

@@ -9,36 +9,32 @@ layui.config({
     table = layui.table;
     laydate = layui.laydate;
     laydate.render({
-        elem: '#start-time'
+        elem: '#fromDate'
     });
     laydate.render({
-        elem: '#end-time'
+        elem: '#toDate'
     });
     main_table = table.render({
-        elem: '#data-table',
+        elem: '#dataTable',
         page: true,
-        limit: 3,
-        limits: [3, 15, 30, 50],
-        url: '/client/rechargeList',
+        limit: 10,
+        limits: [10, 15, 30, 50],
+        url: '/client/recharge/list',
         where: {
-            clientId: $("#client-id").val(),
-            productId: $("#product").val(),
-            startTime: $("#start-time").val(),
-            endTime: $("#end-time").val()
+            clientId: $("#clientId").val(),
+            productId: $("#productId").val(),
+            fromDate: $("#fromDate").val(),
+            toDate: $("#toDate").val()
         },
         cols: [[
-            {field: 'tradeAt', title: '时间'},
-            {field: 'tradeNo', title: '消费单号'},
-            {field: 'corpName', title: '公司'},
-            {field: 'shortName', title: '公司简称'},
-            {field: 'username', title: '账号'},
+            {field: 'rechargeAt', title: '时间'},
+            {field: 'rechargeNo', title: '消费单号'},
             {field: 'productName', title: '产品服务'},
             {field: 'rechargeType', title: '充值类型'},
             {field: 'amount', title: '充值金额'},
-            {field: 'balance', title: '产品服务余额'},
+            {field: 'balance', title: '产品余额'},
             {field: 'managerName', title: '经手人'},
-            {field: 'contractNo', title: '合同编号'},
-            {field: 'remark', title: '备注'}
+            {field: 'contractNo', title: '合同编号'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'
@@ -55,22 +51,20 @@ layui.config({
         var params = data.field;
         main_table.reload({
             where: {
-                productId: params['product'],
                 clientId: params['client-id'],
-                startTime: params['start-time'],
-                endTime: params['end-time']
+                productId: params['product-id'],
+                fromDate: params['from-date'],
+                toDate: params['to-date']
             },
             page: {
                 curr: 1
             }
         });
     });
+    form.on('submit(export)', function(data) {
+        var params = data.field;
+        var uri = "/client/recharge/export?clientId=" + params["client-id"] + "&productId=" + params['product-id']
+            + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
+        location.href = encodeURI(uri);
+    });
 });
-
-function exportToExcel() {
-    var clientId = $("#client-id").val();
-    var productId = $("#product").val();
-    var startTime = $("#start-time").val();
-    var endTime = $("#end-time").val();
-    location.href = "/client/product/recharge/export?clientId=" + clientId + "&productId=" + productId + "&startTime=" + startTime + "&endTime=" + endTime;
-}

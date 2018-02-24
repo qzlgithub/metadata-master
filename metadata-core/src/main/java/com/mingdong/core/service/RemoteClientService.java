@@ -19,6 +19,7 @@ import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
+import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
@@ -193,4 +194,8 @@ public interface RemoteClientService
 
     ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
+
+    String getClientCorpName(Long clientId);
+
+    ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
 }

@@ -149,4 +149,6 @@ public interface Field
     String ACCOUNT_DICT = "accountDict";
     String REQUEST_NO = "requestNo";
     String ACCOUNT = "account";
+    String RECHARGE_NO = "rechargeNo";
+    String RECHARGE_TYPE_NAME = "rechargeTypeName";
 }

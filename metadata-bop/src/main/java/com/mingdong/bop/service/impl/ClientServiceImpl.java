@@ -43,8 +43,7 @@ import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
@@ -234,21 +233,6 @@ public class ClientServiceImpl implements ClientService
             ResultDTO dto = remoteClientService.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, clientUserIdList);
             logger.info("set client[{}] deleted: ", idList, dto.getCode());
         }
-    }
-
-    @Override
-    public Map<String, Object> getClientProductInfo(Long clientProductId)
-    {
-        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
-        Map<String, Object> map = new HashMap<>();
-        if(cp != null)
-        {
-            ClientDTO client = remoteClientService.getClientByClientId(cp.getClientId());
-            map.put(Field.CLIENT_ID, cp.getClientId() + "");
-            map.put(Field.PRODUCT_ID, cp.getProductId() + "");
-            map.put(Field.CORP_NAME, client != null ? client.getCorpName() : "");
-        }
-        return map;
     }
 
     @Override
@@ -451,52 +435,6 @@ public class ClientServiceImpl implements ClientService
             }
         }
         resp.addData(Field.LIST, list);
-    }
-
-    @Override
-    public XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime)
-    {
-        XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet("充值记录");
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("充值时间");
-        row.createCell(1).setCellValue("充值单号");
-        row.createCell(2).setCellValue("公司名称");
-        row.createCell(3).setCellValue("公司简称");
-        row.createCell(4).setCellValue("账号");
-        row.createCell(5).setCellValue("产品服务");
-        row.createCell(6).setCellValue("充值类型");
-        row.createCell(7).setCellValue("充值金额");
-        row.createCell(8).setCellValue("产品服务余额");
-        row.createCell(9).setCellValue("商务经理");
-        row.createCell(10).setCellValue("合同编号");
-        row.createCell(11).setCellValue("备注");
-
-        ProductRechargeInfoListDTO productRechargeInfoDTOS = remoteProductService.getProductRechargeInfoList(clientId,
-                productId, startTime, endTime, new Page(1, 1000));
-        List<ProductRechargeInfoDTO> dataList = productRechargeInfoDTOS.getDataList();
-        CellStyle timeStyle = wb.createCellStyle();
-        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        for(int i = 0; i < dataList.size(); i++)
-        {
-            ProductRechargeInfoDTO pri = dataList.get(i);
-            Row dataRow = sheet.createRow(i + 1);
-            Cell cell = dataRow.createCell(0);
-            cell.setCellValue(pri.getTradeTime());
-            cell.setCellStyle(timeStyle);
-            dataRow.createCell(1).setCellValue(pri.getTradeNo());
-            dataRow.createCell(2).setCellValue(pri.getCorpName());
-            dataRow.createCell(3).setCellValue(pri.getShortName());
-            dataRow.createCell(4).setCellValue(pri.getUsername());
-            dataRow.createCell(5).setCellValue(pri.getProductName());
-            dataRow.createCell(6).setCellValue(pri.getRechargeType());
-            dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(pri.getAmount()));
-            dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(pri.getBalance()));
-            dataRow.createCell(9).setCellValue(pri.getManagerName());
-            dataRow.createCell(10).setCellValue(pri.getContractNo());
-            dataRow.createCell(11).setCellValue(pri.getRemark());
-        }
-        return wb;
     }
 
     @Override
@@ -756,5 +694,130 @@ public class ClientServiceImpl implements ClientService
             }
             res.setList(list);
         }
+    }
+
+    @Override
+    public String getClientCorpName(Long clientId)
+    {
+        return remoteClientService.getClientCorpName(clientId);
+    }
+
+    @Override
+    public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
+            ListRes res)
+    {
+        ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, fromDate, toDate,
+                page);
+        res.setTotal(listDTO.getTotal());
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
+        {
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(RechargeDTO o : listDTO.getList())
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.RECHARGE_AT, DateUtils.format(o.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                m.put(Field.RECHARGE_NO, o.getRechargeNo());
+                m.put(Field.PRODUCT_NAME, o.getProductName());
+                m.put(Field.RECHARGE_TYPE_NAME, o.getRechargeTypeName());
+                m.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
+                m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                m.put(Field.MANAGER_NAME, o.getManagerName());
+                m.put(Field.CONTRACT_NO, o.getContractNo());
+                list.add(m);
+            }
+            res.setList(list);
+        }
+    }
+
+    @Override
+    public XSSFWorkbook createClientRequestXlsx(Long clientId, Long userId, Long productId, Date startTime,
+            Date endTime, Page page)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("消费数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("请求时间");
+        row.createCell(1).setCellValue("请求单号");
+        row.createCell(2).setCellValue("客户账号");
+        row.createCell(3).setCellValue("产品服务");
+        row.createCell(4).setCellValue("计费方式");
+        row.createCell(5).setCellValue("是否击中");
+        row.createCell(6).setCellValue("费用(元)");
+        row.createCell(7).setCellValue("余额(元)");
+        ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, startTime,
+                endTime, page);
+        List<RequestDTO> list = listDTO.getList();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            CellStyle timeStyle = wb.createCellStyle();
+            timeStyle.setDataFormat(
+                    wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
+            for(int i = 0; i < list.size(); i++)
+            {
+                RequestDTO dataInfo = list.get(i);
+                Row dataRow = sheet.createRow(i + 1);
+                Cell cell = dataRow.createCell(0);
+                cell.setCellValue(dataInfo.getRequestAt());
+                cell.setCellStyle(timeStyle);
+                dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
+                dataRow.createCell(2).setCellValue(dataInfo.getUsername());
+                dataRow.createCell(3).setCellValue(dataInfo.getProductName());
+                dataRow.createCell(4).setCellValue(BillPlan.getNameById(dataInfo.getBillPlan()));
+                dataRow.createCell(5).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
+                if(BillPlan.BY_TIME.getId().equals(dataInfo.getBillPlan()))
+                {
+                    dataRow.createCell(6).setCellValue("-");
+                    dataRow.createCell(7).setCellValue("-");
+                }
+                else
+                {
+                    dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+                    dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+                }
+            }
+        }
+        return wb;
+    }
+
+    @Override
+    public XSSFWorkbook createClientRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime, Page page)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("充值记录");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("充值时间");
+        row.createCell(1).setCellValue("充值单号");
+        row.createCell(2).setCellValue("产品服务");
+        row.createCell(3).setCellValue("充值类型");
+        row.createCell(4).setCellValue("充值金额");
+        row.createCell(5).setCellValue("产品余额");
+        row.createCell(6).setCellValue("经手人");
+        row.createCell(7).setCellValue("合同编号");
+
+        ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, startTime,
+                endTime, page);
+        List<RechargeDTO> list = listDTO.getList();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            CellStyle timeStyle = wb.createCellStyle();
+            timeStyle.setDataFormat(
+                    wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
+            for(int i = 0; i < list.size(); i++)
+            {
+                RechargeDTO pri = list.get(i);
+                Row dataRow = sheet.createRow(i + 1);
+                Cell cell = dataRow.createCell(0);
+                cell.setCellValue(pri.getRechargeAt());
+                cell.setCellStyle(timeStyle);
+                dataRow.createCell(1).setCellValue(pri.getRechargeNo());
+                dataRow.createCell(2).setCellValue(pri.getProductName());
+                dataRow.createCell(3).setCellValue(pri.getRechargeTypeName());
+                dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(pri.getAmount()));
+                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(pri.getBalance()));
+                dataRow.createCell(6).setCellValue(pri.getManagerName());
+                dataRow.createCell(7).setCellValue(pri.getContractNo());
+            }
+        }
+        return wb;
     }
 }

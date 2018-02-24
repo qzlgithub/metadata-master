@@ -4,14 +4,11 @@ import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.model.RequestThread;
-import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.constant.BillPlan;
-import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -37,8 +34,6 @@ public class PageController
     private RedisDao redisDao;
     @Resource
     private ManagerService managerService;
-    @Resource
-    private ClientService clientService;
     @Resource
     private ProductService productService;
     @Resource
@@ -99,121 +94,6 @@ public class PageController
         String sessionId = session.getId();
         managerService.userLogout(sessionId);
         return new ModelAndView("redirect:/");
-    }
-
-    /**
-     * 页面：客户列表
-     */
-    @RequestMapping(value = "/client/index.html")
-    public ModelAndView clientIndexPage()
-    {
-        ModelAndView view = new ModelAndView("client/list");
-        List<Map<String, Object>> industryList = systemService.getIndustryList(0L, TrueOrFalse.TRUE);
-        view.addObject(Field.INDUSTRY_LIST, industryList);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户帐号消费列表
-     */
-    @RequestMapping(value = "/client/user/consume.html")
-    public ModelAndView clientUserConsumeIndexPage(@RequestParam(value = Field.USER_ID) Long userId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/product-user-consume");
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addObject(Field.USER_ID, userId);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户添加页面
-     */
-    @RequestMapping(value = "/client/addition.html")
-    public ModelAndView gotoClientAddition()
-    {
-        ModelAndView view = new ModelAndView("client/add");
-        view.addAllObjects(systemService.getInitIndustryMap());
-        view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户编辑页面
-     */
-    @RequestMapping(value = "/client/edit.html")
-    public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
-    {
-        BLResp resp = BLResp.build();
-        clientService.getClientInfoForEdit(clientId, resp);
-        ModelAndView view = new ModelAndView("client/edit");
-        view.addAllObjects(resp.getDataMap());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 页面：客户详情页面
-     */
-    @RequestMapping(value = "/client/detail.html")
-    public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
-    {
-        BLResp resp = BLResp.build();
-        clientService.findClientDetail(clientId, resp);
-        ModelAndView view = new ModelAndView("client/detail");
-        view.addAllObjects(resp.getDataMap());
-        view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
-        view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 充值记录
-     */
-    @RequestMapping(value = "/client/product/recharge.html")
-    public ModelAndView gotoRechargeRecord(@RequestParam(value = Field.ID) Long clientProductId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/product-recharge");
-        view.addAllObjects(clientService.getClientProductInfo(clientProductId));
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 消费明细
-     */
-    @RequestMapping(value = "/client/request.html")
-    public ModelAndView gotoClientConsume(@RequestParam(value = Field.C) Long clientId,
-            @RequestParam(value = Field.P, required = false) Long productId,
-            @RequestParam(value = Field.U, required = false) Long userId)
-    {
-        ModelAndView view = new ModelAndView("client/request");
-        view.addObject(Field.CLIENT_ID, clientId + "");
-        view.addObject(Field.PRODUCT_ID, productId + "");
-        view.addObject(Field.USER_ID, userId + "");
-        // 查询客户企业名称及账号字典列表，包括主账号和子账号
-        view.addAllObjects(clientService.getClientAccountDict(clientId));
-        // 产品字典数据列表
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    /**
-     * 消费明细
-     */
-    @RequestMapping(value = "/client/product/consume.html")
-    public ModelAndView gotoConsumptionDetail(@RequestParam(value = Field.ID) Long clientProductId)
-    {
-        ModelAndView view = new ModelAndView("customer-manage/product-consume");
-        view.addAllObjects(clientService.getClientProductInfo(clientProductId));
-        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
     }
 
     @RequestMapping(value = "/config/recharge.html")

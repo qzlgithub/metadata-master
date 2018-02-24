@@ -244,4 +244,38 @@
         </where>
         order by pr.`create_time` desc
     </select>
+
+    <!-- @formatter:off -->
+    <select id="countByClient" resultType="int">
+        select count(*)
+        from `product_recharge`
+        where `client_id` = #{clientId}
+        <if test="productId != null">and `product_id` = #{productId}</if>
+        <if test="startTime != null">and `create_time` >= #{startTime}</if>
+        <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
+    </select>
+
+    <select id="getListByClient" resultMap="BaseResultMap">
+        select
+            pr.`create_time` as trade_time,
+            pr.`trade_no`    as trade_no,
+            p.`name`         as product_name,
+            drt.`name`       as recharge_type,
+            pr.`amount`      as amount,
+            pr.`balance`     as balance,
+            m.`name`         as manager_name,
+            pr.`contract_no` as contract_no
+        from `product_recharge` pr
+            left join `product` p
+                on pr.`product_id` = p.`id`
+            left join `manager` m
+                on pr.`manager_id` = m.`id`
+            left join `dict_recharge_type` drt
+                on pr.`recharge_type` = drt.`id`
+        where pr.`client_id` = #{clientId}
+        <if test="productId != null">and pr.`product_id` = #{productId}</if>
+        <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
+        <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+    </select>
+    <!-- @formatter:on -->
 </mapper>
