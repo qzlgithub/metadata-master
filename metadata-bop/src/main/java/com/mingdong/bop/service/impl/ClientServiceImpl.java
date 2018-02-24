@@ -33,6 +33,7 @@ import com.mingdong.core.model.dto.ClientOperateInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
+import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
@@ -707,5 +708,15 @@ public class ClientServiceImpl implements ClientService
     {
         ResultDTO resultDTO = remoteClientService.removeCustomClientProduct(clientProductId);
         resp.result(resultDTO.getResult());
+    }
+
+    @Override
+    public Map<String, Object> getClientAccountDict(Long clientId)
+    {
+        Map<String, Object> map = new HashMap<>();
+        ClientUserDictDTO res = remoteClientService.getClientAccountDict(clientId);
+        map.put(Field.CORP_NAME, res.getCorpName());
+        map.put(Field.ACCOUNT_DICT, res.getUserDict());
+        return map;
     }
 }
