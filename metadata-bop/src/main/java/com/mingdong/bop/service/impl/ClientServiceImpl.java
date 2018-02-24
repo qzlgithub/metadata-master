@@ -742,7 +742,12 @@ public class ClientServiceImpl implements ClientService
                 m.put(Field.PRODUCT_NAME, o.getProductName());
                 m.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
                 m.put(Field.IS_HIT, o.getHit());
-                if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+                if(BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    m.put(Field.FEE, "-");
+                    m.put(Field.BALANCE, "-");
+                }
+                else
                 {
                     m.put(Field.FEE, NumberUtils.formatAmount(o.getFee()));
                     m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
