@@ -108,4 +108,6 @@ public interface ClientService
     void selectCustomProduct(Long clientId, List<Long> productIds, BLResp resp);
 
     void removeCustomClientProduct(Long clientProductId, BLResp resp);
+
+    Map<String, Object> getClientAccountDict(Long clientId);
 }

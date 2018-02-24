@@ -1,8 +1,9 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClientUserDictDTO
+public class ClientUserDictDTO implements Serializable
 {
     private String corpName;
     private List<DictDTO> userDict;

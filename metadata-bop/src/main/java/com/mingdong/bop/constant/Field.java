@@ -143,4 +143,8 @@ public interface Field
     String ALL_COUNT = "allCount";
     String ALL_MISS_COUNT = "allMissCount";
 
+    String C = "c";
+    String P = "p";
+    String U = "u";
+    String ACCOUNT_DICT = "accountDict";
 }
