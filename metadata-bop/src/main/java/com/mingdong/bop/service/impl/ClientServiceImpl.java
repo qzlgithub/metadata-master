@@ -239,7 +239,7 @@ public class ClientServiceImpl implements ClientService
     public List<Map<String, Object>> getClientSubUserList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<SubUserDTO> listDTO = remoteClientService.getSubUserList(clientId);
+        ListDTO<SubUserDTO> listDTO = remoteClientService.getSubUserList(clientId, false);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(SubUserDTO o : listDTO.getList())

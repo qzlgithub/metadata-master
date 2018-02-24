@@ -296,10 +296,18 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ListDTO<SubUserDTO> getSubUserList(Long clientId)
+    public ListDTO<SubUserDTO> getSubUserList(Long clientId, boolean includeDeleted)
     {
         ListDTO<SubUserDTO> res = new ListDTO<>();
-        List<ClientUser> userList = clientUserMapper.getListByClient(clientId);
+        List<ClientUser> userList;
+        if(includeDeleted)
+        {
+            userList = clientUserMapper.getListByClient(clientId);
+        }
+        else
+        {
+            userList = clientUserMapper.getAvailableListByClient(clientId);
+        }
         List<SubUserDTO> list = new ArrayList<>();
         for(ClientUser o : userList)
         {
