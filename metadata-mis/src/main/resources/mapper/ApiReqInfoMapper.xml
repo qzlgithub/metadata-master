@@ -22,10 +22,7 @@
     </resultMap>
 
     <select id="countBy1" resultType="int">
-        select count(*)
-        from `api_req` ar
-            left join `client` c
-                on ar.`client_id` = c.`id`
+        select count(*) from `api_req` ar left join `client` c on ar.`client_id` = c.`id`
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
@@ -38,10 +35,7 @@
     </select>
 
     <select id="sumFeeBy" resultType="BigDecimal">
-        select sum(ar.`fee`)
-        from `api_req` ar
-            left join `client` c
-                on ar.`client_id` = c.`id`
+        select sum(ar.`fee`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id`
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
@@ -54,10 +48,7 @@
     </select>
 
     <select id="countMiss" resultType="Integer">
-        select count(ar.`id`)
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id` and ar.`hit` = 0
+        select count(ar.`id`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id` and ar.`hit` = 0
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
@@ -70,25 +61,11 @@
     </select>
 
     <select id="getListBy1" resultMap="BaseResultMap">
-        select
-            ar.`create_time` as create_time,
-            ar.`request_no`  as request_no,
-            c.`corp_name`    as corp_name,
-            c.`short_name`   as short_name,
-            cu.`username`    as username,
-            p.`name`         as product_name,
-            ar.`bill_plan`   as bill_plan,
-            ar.`hit`         as hit,
-            ar.`fee`         as fee,
-            ar.`balance`     as balance,
-            ar.`cost`        as cost
-        from `api_req` ar
-            left join `client` c
-                on ar.`client_id` = c.`id`
-            left join `client_user` cu
-                on ar.`user_id` = cu.`id`
-            left join `product` p
-                on ar.`product_id` = p.`id`
+        select ar.`create_time` as create_time, ar.`request_no` as request_no, c.`corp_name` as corp_name,
+        c.`short_name` as short_name, cu.`username` as username, p.`name` as product_name, ar.`bill_plan` as bill_plan,
+        ar.`hit` as hit, ar.`fee` as fee, ar.`balance` as balance, ar.`cost` as cost from `api_req` ar left join
+        `client` c on ar.`client_id` = c.`id` left join `client_user` cu on ar.`user_id` = cu.`id` left join `product` p
+        on ar.`product_id` = p.`id`
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
@@ -102,31 +79,12 @@
     </select>
 
     <select id="getListBy" resultMap="BaseResultMap">
-        select
-        ar.`id`          as id,
-        ar.`create_time` as create_time,
-        ar.`update_time` as update_time,
-        ar.`user_id` as user_id,
-        ar.`client_id` as client_id,
-        ar.`product_id` as product_id,
-        ar.`hit`         as hit,
-        ar.`request_no`     as request_no,
-        ar.`request_ip`     as request_ip,
-        ar.`bill_plan`     as bill_plan,
-        ar.`fee`     as fee,
-        ar.`balance`     as balance,
-        ar.`cost`        as cost,
-        c.`corp_name`    as corp_name,
-        c.`short_name`   as short_name,
-        cu.`username`    as username,
-        p.`name`         as product_name
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on c.`primary_user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
+        select ar.`id` as id, ar.`create_time` as create_time, ar.`update_time` as update_time, ar.`user_id` as user_id,
+        ar.`client_id` as client_id, ar.`product_id` as product_id, ar.`hit` as hit, ar.`request_no` as request_no,
+        ar.`request_ip` as request_ip, ar.`bill_plan` as bill_plan, ar.`fee` as fee, ar.`balance` as balance, ar.`cost`
+        as cost, c.`corp_name` as corp_name, c.`short_name` as short_name, cu.`username` as username, p.`name` as
+        product_name from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user` cu on
+        c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
         <where>
             <if test="clientId != null">ar.`client_id` = #{clientId}</if>
             <if test="userId != null">and ar.`user_id` = #{userId}</if>
@@ -138,15 +96,8 @@
     </select>
 
     <select id="countClientBillListBy" resultType="Integer">
-        select
-        count(ar.`id`)
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on c.`primary_user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
+        select count(ar.`id`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user`
+        cu on c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
@@ -160,31 +111,12 @@
     </select>
 
     <select id="getClientBillListBy" resultMap="BaseResultMap">
-        select
-        ar.`id`          as id,
-        ar.`create_time` as create_time,
-        ar.`update_time` as update_time,
-        ar.`user_id` as user_id,
-        ar.`client_id` as client_id,
-        ar.`product_id` as product_id,
-        ar.`hit`         as hit,
-        ar.`request_no`     as request_no,
-        ar.`request_ip`     as request_ip,
-        ar.`bill_plan`     as bill_plan,
-        ar.`fee`     as fee,
-        ar.`balance`     as balance,
-        ar.`cost`        as cost,
-        c.`corp_name`    as corp_name,
-        c.`short_name`   as short_name,
-        cu.`username`    as username,
-        p.`name`         as product_name
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on c.`primary_user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
+        select ar.`id` as id, ar.`create_time` as create_time, ar.`update_time` as update_time, ar.`user_id` as user_id,
+        ar.`client_id` as client_id, ar.`product_id` as product_id, ar.`hit` as hit, ar.`request_no` as request_no,
+        ar.`request_ip` as request_ip, ar.`bill_plan` as bill_plan, ar.`fee` as fee, ar.`balance` as balance, ar.`cost`
+        as cost, c.`corp_name` as corp_name, c.`short_name` as short_name, cu.`username` as username, p.`name` as
+        product_name from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user` cu on
+        c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
@@ -198,15 +130,8 @@
     </select>
 
     <select id="getClientBillFeeSum" resultType="BigDecimal">
-        select
-        sum(ar.`fee`)
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on c.`primary_user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
+        select sum(ar.`fee`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user`
+        cu on c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
         <where>
             <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
             <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
@@ -219,5 +144,35 @@
         order by ar.`create_time` desc
     </select>
 
+    <select id="countByClient" resultType="int">
+        select count(*) from `api_req` where `client_id` = #{clientId}
+        <if test="userId != null">and `user_id` = #{userId}</if>
+        <if test="productId != null">and `product_id` = #{productId}</if>
+        <if test="fromDate != null">and `create_time` >= #{fromDate}</if>
+        <if test="toDate != null">and `create_time` &lt; #{toDate}</if>
+    </select>
 
+    <!-- @formatter:off -->
+    <select id="getListByClient" resultMap="BaseResultMap">
+        select
+            ar.`create_time` as create_time,
+            ar.`request_no`  as request_no,
+            cu.`username`    as username,
+            p.`name`         as product_name,
+            ar.`bill_plan`   as bill_plan,
+            ar.`hit`         as hit,
+            ar.`fee`         as fee,
+            ar.`balance`     as balance
+        from `api_req` ar
+            left join `product` p
+                on ar.`product_id` = p.`id`
+            left join `client_user` cu
+                on ar.`user_id` = cu.`id`
+        where ar.`client_id` = #{clientId}
+        <if test="userId != null">and ar.`user_id` = #{userId}</if>
+        <if test="productId != null">and ar.`product_id` = #{productId}</if>
+        <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
+        <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+    </select>
+    <!-- @formatter:on -->
 </mapper>

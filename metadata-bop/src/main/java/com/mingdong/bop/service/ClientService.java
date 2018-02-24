@@ -110,4 +110,7 @@ public interface ClientService
     void removeCustomClientProduct(Long clientProductId, BLResp resp);
 
     Map<String, Object> getClientAccountDict(Long clientId);
+
+    void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
+            ListRes res);
 }

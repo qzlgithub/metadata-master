@@ -147,4 +147,6 @@ public interface Field
     String P = "p";
     String U = "u";
     String ACCOUNT_DICT = "accountDict";
+    String REQUEST_NO = "requestNo";
+    String ACCOUNT = "account";
 }

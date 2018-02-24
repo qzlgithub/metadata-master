@@ -45,6 +45,7 @@ import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -718,5 +719,32 @@ public class ClientServiceImpl implements ClientService
         map.put(Field.CORP_NAME, res.getCorpName());
         map.put(Field.ACCOUNT_DICT, res.getUserDict());
         return map;
+    }
+
+    @Override
+    public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
+            ListRes res)
+    {
+        ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, fromDate,
+                toDate, page);
+        res.setTotal(listDTO.getTotal());
+        List<Map<String, Object>> list = new ArrayList<>();
+        for(RequestDTO o : listDTO.getList())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            m.put(Field.REQUEST_NO, o.getRequestNo());
+            m.put(Field.USERNAME, o.getUsername());
+            m.put(Field.PRODUCT_NAME, o.getProductName());
+            m.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
+            m.put(Field.IS_HIT, o.getHit());
+            if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+            {
+                m.put(Field.FEE, NumberUtils.formatAmount(o.getFee()));
+                m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+            }
+            list.add(m);
+        }
+        res.setList(list);
     }
 }

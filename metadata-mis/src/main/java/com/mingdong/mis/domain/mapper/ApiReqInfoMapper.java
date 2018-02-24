@@ -35,4 +35,10 @@ public interface ApiReqInfoMapper
 
     int countMiss(@Param("keyword") String keyword, @Param("productId") Long productId,
             @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    int countByClient(@Param("clientId") Long clientId, @Param("userId") Long userId,
+            @Param("productId") Long productId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    List<ApiReqInfo> getListByClient(@Param("clientId") Long clientId, @Param("userId") Long userId,
+            @Param("productId") Long productId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

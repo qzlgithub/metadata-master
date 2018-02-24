@@ -184,7 +184,7 @@ public class PageController
     }
 
     /**
-     * 消费明细 -- TODO ...........
+     * 消费明细
      */
     @RequestMapping(value = "/client/request.html")
     public ModelAndView gotoClientConsume(@RequestParam(value = Field.C) Long clientId,
@@ -192,9 +192,9 @@ public class PageController
             @RequestParam(value = Field.U, required = false) Long userId)
     {
         ModelAndView view = new ModelAndView("client/request");
-        view.addObject(Field.CLIENT_ID, clientId);
-        view.addObject(Field.PRODUCT_ID, productId);
-        view.addObject(Field.USER_ID, userId);
+        view.addObject(Field.CLIENT_ID, clientId + "");
+        view.addObject(Field.PRODUCT_ID, productId + "");
+        view.addObject(Field.USER_ID, userId + "");
         // 查询客户企业名称及账号字典列表，包括主账号和子账号
         view.addAllObjects(clientService.getClientAccountDict(clientId));
         // 产品字典数据列表

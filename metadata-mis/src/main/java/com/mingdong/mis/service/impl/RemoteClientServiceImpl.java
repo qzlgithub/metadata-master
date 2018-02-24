@@ -32,6 +32,7 @@ import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
+import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
@@ -1224,7 +1225,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate);
         int missCount = apiReqInfoMapper.countMiss(keyword, productId, billPlan, fromDate, toDate);
         dto.setTotal(total);
-        dto.addExtra(Field.MISS_COUNT, missCount+"");
+        dto.addExtra(Field.MISS_COUNT, missCount + "");
         dto.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -1370,6 +1371,37 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         res.setUserDict(userDict);
+        return res;
+    }
+
+    @Override
+    public ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
+            Date toDate, Page page)
+    {
+        ListDTO<RequestDTO> res = new ListDTO<>();
+        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
+        int pages = page.getTotalPage(total);
+        res.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, fromDate, toDate);
+            List<RequestDTO> list = new ArrayList<>();
+            for(ApiReqInfo o : dataList)
+            {
+                RequestDTO r = new RequestDTO();
+                r.setRequestAt(o.getCreateTime());
+                r.setRequestNo(o.getRequestNo());
+                r.setUsername(o.getUsername());
+                r.setProductName(o.getProductName());
+                r.setBillPlan(o.getBillPlan());
+                r.setHit(o.getHit());
+                r.setFee(o.getFee());
+                r.setBalance(o.getBalance());
+                list.add(r);
+            }
+            res.setList(list);
+        }
         return res;
     }
 

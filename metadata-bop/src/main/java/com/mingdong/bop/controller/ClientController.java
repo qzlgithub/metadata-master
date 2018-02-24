@@ -101,9 +101,10 @@ public class ClientController
         return res;
     }
 
-    @GetMapping(value = "consumeList")
+    @GetMapping(value = "/request/list")
     @ResponseBody
-    public ListRes getConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public ListRes getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime,
@@ -113,8 +114,8 @@ public class ClientController
         ListRes res = new ListRes();
         startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
         endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
-        tradeService.getClientBillList(null, null, clientId, null, productId, startTime, endTime,
-                new Page(pageNum, pageSize), res);
+        clientService.getClientRequestList(clientId, userId, productId, startTime, endTime, new Page(pageNum, pageSize),
+                res);
         return res;
 
     }
