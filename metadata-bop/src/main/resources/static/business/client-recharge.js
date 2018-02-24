@@ -1,20 +1,11 @@
-var form, message, table, main_table, laydate;
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'form', 'table', 'message', 'laydate'], function() {
-    var app = layui.app;
+    var app = layui.app, form = layui.form, table = layui.table, laydate = layui.laydate;
     app.set({type: 'iframe'}).init();
-    message = layui.message;
-    form = layui.form;
-    table = layui.table;
-    laydate = layui.laydate;
-    laydate.render({
-        elem: '#fromDate'
-    });
-    laydate.render({
-        elem: '#toDate'
-    });
-    main_table = table.render({
+    laydate.render({elem: '#fromDate'});
+    laydate.render({elem: '#toDate'});
+    var main_table = table.render({
         elem: '#dataTable',
         page: true,
         limit: 10,
@@ -27,8 +18,8 @@ layui.config({
             toDate: $("#toDate").val()
         },
         cols: [[
-            {field: 'rechargeAt', title: '时间'},
-            {field: 'rechargeNo', title: '消费单号'},
+            {field: 'rechargeAt', title: '充值时间'},
+            {field: 'rechargeNo', title: '充值单号'},
             {field: 'productName', title: '产品服务'},
             {field: 'rechargeTypeName', title: '充值类型'},
             {field: 'billPlanName', title: '计费方式'},
