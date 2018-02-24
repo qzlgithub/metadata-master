@@ -1363,11 +1363,11 @@ public class RemoteClientServiceImpl implements RemoteClientService
         {
             if(o.getId().equals(client.getPrimaryUserId()))
             {
-                userDict.add(new DictDTO(o.getId() + "", "主账号"));
+                userDict.add(new DictDTO(o.getId() + "", o.getUsername() + "（主）"));
             }
             else
             {
-                userDict.add(new DictDTO(o.getId() + "", o.getName()));
+                userDict.add(new DictDTO(o.getId() + "", o.getUsername() + "（" + o.getName() + "）"));
             }
         }
         res.setUserDict(userDict);

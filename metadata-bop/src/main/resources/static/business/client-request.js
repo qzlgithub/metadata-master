@@ -50,7 +50,6 @@ layui.config({
     });
     form.on('submit(search)', function(data) {
         var params = data.field;
-        alert(JSON.stringify(params));
         main_table.reload({
             where: {
                 clientId: params['client-id'],

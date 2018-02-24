@@ -731,22 +731,25 @@ public class ClientServiceImpl implements ClientService
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
-        for(RequestDTO o : listDTO.getList())
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            Map<String, Object> m = new HashMap<>();
-            m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            m.put(Field.REQUEST_NO, o.getRequestNo());
-            m.put(Field.USERNAME, o.getUsername());
-            m.put(Field.PRODUCT_NAME, o.getProductName());
-            m.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
-            m.put(Field.IS_HIT, o.getHit());
-            if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+            for(RequestDTO o : listDTO.getList())
             {
-                m.put(Field.FEE, NumberUtils.formatAmount(o.getFee()));
-                m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                m.put(Field.REQUEST_NO, o.getRequestNo());
+                m.put(Field.USERNAME, o.getUsername());
+                m.put(Field.PRODUCT_NAME, o.getProductName());
+                m.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
+                m.put(Field.IS_HIT, o.getHit());
+                if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    m.put(Field.FEE, NumberUtils.formatAmount(o.getFee()));
+                    m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                }
+                list.add(m);
             }
-            list.add(m);
+            res.setList(list);
         }
-        res.setList(list);
     }
 }
