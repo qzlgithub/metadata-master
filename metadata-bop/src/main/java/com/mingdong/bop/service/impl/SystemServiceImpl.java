@@ -129,18 +129,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void getRechargeTypeInfo(Integer rechargeTypeId, BLResp resp)
-    {
-        DictRechargeTypeDTO rechargeType = remoteSystemService.getDictRechargeTypeById(rechargeTypeId);
-        resp.addData(Field.ID, rechargeTypeId + "");
-        if(rechargeType != null)
-        {
-            resp.addData(Field.NAME, rechargeType.getName());
-            resp.addData(Field.REMARK, rechargeType.getRemark());
-        }
-    }
-
-    @Override
     public void editRechargeType(Integer rechargeTypeId, String name, String remark, BLResp resp)
     {
         RechargeTypeDTO rt = new RechargeTypeDTO();

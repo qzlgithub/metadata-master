@@ -19,6 +19,7 @@ import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
+import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
@@ -51,12 +52,20 @@ public interface RemoteClientService
     ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
 
     /**
-     * 查询客户子账号列表
+     * 查询客户子账号列表，不包括已删除的账号
      *
      * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
      */
-    ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId);
+    ListDTO<SubUserDTO> getSubUserList(Long clientId, Long userId);
+
+    /**
+     * 查询客户子账号列表
+     *
+     * @param clientId       客户ID
+     * @param includeDeleted 是否包含已删除账号
+     */
+    ListDTO<SubUserDTO> getSubUserList(Long clientId, boolean includeDeleted);
 
     /**
      * 新增客户子帐号
@@ -193,4 +202,8 @@ public interface RemoteClientService
 
     ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
+
+    String getClientCorpName(Long clientId);
+
+    ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
 }

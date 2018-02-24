@@ -242,9 +242,9 @@ function reset_password() {
 /**
  * 显示指定客户的子账号列表
  */
-function show_sub_account(id) {
+function show_sub_user(id) {
     $.get(
-        "/client/subAccount/list",
+        "/client/sub-user/list",
         {"id": id},
         function(data) {
             var obj = $("#child-account-body");

@@ -39,4 +39,10 @@ public interface ProductRechargeInfoMapper
     List<ProductRechargeInfo> getListBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
             @Param("managerId") Long managerId, @Param("rechargeType") Long rechargeType,
             @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    int countByClient(@Param("clientId") Long clientId, @Param("productId") Long productId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    List<ProductRechargeInfo> getListByClient(@Param("clientId") Long clientId, @Param("productId") Long productId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

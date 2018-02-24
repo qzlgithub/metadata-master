@@ -10,23 +10,23 @@ layui.config({
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
-        url: '/client/request/list',
+        url: '/client/recharge/list',
         where: {
             clientId: $("#clientId").val(),
-            userId: $("#userId").val(),
             productId: $("#productId").val(),
-            startTime: $("#fromDate").val(),
-            endTime: $("#toDate").val()
+            fromDate: $("#fromDate").val(),
+            toDate: $("#toDate").val()
         },
         cols: [[
-            {field: 'requestAt', title: '请求时间'},
-            {field: 'requestNo', title: '请求单号'},
-            {field: 'username', title: '客户账号'},
+            {field: 'rechargeAt', title: '充值时间'},
+            {field: 'rechargeNo', title: '充值单号'},
             {field: 'productName', title: '产品服务'},
-            {field: 'billPlan', title: '计费方式'},
-            {field: 'isHit', title: '是否击中', templet: "#hitTpl"},
-            {field: 'fee', title: '费用（元）'},
-            {field: 'balance', title: '余额（元）'}
+            {field: 'rechargeTypeName', title: '充值类型'},
+            {field: 'billPlanName', title: '计费方式'},
+            {field: 'amount', title: '充值金额'},
+            {field: 'balance', title: '产品余额'},
+            {field: 'managerName', title: '经手人'},
+            {field: 'contractNo', title: '合同编号'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'
@@ -44,10 +44,9 @@ layui.config({
         main_table.reload({
             where: {
                 clientId: params['client-id'],
-                userId: params['user-id'],
                 productId: params['product-id'],
-                startTime: params['from-date'],
-                endTime: params['to-date']
+                fromDate: params['from-date'],
+                toDate: params['to-date']
             },
             page: {
                 curr: 1
@@ -56,8 +55,8 @@ layui.config({
     });
     form.on('submit(export)', function(data) {
         var params = data.field;
-        var uri = "/client/request/export?clientId=" + params["client-id"] + "&userId=" + params['user-id']
-            + "&productId=" + params['product-id'] + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
+        var uri = "/client/recharge/export?clientId=" + params["client-id"] + "&productId=" + params['product-id']
+            + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
         location.href = encodeURI(uri);
     });
 });

@@ -8,7 +8,6 @@ import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.ProdRechargeVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
-import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -17,8 +16,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.util.BusinessUtils;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,28 +23,22 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping(value = "client")
 public class ClientController
 {
     @Resource
     private ClientService clientService;
-    @Resource
-    private TradeService tradeService;
 
     @GetMapping(value = "check")
-    @ResponseBody
     public Map<String, Object> getList(@RequestParam(value = Field.USERNAME) String username)
     {
         BLResp resp = BLResp.build();
@@ -59,7 +50,6 @@ public class ClientController
      * 判断合同编号唯一性
      */
     @GetMapping(value = "checkContract")
-    @ResponseBody
     public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
         BLResp resp = BLResp.build();
@@ -68,7 +58,6 @@ public class ClientController
     }
 
     @GetMapping(value = "list")
-    @ResponseBody
     public ListRes getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
@@ -87,22 +76,29 @@ public class ClientController
         return res;
     }
 
-    @GetMapping(value = "rechargeList")
-    @ResponseBody
+    /**
+     * 客户充值记录
+     */
+    @GetMapping(value = "/recharge/list")
     public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
+            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ListRes res = new ListRes();
-        tradeService.getProductRechargeList(clientId, productId, startTime, endTime, new Page(pageNum, pageSize), res);
+        fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
+        toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
+        clientService.getProductRechargeList(clientId, productId, fromDate, toDate, new Page(pageNum, pageSize), res);
         return res;
     }
 
+
+    /**
+     * 客户接口请求记录
+     */
     @GetMapping(value = "/request/list")
-    @ResponseBody
     public ListRes getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -120,71 +116,13 @@ public class ClientController
 
     }
 
-    @GetMapping(value = "userConsumeList")
-    @ResponseBody
-    public ListRes getUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    @GetMapping(value = "sub-user/list")
+    public List<Map<String, Object>> getClientSubUserList(@RequestParam(value = Field.ID) Long clientId)
     {
-        ListRes res = new ListRes();
-        startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
-        endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
-        tradeService.getClientBillList(null, null, null, userId, productId, startTime, endTime,
-                new Page(pageNum, pageSize), res);
-        return res;
-
-    }
-
-    @GetMapping(value = "/request/export")
-    public void exportConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
-            @RequestParam(value = Field.USER_ID, required = false) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
-            throws IOException
-    {
-
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(clientId, userId, productId, fromDate, toDate,
-                new Page(1, 1000));
-        String filename = new String("消费记录".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "/userConsumeList/export")
-    public void exportUserConsumeList(@RequestParam(value = Field.USER_ID) Long userId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
-            throws IOException
-    {
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(null, null, null, userId, productId, startTime, endTime,
-                new Page(1, 1000));
-        String filename = new String("消费记录".getBytes(), "ISO8859-1");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        response.setContentType("application/vnd.ms-excel");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "subAccount/list")
-    @ResponseBody
-    public List<Map<String, Object>> getSubAccountList(@RequestParam(value = Field.ID) Long clientId)
-    {
-        return clientService.getSubAccountList(clientId);
+        return clientService.getClientSubUserList(clientId);
     }
 
     @PutMapping(value = "addition")
-    @ResponseBody
     public BLResp addNewClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
@@ -193,7 +131,6 @@ public class ClientController
     }
 
     @PostMapping(value = "modification")
-    @ResponseBody
     public BLResp editClient(@RequestBody NewClientVO vo)
     {
         BLResp resp = BLResp.build();
@@ -202,7 +139,6 @@ public class ClientController
     }
 
     @PostMapping(value = "status")
-    @ResponseBody
     private BLResp changeClientStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -220,7 +156,6 @@ public class ClientController
     }
 
     @DeleteMapping(value = "")
-    @ResponseBody
     private BLResp deleteClient(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -235,7 +170,6 @@ public class ClientController
     }
 
     @GetMapping(value = "same")
-    @ResponseBody
     private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
     {
@@ -245,7 +179,6 @@ public class ClientController
     }
 
     @PostMapping(value = "reset")
-    @ResponseBody
     private BLResp resetPassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -260,7 +193,6 @@ public class ClientController
     }
 
     @PostMapping(value = "product/open")
-    @ResponseBody
     public BLResp openProductService(@RequestBody ProdRechargeVO vo)
     {
         BLResp resp = BLResp.build();
@@ -296,7 +228,6 @@ public class ClientController
     }
 
     @PostMapping(value = "product/select")
-    @ResponseBody
     public BLResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.IDS) String ids)
     {
@@ -316,7 +247,6 @@ public class ClientController
     }
 
     @PostMapping(value = "product/remove")
-    @ResponseBody
     public BLResp productRemove(@RequestParam(value = Field.ID) Long id)
     {
         BLResp resp = BLResp.build();
@@ -325,7 +255,6 @@ public class ClientController
     }
 
     @PostMapping(value = "product/renew")
-    @ResponseBody
     public BLResp renewProductService(@RequestBody ProdRechargeVO vo)
     {
         BLResp resp = BLResp.build();
@@ -361,7 +290,6 @@ public class ClientController
     }
 
     @GetMapping(value = "product/renewInfo")
-    @ResponseBody
     public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_PRODUCT_ID) Long clientProductId)
     {
         BLResp resp = BLResp.build();
@@ -370,7 +298,6 @@ public class ClientController
     }
 
     @GetMapping(value = "operate/log")
-    @ResponseBody
     public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
@@ -378,22 +305,5 @@ public class ClientController
         BLResp resp = BLResp.build();
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
-    }
-
-    @GetMapping(value = "product/recharge/export")
-    public void exportProductRechargeRecord(@RequestParam(value = Field.CLIENT_ID) Long clientId,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.START_TIME, required = false) Date startTime,
-            @RequestParam(value = Field.END_TIME, required = false) Date endTime, HttpServletResponse response)
-            throws IOException
-    {
-        XSSFWorkbook wb = clientService.createProductRechargeXlsx(clientId, productId, startTime, endTime);
-        String filename = new String("产品充值记录".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream outputStream = response.getOutputStream();
-        wb.write(outputStream);
-        outputStream.flush();
-        outputStream.close();
     }
 }

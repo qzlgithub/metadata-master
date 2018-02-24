@@ -9,6 +9,7 @@ public class SubUserDTO implements Serializable
     private String name;
     private String phone;
     private Integer enabled;
+    private Integer deleted;
 
     public Long getUserId()
     {
@@ -58,5 +59,15 @@ public class SubUserDTO implements Serializable
     public void setEnabled(Integer enabled)
     {
         this.enabled = enabled;
+    }
+
+    public Integer getDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted)
+    {
+        this.deleted = deleted;
     }
 }

@@ -46,14 +46,9 @@ public interface ClientService
     void resetPassword(List<Long> idList, BLResp resp);
 
     /**
-     * 根据客户项目id获取客户项目
-     */
-    Map<String, Object> getClientProductInfo(Long clientProductId);
-
-    /**
      * 根据客户id获取帐号列表
      */
-    List<Map<String, Object>> getSubAccountList(Long clientId);
+    List<Map<String, Object>> getClientSubUserList(Long clientId);
 
     /**
      * 客户开通产品包时间形式，新增充值记录和客户产品记录
@@ -90,11 +85,6 @@ public interface ClientService
     void getClientOperateLog(Long clientId, Page page, BLResp resp);
 
     /**
-     * 根据条件导出充值记录
-     */
-    XSSFWorkbook createProductRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime);
-
-    /**
      * 判断合同号是否已存在
      */
     void checkIfContractExist(String contractNo, BLResp resp);
@@ -113,4 +103,13 @@ public interface ClientService
 
     void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             ListRes res);
+
+    String getClientCorpName(Long clientId);
+
+    void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page, ListRes res);
+
+    XSSFWorkbook createClientRequestXlsx(Long clientId, Long userId, Long productId, Date startTime, Date endTime,
+            Page page);
+
+    XSSFWorkbook createClientRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime, Page page);
 }

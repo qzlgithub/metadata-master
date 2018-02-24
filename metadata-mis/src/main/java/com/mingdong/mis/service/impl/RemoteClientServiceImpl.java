@@ -32,6 +32,7 @@ import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
+import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
@@ -60,6 +61,7 @@ import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
+import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
@@ -75,6 +77,7 @@ import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.ManagerMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
+import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
@@ -125,6 +128,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     private ApiReqInfoMapper apiReqInfoMapper;
     @Resource
     private ProductRechargeMapper productRechargeMapper;
+    @Resource
+    private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
@@ -261,7 +266,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId)
+    public ListDTO<SubUserDTO> getSubUserList(Long clientId, Long userId)
     {
         ListDTO<SubUserDTO> res = new ListDTO<>();
         // 查询子账号个数限制
@@ -283,6 +288,35 @@ public class RemoteClientServiceImpl implements RemoteClientService
             su.setName(o.getName());
             su.setPhone(o.getPhone());
             su.setEnabled(o.getEnabled());
+            list.add(su);
+        }
+        res.setTotal(userList.size());
+        res.setList(list);
+        return res;
+    }
+
+    @Override
+    public ListDTO<SubUserDTO> getSubUserList(Long clientId, boolean includeDeleted)
+    {
+        ListDTO<SubUserDTO> res = new ListDTO<>();
+        List<ClientUser> userList;
+        if(includeDeleted)
+        {
+            userList = clientUserMapper.getListByClient(clientId);
+        }
+        else
+        {
+            userList = clientUserMapper.getAvailableListByClient(clientId);
+        }
+        List<SubUserDTO> list = new ArrayList<>();
+        for(ClientUser o : userList)
+        {
+            SubUserDTO su = new SubUserDTO();
+            su.setUserId(o.getId());
+            su.setUsername(o.getUsername());
+            su.setName(o.getName());
+            su.setPhone(o.getPhone());
+            su.setDeleted(o.getDeleted());
             list.add(su);
         }
         res.setTotal(userList.size());
@@ -1385,10 +1419,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
             Date toDate, Page page)
     {
-        ListDTO<RequestDTO> res = new ListDTO<>();
+        ListDTO<RequestDTO> listDTO = new ListDTO<>();
         int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
         int pages = page.getTotalPage(total);
-        res.setTotal(total);
+        listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
@@ -1407,9 +1441,49 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 r.setBalance(o.getBalance());
                 list.add(r);
             }
-            res.setList(list);
+            listDTO.setList(list);
         }
-        return res;
+        return listDTO;
+    }
+
+    @Override
+    public String getClientCorpName(Long clientId)
+    {
+        Client client = clientMapper.findById(clientId);
+        return client != null ? client.getCorpName() : null;
+    }
+
+    @Override
+    public ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
+            Page page)
+    {
+        ListDTO<RechargeDTO> listDTO = new ListDTO<>();
+        int total = productRechargeInfoMapper.countByClient(clientId, productId, fromDate, toDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
+                    fromDate, toDate);
+            List<RechargeDTO> list = new ArrayList<>();
+            for(ProductRechargeInfo o : dataList)
+            {
+                RechargeDTO r = new RechargeDTO();
+                r.setRechargeAt(o.getTradeTime());
+                r.setRechargeNo(o.getTradeNo());
+                r.setProductName(o.getProductName());
+                r.setRechargeTypeName(o.getRechargeType());
+                r.setBillPlan(o.getBillPlan());
+                r.setAmount(o.getAmount());
+                r.setBalance(o.getBalance());
+                r.setManagerName(o.getManagerName());
+                r.setContractNo(o.getContractNo());
+                list.add(r);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 
     /**

@@ -45,11 +45,6 @@ public interface SystemService
     void dropRechargeType(Integer rechargeTypeId);
 
     /**
-     * 根据充值类型id获取充值类型信息
-     */
-    void getRechargeTypeInfo(Integer rechargeTypeId, BLResp resp);
-
-    /**
      * 根据充值类型id更改充值类型信息
      */
     void editRechargeType(Integer rechargeTypeId, String name, String remark, BLResp resp);
