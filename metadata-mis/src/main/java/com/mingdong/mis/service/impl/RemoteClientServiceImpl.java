@@ -1370,7 +1370,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         res.setUserDict(userDict);
-        return null;
+        return res;
     }
 
     /**
