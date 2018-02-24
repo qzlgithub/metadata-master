@@ -52,12 +52,19 @@ public interface RemoteClientService
     ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
 
     /**
-     * 查询客户子账号列表
+     * 查询客户子账号列表，不包括已删除的账号
      *
      * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
      */
-    ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId);
+    ListDTO<SubUserDTO> getSubUserList(Long clientId, Long userId);
+
+    /**
+     * 查询客户子账号列表，包括已删除的账号
+     *
+     * @param clientId 客户ID
+     */
+    ListDTO<SubUserDTO> getSubUserList(Long clientId);
 
     /**
      * 新增客户子帐号

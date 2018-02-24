@@ -84,7 +84,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientSubAccountList(ListRes res)
     {
-        ListDTO<SubUserDTO> listDTO = clientApi.getSubAccountList(RequestThread.getClientId(),
+        ListDTO<SubUserDTO> listDTO = clientApi.getSubUserList(RequestThread.getClientId(),
                 RequestThread.getUserId());
         res.addExtra(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
         res.setTotal(listDTO.getTotal());
@@ -141,7 +141,7 @@ public class ClientServiceImpl implements ClientService
     {
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
-            ListDTO<SubUserDTO> subUserList = clientApi.getSubAccountList(RequestThread.getClientId(),
+            ListDTO<SubUserDTO> subUserList = clientApi.getSubUserList(RequestThread.getClientId(),
                     RequestThread.getUserId());
             List<Map<String, Object>> list = new ArrayList<>();
             for(SubUserDTO u : subUserList.getList())

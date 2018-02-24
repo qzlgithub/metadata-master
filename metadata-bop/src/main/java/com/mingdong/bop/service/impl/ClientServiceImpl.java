@@ -34,7 +34,6 @@ import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -46,6 +45,7 @@ import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
@@ -236,26 +236,20 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public List<Map<String, Object>> getSubAccountList(Long clientId)
+    public List<Map<String, Object>> getClientSubUserList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ClientDTO client = remoteClientService.getClientByClientId(clientId);
-        if(client == null)
+        ListDTO<SubUserDTO> listDTO = remoteClientService.getSubUserList(clientId);
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            return list;
-        }
-        ClientUserListDTO listByClientAndStatus = remoteClientService.getListByClientAndStatus(clientId,
-                TrueOrFalse.TRUE, TrueOrFalse.FALSE);
-        List<ClientUserDTO> cuList = listByClientAndStatus.getDataList();
-        for(ClientUserDTO cu : cuList)
-        {
-            if(!client.getPrimaryUserId().equals(cu.getId()))
+            for(SubUserDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, cu.getId() + "");
-                map.put(Field.USERNAME, cu.getUsername());
-                map.put(Field.NAME, cu.getName());
-                map.put(Field.PHONE, cu.getPhone());
+                map.put(Field.ID, o.getUserId() + "");
+                map.put(Field.USERNAME, o.getUsername());
+                map.put(Field.NAME, o.getName());
+                map.put(Field.PHONE, o.getPhone());
+                map.put(Field.IS_DELETED, o.getDeleted());
                 list.add(map);
             }
         }

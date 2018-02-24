@@ -48,7 +48,7 @@ public interface ClientService
     /**
      * 根据客户id获取帐号列表
      */
-    List<Map<String, Object>> getSubAccountList(Long clientId);
+    List<Map<String, Object>> getClientSubUserList(Long clientId);
 
     /**
      * 客户开通产品包时间形式，新增充值记录和客户产品记录

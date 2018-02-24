@@ -137,6 +137,11 @@
         <if test="deleted != null">and `deleted` = #{deleted}</if>
     </select>
 
+    <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `client_id` = #{clientId}
+    </select>
+
     <select id="getAvailableListByClient" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `client_id` = #{clientId} and `deleted` = 0

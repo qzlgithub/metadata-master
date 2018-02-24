@@ -266,7 +266,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ListDTO<SubUserDTO> getSubAccountList(Long clientId, Long userId)
+    public ListDTO<SubUserDTO> getSubUserList(Long clientId, Long userId)
     {
         ListDTO<SubUserDTO> res = new ListDTO<>();
         // 查询子账号个数限制
@@ -288,6 +288,27 @@ public class RemoteClientServiceImpl implements RemoteClientService
             su.setName(o.getName());
             su.setPhone(o.getPhone());
             su.setEnabled(o.getEnabled());
+            list.add(su);
+        }
+        res.setTotal(userList.size());
+        res.setList(list);
+        return res;
+    }
+
+    @Override
+    public ListDTO<SubUserDTO> getSubUserList(Long clientId)
+    {
+        ListDTO<SubUserDTO> res = new ListDTO<>();
+        List<ClientUser> userList = clientUserMapper.getListByClient(clientId);
+        List<SubUserDTO> list = new ArrayList<>();
+        for(ClientUser o : userList)
+        {
+            SubUserDTO su = new SubUserDTO();
+            su.setUserId(o.getId());
+            su.setUsername(o.getUsername());
+            su.setName(o.getName());
+            su.setPhone(o.getPhone());
+            su.setDeleted(o.getDeleted());
             list.add(su);
         }
         res.setTotal(userList.size());
