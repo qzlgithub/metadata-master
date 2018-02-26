@@ -5,6 +5,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class SettingPageController
     @Resource
     private ProductService productService;
 
+    @LoginRequired
     @GetMapping(value = "/setting/menu.html")
     public ModelAndView rechargeIndex()
     {
@@ -34,6 +36,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/industry.html")
     public ModelAndView configIndustry()
     {
@@ -43,6 +46,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/recharge.html")
     public ModelAndView configRecharge()
     {
@@ -51,6 +55,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/other.html")
     public ModelAndView otherSettingPage()
     {
@@ -60,6 +65,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/role.html")
     public ModelAndView gotoRoleIndex()
     {
@@ -68,6 +74,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/role/add.html")
     public ModelAndView gotoRoleAddition()
     {
@@ -76,6 +83,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/role/edit.html")
     public ModelAndView gotoRoleEdit(@RequestParam(value = Field.ID) Long id)
     {
@@ -85,6 +93,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/user.html")
     public ModelAndView gotoManagerManagement()
     {
@@ -94,6 +103,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/user/add.html")
     public ModelAndView gotoManagerAdditionPage()
     {
@@ -103,6 +113,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/user/edit.html")
     public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.ID) Long managerId)
     {
@@ -114,6 +125,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/product.html")
     public ModelAndView productIndex()
     {
@@ -123,6 +135,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/product/edit.html")
     public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
     {
@@ -133,6 +146,7 @@ public class SettingPageController
         return view;
     }
 
+    @LoginRequired
     @GetMapping(value = "/setting/product/category.html")
     public ModelAndView productCategoryIndex()
     {

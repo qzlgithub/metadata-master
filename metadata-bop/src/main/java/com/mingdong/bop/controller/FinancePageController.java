@@ -5,6 +5,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.TrueOrFalse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class FinancePageController
     @Resource
     private SystemService systemService;
 
+    @LoginRequired
     @RequestMapping(value = "/finance/bill.html")
     public ModelAndView gotoBillListPage()
     {
@@ -34,6 +36,7 @@ public class FinancePageController
         return view;
     }
 
+    @LoginRequired
     @RequestMapping(value = "/finance/recharge.html")
     public ModelAndView gotoRechargeListPage()
     {

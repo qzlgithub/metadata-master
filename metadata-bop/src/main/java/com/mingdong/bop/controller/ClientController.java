@@ -10,6 +10,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -36,6 +37,7 @@ public class ClientController
     @Resource
     private ClientService clientService;
 
+    @LoginRequired
     @GetMapping(value = "/client/check")
     public Map<String, Object> getList(@RequestParam(value = Field.USERNAME) String username)
     {
@@ -47,6 +49,7 @@ public class ClientController
     /**
      * 判断合同编号唯一性
      */
+    @LoginRequired
     @GetMapping(value = "/client/checkContract")
     public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
@@ -58,6 +61,7 @@ public class ClientController
     /**
      * 客户列表
      */
+    @LoginRequired
     @GetMapping(value = "/client/list")
     public ListRes getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
@@ -80,6 +84,7 @@ public class ClientController
     /**
      * 客户产品充值记录
      */
+    @LoginRequired
     @GetMapping(value = "/client/recharge/list")
     public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -98,6 +103,7 @@ public class ClientController
     /**
      * 客户接口请求记录
      */
+    @LoginRequired
     @GetMapping(value = "/client/request/list")
     public ListRes getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.USER_ID, required = false) Long userId,
@@ -116,12 +122,14 @@ public class ClientController
 
     }
 
+    @LoginRequired
     @GetMapping(value = "/client/sub-user/list")
     public List<Map<String, Object>> getClientSubUserList(@RequestParam(value = Field.ID) Long clientId)
     {
         return clientService.getClientSubUserList(clientId);
     }
 
+    @LoginRequired
     @PutMapping(value = "/client/addition")
     public BLResp addNewClient(@RequestBody NewClientVO vo)
     {
@@ -130,6 +138,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/modification")
     public BLResp editClient(@RequestBody NewClientVO vo)
     {
@@ -138,6 +147,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/status")
     private BLResp changeClientStatus(@RequestBody JSONObject jsonReq)
     {
@@ -155,7 +165,8 @@ public class ClientController
         return resp;
     }
 
-    @DeleteMapping(value = "/client")
+    @LoginRequired
+    @DeleteMapping(value = "/client/deletion")
     private BLResp deleteClient(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -169,6 +180,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @GetMapping(value = "/client/same")
     private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
@@ -178,6 +190,7 @@ public class ClientController
         return resp.getDataMap();
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/reset")
     private BLResp resetPassword(@RequestBody JSONObject jsonReq)
     {
@@ -192,6 +205,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/product/open")
     public BLResp openProductService(@RequestBody ProdRechargeVO vo)
     {
@@ -227,6 +241,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/product/select")
     public BLResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.IDS) String ids)
@@ -246,6 +261,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/product/remove")
     public BLResp productRemove(@RequestParam(value = Field.ID) Long id)
     {
@@ -254,6 +270,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @PostMapping(value = "/client/product/renew")
     public BLResp renewProductService(@RequestBody ProdRechargeVO vo)
     {
@@ -289,6 +306,7 @@ public class ClientController
         return resp;
     }
 
+    @LoginRequired
     @GetMapping(value = "/client/product/renewInfo")
     public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_PRODUCT_ID) Long clientProductId)
     {
@@ -297,6 +315,7 @@ public class ClientController
         return resp.getDataMap();
     }
 
+    @LoginRequired
     @GetMapping(value = "/client/operate/log")
     public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,

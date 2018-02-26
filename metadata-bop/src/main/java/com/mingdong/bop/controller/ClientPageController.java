@@ -5,6 +5,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -31,6 +32,7 @@ public class ClientPageController
     /**
      * 页面：客户列表
      */
+    @LoginRequired
     @RequestMapping(value = "/client/index.html")
     public ModelAndView clientIndexPage()
     {
@@ -44,6 +46,7 @@ public class ClientPageController
     /**
      * 页面：客户添加页面
      */
+    @LoginRequired
     @RequestMapping(value = "/client/addition.html")
     public ModelAndView gotoClientAddition()
     {
@@ -57,6 +60,7 @@ public class ClientPageController
     /**
      * 页面：客户编辑页面
      */
+    @LoginRequired
     @RequestMapping(value = "/client/edit.html")
     public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
     {
@@ -71,6 +75,7 @@ public class ClientPageController
     /**
      * 页面：客户详情页面
      */
+    @LoginRequired
     @RequestMapping(value = "/client/detail.html")
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
@@ -87,6 +92,7 @@ public class ClientPageController
     /**
      * 产品充值记录
      */
+    @LoginRequired
     @RequestMapping(value = "/client/recharge.html")
     public ModelAndView gotoClientRecharge(@RequestParam(value = Field.C) Long clientId,
             @RequestParam(value = Field.P, required = false) Long productId)
@@ -105,6 +111,7 @@ public class ClientPageController
     /**
      * 接口请求记录
      */
+    @LoginRequired
     @RequestMapping(value = "/client/request.html")
     public ModelAndView gotoClientRequest(@RequestParam(value = Field.C) Long clientId,
             @RequestParam(value = Field.P, required = false) Long productId,

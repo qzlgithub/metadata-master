@@ -48,6 +48,7 @@ public class FinanceController
         return res;
     }
 
+    @LoginRequired
     @GetMapping(value = "/finance/bill")
     public ListRes getBillList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PRODUCT, required = false) Long productId,

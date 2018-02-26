@@ -164,6 +164,7 @@ public class ExportController
         os.close();
     }
 
+    @LoginRequired
     @GetMapping(value = "/exp/finance/request")
     public void exportBillList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PRODUCT, required = false) Long productId,

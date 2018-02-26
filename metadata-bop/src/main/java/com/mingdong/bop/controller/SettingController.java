@@ -210,6 +210,7 @@ public class SettingController
     /**
      * 系统菜单 - 变更状态
      */
+    @LoginRequired
     @PostMapping(value = "/setting/menu/status")
     public BLResp setModuleStatus(@RequestBody JSONObject jsonReq)
     {

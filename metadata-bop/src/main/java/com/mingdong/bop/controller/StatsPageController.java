@@ -4,6 +4,7 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class StatsPageController
     @Resource
     private StatsService statsService;
 
+    @LoginRequired
     @RequestMapping(value = "/stats/index.html")
     public ModelAndView gotoStatsIndex()
     {
@@ -32,7 +34,8 @@ public class StatsPageController
         return view;
     }
 
-    @RequestMapping(value = "/stats/customer.html")
+    @LoginRequired
+    @RequestMapping(value = "/stats/client.html")
     public ModelAndView gotoStatsCustomer()
     {
         ModelAndView view = new ModelAndView("stats/client");
@@ -42,6 +45,7 @@ public class StatsPageController
         return view;
     }
 
+    @LoginRequired
     @RequestMapping(value = "/stats/revenue.html")
     public ModelAndView gotoStatsRevenue()
     {
@@ -50,6 +54,7 @@ public class StatsPageController
         return view;
     }
 
+    @LoginRequired
     @RequestMapping(value = "/stats/request.html")
     public ModelAndView gotoStatsRequest()
     {
@@ -62,6 +67,7 @@ public class StatsPageController
         return view;
     }
 
+    @LoginRequired
     @RequestMapping(value = "/stats/recharge.html")
     public ModelAndView gotoStatsRecharge()
     {

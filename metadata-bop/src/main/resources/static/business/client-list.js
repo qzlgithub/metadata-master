@@ -177,7 +177,7 @@ function del_client() {
             }
             $.ajax({
                 type: "DELETE",
-                url: "/client",
+                url: "/client/deletion",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": to_deal_client}),

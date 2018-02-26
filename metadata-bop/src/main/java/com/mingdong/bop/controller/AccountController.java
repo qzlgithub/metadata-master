@@ -9,6 +9,7 @@ import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
@@ -32,6 +33,7 @@ public class AccountController
     /**
      * 账号角色 - 权限列表
      */
+    @LoginRequired
     @GetMapping(value = "/account/role/privilege")
     public List<String> getRolePrivilege(@RequestParam(value = Field.ROLE_ID) Long roleId)
     {
@@ -41,6 +43,7 @@ public class AccountController
     /**
      * 账号角色 - 新增
      */
+    @LoginRequired
     @PostMapping(value = "/account/role/addition")
     public BLResp addRole(@RequestBody JSONObject jsonReq)
     {
@@ -63,6 +66,7 @@ public class AccountController
     /**
      * 账号角色 - 编辑
      */
+    @LoginRequired
     @PostMapping(value = "/account/role")
     public BLResp editRole(@RequestBody JSONObject jsonReq)
     {
@@ -86,6 +90,7 @@ public class AccountController
     /**
      * 账号角色 - 变更状态
      */
+    @LoginRequired
     @PostMapping(value = "/account/role/status")
     public BLResp changeRoleStatus(@RequestBody JSONObject jsonReq)
     {
@@ -102,6 +107,7 @@ public class AccountController
     /**
      * 账号角色 - 列表
      */
+    @LoginRequired
     @GetMapping(value = "/account/role/list")
     public ListRes getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
@@ -115,6 +121,7 @@ public class AccountController
     /**
      * 账号角色 - 验证是否存在
      */
+    @LoginRequired
     @GetMapping(value = "/account/role/verification")
     public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
     {
@@ -126,6 +133,7 @@ public class AccountController
     /**
      * 管理账号 - 新增
      */
+    @LoginRequired
     @PostMapping(value = "/account/addition")
     public BLResp addNewManager(@RequestBody NewManagerVO vo)
     {
@@ -157,6 +165,7 @@ public class AccountController
     /**
      * 管理账号 - 列表
      */
+    @LoginRequired
     @GetMapping(value = "/account/list")
     public ListRes getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
@@ -181,6 +190,7 @@ public class AccountController
     /**
      * 管理账号 - 编辑
      */
+    @LoginRequired
     @PostMapping(value = "/account")
     public BLResp editManager(@RequestBody ManagerVO vo)
     {
@@ -205,6 +215,7 @@ public class AccountController
     /**
      * 管理账号 - 变更状态
      */
+    @LoginRequired
     @PostMapping(value = "/account/status")
     public BLResp changeStatus(@RequestBody JSONObject jsonReq)
     {
