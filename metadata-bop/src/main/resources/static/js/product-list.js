@@ -19,8 +19,7 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
             status: $("#status").val()
         },
         cols: [[
-            {field: 'id', title: 'No.'},
-            {field: 'code', title: '编号'},
+            {field: 'code', title: '产品代码'},
             {field: 'name', title: '名称'},
             {field: 'type', title: '类别'},
             {title: '种类', templet: '#custom-tpl'},
