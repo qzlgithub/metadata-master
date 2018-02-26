@@ -8,15 +8,17 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@RestController
+@Controller
 public class UserController
 {
     @Resource
@@ -26,6 +28,7 @@ public class UserController
      * 账号登录
      */
     @PostMapping(value = "/user/login")
+    @ResponseBody
     public BLResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -47,6 +50,7 @@ public class UserController
 
     @LoginRequired
     @PostMapping(value = "/user/password")
+    @ResponseBody
     public BLResp changePwd(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -58,5 +62,15 @@ public class UserController
         }
         managerService.changePassword(RequestThread.getOperatorId(), oldPwd, newPwd, resp);
         return resp;
+    }
+
+    @PostMapping(value = "/user/logout")
+    public ModelAndView managerLogout(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        String sessionId = session.getId();
+        managerService.userLogout(sessionId);
+        session.invalidate();
+        return new ModelAndView("redirect:/");
     }
 }
