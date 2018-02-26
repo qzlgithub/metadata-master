@@ -83,5 +83,5 @@ function exportXlsx() {
     if(uri_param !== '') {
         uri_param = uri_param.replace('&', '?');
     }
-    location.href = encodeURI('/finance/bill/export' + uri_param);
+    location.href = encodeURI('/exp/finance/request' + uri_param);
 }

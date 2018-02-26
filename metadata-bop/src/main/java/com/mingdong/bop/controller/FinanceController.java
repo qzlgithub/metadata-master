@@ -6,12 +6,12 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.ListRes;
+import com.mingdong.core.util.BusinessUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -42,7 +42,7 @@ public class FinanceController
                 to = from;
             }
         }
-        to = setToTomorrow(to);
+        to = BusinessUtils.getLastDayStartTime(to);
         tradeService.getProductRechargeInfoList(keyword, product, manager, rechargeType, from, to,
                 new Page(pageNum, pageSize), res);
         return res;
@@ -68,20 +68,8 @@ public class FinanceController
                 to = from;
             }
         }
-        to = setToTomorrow(to);
+        to = BusinessUtils.getLastDayStartTime(to);
         tradeService.getClientBillList(keyword, productId, billPlan, from, to, new Page(pageNum, pageSize), res);
         return res;
-    }
-
-    private Date setToTomorrow(Date date)
-    {
-        if(date != null)
-        {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            return calendar.getTime();
-        }
-        return null;
     }
 }

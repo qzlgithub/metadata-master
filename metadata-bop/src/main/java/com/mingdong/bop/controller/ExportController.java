@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Calendar;
 import java.util.Date;
 
 @Controller
@@ -31,8 +30,11 @@ public class ExportController
     @Resource
     private TradeService tradeService;
 
+    /**
+     * 导出客户请求记录
+     */
     @LoginRequired
-    @GetMapping(value = "/client/request/export")
+    @GetMapping(value = "/exp/client/request")
     public void exportConsumeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -53,8 +55,11 @@ public class ExportController
         os.close();
     }
 
+    /**
+     * 导出客户充值记录
+     */
     @LoginRequired
-    @GetMapping(value = "/client/recharge/export")
+    @GetMapping(value = "/exp/client/recharge")
     public void exportProductRechargeRecord(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
@@ -74,8 +79,11 @@ public class ExportController
         os.close();
     }
 
+    /**
+     * 导出客户数据
+     */
     @LoginRequired
-    @GetMapping(value = "/stats/client/clientList/export")
+    @GetMapping(value = "/exp/stats/client")
     public void exportClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             HttpServletResponse response) throws IOException
     {
@@ -91,7 +99,7 @@ public class ExportController
     }
 
     @LoginRequired
-    @GetMapping(value = "/stats/client/rechargeList/export")
+    @GetMapping(value = "/exp/stats/recharge")
     public void exportRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             HttpServletResponse response) throws IOException
     {
@@ -107,7 +115,7 @@ public class ExportController
     }
 
     @LoginRequired
-    @GetMapping(value = "/stats/client/requestList/export")
+    @GetMapping(value = "/exp/stats/request")
     public void exportRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.NAME, required = false) String name,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId, HttpServletResponse response)
@@ -125,7 +133,7 @@ public class ExportController
     }
 
     @LoginRequired
-    @GetMapping(value = "/finance/recharge/export")
+    @GetMapping(value = "/exp/finance/recharge")
     public void exportRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,
             @RequestParam(value = Field.PRODUCT, required = false) Long product,
@@ -144,7 +152,7 @@ public class ExportController
                 to = from;
             }
         }
-        to = setToTomorrow(to);
+        to = BusinessUtils.getLastDayStartTime(to);
         XSSFWorkbook wb = tradeService.createProductRechargeInfoListXlsx(keyword, product, manager, rechargeType, from,
                 to, new Page(1, 1000));
         String filename = new String("充值记录".getBytes(), "ISO8859-1");
@@ -156,7 +164,7 @@ public class ExportController
         os.close();
     }
 
-    @GetMapping(value = "/finance/bill/export")
+    @GetMapping(value = "/exp/finance/request")
     public void exportBillList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PRODUCT, required = false) Long productId,
             @RequestParam(value = Field.BILL_PLAN, required = false) Integer billPlan,
@@ -174,7 +182,7 @@ public class ExportController
                 to = from;
             }
         }
-        to = setToTomorrow(to);
+        to = BusinessUtils.getLastDayStartTime(to);
         XSSFWorkbook wb = tradeService.createClientBillListXlsx(keyword, productId, billPlan, from, to,
                 new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
@@ -184,17 +192,5 @@ public class ExportController
         wb.write(os);
         os.flush();
         os.close();
-    }
-
-    private Date setToTomorrow(Date date)
-    {
-        if(date != null)
-        {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            return calendar.getTime();
-        }
-        return null;
     }
 }

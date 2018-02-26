@@ -63,6 +63,9 @@ public class BusinessUtils
         return null;
     }
 
+    /**
+     * 获取指定时间第二天的零点时间
+     */
     public static Date getLastDayStartTime(Date date)
     {
         if(date != null)

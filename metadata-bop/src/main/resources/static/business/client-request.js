@@ -56,7 +56,7 @@ layui.config({
     });
     form.on('submit(export)', function(data) {
         var params = data.field;
-        var uri = "/client/request/export?clientId=" + params["client-id"] + "&userId=" + params['user-id']
+        var uri = "/exp/client/request?clientId=" + params["client-id"] + "&userId=" + params['user-id']
             + "&productId=" + params['product-id'] + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
         location.href = encodeURI(uri);
     });

@@ -55,7 +55,7 @@ layui.config({
     });
     form.on('submit(export)', function(data) {
         var params = data.field;
-        var uri = "/client/recharge/export?clientId=" + params["client-id"] + "&productId=" + params['product-id']
+        var uri = "/exp/client/recharge?clientId=" + params["client-id"] + "&productId=" + params['product-id']
             + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
         location.href = encodeURI(uri);
     });

@@ -130,7 +130,7 @@ $('#scopeLiId span').click(function() {
 
 function clientOutPrint() {
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
-    location.href = '/stats/client/clientList/export?scopeType=' + scopeType;
+    location.href = '/exp/stats/client?scopeType=' + scopeType;
 }
 
 
