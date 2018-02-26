@@ -9,6 +9,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.BLResp;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,7 +65,7 @@ public class UserController
         return resp;
     }
 
-    @PostMapping(value = "/user/logout")
+    @GetMapping(value = "/user/logout")
     public ModelAndView managerLogout(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
