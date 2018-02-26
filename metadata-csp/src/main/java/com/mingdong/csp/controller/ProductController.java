@@ -11,7 +11,6 @@ import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ProductService;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "product")
 public class ProductController
 {
     @Resource
@@ -34,7 +32,7 @@ public class ProductController
      * 查询产品充值记录
      */
     @LoginRequired
-    @GetMapping(value = "recharge")
+    @GetMapping(value = "product/recharge")
     public BLResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
@@ -53,7 +51,7 @@ public class ProductController
      * 导出产品充值记录
      */
     @LoginRequired
-    @GetMapping(value = "recharge/export")
+    @GetMapping(value = "product/recharge/export")
     public void exportProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
@@ -76,7 +74,7 @@ public class ProductController
      * 查询产品服务消费记录
      */
     @LoginRequired
-    @GetMapping(value = "request/list")
+    @GetMapping(value = "product/request/list")
     public BLResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
@@ -95,7 +93,7 @@ public class ProductController
      * 导出产品服务消费记录
      */
     @LoginRequired
-    @GetMapping(value = "request/export")
+    @GetMapping(value = "product/request/export")
     public void exportProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
@@ -115,7 +113,7 @@ public class ProductController
     }
 
     @LoginRequired
-    @GetMapping(value = "all")
+    @GetMapping(value = "product/all")
     public ListRes getProductByParam(@RequestParam(value = Field.PRODUCT_TYPE, required = false) String productType,
             @RequestParam(value = Field.INC_OPENED, required = false) Integer incOpened,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
