@@ -36,10 +36,11 @@
                     <span class="w15">排序</span>
                 </dt>
                 <dd th:each="parent: ${list}">
-                    <div class="clearfix jurisdiction-list-div">
+                    <div class="clearfix jurisdiction-list-div" th:id="'industry-id-'+${parent.id}">
                         <a href="#accordion1" class="accordion-title accordionTitle js-accordionTrigger w5"></a>
-                        <a class="w20 tl important"><i class="pl20" th:text="${parent.name}"></i></a>
-                        <a class="w20" th:text="${parent.code}"></a>
+                        <a
+                                class="w20 tl important"><i class="pl20 industry-name-class" th:text="${parent.name}"></i></a>
+                        <a class="w20 industry-code-class" th:text="${parent.code}"></a>
                         <a class="w10 pt0 important">
                             <div class="layui-form" th:attr="obj-id=${parent.id}">
                                 <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
@@ -54,10 +55,10 @@
                     </div>
                     <ul class="accordion-content accordionItem is-collapsed jurisdiction-list-li" id="accordion1"
                         aria-hidden="true">
-                        <li class="clearfix" th:each="child: ${parent.subList}">
+                        <li class="clearfix" th:each="child: ${parent.subList}" th:id="'industry-id-'+${child.id}">
                             <em class="w5">&nbsp;</em>
-                            <em class="w20 tl important"><i class="pl35" th:text="${child.name}"></i></em>
-                            <em class="w20" th:text="${child.code}"></em>
+                            <em class="w20 tl important"><i class="pl35 industry-name-class" th:text="${child.name}"></i></em>
+                            <em class="w20 industry-code-class" th:text="${child.code}"></em>
                             <em class="w10 pt0 important">
                                 <div class="layui-form" th:attr="obj-id=${child.id}">
                                     <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"

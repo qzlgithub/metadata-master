@@ -106,24 +106,19 @@ $(".add-child").on('click', function() {
 });
 $(".edit-industry").on('click', function() {
     var id = $(this).attr("data-id");
-    $.get(
-        "/setting/industry",
-        {"id": id},
-        function(data) {
-            if(data != null) {
-                $("#edit-id").val(data.id);
-                $("#edit-code").val(data.code);
-                $("#edit-name").val(data.name);
-                layer.open({
-                    title: false,
-                    type: 1,
-                    content: $('#edit-industry'),
-                    area: ['500px'],
-                    shadeClose: true
-                });
-            }
-        }
-    );
+    var obj = $("#industry-id-"+id);
+    var name = obj.find(".industry-name-class").text();
+    var code = obj.find(".industry-code-class").text();
+    $("#edit-id").val(id);
+    $("#edit-name").val(name);
+    $("#edit-code").val(code);
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#edit-industry'),
+        area: ['500px'],
+        shadeClose: true
+    });
 });
 
 function checkNewCode() {

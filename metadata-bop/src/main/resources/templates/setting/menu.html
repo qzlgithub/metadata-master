@@ -39,9 +39,9 @@
                 <dd class="st_tree">
                     <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 important">
                         <block th:each="parent: ${list}">
-                            <li class="clearfix jurisdiction-list-div">
+                            <li class="clearfix jurisdiction-list-div" th:id="'menu-id-'+${parent.id}">
                                 <em class="js-accordionTrigger w5"></em>
-                                <a class="w20 tl important" th:text="${parent.name}"></a>
+                                <a class="w20 tl important menu-name-class" th:text="${parent.name}"></a>
                                 <a class="w20" th:text="${parent.id}"></a>
                                 <a class="w10">
                                     <div class="file">
@@ -64,9 +64,9 @@
                             <!--二级-->
                             <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 ml20 important">
                                 <block th:each="child: ${parent.subList}">
-                                    <li class="clearfix pb20 pl30 important">
+                                    <li class="clearfix pb20 pl30 important" th:id="'menu-id-'+${child.id}">
                                         <em class="js-accordionTrigger w5"></em>
-                                        <a class="w20 tl important" th:text="${child.name}"></a>
+                                        <a class="w20 tl important menu-name-class" th:text="${child.name}"></a>
                                         <a class="w20" th:text="${child.id}"></a>
                                         <a class="w10">&nbsp;</a>
                                         <a class="w10 pt0 important">
@@ -87,9 +87,9 @@
                                     <!--三级-->
                                     <ul class="jurisdiction-list-div jurisdiction-list-li colum-list-li">
                                         <block th:each="tChild: ${child.thrList}">
-                                            <li class="clearfix pb20 pl45 important">
+                                            <li class="clearfix pb20 pl45 important" th:id="'menu-id-'+${tChild.id}">
                                                 <em class="js-accordionTrigger w5"></em>
-                                                <a class="w20 tl important" th:text="${tChild.name}"></a>
+                                                <a class="w20 tl important menu-name-class" th:text="${tChild.name}"></a>
                                                 <a class="w20" th:text="${tChild.id}"></a>
                                                 <a class="w10">&nbsp;</a>
                                                 <a class="w10 pt0 important">
