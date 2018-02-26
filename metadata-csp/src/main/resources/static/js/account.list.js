@@ -25,7 +25,7 @@ function getAccountList() {
                     .replace("#{name}", list[d].name)
                     .replace("#{phone}", list[d].phone);
                     if(list[d].enabled === 1) {
-                        row = row.replace("#{statusName}", "停用");
+                        row = row.replace("#{statusName}", "禁用");
                     }
                     else {
                         row = row.replace("#{statusName}", "启用");
@@ -56,14 +56,14 @@ function stopAccount(id) {
                     if(data.errCode === '000000') {
                         var obj = data.dataMap;
                         if(obj.enabled === 1) {
-                            $("#statusAction" + id).text("停用");
+                            $("#statusAction" + id).text("禁用");
                             layer.msg("启用成功", {
                                 time: 2000
                             });
                         }
                         else {
                             $("#statusAction" + id).text("启用");
-                            layer.msg("停用成功", {
+                            layer.msg("禁用成功", {
                                 time: 2000
                             });
                         }
@@ -133,11 +133,11 @@ function editAccount(id) {
                 var html = '';
                 if(obj.enabled === 1) {
                     html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" checked/>';
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="停用" />';
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" />';
                 }
                 else {
                     html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" />';
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="停用" checked/>';
+                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" checked/>';
                 }
                 $('#account-status-div-id').append(html);
                 form.render('radio');

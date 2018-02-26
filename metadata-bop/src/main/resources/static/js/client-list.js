@@ -21,13 +21,12 @@ layui.config({
         },
         cols: [[
             {type: 'checkbox', fixed: 'left', width: '5%'},
-            {field: 'id', title: '编号', width: '10%'},
             {field: 'username', title: '用户名', width: '8%'},
             {field: 'corpName', title: '公司全称', width: '15%'},
             {field: 'shortName', title: '公司简称', width: '12%'},
             {field: 'industry', title: '所属行业', width: '15%'},
-            {field: 'managerName', title: '商务经理', width: '5%'},
-            {title: '子账号个数', sort: true, width: '3%', toolbar: '#sub-user-bar'},
+            {field: 'managerName', title: '商务经理'},
+            {title: '子账号个数', sort: true, width: '8%', toolbar: '#sub-user-bar'},
             {field: 'registerDate', title: '注册日期', sort: true, width: '10%'},
             {title: '状态', width: '7%', templet: "#status-tpl"},
             {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right', width: '10.3%'}

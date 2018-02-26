@@ -18,7 +18,6 @@ layui.config({
             enabled: $("#enabled").val()
         },
         cols: [[
-            {field: 'id', title: '编号', width: '15%'},
             {field: 'username', title: '用户名', width: '10%'},
             {field: 'name', title: '姓名', width: '15%'},
             {field: 'phone', title: '联系电话', width: '10%'},

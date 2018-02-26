@@ -12,7 +12,6 @@ layui.config({
         elem: '#dataTable',
         url: '/dict/recharge/list',
         cols: [[
-            {field: 'id', title: '编号', width: '5%'},
             {field: 'name', title: '名称', width: '10%'},
             {field: 'remark', title: '备注', width: '30%'},
             {field: 'addAt', title: '添加时间', width: '15%', sort: true},
