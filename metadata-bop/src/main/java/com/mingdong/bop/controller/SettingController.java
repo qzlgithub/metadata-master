@@ -124,8 +124,8 @@ public class SettingController
     }
 
     @LoginRequired
-    @GetMapping(value = "/config/columnInfo")
-    public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id)
+    @GetMapping(value = "/setting/menu")
+    public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
     {
         return systemService.getPrivilegeInfo(id);
     }

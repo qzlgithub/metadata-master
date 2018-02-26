@@ -67,7 +67,7 @@ layui.config({
 $(".edit-manage").on('click', function() {
     var id = $(this).attr("data-id");
     $.get(
-        "/config/columnInfo",
+        "/setting/menu",
         {"id": id},
         function(data) {
             if(data != null) {
