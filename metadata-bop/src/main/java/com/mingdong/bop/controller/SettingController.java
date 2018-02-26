@@ -117,8 +117,8 @@ public class SettingController
     }
 
     @LoginRequired
-    @GetMapping(value = "/config/industryInfo")
-    public Map<String, String> getIndustryInfo(@RequestParam(value = Field.ID) Long id)
+    @GetMapping(value = "/setting/industry")
+    public Map<String, String> getIndustryInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
     {
         return systemService.getIndustryInfo(id);
     }

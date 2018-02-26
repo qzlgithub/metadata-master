@@ -107,7 +107,7 @@ $(".add-child").on('click', function() {
 $(".edit-industry").on('click', function() {
     var id = $(this).attr("data-id");
     $.get(
-        "/config/industryInfo",
+        "/setting/industry",
         {"id": id},
         function(data) {
             if(data != null) {
