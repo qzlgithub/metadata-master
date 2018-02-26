@@ -12,7 +12,7 @@ layui.config({
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
-        url: '/manager/list',
+        url: '/account/list',
         where: {
             roleId: $("#roleId").val(),
             enabled: $("#enabled").val()
@@ -58,7 +58,7 @@ function changeStatus(id) {
             $(this).click();
             $.ajax({
                 type: "POST",
-                url: "/manager/changeStatus",
+                url: "/account/status",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),

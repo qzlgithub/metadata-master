@@ -30,28 +30,29 @@
                 <li>
                     角色：
                     <div class="inline-flex" style="width: 180px">
-                    <select id="roleId" name="roleId" class="select-list">
-                        <option value="">全部</option>
-                        <option th:each="role:${roleList}" th:value="${role.roleId}"
-                                th:text="${role.roleName}"></option>
-                    </select>
+                        <select id="roleId" name="roleId" class="select-list">
+                            <option value="">全部</option>
+                            <option th:each="role:${roleList}" th:value="${role.roleId}"
+                                    th:text="${role.roleName}"></option>
+                        </select>
                     </div>
                 </li>
                 <li>
                     状态：
                     <div class="inline-flex" style="width: 120px">
-                    <select id="enabled" name="enabled" class="select-list">
-                        <option value="">全部</option>
-                        <option value="1">正常</option>
-                        <option value="0">已禁用</option>
-                    </select>
+                        <select id="enabled" name="enabled" class="select-list">
+                            <option value="">全部</option>
+                            <option value="1">正常</option>
+                            <option value="0">已禁用</option>
+                        </select>
                     </div>
                 </li>
                 <li>
                     <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
-            <div class="clearfix mt20"><a href="/setting/user/add.html" class="layui-btn fr layui-btn-normal">添加账号</a></div>
+            <div class="clearfix mt20"><a href="/setting/user/add.html" class="layui-btn fr layui-btn-normal">添加账号</a>
+            </div>
             <table class="layui-table" id="data-table"></table>
         </div>
     </div>
@@ -74,7 +75,8 @@
        lay-event="disable" data-id="{{d.id}}">禁用
     </a>
     {{# } else { }}
-    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="enable"
+    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs"
+       lay-event="enable"
        data-id="{{d.id}}">启用
     </a>
     {{# } }}

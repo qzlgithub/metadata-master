@@ -1,63 +1,220 @@
 package com.mingdong.bop.controller;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.RequestThread;
+import com.mingdong.bop.model.ManagerVO;
+import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.bop.service.ManagerService;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
-import org.springframework.stereotype.Controller;
+import com.mingdong.core.model.ListRes;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
-@Controller
+@RestController
 public class AccountController
 {
     @Resource
     private ManagerService managerService;
 
     /**
-     * 账号登录
+     * 账号角色 - 权限列表
      */
-    @PostMapping(value = "/login")
-    @ResponseBody
-    public BLResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
+    @GetMapping(value = "/account/role/privilege")
+    public List<String> getRolePrivilege(@RequestParam(value = Field.ROLE_ID) Long roleId)
     {
-        BLResp resp = BLResp.build();
-
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-        String realCode = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
-        String code = jsonReq.getString(Field.IMAGE_CODE);
-        /*if(code == null || !code.equalsIgnoreCase(realCode))
-        {
-            return resp.result(RestResult.INVALID_CAPTCHA);
-        }*/
-        session.removeAttribute(Field.IMAGE_CAPTCHA);
-        String username = jsonReq.getString(Field.USERNAME);
-        String password = jsonReq.getString(Field.PASSWORD);
-        managerService.userLogin(username, password, sessionId, resp);
-        return resp;
+        return managerService.getRolePrivilege(roleId);
     }
 
-    @PostMapping(value = "changePwd")
-    @ResponseBody
-    public BLResp changePwd(@RequestBody JSONObject jsonReq)
+    /**
+     * 账号角色 - 新增
+     */
+    @PostMapping(value = "/account/role/addition")
+    public BLResp addRole(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        String oldPwd = jsonReq.getString(Field.OLD_PWD);
-        String newPwd = jsonReq.getString(Field.NEW_PWD);
-        if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
+        String name = jsonReq.getString(Field.NAME);
+        JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
+        if(StringUtils.isNullBlank(name) || privilegeArray == null)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        managerService.changePassword(RequestThread.getOperatorId(), oldPwd, newPwd, resp);
+        List<Long> privilege = privilegeArray.toJavaList(Long.class);
+        if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        managerService.addRole(name, privilege, resp);
+        return resp;
+    }
+
+    /**
+     * 账号角色 - 编辑
+     */
+    @PostMapping(value = "/account/role")
+    public BLResp editRole(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long roleId = jsonReq.getLong(Field.ID);
+        String name = jsonReq.getString(Field.NAME);
+        JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
+        if(roleId == null || StringUtils.isNullBlank(name) || privilegeArray == null)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        List<Long> privilege = privilegeArray.toJavaList(Long.class);
+        if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        managerService.editRole(roleId, name, privilege, resp);
+        return resp;
+    }
+
+    /**
+     * 账号角色 - 变更状态
+     */
+    @PostMapping(value = "/account/role/status")
+    public BLResp changeRoleStatus(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long roleId = jsonReq.getLong(Field.ID);
+        if(roleId == null)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        managerService.changeStatus(roleId, resp);
+        return resp;
+    }
+
+    /**
+     * 账号角色 - 列表
+     */
+    @GetMapping(value = "/account/role/list")
+    public ListRes getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        ListRes res = new ListRes();
+        Page page = new Page(pageNum, pageSize);
+        managerService.getRoleList(page, res);
+        return res;
+    }
+
+    /**
+     * 账号角色 - 验证是否存在
+     */
+    @GetMapping(value = "/account/role/verification")
+    public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
+    {
+        BLResp resp = BLResp.build();
+        managerService.checkIfRoleNameExist(name, resp);
+        return resp.getDataMap();
+    }
+
+    /**
+     * 管理账号 - 新增
+     */
+    @PostMapping(value = "/account/addition")
+    public BLResp addNewManager(@RequestBody NewManagerVO vo)
+    {
+        BLResp resp = BLResp.build();
+        // 校验各个字段值
+        if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
+                StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        if(vo.getRoleId() == null || vo.getRoleId() <= 0)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        if(CollectionUtils.isEmpty(vo.getPrivilege()))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        // 保存管理账号
+        managerService.addManager(vo.getUsername(), vo.getPassword(), vo.getName(), vo.getPhone(), vo.getQq(),
+                vo.getRoleId(), vo.getEnabled(), vo.getPrivilege(), resp);
+        return resp;
+    }
+
+    /**
+     * 管理账号 - 列表
+     */
+    @GetMapping(value = "/account/list")
+    public ListRes getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
+            @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        ListRes res = new ListRes();
+        // 校验各个字段值
+        if(roleId != null && roleId <= 0)
+        {
+            roleId = null;
+        }
+        if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
+        {
+            enabled = null;
+        }
+        Page page = new Page(pageNum, pageSize);
+        managerService.getManagerList(roleId, enabled, page, res);
+        return res;
+    }
+
+    /**
+     * 管理账号 - 编辑
+     */
+    @PostMapping(value = "/account")
+    public BLResp editManager(@RequestBody ManagerVO vo)
+    {
+        BLResp resp = BLResp.build();
+        if(vo.getRoleId() == null || vo.getRoleId() <= 0)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        if(CollectionUtils.isEmpty(vo.getPrivilege()))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        managerService.editManager(vo.getManagerId(), vo.getRoleId(), vo.getName(), vo.getPhone(), vo.getQq(),
+                vo.getEnabled(), vo.getPrivilege(), resp);
+        return resp;
+    }
+
+    /**
+     * 管理账号 - 变更状态
+     */
+    @PostMapping(value = "/account/status")
+    public BLResp changeStatus(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long managerId = jsonReq.getLong(Field.ID);
+        if(managerId == null)
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        managerService.changeManagerStatus(managerId, resp);
         return resp;
     }
 }

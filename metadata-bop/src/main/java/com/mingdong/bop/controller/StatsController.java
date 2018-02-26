@@ -7,27 +7,19 @@ import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.ListRes;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
 
-@Controller
-@RequestMapping(value = "stats")
+@RestController
 public class StatsController
 {
     @Resource
     private StatsService statsService;
 
-    @GetMapping(value = "/client/clientList")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/clientList")
     public ListRes getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
@@ -38,23 +30,7 @@ public class StatsController
         return res;
     }
 
-    @GetMapping(value = "client/clientList/export")
-    public void exportClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
-            HttpServletResponse response) throws IOException
-    {
-        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        XSSFWorkbook wb = statsService.createClientListXlsx(scopeTypeEnum, new Page(1, 1000));
-        String filename = new String("客户数据".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "client/clientListJson")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/clientListJson")
     public String getClientListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
@@ -62,8 +38,7 @@ public class StatsController
         return jsonArray.toJSONString();
     }
 
-    @GetMapping(value = "/client/rechargeList")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/rechargeList")
     public ListRes getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
@@ -74,23 +49,7 @@ public class StatsController
         return res;
     }
 
-    @GetMapping(value = "client/rechargeList/export")
-    public void exportRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
-            HttpServletResponse response) throws IOException
-    {
-        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        XSSFWorkbook wb = statsService.createRechargeListXlsx(scopeTypeEnum, new Page(1, 1000));
-        String filename = new String("充值数据".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "client/rechargeListJson")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/rechargeListJson")
     public String getRechargeListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
@@ -98,8 +57,7 @@ public class StatsController
         return jsonObject.toJSONString();
     }
 
-    @GetMapping(value = "/client/requestList")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/requestList")
     public ListRes getRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.NAME, required = false) String name,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
@@ -112,25 +70,7 @@ public class StatsController
         return res;
     }
 
-    @GetMapping(value = "client/requestList/export")
-    public void exportRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
-            @RequestParam(value = Field.NAME, required = false) String name,
-            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId, HttpServletResponse response)
-            throws IOException
-    {
-        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        XSSFWorkbook wb = statsService.createRequestListXlsx(scopeTypeEnum, new Page(1, 1000),name, productId);
-        String filename = new String("产品请求数据".getBytes(), "ISO8859-1");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
-        OutputStream os = response.getOutputStream();
-        wb.write(os);
-        os.flush();
-        os.close();
-    }
-
-    @GetMapping(value = "client/requestListJson")
-    @ResponseBody
+    @GetMapping(value = "/stats/client/requestListJson")
     public String getRequestListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.NAME, required = false) String name,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)

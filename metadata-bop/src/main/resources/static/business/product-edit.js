@@ -26,7 +26,6 @@ KindEditor.ready(function(K) {
     });
     prettyPrint();
 });
-
 var message;
 layui.config({
     base: '../../static/build/js/'
@@ -50,14 +49,23 @@ layui.config({
         });
     });
 });
-function addProduct() {
+var isSubmit = false;
+function editProduct() {
+    if(isSubmit){
+        return;
+    }
+    isSubmit = true;
+    if(!checkDataValid("#data-div-id")){
+        isSubmit = false;
+        return;
+    }
     $.ajax({
         type: "POST",
-        url: "/product/addition",
+        url: "/product",
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify({
-            "productType": $("#product-type").val(),
+            "id": $("#product-id").val(),
             "code": $("#product-code").val(),
             "name": $("#product-name").val(),
             "costAmt": $("#product-cost").val(),
@@ -70,56 +78,13 @@ function addProduct() {
                 layer.msg(data.errMsg, {time: 2000});
             }
             else {
-                layer.msg("添加成功", {
+                layer.msg("修改成功", {
                     time: 2000
                 }, function() {
                     window.location.href = "/setting/product.html";
                 });
-
             }
+            isSubmit = false;
         }
     });
-}
-
-function checkProdNo() {
-    var prodNoVal = $("#product-code").val();
-    if(prodNoVal === null || prodNoVal == '') {
-        $("#prodNoTip").text("产品编号不能为空");
-        $("#prodNoTip").show();
-    }
-    else {
-        $("#prodNoTip").text("");
-        $("#prodNoTip").hide();
-    }
-}
-
-function checkProdName() {
-    var prodNoVal = $("#product-name").val();
-    if(prodNoVal === null || prodNoVal == '') {
-        $("#prodNameTip").text("产品名不能为空");
-        $("#prodNameTip").show();
-    }
-    else {
-        $("#prodNameTip").text("");
-        $("#prodNameTip").hide();
-    }
-}
-
-function checkCostAmt() {
-    var unitPrice = $("#product-cost").val();
-    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$");
-    if(unitPrice !== "") {
-        if(reg.test(unitPrice)) {
-            $("#costAmtTip").text("");
-            $("#costAmtTip").hide();
-        }
-        else {
-            $("#costAmtTip").text("单价格式错误！");
-            $("#costAmtTip").show();
-        }
-    }
-    else {
-        $("#costAmtTip").text("请填写单价！");
-        $("#costAmtTip").show();
-    }
 }

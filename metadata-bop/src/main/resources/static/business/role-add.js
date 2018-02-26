@@ -63,7 +63,7 @@ function saveRole() {
     var privilege = build_privilege();
     $.ajax({
         type: "POST",
-        url: "/role/addition",
+        url: "/account/role/addition",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
@@ -102,7 +102,7 @@ function checkName() {
     var tip = $("#nameTip");
     if(name !== "") {
         $.get(
-            "/role/check",
+            "/account/role/verification",
             {"name": name},
             function(data) {
                 if(data.exist === 1) {

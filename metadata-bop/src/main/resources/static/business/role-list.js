@@ -12,7 +12,7 @@ layui.config({
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
-        url: '/role/list',
+        url: '/account/role/list',
         cols: [[
             {field: 'name', title: '分组名称', width: '15%'},
             {field: 'privilege', title: '权限类型'},
@@ -38,7 +38,7 @@ function changeStatus(id) {
             $(this).click();
             $.ajax({
                 type: "POST",
-                url: "/role/changeStatus",
+                url: "/account/role/status",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),

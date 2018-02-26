@@ -27,7 +27,7 @@ $("#savePwd").click(function() {
             }else{
                 $.ajax({
                     type: "POST",
-                    url: "/changePwd",
+                    url: "/user/password",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify({

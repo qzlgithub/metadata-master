@@ -62,7 +62,7 @@ function checkSubPrivAllChecked() {
 function resetPrivilege() {
     var roleId = $("#roleId").val();
     $.get(
-        "/role/privilege",
+        "/account/role/privilege",
         {"roleId": roleId},
         function(data) {
             $(".privilege").prop("checked", false);
@@ -87,7 +87,7 @@ function saveManager() {
         + "\nenabled: " + enabled);
     $.ajax({
         type: "POST",
-        url: "/manager/modification",
+        url: "/account",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({

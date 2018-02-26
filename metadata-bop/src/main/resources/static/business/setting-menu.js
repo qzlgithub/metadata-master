@@ -109,7 +109,7 @@ function changeStatus(modules, status) {
     if(modules.length !== 0 && (status === 0 || status === 1)) {
         $.ajax({
             type: "post",
-            url: "system/module/status",
+            url: "/system/module/status",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify({"module": modules, "status": status}),

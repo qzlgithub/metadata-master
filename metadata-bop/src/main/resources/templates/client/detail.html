@@ -194,16 +194,13 @@
                     </table>
                 </div>
             </form>
-            <!--form end-->
         </div>
     </div>
     <div class="layui-footer" th:include="common :: copyright"></div>
 </div>
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
 
-<!-- 冻结解冻提示层 -->
 <div id="ban-div" class="modal">
     <div class="layui-layer-title">账号操作记录</div>
     <div class="mb30">
@@ -224,11 +221,8 @@
         </div>
     </div>
 </div>
-<!-- 冻结解冻提示层 -->
 
-<!--app-id  提示层-->
 <div id="key-modal" class="modal">
-    <!--form-->
     <div class="layui-layer-title" id="app-id-prod"></div>
     <div class="mb30">
         <form class="layui-form" action="">
@@ -240,17 +234,12 @@
             </div>
         </form>
     </div>
-    <!--form end-->
 </div>
-<!--提示层 end-->
 
-<!--续签  提示层-->
 <div id="renew-modal" class="modal">
-    <!--form-->
     <div class="layui-layer-title" id="renew-server-id">续费服务</div>
     <div class="mb30">
         <ul class="renew-inf-list clearfix" id="renew-info"></ul>
-        <!--<form class="layui-form" action="">-->
         <div class="m30 mt0 mr40">
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
@@ -321,19 +310,12 @@
                 </div>
             </div>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
 
-<!--提示层 end-->
-
-<!--开通服务  提示层-->
 <div id="openServe-modal" class="modal">
-    <!--form-->
     <div class="layui-layer-title">开通服务</div>
     <div class="m30">
-        <!--<form class="layui-form" action="">-->
         <div class="m30 mt0 mr40">
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
@@ -402,16 +384,11 @@
                 </div>
             </div>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
-<!--提示层 end-->
 
 
-<!--添加定制服务  提示层-->
 <div id="service-modal" class="modal">
-    <!--form-->
     <div class="layui-layer-title">添加定制服务</div>
     <div class="m30">
         <ul class="search-list clearfix pb25">
@@ -473,9 +450,7 @@
                     class="layui-icon fz-14 ul-li-class" th:value="${pro.productId}">&#x1006;</i></li>
         </ul>
     </div>
-    <!--form end-->
 </div>
-<!--添加定制服务 提示层 end-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/logout.js"></script>
@@ -483,6 +458,6 @@
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
-<script type="text/javascript" src="/static/js/customer.detail.js"></script>
+<script type="text/javascript" src="/static/business/client-detail.js"></script>
 </body>
 </html>

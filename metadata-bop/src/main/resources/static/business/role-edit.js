@@ -63,7 +63,7 @@ function saveRole() {
     var privilege = build_privilege();
     $.ajax({
         type: "POST",
-        url: "/role/modification",
+        url: "/account/role",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
