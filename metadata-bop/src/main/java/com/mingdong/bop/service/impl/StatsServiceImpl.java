@@ -173,7 +173,7 @@ public class StatsServiceImpl implements StatsService
         row.createCell(1).setCellValue("公司名称");
         row.createCell(2).setCellValue("公司简称");
         row.createCell(3).setCellValue("账号");
-        row.createCell(7).setCellValue("商务经理");
+        row.createCell(4).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
@@ -196,7 +196,7 @@ public class StatsServiceImpl implements StatsService
                 dataRow.createCell(1).setCellValue(dataInfo.getCorpName());
                 dataRow.createCell(2).setCellValue(dataInfo.getShortName());
                 dataRow.createCell(3).setCellValue(dataInfo.getUsername());
-                dataRow.createCell(7).setCellValue(dataInfo.getManagerName());
+                dataRow.createCell(4).setCellValue(dataInfo.getManagerName());
             }
         }
         return wb;
