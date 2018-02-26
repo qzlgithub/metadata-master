@@ -196,7 +196,7 @@ $("#sameCompany").click(function() {
 
 function fetchIndustry() {
     $.get(
-        "/config/industry",
+        "/m/dict/sub-industry",
         {"parentId": $("#parentIndustry").val()},
         function(data) {
             $("#industry").empty();

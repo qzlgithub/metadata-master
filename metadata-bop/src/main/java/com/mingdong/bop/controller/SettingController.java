@@ -33,8 +33,11 @@ public class SettingController
     @Resource
     private SystemService systemService;
 
+    /**
+     * 充值类型 - 列表
+     */
     @LoginRequired
-    @GetMapping(value = "dict/recharge/list")
+    @GetMapping(value = "/setting/rechargeType/list")
     public ListRes getRechargeTypeList()
     {
         ListRes res = new ListRes();
@@ -42,8 +45,11 @@ public class SettingController
         return res;
     }
 
+    /**
+     * 充值类型 - 新增
+     */
     @LoginRequired
-    @PutMapping(value = "dict/recharge")
+    @PutMapping(value = "/setting/rechargeType/addition")
     public BLResp addRechargeType(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -57,8 +63,11 @@ public class SettingController
         return resp;
     }
 
+    /**
+     * 充值类型 - 删除
+     */
     @LoginRequired
-    @DeleteMapping(value = "dict/recharge")
+    @DeleteMapping(value = "/setting/rechargeType/deletion")
     public BLResp dropRechargeType(@RequestBody JSONObject jsonReq)
     {
         Integer id = jsonReq.getInteger(Field.ID);
@@ -69,8 +78,11 @@ public class SettingController
         return BLResp.build();
     }
 
+    /**
+     * 充值类型 - 编辑
+     */
     @LoginRequired
-    @PostMapping(value = "dict/recharge")
+    @PostMapping(value = "/setting/rechargeType")
     public BLResp editRechargeType(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -86,8 +98,11 @@ public class SettingController
 
     }
 
+    /**
+     * 充值类型 - 变更状态
+     */
     @LoginRequired
-    @PostMapping(value = "dict/recharge/status")
+    @PostMapping(value = "/setting/rechargeType/status")
     public BLResp enableRechargeType(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -99,14 +114,6 @@ public class SettingController
         }
         systemService.enableRechargeType(id, enabled, resp);
         return resp;
-    }
-
-    @LoginRequired
-    @GetMapping(value = "/config/industry")
-    public List<Map<String, Object>> configIndustry(
-            @RequestParam(value = Field.PARENT_ID, defaultValue = "0") Long parentId)
-    {
-        return systemService.getIndustryMap(parentId, TrueOrFalse.TRUE);
     }
 
     @LoginRequired

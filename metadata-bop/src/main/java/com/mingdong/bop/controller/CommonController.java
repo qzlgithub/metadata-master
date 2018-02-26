@@ -40,4 +40,16 @@ public class CommonController
     {
         return systemService.getIndustryList(industryId, TrueOrFalse.TRUE);
     }
+
+
+
+    /**
+     * 行业字典 - 根据上级行业ID获取下级行业字典
+     */
+    @GetMapping(value = "/m/dict/sub-industry")
+    public List<Map<String, Object>> configIndustry(
+            @RequestParam(value = Field.PARENT_ID, defaultValue = "0") Long parentId)
+    {
+        return systemService.getIndustryMap(parentId, TrueOrFalse.TRUE);
+    }
 }

@@ -10,7 +10,7 @@ layui.config({
     app.set({type: 'iframe'}).init();
     table.render({
         elem: '#dataTable',
-        url: '/dict/recharge/list',
+        url: '/setting/rechargeType/list',
         cols: [[
             {field: 'name', title: '名称', width: '10%'},
             {field: 'remark', title: '备注', width: '30%'},
@@ -67,7 +67,7 @@ layui.config({
 function change_status(id, enabled) {
     $.ajax({
         type: "POST",
-        url: "/dict/recharge/status",
+        url: "/setting/rechargeType/status",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
@@ -89,7 +89,7 @@ function add_recharge_type() {
     var newRemark = $("#newRemark").val();
     $.ajax({
         type: "PUT",
-        url: "/dict/recharge",
+        url: "/setting/rechargeType/addition",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
@@ -122,7 +122,7 @@ function del_recharge_type(id) {
         yes: function() {
             $.ajax({
                 type: "DELETE",
-                url: "/dict/recharge",
+                url: "/setting/rechargeType/deletion",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),
                 success: function() {
@@ -142,7 +142,7 @@ function del_recharge_type(id) {
 function edit_recharge_type() {
     $.ajax({
         type: "POST",
-        url: "/dict/recharge",
+        url: "/setting/rechargeType",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
