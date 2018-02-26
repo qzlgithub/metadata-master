@@ -17,25 +17,23 @@ function getAccountList() {
         "/client/sub-account/list",
         {},
         function(data) {
-            if(data.errCode === '000000') {
-                var list = data.dataMap.list;
-                $("#dataBody").empty();
-                for(var d in list) {
-                    var row = rowStr.replace(/#{id}/g, list[d].userId).replace("#{username}", list[d].username)
-                    .replace("#{name}", list[d].name)
-                    .replace("#{phone}", list[d].phone);
-                    if(list[d].enabled === 1) {
-                        row = row.replace("#{statusName}", "禁用");
-                    }
-                    else {
-                        row = row.replace("#{statusName}", "启用");
-                    }
-                    $("#dataBody").append(row);
+            var list = data.list;
+            $("#dataBody").empty();
+            for(var d in list) {
+                var row = rowStr.replace(/#{id}/g, list[d].userId).replace("#{username}", list[d].username)
+                .replace("#{name}", list[d].name)
+                .replace("#{phone}", list[d].phone);
+                if(list[d].enabled === 1) {
+                    row = row.replace("#{statusName}", "禁用");
                 }
-                var allowedQty = data.dataMap.allowedQty;
-                $("#acountAll").text(list.length);
-                $("#canAddNumber").text(allowedQty - list.length);
+                else {
+                    row = row.replace("#{statusName}", "启用");
+                }
+                $("#dataBody").append(row);
             }
+            var allowedQty = data.extradata.allowedQty;
+            $("#acountAll").text(list.length);
+            $("#canAddNumber").text(allowedQty - list.length);
         }
     );
 }

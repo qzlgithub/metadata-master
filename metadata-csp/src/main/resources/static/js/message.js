@@ -24,20 +24,18 @@ function getMessageList(obj, pageFun) {
         "/client/message",
         {"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(res) {
-            if(res.code === 0) {
-                var total = res.total;
-                var pages = (total - 1) / obj['pageSize'] + 1;
-                var list = res.list;
-                $("#dataBody").empty();
-                for(var d in list) {
-                    var row = rowStr.replace("#{addAt}", list[d].addAt)
-                    .replace("#{typeName}", list[d].type)
-                    .replace("#{content}", list[d].content);
-                    $("#dataBody").append(row);
-                }
-                if(typeof pageFun === 'function') {
-                    pageFun(obj, pages, total);
-                }
+            var total = res.total;
+            var pages = Math.floor((total - 1) / obj['pageSize']) + 1;
+            var list = res.list;
+            $("#dataBody").empty();
+            for(var d in list) {
+                var row = rowStr.replace("#{addAt}", list[d].addAt)
+                .replace("#{typeName}", list[d].type)
+                .replace("#{content}", list[d].content);
+                $("#dataBody").append(row);
+            }
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
         }
     );
