@@ -7,16 +7,13 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
-import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -35,8 +32,6 @@ public class PageController
     private ManagerService managerService;
     @Resource
     private ProductService productService;
-    @Resource
-    private SystemService systemService;
     @Resource
     private StatsService statsService;
 
@@ -60,32 +55,6 @@ public class PageController
         return view;
     }
 
-    @RequestMapping(value = "/finance/bill.html")
-    public ModelAndView gotoBillListPage()
-    {
-        ModelAndView view = new ModelAndView("finance/bill");
-        view.addAllObjects(RequestThread.getMap());
-        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        view.addObject(Field.PRODUCT_DICT, productInfoList);
-        return view;
-    }
-
-    @RequestMapping(value = "/finance/recharge.html")
-    public ModelAndView gotoRechargeListPage()
-    {
-        ModelAndView view = new ModelAndView("finance/recharge");
-        view.addAllObjects(RequestThread.getMap());
-        List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
-                TrueOrFalse.FALSE);
-        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
-
-        view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
-        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
-        view.addObject(Field.MANAGER_LIST, managerList);
-        return view;
-    }
-
     @RequestMapping(value = "logout")
     public ModelAndView managerLogout(HttpServletRequest request)
     {
@@ -93,24 +62,6 @@ public class PageController
         String sessionId = session.getId();
         managerService.userLogout(sessionId);
         return new ModelAndView("redirect:/");
-    }
-
-    @GetMapping(value = "/product/edit.html")
-    public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("product/edit");
-        Map<String, Object> map = productService.getProductInfo(id);
-        view.addAllObjects(map);
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/product/category/index.html")
-    public ModelAndView productCategoryIndex()
-    {
-        ModelAndView view = new ModelAndView("product/category");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
     }
 
     @RequestMapping(value = "/stats/index.html")
@@ -162,5 +113,4 @@ public class PageController
         view.addAllObjects(resp.getDataMap());
         return view;
     }
-
 }

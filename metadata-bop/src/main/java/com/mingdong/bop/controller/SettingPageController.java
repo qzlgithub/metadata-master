@@ -3,6 +3,7 @@ package com.mingdong.bop.controller;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ManagerService;
+import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.model.BLResp;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Controller
 public class SettingPageController
@@ -20,6 +22,8 @@ public class SettingPageController
     private SystemService systemService;
     @Resource
     private ManagerService managerService;
+    @Resource
+    private ProductService productService;
 
     @GetMapping(value = "/setting/menu.html")
     public ModelAndView rechargeIndex()
@@ -115,6 +119,24 @@ public class SettingPageController
     {
         ModelAndView view = new ModelAndView("product/list");
         view.addObject(Field.PRODUCT_TYPE_DICT, ProdType.getProdTypeDict());
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @GetMapping(value = "/setting/product/edit.html")
+    public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
+    {
+        ModelAndView view = new ModelAndView("product/edit");
+        Map<String, Object> map = productService.getProductInfo(id);
+        view.addAllObjects(map);
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @GetMapping(value = "/setting/product/category.html")
+    public ModelAndView productCategoryIndex()
+    {
+        ModelAndView view = new ModelAndView("product/category");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

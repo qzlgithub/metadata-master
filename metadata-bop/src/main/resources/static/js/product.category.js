@@ -115,7 +115,7 @@ function addProductCategory() {
                 layer.msg("添加成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/product/category/index.html";
+                    window.location.href = "/setting/product/category.html";
                 });
             }
         }
@@ -159,7 +159,7 @@ function updateProductCategory() {
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/product/category/index.html";
+                    window.location.href = "/setting/product/category.html";
                 });
 
             }
