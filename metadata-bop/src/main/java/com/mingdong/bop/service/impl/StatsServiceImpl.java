@@ -55,6 +55,11 @@ import java.util.Set;
 @Service
 public class StatsServiceImpl implements StatsService
 {
+    private static final String INDEX_STATS_KEY = "indexStatsKey";
+    private static final String CLIENT_INDEX_STATS_KEY = "clientIndexStatsKey";
+    private static final String RECHARGE_INDEX_STATS_KEY = "rechargeIndexStatsKey";
+    private static final String REQUEST_INDEX_STATS_KEY = "requestIndexStatsKey";
+    private static final Integer SECONDS = 60;
     @Resource
     private RedisDao redisDao;
     @Resource
@@ -65,12 +70,6 @@ public class StatsServiceImpl implements StatsService
     private RemoteProductService remoteProductService;
     @Resource
     private RemoteClientService remoteClientService;
-
-    private String INDEX_STATS_KEY = "indexStatsKey";
-    private String CLIENT_INDEX_STATS_KEY = "clientIndexStatsKey";
-    private String RECHARGE_INDEX_STATS_KEY = "rechargeIndexStatsKey";
-    private String REQUEST_INDEX_STATS_KEY = "requestIndexStatsKey";
-    private Integer SECONDS = 60;
 
     @Override
     public BLResp getIndexStats()
