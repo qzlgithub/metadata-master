@@ -23,7 +23,7 @@ public class CommonController
     @Resource
     private SystemService systemService;
 
-    @GetMapping(value = "/common/imageCode")
+    @GetMapping(value = "/m/captcha/img")
     public Map<String, Object> getImageCode(HttpServletRequest request) throws IOException
     {
         ImageCode imageCode = CaptchaUtils.buildImageCode();

@@ -58,7 +58,7 @@
 
     function refImage() {
         $.ajax({
-            url: "/common/imageCode",
+            url: "/m/captcha/img",
             success: function(e) {
                 $("#yzmimg").attr("src", e.image);
             }
