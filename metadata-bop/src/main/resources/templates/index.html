@@ -4,14 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>明动元数据管理平台</title>
-    <!--[if IE]>
-    <script type="text/javascript" src="scripts/jquery.bgiframe.js"></script><![endif]-->
-    <!-- Internet Explorer .png-fix -->
-    <!--[if IE 6]>
-    <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.7a.js"></script>
-    <![endif]-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../static/js/md5.js"></script>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/css/base.css" media="all"/>
     <link rel="stylesheet" href="/static/css/common.css" media="all"/>
@@ -21,73 +13,35 @@
 
 <body id="login" style="background-color:#2273c6">
 <div id="login-wrapper" class="png_bg">
-    <div id="login-top"><img src="../images/title.png"/></div>
+    <div id="login-top">
+        <img src="/static/images/title.png"/>
+    </div>
     <div id="login-content">
-        <form id="login_form" method="post" corpName="login_form" onsubmit="return sub();" action="chklogin.aspx">
-            <p class="clearfix">
-                <label style="color:#000000">用户名：</label>
-                <input class="text-input" type="text" corpName="account" id="account"/></p>
-            <p class="clearfix mt25 mb25">
-                <label style="color:#000000">密　码：</label>
-                <input class="text-input" type="password" corpName="password" id="password"/></p>
-            <p class="clearfix">
-                <label style="color:#000000">验证码：</label>
-                <input type="text" id="code" class="text-input text_auth" corpName="code" maxlength="6"/>
-                <a class="img_auth"><img id='yzmimg' align='absmiddle' onclick="refImage()" th:src="${image}"/></a></p>
-            <!--<p class="clearfix mt20">
-                <label>&nbsp;</label>
-                <input type="checkbox" corpName="remembermeadmin" id="remembermeadmin" style="width:15px;"/>
-                <label style="width:80px; color:black; line-height:14px;">记住登录</label></p>-->
-            <p class="mt20">
-                <input class="button" type="button" onclick="login()"
-                       style="padding: 10px 20px;  width: 100%; font-size:18px!important;"
-                       value="登 录"/>
-                <!--<input style="width:90px;" class="button" type="button" value="进入网站首页" />-->
-                <input type="hidden" value="login" id="action"
-                       corpName="action"/></p>
-        </form>
+        <p class="clearfix">
+            <label style="color:#000000">用户名：</label>
+            <input class="text-input" type="text" id="username" title="请输入您的用户名"/>
+        </p>
+        <p class="clearfix mt25 mb25">
+            <label style="color:#000000">密　码：</label>
+            <input class="text-input" type="password" id="password" title="请输入您的密码"/>
+        </p>
+        <p class="clearfix">
+            <label style="color:#000000">验证码：</label>
+            <input type="text" class="text-input text_auth" maxlength="6" id="code" title="请识别右方的验证码"/>
+            <a class="img_auth">
+                <img th:src="${image}" id="captchaImg"/>
+            </a>
+        </p>
+        <p class="mt20">
+            <input class="button" type="button" style="padding: 10px 20px; width: 100%; font-size: 18px!important;"
+                   id="loginBt" value="登 录"/>
+        </p>
     </div>
 </div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
-<script type="text/javascript">
-    $(document).keydown(function(e) {
-        if(e.keyCode === 13) {
-            login();
-        }
-    });
-
-    function refImage() {
-        $.ajax({
-            url: "/m/captcha/img",
-            success: function(e) {
-                $("#yzmimg").attr("src", e.image);
-            }
-        });
-    }
-
-    function login() {
-        $.ajax({
-            type: "POST",
-            url: "/user/login",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "username": $("#account").val(),
-                "password": MD5($("#password").val()),
-                "imageCode": $("#code").val()
-            }),
-            success: function(data) {
-                if(data.errCode !== '000000') {
-                    refImage();
-                    $("#code").val("");
-                    layer.msg(data.errMsg);
-                }
-                else {
-                    window.location.href = "/setting/user.html";
-                }
-            }
-        });
-    }
-</script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/business/index.js"></script>
 </body>
 </html>

@@ -6,14 +6,14 @@
         <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
         <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'31000')}">
-                <a class="" href="javascript:;">
+                <a>
                     <i class="icon icon5" aria-hidden="true"></i>
                     <em th:text="${i_system.m31000}">客户管理mingdong.net</em>
                 </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'client_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'31100')}">
-                        <a th:href="@{/client/index.html}">
+                        <a href="/client/index.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m31100}">客户管理mingdong.net</span>
                         </a>
