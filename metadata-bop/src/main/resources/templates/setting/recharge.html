@@ -17,7 +17,7 @@
 <div class="layui-layout layui-layout-admin kit-layout-admin">
     <div th:include="common :: top"></div>
 
-    <div class="layui-side layui-bg-black kit-side" th:include="system::left"></div>
+    <div class="layui-side layui-bg-black kit-side" th:include="setting :: left"></div>
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<div id="editpwd-manage" class="modal" th:include="resetPoint :: point"></div>
+<div id="editpwd-manage" class="modal" th:include="reset :: point"></div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>

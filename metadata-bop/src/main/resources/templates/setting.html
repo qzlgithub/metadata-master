@@ -6,50 +6,53 @@
         <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
         <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar="">
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'11000')}">
-                <a class="" href="#">
+                <a>
                     <i class="icon icon2" aria-hidden="true"></i>
-                    <em th:text="${i_system.m11000}">账户管理</em></a>
+                    <em th:text="${i_system.m11000}">账户管理</em>
+                </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'manager_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'11100')}">
-                        <a th:href="@{/setting/user.html}">
+                        <a href="/setting/user.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m11100}">账户管理</span></a>
+                            <span th:text="${i_system.m11100}">账户管理</span>
+                        </a>
                     </dd>
                     <dd th:class="${i_module eq 'role_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'11200')}">
-                        <a th:href="@{/setting/role.html}">
+                        <a href="/setting/role.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m11200}">分组管理</span></a>
                     </dd>
                 </dl>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'12000')}">
-                <a class="" href="#">
+                <a>
                     <i class="icon icon3" aria-hidden="true"></i>
-                    <em th:text="${i_system.m12000}">系统配置</em></a>
+                    <em th:text="${i_system.m12000}">系统配置</em>
+                </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'privilege_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'12100')}">
-                        <a th:href="@{/setting/menu.html}">
+                        <a href="/setting/menu.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12100}">栏目管理</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_recharge'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'12200')}">
-                        <a th:href="@{/setting/recharge.html}">
+                        <a href="/setting/recharge.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12200}">充值类型</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_industry'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'12300')}">
-                        <a th:href="@{/setting/industry.html}">
+                        <a href="/setting/industry.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12300}">行业分类</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_other'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'12400')}">
-                        <a th:href="@{/setting/other.html}">
+                        <a href="/setting/other.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12400}">其他设置</span></a>
                     </dd>
