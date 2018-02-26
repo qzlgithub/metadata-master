@@ -13,7 +13,6 @@ import com.mingdong.csp.service.ClientService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping(value = "client")
 public class ClientController
 {
     @Resource
@@ -31,7 +29,7 @@ public class ClientController
     /**
      * 用户登陆
      */
-    @PostMapping(value = "user/login")
+    @PostMapping(value = "client/user/login")
     public BLResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -56,7 +54,7 @@ public class ClientController
     /**
      * 用户注销
      */
-    @PostMapping(value = "user/logout")
+    @PostMapping(value = "client/user/logout")
     public BLResp userLogout(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
@@ -69,7 +67,7 @@ public class ClientController
      * 用户修改密码
      */
     @LoginRequired
-    @PostMapping(value = "user/password")
+    @PostMapping(value = "client/user/password")
     public BLResp changePassword(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -87,7 +85,7 @@ public class ClientController
      * 获取用户产品凭证信息
      */
     @LoginRequired
-    @GetMapping(value = "user/credential")
+    @GetMapping(value = "client/user/credential")
     public BLResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
             @RequestParam(value = Field.PASSWORD) String password)
     {
@@ -100,7 +98,7 @@ public class ClientController
      * 更新用户产品凭证信息
      */
     @LoginRequired
-    @PostMapping(value = "user/credential")
+    @PostMapping(value = "client/user/credential")
     public BLResp saveUserCredential(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -119,7 +117,7 @@ public class ClientController
      * 添加子账号
      */
     @LoginRequired
-    @PostMapping(value = "account/addition")
+    @PostMapping(value = "client/account/addition")
     public BLResp addAccount(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -140,7 +138,7 @@ public class ClientController
      * 获取子账号列表
      */
     @LoginRequired
-    @GetMapping(value = "/sub-account/list")
+    @GetMapping(value = "client/sub-account/list")
     public ListRes getClientSubAccountList()
     {
         ListRes res = new ListRes();
@@ -152,7 +150,7 @@ public class ClientController
      * 子账号的启用禁用
      */
     @LoginRequired
-    @PostMapping(value = "changeStatus")
+    @PostMapping(value = "client/changeStatus")
     public BLResp changeStatus(@RequestBody JSONObject jsonObject)
     {
         BLResp resp = BLResp.build();
@@ -162,7 +160,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "childAccountDetail")
+    @GetMapping(value = "client/childAccountDetail")
     public BLResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
     {
         BLResp resp = BLResp.build();
@@ -174,7 +172,7 @@ public class ClientController
      * 编辑子账号
      */
     @LoginRequired
-    @PostMapping(value = "editChildAccount")
+    @PostMapping(value = "client/editChildAccount")
     public BLResp editChildAccount(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -198,7 +196,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @PostMapping(value = "user/deletion")
+    @PostMapping(value = "client/user/deletion")
     public BLResp dropSubUser(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -212,7 +210,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "message")
+    @GetMapping(value = "client/message")
     public ListRes getClientMessageList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
