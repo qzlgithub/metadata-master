@@ -33,25 +33,25 @@
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'privilege_index'} ? 'layui-this':''"
                             th:if="${#lists.contains(i_privilege,'12100')}">
-                        <a th:href="@{/privilege/index.html}">
+                        <a th:href="@{/setting/menu.html}">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12100}">栏目管理mingdong.net</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_recharge'} ? 'layui-this':''"
                             th:if="${#lists.contains(i_privilege,'12200')}">
-                        <a th:href="@{/config/recharge.html}">
+                        <a th:href="@{/setting/recharge.html}">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12200}">充值类型mingdong.net</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_industry'} ? 'layui-this':''"
                             th:if="${#lists.contains(i_privilege,'12300')}">
-                        <a th:href="@{/config/industry.html}">
+                        <a th:href="@{/setting/industry.html}">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12300}">行业分类mingdong.net</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'config_other'} ? 'layui-this':''"
                             th:if="${#lists.contains(i_privilege,'12400')}">
-                        <a th:href="@{/config/setting.html}">
+                        <a th:href="@{/setting/other.html}">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m12400}">其他设置mingdong.net</span></a>
                     </dd>

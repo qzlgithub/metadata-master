@@ -9,7 +9,6 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.BLResp;
 import com.mingdong.core.model.ImageCode;
@@ -96,32 +95,6 @@ public class PageController
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "/config/recharge.html")
-    public ModelAndView configRecharge()
-    {
-        ModelAndView view = new ModelAndView("dict/recharge");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/config/industry.html")
-    public ModelAndView configIndustry()
-    {
-        ModelAndView view = new ModelAndView("system-manage/industry-manage");
-        view.addObject(Field.LIST, systemService.getHierarchyIndustry());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/config/setting.html")
-    public ModelAndView otherSettingPage()
-    {
-        ModelAndView view = new ModelAndView("system-manage/other-setting");
-        view.addAllObjects(systemService.getSettings());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
     @RequestMapping(value = "/manager/index.html")
     public ModelAndView gotoManagerManagement()
     {
@@ -147,24 +120,6 @@ public class PageController
         managerService.getManagerInfo(managerId, resp);
         ModelAndView view = new ModelAndView("account/edit");
         view.addAllObjects(resp.getDataMap());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/privilege/index.html")
-    public ModelAndView rechargeIndex()
-    {
-        ModelAndView view = new ModelAndView("system-manage/column-manage");
-        view.addObject(Field.LIST, systemService.getHierarchyPrivilege());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @GetMapping(value = "/product/index.html")
-    public ModelAndView productIndex()
-    {
-        ModelAndView view = new ModelAndView("product/list");
-        view.addObject(Field.PRODUCT_TYPE_DICT, ProdType.getProdTypeDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

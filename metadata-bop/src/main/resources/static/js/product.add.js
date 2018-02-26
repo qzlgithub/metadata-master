@@ -73,7 +73,7 @@ function addProduct() {
                 layer.msg("添加成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/product/index.html";
+                    window.location.href = "/setting/product.html";
                 });
 
             }

@@ -197,7 +197,7 @@ function saveIndustry(id, code, name) {
                 layer.msg("添加成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/config/industry.html";
+                    window.location.href = "/setting/industry.html";
                 });
             }
         }
@@ -264,7 +264,7 @@ function editIndustry() {
                 layer.msg("修改失败：" + data.errMsg, {time: 2000});
             }
             else {
-                window.location.href = "/config/industry.html";
+                window.location.href = "/setting/industry.html";
             }
         }
     });

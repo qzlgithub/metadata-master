@@ -102,7 +102,7 @@ function add_recharge_type() {
                 layer.msg("添加成功!", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/config/recharge.html";
+                    window.location.href = "/setting/recharge.html";
                 });
             }
             else {
@@ -127,7 +127,7 @@ function del_recharge_type(id) {
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),
                 success: function() {
-                    window.location.href = "/config/recharge.html";
+                    window.location.href = "/setting/recharge.html";
                 }
             });
         },
@@ -161,7 +161,7 @@ function edit_recharge_type() {
                 layer.msg("修改成功!", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/config/recharge.html";
+                    window.location.href = "/setting/recharge.html";
                 });
             }
         }

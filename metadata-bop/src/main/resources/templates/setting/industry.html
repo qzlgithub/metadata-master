@@ -21,7 +21,7 @@
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="/manager/index.html">系统管理</a>
-            <a href="/privilege/index.html">系统配置</a>
+            <a href="/setting/menu.html">系统配置</a>
             <a><cite>行业分类</cite></a>
         </div>
         <div class="p20">
@@ -111,32 +111,30 @@
 <div id="edit-industry" class="modal">
     <div class="layui-layer-title">编辑行业</div>
     <div class="mb30">
-        <!--<form class="layui-form" action="">-->
-            <div class="m30">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">编号：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="edit-code" lay-verify="required" placeholder="请输入"
-                               autocomplete="off" class="layui-input"/>
-                        <p class="col3 mt5" id="tip-edit-code"></p>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">行业名称：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="edit-name" lay-verify="required" placeholder="请输入"
-                               autocomplete="off" class="layui-input"/>
-                        <p class="col3 mt5" id="tip-edit-name"></p>
-                    </div>
+        <div class="m30">
+            <div class="layui-form-item">
+                <label class="layui-form-label">编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="edit-code" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                    <p class="col3 mt5" id="tip-edit-code"></p>
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">行业名称：</label>
                 <div class="layui-input-block">
-                    <input type="hidden" id="edit-id"/>
-                    <button class="layui-btn" onclick="editIndustry()">保存</button>
+                    <input type="text" id="edit-name" lay-verify="required" placeholder="请输入"
+                           autocomplete="off" class="layui-input"/>
+                    <p class="col3 mt5" id="tip-edit-name"></p>
                 </div>
             </div>
-        <!--</form>-->
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="edit-id"/>
+                <button class="layui-btn" onclick="editIndustry()">保存</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -178,7 +176,7 @@
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/js/modernizr.js"></script>
-<script type="text/javascript" src="/static/js/industry.manage.js"></script>
+<script type="text/javascript" src="/static/business/setting-industry.js"></script>
 
 </body>
 </html>

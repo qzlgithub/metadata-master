@@ -94,7 +94,7 @@ function editColumn() {
                 });
             }
             else {
-                window.location.href = "/privilege/index.html";
+                window.location.href = "/setting/menu.html";
                 /*    layer.msg("修改成功", {
                         time: 2000
                     }, function() {
