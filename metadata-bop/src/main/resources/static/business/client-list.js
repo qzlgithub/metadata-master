@@ -61,8 +61,8 @@ layui.config({
         var target = $("#industry");
         if(parent_industry_id !== "") {
             $.get(
-                "/system/industry/childList",
-                {"industryId": parent_industry_id},
+                "/m/dict/sub-industry",
+                {"parentId": parent_industry_id},
                 function(data) {
                     target.empty();
                     target.append(new Option('全部', ''));

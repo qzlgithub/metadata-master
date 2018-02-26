@@ -25,22 +25,29 @@ public class RedisDao extends RedisBaseDao
         return hGet(DB.SYSTEM, Key.INDUSTRY, industryId + "");
     }
 
-    public <T> T getObject(String key, int seconds, TypeReference<T> type,
-            DataAbstract<T> da) {
-        String value = get(DB.SYSTEM,key);
-        if(value == null){
+    public <T> T getObject(String key, int seconds, TypeReference<T> type, DataAbstract<T> da)
+    {
+        String value = get(DB.SYSTEM, key);
+        if(value == null)
+        {
             T t = da.queryData();
-            if(t == null){
+            if(t == null)
+            {
                 return null;
             }
             value = JSON.toJSONString(t, SerializerFeature.EMPTY);
-            if (seconds > 0) {
+            if(seconds > 0)
+            {
                 setEx(DB.SYSTEM, key, value, seconds);
-            } else {
+            }
+            else
+            {
                 set(DB.SYSTEM, key, value);
             }
             return t;
-        }else{
+        }
+        else
+        {
             return JSON.parseObject(value, type, Feature.IgnoreNotMatch);
         }
     }

@@ -78,23 +78,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public List<Map<String, Object>> getIndustryMap(Long parentId, Integer enabled)
-    {
-        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(parentId,
-                enabled);
-        List<DictIndustryDTO> dataList = dictIndustryListDTO.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(DictIndustryDTO industry : dataList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, industry.getId() + "");
-            map.put(Field.NAME, industry.getName());
-            list.add(map);
-        }
-        return list;
-    }
-
-    @Override
     public void addIndustryType(Long id, String code, String name, BLResp resp)
     {
         Date current = new Date();
@@ -303,8 +286,8 @@ public class SystemServiceImpl implements SystemService
         for(DictIndustryDTO parent : dataList)
         {
             Map<String, Object> map = new HashMap<>();
-            map.put(Field.NAME, parent.getName());
             map.put(Field.ID, parent.getId() + "");
+            map.put(Field.NAME, parent.getName());
             list.add(map);
         }
         return list;

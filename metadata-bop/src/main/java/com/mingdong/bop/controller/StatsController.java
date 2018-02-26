@@ -76,7 +76,7 @@ public class StatsController
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        JSONArray jsonArray = statsService.getRequestListJson(scopeTypeEnum,name, productId);
+        JSONArray jsonArray = statsService.getRequestListJson(scopeTypeEnum, name, productId);
         return jsonArray.toJSONString();
     }
 

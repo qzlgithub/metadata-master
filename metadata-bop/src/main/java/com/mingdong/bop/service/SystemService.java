@@ -25,11 +25,6 @@ public interface SystemService
     Map<String, String> getIndustryInfo(Long id);
 
     /**
-     * 根据parentId和状态获取行业分类列表
-     */
-    List<Map<String, Object>> getIndustryMap(Long parentId, Integer enabled);
-
-    /**
      * 新增行业分类信息
      */
     void addIndustryType(Long id, String code, String name, BLResp resp);

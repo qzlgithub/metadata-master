@@ -23,6 +23,9 @@ public class CommonController
     @Resource
     private SystemService systemService;
 
+    /**
+     * 获取图片验证码
+     */
     @GetMapping(value = "/m/captcha/img")
     public Map<String, Object> getImageCode(HttpServletRequest request) throws IOException
     {
@@ -35,21 +38,13 @@ public class CommonController
         return map;
     }
 
-    @GetMapping(value = "/system/industry/childList")
-    public List<Map<String, Object>> getSubIndustryList(@RequestParam(value = Field.INDUSTRY_ID) Long industryId)
-    {
-        return systemService.getIndustryList(industryId, TrueOrFalse.TRUE);
-    }
-
-
-
     /**
-     * 行业字典 - 根据上级行业ID获取下级行业字典
+     * 根据上级行业ID获取下级行业字典
      */
     @GetMapping(value = "/m/dict/sub-industry")
     public List<Map<String, Object>> configIndustry(
             @RequestParam(value = Field.PARENT_ID, defaultValue = "0") Long parentId)
     {
-        return systemService.getIndustryMap(parentId, TrueOrFalse.TRUE);
+        return systemService.getIndustryList(parentId, TrueOrFalse.TRUE);
     }
 }

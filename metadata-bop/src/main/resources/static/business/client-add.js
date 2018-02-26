@@ -104,8 +104,8 @@ function getSubIndustry() {
     var parentId = $("#parentIndustryId").val();
     if(parentId !== "") {
         $.get(
-            "/system/industry/childList",
-            {"industryId": parentId},
+            "/m/dict/sub-industry",
+            {"parentId": parentId},
             function(data) {
                 $("#industryId").empty();
                 for(var d in data) {
