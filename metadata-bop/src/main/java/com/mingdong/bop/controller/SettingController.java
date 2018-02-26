@@ -117,16 +117,6 @@ public class SettingController
     }
 
     /**
-     * 行业字典 - 详情
-     */
-    @LoginRequired
-    @GetMapping(value = "/setting/industry")
-    public Map<String, String> getIndustryInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
-    {
-        return systemService.getIndustryInfo(id);
-    }
-
-    /**
      * 行业字典 - 验证行业编码是否存在
      */
     @LoginRequired
@@ -193,16 +183,6 @@ public class SettingController
         }
         systemService.changeIndustryStatus(id, enabled, resp);
         return resp;
-    }
-
-    /**
-     * 系统菜单 - 详情
-     */
-    @LoginRequired
-    @GetMapping(value = "/setting/menu")
-    public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
-    {
-        return systemService.getPrivilegeInfo(id);
     }
 
     /**

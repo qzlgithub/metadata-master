@@ -66,16 +66,10 @@ layui.config({
 });
 $(".edit-manage").on('click', function() {
     var id = $(this).attr("data-id");
-    $.get(
-        "/setting/menu",
-        {"id": id},
-        function(data) {
-            if(data != null) {
-                $("#editId").val(data.id);
-                $("#editNameId").val(data.name);
-            }
-        }
-    );
+    var obj = $("#menu-id-"+id);
+    var name = $(obj).find(".menu-name-class").text();
+    $("#editId").val(id);
+    $("#editNameId").val(name);
 });
 
 function editColumn() {
