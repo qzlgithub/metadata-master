@@ -24,7 +24,7 @@ layui.config({
 function enable_recharge_type(id, enabled) {
     $.ajax({
         type: "post",
-        url: "/config/industry/status",
+        url: "/setting/industry/status",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
@@ -130,7 +130,7 @@ function checkNewCode() {
     var code = $("#new-code").val();
     if(code !== "") {
         $.get(
-            "/config/industry/checkCode",
+            "/setting/industry/verification",
             {"code": code},
             function(data) {
                 if(data.exist === 1) {
@@ -182,8 +182,8 @@ function addIndustry(type) {
 
 function saveIndustry(id, code, name) {
     $.ajax({
-        type: "POST",
-        url: "/config/industry/addition",
+        type: "PUT",
+        url: "/setting/industry/addition",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({"id": id, "code": code, "name": name}),
@@ -255,7 +255,7 @@ function editIndustry() {
     var name = $("#edit-name").val();
     $.ajax({
         type: "POST",
-        url: "/config/industry/modification",
+        url: "/setting/industry",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({"id": id, "code": code, "name": name}),

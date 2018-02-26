@@ -83,7 +83,7 @@ function editColumn() {
     var name = $("#editNameId").val();
     $.ajax({
         type: "POST",
-        url: "/config/column/modification",
+        url: "/setting/menu",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({"id": id, "name": name}),
@@ -109,7 +109,7 @@ function changeStatus(modules, status) {
     if(modules.length !== 0 && (status === 0 || status === 1)) {
         $.ajax({
             type: "post",
-            url: "/system/module/status",
+            url: "/setting/menu/status",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify({"module": modules, "status": status}),

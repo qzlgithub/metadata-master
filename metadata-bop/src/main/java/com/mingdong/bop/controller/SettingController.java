@@ -116,6 +116,9 @@ public class SettingController
         return resp;
     }
 
+    /**
+     * 行业字典 - 详情
+     */
     @LoginRequired
     @GetMapping(value = "/setting/industry")
     public Map<String, String> getIndustryInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
@@ -123,6 +126,78 @@ public class SettingController
         return systemService.getIndustryInfo(id);
     }
 
+    /**
+     * 行业字典 - 验证行业编码是否存在
+     */
+    @LoginRequired
+    @GetMapping(value = "/setting/industry/verification")
+    public Map<String, Integer> configIndustry(@RequestParam(value = Field.CODE) String code)
+    {
+        Map<String, Integer> map = new HashMap<>();
+        boolean exist = systemService.checkIndustryCodeExist(code);
+        map.put(Field.EXIST, exist ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        return map;
+    }
+
+    /**
+     * 行业字典 - 新增
+     */
+    @LoginRequired
+    @PutMapping(value = "/setting/industry/addition")
+    public BLResp addIndustryType(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        String code = jsonReq.getString(Field.CODE);
+        String name = jsonReq.getString(Field.NAME);
+        if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.addIndustryType(id, code, name, resp);
+        return resp;
+    }
+
+    /**
+     * 行业字典 - 编辑
+     */
+    @LoginRequired
+    @PostMapping(value = "/setting/industry")
+    public BLResp editIndustryInfo(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        String code = jsonReq.getString(Field.CODE);
+        String name = jsonReq.getString(Field.NAME);
+        if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.editIndustryInfo(id, code, name, resp);
+        return resp;
+    }
+
+    /**
+     * 行业字典 - 变更状态
+     */
+    @LoginRequired
+    @PostMapping(value = "/setting/industry/status")
+    public BLResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
+    {
+        BLResp resp = BLResp.build();
+        Long id = jsonReq.getLong(Field.ID);
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
+        if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
+        {
+            return resp.result(RestResult.KEY_FIELD_MISSING);
+        }
+        systemService.changeIndustryStatus(id, enabled, resp);
+        return resp;
+    }
+
+    /**
+     * 系统菜单 - 详情
+     */
     @LoginRequired
     @GetMapping(value = "/setting/menu")
     public Map<String, Object> getColumnInfo(@RequestParam(value = Field.ID) Long id) // TODO - to be deleted
@@ -130,8 +205,11 @@ public class SettingController
         return systemService.getPrivilegeInfo(id);
     }
 
+    /**
+     * 系统菜单 - 编辑
+     */
     @LoginRequired
-    @PostMapping(value = "/config/column/modification")
+    @PostMapping(value = "/setting/menu")
     public BLResp editColumnInfo(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -149,65 +227,30 @@ public class SettingController
         return resp;
     }
 
-    @LoginRequired
-    @GetMapping(value = "/config/industry/checkCode")
-    public Map<String, Integer> configIndustry(@RequestParam(value = Field.CODE) String code)
-    {
-        Map<String, Integer> map = new HashMap<>();
-        boolean exist = systemService.checkIndustryCodeExist(code);
-        map.put(Field.EXIST, exist ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-        return map;
-    }
-
-    @LoginRequired
-    @PostMapping(value = "/config/industry/addition")
-    public BLResp addIndustryType(@RequestBody JSONObject jsonReq)
+    /**
+     * 系统菜单 - 变更状态
+     */
+    @PostMapping(value = "/setting/menu/status")
+    public BLResp setModuleStatus(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
-        Long id = jsonReq.getLong(Field.ID);
-        String code = jsonReq.getString(Field.CODE);
-        String name = jsonReq.getString(Field.NAME);
-        if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
+        JSONArray moduleArray = jsonReq.getJSONArray(Field.MODULE);
+        List<Long> moduleIdList = moduleArray.toJavaList(Long.class);
+        Integer status = jsonReq.getInteger(Field.STATUS);
+        if(CollectionUtils.isEmpty(moduleIdList) || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(
+                status)))
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
-        systemService.addIndustryType(id, code, name, resp);
+        systemService.setModuleStatus(moduleIdList, status, resp);
         return resp;
     }
 
+    /**
+     * 其它设置 - 编辑
+     */
     @LoginRequired
-    @PostMapping(value = "/config/industry/modification")
-    public BLResp editIndustryInfo(@RequestBody JSONObject jsonReq)
-    {
-        BLResp resp = BLResp.build();
-        Long id = jsonReq.getLong(Field.ID);
-        String code = jsonReq.getString(Field.CODE);
-        String name = jsonReq.getString(Field.NAME);
-        if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        systemService.editIndustryInfo(id, code, name, resp);
-        return resp;
-    }
-
-    @LoginRequired
-    @PostMapping(value = "/config/industry/status")
-    public BLResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
-    {
-        BLResp resp = BLResp.build();
-        Long id = jsonReq.getLong(Field.ID);
-        Integer enabled = jsonReq.getInteger(Field.ENABLED);
-        if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        systemService.changeIndustryStatus(id, enabled, resp);
-        return resp;
-    }
-
-    @LoginRequired
-    @PostMapping(value = "/config/global/setting")
+    @PostMapping(value = "/setting/configuration")
     public BLResp setGlobalSetting(@RequestBody JSONObject jsonReq)
     {
         BLResp resp = BLResp.build();
@@ -227,22 +270,6 @@ public class SettingController
         sysConfigDTO.setValue(serviceQQ + "");
         sysConfigDTOList.add(sysConfigDTO);
         systemService.setGlobalSetting(sysConfigDTOList, resp);
-        return resp;
-    }
-
-    @PostMapping(value = "/system/module/status")
-    public BLResp setModuleStatus(@RequestBody JSONObject jsonReq)
-    {
-        BLResp resp = BLResp.build();
-        JSONArray moduleArray = jsonReq.getJSONArray(Field.MODULE);
-        List<Long> moduleIdList = moduleArray.toJavaList(Long.class);
-        Integer status = jsonReq.getInteger(Field.STATUS);
-        if(CollectionUtils.isEmpty(moduleIdList) || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(
-                status)))
-        {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
-        }
-        systemService.setModuleStatus(moduleIdList, status, resp);
         return resp;
     }
 }
