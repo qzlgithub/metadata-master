@@ -107,7 +107,7 @@ function saveManager() {
                 layer.msg("保存成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/manager/index.html";
+                    window.location.href = "/setting/user.html";
                 });
             }
         }

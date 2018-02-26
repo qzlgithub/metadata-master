@@ -81,7 +81,7 @@ function saveRole() {
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/role/index.html";
+                    window.location.href = "/setting/role.html";
                 });
             }
         }

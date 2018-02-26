@@ -21,8 +21,8 @@
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/manager/index.html">系统管理</a>
-            <a href="/manager/index.html">账户管理</a>
+            <a href="/setting/user.html">系统管理</a>
+            <a href="/setting/user.html">账户管理</a>
             <a><cite>账户管理</cite></a>
         </div>
         <div class="p20 layui-form">
@@ -51,7 +51,7 @@
                     <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
-            <div class="clearfix mt20"><a th:href="@{/manager/addition.html}" class="layui-btn fr layui-btn-normal">添加账号</a></div>
+            <div class="clearfix mt20"><a href="/setting/user/add.html" class="layui-btn fr layui-btn-normal">添加账号</a></div>
             <table class="layui-table" id="data-table"></table>
         </div>
     </div>
@@ -66,9 +66,9 @@
 <script type="text/javascript" src="/static/js/logout.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
-<script type="text/javascript" src="/static/business/account-list.js"></script>
+<script type="text/javascript" src="/static/business/user-list.js"></script>
 <script type="text/html" id="operation-bar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/manager/edit.html?id={{d.id}}">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/user/edit.html?id={{d.id}}">编辑</a>
     {{# if(d.enabled === 1) { }}
     <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs"
        lay-event="disable" data-id="{{d.id}}">禁用

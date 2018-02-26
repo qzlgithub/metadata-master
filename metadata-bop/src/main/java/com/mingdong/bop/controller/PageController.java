@@ -95,35 +95,6 @@ public class PageController
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "/manager/index.html")
-    public ModelAndView gotoManagerManagement()
-    {
-        ModelAndView view = new ModelAndView("account/list");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/manager/addition.html")
-    public ModelAndView gotoManagerAdditionPage()
-    {
-        ModelAndView view = new ModelAndView("account/add");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/manager/edit.html")
-    public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.ID) Long managerId)
-    {
-        BLResp resp = BLResp.build();
-        managerService.getManagerInfo(managerId, resp);
-        ModelAndView view = new ModelAndView("account/edit");
-        view.addAllObjects(resp.getDataMap());
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
     @GetMapping(value = "/product/edit.html")
     public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
     {
@@ -138,31 +109,6 @@ public class PageController
     public ModelAndView productCategoryIndex()
     {
         ModelAndView view = new ModelAndView("product/category");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/role/index.html")
-    public ModelAndView gotoRoleIndex()
-    {
-        ModelAndView view = new ModelAndView("role/list");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/role/addition.html")
-    public ModelAndView gotoRoleAddition()
-    {
-        ModelAndView view = new ModelAndView("role/add");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @RequestMapping(value = "/role/edit.html")
-    public ModelAndView gotoRoleEdit(@RequestParam(value = Field.ID) Long id)
-    {
-        ModelAndView view = new ModelAndView("role/edit");
-        view.addAllObjects(managerService.getRolePrivilegeDetail(id));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

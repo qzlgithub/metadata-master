@@ -71,7 +71,7 @@ function saveRole() {
             "privilege": privilege
         }),
         success: function(data) {
-            if(data.errCode != '000000') {
+            if(data.errCode !== '000000') {
                 layer.msg("添加失败:" + data.errMsg, {
                     time: 2000
                 });
@@ -80,7 +80,7 @@ function saveRole() {
                 layer.msg("添加成功", {
                     time: 2000
                 }, function() {
-                    window.location.href = "/role/index.html";
+                    window.location.href = "/setting/role.html";
                 });
             }
         }
