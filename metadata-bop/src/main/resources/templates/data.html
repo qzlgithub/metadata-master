@@ -8,38 +8,38 @@
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'41000')}">
                 <a>
                     <i class="icon icon1" aria-hidden="true"></i>
-                    <em th:text="${i_system.m41000}">运营数据管理mingdong.net</em>
+                    <em th:text="${i_system.m41000}">运营数据管理</em>
                 </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'stats_index'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41100')}">
                         <a href="/stats/index.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m41100}">运营数据汇总mingdong.net</span></a>
+                            <span th:text="${i_system.m41100}">运营数据汇总</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'stats_customer'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41200')}">
                         <a href="/stats/client.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m41200}">客户数据mingdong.net</span></a>
+                            <span th:text="${i_system.m41200}">客户数据</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'stats_recharge'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41300')}">
                         <a href="/stats/recharge.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m41300}">充值数据mingdong.net</span></a>
+                            <span th:text="${i_system.m41300}">充值数据</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'stats_revenue'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41400')}">
                         <a href="/stats/revenue.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m41400}">营收数据mingdong.net</span></a>
+                            <span th:text="${i_system.m41400}">营收数据</span></a>
                     </dd>
                     <dd th:class="${i_module eq 'stats_request'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41500')}">
                         <a href="/stats/request.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m41500}">产品请求数据mingdong.net</span></a>
+                            <span th:text="${i_system.m41500}">产品请求数据</span></a>
                     </dd>
                 </dl>
             </li>
