@@ -71,11 +71,11 @@
 <script type="text/html" id="operation-bar">
     <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/user/edit.html?id={{d.id}}">编辑</a>
     {{# if(d.enabled === 1) { }}
-    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs"
+    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-danger layui-btn-xs"
        lay-event="disable" data-id="{{d.id}}">禁用
     </a>
     {{# } else { }}
-    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-warm layui-btn-xs"
+    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-normal layui-btn-xs"
        lay-event="enable"
        data-id="{{d.id}}">启用
     </a>

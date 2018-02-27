@@ -153,7 +153,7 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.NAME, o.getName());
                 map.put(Field.TYPE, ProdType.getNameById(o.getType()));
                 map.put(Field.CUSTOM, o.getCustom());
-                map.put(Field.COST_AMT, o.getCostAmt());
+                map.put(Field.COST_AMT, NumberUtils.formatAmount(o.getCostAmt()));
                 map.put(Field.REMARK, o.getRemark());
                 map.put(Field.STATUS, o.getEnabled());
                 list.add(map);
