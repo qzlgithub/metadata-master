@@ -72,7 +72,7 @@ public class PageController
         ModelAndView view = new ModelAndView("home");
         RestResp resp = RestResp.build();
         clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
         view.addObject(Field.IS_PRIMARY, TrueOrFalse.TRUE.equals(RequestThread.getPrimary()));
         return view;
@@ -95,7 +95,7 @@ public class PageController
         ModelAndView view = new ModelAndView("/product/detail");
         RestResp resp = RestResp.build();
         productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addObject(Field.USERNAME, RequestThread.getUsername());
         view.addAllObjects(RequestThread.getPageData());
         return view;
@@ -117,7 +117,7 @@ public class PageController
         ModelAndView view = new ModelAndView("/product/mine");
         RestResp resp = RestResp.build();
         productService.getClientProductDetailList(RequestThread.getClientId(), resp);
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
@@ -176,7 +176,7 @@ public class PageController
         RestResp resp = RestResp.build();
         productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
                 new Page(pageNum, pageSize), resp);
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

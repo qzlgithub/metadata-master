@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class RestResp
 {
-    private String errCode;
-    private String errMsg;
-    private Map<String, Object> dataMap;
+    private String code;
+    private String message;
+    private Map<String, Object> data;
 
     public static RestResp build()
     {
@@ -25,34 +25,34 @@ public class RestResp
         return JSON.toJSONString(resp);
     }
 
-    public String getErrCode()
+    public String getCode()
     {
-        return errCode;
+        return code;
     }
 
-    public void setErrCode(String errCode)
+    public void setCode(String code)
     {
-        this.errCode = errCode;
+        this.code = code;
     }
 
-    public String getErrMsg()
+    public String getMessage()
     {
-        return errMsg;
+        return message;
     }
 
-    public void setErrMsg(String errMsg)
+    public void setMessage(String message)
     {
-        this.errMsg = errMsg;
+        this.message = message;
     }
 
-    public Map<String, Object> getDataMap()
+    public Map<String, Object> getData()
     {
-        return dataMap;
+        return data;
     }
 
-    public void setDataMap(Map<String, Object> dataMap)
+    public void setData(Map<String, Object> data)
     {
-        this.dataMap = dataMap;
+        this.data = data;
     }
 
     public RestResp result(RestResult result)
@@ -61,18 +61,18 @@ public class RestResp
         {
             result = RestResult.SUCCESS;
         }
-        errCode = result.getCode();
-        errMsg = result.getMessage();
+        code = result.getCode();
+        message = result.getMessage();
         return this;
     }
 
     public void addData(String k, Object v)
     {
-        if(dataMap == null)
+        if(data == null)
         {
-            dataMap = new HashMap<>();
+            data = new HashMap<>();
         }
-        dataMap.put(k, v);
+        data.put(k, v);
     }
 
     public void addAllData(Map<String,Object> map){

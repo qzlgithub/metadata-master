@@ -145,7 +145,7 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
             if(res.code === '000000') {
                 var div = $("#ban-data-body");
                 div.empty();
-                var result = res.dataMap;
+                var result = res.data;
                 var total = result.total;
                 var pages = result.pages;
                 var pageNum = result.pageNum;

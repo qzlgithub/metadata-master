@@ -67,7 +67,7 @@ public class ClientPageController
         RestResp resp = RestResp.build();
         clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -82,7 +82,7 @@ public class ClientPageController
         RestResp resp = RestResp.build();
         clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("client/detail");
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
         view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
         view.addAllObjects(RequestThread.getMap());

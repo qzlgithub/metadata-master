@@ -30,7 +30,7 @@ public class StatsPageController
         ModelAndView view = new ModelAndView("stats/index");
         view.addAllObjects(RequestThread.getMap());
         RestResp resp = statsService.getIndexStats();
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         return view;
     }
 
@@ -41,7 +41,7 @@ public class StatsPageController
         ModelAndView view = new ModelAndView("stats/client");
         view.addAllObjects(RequestThread.getMap());
         RestResp resp = statsService.getClientIndexStats();
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         return view;
     }
 
@@ -63,7 +63,7 @@ public class StatsPageController
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addAllObjects(RequestThread.getMap());
         RestResp resp = statsService.getRequestIndexStats();
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         return view;
     }
 
@@ -74,7 +74,7 @@ public class StatsPageController
         ModelAndView view = new ModelAndView("stats/recharge");
         view.addAllObjects(RequestThread.getMap());
         RestResp resp = statsService.getRechargeIndexStats();
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         return view;
     }
 }

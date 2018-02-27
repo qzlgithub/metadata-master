@@ -42,7 +42,7 @@ function changeImage() {
         "/captcha",
         function(res) {
             if(res.code === '000000') {
-                var data = res.dataMap;
+                var data = res.data;
                 $("#captcha").attr("src", data.imageCaptcha);
             }
         }
@@ -73,7 +73,7 @@ function userLogin() {
         data: JSON.stringify({"username": username, "password": MD5(password), "code": code}),
         success: function(res) {
             if(res.code === '000000') {
-                var data = res.dataMap;
+                var data = res.data;
                 sessionStorage.setItem("user_name", data.name);
                 sessionStorage.setItem("manager_qq", data.managerQq);
                 sessionStorage.setItem("first_login", data.firstLogin);

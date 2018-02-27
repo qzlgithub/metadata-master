@@ -200,7 +200,7 @@ public class SettingController
             return resp.result(RestResult.KEY_FIELD_MISSING);
         }
         systemService.editPrivilegeInfo(privilegeId, name, resp);
-        if(RestResult.SUCCESS.getCode().equals(resp.getErrCode()))
+        if(RestResult.SUCCESS.getCode().equals(resp.getCode()))
         {
             systemService.cacheSystemModule();
         }

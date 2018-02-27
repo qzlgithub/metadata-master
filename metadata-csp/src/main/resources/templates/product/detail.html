@@ -277,7 +277,7 @@
                 {"productId": productId, "password": MD5(password)},
                 function(res) {
                     if(res.code === '000000') {
-                        var data = res.dataMap;
+                        var data = res.data;
                         $("#app-id").text(data.appId);
                         $("#app-key").val(data.appKey);
                         $("#req-host").val(data.reqHost);

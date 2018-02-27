@@ -73,7 +73,7 @@ function getRechargeList(obj, pageFun) {
         function(res) {
             if(res.code === '000000') {
                 var dataList = $("#data-list");
-                var data = res.dataMap;
+                var data = res.data;
                 var total = data.total;
                 var pages = data.pages;
                 var list = data.list;

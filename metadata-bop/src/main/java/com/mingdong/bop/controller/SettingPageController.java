@@ -120,7 +120,7 @@ public class SettingPageController
         RestResp resp = RestResp.build();
         managerService.getManagerInfo(managerId, resp);
         ModelAndView view = new ModelAndView("user/edit");
-        view.addAllObjects(resp.getDataMap());
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

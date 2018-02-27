@@ -127,7 +127,7 @@ public class AccountController
     {
         RestResp resp = RestResp.build();
         managerService.checkIfRoleNameExist(name, resp);
-        return resp.getDataMap();
+        return resp.getData();
     }
 
     /**

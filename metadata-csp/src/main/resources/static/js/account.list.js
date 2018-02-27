@@ -52,7 +52,7 @@ function stopAccount(id) {
                 data: JSON.stringify({"clientUserId": id}),
                 success: function(res) {
                     if(res.code === '000000') {
-                        var obj = res.dataMap;
+                        var obj = res.data;
                         if(obj.enabled === 1) {
                             $("#statusAction" + id).text("禁用");
                             layer.msg("启用成功", {
@@ -120,7 +120,7 @@ function editAccount(id) {
         {"clientUserId": id},
         function(res) {
             if(res.code === '000000') {
-                var obj = res.dataMap;
+                var obj = res.data;
                 $("#edit-id").val(obj.clientUserId + "");
                 $("#edit-username").val(obj.username);
                 $("#edit-pwd").val("");

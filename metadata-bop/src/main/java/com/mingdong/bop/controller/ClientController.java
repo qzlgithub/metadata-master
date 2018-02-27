@@ -43,7 +43,7 @@ public class ClientController
     {
         RestResp resp = RestResp.build();
         clientService.checkIfUsernameExist(username, resp);
-        return resp.getDataMap();
+        return resp.getData();
     }
 
     /**
@@ -55,7 +55,7 @@ public class ClientController
     {
         RestResp resp = RestResp.build();
         clientService.checkIfContractExist(contractNo, resp);
-        return resp.getDataMap();
+        return resp.getData();
     }
 
     /**
@@ -187,7 +187,7 @@ public class ClientController
     {
         RestResp resp = RestResp.build();
         clientService.getSimilarCorp(name, clientId, resp);
-        return resp.getDataMap();
+        return resp.getData();
     }
 
     @LoginRequired
@@ -312,7 +312,7 @@ public class ClientController
     {
         RestResp resp = RestResp.build();
         clientService.getProductRenewInfo(clientProductId, resp);
-        return resp.getDataMap();
+        return resp.getData();
     }
 
     @LoginRequired
