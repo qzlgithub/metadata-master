@@ -49,7 +49,7 @@ layui.config({
             dataName: 'list'
         },
         done: function(res) {
-            $("#summary").text("共请求" + res.total + "次，收入：￥" + res.extradata.totalFee);
+            $("#summary").text("共请求" + res.total + "次，收入：￥" + res.data.totalFee);
         }
     });
     form.on('submit(search)', function(data) {

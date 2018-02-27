@@ -40,7 +40,7 @@ layui.config({
             dataName: 'list'
         },
         done: function(res, curr, count) {
-            var result = res.extradata;
+            var result = res.data;
             $('#chartTitleId').text(result.title);
             $('#miss-number').text(result.missCount);
             $('#query-number').text(count);

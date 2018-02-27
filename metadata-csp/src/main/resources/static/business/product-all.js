@@ -56,7 +56,7 @@ function fetch_product_list(obj, page_function) {
         },
         function(res) {
             var total = res.total;
-            var pages = res.extradata.pages;
+            var pages = res.data.pages;
             var list = res.list;
             $("#dataBody").empty();
             var htmlStr = '<ul class="row mr0 ml0" >';

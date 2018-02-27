@@ -10,7 +10,7 @@ public class RestListResp
     private String message;
     private int total;
     private List<Map<String, Object>> list;
-    private Map<String, Object> extradata;
+    private Map<String, Object> data;
 
     public RestListResp()
     {
@@ -57,22 +57,22 @@ public class RestListResp
         this.list = list;
     }
 
-    public Map<String, Object> getExtradata()
+    public Map<String, Object> getData()
     {
-        return extradata;
+        return data;
     }
 
-    public void setExtradata(Map<String, Object> extradata)
+    public void setData(Map<String, Object> data)
     {
-        this.extradata = extradata;
+        this.data = data;
     }
 
     public void addExtra(String k, Object v)
     {
-        if(extradata == null)
+        if(data == null)
         {
-            extradata = new HashMap<>();
+            data = new HashMap<>();
         }
-        extradata.put(k, v);
+        data.put(k, v);
     }
 }

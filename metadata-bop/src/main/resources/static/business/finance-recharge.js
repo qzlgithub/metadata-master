@@ -52,7 +52,7 @@ layui.config({
             dataName: 'list'
         },
         done: function(res) {
-            $("#summary").text("充值总额：￥" + res.extradata.totalAmt);
+            $("#summary").text("充值总额：￥" + res.data.totalAmt);
         }
     });
     form.on('submit(search)', function(data) {

@@ -31,7 +31,7 @@ function getAccountList() {
                 }
                 $("#dataBody").append(row);
             }
-            var allowedQty = data.extradata.allowedQty;
+            var allowedQty = data.data.allowedQty;
             $("#acountAll").text(list.length);
             $("#canAddNumber").text(allowedQty - list.length);
         }
