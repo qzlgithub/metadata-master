@@ -6,17 +6,6 @@ public class OpenClientProductDTO implements Serializable
 {
     private ClientProductDTO clientProductDTO;
     private ProductRechargeDTO productRechargeDTO;
-    private boolean isYear;//是否包年形式
-
-    public boolean isYear()
-    {
-        return isYear;
-    }
-
-    public void setYear(boolean year)
-    {
-        isYear = year;
-    }
 
     public ClientProductDTO getClientProductDTO()
     {
