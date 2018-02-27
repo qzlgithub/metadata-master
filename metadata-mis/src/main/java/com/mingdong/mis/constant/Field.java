@@ -7,7 +7,7 @@ public interface Field
     String APP_KEY = "appKey";
     String PHONE = "phone";
     String QUERY = "query";
-    String RESULT = "result";
+    String RESULT = "setError";
     String TIMESTAMP = "timestamp";
     String ACCESS_KEY = "accessKey";
     String USERNAME = "username";

@@ -21,9 +21,7 @@ public class GlobalExceptionHandler
     public RestResp handleSQLException(HttpServletRequest request, HttpServletResponse response, Exception ep)
     {
         ep.printStackTrace();
-        RestResp resp = RestResp.build();
-        resp.result(RestResult.SYSTEM_ERROR);
-        return resp;
+        return new RestResp(RestResult.SYSTEM_ERROR);
     }
 
 }

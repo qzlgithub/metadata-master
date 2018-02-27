@@ -20,5 +20,5 @@ public interface StatsClientMapper
     Integer countClientRechargeByDate(@Param("start") Date start, @Param("end") Date end);
 
     List<StatsDateInfo> getRequestListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
-            @Param("keyword") String keyword,@Param("productId") Long productId);
+            @Param("keyword") String keyword, @Param("productId") Long productId);
 }

@@ -6,8 +6,8 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ImageCode;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.constant.Field;
@@ -70,7 +70,7 @@ public class PageController
     public ModelAndView getHomeData()
     {
         ModelAndView view = new ModelAndView("home");
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
@@ -93,7 +93,7 @@ public class PageController
     public ModelAndView productDetail(@RequestParam(value = Field.ID) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/detail");
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
         view.addAllObjects(resp.getData());
         view.addObject(Field.USERNAME, RequestThread.getUsername());
@@ -115,7 +115,7 @@ public class PageController
     public ModelAndView productMine()
     {
         ModelAndView view = new ModelAndView("/product/mine");
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         productService.getClientProductDetailList(RequestThread.getClientId(), resp);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());

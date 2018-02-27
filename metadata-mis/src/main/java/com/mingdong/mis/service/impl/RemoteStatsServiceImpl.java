@@ -134,12 +134,12 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     @Override
     public ListDTO<StatsDateInfoDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId)
     {
-        List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name,
-                productId);
+        List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name, productId);
         ListDTO<StatsDateInfoDTO> listDTO = new ListDTO<>();
         List<StatsDateInfoDTO> listData = new ArrayList<>();
         StatsDateInfoDTO statsDateDTO;
-        for(StatsDateInfo item : list){
+        for(StatsDateInfo item : list)
+        {
             statsDateDTO = new StatsDateInfoDTO();
             statsDateDTO.setDate(item.getDate());
             statsDateDTO.setCount(item.getCount());

@@ -1,7 +1,7 @@
 package com.mingdong.csp.controller;
 
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ImageCode;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.constant.Field;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class CommonController
     @GetMapping(value = "captcha")
     public RestResp getImageCaptcha(HttpServletRequest request) throws IOException
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         HttpSession session = request.getSession();
         ImageCode imageCode = CaptchaUtils.buildImageCode();
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());

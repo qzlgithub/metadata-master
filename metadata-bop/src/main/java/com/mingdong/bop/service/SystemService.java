@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
 import java.util.List;

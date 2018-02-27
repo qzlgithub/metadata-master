@@ -5,8 +5,8 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ClientService;
@@ -32,20 +32,21 @@ public class ClientController
     @PostMapping(value = "client/user/login")
     public RestResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         HttpSession session = request.getSession();
         // TODO 开发过程暂时注释掉
         /*String userCode = jsonReq.getString(Field.CODE);
         String code = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
         if(StringUtils.isNullBlank(userCode) || !userCode.equalsIgnoreCase(code))
         {
-            return resp.result(RestResult.INVALID_CAPTCHA);
+            return resp.setError(RestResult.INVALID_CAPTCHA);
         }*/
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.userLogin(username, password, session.getId(), resp);
         return resp;
@@ -70,12 +71,13 @@ public class ClientController
     @PostMapping(value = "client/user/password")
     public RestResp changePassword(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         String oldPwd = jsonReq.getString(Field.ORG_PASSWORD);
         String newPwd = jsonReq.getString(Field.NEW_PASSWORD);
         if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, resp);
         return resp;
@@ -89,7 +91,7 @@ public class ClientController
     public RestResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
             @RequestParam(value = Field.PASSWORD) String password)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         clientService.getUserCredential(RequestThread.getUserId(), password, productId, resp);
         return resp;
     }
@@ -101,13 +103,14 @@ public class ClientController
     @PostMapping(value = "client/user/credential")
     public RestResp saveUserCredential(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long productId = jsonReq.getLong(Field.PRODUCT_ID);
         String appKey = jsonReq.getString(Field.APP_KEY);
         String reqHost = jsonReq.getString(Field.REQ_HOST);
         if(productId == null || StringUtils.isNullBlank(appKey) || StringUtils.isNullBlank(reqHost))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.saveUserCredential(RequestThread.getUserId(), productId, appKey, reqHost, resp);
         return resp;
@@ -120,7 +123,7 @@ public class ClientController
     @PostMapping(value = "client/account/addition")
     public RestResp addAccount(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         String name = jsonReq.getString(Field.NAME);
@@ -128,7 +131,8 @@ public class ClientController
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password) || StringUtils.isNullBlank(name) ||
                 StringUtils.isNullBlank(phone))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.addAccount(RequestThread.getUserId(), username, password, name, phone, resp);
         return resp;
@@ -153,7 +157,7 @@ public class ClientController
     @PostMapping(value = "client/changeStatus")
     public RestResp changeStatus(@RequestBody JSONObject jsonObject)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
         clientService.changeStatus(RequestThread.getUserId(), clientUserId, resp);
         return resp;
@@ -163,7 +167,7 @@ public class ClientController
     @GetMapping(value = "client/childAccountDetail")
     public RestResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         clientService.getAccountByUserId(clientUserId, resp);
         return resp;
     }
@@ -175,7 +179,7 @@ public class ClientController
     @PostMapping(value = "client/editChildAccount")
     public RestResp editChildAccount(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
@@ -184,11 +188,13 @@ public class ClientController
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(clientUserId == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(name) || StringUtils.isNullBlank(phone))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.editChildAccount(RequestThread.getUserId(), clientUserId, username, password, name, phone,
                 enabled, resp);
@@ -199,11 +205,12 @@ public class ClientController
     @PostMapping(value = "client/user/deletion")
     public RestResp dropSubUser(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
         if(clientUserId == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         clientService.setSubUserDeleted(RequestThread.getUserId(), clientUserId, resp);
         return resp;

@@ -12,17 +12,21 @@ public class RestResp
     private String message;
     private Map<String, Object> data;
 
-    public static RestResp build()
+    public RestResp()
     {
-        RestResp resp = new RestResp();
-        return resp.result(RestResult.SUCCESS);
+        code = RestResult.SUCCESS.getCode();
+        message = RestResult.SUCCESS.getMessage();
     }
 
-    public static String getErrResp(RestResult result)
+    public RestResp(RestResult restResult)
     {
-        RestResp resp = new RestResp();
-        resp.result(result);
-        return JSON.toJSONString(resp);
+        code = restResult.getCode();
+        message = restResult.getMessage();
+    }
+
+    public static String getErrorResp(RestResult result)
+    {
+        return JSON.toJSONString(new RestResp(result));
     }
 
     public String getCode()
@@ -55,15 +59,13 @@ public class RestResp
         this.data = data;
     }
 
-    public RestResp result(RestResult result)
+    public void setError(RestResult result)
     {
-        if(result == null)
+        if(result != null)
         {
-            result = RestResult.SUCCESS;
+            code = result.getCode();
+            message = result.getMessage();
         }
-        code = result.getCode();
-        message = result.getMessage();
-        return this;
     }
 
     public void addData(String k, Object v)

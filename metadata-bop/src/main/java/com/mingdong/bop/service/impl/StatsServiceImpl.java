@@ -15,8 +15,8 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -74,7 +74,7 @@ public class StatsServiceImpl implements StatsService
     @Override
     public RestResp getIndexStats()
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Map<String, Object> objectMap = redisDao.getObject(INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -108,7 +108,7 @@ public class StatsServiceImpl implements StatsService
     @Override
     public RestResp getClientIndexStats()
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Map<String, Object> objectMap = redisDao.getObject(CLIENT_INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -147,7 +147,7 @@ public class StatsServiceImpl implements StatsService
         List<ClientInfoDTO> clientInfoListByDate = clientInfoListDTO.getDataList();
         Integer total = clientInfoListDTO.getTotal();
         res.setTotal(total);
-        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
+        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
         List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
         Map<String, Object> map;
         for(ClientInfoDTO item : clientInfoListByDate)
@@ -241,7 +241,7 @@ public class StatsServiceImpl implements StatsService
     @Override
     public RestResp getRechargeIndexStats()
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Map<String, Object> objectMap = redisDao.getObject(RECHARGE_INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -439,8 +439,8 @@ public class StatsServiceImpl implements StatsService
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(name, productId, null, beforeDate,
                 currentDay, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
-        res.addExtra(Field.TITLE,
+        res.addData(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
+        res.addData(Field.TITLE,
                 dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
         if(listDTO.getList() != null)
         {
@@ -659,7 +659,7 @@ public class StatsServiceImpl implements StatsService
         BigDecimal sumRec = remoteStatsService.getClientRechargeStatsByDate(date, currentDay);
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
-        res.addExtra(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
+        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
         int pages = page.getTotalPage(total);
         res.setTotal(total);
         List<Map<String, Object>> list = new ArrayList<>();

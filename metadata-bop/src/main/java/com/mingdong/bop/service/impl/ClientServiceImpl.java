@@ -21,8 +21,8 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -149,7 +149,7 @@ public class ClientServiceImpl implements ClientService
         ClientDetailDTO dto = remoteClientService.getClientInfoForEdit(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
-            resp.result(dto.getResult());
+            resp.setError(dto.getResult());
             return;
         }
         resp.addData(Field.CLIENT_ID, clientId + "");
@@ -200,7 +200,8 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, RestResp resp)
+    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId,
+            RestResp resp)
     {
         UpdateClientUserStatusDTO dto = new UpdateClientUserStatusDTO();
         dto.setClientIdList(clientIdList);
@@ -208,7 +209,7 @@ public class ClientServiceImpl implements ClientService
         dto.setManagerId(managerId);
         dto.setReason(reason);
         ResultDTO resultDTO = remoteClientService.updateClientUserStatus(dto);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -272,7 +273,7 @@ public class ClientServiceImpl implements ClientService
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
         ResultDTO res = remoteClientService.openProduct(dto);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -290,7 +291,7 @@ public class ClientServiceImpl implements ClientService
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
         ResultDTO res = remoteClientService.openProduct(dto);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -299,13 +300,13 @@ public class ClientServiceImpl implements ClientService
         ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         if(cp == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         ProductRechargeDTO pr = remoteProductService.getProductRechargeById(cp.getLatestRechargeId());
         if(pr == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         resp.addData(Field.BILL_PLAN, pr.getBillPlan());
@@ -359,7 +360,7 @@ public class ClientServiceImpl implements ClientService
         cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
         ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -396,7 +397,7 @@ public class ClientServiceImpl implements ClientService
         cpUpd.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cpUpd);
         ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -405,7 +406,7 @@ public class ClientServiceImpl implements ClientService
         ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         ClientOperateInfoListDTO clientOperateInfoListByUserId = remoteClientService.getClientOperateInfoListByUserId(
@@ -447,7 +448,7 @@ public class ClientServiceImpl implements ClientService
                 vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())) || CollectionUtils.isEmpty(
                 vo.getContacts()))
         {
-            resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
         List<ClientContactDTO> contactList = new ArrayList<>(vo.getContacts().size());
@@ -456,12 +457,12 @@ public class ClientServiceImpl implements ClientService
             if(StringUtils.isNullBlank(o.getName()) || StringUtils.isNullBlank(o.getPosition()) ||
                     StringUtils.isNullBlank(o.getPhone()))
             {
-                resp.result(RestResult.KEY_FIELD_MISSING);
+                resp.setError(RestResult.KEY_FIELD_MISSING);
                 return;
             }
             if(!TrueOrFalse.TRUE.equals(o.getGeneral()) && !TrueOrFalse.FALSE.equals(o.getGeneral()))
             {
-                resp.result(RestResult.KEY_FIELD_MISSING);
+                resp.setError(RestResult.KEY_FIELD_MISSING);
                 return;
             }
             ClientContactDTO cd = new ClientContactDTO();
@@ -482,7 +483,7 @@ public class ClientServiceImpl implements ClientService
         dto.setEnabled(vo.getEnabled());
         dto.setManagerId(RequestThread.getOperatorId());
         ResultDTO res = remoteClientService.addNewClient(dto);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -492,7 +493,7 @@ public class ClientServiceImpl implements ClientService
                 vo.getShortName()) || StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
                 (!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())))
         {
-            resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
         NewClientDTO client = new NewClientDTO();
@@ -511,7 +512,7 @@ public class ClientServiceImpl implements ClientService
                         StringUtils.isNullBlank(c.getPhone()) || (!TrueOrFalse.TRUE.equals(c.getGeneral()) &&
                         !TrueOrFalse.FALSE.equals(c.getGeneral())))
                 {
-                    resp.result(RestResult.KEY_FIELD_MISSING);
+                    resp.setError(RestResult.KEY_FIELD_MISSING);
                     return;
                 }
                 ClientContactDTO o = new ClientContactDTO();
@@ -525,7 +526,7 @@ public class ClientServiceImpl implements ClientService
             }
         }
         ResultDTO dto = remoteClientService.editClient(client, contactList, vo.getContactDel());
-        resp.result(dto.getResult());
+        resp.setError(dto.getResult());
     }
 
     @Override
@@ -534,7 +535,7 @@ public class ClientServiceImpl implements ClientService
         ClientDetailDTO dto = remoteClientService.getClientDetail(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
-            resp.result(dto.getResult());
+            resp.setError(dto.getResult());
             return;
         }
         resp.addData(Field.CLIENT_ID, clientId + "");
@@ -635,14 +636,14 @@ public class ClientServiceImpl implements ClientService
     public void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp)
     {
         ResultDTO resultDTO = remoteClientService.selectCustomProduct(clientId, productIds);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void removeCustomClientProduct(Long clientProductId, RestResp resp)
     {
         ResultDTO resultDTO = remoteClientService.removeCustomClientProduct(clientProductId);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override

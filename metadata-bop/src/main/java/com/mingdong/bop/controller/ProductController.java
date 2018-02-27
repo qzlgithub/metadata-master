@@ -9,8 +9,8 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,11 +59,12 @@ public class ProductController
     @PostMapping(value = "/product")
     public RestResp editClient(@RequestBody ProductVO vo)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         if(vo.getId() == null || StringUtils.isNullBlank(vo.getName()) || vo.getCostAmt() == null ||
                 vo.getEnabled() == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         productService.editProduct(vo.getId(), vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(),
                 vo.getEnabled(), vo.getCustom(), vo.getRemark(), vo.getContent(), resp);
@@ -77,13 +78,14 @@ public class ProductController
     @PostMapping(value = "/product/status")
     public RestResp changeProductStatus(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long productId = jsonReq.getLong(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(productId == null || productId <= 0 || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(
                 enabled)))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         productService.changeProductStatus(productId, enabled, resp);
         return resp;

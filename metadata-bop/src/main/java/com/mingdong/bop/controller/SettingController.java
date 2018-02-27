@@ -10,8 +10,8 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,11 +52,12 @@ public class SettingController
     @PutMapping(value = "/setting/rechargeType/addition")
     public RestResp addRechargeType(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         String name = jsonReq.getString(Field.NAME);
         if(StringUtils.isNullBlank(name))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         String remark = jsonReq.getString(Field.REMARK);
         systemService.addRechargeType(name, remark, resp);
@@ -75,7 +76,7 @@ public class SettingController
         {
             systemService.dropRechargeType(id);
         }
-        return RestResp.build();
+        return new RestResp();
     }
 
     /**
@@ -85,13 +86,14 @@ public class SettingController
     @PostMapping(value = "/setting/rechargeType")
     public RestResp editRechargeType(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Integer id = jsonReq.getInteger(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         String remark = jsonReq.getString(Field.REMARK);
         if(id == null || StringUtils.isNullBlank(name))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.editRechargeType(id, name, remark, resp);
         return resp;
@@ -105,12 +107,13 @@ public class SettingController
     @PostMapping(value = "/setting/rechargeType/status")
     public RestResp enableRechargeType(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Integer id = jsonReq.getInteger(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.enableRechargeType(id, enabled, resp);
         return resp;
@@ -136,13 +139,14 @@ public class SettingController
     @PutMapping(value = "/setting/industry/addition")
     public RestResp addIndustryType(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long id = jsonReq.getLong(Field.ID);
         String code = jsonReq.getString(Field.CODE);
         String name = jsonReq.getString(Field.NAME);
         if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.addIndustryType(id, code, name, resp);
         return resp;
@@ -155,13 +159,14 @@ public class SettingController
     @PostMapping(value = "/setting/industry")
     public RestResp editIndustryInfo(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long id = jsonReq.getLong(Field.ID);
         String code = jsonReq.getString(Field.CODE);
         String name = jsonReq.getString(Field.NAME);
         if(StringUtils.isNullBlank(code) || StringUtils.isNullBlank(name))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.editIndustryInfo(id, code, name, resp);
         return resp;
@@ -174,12 +179,13 @@ public class SettingController
     @PostMapping(value = "/setting/industry/status")
     public RestResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long id = jsonReq.getLong(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.changeIndustryStatus(id, enabled, resp);
         return resp;
@@ -192,12 +198,13 @@ public class SettingController
     @PostMapping(value = "/setting/menu")
     public RestResp editColumnInfo(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long privilegeId = jsonReq.getLong(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         if(privilegeId == null || StringUtils.isNullBlank(name))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.editPrivilegeInfo(privilegeId, name, resp);
         if(RestResult.SUCCESS.getCode().equals(resp.getCode()))
@@ -214,14 +221,15 @@ public class SettingController
     @PostMapping(value = "/setting/menu/status")
     public RestResp setModuleStatus(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         JSONArray moduleArray = jsonReq.getJSONArray(Field.MODULE);
         List<Long> moduleIdList = moduleArray.toJavaList(Long.class);
         Integer status = jsonReq.getInteger(Field.STATUS);
         if(CollectionUtils.isEmpty(moduleIdList) || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(
                 status)))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         systemService.setModuleStatus(moduleIdList, status, resp);
         return resp;
@@ -234,12 +242,13 @@ public class SettingController
     @PostMapping(value = "/setting/configuration")
     public RestResp setGlobalSetting(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Integer subUserQty = jsonReq.getInteger(Field.SUB_USER_QTY);
         String serviceQQ = jsonReq.getString(Field.SERVICE_QQ);
         if(subUserQty == null || StringUtils.isNullBlank(serviceQQ))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         List<SysConfigDTO> sysConfigDTOList = new ArrayList<>();
         SysConfigDTO sysConfigDTO = new SysConfigDTO();

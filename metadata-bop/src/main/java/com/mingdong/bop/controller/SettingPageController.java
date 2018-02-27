@@ -117,7 +117,7 @@ public class SettingPageController
     @GetMapping(value = "/setting/user/edit.html")
     public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.ID) Long managerId)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         managerService.getManagerInfo(managerId, resp);
         ModelAndView view = new ModelAndView("user/edit");
         view.addAllObjects(resp.getData());

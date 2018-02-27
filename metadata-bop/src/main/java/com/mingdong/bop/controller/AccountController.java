@@ -12,8 +12,8 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,17 +47,19 @@ public class AccountController
     @PostMapping(value = "/account/role/addition")
     public RestResp addRole(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         String name = jsonReq.getString(Field.NAME);
         JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
         if(StringUtils.isNullBlank(name) || privilegeArray == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         List<Long> privilege = privilegeArray.toJavaList(Long.class);
         if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.addRole(name, privilege, resp);
         return resp;
@@ -70,18 +72,20 @@ public class AccountController
     @PostMapping(value = "/account/role")
     public RestResp editRole(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long roleId = jsonReq.getLong(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
         if(roleId == null || StringUtils.isNullBlank(name) || privilegeArray == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         List<Long> privilege = privilegeArray.toJavaList(Long.class);
         if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.editRole(roleId, name, privilege, resp);
         return resp;
@@ -94,11 +98,12 @@ public class AccountController
     @PostMapping(value = "/account/role/status")
     public RestResp changeRoleStatus(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long roleId = jsonReq.getLong(Field.ID);
         if(roleId == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.changeStatus(roleId, resp);
         return resp;
@@ -125,7 +130,7 @@ public class AccountController
     @GetMapping(value = "/account/role/verification")
     public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         managerService.checkIfRoleNameExist(name, resp);
         return resp.getData();
     }
@@ -137,24 +142,28 @@ public class AccountController
     @PostMapping(value = "/account/addition")
     public RestResp addNewManager(@RequestBody NewManagerVO vo)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         // 校验各个字段值
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(vo.getRoleId() == null || vo.getRoleId() <= 0)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(CollectionUtils.isEmpty(vo.getPrivilege()))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         // 保存管理账号
         managerService.addManager(vo.getUsername(), vo.getPassword(), vo.getName(), vo.getPhone(), vo.getQq(),
@@ -194,18 +203,21 @@ public class AccountController
     @PostMapping(value = "/account")
     public RestResp editManager(@RequestBody ManagerVO vo)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         if(vo.getRoleId() == null || vo.getRoleId() <= 0)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         if(CollectionUtils.isEmpty(vo.getPrivilege()))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.editManager(vo.getManagerId(), vo.getRoleId(), vo.getName(), vo.getPhone(), vo.getQq(),
                 vo.getEnabled(), vo.getPrivilege(), resp);
@@ -219,11 +231,12 @@ public class AccountController
     @PostMapping(value = "/account/status")
     public RestResp changeStatus(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         Long managerId = jsonReq.getLong(Field.ID);
         if(managerId == null)
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.changeManagerStatus(managerId, resp);
         return resp;

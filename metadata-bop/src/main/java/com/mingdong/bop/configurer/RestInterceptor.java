@@ -45,7 +45,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter
                 ManagerSession ms = redisDao.getManagerSession(sessionId);
                 if(ms == null)
                 {
-                    String resp = RestResp.getErrResp(RestResult.ACCESS_LIMITED);
+                    String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
                     response.getOutputStream().write(resp.getBytes("UTF-8"));
                     return false;
                 }

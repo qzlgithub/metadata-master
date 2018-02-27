@@ -32,7 +32,7 @@ public class UserController
     @ResponseBody
     public RestResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
 
         HttpSession session = request.getSession();
         String sessionId = session.getId();
@@ -40,7 +40,7 @@ public class UserController
         String code = jsonReq.getString(Field.IMAGE_CODE);
         /*if(code == null || !code.equalsIgnoreCase(realCode))
         {
-            return resp.result(RestResult.INVALID_CAPTCHA);
+            return resp.setError(RestResult.INVALID_CAPTCHA);
         }*/
         session.removeAttribute(Field.IMAGE_CAPTCHA);
         String username = jsonReq.getString(Field.USERNAME);
@@ -54,12 +54,13 @@ public class UserController
     @ResponseBody
     public RestResp changePwd(@RequestBody JSONObject jsonReq)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         String oldPwd = jsonReq.getString(Field.OLD_PWD);
         String newPwd = jsonReq.getString(Field.NEW_PWD);
         if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
         {
-            return resp.result(RestResult.KEY_FIELD_MISSING);
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
         }
         managerService.changePassword(RequestThread.getOperatorId(), oldPwd, newPwd, resp);
         return resp;

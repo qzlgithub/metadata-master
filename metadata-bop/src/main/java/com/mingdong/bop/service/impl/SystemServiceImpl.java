@@ -8,8 +8,8 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
@@ -90,7 +90,7 @@ public class SystemServiceImpl implements SystemService
         industry.setParentId(id != null ? id : 0L);
         industry.setEnabled(TrueOrFalse.TRUE);
         ResultDTO resultDTO = remoteSystemService.addIndustryType(industry);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class SystemServiceImpl implements SystemService
         industry.setCode(code);
         industry.setName(name);
         ResultDTO resultDTO = remoteSystemService.editIndustryInfo(industry);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -119,7 +119,7 @@ public class SystemServiceImpl implements SystemService
         rt.setName(name);
         rt.setRemark(remark);
         ResultDTO res = remoteSystemService.editRechargeType(rt);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -129,7 +129,7 @@ public class SystemServiceImpl implements SystemService
         rt.setId(rechargeTypeId);
         rt.setEnabled(enabled);
         ResultDTO res = remoteSystemService.editRechargeType(rt);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -230,7 +230,7 @@ public class SystemServiceImpl implements SystemService
         privilege.setUpdateTime(new Date());
         privilege.setName(name);
         ResultDTO resultDTO = remoteSystemService.editPrivilegeInfo(privilege);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -273,7 +273,7 @@ public class SystemServiceImpl implements SystemService
     public void addRechargeType(String name, String remark, RestResp resp)
     {
         ResultDTO res = remoteSystemService.addRechargeType(name, remark);
-        resp.result(res.getResult());
+        resp.setError(res.getResult());
     }
 
     @Override
@@ -357,14 +357,14 @@ public class SystemServiceImpl implements SystemService
     public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, RestResp resp)
     {
         ResultDTO resultDTO = remoteSystemService.addOrUpdateSetting(sysConfigDTOList);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void changeIndustryStatus(Long industryTypeId, Integer enabled, RestResp resp)
     {
         ResultDTO resultDTO = remoteSystemService.changeIndustryStatus(industryTypeId, enabled);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override

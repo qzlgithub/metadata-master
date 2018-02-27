@@ -9,8 +9,8 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService
                 fromDate, toDate, page);
         if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(productRecListDTO.getResultDTO().getResult());
+            resp.setError(productRecListDTO.getResultDTO().getResult());
             return;
         }
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService
                 toDate, page);
         if(apiReqInfoListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
-            resp.result(apiReqInfoListDTO.getResultDTO().getResult());
+            resp.setError(apiReqInfoListDTO.getResultDTO().getResult());
             return;
         }
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
@@ -213,7 +213,7 @@ public class ProductServiceImpl implements ProductService
         ProductDTO dto = productApi.getClientProductDetail(clientId, productId);
         if(dto.getResult() != RestResult.SUCCESS)
         {
-            resp.result(dto.getResult());
+            resp.setError(dto.getResult());
             return;
         }
         resp.addData(Field.PRODUCT_ID, dto.getId() + "");
@@ -411,7 +411,7 @@ public class ProductServiceImpl implements ProductService
     {
         ListDTO<ProductDTO> listDTO = productApi.getProductList(clientId, productTypeList, incOpened, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
+        res.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>();

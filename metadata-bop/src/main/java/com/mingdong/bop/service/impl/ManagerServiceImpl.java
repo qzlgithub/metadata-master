@@ -13,8 +13,8 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -60,22 +60,22 @@ public class ManagerServiceImpl implements ManagerService
         ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
         if(manager == null)
         {
-            resp.result(RestResult.ACCOUNT_NOT_EXIST);
+            resp.setError(RestResult.ACCOUNT_NOT_EXIST);
             return;
         }
         else if(TrueOrFalse.FALSE.equals(manager.getEnabled()))
         {
-            resp.result(RestResult.ACCOUNT_DISABLED);
+            resp.setError(RestResult.ACCOUNT_DISABLED);
             return;
         }
         else if(!manager.getPassword().equals(Md5Utils.encrypt(password)))
         {
-            resp.result(RestResult.INVALID_PASSCODE);
+            resp.setError(RestResult.INVALID_PASSCODE);
             return;
         }
         else if(!TrueOrFalse.TRUE.equals(manager.getEnabled()))
         {
-            resp.result(RestResult.ACCOUNT_DISABLED);
+            resp.setError(RestResult.ACCOUNT_DISABLED);
             return;
         }
         // 删除用户旧的sessionId
@@ -100,7 +100,7 @@ public class ManagerServiceImpl implements ManagerService
         ms.setPrivileges(privilegeList);
         ms.setAddAt(current.getTime());
         redisDao.saveManagerSession(sessionId, ms);
-        resp.addData(Field.NAME,manager.getName());
+        resp.addData(Field.NAME, manager.getName());
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ManagerServiceImpl implements ManagerService
     public void changePassword(Long managerId, String oldPwd, String newPwd, RestResp resp)
     {
         ResultDTO resultDTO = remoteManagerService.updateManagerPwd(managerId, newPwd, oldPwd);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -153,7 +153,7 @@ public class ManagerServiceImpl implements ManagerService
         newRole.setRoleDTO(role);
         newRole.setPrivilege(privilege);
         ResultDTO resultDTO = remoteManagerService.addRole(newRole);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -167,7 +167,7 @@ public class ManagerServiceImpl implements ManagerService
         newRole.setRoleDTO(roleUpd);
         newRole.setPrivilege(privilege);
         ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -201,7 +201,7 @@ public class ManagerServiceImpl implements ManagerService
         ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         ManagerPrivilegeListDTO managerPrivilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(
@@ -255,7 +255,7 @@ public class ManagerServiceImpl implements ManagerService
         newManager.setManagerDTO(manager);
         newManager.setPrivilege(privilege);
         ResultDTO resultDTO = remoteManagerService.addManager(newManager);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -275,7 +275,7 @@ public class ManagerServiceImpl implements ManagerService
         newManager.setManagerDTO(manager);
         newManager.setPrivilege(privilege);
         ResultDTO resultDTO = remoteManagerService.updateManagerSkipNull(newManager);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
@@ -315,7 +315,7 @@ public class ManagerServiceImpl implements ManagerService
         RoleDTO role = remoteManagerService.getRoleById(roleId);
         if(role == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         Integer enabled = TrueOrFalse.TRUE;
@@ -330,7 +330,7 @@ public class ManagerServiceImpl implements ManagerService
         NewRole newRole = new NewRole();
         newRole.setRoleDTO(roleUpd);
         ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
-        resp.result(resultDTO.getResult());
+        resp.setError(resultDTO.getResult());
         resp.addData(Field.ENABLED, enabled);
     }
 
@@ -340,7 +340,7 @@ public class ManagerServiceImpl implements ManagerService
         ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
         {
-            resp.result(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         Integer enabled = TrueOrFalse.TRUE;

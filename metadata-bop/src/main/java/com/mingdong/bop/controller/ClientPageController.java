@@ -64,7 +64,7 @@ public class ClientPageController
     @RequestMapping(value = "/client/edit.html")
     public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
         view.addAllObjects(resp.getData());
@@ -79,7 +79,7 @@ public class ClientPageController
     @RequestMapping(value = "/client/detail.html")
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("client/detail");
         view.addAllObjects(resp.getData());

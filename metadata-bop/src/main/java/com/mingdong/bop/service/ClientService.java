@@ -2,8 +2,8 @@ package com.mingdong.bop.service;
 
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.math.BigDecimal;
@@ -26,7 +26,8 @@ public interface ClientService
     /**
      * 根据条件获取客户信息列表
      */
-    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, RestListResp res);
+    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page,
+            RestListResp res);
 
     void getClientInfoForEdit(Long clientId, RestResp resp);
 

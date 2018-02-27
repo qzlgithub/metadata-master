@@ -3,8 +3,8 @@ package com.mingdong.csp.controller;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.RestListResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -39,7 +39,7 @@ public class ProductController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
@@ -81,7 +81,7 @@ public class ProductController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        RestResp resp = RestResp.build();
+        RestResp resp = new RestResp();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate,
@@ -114,7 +114,8 @@ public class ProductController
 
     @LoginRequired
     @GetMapping(value = "product/all")
-    public RestListResp getProductByParam(@RequestParam(value = Field.PRODUCT_TYPE, required = false) String productType,
+    public RestListResp getProductByParam(
+            @RequestParam(value = Field.PRODUCT_TYPE, required = false) String productType,
             @RequestParam(value = Field.INC_OPENED, required = false) Integer incOpened,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)

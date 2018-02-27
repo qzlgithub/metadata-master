@@ -43,7 +43,7 @@ public class TradeServiceImpl implements TradeService
         ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
                 managerId, rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
+        res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
@@ -124,7 +124,7 @@ public class TradeServiceImpl implements TradeService
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
+        res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());

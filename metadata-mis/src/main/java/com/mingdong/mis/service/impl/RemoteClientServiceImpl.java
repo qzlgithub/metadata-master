@@ -1085,7 +1085,9 @@ public class RemoteClientServiceImpl implements RemoteClientService
                             openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
                     openClientProductDTO.getClientProductDTO().setBalance(
                             openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
-                }else{
+                }
+                else
+                {
                     //上一次为包年形式-余额重置
                     openClientProductDTO.getProductRechargeDTO().setBalance(
                             openClientProductDTO.getProductRechargeDTO().getAmount());
@@ -1368,14 +1370,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
             cp.setBillPlan(dto.getBillPlan());
             cp.setLatestRechargeId(recharge.getId());
             cp.setOpened(TrueOrFalse.TRUE);
-//            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-//            {
-//                cp.setBalance(new BigDecimal(0));
-//            }
-//            else
-//            {
-                cp.setBalance(dto.getAmount());
-//            }
+            //            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+            //            {
+            //                cp.setBalance(new BigDecimal(0));
+            //            }
+            //            else
+            //            {
+            cp.setBalance(dto.getAmount());
+            //            }
             clientProductMapper.add(cp);
         }
         else
@@ -1386,14 +1388,14 @@ public class RemoteClientServiceImpl implements RemoteClientService
             cpUpd.setBillPlan(dto.getBillPlan());
             cpUpd.setLatestRechargeId(recharge.getId());
             cpUpd.setOpened(TrueOrFalse.TRUE);
-//            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-//            {
-//                cpUpd.setBalance(new BigDecimal(0));
-//            }
-//            else
-//            {
-                cpUpd.setBalance(dto.getAmount());
-//            }
+            //            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
+            //            {
+            //                cpUpd.setBalance(new BigDecimal(0));
+            //            }
+            //            else
+            //            {
+            cpUpd.setBalance(dto.getAmount());
+            //            }
             clientProductMapper.updateSkipNull(cpUpd);
         }
         return res;
