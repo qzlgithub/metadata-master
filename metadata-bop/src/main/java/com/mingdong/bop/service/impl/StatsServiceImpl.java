@@ -59,6 +59,7 @@ public class StatsServiceImpl implements StatsService
     private static final String CLIENT_INDEX_STATS_KEY = "clientIndexStatsKey";
     private static final String RECHARGE_INDEX_STATS_KEY = "rechargeIndexStatsKey";
     private static final String REQUEST_INDEX_STATS_KEY = "requestIndexStatsKey";
+    private static final String REVENUE_INDEX_STATS_KEY = "revenueIndexStatsKey";
     private static final Integer SECONDS = 60;
     @Resource
     private RedisDao redisDao;
@@ -102,6 +103,7 @@ public class StatsServiceImpl implements StatsService
                 });
         resp.addAllData(objectMap);
         getRequestQuery(resp);
+        getRevenueQuery(resp);
         return resp;
     }
 
@@ -572,6 +574,178 @@ public class StatsServiceImpl implements StatsService
         RestResp resp = new RestResp();
         getRequestQuery(resp);
         return resp;
+    }
+
+    @Override
+    public void getRevenueList(ScopeType scopeTypeEnum, Page page, RestListResp res)
+    {
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String dateStr = sdf.format(beforeDate);
+        String currentDayStr = sdf.format(currentDay);
+        ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getRevenueList(beforeDate, currentDay, page);
+        res.setTotal(listDTO.getTotal());
+        res.addExtra(Field.TITLE,
+                dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
+        if(listDTO.getList() != null)
+        {
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(ApiReqInfoDTO o : listDTO.getList())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.CORP_NAME, o.getCorpName());
+                map.put(Field.USERNAME, o.getUsername());
+                map.put(Field.SHORT_NAME, o.getShortName());
+                map.put(Field.PRODUCT, o.getProductName());
+                map.put(Field.REQUEST_NUMBER, o.getRequestNumber());
+                map.put(Field.FEE, o.getFee());
+                list.add(map);
+            }
+            res.setList(list);
+        }
+    }
+
+    @Override
+    public XSSFWorkbook createRevenueListXlsx(ScopeType scopeTypeEnum, Page page)
+    {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet("营收数据");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("公司名称");
+        row.createCell(1).setCellValue("公司简称");
+        row.createCell(2).setCellValue("公司账号");
+        row.createCell(3).setCellValue("产品服务");
+        row.createCell(4).setCellValue("请求次数");
+        row.createCell(5).setCellValue("利润（元）");
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getRevenueList(beforeDate, currentDay, page);
+        List<ApiReqInfoDTO> dataList = listDTO.getList();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            Row dataRow;
+            ApiReqInfoDTO dataInfo;
+            for(int i = 0; i < dataList.size(); i++)
+            {
+                dataInfo = dataList.get(i);
+                dataRow = sheet.createRow(i + 1);
+                dataRow.createCell(0).setCellValue(dataInfo.getCorpName());
+                dataRow.createCell(1).setCellValue(dataInfo.getShortName());
+                dataRow.createCell(2).setCellValue(dataInfo.getUsername());
+                dataRow.createCell(3).setCellValue(dataInfo.getProductName());
+                dataRow.createCell(4).setCellValue(dataInfo.getRequestNumber() + "");
+                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+            }
+        }
+        return wb;
+    }
+
+    @Override
+    public RestResp getRevenueIndexStats()
+    {
+        RestResp blResp = new RestResp();
+        getRevenueQuery(blResp);
+        return blResp;
+    }
+
+    @Override
+    public JSONArray getRevenueListJson(ScopeType scopeTypeEnum)
+    {
+        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArraySec;
+        Date currentDay = new Date();
+        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        ListDTO<StatsDateInfoDTO> listDTO = remoteStatsService.getRevenueListStats(beforeDate, currentDay);
+        List<StatsDateInfoDTO> list = listDTO.getList();
+        Map<String, BigDecimal> dateIntMap = new HashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(!CollectionUtils.isEmpty(list))
+        {
+            for(StatsDateInfoDTO item : list)
+            {
+                dateIntMap.put(sdf.format(item.getDate()), item.getFee());
+            }
+        }
+        Map<String, BigDecimal> dateMap = new LinkedHashMap<>();
+        Calendar c = Calendar.getInstance();
+        c.setTime(beforeDate);
+        int difInt = (int) BusinessUtils.getDayDiff(beforeDate, currentDay) + 1;
+        for(int i = 0; i < difInt; i++)
+        {
+            String dateStr = sdf.format(c.getTime());
+            BigDecimal integer = dateIntMap.get(dateStr);
+            if(integer != null)
+            {
+                dateMap.put(dateStr, integer);
+            }
+            else
+            {
+                dateMap.put(dateStr, new BigDecimal(0));
+            }
+            c.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        for(Map.Entry<String, BigDecimal> entry : dateMap.entrySet())
+        {
+            jsonArraySec = new JSONArray();
+            jsonArraySec.add(entry.getKey());
+            jsonArraySec.add(entry.getValue());
+            jsonArray.add(jsonArraySec);
+        }
+        return jsonArray;
+    }
+
+    private void getRevenueQuery(RestResp blResp)
+    {
+        Map<String, Object> objectMap = redisDao.getObject(REVENUE_INDEX_STATS_KEY, SECONDS,
+                new TypeReference<Map<String, Object>>()
+                {
+                }, new DataAbstract<Map<String, Object>>()
+                {
+                    @Override
+                    public Map<String, Object> queryData()
+                    {
+                        Map<String, Object> map = new HashMap<>();
+                        ListDTO<StatsDateInfoDTO> requestListStats = remoteStatsService.getRevenueListStats(null, null);
+                        List<StatsDateInfoDTO> list = requestListStats.getList();
+                        Date currentDay = new Date();
+                        Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
+                        Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
+                        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
+                        Map<String, BigDecimal> dataMap = new HashMap<>();
+                        dataMap.put(Field.TODAY_FEE, new BigDecimal(0));
+                        dataMap.put(Field.YESTERDAY_FEE, new BigDecimal(0));
+                        dataMap.put(Field.MONTH_FEE, new BigDecimal(0));
+                        dataMap.put(Field.ALL_FEE, new BigDecimal(0));
+                        for(StatsDateInfoDTO item : list)
+                        {
+                            if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate()))
+                            {
+                                BigDecimal count = dataMap.get(Field.TODAY_FEE);
+                                dataMap.put(Field.TODAY_FEE, count.add(item.getFee()));
+                            }
+                            if(yesterdayDate.equals(item.getDate()) || (yesterdayDate.before(item.getDate()) &&
+                                    nowDate.after(item.getDate())))
+                            {
+                                BigDecimal count = dataMap.get(Field.YESTERDAY_FEE);
+                                dataMap.put(Field.YESTERDAY_FEE, count.add(item.getFee()));
+                            }
+                            if(monthFirst.equals(item.getDate()) || monthFirst.before(item.getDate()))
+                            {
+                                BigDecimal count = dataMap.get(Field.MONTH_FEE);
+                                dataMap.put(Field.MONTH_FEE, count.add(item.getFee()));
+                            }
+                            BigDecimal count = dataMap.get(Field.ALL_FEE);
+                            dataMap.put(Field.ALL_FEE, count.add(item.getFee()));
+                        }
+                        for(Map.Entry<String, BigDecimal> entry : dataMap.entrySet())
+                        {
+                            map.put(entry.getKey(), NumberUtils.formatAmount(entry.getValue()));
+                        }
+                        return map;
+                    }
+                });
+        blResp.addAllData(objectMap);
     }
 
     private void getRequestQuery(RestResp resp)

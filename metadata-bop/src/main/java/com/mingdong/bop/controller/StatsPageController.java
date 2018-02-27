@@ -51,6 +51,8 @@ public class StatsPageController
     {
         ModelAndView view = new ModelAndView("stats/revenue");
         view.addAllObjects(RequestThread.getMap());
+        RestResp resp = statsService.getRevenueIndexStats();
+        view.addAllObjects(resp.getData());
         return view;
     }
 

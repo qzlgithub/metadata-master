@@ -22,6 +22,17 @@ public class ApiReqInfo
     private String username;
     private String productName;
     private String billPlanName;
+    private Integer requestNumber;//请求次数-统计那边用到
+
+    public Integer getRequestNumber()
+    {
+        return requestNumber;
+    }
+
+    public void setRequestNumber(Integer requestNumber)
+    {
+        this.requestNumber = requestNumber;
+    }
 
     public String getRequestIp()
     {

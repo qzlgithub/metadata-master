@@ -1,13 +1,27 @@
 package com.mingdong.core.model.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class StatsDateInfoDTO implements Serializable
 {
     private Date date;
+    //request
     private Integer count;
     private Integer missCount;
+    //revenue
+    private BigDecimal fee;
+
+    public BigDecimal getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee)
+    {
+        this.fee = fee;
+    }
 
     public Integer getMissCount()
     {

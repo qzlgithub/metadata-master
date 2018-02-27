@@ -38,7 +38,6 @@ public interface Field
     String EMAIL = "email";
     String TYPE_NAME = "typeName";
     String SUB_LIST = "subList";
-    String TRADE_AT = "tradeAt";
     String MANAGER_ID = "managerId";
     String IMAGE_CAPTCHA = "imageCaptcha";
     String PASSWORD = "password";
@@ -47,18 +46,15 @@ public interface Field
     String INDUSTRY = "industry";
     String ROLE_ID = "roleId";
     String ROLE_LIST = "roleList";
-    String ACCOUNT_ENABLED = "accountEnabled";
     String INDUSTRY_LIST = "industryList";
     String PARENT_INDUSTRY_ID = "parentIndustryId";
     String CLIENT_ID = "clientId";
     String USER_STATUS = "userStatus";
-    String ACCOUNT_STATUS = "accountStatus";
     String PARENT_ID = "parentId";
     String INDUSTRY_NAME = "industryName";
     String USER_ENABLED = "userEnabled";
     String USER_LIST = "userList";
     String PARENT_INDUSTRY = "parentIndustry";
-    String RECHARGE_TYPE_ID = "rechargeTypeId";
     String OLD_PWD = "oldPwd";
     String NEW_PWD = "newPwd";
     String EXIST = "exist";
@@ -70,7 +66,6 @@ public interface Field
     String PRODUCT_ID = "productId";
     String PRODUCT_DICT = "productDict";
     String DEFAULT_PASSWORD = "defaultPassword";
-    String CREATE_TIME = "createTime";
     String APP_ID = "appId";
     String RECHARGE_DICT = "rechargeDict";
     String START_DATE = "startDate";
@@ -98,9 +93,6 @@ public interface Field
     String RECHARGE_TYPE_LIST = "rechargeTypeList";
     String PRODUCT_INFO_LIST = "productInfoList";
     String MANAGER_LIST = "managerList";
-    String TYPE_Id = "typeId";
-    String SHOW_STATS = "showStats";
-    String HIT = "hit";
     String MODULE = "module";
     String STATUS = "status";
     String CONTACT_LIST = "contactList";
@@ -125,7 +117,6 @@ public interface Field
     String MANAGER = "manager";
     String FROM_DATE = "fromDate";
     String TO_DATE = "toDate";
-    String RECHARGE_TIME = "rechargeTime";
     String RECHARGE_AT = "rechargeAt";
     String FEE = "fee";
     String IS_HIT = "isHit";
@@ -148,9 +139,13 @@ public interface Field
     String U = "u";
     String ACCOUNT_DICT = "accountDict";
     String REQUEST_NO = "requestNo";
-    String ACCOUNT = "account";
     String RECHARGE_NO = "rechargeNo";
     String RECHARGE_TYPE_NAME = "rechargeTypeName";
     String BILL_PLAN_NAME = "billPlanName";
     String IS_DELETED = "isDeleted";
+    String REQUEST_NUMBER = "requestNumber";
+    String TODAY_FEE = "todayFee";
+    String YESTERDAY_FEE = "yesterdayFee";
+    String MONTH_FEE = "monthFee";
+    String ALL_FEE = "allFee";
 }

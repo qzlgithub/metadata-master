@@ -133,6 +133,24 @@ public class ExportController
     }
 
     @LoginRequired
+    @GetMapping(value = "/exp/stats/revenue")
+    public void exportRevenueList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.NAME, required = false) String name,
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId, HttpServletResponse response)
+            throws IOException
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        XSSFWorkbook wb = statsService.createRevenueListXlsx(scopeTypeEnum, new Page(1, 1000));
+        String filename = new String("营收数据".getBytes(), "ISO8859-1");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
+        OutputStream os = response.getOutputStream();
+        wb.write(os);
+        os.flush();
+        os.close();
+    }
+
+    @LoginRequired
     @GetMapping(value = "/exp/finance/recharge")
     public void exportRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,

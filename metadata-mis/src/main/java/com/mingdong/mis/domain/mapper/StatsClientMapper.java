@@ -21,4 +21,6 @@ public interface StatsClientMapper
 
     List<StatsDateInfo> getRequestListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
             @Param("keyword") String keyword, @Param("productId") Long productId);
+
+    List<StatsDateInfo> getRevenueListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

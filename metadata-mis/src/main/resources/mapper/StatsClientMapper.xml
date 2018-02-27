@@ -5,6 +5,7 @@
         <result column="date" property="date" jdbcType="TIMESTAMP" />
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="miss_count" property="missCount" jdbcType="INTEGER" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
     </resultMap>
 
     <select id="getAllClientCount" resultType="Integer">
@@ -52,14 +53,29 @@
         count(case when ar.`hit` = 0 then ar.`hit` end) as miss_count
         from `api_req` ar
         left join `client` c
-        on ar.`client_id` = c.`id` and ar.`hit` = 0
+        on ar.`client_id` = c.`id`
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
             </if>
             <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
-            <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+            <if test="toDate != null">and ar.`create_time` &lt;= #{toDate}</if>
+        </where>
+        group by date_format(ar.`create_time`,"%Y-%m-%d")
+        order by date_format(ar.`create_time`,"%Y-%m-%d") asc
+    </select>
+
+    <select id="getRevenueListStats" resultMap="BaseResultMap">
+        select
+        date_format(ar.`create_time`,"%Y-%m-%d") as date,
+        sum(ar.`fee`) as fee
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        <where>
+            <if test="fromDate != null">ar.`create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and ar.`create_time` &lt;= #{toDate}</if>
         </where>
         group by date_format(ar.`create_time`,"%Y-%m-%d")
         order by date_format(ar.`create_time`,"%Y-%m-%d") asc

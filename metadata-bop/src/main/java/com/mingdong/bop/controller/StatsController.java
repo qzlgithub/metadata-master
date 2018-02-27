@@ -87,4 +87,24 @@ public class StatsController
         return jsonArray.toJSONString();
     }
 
+    @LoginRequired
+    @GetMapping(value = "/stats/client/revenueList")
+    public RestListResp getRevenueList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        RestListResp res = new RestListResp();
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        statsService.getRevenueList(scopeTypeEnum, new Page(pageNum, pageSize), res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/stats/client/revenueListJson")
+    public String getRevenueListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
+    {
+        ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
+        JSONArray jsonArray = statsService.getRevenueListJson(scopeTypeEnum);
+        return jsonArray.toJSONString();
+    }
 }

@@ -32,7 +32,7 @@
                 <dd>
                     <ul class="public-data-list layui-row">
                         <li class="layui-col-md3">
-                            <span class="layui-col-md3 mt25"><img src="../../static/images/img1.png"/></span>
+                            <span class="layui-col-md3 mt25"><img src="/static/images/img1.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">新增客户</p>
                                 <p class="col4 mt10">近30天： <span th:text="${clientCountByDate}"></span>位 </p>
@@ -41,7 +41,7 @@
                             </div>
                         </li>
                         <li class="layui-col-md3 mr40 ml40">
-                            <span class="layui-col-md3 mt25"><img src="../../static/images/img2.png"/></span>
+                            <span class="layui-col-md3 mt25"><img src="/static/images/img2.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">客户充值</p>
                                 <p class="col4 mt10">近7天充值： <span th:text="${clientRechargeByWeek}"></span>元 </p>
@@ -50,12 +50,12 @@
                             </div>
                         </li>
                         <li class="layui-col-md3">
-                            <span class="layui-col-md3 mt25"><img src="../../static/images/img3.png"/></span>
+                            <span class="layui-col-md3 mt25"><img src="/static/images/img3.png"/></span>
                             <div class="layui-col-md9 fz-14">
                                 <p class="fz-16 mt10">平台收入</p>
-                                <p class="col4 mt10">今日收入： 6381元/8000次</p>
-                                <p class="mt10 col2">昨日收入： 6381元/8000次</p>
-                                <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                <p class="col4 mt10">今日收入： <span th:text="${todayFee}+'元'"></span></p>
+                                <p class="mt10 col2">昨日收入： <span th:text="${yesterdayFee}+'元'"></span></p>
+                                <p class="mt10 tr fz-12"><a href="/stats/revenue.html">查看明细</a></p>
                             </div>
                         </li>
                     </ul>
@@ -109,6 +109,7 @@
                     </div>
                 </dd>
             </dl>
+            <!--
             <dl class="public-data">
                 <dt>产品分析</dt>
                 <dd class="layui-row">
@@ -292,6 +293,7 @@
                     <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
                 </dd>
             </dl>
+            -->
         </div>
     </div>
 

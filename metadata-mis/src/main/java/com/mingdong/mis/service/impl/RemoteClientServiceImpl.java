@@ -1499,6 +1499,31 @@ public class RemoteClientServiceImpl implements RemoteClientService
         return listDTO;
     }
 
+    @Override
+    public ListDTO<ApiReqInfoDTO> getRevenueList(Date fromDate, Date toDate, Page page)
+    {
+        ListDTO<ApiReqInfoDTO> listDTO = new ListDTO<>();
+        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate);
+        listDTO.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
+        int total = apiReqInfoMapper.getRevenueListCount(fromDate, toDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getRevenueList(fromDate, toDate);
+            List<ApiReqInfoDTO> list = new ArrayList<>();
+            for(ApiReqInfo o : dataList)
+            {
+                ApiReqInfoDTO r = new ApiReqInfoDTO();
+                EntityUtils.copyProperties(o, r);
+                list.add(r);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
     /**
      * 更新企业的子账号个数
      */

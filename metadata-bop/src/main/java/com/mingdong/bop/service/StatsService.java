@@ -60,9 +60,33 @@ public interface StatsService
      */
     void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, RestListResp res);
 
+    /**
+     * 产品请求数据导出
+     */
     XSSFWorkbook createRequestListXlsx(ScopeType scopeTypeEnum, Page page, String name, Long productId);
 
+    /**
+     * 产品请求数据json
+     */
     JSONArray getRequestListJson(ScopeType scopeTypeEnum, String name, Long productId);
 
+    /**
+     * 产品请求数据index页面的数据
+     */
     RestResp getRequestIndexStats();
+
+    /**
+     * 营收数据
+     */
+    void getRevenueList(ScopeType scopeTypeEnum, Page page, RestListResp res);
+
+    /**
+     * 营收数据导出
+     */
+    XSSFWorkbook createRevenueListXlsx(ScopeType scopeTypeEnum, Page page);
+
+    RestResp getRevenueIndexStats();
+
+    JSONArray getRevenueListJson(ScopeType scopeTypeEnum);
+
 }

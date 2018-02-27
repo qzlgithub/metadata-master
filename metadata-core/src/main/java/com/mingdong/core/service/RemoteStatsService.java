@@ -19,17 +19,17 @@ public interface RemoteStatsService
     /**
      * 根据日期获取客户数量
      */
-    Integer getClientCountByDate(Date monthDay, Date currentDay);
+    Integer getClientCountByDate(Date fromDate, Date toDate);
 
     /**
      * 根据日期获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
+    ClientInfoListDTO getClientInfoListByDate(Date fromDate, Date toDate, Page page);
 
     /**
      * 根据日期获取充值总额
      */
-    BigDecimal getClientRechargeStatsByDate(Date nowDay, Date currentDay);
+    BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate);
 
     /**
      * 获取充值总额
@@ -39,12 +39,14 @@ public interface RemoteStatsService
     /**
      * 根据日期获取充值信息列表
      */
-    ProductRechargeInfoListDTO getProductRechargeInfoListBy(Date date, Date currentDay, Page page);
+    ProductRechargeInfoListDTO getProductRechargeInfoListBy(Date fromDate, Date toDate, Page page);
 
     /**
      * 根据日期获取客户充值次数
      */
-    Integer getClientRechargeCountByDate(Date date, Date currentDay);
+    Integer getClientRechargeCountByDate(Date fromDate, Date toDate);
 
-    ListDTO<StatsDateInfoDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId);
+    ListDTO<StatsDateInfoDTO> getRequestListStats(Date fromDate, Date toDate, String name, Long productId);
+
+    ListDTO<StatsDateInfoDTO> getRevenueListStats(Date fromDate, Date toDate);
 }

@@ -206,4 +206,6 @@ public interface RemoteClientService
     String getClientCorpName(Long clientId);
 
     ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
+
+    ListDTO<ApiReqInfoDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 }

@@ -41,4 +41,8 @@ public interface ApiReqInfoMapper
 
     List<ApiReqInfo> getListByClient(@Param("clientId") Long clientId, @Param("userId") Long userId,
             @Param("productId") Long productId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    int getRevenueListCount(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    List<ApiReqInfo> getRevenueList(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

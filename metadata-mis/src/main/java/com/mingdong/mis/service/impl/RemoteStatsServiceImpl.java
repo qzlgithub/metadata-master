@@ -150,6 +150,24 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         return listDTO;
     }
 
+    @Override
+    public ListDTO<StatsDateInfoDTO> getRevenueListStats(Date fromDate, Date toDate)
+    {
+        List<StatsDateInfo> list = statsClientMapper.getRevenueListStats(fromDate, toDate);
+        ListDTO<StatsDateInfoDTO> listDTO = new ListDTO<>();
+        List<StatsDateInfoDTO> listData = new ArrayList<>();
+        StatsDateInfoDTO statsDateDTO;
+        for(StatsDateInfo item : list)
+        {
+            statsDateDTO = new StatsDateInfoDTO();
+            statsDateDTO.setDate(item.getDate());
+            statsDateDTO.setFee(item.getFee());
+            listData.add(statsDateDTO);
+        }
+        listDTO.setList(listData);
+        return listDTO;
+    }
+
     private void findClientInfoDTO(List<ClientInfo> clientInfoList, List<ClientInfoDTO> dataList)
     {
         ClientInfoDTO clientInfoDTO;

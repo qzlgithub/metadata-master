@@ -37,7 +37,7 @@ function login() {
                 layer.msg(res.message);
             }
             else {
-                var da = data.data;
+                var da = res.data;
                 sessionStorage.setItem("user_name", da.name);
                 window.location.href = "/setting/user.html";
             }
