@@ -79,7 +79,7 @@
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/product-list.js"></script>
-<script type="text/html" id="operation-bar">
+<script type="text/html" id="operationBar">
     <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/product/edit.html?id={{d.id}}">编辑</a>
     {{# if(d.status === 1) { }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
@@ -87,14 +87,14 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
     {{# } }}
 </script>
-<script type="text/html" id="custom-tpl">
+<script type="text/html" id="customTpl">
     {{# if(d.custom === 1){ }}
     <div>定制</div>
     {{# } else { }}
     <div>普通</div>
     {{# } }}
 </script>
-<script type="text/html" id="status-tpl">
+<script type="text/html" id="statusTpl">
     {{# if(d.status === 1){ }}
     <div>正常</div>
     {{# } else { }}

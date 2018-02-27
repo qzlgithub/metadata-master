@@ -22,11 +22,11 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
             {field: 'code', title: '产品代码'},
             {field: 'name', title: '名称'},
             {field: 'type', title: '类别'},
-            {title: '种类', templet: '#custom-tpl'},
+            {title: '种类', templet: '#customTpl'},
             {field: 'costAmt', title: '成本价'},
-            {title: '状态', templet: "#status-tpl"},
+            {title: '状态', templet: "#statusTpl"},
             {field: 'remark', title: '备注说明'},
-            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right'}
+            {title: '操作', align: 'center', toolbar: '#operationBar', fixed: 'right'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'

@@ -35,7 +35,7 @@ layui.config({
             shadeClose: true
         });
     });
-    table.on('tool(main-table)', function(obj) {
+    table.on('tool(dataTable)', function(obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if(layEvent === 'edit') {

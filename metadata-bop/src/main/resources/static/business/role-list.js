@@ -16,7 +16,7 @@ layui.config({
         cols: [[
             {field: 'name', title: '分组名称', width: '15%'},
             {field: 'privilege', title: '权限类型'},
-            {title: '操作', align: 'center', toolbar: '#operation-bar', fixed: 'right', width: '15%'}
+            {title: '操作', align: 'center', toolbar: '#operationBar', fixed: 'right', width: '15%'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'
