@@ -2,7 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -16,24 +16,24 @@ public interface ClientService
     /**
      * 判断username是否已存在
      */
-    void checkIfUsernameExist(String username, BLResp resp);
+    void checkIfUsernameExist(String username, RestResp resp);
 
     /**
      * 根据客户的公司全称OR简称来获取客户信息列表
      */
-    void getSimilarCorp(String name, Long clientId, BLResp resp);
+    void getSimilarCorp(String name, Long clientId, RestResp resp);
 
     /**
      * 根据条件获取客户信息列表
      */
     void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res);
 
-    void getClientInfoForEdit(Long clientId, BLResp resp);
+    void getClientInfoForEdit(Long clientId, RestResp resp);
 
     /**
      * 更改客户状态同时修改帐号并新增客户帐号操作记录
      */
-    void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp);
+    void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, RestResp resp);
 
     /**
      * 根据客户ids软删客户
@@ -43,7 +43,7 @@ public interface ClientService
     /**
      * 根据客户ids重置主帐号的密码
      */
-    void resetPassword(List<Long> idList, BLResp resp);
+    void resetPassword(List<Long> idList, RestResp resp);
 
     /**
      * 根据客户id获取帐号列表
@@ -54,50 +54,50 @@ public interface ClientService
      * 客户开通产品包时间形式，新增充值记录和客户产品记录
      */
     void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp);
+            BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp);
 
     /**
      * 客户开通产品计次形式，新增充值记录和客户产品记录
      */
     void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp);
+            BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp);
 
     /**
      * 根据客户产品id获取最后一次充值记录
      */
-    void getProductRenewInfo(Long clientProductId, BLResp resp);
+    void getProductRenewInfo(Long clientProductId, RestResp resp);
 
     /**
      * 根据客户产品id续费按包时间形式，新增充值记录，更新客户产品信息
      */
     void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp);
+            BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp);
 
     /**
      * 根据客户产品id续费按计次形式，新增充值记录，更新客户产品信息
      */
     void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp);
+            BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp);
 
     /**
      * 根据客户id获取客户帐号操作记录
      */
-    void getClientOperateLog(Long clientId, Page page, BLResp resp);
+    void getClientOperateLog(Long clientId, Page page, RestResp resp);
 
     /**
      * 判断合同号是否已存在
      */
-    void checkIfContractExist(String contractNo, BLResp resp);
+    void checkIfContractExist(String contractNo, RestResp resp);
 
-    void addClient(NewClientVO vo, BLResp resp);
+    void addClient(NewClientVO vo, RestResp resp);
 
-    void editClient(NewClientVO vo, BLResp resp);
+    void editClient(NewClientVO vo, RestResp resp);
 
-    void findClientDetail(Long clientId, BLResp resp);
+    void findClientDetail(Long clientId, RestResp resp);
 
-    void selectCustomProduct(Long clientId, List<Long> productIds, BLResp resp);
+    void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp);
 
-    void removeCustomClientProduct(Long clientProductId, BLResp resp);
+    void removeCustomClientProduct(Long clientProductId, RestResp resp);
 
     Map<String, Object> getClientAccountDict(Long clientId);
 

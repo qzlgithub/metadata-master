@@ -21,7 +21,7 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
@@ -87,14 +87,14 @@ public class ClientServiceImpl implements ClientService
     private RemoteSystemService remoteSystemService;
 
     @Override
-    public void checkIfUsernameExist(String username, BLResp resp)
+    public void checkIfUsernameExist(String username, RestResp resp)
     {
         UserDTO user = remoteClientService.findByUsername(username);
         resp.addData(Field.EXIST, user == null ? 0 : 1);
     }
 
     @Override
-    public void getSimilarCorp(String name, Long clientId, BLResp resp)
+    public void getSimilarCorp(String name, Long clientId, RestResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
         ClientInfoListDTO similarCorpByName = remoteClientService.getSimilarCorpByName(name, clientId);
@@ -144,7 +144,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientInfoForEdit(Long clientId, BLResp resp)
+    public void getClientInfoForEdit(Long clientId, RestResp resp)
     {
         ClientDetailDTO dto = remoteClientService.getClientInfoForEdit(clientId);
         if(RestResult.SUCCESS != dto.getResult())
@@ -200,7 +200,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, BLResp resp)
+    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, RestResp resp)
     {
         UpdateClientUserStatusDTO dto = new UpdateClientUserStatusDTO();
         dto.setClientIdList(clientIdList);
@@ -219,7 +219,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void resetPassword(List<Long> idList, BLResp resp)
+    public void resetPassword(List<Long> idList, RestResp resp)
     {
         ClientListDTO clientListByIds = remoteClientService.getClientListByIds(idList);
         List<ClientDTO> clientList = clientListByIds.getDataList();
@@ -258,7 +258,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
-            Integer rechargeType, BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp)
+            Integer rechargeType, BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
     {
         ProductOpenDTO dto = new ProductOpenDTO();
         dto.setClientId(clientId);
@@ -277,7 +277,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
-            Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
+            Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
     {
         ProductOpenDTO dto = new ProductOpenDTO();
         dto.setClientId(clientId);
@@ -294,7 +294,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getProductRenewInfo(Long clientProductId, BLResp resp)
+    public void getProductRenewInfo(Long clientProductId, RestResp resp)
     {
         ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
         if(cp == null)
@@ -326,7 +326,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, Date startDate, Date endDate, String remark, BLResp resp)
+            BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
     {
         OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
         openClientProductDTO.setYear(true);
@@ -364,7 +364,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, BigDecimal unitAmt, String remark, BLResp resp)
+            BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
     {
         OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
         openClientProductDTO.setYear(false);
@@ -400,7 +400,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientOperateLog(Long clientId, Page page, BLResp resp)
+    public void getClientOperateLog(Long clientId, Page page, RestResp resp)
     {
         ClientDTO client = remoteClientService.getClientByClientId(clientId);
         if(client == null)
@@ -432,14 +432,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void checkIfContractExist(String contractNo, BLResp resp)
+    public void checkIfContractExist(String contractNo, RestResp resp)
     {
         ProductRechargeDTO pr = remoteProductService.getProductRechargeByContractNo(contractNo);
         resp.addData(Field.EXIST, pr == null ? 0 : 1);
     }
 
     @Override
-    public void addClient(NewClientVO vo, BLResp resp)
+    public void addClient(NewClientVO vo, RestResp resp)
     {
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
@@ -486,7 +486,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void editClient(NewClientVO vo, BLResp resp)
+    public void editClient(NewClientVO vo, RestResp resp)
     {
         if(vo.getClientId() == null || StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(
                 vo.getShortName()) || StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
@@ -529,7 +529,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void findClientDetail(Long clientId, BLResp resp)
+    public void findClientDetail(Long clientId, RestResp resp)
     {
         ClientDetailDTO dto = remoteClientService.getClientDetail(clientId);
         if(RestResult.SUCCESS != dto.getResult())
@@ -632,14 +632,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void selectCustomProduct(Long clientId, List<Long> productIds, BLResp resp)
+    public void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp)
     {
         ResultDTO resultDTO = remoteClientService.selectCustomProduct(clientId, productIds);
         resp.result(resultDTO.getResult());
     }
 
     @Override
-    public void removeCustomClientProduct(Long clientProductId, BLResp resp)
+    public void removeCustomClientProduct(Long clientProductId, RestResp resp)
     {
         ResultDTO resultDTO = remoteClientService.removeCustomClientProduct(clientProductId);
         resp.result(resultDTO.getResult());

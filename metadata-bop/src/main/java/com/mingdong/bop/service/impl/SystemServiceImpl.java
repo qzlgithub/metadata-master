@@ -8,7 +8,7 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
@@ -78,7 +78,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void addIndustryType(Long id, String code, String name, BLResp resp)
+    public void addIndustryType(Long id, String code, String name, RestResp resp)
     {
         Date current = new Date();
         DictIndustryDTO industry = new DictIndustryDTO();
@@ -94,7 +94,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void editIndustryInfo(Long id, String code, String name, BLResp resp)
+    public void editIndustryInfo(Long id, String code, String name, RestResp resp)
     {
         DictIndustryDTO industry = new DictIndustryDTO();
         industry.setId(id);
@@ -112,7 +112,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void editRechargeType(Integer rechargeTypeId, String name, String remark, BLResp resp)
+    public void editRechargeType(Integer rechargeTypeId, String name, String remark, RestResp resp)
     {
         RechargeTypeDTO rt = new RechargeTypeDTO();
         rt.setId(rechargeTypeId);
@@ -123,7 +123,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void enableRechargeType(Integer rechargeTypeId, Integer enabled, BLResp resp)
+    public void enableRechargeType(Integer rechargeTypeId, Integer enabled, RestResp resp)
     {
         RechargeTypeDTO rt = new RechargeTypeDTO();
         rt.setId(rechargeTypeId);
@@ -223,7 +223,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void editPrivilegeInfo(Long privilegeId, String name, BLResp resp)
+    public void editPrivilegeInfo(Long privilegeId, String name, RestResp resp)
     {
         PrivilegeDTO privilege = new PrivilegeDTO();
         privilege.setId(privilegeId);
@@ -270,7 +270,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void addRechargeType(String name, String remark, BLResp resp)
+    public void addRechargeType(String name, String remark, RestResp resp)
     {
         ResultDTO res = remoteSystemService.addRechargeType(name, remark);
         resp.result(res.getResult());
@@ -354,21 +354,21 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, BLResp resp)
+    public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, RestResp resp)
     {
         ResultDTO resultDTO = remoteSystemService.addOrUpdateSetting(sysConfigDTOList);
         resp.result(resultDTO.getResult());
     }
 
     @Override
-    public void changeIndustryStatus(Long industryTypeId, Integer enabled, BLResp resp)
+    public void changeIndustryStatus(Long industryTypeId, Integer enabled, RestResp resp)
     {
         ResultDTO resultDTO = remoteSystemService.changeIndustryStatus(industryTypeId, enabled);
         resp.result(resultDTO.getResult());
     }
 
     @Override
-    public void setModuleStatus(List<Long> moduleIdList, Integer status, BLResp resp)
+    public void setModuleStatus(List<Long> moduleIdList, Integer status, RestResp resp)
     {
         remoteSystemService.setModuleStatus(status, moduleIdList);
     }

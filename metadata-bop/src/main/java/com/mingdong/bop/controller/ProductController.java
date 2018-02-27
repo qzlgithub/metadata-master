@@ -9,7 +9,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,9 +57,9 @@ public class ProductController
      */
     @LoginRequired
     @PostMapping(value = "/product")
-    public BLResp editClient(@RequestBody ProductVO vo)
+    public RestResp editClient(@RequestBody ProductVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         if(vo.getId() == null || StringUtils.isNullBlank(vo.getName()) || vo.getCostAmt() == null ||
                 vo.getEnabled() == null)
         {
@@ -75,9 +75,9 @@ public class ProductController
      */
     @LoginRequired
     @PostMapping(value = "/product/status")
-    public BLResp changeProductStatus(@RequestBody JSONObject jsonReq)
+    public RestResp changeProductStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long productId = jsonReq.getLong(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(productId == null || productId <= 0 || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(

@@ -6,7 +6,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.component.RedisDao;
@@ -70,7 +70,7 @@ public class PageController
     public ModelAndView getHomeData()
     {
         ModelAndView view = new ModelAndView("home");
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getHomeData(RequestThread.getClientId(), RequestThread.getUserId(), resp);
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
@@ -93,7 +93,7 @@ public class PageController
     public ModelAndView productDetail(@RequestParam(value = Field.ID) Long productId)
     {
         ModelAndView view = new ModelAndView("/product/detail");
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
         view.addAllObjects(resp.getDataMap());
         view.addObject(Field.USERNAME, RequestThread.getUsername());
@@ -115,7 +115,7 @@ public class PageController
     public ModelAndView productMine()
     {
         ModelAndView view = new ModelAndView("/product/mine");
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         productService.getClientProductDetailList(RequestThread.getClientId(), resp);
         view.addAllObjects(resp.getDataMap());
         view.addAllObjects(RequestThread.getPageData());
@@ -173,7 +173,7 @@ public class PageController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         ModelAndView view = new ModelAndView("/product/recharge");
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
                 new Page(pageNum, pageSize), resp);
         view.addAllObjects(resp.getDataMap());

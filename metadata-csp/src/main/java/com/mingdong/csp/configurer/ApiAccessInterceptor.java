@@ -2,7 +2,7 @@ package com.mingdong.csp.configurer;
 
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
@@ -45,7 +45,7 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
                 UserSession us = redisDao.getUserSession(sessionId);
                 if(us == null)
                 {
-                    String resp = BLResp.getErrResp(RestResult.ACCESS_LIMITED);
+                    String resp = RestResp.getErrResp(RestResult.ACCESS_LIMITED);
                     response.getOutputStream().write(resp.getBytes("UTF-8"));
                     return false;
                 }

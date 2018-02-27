@@ -1,6 +1,6 @@
 package com.mingdong.csp.controller;
 
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.constant.Field;
@@ -15,9 +15,9 @@ import java.io.IOException;
 public class CommonController
 {
     @GetMapping(value = "captcha")
-    public BLResp getImageCaptcha(HttpServletRequest request) throws IOException
+    public RestResp getImageCaptcha(HttpServletRequest request) throws IOException
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         HttpSession session = request.getSession();
         ImageCode imageCode = CaptchaUtils.buildImageCode();
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());

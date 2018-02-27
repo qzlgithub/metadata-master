@@ -1,7 +1,7 @@
 package com.mingdong.csp.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -14,7 +14,7 @@ public interface ProductService
     /**
      * 获取客户产品充值记录
      */
-    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, BLResp resp);
+    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestResp resp);
 
     /**
      * 导出客户产品充值记录
@@ -24,7 +24,7 @@ public interface ProductService
     /**
      * 客户请求记录
      */
-    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, BLResp resp);
+    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestResp resp);
 
     /**
      * 导出客户请求记录
@@ -38,7 +38,7 @@ public interface ProductService
      * @param productId
      * @param resp
      */
-    void getClientProductDetail(Long clientId, Long productId, BLResp resp);
+    void getClientProductDetail(Long clientId, Long productId, RestResp resp);
 
     /**
      * 根据客户id获取客户产品列表
@@ -54,7 +54,7 @@ public interface ProductService
      * @param clientId
      * @param resp
      */
-    void getClientProductDetailList(Long clientId, BLResp resp);
+    void getClientProductDetailList(Long clientId, RestResp resp);
 
     /**
      * 根据状态获取产品类型列表
@@ -73,7 +73,7 @@ public interface ProductService
      * @param page
      * @param resp
      */
-    void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp);
+    void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, RestResp resp);
 
     void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page, ListRes res);
 }

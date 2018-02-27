@@ -8,7 +8,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -45,7 +45,7 @@ public class ClientServiceImpl implements ClientService
     private RemoteProductService productApi;
 
     @Override
-    public void userLogin(String username, String password, String sessionId, BLResp resp)
+    public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
         UserDTO dto = clientApi.userLogin(username, password);
         if(RestResult.SUCCESS != dto.getResultDTO().getResult())
@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changePassword(Long userId, String oldPwd, String newPwd, BLResp resp)
+    public void changePassword(Long userId, String oldPwd, String newPwd, RestResp resp)
     {
         ResultDTO dto = clientApi.changeUserPassword(userId, oldPwd, newPwd);
         resp.result(dto.getResult());
@@ -76,7 +76,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
-            BLResp resp)
+            RestResp resp)
     {
         ResultDTO dto = clientApi.addAccount(primaryAccountId, username, password, name, phone);
         resp.result(dto.getResult());
@@ -106,7 +106,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeStatus(Long primaryAccountId, Long clientUserId, BLResp resp)
+    public void changeStatus(Long primaryAccountId, Long clientUserId, RestResp resp)
     {
         UserDTO userDTO = clientApi.changeStatus(primaryAccountId, clientUserId);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
@@ -123,7 +123,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
-            String name, String phone, Integer enabled, BLResp resp)
+            String name, String phone, Integer enabled, RestResp resp)
     {
         UserDTO userDTO = clientApi.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone,
                 enabled);
@@ -140,7 +140,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getHomeData(Long clientId, Long clientUserId, BLResp resp)
+    public void getHomeData(Long clientId, Long clientUserId, RestResp resp)
     {
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
@@ -213,14 +213,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void setSubUserDeleted(Long primaryUserId, Long subUserId, BLResp resp)
+    public void setSubUserDeleted(Long primaryUserId, Long subUserId, RestResp resp)
     {
         ResultDTO dto = clientApi.setSubUserDeleted(primaryUserId, subUserId);
         resp.result(dto.getResult());
     }
 
     @Override
-    public void getAccountByUserId(Long userId, BLResp resp)
+    public void getAccountByUserId(Long userId, RestResp resp)
     {
         UserDTO userDTO = clientApi.getAccountByUserId(userId);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
@@ -237,7 +237,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getUserCredential(Long userId, String password, Long productId, BLResp resp)
+    public void getUserCredential(Long userId, String password, Long productId, RestResp resp)
     {
         CredentialDTO dto = clientApi.getUserCredential(userId, password, productId);
         if(dto.getResultDTO().getResult() != RestResult.SUCCESS)
@@ -251,7 +251,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, BLResp resp)
+    public void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, RestResp resp)
     {
         ResultDTO dto = clientApi.saveUserCredential(userId, productId, appKey, reqHost);
         resp.result(dto.getResult());

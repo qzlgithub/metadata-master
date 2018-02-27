@@ -10,7 +10,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            Integer custom, String remark, String content, BLResp resp)
+            Integer custom, String remark, String content, RestResp resp)
     {
         NewProductDTO newProductDTO = new NewProductDTO();
         Date current = new Date();
@@ -89,7 +89,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void changeProductStatus(Long productId, Integer enabled, BLResp resp)
+    public void changeProductStatus(Long productId, Integer enabled, RestResp resp)
     {
         ResultDTO resultDTO = remoteProductService.changeProductStatus(productId, enabled);
         resp.result(resultDTO.getResult());

@@ -14,7 +14,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.util.BusinessUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,7 @@ public class ClientController
     @GetMapping(value = "/client/check")
     public Map<String, Object> getList(@RequestParam(value = Field.USERNAME) String username)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.checkIfUsernameExist(username, resp);
         return resp.getDataMap();
     }
@@ -53,7 +53,7 @@ public class ClientController
     @GetMapping(value = "/client/checkContract")
     public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.checkIfContractExist(contractNo, resp);
         return resp.getDataMap();
     }
@@ -131,27 +131,27 @@ public class ClientController
 
     @LoginRequired
     @PutMapping(value = "/client/addition")
-    public BLResp addNewClient(@RequestBody NewClientVO vo)
+    public RestResp addNewClient(@RequestBody NewClientVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.addClient(vo, resp);
         return resp;
     }
 
     @LoginRequired
     @PostMapping(value = "/client/modification")
-    public BLResp editClient(@RequestBody NewClientVO vo)
+    public RestResp editClient(@RequestBody NewClientVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.editClient(vo, resp);
         return resp;
     }
 
     @LoginRequired
     @PostMapping(value = "/client/status")
-    private BLResp changeClientStatus(@RequestBody JSONObject jsonReq)
+    private RestResp changeClientStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
         List<Long> idList = idArr.toJavaList(Long.class);
         Integer status = jsonReq.getInteger(Field.STATUS);
@@ -167,9 +167,9 @@ public class ClientController
 
     @LoginRequired
     @DeleteMapping(value = "/client/deletion")
-    private BLResp deleteClient(@RequestBody JSONObject jsonReq)
+    private RestResp deleteClient(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
         List<Long> idList = idArr.toJavaList(Long.class);
         if(CollectionUtils.isEmpty(idList))
@@ -185,16 +185,16 @@ public class ClientController
     private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getSimilarCorp(name, clientId, resp);
         return resp.getDataMap();
     }
 
     @LoginRequired
     @PostMapping(value = "/client/reset")
-    private BLResp resetPassword(@RequestBody JSONObject jsonReq)
+    private RestResp resetPassword(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         JSONArray idArr = jsonReq.getJSONArray(Field.ID);
         List<Long> idList = idArr.toJavaList(Long.class);
         if(CollectionUtils.isEmpty(idList))
@@ -207,9 +207,9 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/product/open")
-    public BLResp openProductService(@RequestBody ProdRechargeVO vo)
+    public RestResp openProductService(@RequestBody ProdRechargeVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         if(vo.getClientId() == null || vo.getProductId() == null || vo.getBillPlan() == null ||
                 vo.getRechargeType() == null || StringUtils.isNullBlank(vo.getContractNo()) || vo.getAmount() == null)
         {
@@ -243,10 +243,10 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/product/select")
-    public BLResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public RestResp productSelect(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.IDS) String ids)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String[] split;
         List<Long> productIds = new ArrayList<>();
         if(!StringUtils.isNullBlank(ids))
@@ -263,18 +263,18 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/product/remove")
-    public BLResp productRemove(@RequestParam(value = Field.ID) Long id)
+    public RestResp productRemove(@RequestParam(value = Field.ID) Long id)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.removeCustomClientProduct(id, resp);
         return resp;
     }
 
     @LoginRequired
     @PostMapping(value = "/client/product/renew")
-    public BLResp renewProductService(@RequestBody ProdRechargeVO vo)
+    public RestResp renewProductService(@RequestBody ProdRechargeVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         if(vo.getClientProductId() == null || vo.getBillPlan() == null || vo.getRechargeType() == null ||
                 StringUtils.isNullBlank(vo.getContractNo()) || vo.getAmount() == null)
         {
@@ -310,18 +310,18 @@ public class ClientController
     @GetMapping(value = "/client/product/renewInfo")
     public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_PRODUCT_ID) Long clientProductId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getProductRenewInfo(clientProductId, resp);
         return resp.getDataMap();
     }
 
     @LoginRequired
     @GetMapping(value = "/client/operate/log")
-    public BLResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
+    public RestResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
     }

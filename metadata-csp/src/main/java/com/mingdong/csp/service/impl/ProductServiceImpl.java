@@ -9,7 +9,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
-            BLResp resp)
+            RestResp resp)
     {
         ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
                 fromDate, toDate, page);
@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
-            BLResp resp)
+            RestResp resp)
     {
         ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
                 toDate, page);
@@ -208,7 +208,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getClientProductDetail(Long clientId, Long productId, BLResp resp)
+    public void getClientProductDetail(Long clientId, Long productId, RestResp resp)
     {
         ProductDTO dto = productApi.getClientProductDetail(clientId, productId);
         if(dto.getResult() != RestResult.SUCCESS)
@@ -253,7 +253,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getClientProductDetailList(Long clientId, BLResp resp)
+    public void getClientProductDetailList(Long clientId, RestResp resp)
     {
         List<Map<String, Object>> remindList = new ArrayList<>();
         List<Map<String, Object>> trashList = new ArrayList<>();
@@ -340,7 +340,7 @@ public class ProductServiceImpl implements ProductService
     }*/
 
     @Override
-    public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, BLResp resp)
+    public void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, RestResp resp)
     {
         ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), isOpen,
                 selectedType, page);

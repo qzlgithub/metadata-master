@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -13,12 +13,12 @@ public interface StatsService
     /**
      * 获取数据统计index页面的数据
      */
-    BLResp getIndexStats();
+    RestResp getIndexStats();
 
     /**
      * 获取客户统计index页面的数据
      */
-    BLResp getClientIndexStats();
+    RestResp getClientIndexStats();
 
     /**
      * 获取客户列表
@@ -38,7 +38,7 @@ public interface StatsService
     /**
      * 获取充值统计index页面的数据
      */
-    BLResp getRechargeIndexStats();
+    RestResp getRechargeIndexStats();
 
     /**
      * 获取充值列表
@@ -64,5 +64,5 @@ public interface StatsService
 
     JSONArray getRequestListJson(ScopeType scopeTypeEnum, String name, Long productId);
 
-    BLResp getRequestIndexStats();
+    RestResp getRequestIndexStats();
 }

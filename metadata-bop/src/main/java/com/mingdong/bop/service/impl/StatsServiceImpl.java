@@ -15,7 +15,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
@@ -72,9 +72,9 @@ public class StatsServiceImpl implements StatsService
     private RemoteClientService remoteClientService;
 
     @Override
-    public BLResp getIndexStats()
+    public RestResp getIndexStats()
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Map<String, Object> objectMap = redisDao.getObject(INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -106,9 +106,9 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public BLResp getClientIndexStats()
+    public RestResp getClientIndexStats()
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Map<String, Object> objectMap = redisDao.getObject(CLIENT_INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -239,9 +239,9 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public BLResp getRechargeIndexStats()
+    public RestResp getRechargeIndexStats()
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Map<String, Object> objectMap = redisDao.getObject(RECHARGE_INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
                 {
@@ -567,14 +567,14 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public BLResp getRequestIndexStats()
+    public RestResp getRequestIndexStats()
     {
-        BLResp blResp = new BLResp();
-        getRequestQuery(blResp);
-        return blResp;
+        RestResp resp = new RestResp();
+        getRequestQuery(resp);
+        return resp;
     }
 
-    private void getRequestQuery(BLResp blResp)
+    private void getRequestQuery(RestResp resp)
     {
         Map<String, Object> objectMap = redisDao.getObject(REQUEST_INDEX_STATS_KEY, SECONDS,
                 new TypeReference<Map<String, Object>>()
@@ -649,7 +649,7 @@ public class StatsServiceImpl implements StatsService
                         return map;
                     }
                 });
-        blResp.addAllData(objectMap);
+        resp.addAllData(objectMap);
     }
 
     private void getProductRechargeInfoList(Page page, Date date, Date currentDay, ListRes res)

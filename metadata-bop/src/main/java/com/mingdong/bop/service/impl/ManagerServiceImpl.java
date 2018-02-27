@@ -13,7 +13,7 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
@@ -54,7 +54,7 @@ public class ManagerServiceImpl implements ManagerService
     private RemoteSystemService remoteSystemService;
 
     @Override
-    public void userLogin(String username, String password, String sessionId, BLResp resp)
+    public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
         // 1. 验证登陆信息正确性
         ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
@@ -110,7 +110,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp)
+    public void changePassword(Long managerId, String oldPwd, String newPwd, RestResp resp)
     {
         ResultDTO resultDTO = remoteManagerService.updateManagerPwd(managerId, newPwd, oldPwd);
         resp.result(resultDTO.getResult());
@@ -139,7 +139,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void addRole(String name, List<Long> privilege, BLResp resp)
+    public void addRole(String name, List<Long> privilege, RestResp resp)
     {
         NewRole newRole = new NewRole();
         RoleDTO role = new RoleDTO();
@@ -157,7 +157,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void editRole(Long roleId, String roleName, List<Long> privilege, BLResp resp)
+    public void editRole(Long roleId, String roleName, List<Long> privilege, RestResp resp)
     {
         NewRole newRole = new NewRole();
         RoleDTO roleUpd = new RoleDTO();
@@ -196,7 +196,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getManagerInfo(Long managerId, BLResp resp)
+    public void getManagerInfo(Long managerId, RestResp resp)
     {
         ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
@@ -236,7 +236,7 @@ public class ManagerServiceImpl implements ManagerService
 
     @Override
     public void addManager(String username, String password, String name, String phone, String qq, Long roleId,
-            Integer enabled, List<Long> privilege, BLResp resp)
+            Integer enabled, List<Long> privilege, RestResp resp)
     {
         NewManager newManager = new NewManager();
         ManagerDTO manager = new ManagerDTO();
@@ -260,7 +260,7 @@ public class ManagerServiceImpl implements ManagerService
 
     @Override
     public void editManager(Long managerId, Long roleId, String name, String phone, String qq, Integer enabled,
-            List<Long> privilege, BLResp resp)
+            List<Long> privilege, RestResp resp)
     {
         NewManager newManager = new NewManager();
         ManagerDTO manager = new ManagerDTO();
@@ -310,7 +310,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeStatus(Long roleId, BLResp resp)
+    public void changeStatus(Long roleId, RestResp resp)
     {
         RoleDTO role = remoteManagerService.getRoleById(roleId);
         if(role == null)
@@ -335,7 +335,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeManagerStatus(Long managerId, BLResp resp)
+    public void changeManagerStatus(Long managerId, RestResp resp)
     {
         ManagerDTO manager = remoteManagerService.getManagerById(managerId);
         if(manager == null)
@@ -359,7 +359,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void checkIfRoleNameExist(String name, BLResp resp)
+    public void checkIfRoleNameExist(String name, RestResp resp)
     {
         RoleDTO role = remoteManagerService.getRoleByName(name);
         resp.addData(Field.EXIST, role == null ? 0 : 1);

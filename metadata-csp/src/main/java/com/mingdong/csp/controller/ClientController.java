@@ -5,7 +5,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -30,9 +30,9 @@ public class ClientController
      * 用户登陆
      */
     @PostMapping(value = "client/user/login")
-    public BLResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
+    public RestResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         HttpSession session = request.getSession();
         // TODO 开发过程暂时注释掉
         /*String userCode = jsonReq.getString(Field.CODE);
@@ -55,12 +55,12 @@ public class ClientController
      * 用户注销
      */
     @PostMapping(value = "client/user/logout")
-    public BLResp userLogout(HttpServletRequest request)
+    public RestResp userLogout(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         clientService.userLogout(sessionId);
-        return new BLResp();
+        return new RestResp();
     }
 
     /**
@@ -68,9 +68,9 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "client/user/password")
-    public BLResp changePassword(@RequestBody JSONObject jsonReq)
+    public RestResp changePassword(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String oldPwd = jsonReq.getString(Field.ORG_PASSWORD);
         String newPwd = jsonReq.getString(Field.NEW_PASSWORD);
         if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
@@ -86,10 +86,10 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "client/user/credential")
-    public BLResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
+    public RestResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
             @RequestParam(value = Field.PASSWORD) String password)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getUserCredential(RequestThread.getUserId(), password, productId, resp);
         return resp;
     }
@@ -99,9 +99,9 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "client/user/credential")
-    public BLResp saveUserCredential(@RequestBody JSONObject jsonReq)
+    public RestResp saveUserCredential(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long productId = jsonReq.getLong(Field.PRODUCT_ID);
         String appKey = jsonReq.getString(Field.APP_KEY);
         String reqHost = jsonReq.getString(Field.REQ_HOST);
@@ -118,9 +118,9 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "client/account/addition")
-    public BLResp addAccount(@RequestBody JSONObject jsonReq)
+    public RestResp addAccount(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         String name = jsonReq.getString(Field.NAME);
@@ -151,9 +151,9 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "client/changeStatus")
-    public BLResp changeStatus(@RequestBody JSONObject jsonObject)
+    public RestResp changeStatus(@RequestBody JSONObject jsonObject)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
         clientService.changeStatus(RequestThread.getUserId(), clientUserId, resp);
         return resp;
@@ -161,9 +161,9 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "client/childAccountDetail")
-    public BLResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
+    public RestResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getAccountByUserId(clientUserId, resp);
         return resp;
     }
@@ -173,9 +173,9 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "client/editChildAccount")
-    public BLResp editChildAccount(@RequestBody JSONObject jsonReq)
+    public RestResp editChildAccount(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
@@ -197,9 +197,9 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "client/user/deletion")
-    public BLResp dropSubUser(@RequestBody JSONObject jsonReq)
+    public RestResp dropSubUser(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long clientUserId = jsonReq.getLong(Field.CLIENT_USER_ID);
         if(clientUserId == null)
         {

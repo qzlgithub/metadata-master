@@ -10,7 +10,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,9 +50,9 @@ public class SettingController
      */
     @LoginRequired
     @PutMapping(value = "/setting/rechargeType/addition")
-    public BLResp addRechargeType(@RequestBody JSONObject jsonReq)
+    public RestResp addRechargeType(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String name = jsonReq.getString(Field.NAME);
         if(StringUtils.isNullBlank(name))
         {
@@ -68,14 +68,14 @@ public class SettingController
      */
     @LoginRequired
     @DeleteMapping(value = "/setting/rechargeType/deletion")
-    public BLResp dropRechargeType(@RequestBody JSONObject jsonReq)
+    public RestResp dropRechargeType(@RequestBody JSONObject jsonReq)
     {
         Integer id = jsonReq.getInteger(Field.ID);
         if(id != null)
         {
             systemService.dropRechargeType(id);
         }
-        return BLResp.build();
+        return RestResp.build();
     }
 
     /**
@@ -83,9 +83,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/rechargeType")
-    public BLResp editRechargeType(@RequestBody JSONObject jsonReq)
+    public RestResp editRechargeType(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Integer id = jsonReq.getInteger(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         String remark = jsonReq.getString(Field.REMARK);
@@ -103,9 +103,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/rechargeType/status")
-    public BLResp enableRechargeType(@RequestBody JSONObject jsonReq)
+    public RestResp enableRechargeType(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Integer id = jsonReq.getInteger(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
@@ -134,9 +134,9 @@ public class SettingController
      */
     @LoginRequired
     @PutMapping(value = "/setting/industry/addition")
-    public BLResp addIndustryType(@RequestBody JSONObject jsonReq)
+    public RestResp addIndustryType(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long id = jsonReq.getLong(Field.ID);
         String code = jsonReq.getString(Field.CODE);
         String name = jsonReq.getString(Field.NAME);
@@ -153,9 +153,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/industry")
-    public BLResp editIndustryInfo(@RequestBody JSONObject jsonReq)
+    public RestResp editIndustryInfo(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long id = jsonReq.getLong(Field.ID);
         String code = jsonReq.getString(Field.CODE);
         String name = jsonReq.getString(Field.NAME);
@@ -172,9 +172,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/industry/status")
-    public BLResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
+    public RestResp changeIndustryStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long id = jsonReq.getLong(Field.ID);
         Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(id == null || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled)))
@@ -190,9 +190,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/menu")
-    public BLResp editColumnInfo(@RequestBody JSONObject jsonReq)
+    public RestResp editColumnInfo(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long privilegeId = jsonReq.getLong(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         if(privilegeId == null || StringUtils.isNullBlank(name))
@@ -212,9 +212,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/menu/status")
-    public BLResp setModuleStatus(@RequestBody JSONObject jsonReq)
+    public RestResp setModuleStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         JSONArray moduleArray = jsonReq.getJSONArray(Field.MODULE);
         List<Long> moduleIdList = moduleArray.toJavaList(Long.class);
         Integer status = jsonReq.getInteger(Field.STATUS);
@@ -232,9 +232,9 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/configuration")
-    public BLResp setGlobalSetting(@RequestBody JSONObject jsonReq)
+    public RestResp setGlobalSetting(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Integer subUserQty = jsonReq.getInteger(Field.SUB_USER_QTY);
         String serviceQQ = jsonReq.getString(Field.SERVICE_QQ);
         if(subUserQty == null || StringUtils.isNullBlank(serviceQQ))

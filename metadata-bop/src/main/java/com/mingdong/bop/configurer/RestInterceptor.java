@@ -7,7 +7,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +45,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter
                 ManagerSession ms = redisDao.getManagerSession(sessionId);
                 if(ms == null)
                 {
-                    String resp = BLResp.getErrResp(RestResult.ACCESS_LIMITED);
+                    String resp = RestResp.getErrResp(RestResult.ACCESS_LIMITED);
                     response.getOutputStream().write(resp.getBytes("UTF-8"));
                     return false;
                 }

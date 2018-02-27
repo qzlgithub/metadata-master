@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface ManagerService
     /**
      * 管理员登录，更新sessionId
      */
-    void userLogin(String username, String password, String sessionId, BLResp resp);
+    void userLogin(String username, String password, String sessionId, RestResp resp);
 
     /**
      * 管理员注销
@@ -22,7 +22,7 @@ public interface ManagerService
     /**
      * 管理员修改密码
      */
-    void changePassword(Long managerId, String oldPwd, String newPwd, BLResp resp);
+    void changePassword(Long managerId, String oldPwd, String newPwd, RestResp resp);
 
     /**
      * 获取角色列表
@@ -32,12 +32,12 @@ public interface ManagerService
     /**
      * 新增角色并赋权
      */
-    void addRole(String name, List<Long> privilege, BLResp resp);
+    void addRole(String name, List<Long> privilege, RestResp resp);
 
     /**
      * 修改角色并赋权
      */
-    void editRole(Long roleId, String roleName, List<Long> privilege, BLResp resp);
+    void editRole(Long roleId, String roleName, List<Long> privilege, RestResp resp);
 
     /**
      * 根据条件获取管理员列表
@@ -47,19 +47,19 @@ public interface ManagerService
     /**
      * 根据管理员Id获取管理员信息
      */
-    void getManagerInfo(Long managerId, BLResp resp);
+    void getManagerInfo(Long managerId, RestResp resp);
 
     /**
      * 新增管理员信息并赋权
      */
     void addManager(String username, String password, String name, String phone, String qq, Long roleId,
-            Integer enabled, List<Long> privilege, BLResp resp);
+            Integer enabled, List<Long> privilege, RestResp resp);
 
     /**
      * 修改管理员信息并赋权
      */
     void editManager(Long managerId, Long roleId, String name, String phone, String qq, Integer enabled,
-            List<Long> privilege, BLResp resp);
+            List<Long> privilege, RestResp resp);
 
     /**
      * 根据角色id获取角色信息
@@ -74,17 +74,17 @@ public interface ManagerService
     /**
      * 根据角色id更改角色状态
      */
-    void changeStatus(Long roleId, BLResp resp);
+    void changeStatus(Long roleId, RestResp resp);
 
     /**
      * 根据管理员id更改管理员状态
      */
-    void changeManagerStatus(Long managerId, BLResp resp);
+    void changeManagerStatus(Long managerId, RestResp resp);
 
     /**
      * 判断角色名称是否存在
      */
-    void checkIfRoleNameExist(String name, BLResp resp);
+    void checkIfRoleNameExist(String name, RestResp resp);
 
     /**
      * 根据enabled获取管理员信息列表

@@ -9,7 +9,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +64,7 @@ public class ClientPageController
     @RequestMapping(value = "/client/edit.html")
     public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
         view.addAllObjects(resp.getDataMap());
@@ -79,7 +79,7 @@ public class ClientPageController
     @RequestMapping(value = "/client/detail.html")
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("client/detail");
         view.addAllObjects(resp.getDataMap());

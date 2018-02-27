@@ -7,7 +7,7 @@ import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,9 +30,9 @@ public class UserController
      */
     @PostMapping(value = "/user/login")
     @ResponseBody
-    public BLResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
+    public RestResp addNewAccount(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
 
         HttpSession session = request.getSession();
         String sessionId = session.getId();
@@ -52,9 +52,9 @@ public class UserController
     @LoginRequired
     @PostMapping(value = "/user/password")
     @ResponseBody
-    public BLResp changePwd(@RequestBody JSONObject jsonReq)
+    public RestResp changePwd(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String oldPwd = jsonReq.getString(Field.OLD_PWD);
         String newPwd = jsonReq.getString(Field.NEW_PWD);
         if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))

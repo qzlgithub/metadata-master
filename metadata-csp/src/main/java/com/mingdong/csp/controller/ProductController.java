@@ -3,7 +3,7 @@ package com.mingdong.csp.controller;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
@@ -33,13 +33,13 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "product/recharge")
-    public BLResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+    public RestResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
@@ -75,13 +75,13 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "product/request/list")
-    public BLResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+    public RestResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate,

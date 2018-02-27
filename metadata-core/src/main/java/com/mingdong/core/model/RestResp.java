@@ -6,21 +6,21 @@ import com.mingdong.core.constant.RestResult;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BLResp
+public class RestResp
 {
     private String errCode;
     private String errMsg;
     private Map<String, Object> dataMap;
 
-    public static BLResp build()
+    public static RestResp build()
     {
-        BLResp resp = new BLResp();
+        RestResp resp = new RestResp();
         return resp.result(RestResult.SUCCESS);
     }
 
     public static String getErrResp(RestResult result)
     {
-        BLResp resp = new BLResp();
+        RestResp resp = new RestResp();
         resp.result(result);
         return JSON.toJSONString(resp);
     }
@@ -55,7 +55,7 @@ public class BLResp
         this.dataMap = dataMap;
     }
 
-    public BLResp result(RestResult result)
+    public RestResp result(RestResult result)
     {
         if(result == null)
         {

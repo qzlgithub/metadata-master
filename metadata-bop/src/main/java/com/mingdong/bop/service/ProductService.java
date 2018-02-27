@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 
 import java.math.BigDecimal;
@@ -19,12 +19,12 @@ public interface ProductService
      * 修改产品
      */
     void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            Integer custom, String remark, String content, BLResp resp);
+            Integer custom, String remark, String content, RestResp resp);
 
     /**
      * 更改产品信息
      */
-    void changeProductStatus(Long productId, Integer enabled, BLResp resp);
+    void changeProductStatus(Long productId, Integer enabled, RestResp resp);
 
     /**
      * 获取产品信息列表

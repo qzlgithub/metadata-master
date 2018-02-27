@@ -7,7 +7,7 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,7 +117,7 @@ public class SettingPageController
     @GetMapping(value = "/setting/user/edit.html")
     public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.ID) Long managerId)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         managerService.getManagerInfo(managerId, resp);
         ModelAndView view = new ModelAndView("user/edit");
         view.addAllObjects(resp.getDataMap());

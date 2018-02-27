@@ -12,7 +12,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.ListRes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,9 +45,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/role/addition")
-    public BLResp addRole(@RequestBody JSONObject jsonReq)
+    public RestResp addRole(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         String name = jsonReq.getString(Field.NAME);
         JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
         if(StringUtils.isNullBlank(name) || privilegeArray == null)
@@ -68,9 +68,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/role")
-    public BLResp editRole(@RequestBody JSONObject jsonReq)
+    public RestResp editRole(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long roleId = jsonReq.getLong(Field.ID);
         String name = jsonReq.getString(Field.NAME);
         JSONArray privilegeArray = jsonReq.getJSONArray(Field.PRIVILEGE);
@@ -92,9 +92,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/role/status")
-    public BLResp changeRoleStatus(@RequestBody JSONObject jsonReq)
+    public RestResp changeRoleStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long roleId = jsonReq.getLong(Field.ID);
         if(roleId == null)
         {
@@ -125,7 +125,7 @@ public class AccountController
     @GetMapping(value = "/account/role/verification")
     public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         managerService.checkIfRoleNameExist(name, resp);
         return resp.getDataMap();
     }
@@ -135,9 +135,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/addition")
-    public BLResp addNewManager(@RequestBody NewManagerVO vo)
+    public RestResp addNewManager(@RequestBody NewManagerVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         // 校验各个字段值
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()))
@@ -192,9 +192,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account")
-    public BLResp editManager(@RequestBody ManagerVO vo)
+    public RestResp editManager(@RequestBody ManagerVO vo)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         if(vo.getRoleId() == null || vo.getRoleId() <= 0)
         {
             return resp.result(RestResult.KEY_FIELD_MISSING);
@@ -217,9 +217,9 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/status")
-    public BLResp changeStatus(@RequestBody JSONObject jsonReq)
+    public RestResp changeStatus(@RequestBody JSONObject jsonReq)
     {
-        BLResp resp = BLResp.build();
+        RestResp resp = RestResp.build();
         Long managerId = jsonReq.getLong(Field.ID);
         if(managerId == null)
         {

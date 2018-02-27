@@ -6,7 +6,7 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.BLResp;
+import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +29,7 @@ public class StatsPageController
     {
         ModelAndView view = new ModelAndView("stats/index");
         view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getIndexStats();
+        RestResp resp = statsService.getIndexStats();
         view.addAllObjects(resp.getDataMap());
         return view;
     }
@@ -40,7 +40,7 @@ public class StatsPageController
     {
         ModelAndView view = new ModelAndView("stats/client");
         view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getClientIndexStats();
+        RestResp resp = statsService.getClientIndexStats();
         view.addAllObjects(resp.getDataMap());
         return view;
     }
@@ -62,7 +62,7 @@ public class StatsPageController
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getRequestIndexStats();
+        RestResp resp = statsService.getRequestIndexStats();
         view.addAllObjects(resp.getDataMap());
         return view;
     }
@@ -73,7 +73,7 @@ public class StatsPageController
     {
         ModelAndView view = new ModelAndView("stats/recharge");
         view.addAllObjects(RequestThread.getMap());
-        BLResp resp = statsService.getRechargeIndexStats();
+        RestResp resp = statsService.getRechargeIndexStats();
         view.addAllObjects(resp.getDataMap());
         return view;
     }
