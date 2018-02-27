@@ -19,7 +19,7 @@ public enum ModulePath
     STATS_CLIENT("/stats/client.html", ModuleName.STATS_CLIENT),
     STATS_RECHARGE("/stats/recharge.html", ModuleName.STATS_RECHARGE),
     STATS_REVENUE("/stats/revenue.html", ModuleName.STATS_REVENUE),
-    STATS_REQUEST("/stats/request.html", ModuleName.STATS_REQUEST),
+    STATS_CONSUMPTION("/stats/request.html", ModuleName.STATS_CONSUMPTION),
     // 产品
     SETTING_PRODUCT("/setting/product.html", ModuleName.SETTING_PRODUCT),
     SETTING_PRODUCT_EDIT("/setting/product/edit.html", ModuleName.SETTING_PRODUCT),
@@ -30,13 +30,13 @@ public enum ModulePath
     CLIENT_EDIT("/client/edit.html", ModuleName.CLIENT_INDEX),
     CLIENT_DETAIL("/client/detail.html", ModuleName.CLIENT_INDEX),
     CLIENT_RECHARGE("/client/recharge.html", ModuleName.CLIENT_INDEX),
-    CLIENT_REQUEST("/client/request.html", ModuleName.CLIENT_INDEX),
+    CLIENT_CONSUMPTION("/client/request.html", ModuleName.CLIENT_INDEX),
     // 财务
-    FINANCE_REQUEST("/finance/request.html", ModuleName.FINANCE_REQUEST),
+    FINANCE_CONSUMPTION("/finance/request.html", ModuleName.FINANCE_CONSUMPTION),
     FINANCE_RECHARGE("/finance/recharge.html", ModuleName.FINANCE_RECHARGE);
 
-    private String path;
-    private String module;
+    private final String path;
+    private final String module;
 
     ModulePath(String path, String module)
     {
