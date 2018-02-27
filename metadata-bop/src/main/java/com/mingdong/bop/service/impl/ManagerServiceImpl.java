@@ -21,11 +21,11 @@ import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
-import com.mingdong.core.model.dto.NewRole;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleDTO1;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
@@ -139,34 +139,23 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void addRole(String name, List<Long> privilege, RestResp resp)
+    public void addAccountRole(String name, List<Long> privilegeIdList, RestResp resp)
     {
-        NewRole newRole = new NewRole();
-        RoleDTO role = new RoleDTO();
-        Long roleId = IDUtils.getRoleId(param.getNodeId());
-        Date current = new Date();
-        role.setId(roleId);
-        role.setCreateTime(current);
-        role.setUpdateTime(current);
-        role.setName(name);
-        role.setEnabled(TrueOrFalse.TRUE);
-        newRole.setRoleDTO(role);
-        newRole.setPrivilege(privilege);
-        ResultDTO resultDTO = remoteManagerService.addRole(newRole);
+        RoleDTO1 roleDTO = new RoleDTO1();
+        roleDTO.setName(name);
+        roleDTO.setPrivilegeIdList(privilegeIdList);
+        ResultDTO resultDTO = remoteManagerService.addAccountRole(roleDTO);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void editRole(Long roleId, String roleName, List<Long> privilege, RestResp resp)
     {
-        NewRole newRole = new NewRole();
-        RoleDTO roleUpd = new RoleDTO();
-        roleUpd.setId(roleId);
-        roleUpd.setUpdateTime(new Date());
-        roleUpd.setName(roleName);
-        newRole.setRoleDTO(roleUpd);
-        newRole.setPrivilege(privilege);
-        ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
+        RoleDTO1 roleDTO = new RoleDTO1();
+        roleDTO.setId(roleId);
+        roleDTO.setName(roleName);
+        roleDTO.setPrivilegeIdList(privilege);
+        ResultDTO resultDTO = remoteManagerService.editAccountRole(roleDTO);
         resp.setError(resultDTO.getResult());
     }
 
@@ -279,20 +268,18 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public Map<String, Object> getRolePrivilegeDetail(Long roleId)
+    public Map<String, Object> getAccountRoleInfo(Long roleId)
     {
         Map<String, Object> map = new HashMap<>();
-        RoleDTO role = remoteManagerService.getRoleById(roleId);
+        RoleDTO1 roleDTO = remoteManagerService.getAccountRoleInfo(roleId);
         map.put(Field.ROLE_ID, roleId + "");
-        map.put(Field.ROLE_NAME, role != null ? role.getName() : "");
-        RolePrivilegeListDTO rolePrivilegeListByRoleId = remoteManagerService.getRolePrivilegeListByRoleId(roleId);
-        List<RolePrivilegeDTO> dataList = rolePrivilegeListByRoleId.getDataList();
-        List<String> list = new ArrayList<>();
-        for(RolePrivilegeDTO rp : dataList)
+        map.put(Field.ROLE_NAME, roleDTO.getName());
+        List<String> privilegeList = new ArrayList<>();
+        for(Long privilegeId : roleDTO.getPrivilegeIdList())
         {
-            list.add(rp.getPrivilegeId() + "");
+            privilegeList.add(privilegeId + "");
         }
-        map.put(Field.PRIVILEGE, list);
+        map.put(Field.PRIVILEGE_LIST, privilegeList);
         return map;
     }
 
@@ -343,8 +330,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void checkIfRoleNameExist(String name, RestResp resp)
     {
-        RoleDTO role = remoteManagerService.getRoleByName(name);
-        resp.addData(Field.EXIST, role == null ? 0 : 1);
+        resp.addData(Field.EXIST, remoteManagerService.isRoleNameExist(name));
     }
 
     @Override

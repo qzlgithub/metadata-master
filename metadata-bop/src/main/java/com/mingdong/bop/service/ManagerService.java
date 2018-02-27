@@ -32,7 +32,7 @@ public interface ManagerService
     /**
      * 新增角色并赋权
      */
-    void addRole(String name, List<Long> privilege, RestResp resp);
+    void addAccountRole(String name, List<Long> privilegeIdList, RestResp resp);
 
     /**
      * 修改角色并赋权
@@ -64,7 +64,7 @@ public interface ManagerService
     /**
      * 根据角色id获取角色信息
      */
-    Map<String, Object> getRolePrivilegeDetail(Long roleId);
+    Map<String, Object> getAccountRoleInfo(Long roleId);
 
     /**
      * 根据角色id获取赋权

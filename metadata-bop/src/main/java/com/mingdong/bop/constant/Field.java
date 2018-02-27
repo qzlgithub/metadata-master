@@ -148,4 +148,6 @@ public interface Field
     String YESTERDAY_FEE = "yesterdayFee";
     String MONTH_FEE = "monthFee";
     String ALL_FEE = "allFee";
+    String O = "o";
+    String PRIVILEGE_LIST = "privilegeList";
 }

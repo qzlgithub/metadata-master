@@ -5,9 +5,8 @@ import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
-import com.mingdong.core.model.dto.NewRole;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleDTO1;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 
@@ -34,19 +33,11 @@ public interface RemoteManagerService
     RoleListDTO getRoleList(Page page);
 
     /**
-     * 根据角色名称获取角色
+     * 检测角色名称是否已存在
+     *
+     * @return 1-存在，0-不存在
      */
-    RoleDTO getRoleByName(String name);
-
-    /**
-     * 根据角色id获取角色信息
-     */
-    RoleDTO getRoleById(Long roleId);
-
-    /**
-     * 根据角色信息，null值不修改
-     */
-    ResultDTO updateRoleSkipNull(NewRole newRole);
+    Integer isRoleNameExist(String name);
 
     /**
      * 根据条件获取管理员信息列表
@@ -69,20 +60,32 @@ public interface RemoteManagerService
     ResultDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd);
 
     /**
-     * 新增角色并赋权
-     */
-    ResultDTO addRole(NewRole newRole);
-
-    /**
      * 新增管理员并赋权
      */
     ResultDTO addManager(NewManager newManager);
 
     /**
-     * 更新用户角色状态
+     * 变更账户角色状态
      *
      * @param roleId 角色ID
      * @param status 状态：1-启用，2-禁用
      */
     ResultDTO changeRoleStatus(Long roleId, Integer status);
+
+    /**
+     * 编辑账户角色信息
+     */
+    ResultDTO editAccountRole(RoleDTO1 roleDTO);
+
+    /**
+     * 获取账户角色信息
+     *
+     * @param roleId 角色ID
+     */
+    RoleDTO1 getAccountRoleInfo(Long roleId);
+
+    /**
+     * 创建账户角色
+     */
+    ResultDTO addAccountRole(RoleDTO1 roleDTO);
 }

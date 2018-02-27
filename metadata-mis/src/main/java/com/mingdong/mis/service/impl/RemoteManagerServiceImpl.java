@@ -5,15 +5,16 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
-import com.mingdong.core.model.dto.NewRole;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.RoleDTO1;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
@@ -161,70 +162,10 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public RoleDTO getRoleByName(String name)
+    public Integer isRoleNameExist(String name)
     {
-        RoleDTO roleDTO = new RoleDTO();
         Role role = roleMapper.findByName(name);
-        if(role == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(role, roleDTO);
-        return roleDTO;
-    }
-
-    @Override
-    public RoleDTO getRoleById(Long roleId)
-    {
-        RoleDTO roleDTO = new RoleDTO();
-        Role role = roleMapper.findById(roleId);
-        if(role == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(role, roleDTO);
-        return roleDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO updateRoleSkipNull(NewRole newRole)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Role role = roleMapper.findById(newRole.getRoleDTO().getId());
-        if(role == null)
-        {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
-        }
-        role = roleMapper.findByName(newRole.getRoleDTO().getName());
-        if(role != null && !newRole.getRoleDTO().getId().equals(role.getId()))
-        {
-            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
-            return resultDTO;
-        }
-        if(newRole.getPrivilege() != null)
-        {
-            rolePrivilegeMapper.deleteByRole(newRole.getRoleDTO().getId());
-            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newRole.getPrivilege());
-            Date current = new Date();
-            List<RolePrivilege> toAddList = new ArrayList<>();
-            for(Long id : allPrivilegeIdList)
-            {
-                RolePrivilege rp = new RolePrivilege();
-                rp.setCreateTime(current);
-                rp.setUpdateTime(current);
-                rp.setRoleId(newRole.getRoleDTO().getId());
-                rp.setPrivilegeId(id);
-                toAddList.add(rp);
-            }
-            rolePrivilegeMapper.addList(toAddList);
-        }
-        role = new Role();
-        EntityUtils.copyProperties(newRole.getRoleDTO(), role);
-        roleMapper.updateSkipNull(role);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        return role != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override
@@ -342,40 +283,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO addRole(NewRole newRole)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        Role role = roleMapper.findByName(newRole.getRoleDTO().getName());
-        if(role != null)
-        {
-            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
-            return resultDTO;
-        }
-        if(newRole.getPrivilege() != null)
-        {
-            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newRole.getPrivilege());
-            Date current = new Date();
-            List<RolePrivilege> toAddList = new ArrayList<>();
-            for(Long id : allPrivilegeIdList)
-            {
-                RolePrivilege rp = new RolePrivilege();
-                rp.setCreateTime(current);
-                rp.setUpdateTime(current);
-                rp.setPrivilegeId(id);
-                rp.setRoleId(newRole.getRoleDTO().getId());
-                toAddList.add(rp);
-            }
-            rolePrivilegeMapper.addList(toAddList);
-        }
-        role = new Role();
-        EntityUtils.copyProperties(newRole.getRoleDTO(), role);
-        roleMapper.add(role);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
-    }
-
-    @Override
-    @Transactional
     public ResultDTO addManager(NewManager newManager)
     {
         ResultDTO resultDTO = new ResultDTO();
@@ -423,6 +330,113 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             obj.setUpdateTime(new Date());
             obj.setEnabled(status);
             roleMapper.updateSkipNull(obj);
+        }
+        return resultDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO editAccountRole(RoleDTO1 roleDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = roleMapper.findById(roleDTO.getId());
+        if(role == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        Role obj = roleMapper.findByName(roleDTO.getName());
+        if(obj != null && !roleDTO.getId().equals(obj.getId()))
+        {
+            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return resultDTO;
+        }
+        Date date = new Date();
+        // 清空角色的旧权限数据
+        rolePrivilegeMapper.deleteByRole(roleDTO.getId());
+        // 保存角色的新权限数据
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(roleDTO.getPrivilegeIdList());
+        List<RolePrivilege> toAddList = new ArrayList<>();
+        for(Long id : allPrivilegeIdList)
+        {
+            RolePrivilege rp = new RolePrivilege();
+            rp.setCreateTime(date);
+            rp.setUpdateTime(date);
+            rp.setRoleId(roleDTO.getId());
+            rp.setPrivilegeId(id);
+            toAddList.add(rp);
+        }
+        if(!CollectionUtils.isEmpty(toAddList))
+        {
+            rolePrivilegeMapper.addList(toAddList);
+        }
+        // 保存角色名称
+        if(!role.getName().equals(roleDTO.getName()))
+        {
+            obj = new Role();
+            obj.setId(roleDTO.getId());
+            obj.setUpdateTime(date);
+            obj.setName(roleDTO.getName());
+            roleMapper.updateSkipNull(obj);
+        }
+        return resultDTO;
+    }
+
+    @Override
+    public RoleDTO1 getAccountRoleInfo(Long roleId)
+    {
+        RoleDTO1 roleDTO = new RoleDTO1();
+        Role role = roleMapper.findById(roleId);
+        if(role == null)
+        {
+            return roleDTO;
+        }
+        roleDTO.setName(role.getName());
+        List<RolePrivilege> dataList = rolePrivilegeMapper.getByRole(roleId);
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Long> privilegeIdList = new ArrayList<>();
+            for(RolePrivilege o : dataList)
+            {
+                privilegeIdList.add(o.getPrivilegeId());
+            }
+            roleDTO.setPrivilegeIdList(privilegeIdList);
+        }
+        return roleDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO addAccountRole(RoleDTO1 roleDTO)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = roleMapper.findByName(roleDTO.getName());
+        if(role != null)
+        {
+            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return resultDTO;
+        }
+        Date date = new Date();
+        role = new Role();
+        role.setCreateTime(date);
+        role.setUpdateTime(date);
+        role.setName(roleDTO.getName());
+        role.setEnabled(TrueOrFalse.TRUE);
+        roleMapper.add(role);
+        if(!CollectionUtils.isEmpty(roleDTO.getPrivilegeIdList()))
+        {
+            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(roleDTO.getPrivilegeIdList());
+            List<RolePrivilege> toAddList = new ArrayList<>();
+            for(Long id : allPrivilegeIdList)
+            {
+                RolePrivilege rp = new RolePrivilege();
+                rp.setCreateTime(date);
+                rp.setUpdateTime(date);
+                rp.setRoleId(role.getId());
+                rp.setPrivilegeId(id);
+                toAddList.add(rp);
+            }
+            rolePrivilegeMapper.addList(toAddList);
         }
         return resultDTO;
     }

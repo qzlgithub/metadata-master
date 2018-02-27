@@ -62,9 +62,8 @@ function checkSubPrivAllChecked() {
 function saveRole() {
     var privilege = build_privilege();
     $.ajax({
-        type: "POST",
+        type: "PUT",
         url: "/account/role/addition",
-        dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
             "name": $("#name").val(),

@@ -9,7 +9,7 @@
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
     </resultMap>
 
-    <insert id="add" parameterType="Role">
+    <insert id="add" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
         insert into `role`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -39,19 +39,29 @@
     </update>
 
     <select id="getList" resultMap="BaseResultMap">
-        select `id`, `name`, `enabled` from `role` order by `enabled` desc, id asc
+        select
+            `id`, `name`, `enabled`
+        from `role`
+        order by `enabled` desc, id asc
     </select>
 
     <select id="countAll" resultType="Integer">
-        select count(*) from `role`
+        select count(*)
+        from `role`
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `enabled` from `role` where `id` = #{id}
+        select
+            `id`, `create_time`, `update_time`, `name`, `enabled`
+        from `role`
+        where `id` = #{id}
     </select>
 
     <select id="findByName" parameterType="String" resultMap="BaseResultMap">
-        select `id`, `create_time`, `update_time`, `name`, `enabled` from `role` where `name` = #{name}
+        select
+            `id`, `create_time`, `update_time`, `name`, `enabled`
+        from `role`
+        where `name` = #{name}
     </select>
 
     <select id="getByStatus" parameterType="Integer" resultMap="BaseResultMap">

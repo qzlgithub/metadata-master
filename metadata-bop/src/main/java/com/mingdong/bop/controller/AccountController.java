@@ -16,6 +16,7 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,8 +45,8 @@ public class AccountController
      * 账号角色 - 新增
      */
     @LoginRequired
-    @PostMapping(value = "/account/role/addition")
-    public RestResp addRole(@RequestBody JSONObject jsonReq)
+    @PutMapping(value = "/account/role/addition")
+    public RestResp addAccountRole(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
         String name = jsonReq.getString(Field.NAME);
@@ -56,12 +57,12 @@ public class AccountController
             return resp;
         }
         List<Long> privilege = privilegeArray.toJavaList(Long.class);
-        if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
+        if(CollectionUtils.isEmpty(privilege))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.addRole(name, privilege, resp);
+        managerService.addAccountRole(name, privilege, resp);
         return resp;
     }
 
@@ -82,7 +83,7 @@ public class AccountController
             return resp;
         }
         List<Long> privilege = privilegeArray.toJavaList(Long.class);
-        if(com.mingdong.common.util.CollectionUtils.isEmpty(privilege))
+        if(CollectionUtils.isEmpty(privilege))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
@@ -129,7 +130,7 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/role/verification")
-    public Map<String, Object> getList(@RequestParam(value = Field.NAME) String name)
+    public Map<String, Object> checkIfRoleNameExist(@RequestParam(value = Field.NAME) String name)
     {
         RestResp resp = new RestResp();
         managerService.checkIfRoleNameExist(name, resp);

@@ -85,10 +85,10 @@ public class SettingPageController
 
     @LoginRequired
     @GetMapping(value = "/setting/role/edit.html")
-    public ModelAndView gotoRoleEdit(@RequestParam(value = Field.ID) Long id)
+    public ModelAndView gotoRoleEditPage(@RequestParam(value = Field.O) Long roleId)
     {
         ModelAndView view = new ModelAndView("role/edit");
-        view.addAllObjects(managerService.getRolePrivilegeDetail(id));
+        view.addAllObjects(managerService.getAccountRoleInfo(roleId));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
