@@ -37,6 +37,8 @@ function login() {
                 layer.msg(data.errMsg);
             }
             else {
+                var da = data.dataMap;
+                sessionStorage.setItem("user_name", da.name);
                 window.location.href = "/setting/user.html";
             }
         }

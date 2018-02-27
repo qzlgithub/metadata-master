@@ -100,6 +100,7 @@ public class ManagerServiceImpl implements ManagerService
         ms.setPrivileges(privilegeList);
         ms.setAddAt(current.getTime());
         redisDao.saveManagerSession(sessionId, ms);
+        resp.addData(Field.NAME,manager.getName());
     }
 
     @Override

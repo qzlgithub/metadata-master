@@ -35,8 +35,6 @@ public class RequestThread
     public static Map<String, Object> getMap()
     {
         Map<String, Object> m = new HashMap<>();
-        m.put("i_id", get().getiId());
-        m.put("i_name", get().getiName());
         m.put("i_privilege", get().getiPrivilege());
         m.put("i_module", get().getiModule());
         m.put("i_system", get().getiSystem());
