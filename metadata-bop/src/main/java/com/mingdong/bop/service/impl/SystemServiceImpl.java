@@ -9,7 +9,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
@@ -380,7 +380,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void getRechargeTypeList(ListRes res)
+    public void getRechargeTypeList(RestListResp res)
     {
         ListDTO<RechargeTypeDTO> dto = remoteSystemService.getRechargeList();
         res.setTotal(dto.getTotal());

@@ -141,14 +141,14 @@ function post_client_status() {
             contentType: "application/json",
             data: JSON.stringify({"id": to_deal_client, "status": status, "reason": $("#ban-reason").val()}),
             success: function(res) {
-                if(res.errCode === '000000') {
+                if(res.code === '000000') {
                     layer.closeAll();
                     $("#ban-reason").val('');
                     $("#ban-status").val('');
                     main_table.reload();
                 }
                 else {
-                    layer.msg("操作失败：" + res.errMsg, {time: 2000});
+                    layer.msg("操作失败：" + res.message, {time: 2000});
                 }
             }
         });
@@ -181,12 +181,12 @@ function del_client() {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": to_deal_client}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
+                success: function(res) {
+                    if(res.code === '000000') {
                         main_table.reload();
                     }
                     else {
-                        layer.msg("操作失败:" + data.errMsg, {time: 2000});
+                        layer.msg("操作失败:" + res.message, {time: 2000});
                     }
                 }
             });
@@ -221,12 +221,12 @@ function reset_password() {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": to_deal_client}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
+                success: function(res) {
+                    if(res.code === '000000') {
                         layer.msg("主账号密码已重置", {time: 2000});
                     }
                     else {
-                        layer.msg("操作失败:" + data.errMsg, {time: 2000});
+                        layer.msg("操作失败:" + res.message, {time: 2000});
                     }
                 }
             });

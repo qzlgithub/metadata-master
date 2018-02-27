@@ -5,7 +5,7 @@ import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.util.BusinessUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +22,7 @@ public class FinanceController
 
     @LoginRequired
     @GetMapping(value = "/finance/recharge")
-    public ListRes getRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
+    public RestListResp getRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,
             @RequestParam(value = Field.PRODUCT, required = false) Long product,
             @RequestParam(value = Field.MANAGER, required = false) Long manager,
@@ -31,7 +31,7 @@ public class FinanceController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
         Date from = fromDate, to = toDate;
         if(fromDate != null && toDate != null)
@@ -50,7 +50,7 @@ public class FinanceController
 
     @LoginRequired
     @GetMapping(value = "/finance/bill")
-    public ListRes getBillList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
+    public RestListResp getBillList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PRODUCT, required = false) Long productId,
             @RequestParam(value = Field.BILL_PLAN, required = false) Integer billPlan,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
@@ -58,7 +58,7 @@ public class FinanceController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
         Date from = fromDate, to = toDate;
         if(fromDate != null && toDate != null)

@@ -42,8 +42,8 @@ function changeStatus(id) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
+                success: function(res) {
+                    if(res.code === '000000') {
                         var obj = data.dataMap;
                         if(obj.enabled === 1) {
                             layer.msg("启用成功", {

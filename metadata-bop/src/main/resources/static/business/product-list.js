@@ -61,12 +61,12 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
                         dataType: "json",
                         contentType: "application/json",
                         data: JSON.stringify({"id": curr_data.id, "enabled": status}),
-                        success: function(data) {
-                            if(data.errCode === '000000') {
+                        success: function(res) {
+                            if(res.code === '000000') {
                                 main_table.reload();
                             }
                             else {
-                                layer.msg("操作失败:" + data.errMsg, {time: 2000});
+                                layer.msg("操作失败:" + res.message, {time: 2000});
                             }
                         }
                     });

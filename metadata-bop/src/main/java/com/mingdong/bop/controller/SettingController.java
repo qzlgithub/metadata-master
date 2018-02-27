@@ -11,7 +11,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +38,9 @@ public class SettingController
      */
     @LoginRequired
     @GetMapping(value = "/setting/rechargeType/list")
-    public ListRes getRechargeTypeList()
+    public RestListResp getRechargeTypeList()
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         systemService.getRechargeTypeList(res);
         return res;
     }

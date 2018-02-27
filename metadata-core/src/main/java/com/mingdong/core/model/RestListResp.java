@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListRes
+public class RestListResp
 {
     private int code;
     private String message;
@@ -12,7 +12,7 @@ public class ListRes
     private List<Map<String, Object>> list;
     private Map<String, Object> extradata;
 
-    public ListRes()
+    public RestListResp()
     {
         code = 0;
     }

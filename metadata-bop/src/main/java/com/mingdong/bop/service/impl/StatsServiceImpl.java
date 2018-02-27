@@ -16,7 +16,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
@@ -136,7 +136,7 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public void getClientList(ScopeType scopeTypeEnum, Page page, ListRes res)
+    public void getClientList(ScopeType scopeTypeEnum, Page page, RestListResp res)
     {
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
@@ -273,7 +273,7 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public void getRechargeList(ScopeType scopeTypeEnum, Page page, ListRes res)
+    public void getRechargeList(ScopeType scopeTypeEnum, Page page, RestListResp res)
     {
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
@@ -429,7 +429,7 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, ListRes res)
+    public void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, RestListResp res)
     {
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
@@ -652,7 +652,7 @@ public class StatsServiceImpl implements StatsService
         resp.addAllData(objectMap);
     }
 
-    private void getProductRechargeInfoList(Page page, Date date, Date currentDay, ListRes res)
+    private void getProductRechargeInfoList(Page page, Date date, Date currentDay, RestListResp res)
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Integer total = remoteStatsService.getClientRechargeCountByDate(date, currentDay);

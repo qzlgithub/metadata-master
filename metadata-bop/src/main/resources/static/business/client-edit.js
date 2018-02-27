@@ -244,9 +244,9 @@ function editClient() {
             "contacts": update,
             "enabled": $("input[name='clientEnabled']:checked").val()
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("修改失败:" + data.errMsg);
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("修改失败:" + res.message);
                 isSubmit = false;
             }
             else {

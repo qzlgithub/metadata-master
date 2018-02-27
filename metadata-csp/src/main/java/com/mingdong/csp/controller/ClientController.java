@@ -6,7 +6,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.ClientService;
@@ -139,9 +139,9 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "client/sub-account/list")
-    public ListRes getClientSubAccountList()
+    public RestListResp getClientSubAccountList()
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         clientService.getClientSubAccountList(res);
         return res;
     }
@@ -211,10 +211,10 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "client/message")
-    public ListRes getClientMessageList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+    public RestListResp getClientMessageList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         clientService.getClientMessageList(new Page(pageNum, pageSize), res);
         return res;
     }

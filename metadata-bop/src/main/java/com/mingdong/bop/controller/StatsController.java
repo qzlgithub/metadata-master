@@ -7,7 +7,7 @@ import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +22,11 @@ public class StatsController
 
     @LoginRequired
     @GetMapping(value = "/stats/client/clientList")
-    public ListRes getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public RestListResp getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize), res);
         return res;
@@ -43,11 +43,11 @@ public class StatsController
 
     @LoginRequired
     @GetMapping(value = "/stats/client/rechargeList")
-    public ListRes getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public RestListResp getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         statsService.getRechargeList(scopeTypeEnum, new Page(pageNum, pageSize), res);
         return res;
@@ -64,13 +64,13 @@ public class StatsController
 
     @LoginRequired
     @GetMapping(value = "/stats/client/requestList")
-    public ListRes getRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
+    public RestListResp getRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.NAME, required = false) String name,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         statsService.getRequestList(scopeTypeEnum, new Page(pageNum, pageSize), name, productId, res);
         return res;

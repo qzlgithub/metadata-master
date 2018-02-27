@@ -73,9 +73,9 @@ function editProduct() {
             "remark": $("#product-remark").val(),
             "content": editor.html()
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg(data.errMsg, {time: 2000});
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg(res.message, {time: 2000});
             }
             else {
                 layer.msg("修改成功", {

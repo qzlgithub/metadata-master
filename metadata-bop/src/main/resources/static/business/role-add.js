@@ -70,9 +70,9 @@ function saveRole() {
             "name": $("#name").val(),
             "privilege": privilege
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("添加失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("添加失败:" + res.message, {
                     time: 2000
                 });
             }

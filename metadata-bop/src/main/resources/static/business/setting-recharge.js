@@ -96,8 +96,8 @@ function add_recharge_type() {
             "name": newName,
             "remark": newRemark
         }),
-        success: function(data) {
-            if(data.errCode === "000000") {
+        success: function(res) {
+            if(res.code === "000000") {
                 layer.msg("添加成功!", {
                     time: 2000
                 }, function() {
@@ -105,7 +105,7 @@ function add_recharge_type() {
                 });
             }
             else {
-                layer.msg("添加失败：" + data.errMsg, {
+                layer.msg("添加失败：" + res.message, {
                     time: 2000
                 });
             }
@@ -150,9 +150,9 @@ function edit_recharge_type() {
             "name": $("#editName").val(),
             "remark": $("#editRemark").val()
         }),
-        success: function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg("修改失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== "000000") {
+                layer.msg("修改失败:" + res.message, {
                     time: 2000
                 });
             }

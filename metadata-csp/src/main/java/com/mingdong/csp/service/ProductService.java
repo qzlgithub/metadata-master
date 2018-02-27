@@ -2,7 +2,7 @@ package com.mingdong.csp.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.Date;
@@ -75,5 +75,5 @@ public interface ProductService
      */
     void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, RestResp resp);
 
-    void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page, ListRes res);
+    void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page, RestListResp res);
 }

@@ -71,7 +71,7 @@ function getRequestList(obj, pageFun) {
             "toDate": obj['toDate'] == '' ? '' : obj['toDate'] + " 23:59:59"
         },
         function(res) {
-            if(res.errCode === '000000') {
+            if(res.code === '000000') {
                 var dataList = $("#data-list");
                 var data = res.dataMap;
                 var total = data.total;

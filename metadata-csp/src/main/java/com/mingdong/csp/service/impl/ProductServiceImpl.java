@@ -10,7 +10,7 @@ import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
@@ -407,7 +407,7 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page,
-            ListRes res)
+            RestListResp res)
     {
         ListDTO<ProductDTO> listDTO = productApi.getProductList(clientId, productTypeList, incOpened, page);
         res.setTotal(listDTO.getTotal());

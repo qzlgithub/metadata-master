@@ -142,7 +142,7 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(res) {
-            if(res.errCode === '000000') {
+            if(res.code === '000000') {
                 var div = $("#ban-data-body");
                 div.empty();
                 var result = res.dataMap;
@@ -171,7 +171,7 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
                 }
             }
             else {
-                layer.msg(res.errMsg);
+                layer.msg(res.message);
             }
         }
     );
@@ -205,9 +205,9 @@ function openProduct() {
             "endDate": end,
             "unitAmt": unit
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("开通失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("开通失败:" + res.message, {
                     time: 2000
                 });
             }
@@ -248,9 +248,9 @@ function renewProduct() {
             "endDate": endDate,
             "unitAmt": unit
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("续费失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("续费失败:" + res.message, {
                     time: 2000
                 });
             }
@@ -556,9 +556,9 @@ $(".remove-class").on("click", function() {
                 type: "POST",
                 url: "/client/product/remove",
                 data: {"id": clientProductId},
-                success: function(data) {
-                    if(data.errCode !== '000000') {
-                        layer.msg("移除失败:" + data.errMsg, {
+                success: function(res) {
+                    if(res.code !== '000000') {
+                        layer.msg("移除失败:" + res.message, {
                             time: 2000
                         });
                     }
@@ -582,7 +582,7 @@ $(".remove-class").on("click", function() {
 function findProductTr() {
     var selectProductId = $("#select-product").val();
     $("#all-product").find("tr").each(function() {
-        if(selectProductId == "" || selectProductId == $(this).attr("value")) {
+        if(selectProductId === "" || selectProductId === $(this).attr("value")) {
             $(this).show();
         }
         else {
@@ -607,9 +607,9 @@ function selectProductSave() {
         type: "post",
         url: "/client/product/select",
         data: {clientId: clientId, ids: ids.join(",")},
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("添加失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("添加失败:" + res.message, {
                     time: 2000
                 });
                 isSubmit = false;

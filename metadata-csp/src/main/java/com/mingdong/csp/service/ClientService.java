@@ -2,7 +2,7 @@ package com.mingdong.csp.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 
 public interface ClientService
 {
@@ -29,7 +29,7 @@ public interface ClientService
     /**
      * 子账号列表
      */
-    void getClientSubAccountList(ListRes res);
+    void getClientSubAccountList(RestListResp res);
 
     /**
      * 禁用启用子账号
@@ -50,7 +50,7 @@ public interface ClientService
     /**
      * 获取客户消息
      */
-    void getClientMessageList(Page page, ListRes res);
+    void getClientMessageList(Page page, RestListResp res);
 
     /**
      * 软删客户子帐号

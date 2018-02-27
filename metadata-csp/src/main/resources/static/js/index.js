@@ -41,7 +41,7 @@ function changeImage() {
     $.get(
         "/captcha",
         function(res) {
-            if(res.errCode === '000000') {
+            if(res.code === '000000') {
                 var data = res.dataMap;
                 $("#captcha").attr("src", data.imageCaptcha);
             }
@@ -72,7 +72,7 @@ function userLogin() {
         contentType: "application/json",
         data: JSON.stringify({"username": username, "password": MD5(password), "code": code}),
         success: function(res) {
-            if(res.errCode === '000000') {
+            if(res.code === '000000') {
                 var data = res.dataMap;
                 sessionStorage.setItem("user_name", data.name);
                 sessionStorage.setItem("manager_qq", data.managerQq);
@@ -82,7 +82,7 @@ function userLogin() {
             else {
                 $("#captcha-code").val("");
                 changeImage();
-                layer.msg("登陆失败，" + res.errMsg);
+                layer.msg("登陆失败，" + res.message);
             }
         }
     })

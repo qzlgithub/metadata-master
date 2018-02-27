@@ -82,9 +82,9 @@ function changePwd(orgPwd, newPwd) {
             "orgPassword": MD5(orgPwd),
             "newPassword": MD5(newPwd)
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("修改失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("修改失败:" + res.message, {
                     time: 2000
                 });
             }

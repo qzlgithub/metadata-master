@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public interface StatsService
@@ -23,7 +23,7 @@ public interface StatsService
     /**
      * 获取客户列表
      */
-    void getClientList(ScopeType scopeTypeEnum, Page page, ListRes res);
+    void getClientList(ScopeType scopeTypeEnum, Page page, RestListResp res);
 
     /**
      * 导出客户列表
@@ -43,7 +43,7 @@ public interface StatsService
     /**
      * 获取充值列表
      */
-    void getRechargeList(ScopeType scopeTypeEnum, Page page, ListRes res);
+    void getRechargeList(ScopeType scopeTypeEnum, Page page, RestListResp res);
 
     /**
      * 导出充值列表
@@ -58,7 +58,7 @@ public interface StatsService
     /**
      * 获取产品请求数据
      */
-    void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, ListRes res);
+    void getRequestList(ScopeType scopeTypeEnum, Page page, String name, Long productId, RestListResp res);
 
     XSSFWorkbook createRequestListXlsx(ScopeType scopeTypeEnum, Page page, String name, Long productId);
 

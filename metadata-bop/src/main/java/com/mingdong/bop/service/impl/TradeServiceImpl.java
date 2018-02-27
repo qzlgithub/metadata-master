@@ -8,7 +8,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
@@ -38,7 +38,7 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
-            Date fromDate, Date toDate, Page page, ListRes res)
+            Date fromDate, Date toDate, Page page, RestListResp res)
     {
         ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
                 managerId, rechargeType, fromDate, toDate, page);
@@ -119,7 +119,7 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
-            Page page, ListRes res)
+            Page page, RestListResp res)
     {
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan, fromDate,
                 toDate, page);

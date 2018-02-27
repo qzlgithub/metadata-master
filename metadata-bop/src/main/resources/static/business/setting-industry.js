@@ -182,9 +182,9 @@ function saveIndustry(id, code, name) {
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({"id": id, "code": code, "name": name}),
-        success: function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg("添加失败" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== "000000") {
+                layer.msg("添加失败" + res.message, {
                     time: 2000
                 });
             }
@@ -254,9 +254,9 @@ function editIndustry() {
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({"id": id, "code": code, "name": name}),
-        success: function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg("修改失败：" + data.errMsg, {time: 2000});
+        success: function(res) {
+            if(res.code !== "000000") {
+                layer.msg("修改失败：" + res.message, {time: 2000});
             }
             else {
                 window.location.href = "/setting/industry.html";

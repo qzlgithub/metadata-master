@@ -276,7 +276,7 @@
                 "/client/user/credential",
                 {"productId": productId, "password": MD5(password)},
                 function(res) {
-                    if(res.errCode === '000000') {
+                    if(res.code === '000000') {
                         var data = res.dataMap;
                         $("#app-id").text(data.appId);
                         $("#app-key").val(data.appKey);
@@ -285,7 +285,7 @@
                         $("#mode_app_id_2").show();
                     }
                     else {
-                        layer.msg("认证失败：" + res.errMsg);
+                        layer.msg("认证失败：" + res.message);
                     }
                 }
             );
@@ -311,13 +311,13 @@
             contentType: "application/json",
             data: JSON.stringify({"productId": productId, "appKey": appKey, "reqHost": reqHost}),
             success: function(res) {
-                if(res.errCode === '000000') {
+                if(res.code === '000000') {
                     layer.msg("添加成功", {time: 2000}, function() {
                         layer.closeAll();
                     });
                 }
                 else {
-                    layer.msg("添加失败：" + res.errMsg);
+                    layer.msg("添加失败：" + res.message);
                 }
             }
         });

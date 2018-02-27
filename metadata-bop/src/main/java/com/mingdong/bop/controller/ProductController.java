@@ -10,7 +10,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,14 +30,14 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "/product/list")
-    public ListRes getProductList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
+    public RestListResp getProductList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.TYPE, required = false) Integer type,
             @RequestParam(value = Field.CUSTOM, required = false) Integer custom,
             @RequestParam(value = Field.STATUS, required = false) Integer status,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         Page page = new Page(pageNum, pageSize);
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
         if(!TrueOrFalse.TRUE.equals(custom) && !TrueOrFalse.FALSE.equals(custom))

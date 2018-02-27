@@ -9,7 +9,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
@@ -83,7 +83,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientSubAccountList(ListRes res)
+    public void getClientSubAccountList(RestListResp res)
     {
         ListDTO<SubUserDTO> listDTO = clientApi.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
         res.addExtra(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
@@ -196,7 +196,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientMessageList(Page page, ListRes res)
+    public void getClientMessageList(Page page, RestListResp res)
     {
         ListDTO<MessageDTO> listDTO = clientApi.getClientMessage(RequestThread.getClientId(), page);
         List<Map<String, Object>> list = new ArrayList<>();

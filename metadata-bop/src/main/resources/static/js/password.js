@@ -34,14 +34,14 @@ $("#savePwd").click(function() {
                         "oldPwd": MD5($("#oldPwd").val()),
                         "newPwd": MD5(newPwd)
                     }),
-                    success: function(data) {
-                        if(data.errCode !== "000000") {
-                            layer.msg("密码修改失败:" + data.errMsg);
+                    success: function(res) {
+                        if(res.code !== "000000") {
+                            layer.msg("密码修改失败:" + data.message);
                         }
                         else {
                             layer.closeAll();
                             layer.msg("密码修改成功", {
-                                time: 2000, //1s后自动关闭
+                                time: 2000
                             });
 
                         }

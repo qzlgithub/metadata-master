@@ -2,7 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,5 +36,5 @@ public interface ProductService
      */
     List<Map<String, Object>> getProductInfoListMap(Integer enabled);
 
-    void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, ListRes res);
+    void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res);
 }

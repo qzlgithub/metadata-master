@@ -107,9 +107,9 @@ function addProductCategory() {
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify(param),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg(data.errMsg, {time: 2000});
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg(res.message, {time: 2000});
             }
             else {
                 layer.msg("添加成功", {
@@ -151,9 +151,9 @@ function updateProductCategory() {
             "name": $("#productNameU").val(),
             "remark": $("#productRemarkU").val()
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg(data.errMsg, {time: 2000});
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg(res.message, {time: 2000});
             }
             else {
                 layer.msg("修改成功", {
@@ -181,8 +181,8 @@ function updateStatus(id) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id, "enabled": enabled}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
+                success: function(res) {
+                    if(res.code === '000000') {
                         if(enabled === "0") {
                             $("#enabledTxt" + id).text("禁用");
                             $("#enabled" + id).val(1);

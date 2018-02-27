@@ -22,7 +22,7 @@ import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -116,7 +116,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page,
-            ListRes res)
+            RestListResp res)
     {
         ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword,
                 industryId == null ? parentIndustryId : industryId, enabled, page);
@@ -657,7 +657,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
-            ListRes res)
+            RestListResp res)
     {
         ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, fromDate,
                 toDate, page);
@@ -698,7 +698,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
-            ListRes res)
+            RestListResp res)
     {
         ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, fromDate, toDate,
                 page);

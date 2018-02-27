@@ -100,9 +100,9 @@ function saveManager() {
             "enabled": enabled,
             "privilege": privilege
         }),
-        success: function(data) {
-            if(data.errCode !== "000000") {
-                layer.msg("修改失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== "000000") {
+                layer.msg("修改失败:" + res.message, {
                     time: 2000
                 });
             }

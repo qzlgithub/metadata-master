@@ -93,11 +93,11 @@
                 "serviceQQ": serviceQQ
             }),
             success: function(res) {
-                if(res.errCode === '000000') {
+                if(res.code === '000000') {
                     layer.msg("保存成功");
                 }
                 else {
-                    layer.msg("操作失败：" + res.errMsg);
+                    layer.msg("操作失败：" + res.message);
                 }
             }
         });

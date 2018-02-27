@@ -13,7 +13,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -109,10 +109,10 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/role/list")
-    public ListRes getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+    public RestListResp getManagerRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         Page page = new Page(pageNum, pageSize);
         managerService.getRoleList(page, res);
         return res;
@@ -167,12 +167,12 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/list")
-    public ListRes getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
+    public RestListResp getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         // 校验各个字段值
         if(roleId != null && roleId <= 0)
         {

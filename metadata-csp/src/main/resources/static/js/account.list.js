@@ -50,9 +50,9 @@ function stopAccount(id) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"clientUserId": id}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
-                        var obj = data.dataMap;
+                success: function(res) {
+                    if(res.code === '000000') {
+                        var obj = res.dataMap;
                         if(obj.enabled === 1) {
                             $("#statusAction" + id).text("禁用");
                             layer.msg("启用成功", {
@@ -88,8 +88,8 @@ function delAccount(id) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"clientUserId": id}),
-                success: function(data) {
-                    if(data.errCode === '000000') {
+                success: function(res) {
+                    if(res.code === '000000') {
                         layer.msg("删除成功", {
                             time: 1000
                         }, function() {
@@ -118,9 +118,9 @@ function editAccount(id) {
     $.get(
         "/client/childAccountDetail",
         {"clientUserId": id},
-        function(data) {
-            if(data.errCode === '000000') {
-                var obj = data.dataMap;
+        function(res) {
+            if(res.code === '000000') {
+                var obj = res.dataMap;
                 $("#edit-id").val(obj.clientUserId + "");
                 $("#edit-username").val(obj.username);
                 $("#edit-pwd").val("");
@@ -148,7 +148,7 @@ function editAccount(id) {
                 });
             }
             else {
-                layer.msg("获取信息失败，" + data.errMsg, {
+                layer.msg("获取信息失败，" + res.message, {
                     time: 2000
                 });
             }
@@ -182,8 +182,8 @@ function addSubmitAccount() {
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify({"username": username, "password": MD5(pwd), "name": name, "phone": phone, "enabled": enabled}),
-            success: function(data) {
-                if(data.errCode === '000000') {
+            success: function(res) {
+                if(res.code === '000000') {
                     layer.msg("新增成功", {
                         time: 2000
                     }, function() {
@@ -193,7 +193,7 @@ function addSubmitAccount() {
                     });
                 }
                 else {
-                    layer.msg("新增失败，" + data.errMsg, {
+                    layer.msg("新增失败，" + res.message, {
                         time: 2000
                     }, function() {
                         isSubmit = false;
@@ -226,9 +226,8 @@ function editSubmitAccount() {
                 "phone": phone,
                 "enabled": enabled
             }),
-            success: function(data) {
-                if(data.errCode === '000000') {
-                    var obj = data.dataMap;
+            success: function(res) {
+                if(res.code === '000000') {
                     layer.msg("修改成功", {
                         time: 2000
                     }, function() {
@@ -238,7 +237,7 @@ function editSubmitAccount() {
                     });
                 }
                 else {
-                    layer.msg("修改失败，" + data.errMsg, {
+                    layer.msg("修改失败，" + res.message, {
                         time: 2000
                     }, function() {
                         isSubmit = false;

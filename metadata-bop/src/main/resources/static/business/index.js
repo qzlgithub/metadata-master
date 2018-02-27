@@ -30,11 +30,11 @@ function login() {
             "password": MD5($("#password").val()),
             "imageCode": $("#code").val()
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
+        success: function(res) {
+            if(res.code !== '000000') {
                 refresh_code();
                 $("#code").val("");
-                layer.msg(data.errMsg);
+                layer.msg(res.message);
             }
             else {
                 var da = data.dataMap;

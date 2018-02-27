@@ -3,7 +3,7 @@ package com.mingdong.bop.service;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ public interface ClientService
     /**
      * 根据条件获取客户信息列表
      */
-    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, ListRes res);
+    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page, RestListResp res);
 
     void getClientInfoForEdit(Long clientId, RestResp resp);
 
@@ -102,11 +102,11 @@ public interface ClientService
     Map<String, Object> getClientAccountDict(Long clientId);
 
     void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
-            ListRes res);
+            RestListResp res);
 
     String getClientCorpName(Long clientId);
 
-    void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page, ListRes res);
+    void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestListResp res);
 
     XSSFWorkbook createClientRequestXlsx(Long clientId, Long userId, Long productId, Date startTime, Date endTime,
             Page page);

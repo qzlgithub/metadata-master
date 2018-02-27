@@ -1,7 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
 import java.util.List;
@@ -127,5 +127,5 @@ public interface SystemService
     /**
      * 获取系统配置-充值类型字典列表
      */
-    void getRechargeTypeList(ListRes res);
+    void getRechargeTypeList(RestListResp res);
 }

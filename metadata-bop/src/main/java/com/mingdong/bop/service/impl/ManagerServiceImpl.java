@@ -14,7 +14,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -117,7 +117,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getRoleList(Page page, ListRes res)
+    public void getRoleList(Page page, RestListResp res)
     {
         RoleListDTO roleListDTO = remoteManagerService.getRoleList(page);
         res.setTotal(roleListDTO.getTotal());
@@ -171,7 +171,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getManagerList(Long roleId, Integer enabled, Page page, ListRes res)
+    public void getManagerList(Long roleId, Integer enabled, Page page, RestListResp res)
     {
         ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleId, enabled, page);
         res.setTotal(managerListDTO.getTotal());

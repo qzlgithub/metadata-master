@@ -11,7 +11,7 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, ListRes res)
+    public void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res)
     {
         ListDTO<ProductDTO> dto = remoteProductService.getProductList(keyword, type, custom, status, page);
         res.setTotal(dto.getTotal());

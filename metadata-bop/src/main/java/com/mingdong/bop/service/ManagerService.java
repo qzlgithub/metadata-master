@@ -2,7 +2,7 @@ package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public interface ManagerService
     /**
      * 获取角色列表
      */
-    void getRoleList(Page page, ListRes res);
+    void getRoleList(Page page, RestListResp res);
 
     /**
      * 新增角色并赋权
@@ -42,7 +42,7 @@ public interface ManagerService
     /**
      * 根据条件获取管理员列表
      */
-    void getManagerList(Long roleId, Integer enabled, Page page, ListRes res);
+    void getManagerList(Long roleId, Integer enabled, Page page, RestListResp res);
 
     /**
      * 根据管理员Id获取管理员信息

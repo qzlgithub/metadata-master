@@ -15,7 +15,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.ListRes;
+import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.util.BusinessUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,14 +63,14 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "/client/list")
-    public ListRes getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
+    public RestListResp getClientList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         Page page = new Page(pageNum, pageSize);
         if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
         {
@@ -86,14 +86,14 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "/client/recharge/list")
-    public ListRes getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public RestListResp getRechargeList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         clientService.getProductRechargeList(clientId, productId, fromDate, toDate, new Page(pageNum, pageSize), res);
@@ -105,7 +105,7 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "/client/request/list")
-    public ListRes getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+    public RestListResp getClientRequestList(@RequestParam(value = Field.CLIENT_ID) Long clientId,
             @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
@@ -113,7 +113,7 @@ public class ClientController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        ListRes res = new ListRes();
+        RestListResp res = new RestListResp();
         startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
         endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
         clientService.getClientRequestList(clientId, userId, productId, startTime, endTime, new Page(pageNum, pageSize),

@@ -159,9 +159,9 @@ function createUser() {
             "license": license,
             "enabled": enabled
         }),
-        success: function(data) {
-            if(data.errCode !== '000000') {
-                layer.msg("添加失败:" + data.errMsg, {
+        success: function(res) {
+            if(res.code !== '000000') {
+                layer.msg("添加失败:" + data.message, {
                     time: 2000
                 });
                 isSubmit = false;
