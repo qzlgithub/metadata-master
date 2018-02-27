@@ -47,7 +47,7 @@ public class ClientPageController
      * 页面：客户添加页面
      */
     @LoginRequired
-    @RequestMapping(value = "/client/addition.html")
+    @RequestMapping(value = "/client/add.html")
     public ModelAndView gotoClientAddition()
     {
         ModelAndView view = new ModelAndView("client/add");

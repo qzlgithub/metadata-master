@@ -11,7 +11,7 @@
                     <em th:text="${i_system.m21000}">产品管理</em>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd th:class="${i_module eq 'product_index'} ? 'layui-this':''"
+                    <dd th:class="${i_module eq 'setting-product'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'21200')}">
                         <a href="/setting/product.html">
                             <i class="layui-icon">&#xe602;</i>

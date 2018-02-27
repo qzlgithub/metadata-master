@@ -1,7 +1,7 @@
 package com.mingdong.bop.configurer;
 
 import com.mingdong.bop.component.RedisDao;
-import com.mingdong.bop.constant.PathModule;
+import com.mingdong.bop.constant.ModulePath;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.SystemService;
@@ -49,7 +49,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
             return false;
         }
         RequestThread.set(ms.getManagerId(), ms.getName(), ms.getPrivileges());
-        String module = PathModule.getByPath(path);
+        String module = ModulePath.getByPath(path);
         RequestThread.setModule(module != null ? module : "");
         Map<String, String> system = redisDao.getSystemModule();
         if(system == null)
