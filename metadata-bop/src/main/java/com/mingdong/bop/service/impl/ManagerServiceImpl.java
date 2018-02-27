@@ -310,7 +310,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeStatus(Long roleId, RestResp resp)
+    public void changeRoleStatus(Long roleId, RestResp resp)
     {
         RoleDTO role = remoteManagerService.getRoleById(roleId);
         if(role == null)

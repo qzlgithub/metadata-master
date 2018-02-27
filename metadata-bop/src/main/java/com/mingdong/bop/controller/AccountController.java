@@ -105,7 +105,7 @@ public class AccountController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.changeStatus(roleId, resp);
+        managerService.changeRoleStatus(roleId, resp);
         return resp;
     }
 

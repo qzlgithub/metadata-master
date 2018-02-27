@@ -35,16 +35,14 @@ function changeStatus(id) {
     layer.confirm('是否确定？', {
         btn: ['确定', '取消'],
         yes: function() {
-            $(this).click();
             $.ajax({
                 type: "POST",
                 url: "/account/role/status",
-                dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify({"id": id}),
                 success: function(res) {
                     if(res.code === '000000') {
-                        var obj = data.data;
+                        var obj = res.data;
                         if(obj.enabled === 1) {
                             layer.msg("启用成功", {
                                 time: 2000
