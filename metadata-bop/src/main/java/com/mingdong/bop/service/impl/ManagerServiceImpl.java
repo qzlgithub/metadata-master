@@ -130,7 +130,7 @@ public class ManagerServiceImpl implements ManagerService
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.ID, o.getId() + "");
                 m.put(Field.NAME, o.getName());
-                if(!CollectionUtils.isEmpty(o.getModuleNameList()))
+                if(CollectionUtils.isEmpty(o.getModuleNameList()))
                 {
                     m.put(Field.MODULE, "");
                 }
