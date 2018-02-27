@@ -586,7 +586,7 @@ public class StatsServiceImpl implements StatsService
         String currentDayStr = sdf.format(currentDay);
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getRevenueList(beforeDate, currentDay, page);
         res.setTotal(listDTO.getTotal());
-        res.addExtra(Field.TITLE,
+        res.addData(Field.TITLE,
                 dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
         if(listDTO.getList() != null)
         {
