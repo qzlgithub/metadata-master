@@ -33,7 +33,7 @@ layui.config({
         },
         response: {
             statusName: 'code',
-            statusCode: 0,
+            statusCode: '000000',
             msgName: 'message',
             countName: 'total',
             dataName: 'list'

@@ -6,23 +6,23 @@ import java.util.Map;
 
 public class RestListResp
 {
-    private int code;
+    private String code;
     private String message;
+    private Map<String, Object> data;
     private int total;
     private List<Map<String, Object>> list;
-    private Map<String, Object> data;
 
     public RestListResp()
     {
-        code = 0;
+        code = "000000";
     }
 
-    public int getCode()
+    public String getCode()
     {
         return code;
     }
 
-    public void setCode(int code)
+    public void setCode(String code)
     {
         this.code = code;
     }

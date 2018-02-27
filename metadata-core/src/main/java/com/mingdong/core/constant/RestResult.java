@@ -2,7 +2,7 @@ package com.mingdong.core.constant;
 
 public enum RestResult
 {
-    SUCCESS("000000", "成功"),
+    SUCCESS("000000", "ok"),
     ACCOUNT_NOT_EXIST("100001", "账号不存在"),
     INVALID_PASSCODE("100002", "账号密码不匹配"),
     ACCOUNT_DISABLED("100003", "账户已禁用"),
