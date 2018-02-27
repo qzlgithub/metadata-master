@@ -77,4 +77,12 @@ public interface RemoteManagerService
      * 新增管理员并赋权
      */
     ResultDTO addManager(NewManager newManager);
+
+    /**
+     * 更新用户角色状态
+     *
+     * @param roleId 角色ID
+     * @param status 状态：1-启用，2-禁用
+     */
+    ResultDTO changeRoleStatus(Long roleId, Integer status);
 }

@@ -405,6 +405,28 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         return resultDTO;
     }
 
+    @Override
+    @Transactional
+    public ResultDTO changeRoleStatus(Long roleId, Integer status)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        Role role = roleMapper.findById(roleId);
+        if(role == null)
+        {
+            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return resultDTO;
+        }
+        if(!role.getEnabled().equals(status))
+        {
+            Role obj = new Role();
+            obj.setId(roleId);
+            obj.setUpdateTime(new Date());
+            obj.setEnabled(status);
+            roleMapper.updateSkipNull(obj);
+        }
+        return resultDTO;
+    }
+
     /**
      * 查询权限列表及其父级权限的ID
      */

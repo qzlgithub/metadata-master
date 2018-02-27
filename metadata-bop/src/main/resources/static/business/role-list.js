@@ -8,7 +8,7 @@ layui.config({
     form = layui.form;
     table = layui.table;
     main_table = table.render({
-        elem: '#data-table',
+        elem: '#dataTable',
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
@@ -29,38 +29,43 @@ layui.config({
             dataName: 'list'
         }
     });
-});
 
-function changeStatus(id) {
-    layer.confirm('是否确定？', {
-        btn: ['确定', '取消'],
-        yes: function() {
-            $.ajax({
-                type: "POST",
-                url: "/account/role/status",
-                contentType: "application/json",
-                data: JSON.stringify({"id": id}),
-                success: function(res) {
-                    if(res.code === '000000') {
-                        var obj = res.data;
-                        if(obj.enabled === 1) {
-                            layer.msg("启用成功", {
-                                time: 2000
-                            });
+    table.on('tool(dataTable)', function(obj) {
+        var curr_data = obj.data, event = obj.event;
+        if(event === 'disable' || event === 'enable') {
+            var remind_txt, status;
+            if(event === 'disable') {
+                remind_txt = '禁用';
+                status = 0;
+            }
+            else {
+                remind_txt = '启用';
+                status = 1;
+            }
+            layer.confirm('确定' + remind_txt + '该角色？', {
+                btn: ['确定', '取消'],
+                yes: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/account/role/status",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({"roleId": curr_data.id, "enabled": status}),
+                        success: function(res) {
+                            if(res.code === '000000') {
+                                main_table.reload();
+                            }
+                            else {
+                                layer.msg("操作失败:" + res.message, {time: 2000});
+                            }
                         }
-                        else {
-                            layer.msg("禁用成功", {
-                                time: 2000
-                            });
-                        }
-                        main_table.reload();
-                    }
+                    });
+                    layer.closeAll();
+                },
+                no: function() {
+                    layer.closeAll();
                 }
             });
-            layer.closeAll();
-        },
-        btn2: function() {
-            layer.closeAll();
         }
     });
-}
+});

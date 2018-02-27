@@ -74,7 +74,7 @@ public interface ManagerService
     /**
      * 根据角色id更改角色状态
      */
-    void changeRoleStatus(Long roleId, RestResp resp);
+    void changeRoleStatus(Long roleId, Integer status, RestResp resp);
 
     /**
      * 根据管理员id更改管理员状态

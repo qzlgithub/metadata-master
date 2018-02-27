@@ -99,13 +99,14 @@ public class AccountController
     public RestResp changeRoleStatus(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
-        Long roleId = jsonReq.getLong(Field.ID);
-        if(roleId == null)
+        Long roleId = jsonReq.getLong(Field.ROLE_ID);
+        Integer status = jsonReq.getInteger(Field.ENABLED);
+        if(roleId == null || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(status)))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.changeRoleStatus(roleId, resp);
+        managerService.changeRoleStatus(roleId, status, resp);
         return resp;
     }
 

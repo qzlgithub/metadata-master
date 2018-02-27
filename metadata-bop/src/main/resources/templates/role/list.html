@@ -29,7 +29,7 @@
             <div class="clearfix mt20">
                 <a href="/setting/role/add.html" class="layui-btn fr layui-btn-normal">添加分组</a>
             </div>
-            <table class="layui-table" id="data-table"></table>
+            <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
         </div>
     </div>
 
@@ -43,15 +43,11 @@
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/role-list.js"></script>
 <script type="text/html" id="operation-bar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/role/edit.html?id={{d.id}}">编辑</a>
+    <a class="layui-btn layui-btn-xs" href="/setting/role/edit.html?id={{d.id}}">编辑</a>
     {{# if(d.enabled === 1) { }}
-    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-danger layui-btn-xs"
-       lay-event="disable" data-id="{{d.id}}">禁用
-    </a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
     {{# } else { }}
-    <a href="javascript:" onclick="changeStatus('{{d.id}}')" class="layui-btn layui-btn-normal layui-btn-xs"
-       lay-event="enable" data-id="{{d.id}}">启用
-    </a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
     {{# } }}
 </script>
 </body>

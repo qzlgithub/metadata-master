@@ -41,7 +41,6 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
     });
     table.on('tool(main)', function(obj) {
         var curr_data = obj.data, event = obj.event;
-        console.log(curr_data + " - " + event);
         if(event === 'disable' || event === 'enable') {
             var remind_txt, status;
             if(event === 'disable') {

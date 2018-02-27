@@ -310,28 +310,10 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeRoleStatus(Long roleId, RestResp resp)
+    public void changeRoleStatus(Long roleId, Integer status, RestResp resp)
     {
-        RoleDTO role = remoteManagerService.getRoleById(roleId);
-        if(role == null)
-        {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        Integer enabled = TrueOrFalse.TRUE;
-        if(TrueOrFalse.TRUE.equals(role.getEnabled()))
-        {
-            enabled = TrueOrFalse.FALSE;
-        }
-        RoleDTO roleUpd = new RoleDTO();
-        roleUpd.setId(roleId);
-        roleUpd.setUpdateTime(new Date());
-        roleUpd.setEnabled(enabled);
-        NewRole newRole = new NewRole();
-        newRole.setRoleDTO(roleUpd);
-        ResultDTO resultDTO = remoteManagerService.updateRoleSkipNull(newRole);
+        ResultDTO resultDTO = remoteManagerService.changeRoleStatus(roleId, status);
         resp.setError(resultDTO.getResult());
-        resp.addData(Field.ENABLED, enabled);
     }
 
     @Override
