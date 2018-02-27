@@ -192,7 +192,7 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getUserInfo(Long userId, RestResp resp)
+    public void getAccountInfo(Long userId, RestResp resp)
     {
         ManagerDTO manager = remoteManagerService.getManagerById(userId);
         if(manager == null)

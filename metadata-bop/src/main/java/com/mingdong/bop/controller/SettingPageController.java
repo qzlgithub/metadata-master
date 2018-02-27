@@ -115,11 +115,11 @@ public class SettingPageController
 
     @LoginRequired
     @GetMapping(value = "/setting/user/edit.html")
-    public ModelAndView gotoManagerEditPage(@RequestParam(value = Field.O) Long userId)
+    public ModelAndView gotoAccountEditPage(@RequestParam(value = Field.O) Long userId)
     {
         ModelAndView view = new ModelAndView("user/edit");
         RestResp resp = new RestResp();
-        managerService.getUserInfo(userId, resp);
+        managerService.getAccountInfo(userId, resp);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getMap());
         return view;
