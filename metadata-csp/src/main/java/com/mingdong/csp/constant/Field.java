@@ -62,8 +62,6 @@ public interface Field
     String NORMAL_LIST = "normalList";
     String PRODUCT_TYPE_LIST = "productTypeList";
 
-    String SELECTED_TYPE = "selectedType";
-    String IS_OPEN = "isOpen";
     String PRODUCT_TYPE = "productType";
     String INC_OPENED = "incOpened";
     String IS_OPENED = "isOpened";

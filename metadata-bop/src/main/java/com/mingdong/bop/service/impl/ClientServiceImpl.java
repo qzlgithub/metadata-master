@@ -330,7 +330,6 @@ public class ClientServiceImpl implements ClientService
             BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
     {
         OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
-        openClientProductDTO.setYear(true);
         Date current = new Date();
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         ProductRechargeDTO pr = new ProductRechargeDTO();
@@ -368,7 +367,6 @@ public class ClientServiceImpl implements ClientService
             BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
     {
         OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
-        openClientProductDTO.setYear(false);
         Date current = new Date();
         Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
         ProductRechargeDTO pr = new ProductRechargeDTO();
