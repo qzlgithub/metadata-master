@@ -117,7 +117,7 @@ public class ClientPageController
             @RequestParam(value = Field.P, required = false) Long productId,
             @RequestParam(value = Field.U, required = false) Long userId)
     {
-        ModelAndView view = new ModelAndView("client/request");
+        ModelAndView view = new ModelAndView("client/consumption");
         view.addObject(Field.CLIENT_ID, clientId + "");
         view.addObject(Field.PRODUCT_ID, productId + "");
         view.addObject(Field.USER_ID, userId + "");

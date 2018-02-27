@@ -29,7 +29,7 @@ public class FinancePageController
     @RequestMapping(value = "/finance/consumption.html")
     public ModelAndView gotoBillListPage()
     {
-        ModelAndView view = new ModelAndView("finance/request");
+        ModelAndView view = new ModelAndView("finance/consumption");
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
         view.addObject(Field.PRODUCT_DICT, productInfoList);

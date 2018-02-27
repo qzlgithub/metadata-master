@@ -58,7 +58,7 @@ public class StatsPageController
     @RequestMapping(value = "/stats/consumption.html")
     public ModelAndView gotoStatsRequest()
     {
-        ModelAndView view = new ModelAndView("stats/request");
+        ModelAndView view = new ModelAndView("stats/consumption");
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addAllObjects(RequestThread.getMap());
