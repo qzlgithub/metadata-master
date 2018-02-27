@@ -26,10 +26,10 @@ public class FinancePageController
     private SystemService systemService;
 
     @LoginRequired
-    @RequestMapping(value = "/finance/bill.html")
+    @RequestMapping(value = "/finance/request.html")
     public ModelAndView gotoBillListPage()
     {
-        ModelAndView view = new ModelAndView("finance/bill");
+        ModelAndView view = new ModelAndView("finance/request");
         view.addAllObjects(RequestThread.getMap());
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
         view.addObject(Field.PRODUCT_DICT, productInfoList);
