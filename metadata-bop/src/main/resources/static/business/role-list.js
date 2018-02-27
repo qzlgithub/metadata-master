@@ -14,8 +14,8 @@ layui.config({
         limits: [10, 15, 30, 50],
         url: '/account/role/list',
         cols: [[
-            {field: 'name', title: '分组名称', width: '15%'},
-            {field: 'privilege', title: '权限类型'},
+            {field: 'name', title: '角色名称', width: '15%'},
+            {field: 'module', title: '功能模块'},
             {title: '操作', align: 'center', toolbar: '#operationBar', fixed: 'right', width: '15%'}
         ]],
         request: {
@@ -29,7 +29,6 @@ layui.config({
             dataName: 'list'
         }
     });
-
     table.on('tool(dataTable)', function(obj) {
         var curr_data = obj.data, event = obj.event;
         if(event === 'disable' || event === 'enable') {

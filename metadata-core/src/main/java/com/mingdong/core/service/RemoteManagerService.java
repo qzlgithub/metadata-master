@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
@@ -26,11 +27,6 @@ public interface RemoteManagerService
      * 更改管理员信息，null值不修改
      */
     ResultDTO updateManagerSkipNull(NewManager newManager);
-
-    /**
-     * 获取所有角色列表
-     */
-    RoleListDTO getRoleList(Page page);
 
     /**
      * 检测角色名称是否已存在
@@ -88,4 +84,14 @@ public interface RemoteManagerService
      * 创建账户角色
      */
     ResultDTO addAccountRole(RoleDTO1 roleDTO);
+
+    /**
+     * 获取所有角色列表
+     */
+    RoleListDTO getRoleList(Page page);
+
+    /**
+     * 获取账户角色列表
+     */
+    ListDTO<RoleDTO1> getAccountRoleList(Page page);
 }

@@ -22,4 +22,6 @@ public interface PrivilegeMapper
 
     void updateModuleStatusByIds(@Param("enabled") Integer enabled, @Param("data") Date date,
             @Param("idList") List<Long> idList);
+
+    List<Privilege> getModuleListByRole(Long roleId);
 }

@@ -27,7 +27,7 @@ public interface ManagerService
     /**
      * 获取角色列表
      */
-    void getRoleList(Page page, RestListResp res);
+    void getAccountRoleList(Page page, RestListResp res);
 
     /**
      * 新增角色并赋权
@@ -45,9 +45,9 @@ public interface ManagerService
     void getManagerList(Long roleId, Integer enabled, Page page, RestListResp res);
 
     /**
-     * 根据管理员Id获取管理员信息
+     * 获取用户信息
      */
-    void getManagerInfo(Long managerId, RestResp resp);
+    void getUserInfo(Long userId, RestResp resp);
 
     /**
      * 新增管理员信息并赋权

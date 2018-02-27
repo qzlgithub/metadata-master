@@ -15,6 +15,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -117,25 +118,31 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getRoleList(Page page, RestListResp res)
+    public void getAccountRoleList(Page page, RestListResp res)
     {
-        RoleListDTO roleListDTO = remoteManagerService.getRoleList(page);
-        res.setTotal(roleListDTO.getTotal());
-        List<RoleDTO> roleList = roleListDTO.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>(roleList.size());
-        if(!CollectionUtils.isEmpty(roleList))
+        ListDTO<RoleDTO1> listDTO = remoteManagerService.getAccountRoleList(page);
+        res.setTotal(listDTO.getTotal());
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(RoleDTO role : roleList)
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(RoleDTO1 o : listDTO.getList())
             {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, role.getId() + "");
-                map.put(Field.NAME, role.getName());
-                map.put(Field.PRIVILEGE, getRoleTopPrivilege(role.getId()));
-                map.put(Field.ENABLED, role.getEnabled());
-                list.add(map);
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.ID, o.getId() + "");
+                m.put(Field.NAME, o.getName());
+                if(!CollectionUtils.isEmpty(o.getModuleNameList()))
+                {
+                    m.put(Field.MODULE, "");
+                }
+                else
+                {
+                    m.put(Field.MODULE, StringUtils.join(o.getModuleNameList().toArray(), "，"));
+                }
+                m.put(Field.ENABLED, o.getEnabled());
+                list.add(m);
             }
+            res.setList(list);
         }
-        res.setList(list);
     }
 
     @Override
@@ -185,16 +192,16 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getManagerInfo(Long managerId, RestResp resp)
+    public void getUserInfo(Long userId, RestResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(userId);
         if(manager == null)
         {
             resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
         ManagerPrivilegeListDTO managerPrivilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(
-                managerId);
+                userId);
 
         List<ManagerPrivilegeDTO> dataList = managerPrivilegeListDTO.getDataList();
         List<String> privilege = new ArrayList<>(dataList.size());
@@ -212,7 +219,7 @@ public class ManagerServiceImpl implements ManagerService
             map.put(Field.NAME, role.getName());
             roleList.add(map);
         }
-        resp.addData(Field.MANAGER_ID, managerId + "");
+        resp.addData(Field.MANAGER_ID, userId + "");
         resp.addData(Field.ROLE_ID, manager.getRoleId() + "");
         resp.addData(Field.USERNAME, manager.getUsername());
         resp.addData(Field.NAME, manager.getName());
