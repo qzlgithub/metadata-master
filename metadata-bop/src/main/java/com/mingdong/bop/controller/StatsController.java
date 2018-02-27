@@ -19,6 +19,7 @@ public class StatsController
 {
     @Resource
     private StatsService statsService;
+
     @LoginRequired
     @GetMapping(value = "/stats/client/clientList")
     public ListRes getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
@@ -30,6 +31,7 @@ public class StatsController
         statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize), res);
         return res;
     }
+
     @LoginRequired
     @GetMapping(value = "/stats/client/clientListJson")
     public String getClientListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
@@ -38,6 +40,7 @@ public class StatsController
         JSONArray jsonArray = statsService.getClientListJson(scopeTypeEnum);
         return jsonArray.toJSONString();
     }
+
     @LoginRequired
     @GetMapping(value = "/stats/client/rechargeList")
     public ListRes getRechargeList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
@@ -49,6 +52,7 @@ public class StatsController
         statsService.getRechargeList(scopeTypeEnum, new Page(pageNum, pageSize), res);
         return res;
     }
+
     @LoginRequired
     @GetMapping(value = "/stats/client/rechargeListJson")
     public String getRechargeListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType)
@@ -57,6 +61,7 @@ public class StatsController
         JSONObject jsonObject = statsService.getRechargeListJson(scopeTypeEnum);
         return jsonObject.toJSONString();
     }
+
     @LoginRequired
     @GetMapping(value = "/stats/client/requestList")
     public ListRes getRequestList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
@@ -70,6 +75,7 @@ public class StatsController
         statsService.getRequestList(scopeTypeEnum, new Page(pageNum, pageSize), name, productId, res);
         return res;
     }
+
     @LoginRequired
     @GetMapping(value = "/stats/client/requestListJson")
     public String getRequestListJson(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,

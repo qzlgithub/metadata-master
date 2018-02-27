@@ -11,16 +11,16 @@ import javax.annotation.Resource;
 public class InterceptorConfigurer extends WebMvcConfigurerAdapter
 {
     @Resource
-    private AccessInterceptor accessInterceptor;
+    private PageInterceptor pageInterceptor;
+    @Resource
+    private RestInterceptor restInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry)
     {
-        registry.addInterceptor(accessInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/index.html")
-                .excludePathPatterns("/m/**")
-                .excludePathPatterns("/user/login");
+        registry.addInterceptor(pageInterceptor).addPathPatterns("/**/*.html").excludePathPatterns("/index.html",
+                "/login.html");
+        registry.addInterceptor(restInterceptor).addPathPatterns("/**").excludePathPatterns("/", "/**/*.html");
         super.addInterceptors(registry);
     }
 
