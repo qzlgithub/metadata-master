@@ -39,7 +39,7 @@
             <li class="layui-nav-item bd-right-none important">
                 <a>
                     <img src="http://m.zhengjinfan.cn/images/0.jpg" class="layui-nav-img"/>
-                    <p th:text="${i_name}">管理员</p>
+                    <p id="manager-user-name-id">管理员</p>
                 </a>
                 <ul class="layui-nav-child">
                     <li class="cp"><a id="changePwd">修改密码</a></li>
@@ -49,6 +49,9 @@
         </ul>
         <ul class="layui-nav layui-layout-right kit-nav"></ul>
     </div>
+    <script>
+        document.getElementById("manager-user-name-id").innerHTML = sessionStorage.getItem("user_name");
+    </script>
 </div>
 <div th:fragment="point">
     <div class="layui-layer-title">修改密码</div>
