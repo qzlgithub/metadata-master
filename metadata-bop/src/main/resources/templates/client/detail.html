@@ -119,7 +119,7 @@
                             <p class="mt40 customer-detail-menu">
                                 <a th:href="'/client/recharge.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}">
                                     充值记录</a>
-                                <a th:href="'/client/request.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}"
+                                <a th:href="'/client/consumption.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}"
                                    class="tc">消费记录</a>
                                 <a class="cp">
                                     <span class="renew" th:attr="client-product-id=${cp.clientProductId}">续签</span>
@@ -185,7 +185,7 @@
                             <td th:text="${user.phone}"></td>
                             <td>
                                 <span>
-                                    <a th:href="'/client/request.html?c=' + ${clientId} + '&amp;u=' + ${user.id}"
+                                    <a th:href="'/client/consumption.html?c=' + ${clientId} + '&amp;u=' + ${user.id}"
                                        class="edit">查看消费详情</a>
                                 </span>
                             </td>

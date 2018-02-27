@@ -249,7 +249,7 @@ function show_sub_user(id) {
             var obj = $("#child-account-body");
             var sub_acct_tr =
                 '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td>' +
-                '<td><a href="/client/request.html?c=' + id + '&u=#{id}" class="edit">查看消费</a></td></tr>';
+                '<td><a href="/client/consumption.html?c=' + id + '&u=#{id}" class="edit">查看消费</a></td></tr>';
             obj.empty();
             for(var d in data) {
                 var tr = sub_acct_tr.replace(/#{id}/g, data[d].id).replace(/#{username}/g, data[d].username)

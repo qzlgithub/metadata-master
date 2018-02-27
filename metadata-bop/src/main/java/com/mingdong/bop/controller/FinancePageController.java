@@ -26,7 +26,7 @@ public class FinancePageController
     private SystemService systemService;
 
     @LoginRequired
-    @RequestMapping(value = "/finance/request.html")
+    @RequestMapping(value = "/finance/consumption.html")
     public ModelAndView gotoBillListPage()
     {
         ModelAndView view = new ModelAndView("finance/request");

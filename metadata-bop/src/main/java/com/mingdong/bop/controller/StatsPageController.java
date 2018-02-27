@@ -55,7 +55,7 @@ public class StatsPageController
     }
 
     @LoginRequired
-    @RequestMapping(value = "/stats/request.html")
+    @RequestMapping(value = "/stats/consumption.html")
     public ModelAndView gotoStatsRequest()
     {
         ModelAndView view = new ModelAndView("stats/request");

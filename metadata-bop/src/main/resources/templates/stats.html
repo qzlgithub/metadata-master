@@ -35,9 +35,9 @@
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m41400}">营收数据</span></a>
                     </dd>
-                    <dd th:class="${i_module eq 'stats-request'} ? 'layui-this':''"
+                    <dd th:class="${i_module eq 'stats-consumption'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'41500')}">
-                        <a href="/stats/request.html">
+                        <a href="/stats/consumption.html">
                             <i class="layui-icon">&#xe602;</i>
                             <span th:text="${i_system.m41500}">产品请求数据</span></a>
                     </dd>

@@ -112,7 +112,7 @@ public class ClientPageController
      * 接口请求记录
      */
     @LoginRequired
-    @RequestMapping(value = "/client/request.html")
+    @RequestMapping(value = "/client/consumption.html")
     public ModelAndView gotoClientRequest(@RequestParam(value = Field.C) Long clientId,
             @RequestParam(value = Field.P, required = false) Long productId,
             @RequestParam(value = Field.U, required = false) Long userId)
