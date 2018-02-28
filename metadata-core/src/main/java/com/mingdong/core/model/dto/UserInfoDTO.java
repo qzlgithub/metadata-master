@@ -1,8 +1,9 @@
 package com.mingdong.core.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UserInfoDTO
+public class UserInfoDTO implements Serializable
 {
     private String username;
     private String name;
