@@ -1,25 +1,27 @@
-var message;
+var layer, message;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'message'], function() {
-    var app = layui.app,
-        $ = layui.jquery,
-        layer = layui.layer;
+}).use(['app', 'message', 'form'], function() {
+    var app = layui.app;
+    app.set({type: 'iframe'}).init();
+    var form = layui.form;
     //将message设置为全局以便子页面调用
+    layer = layui.layer;
     message = layui.message;
-    //主入口
-    app.set({
-        type: 'iframe'
-    }).init();
-    $('#pay').on('click', function() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: '<img src="../../static/build/images/pay.png" />',
-            area: ['500px', '250px'],
-            shadeClose: true
-        });
-    });
+    form.on('select(role-dict)', function(obj) {
+        var roleId = obj.value;
+        $.get(
+            "/account/role/privilege",
+            {"roleId": roleId},
+            function(data) {
+                $(".privilege").prop("checked", false);
+                for(var i in data) {
+                    $("#" + data[i]).prop("checked", true);
+                }
+                checkSubPrivAllChecked();
+            }
+        );
+    })
 });
 $(function() {
     checkSubPrivAllChecked();
@@ -59,21 +61,6 @@ function checkSubPrivAllChecked() {
     });
 }
 
-function resetPrivilege() {
-    var roleId = $("#roleId").val();
-    $.get(
-        "/account/role/privilege",
-        {"roleId": roleId},
-        function(data) {
-            $(".privilege").prop("checked", false);
-            for(var i in data) {
-                $("#" + data[i]).prop("checked", true);
-            }
-            checkSubPrivAllChecked();
-        }
-    );
-}
-
 function saveManager() {
     var managerId = $("#managerId").val();
     var roleId = $("#roleId").val();
@@ -83,8 +70,6 @@ function saveManager() {
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
-    console.log("roleId: " + roleId + "\nusername: " + username + "\nname: " + name + "\nphone: " + phone
-        + "\nenabled: " + enabled);
     $.ajax({
         type: "POST",
         url: "/account",

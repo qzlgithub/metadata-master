@@ -15,20 +15,16 @@ import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
-import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Privilege;
-import com.mingdong.mis.domain.entity.Role;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.PrivilegeMapper;
-import com.mingdong.mis.domain.mapper.RoleMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +38,6 @@ import java.util.Map;
 public class RemoteSystemServiceImpl implements RemoteSystemService
 {
     @Resource
-    private RoleMapper roleMapper;
-    @Resource
     private DictIndustryMapper dictIndustryMapper;
     @Resource
     private PrivilegeMapper privilegeMapper;
@@ -51,26 +45,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     private DictRechargeTypeMapper dictRechargeTypeMapper;
     @Resource
     private SysConfigMapper sysConfigMapper;
-
-    @Override
-    public RoleListDTO getRoleListByStatus(Integer aTrue)
-    {
-        RoleListDTO roleListDTO = new RoleListDTO();
-        List<RoleDTO> dataList = new ArrayList<>();
-        roleListDTO.setDataList(dataList);
-        RoleDTO roleDTO;
-        List<Role> roleList = roleMapper.getByStatus(TrueOrFalse.TRUE);
-        if(!CollectionUtils.isEmpty(roleList))
-        {
-            for(Role item : roleList)
-            {
-                roleDTO = new RoleDTO();
-                EntityUtils.copyProperties(item, roleDTO);
-                dataList.add(roleDTO);
-            }
-        }
-        return roleListDTO;
-    }
 
     @Override
     public DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse)
@@ -93,19 +67,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public DictIndustryDTO getDictIndustryById(Long industryId)
-    {
-        DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
-        DictIndustry byId = dictIndustryMapper.findById(industryId);
-        if(byId == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byId, dictIndustryDTO);
-        return dictIndustryDTO;
-    }
-
-    @Override
     public DictIndustryDTO getDictIndustryByCode(String code)
     {
         DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
@@ -116,33 +77,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         }
         EntityUtils.copyProperties(byCode, dictIndustryDTO);
         return dictIndustryDTO;
-    }
-
-    @Override
-    public DictRechargeTypeDTO getDictRechargeTypeById(Integer rechargeTypeId)
-    {
-        DictRechargeTypeDTO dictRechargeTypeDTO = new DictRechargeTypeDTO();
-        DictRechargeType rechargeType = dictRechargeTypeMapper.findById(rechargeTypeId);
-        if(rechargeType == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(rechargeType, dictRechargeTypeDTO);
-        return dictRechargeTypeDTO;
-    }
-
-    @Override
-    public PrivilegeListDTO getPrivilegeTopListByRoleId(Long roleId)
-    {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        privilegeListDTO.setDataList(dataList);
-        List<Privilege> privilegeList = privilegeMapper.getTopListByRole(roleId);
-        if(!CollectionUtils.isEmpty(privilegeList))
-        {
-            findPrivilegeDTO(privilegeList, dataList);
-        }
-        return privilegeListDTO;
     }
 
     @Override
@@ -157,19 +91,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             findPrivilegeDTO(privilegeList, dataList);
         }
         return privilegeListDTO;
-    }
-
-    @Override
-    public PrivilegeDTO getPrivilegeById(Long id)
-    {
-        PrivilegeDTO privilegeDTO = new PrivilegeDTO();
-        Privilege privilege = privilegeMapper.findById(id);
-        if(privilege == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(privilege, privilegeDTO);
-        return privilegeDTO;
     }
 
     @Override

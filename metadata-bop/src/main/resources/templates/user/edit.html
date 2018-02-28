@@ -27,13 +27,13 @@
         </div>
         <div class="p20">
             <div class="form-title mb20">账号信息</div>
-            <div class="w40 m30">
+            <div class="w40 m30 layui-form">
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <select name="modules" id="roleId" class="select-list" onchange="resetPrivilege()">
-                            <option th:each="role:${roleList}" th:value="${role.key}"
-                                    th:text="${role.value}" th:selected="${roleId} eq ${role.key}"></option>
+                        <select name="modules" id="roleId" lay-filter="role-dict">
+                            <option th:each="o : ${roleDict}" th:value="${o.key}"
+                                    th:text="${o.value}" th:selected="${roleId} eq ${o.key}"></option>
                         </select>
                     </div>
                 </div>

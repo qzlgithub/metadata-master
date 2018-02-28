@@ -1,5 +1,6 @@
 package com.mingdong.bop.service;
 
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -10,19 +11,9 @@ import java.util.Map;
 public interface SystemService
 {
     /**
-     * 获取角色列表
-     */
-    List<Map<String, Object>> getValidRole();
-
-    /**
      * 判断是否存在该code数据
      */
     boolean checkIndustryCodeExist(String code);
-
-    /**
-     * 根据行业分类id获取行业分类
-     */
-    Map<String, String> getIndustryInfo(Long id);
 
     /**
      * 新增行业分类信息
@@ -58,11 +49,6 @@ public interface SystemService
      * 获取顶级的权限
      */
     List<Map<String, Object>> getHierarchyPrivilege();
-
-    /**
-     * 根据id获取权限信息
-     */
-    Map<String, Object> getPrivilegeInfo(Long id);
 
     /**
      * 修改权限信息
@@ -128,4 +114,6 @@ public interface SystemService
      * 获取系统配置-充值类型字典列表
      */
     void getRechargeTypeList(RestListResp res);
+
+    List<Dict> getAccountRoleDict();
 }

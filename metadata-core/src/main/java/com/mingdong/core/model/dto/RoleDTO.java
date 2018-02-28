@@ -1,15 +1,15 @@
 package com.mingdong.core.model.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 public class RoleDTO implements Serializable
 {
     private Long id;
-    private Date createTime;
-    private Date updateTime;
     private String name;
     private Integer enabled;
+    private List<Long> privilegeIdList;
+    private List<String> moduleNameList;
 
     public Long getId()
     {
@@ -19,26 +19,6 @@ public class RoleDTO implements Serializable
     public void setId(Long id)
     {
         this.id = id;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
     }
 
     public String getName()
@@ -59,5 +39,25 @@ public class RoleDTO implements Serializable
     public void setEnabled(Integer enabled)
     {
         this.enabled = enabled;
+    }
+
+    public List<Long> getPrivilegeIdList()
+    {
+        return privilegeIdList;
+    }
+
+    public void setPrivilegeIdList(List<Long> privilegeIdList)
+    {
+        this.privilegeIdList = privilegeIdList;
+    }
+
+    public List<String> getModuleNameList()
+    {
+        return moduleNameList;
+    }
+
+    public void setModuleNameList(List<String> moduleNameList)
+    {
+        this.moduleNameList = moduleNameList;
     }
 }
