@@ -189,7 +189,7 @@
         '</label>',
 		'<div class="ta_date" id="'+this.compareInputDiv+'">',
 		'	<span name="dateCompare" id="'+this.inputCompareId+'" class="date_title"></span>',
-		'	<a class="opt_sel" id="'+ this.mOpts.compareTrigger +'" href="#">',
+		'	<a class="opt_sel" id="'+ this.mOpts.compareTrigger +'" href="javascript:;">',
         '		<i class="i_orderd"></i>',
         '	</a>',
 		'</div>'

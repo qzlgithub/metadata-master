@@ -15,7 +15,7 @@ layui.config({
         layer.open({
             title: false,
             type: 1,
-            content: '<img src="../../static/build/images/pay.png" />',
+            content: '<img src="/static/build/images/pay.png" />',
             area: ['500px', '250px'],
             shadeClose: true
         });

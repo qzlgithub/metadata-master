@@ -111,7 +111,7 @@
                                 <span class="fb fr" th:text="'单价：' + ${cp.unitAmt} + '元/次'"></span>
                             </p>
                             <p class="mt40 tc mb40">
-                                <a href="#" class="add-button mr30" th:text="${cp.productName}"></a>
+                                <a href="javascript:;" class="add-button mr30" th:text="${cp.productName}"></a>
                                 <span class="key-button cp app-id"
                                       th:attr="app-id=${cp.appId}, app-name=${cp.productName}">
                                     AppID</span>
@@ -128,7 +128,7 @@
                         </li>
 
                         <li th:each="prod : ${toOpen}">
-                            <p class="tc mt15"><img src="../../static/images/icon/check-icon.png"/></p>
+                            <p class="tc mt15"><img src="/static/images/icon/check-icon.png"/></p>
                             <p class="tc mt5" th:text="${prod.productName}"></p>
                             <p class="mt40 tr">
                                 <span th:if="${prod.isSelected == 0}" class="cp open-product"
