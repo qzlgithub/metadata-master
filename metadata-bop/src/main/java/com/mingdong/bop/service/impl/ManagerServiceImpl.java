@@ -25,7 +25,7 @@ import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO1;
+import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
@@ -116,12 +116,12 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void getAccountRoleList(Page page, RestListResp res)
     {
-        ListDTO<RoleDTO1> listDTO = remoteManagerService.getAccountRoleList(null);
+        ListDTO<RoleDTO> listDTO = remoteManagerService.getAccountRoleList(null);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(RoleDTO1 o : listDTO.getList())
+            for(RoleDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.ID, o.getId() + "");
@@ -144,7 +144,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void addAccountRole(String name, List<Long> privilegeIdList, RestResp resp)
     {
-        RoleDTO1 roleDTO = new RoleDTO1();
+        RoleDTO roleDTO = new RoleDTO();
         roleDTO.setName(name);
         roleDTO.setPrivilegeIdList(privilegeIdList);
         ResultDTO resultDTO = remoteManagerService.addAccountRole(roleDTO);
@@ -154,7 +154,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void editRole(Long roleId, String roleName, List<Long> privilege, RestResp resp)
     {
-        RoleDTO1 roleDTO = new RoleDTO1();
+        RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(roleId);
         roleDTO.setName(roleName);
         roleDTO.setPrivilegeIdList(privilege);
@@ -271,7 +271,7 @@ public class ManagerServiceImpl implements ManagerService
     public Map<String, Object> getAccountRoleInfo(Long roleId)
     {
         Map<String, Object> map = new HashMap<>();
-        RoleDTO1 roleDTO = remoteManagerService.getAccountRoleInfo(roleId);
+        RoleDTO roleDTO = remoteManagerService.getAccountRoleInfo(roleId);
         map.put(Field.ROLE_ID, roleId + "");
         map.put(Field.ROLE_NAME, roleDTO.getName());
         List<String> privilegeList = new ArrayList<>();

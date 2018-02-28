@@ -96,7 +96,7 @@ public class SettingPageController
     public ModelAndView gotoManagerManagement()
     {
         ModelAndView view = new ModelAndView("user/list");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
+        view.addObject(Field.ROLE_DICT, systemService.getAccountRoleDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -106,7 +106,7 @@ public class SettingPageController
     public ModelAndView gotoManagerAdditionPage()
     {
         ModelAndView view = new ModelAndView("user/add");
-        view.addObject(Field.ROLE_LIST, systemService.getValidRole());
+        view.addObject(Field.ROLE_DICT, systemService.getAccountRoleDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

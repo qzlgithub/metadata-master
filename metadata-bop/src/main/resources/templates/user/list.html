@@ -30,17 +30,16 @@
                 <li>
                     角色：
                     <div class="inline-flex" style="width: 180px">
-                        <select id="roleId" name="roleId" class="select-list">
+                        <select id="roleId" name="roleId">
                             <option value="">全部</option>
-                            <option th:each="role:${roleList}" th:value="${role.roleId}"
-                                    th:text="${role.roleName}"></option>
+                            <option th:each="o : ${roleDict}" th:value="${o.key}" th:text="${o.value}"></option>
                         </select>
                     </div>
                 </li>
                 <li>
                     状态：
                     <div class="inline-flex" style="width: 120px">
-                        <select id="enabled" name="enabled" class="select-list">
+                        <select id="enabled" name="enabled">
                             <option value="">全部</option>
                             <option value="1">正常</option>
                             <option value="0">已禁用</option>

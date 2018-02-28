@@ -8,8 +8,10 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
@@ -19,9 +21,8 @@ import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
-import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.service.RemoteSystemService;
 import org.springframework.stereotype.Service;
 
@@ -39,42 +40,14 @@ public class SystemServiceImpl implements SystemService
     private RedisDao redisDao;
     @Resource
     private RemoteSystemService remoteSystemService;
-
-    @Override
-    public List<Map<String, Object>> getValidRole()
-    {
-        RoleListDTO roleListByStatus = remoteSystemService.getRoleListByStatus(TrueOrFalse.TRUE);
-        List<RoleDTO> roleList = roleListByStatus.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(RoleDTO role : roleList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ROLE_ID, role.getId() + "");
-            map.put(Field.ROLE_NAME, role.getName());
-            list.add(map);
-        }
-        return list;
-    }
+    @Resource
+    private RemoteManagerService remoteManagerService;
 
     @Override
     public boolean checkIndustryCodeExist(String code)
     {
         DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code.toUpperCase());
         return industry != null;
-    }
-
-    @Override
-    public Map<String, String> getIndustryInfo(Long id)
-    {
-        Map<String, String> map = new HashMap<>();
-        map.put(Field.ID, id + "");
-        DictIndustryDTO industry = remoteSystemService.getDictIndustryById(id);
-        if(industry != null)
-        {
-            map.put(Field.CODE, industry.getCode());
-            map.put(Field.NAME, industry.getName());
-        }
-        return map;
     }
 
     @Override
@@ -207,19 +180,6 @@ public class SystemServiceImpl implements SystemService
             list.add(p);
         }
         return list;
-    }
-
-    @Override
-    public Map<String, Object> getPrivilegeInfo(Long id)
-    {
-        Map<String, Object> privilegeMap = new HashMap<>();
-        privilegeMap.put(Field.ID, id + "");
-        PrivilegeDTO privilege = remoteSystemService.getPrivilegeById(id);
-        if(privilege != null)
-        {
-            privilegeMap.put(Field.NAME, privilege.getName());
-        }
-        return privilegeMap;
     }
 
     @Override
@@ -396,6 +356,21 @@ public class SystemServiceImpl implements SystemService
             list.add(m);
         }
         res.setList(list);
+    }
+
+    @Override
+    public List<Dict> getAccountRoleDict()
+    {
+        List<Dict> roleDict = new ArrayList<>();
+        ListDTO<DictDTO> listDTO = remoteManagerService.getAccountRoleDict();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
+        {
+            for(DictDTO o : listDTO.getList())
+            {
+                roleDict.add(new Dict(o.getKey(), o.getValue()));
+            }
+        }
+        return roleDict;
     }
 
     private void cacheAllIndustryData()

@@ -8,7 +8,7 @@ import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO1;
+import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
@@ -74,24 +74,24 @@ public interface RemoteManagerService
     /**
      * 编辑账户角色信息
      */
-    ResultDTO editAccountRole(RoleDTO1 roleDTO);
+    ResultDTO editAccountRole(RoleDTO roleDTO);
 
     /**
      * 获取账户角色信息
      *
      * @param roleId 角色ID
      */
-    RoleDTO1 getAccountRoleInfo(Long roleId);
+    RoleDTO getAccountRoleInfo(Long roleId);
 
     /**
      * 创建账户角色
      */
-    ResultDTO addAccountRole(RoleDTO1 roleDTO);
+    ResultDTO addAccountRole(RoleDTO roleDTO);
 
     /**
      * 获取账户角色列表
      */
-    ListDTO<RoleDTO1> getAccountRoleList(Page page);
+    ListDTO<RoleDTO> getAccountRoleList(Page page);
 
     ListDTO<DictDTO> getAccountRoleDict();
 }
