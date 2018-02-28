@@ -142,36 +142,28 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
         "/client/operate/log",
         {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(res) {
-            if(res.code === '000000') {
-                var div = $("#ban-data-body");
-                div.empty();
-                var result = res.data;
-                var total = result.total;
-                var pages = result.pages;
-                var pageNum = result.pageNum;
-                var pageSize = result.pageSize;
-                var list = result.list;
-                if(typeof(list) !== "undefined" && list.length > 0) {
-                    for(var o in list) {
-                        var tr = logTr.replace(/#{type}/g, list[o].type === 1 ? "解冻操作" : "冻结操作")
-                        .replace(/#{managerName}/g, list[o].managerName)
-                        .replace(/#{operateTime}/g, list[o].operateTime)
-                        .replace(/#{reason}/g, list[o].reason);
-                        div.append(tr);
-                    }
-                    if(typeof pageFun === 'function') {
-                        pageFun(obj, pages, total);
-                    }
+            var div = $("#ban-data-body");
+            div.empty();
+            var total = res.total;
+            var pages = Math.floor((total - 1) / parseInt(obj['pageSize'])) + 1;
+            var list = res.list;
+            if(typeof(list) !== "undefined" && list.length > 0) {
+                for(var o in list) {
+                    var tr = logTr.replace(/#{type}/g, list[o].type === 1 ? "解冻操作" : "冻结操作")
+                    .replace(/#{managerName}/g, list[o].managerName)
+                    .replace(/#{operateTime}/g, list[o].operateTime)
+                    .replace(/#{reason}/g, list[o].reason);
+                    div.append(tr);
                 }
-                else {
-                    div.append("<h3>暂无数据</h3>");
-                }
-                if(typeof openLayerFun === 'function') {
-                    openLayerFun();
+                if(typeof pageFun === 'function') {
+                    pageFun(obj, pages, total);
                 }
             }
             else {
-                layer.msg(res.message);
+                div.append("<h3>暂无数据</h3>");
+            }
+            if(typeof openLayerFun === 'function') {
+                openLayerFun();
             }
         }
     );

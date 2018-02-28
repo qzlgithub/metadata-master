@@ -397,13 +397,10 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientOperateLog(Long clientId, Page page, RestResp resp)
+    public void getClientOperateLog(Long clientId, Page page, RestListResp resp)
     {
         ListDTO<ClientOperateLogDTO> listDTO = remoteClientService.getClientOperateLog(clientId, page);
-        resp.addData(Field.TOTAL, listDTO.getTotal());
-        resp.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
@@ -417,7 +414,7 @@ public class ClientServiceImpl implements ClientService
                 list.add(map);
             }
         }
-        resp.addData(Field.LIST, list);
+        resp.setList(list);
     }
 
     @Override

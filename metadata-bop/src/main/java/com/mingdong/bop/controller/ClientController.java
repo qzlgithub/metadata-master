@@ -327,11 +327,11 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "/client/operate/log")
-    public RestResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
+    public RestListResp getClientOperateLog(@RequestParam(value = Field.ID) Long clientId,
             @RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
     {
-        RestResp resp = new RestResp();
+        RestListResp resp = new RestListResp();
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
     }

@@ -83,7 +83,7 @@ public interface ClientService
     /**
      * 查询客户帐号的管理员操作记录
      */
-    void getClientOperateLog(Long clientId, Page page, RestResp resp);
+    void getClientOperateLog(Long clientId, Page page, RestListResp resp);
 
     /**
      * 判断合同号是否已存在
