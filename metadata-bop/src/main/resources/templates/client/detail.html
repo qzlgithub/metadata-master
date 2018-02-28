@@ -128,7 +128,7 @@
                         </li>
 
                         <li th:each="prod : ${toOpen}">
-                            <p class="tc mt15"><img src="../../static/images/icon/check-icon.png"/></p>
+                            <p class="tc mt15"><img src="/static/images/icon/check-icon.png"/></p>
                             <p class="tc mt5" th:text="${prod.productName}"></p>
                             <p class="mt40 tr">
                                 <span th:if="${prod.isSelected == 0}" class="cp open-product"
