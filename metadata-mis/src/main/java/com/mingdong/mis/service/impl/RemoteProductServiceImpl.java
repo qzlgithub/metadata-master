@@ -327,53 +327,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductRechargeInfoListDTO getProductRechargeInfoList(Long clientId, Long productId, Date startTime,
-            Date endTime, Page page)
-    {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
-        List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
-        productRechargeInfoListDTO.setDataList(dataList);
-        ProductRechargeInfoDTO clientOperateInfoDTO;
-        if(page == null)
-        {
-            List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId, productId,
-                    startTime, endTime);
-            if(!CollectionUtils.isEmpty(productRechargeInfos))
-            {
-                for(ProductRechargeInfo item : productRechargeInfos)
-                {
-                    clientOperateInfoDTO = new ProductRechargeInfoDTO();
-                    EntityUtils.copyProperties(item, clientOperateInfoDTO);
-                    dataList.add(clientOperateInfoDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = productRechargeInfoMapper.countBy(clientId, productId, startTime, endTime);
-            int pages = page.getTotalPage(total);
-            productRechargeInfoListDTO.setPages(pages);
-            productRechargeInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductRechargeInfo> productRechargeInfos = productRechargeInfoMapper.getListBy(clientId,
-                        productId, startTime, endTime);
-                if(!CollectionUtils.isEmpty(productRechargeInfos))
-                {
-                    for(ProductRechargeInfo item : productRechargeInfos)
-                    {
-                        clientOperateInfoDTO = new ProductRechargeInfoDTO();
-                        dataList.add(clientOperateInfoDTO);
-                        EntityUtils.copyProperties(item, clientOperateInfoDTO);
-                    }
-                }
-            }
-        }
-        return productRechargeInfoListDTO;
-    }
-
-    @Override
     public ProductDTO getProductById(Long productId)
     {
         ProductDTO productDTO = new ProductDTO();

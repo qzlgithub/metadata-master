@@ -64,12 +64,6 @@ public interface RemoteProductService
     BigDecimal sumAmountByClientProduct(Long clientProductId);
 
     /**
-     * 根据条件获取产品充值记录列表
-     */
-    ProductRechargeInfoListDTO getProductRechargeInfoList(Long clientId, Long productId, Date startTime, Date endTime,
-            Page page);
-
-    /**
      * 根据产品id获取产品信息
      */
     ProductDTO getProductById(Long productId);
