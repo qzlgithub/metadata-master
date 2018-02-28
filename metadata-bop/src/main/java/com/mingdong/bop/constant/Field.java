@@ -150,4 +150,5 @@ public interface Field
     String ALL_FEE = "allFee";
     String O = "o";
     String PRIVILEGE_LIST = "privilegeList";
+    String ROLE_DICT = "roleDict";
 }

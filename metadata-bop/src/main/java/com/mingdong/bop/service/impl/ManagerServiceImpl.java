@@ -190,15 +190,15 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public Map<String, Object> getAccountInfoData(Long userId)
     {
-        Map<String, Object> data = new HashMap<>(); // TODO zhujun
+        Map<String, Object> data = new HashMap<>();
         data.put(Field.MANAGER_ID, userId + "");
         // 查询账户的基本信息及权限配置信息
         UserInfoDTO userInfoDTO = remoteManagerService.getAccountInfo(userId);
         data.put(Field.USERNAME, userInfoDTO.getUsername());
-        data.put(Field.NAME, userInfoDTO.getUsername());
-        data.put(Field.PHONE, userInfoDTO.getUsername());
-        data.put(Field.QQ, userInfoDTO.getUsername());
-        data.put(Field.ROLE_ID, userInfoDTO.getUsername());
+        data.put(Field.NAME, userInfoDTO.getName());
+        data.put(Field.PHONE, userInfoDTO.getPhone());
+        data.put(Field.QQ, userInfoDTO.getQq());
+        data.put(Field.ROLE_ID, userInfoDTO.getRoleId());
         data.put(Field.ENABLED, userInfoDTO.getEnabled());
         List<String> privilege = new ArrayList<>();
         if(!CollectionUtils.isEmpty(userInfoDTO.getPrivilegeIdList()))
@@ -219,45 +219,8 @@ public class ManagerServiceImpl implements ManagerService
                 roleDict.add(new Dict(o.getKey(), o.getValue()));
             }
         }
-        data.put(Field.ROLE_LIST, roleDict);
+        data.put(Field.ROLE_DICT, roleDict);
         return data;
-
-        /*ManagerDTO manager = remoteManagerService.getManagerById(userId);
-        if(manager == null)
-        {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        ManagerPrivilegeListDTO managerPrivilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(
-                userId);
-
-        List<ManagerPrivilegeDTO> dataList = managerPrivilegeListDTO.getDataList();
-        List<String> privilege = new ArrayList<>(dataList.size());
-        for(ManagerPrivilegeDTO mp : dataList)
-        {
-            privilege.add(mp.getPrivilegeId() + "");
-        }
-        RoleListDTO roleListDTO = remoteManagerService.getRoleList(null);
-
-        List<RoleDTO> roleDataList = roleListDTO.getDataList();
-        List<Map<String, Object>> roleList = new ArrayList<>(roleDataList.size());
-        for(RoleDTO role : roleDataList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, role.getId() + "");
-            map.put(Field.NAME, role.getName());
-            roleList.add(map);
-        }
-
-        resp.addData(Field.MANAGER_ID, userId + "");
-        resp.addData(Field.ROLE_ID, manager.getRoleId() + "");
-        resp.addData(Field.USERNAME, manager.getUsername());
-        resp.addData(Field.NAME, manager.getName());
-        resp.addData(Field.PHONE, manager.getPhone());
-        resp.addData(Field.QQ, manager.getQq());
-        resp.addData(Field.ENABLED, manager.getEnabled());
-        resp.addData(Field.PRIVILEGE, privilege);
-        resp.addData(Field.ROLE_LIST, roleList);*/
     }
 
     @Override
