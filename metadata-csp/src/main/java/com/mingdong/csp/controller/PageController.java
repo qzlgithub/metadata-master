@@ -205,15 +205,6 @@ public class PageController
     }
 
     @LoginRequired
-    @GetMapping(value = {"/system/account-set.html"})
-    public ModelAndView systemAccountSet()
-    {
-        ModelAndView view = new ModelAndView("/system/account-set");
-        view.addAllObjects(RequestThread.getPageData());
-        return view;
-    }
-
-    @LoginRequired
     @GetMapping(value = {"/system/message.html"})
     public ModelAndView systemMessage()
     {

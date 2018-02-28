@@ -105,7 +105,9 @@
         <!--right end-->
         <!--left-->
         <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important mt15" style="position: fixed; right: 9%;">
-            <img src="../images/lxkf.png" style="width: 79px;"/>
+            <a target="_blank"
+               href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><img
+                    src="/images/lxkf.png" style="width: 79px;"/></a>
         </div>
         <!--left end-->
     </div>
@@ -137,6 +139,10 @@
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script>
+    var form;
+    layui.use('form', function() {
+        form = layui.form;
+    });
     //点击加背景色
     /*$(function(){
       $(".development-menu li").click(function(){

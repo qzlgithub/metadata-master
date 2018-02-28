@@ -1,3 +1,7 @@
+var form;
+layui.use('form', function() {
+    form = layui.form;
+});
 $("#all-type").click(function() {
     if(!$(this).hasClass("active")) {
         $(".c-product-type").removeClass("active");
@@ -65,7 +69,7 @@ function fetch_product_list(obj, page_function) {
                 if(typeof list[d].status === 'undefined') {
                     htmlStr += '<div class="serve-list-title">' + list[d].name + '<span class="fr">未开通</span></div>';
                     htmlStr += '<p class="col2 tl fz-14 p10 important" style="height: 89px; overflow: hidden;">' + list[d].remark + '</p>';
-                    htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id=' + list[d].productId + '">查看详情</a></p>';
+                    htmlStr += '<p class="tc mb15 mt10"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><i class="icon kefu mr5"></i>开通</a> ｜ <a href="/product/introduce.html?id=' + list[d].productId + '">查看详情</a></p>';
                 }
                 else {
                     htmlStr += '<div class="serve-list-title">' + list[d].name;
@@ -96,7 +100,7 @@ function fetch_product_list(obj, page_function) {
                         htmlStr += '<p class="col2 tc fz-14 important">当前余额：￥' + list[d].balance + '</p>';
                         htmlStr += '<p class="fz-20 col5 tc important">' + list[d].unitAmt + '元/次</p>';
                     }
-                    htmlStr += '<p class="tc mb15 mt10"><a href=""><i class="icon kefu mr5"></i>续约</a> ｜ <a href="/product/detail.html?id=' + list[d].productId + '">查看服务</a>'
+                    htmlStr += '<p class="tc mb15 mt10"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><i class="icon kefu mr5"></i>续约</a> ｜ <a href="/product/detail.html?id=' + list[d].productId + '">查看服务</a>'
                 }
                 htmlStr += '</li>';
             }

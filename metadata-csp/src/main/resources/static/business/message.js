@@ -1,3 +1,7 @@
+var form;
+layui.use('form', function() {
+    form = layui.form;
+});
 $(function() {
     var obj = {
         pageNum: 1,
