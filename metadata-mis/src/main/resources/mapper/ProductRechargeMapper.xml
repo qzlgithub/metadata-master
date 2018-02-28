@@ -26,11 +26,11 @@
             `id`, `create_time`, `update_time`, `client_product_id`, `client_id`, `product_id`, `trade_no`,
             `contract_no`, `bill_plan`, `recharge_type`, `amount`, `balance`, `start_date`, `end_date`, `unit_amt`,
             `remark`, `manager_id`
-        from `product_recharge`
+        from `recharge`
     </sql>
 
     <insert id="add" parameterType="ProductRecharge" useGeneratedKeys="true" keyProperty="id">
-        insert into `product_recharge`
+        insert into `recharge`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
@@ -72,7 +72,7 @@
     </insert>
 
     <update id="updateSkipNull" parameterType="ProductRecharge">
-        update `product_recharge`
+        update `recharge`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -101,13 +101,13 @@
 
     <select id="sumAmountByClientProduct" parameterType="Long" resultType="BigDecimal">
         select sum(`amount`)
-        from `product_recharge`
+        from `recharge`
         where `client_product_id` = #{clientProductId}
     </select>
 
     <select id="countBy" resultType="int">
         select count(*)
-        from `product_recharge`
+        from `recharge`
         <where>
             <if test="clientId != null">`client_id` = #{clientId}</if>
             <if test="productId != null">and `product_id` = #{productId}</if>

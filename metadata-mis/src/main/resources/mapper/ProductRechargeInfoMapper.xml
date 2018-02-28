@@ -35,7 +35,7 @@
             m.`name`         as manager_name,
             pr.`contract_no` as contract_no,
             pr.`remark`      as remark
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
@@ -58,7 +58,7 @@
     <select id="countBy" resultType="Integer">
         select
             count(pr.`id`)
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
@@ -94,7 +94,7 @@
             m.`name`         as manager_name,
             pr.`contract_no` as contract_no,
             pr.`remark`      as remark
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
@@ -118,7 +118,7 @@
     <select id="countProductRechargeInfoBy" resultType="Integer">
         select
             count(pr.`id`)
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
@@ -142,7 +142,7 @@
     <select id="getProductRechargeInfoSumBy" resultType="BigDecimal">
         select
             sum(pr.`amount`)
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `client_user` cu
@@ -167,7 +167,7 @@
     <select id="countBy1" resultType="int">
         select
             count(*)
-        from `product_recharge` pr
+        from recharge pr
             left join `client` c
                 on pr.`client_id` = c.`id`
         <where>
@@ -188,7 +188,7 @@
     <select id="sumRechargeAmountBy" resultType="BigDecimal">
         select
             sum(pr.`amount`)
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
         <where>
@@ -220,7 +220,7 @@
             m.`name`         as manager_name,
             pr.`contract_no` as contract_no,
             pr.`remark`      as remark
-        from `product_recharge` pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
             left join `manager` m
@@ -248,7 +248,7 @@
     <!-- @formatter:off -->
     <select id="countByClient" resultType="int">
         select count(*)
-        from `product_recharge`
+        from `recharge`
         where `client_id` = #{clientId}
         <if test="productId != null">and `product_id` = #{productId}</if>
         <if test="startTime != null">and `create_time` >= #{startTime}</if>
@@ -266,7 +266,7 @@
             pr.`balance`     as balance,
             m.`name`         as manager_name,
             pr.`contract_no` as contract_no
-        from `product_recharge` pr
+        from `recharge` pr
             left join `product` p
                 on pr.`product_id` = p.`id`
             left join `manager` m

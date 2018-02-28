@@ -27,7 +27,7 @@
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
-            left join `product_recharge` pr
+            left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
         where (p.`custom` = 0 or cp.`id` is not null)
         <if test="typeIdList != null and typeIdList.size() > 0">
@@ -54,7 +54,7 @@
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
-            left join `product_recharge` pr
+            left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
         where (p.`custom` = 0 or cp.`id` is not null)
         <if test="typeIdList != null and typeIdList.size() > 0">
@@ -87,7 +87,7 @@
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
-            left join `product_recharge` pr
+            left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
         where p.`enabled` = 1
     </select>
@@ -115,7 +115,7 @@
         <if test="isOpen == null">left join `client_product` cp</if>
         <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
         <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
-        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `product_recharge` pr on
+        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `recharge` pr on
         cp.`latest_recharge_id` = pr.`id` where p.`enabled` = 1 and (p.`custom` = 0 or (p.`custom` = 1 and
         (cp.opened = 1 or cp.opened = 0)))
         <if test="selectedType != null">
@@ -148,7 +148,7 @@
         <if test="isOpen == null">left join `client_product` cp</if>
         <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
         <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
-        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `product_recharge` pr on
+        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `recharge` pr on
         cp.`latest_recharge_id` = pr.`id` where p.`enabled` = 1 and (p.`custom` = 0 or (p.`custom` = 1 and
         (cp.opened = 1 or cp.opened = 0)))
         <if test="selectedType != null">
@@ -182,7 +182,7 @@
                 on cp.`product_id` = p.`id`
             left join `product_txt` pt
                 on cp.`product_id` = pt.`id`
-            left join `product_recharge` pr
+            left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
         where cp.`id` = #{id}
     </select>

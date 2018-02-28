@@ -23,7 +23,7 @@
     </select>
 
     <select id="getClientRechargeByDate" resultType="BigDecimal">
-        select sum(`amount`) from `product_recharge` where 1=1
+        select sum(`amount`) from `recharge` where 1=1
         <if test="start != null">
             and `create_time` &gt;= #{start}
         </if>
@@ -33,11 +33,11 @@
     </select>
 
     <select id="getClientRechargeAll" resultType="BigDecimal">
-        select sum(`amount`) from `product_recharge`
+        select sum(`amount`) from `recharge`
     </select>
 
     <select id="countClientRechargeByDate" resultType="Integer">
-        select count(`id`) from `product_recharge` where 1=1
+        select count(`id`) from `recharge` where 1=1
         <if test="start != null">
             and `create_time` &gt;= #{start}
         </if>
