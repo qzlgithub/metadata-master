@@ -2,18 +2,16 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
-import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
-import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
+import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -23,7 +21,6 @@ import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 
 import java.util.Date;
@@ -114,16 +111,6 @@ public interface RemoteClientService
     ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Page page);
 
     /**
-     * 根据客户id获取客户信息
-     */
-    ClientDTO getClientByClientId(Long clientId);
-
-    /**
-     * 根据条件获取客户帐号信息列表
-     */
-    ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted);
-
-    /**
      * 根据客户ID将客户设置为删除
      */
     ResultDTO setClientDeleted(List<Long> idList);
@@ -144,20 +131,9 @@ public interface RemoteClientService
     ClientProductDTO getClientProductById(Long clientProductId);
 
     /**
-     * 根据客户帐号id获取客户帐号操作记录列表
-     */
-    ClientOperateInfoListDTO getClientOperateInfoListByUserId(Long userId, Page page);
-
-    /**
      * 根据条件获取客户信息列表
      */
     ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
-
-    /**
-     * 根据条件获取客户消费信息列表
-     */
-    ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long clientId, Long userId, Long productId,
-            Date startDate, Date endDate, Page page);
 
     /**
      * 新增客户
@@ -172,7 +148,7 @@ public interface RemoteClientService
     /**
      * 更改客户帐号状态
      */
-    ResultDTO updateClientUserStatus(UpdateClientUserStatusDTO updateClientUserStatusDTO);
+    ResultDTO changeClientStatus(DisableClientDTO disableClientDTO);
 
     /**
      * 获取客户信息
@@ -208,4 +184,6 @@ public interface RemoteClientService
     ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
 
     ListDTO<ApiReqInfoDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
+
+    ListDTO<ClientOperateLogDTO> getClientOperateLog(Long clientId, Page page);
 }

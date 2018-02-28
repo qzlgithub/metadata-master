@@ -12,21 +12,19 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
-import com.mingdong.core.model.dto.ClientOperateInfoDTO;
-import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
+import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.ClientUserListDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -36,7 +34,6 @@ import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.util.EntityUtils;
@@ -609,39 +606,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientDTO getClientByClientId(Long clientId)
-    {
-        ClientDTO clientDTO = new ClientDTO();
-        Client byId = clientMapper.findById(clientId);
-        if(byId == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byId, clientDTO);
-        return clientDTO;
-    }
-
-    @Override
-    public ClientUserListDTO getListByClientAndStatus(Long clientId, Integer enabled, Integer deleted)
-    {
-        ClientUserListDTO clientUserListDTO = new ClientUserListDTO();
-        List<ClientUserDTO> dataList = new ArrayList<>();
-        clientUserListDTO.setDataList(dataList);
-        List<ClientUser> subUserList = clientUserMapper.getListByClientAndStatus(clientId, enabled, deleted);
-        if(!CollectionUtils.isEmpty(subUserList))
-        {
-            ClientUserDTO clientUserDTO;
-            for(ClientUser item : subUserList)
-            {
-                clientUserDTO = new ClientUserDTO();
-                EntityUtils.copyProperties(item, clientUserDTO);
-                dataList.add(clientUserDTO);
-            }
-        }
-        return clientUserListDTO;
-    }
-
-    @Override
     @Transactional
     public ResultDTO setClientDeleted(List<Long> idList)
     {
@@ -695,50 +659,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientOperateInfoListDTO getClientOperateInfoListByUserId(Long userId, Page page)
-    {
-        ClientOperateInfoListDTO clientOperateInfoListDTO = new ClientOperateInfoListDTO();
-        List<ClientOperateInfoDTO> dataList = new ArrayList<>();
-        clientOperateInfoListDTO.setDataList(dataList);
-        ClientOperateInfoDTO clientOperateInfoDTO;
-        if(page == null)
-        {
-            List<ClientOperateInfo> clientOperateInfos = clientOperateInfoMapper.getListByClientUser(userId);
-            if(!CollectionUtils.isEmpty(clientOperateInfos))
-            {
-                for(ClientOperateInfo item : clientOperateInfos)
-                {
-                    clientOperateInfoDTO = new ClientOperateInfoDTO();
-                    EntityUtils.copyProperties(item, clientOperateInfoDTO);
-                    dataList.add(clientOperateInfoDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = clientOperateLogMapper.countByClientUser(userId);
-            int pages = page.getTotalPage(total);
-            clientOperateInfoListDTO.setPages(pages);
-            clientOperateInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ClientOperateInfo> clientOperateInfos = clientOperateInfoMapper.getListByClientUser(userId);
-                if(!CollectionUtils.isEmpty(clientOperateInfos))
-                {
-                    for(ClientOperateInfo item : clientOperateInfos)
-                    {
-                        clientOperateInfoDTO = new ClientOperateInfoDTO();
-                        dataList.add(clientOperateInfoDTO);
-                        EntityUtils.copyProperties(item, clientOperateInfoDTO);
-                    }
-                }
-            }
-        }
-        return clientOperateInfoListDTO;
-    }
-
-    @Override
     public ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page)
     {
         ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
@@ -777,54 +697,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         return clientInfoListDTO;
-    }
-
-    @Override
-    public ApiReqInfoListDTO getClientBillListBy(String shortName, Long typeId, Long clientId, Long userId,
-            Long productId, Date startDate, Date endDate, Page page)
-    {
-        ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
-        List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
-        apiReqInfoListDTO.setDataList(apiReqInfoDTOList);
-        ApiReqInfoDTO apiReqInfoDTO;
-        if(page == null)
-        {
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId, userId,
-                    productId, startDate, endDate);
-            if(!CollectionUtils.isEmpty(apiReqInfoList))
-            {
-                for(ApiReqInfo item : apiReqInfoList)
-                {
-                    apiReqInfoDTO = new ApiReqInfoDTO();
-                    EntityUtils.copyProperties(item, apiReqInfoDTO);
-                    apiReqInfoDTOList.add(apiReqInfoDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = apiReqInfoMapper.countClientBillListBy(shortName, typeId, clientId, userId, productId,
-                    startDate, endDate);
-            int pages = page.getTotalPage(total);
-            apiReqInfoListDTO.setPages(pages);
-            apiReqInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getClientBillListBy(shortName, typeId, clientId,
-                        userId, productId, startDate, endDate);
-                if(!CollectionUtils.isEmpty(apiReqInfoList))
-                {
-                    for(ApiReqInfo item : apiReqInfoList)
-                    {
-                        apiReqInfoDTO = new ApiReqInfoDTO();
-                        apiReqInfoDTOList.add(apiReqInfoDTO);
-                        EntityUtils.copyProperties(item, apiReqInfoDTO);
-                    }
-                }
-            }
-        }
-        return apiReqInfoListDTO;
     }
 
     @Override
@@ -958,41 +830,40 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public ResultDTO updateClientUserStatus(UpdateClientUserStatusDTO updateClientUserStatusDTO)
+    public ResultDTO changeClientStatus(DisableClientDTO disableClientDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        List<Client> clientList = clientMapper.getListByIdList(updateClientUserStatusDTO.getClientIdList());
+        List<Client> clientList = clientMapper.getListByIdList(disableClientDTO.getClientIdList());
         if(CollectionUtils.isEmpty(clientList))
         {
             return resultDTO;
         }
-        Date current = new Date();
-        Integer enabled = updateClientUserStatusDTO.getEnabled();
+        Date date = new Date();
         List<Long> clientIdList = new ArrayList<>();
         List<Long> userIdList = new ArrayList<>();
         List<ClientOperateLog> logList = new ArrayList<>(clientIdList.size());
         for(Client o : clientList)
         {
-            if(!enabled.equals(o.getEnabled()))
+            if(!o.getEnabled().equals(disableClientDTO.getEnabled()))
             {
                 clientIdList.add(o.getId());
                 userIdList.add(o.getPrimaryUserId());
                 ClientOperateLog log = new ClientOperateLog();
-                log.setCreateTime(current);
-                log.setUpdateTime(current);
+                log.setCreateTime(date);
+                log.setUpdateTime(date);
                 log.setClientId(o.getId());
                 log.setClientUserId(o.getPrimaryUserId());
-                log.setManagerId(updateClientUserStatusDTO.getManagerId());
-                log.setType(updateClientUserStatusDTO.getEnabled());
-                log.setReason(updateClientUserStatusDTO.getReason());
+                log.setManagerId(disableClientDTO.getManagerId());
+                log.setType(disableClientDTO.getEnabled());
+                log.setReason(disableClientDTO.getReason());
                 logList.add(log);
             }
         }
         if(clientIdList.size() > 0)
         {
             clientOperateLogMapper.addList(logList);
-            clientUserMapper.updateStatusByIds(enabled, current, userIdList);
-            clientMapper.updateStatusByIds(enabled, current, clientIdList);
+            clientUserMapper.updateStatusByIds(disableClientDTO.getEnabled(), date, userIdList);
+            clientMapper.updateStatusByIds(disableClientDTO.getEnabled(), date, clientIdList);
         }
         return resultDTO;
     }
@@ -1520,6 +1391,35 @@ public class RemoteClientServiceImpl implements RemoteClientService
                 list.add(r);
             }
             listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<ClientOperateLogDTO> getClientOperateLog(Long clientId, Page page)
+    {
+        ListDTO<ClientOperateLogDTO> listDTO = new ListDTO<>();
+        int total = clientOperateInfoMapper.countByClient(clientId);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientOperateInfo> dataList = clientOperateInfoMapper.getListByClient(clientId);
+            if(!CollectionUtils.isEmpty(dataList))
+            {
+                List<ClientOperateLogDTO> list = new ArrayList<>(dataList.size());
+                for(ClientOperateInfo o : dataList)
+                {
+                    ClientOperateLogDTO col = new ClientOperateLogDTO();
+                    col.setOperateTime(o.getOperateTime());
+                    col.setType(o.getType());
+                    col.setReason(o.getReason());
+                    col.setManagerName(o.getManagerName());
+                    list.add(col);
+                }
+                listDTO.setList(list);
+            }
         }
         return listDTO;
     }

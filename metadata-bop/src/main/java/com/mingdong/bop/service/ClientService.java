@@ -34,7 +34,7 @@ public interface ClientService
     /**
      * 更改客户状态同时修改帐号并新增客户帐号操作记录
      */
-    void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId, RestResp resp);
+    void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, RestResp resp);
 
     /**
      * 根据客户ids软删客户
@@ -81,7 +81,7 @@ public interface ClientService
             BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp);
 
     /**
-     * 根据客户id获取客户帐号操作记录
+     * 查询客户帐号的管理员操作记录
      */
     void getClientOperateLog(Long clientId, Page page, RestResp resp);
 

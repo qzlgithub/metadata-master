@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.ProdRechargeVO;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -162,7 +161,7 @@ public class ClientController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.changeClientStatus(idList, status, reason, RequestThread.getOperatorId(), resp);
+        clientService.changeClientStatus(idList, status, reason, resp);
         return resp;
     }
 

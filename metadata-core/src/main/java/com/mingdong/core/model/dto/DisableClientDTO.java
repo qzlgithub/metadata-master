@@ -3,7 +3,7 @@ package com.mingdong.core.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class UpdateClientUserStatusDTO implements Serializable
+public class DisableClientDTO implements Serializable
 {
     private List<Long> clientIdList;
     private Integer enabled;

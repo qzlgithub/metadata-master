@@ -11,7 +11,12 @@ public class ResultDTO implements Serializable
 
     public ResultDTO()
     {
-        code = RestResult.SUCCESS.getCode();
+        new ResultDTO(RestResult.SUCCESS);
+    }
+
+    public ResultDTO(RestResult restResult)
+    {
+        code = restResult.getCode();
     }
 
     public String getCode()

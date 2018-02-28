@@ -1,14 +1,13 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class ClientOperateInfoDTO implements Serializable
+public class ClientOperateLogDTO
 {
     private Date operateTime;
     private Integer type;
-    private String managerName;
     private String reason;
+    private String managerName;
 
     public Date getOperateTime()
     {
@@ -30,16 +29,6 @@ public class ClientOperateInfoDTO implements Serializable
         this.type = type;
     }
 
-    public String getManagerName()
-    {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName)
-    {
-        this.managerName = managerName;
-    }
-
     public String getReason()
     {
         return reason;
@@ -48,5 +37,15 @@ public class ClientOperateInfoDTO implements Serializable
     public void setReason(String reason)
     {
         this.reason = reason;
+    }
+
+    public String getManagerName()
+    {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName)
+    {
+        this.managerName = managerName;
     }
 }

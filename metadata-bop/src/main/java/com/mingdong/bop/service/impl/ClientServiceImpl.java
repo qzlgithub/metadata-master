@@ -29,12 +29,12 @@ import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
-import com.mingdong.core.model.dto.ClientOperateInfoDTO;
-import com.mingdong.core.model.dto.ClientOperateInfoListDTO;
+import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
@@ -46,7 +46,6 @@ import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UpdateClientUserStatusDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
@@ -200,15 +199,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, Long managerId,
-            RestResp resp)
+    public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, RestResp resp)
     {
-        UpdateClientUserStatusDTO dto = new UpdateClientUserStatusDTO();
+        DisableClientDTO dto = new DisableClientDTO();
         dto.setClientIdList(clientIdList);
         dto.setEnabled(enabled);
-        dto.setManagerId(managerId);
         dto.setReason(reason);
-        ResultDTO resultDTO = remoteClientService.updateClientUserStatus(dto);
+        dto.setManagerId(RequestThread.getOperatorId());
+        ResultDTO resultDTO = remoteClientService.changeClientStatus(dto);
         resp.setError(resultDTO.getResult());
     }
 
@@ -401,23 +399,15 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientOperateLog(Long clientId, Page page, RestResp resp)
     {
-        ClientDTO client = remoteClientService.getClientByClientId(clientId);
-        if(client == null)
-        {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        ClientOperateInfoListDTO clientOperateInfoListByUserId = remoteClientService.getClientOperateInfoListByUserId(
-                client.getPrimaryUserId(), page);
-        resp.addData(Field.TOTAL, clientOperateInfoListByUserId.getTotal());
-        resp.addData(Field.PAGES, clientOperateInfoListByUserId.getPages());
+        ListDTO<ClientOperateLogDTO> listDTO = remoteClientService.getClientOperateLog(clientId, page);
+        resp.addData(Field.TOTAL, listDTO.getTotal());
+        resp.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
-        List<ClientOperateInfoDTO> dataList = clientOperateInfoListByUserId.getDataList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(dataList))
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(ClientOperateInfoDTO info : dataList)
+            for(ClientOperateLogDTO info : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.OPERATE_TIME, DateUtils.format(info.getOperateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
