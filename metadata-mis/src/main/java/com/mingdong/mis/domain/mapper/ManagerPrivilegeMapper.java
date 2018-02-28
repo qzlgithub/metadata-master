@@ -12,4 +12,6 @@ public interface ManagerPrivilegeMapper
     List<ManagerPrivilege> getPrivilegeIdListByManager(Long managerId);
 
     void deleteByManager(Long managerId);
+
+    List<ManagerPrivilege> getListByUser(Long managerId);
 }

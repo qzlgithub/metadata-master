@@ -9,6 +9,12 @@
         <result column="privilege_id" property="privilegeId" jdbcType="BIGINT" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `manager_id`, `privilege_id`
+        from `manager_privilege`
+    </sql>
+
     <insert id="addList" parameterType="List">
         insert into `manager_privilege` (`create_time`, `update_time`, `manager_id`, `privilege_id`) values
         <foreach collection="list" item="item" separator=",">
@@ -39,4 +45,9 @@
         delete from `manager_privilege`
         where `manager_id` = #{managerId}
     </delete>
+
+    <select id="getListByUser" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `manager_id` = #{managerId}
+    </select>
 </mapper>

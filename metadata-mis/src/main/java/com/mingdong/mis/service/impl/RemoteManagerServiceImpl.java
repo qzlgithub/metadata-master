@@ -6,6 +6,7 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
@@ -19,6 +20,7 @@ import com.mingdong.core.model.dto.RoleDTO1;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
+import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.Manager;
@@ -68,6 +70,35 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         EntityUtils.copyProperties(byId, managerDTO);
         return managerDTO;
+    }
+
+    @Override
+    public UserInfoDTO getAccountInfo(Long userId)
+    {
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        Manager manager = managerMapper.findById(userId);
+        if(manager != null)
+        {
+            // 基本信息
+            userInfoDTO.setUsername(manager.getUsername());
+            userInfoDTO.setName(manager.getName());
+            userInfoDTO.setPhone(manager.getPhone());
+            userInfoDTO.setQq(manager.getQq());
+            userInfoDTO.setRoleId(manager.getRoleId());
+            userInfoDTO.setEnabled(manager.getEnabled());
+            // 用户权限信息
+            List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getListByUser(userId);
+            if(!CollectionUtils.isEmpty(managerPrivilegeList))
+            {
+                List<Long> privilegeIdList = new ArrayList<>(managerPrivilegeList.size());
+                for(ManagerPrivilege o : managerPrivilegeList)
+                {
+                    privilegeIdList.add(o.getPrivilegeId());
+                }
+                userInfoDTO.setPrivilegeIdList(privilegeIdList);
+            }
+        }
+        return userInfoDTO;
     }
 
     @Override
@@ -462,6 +493,23 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
                 r.setEnabled(o.getEnabled());
                 r.setModuleNameList(getRoleModuleNameList(o.getId()));
                 list.add(r);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<DictDTO> getAccountRoleDict()
+    {
+        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        List<Role> roleList = roleMapper.getByStatus(TrueOrFalse.TRUE);
+        if(!CollectionUtils.isEmpty(roleList))
+        {
+            List<DictDTO> list = new ArrayList<>(roleList.size());
+            for(Role o : roleList)
+            {
+                list.add(new DictDTO(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }

@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -10,6 +11,7 @@ import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO1;
 import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
+import com.mingdong.core.model.dto.UserInfoDTO;
 
 public interface RemoteManagerService
 {
@@ -17,6 +19,8 @@ public interface RemoteManagerService
      * 根据管理员id获取管理员信息
      */
     ManagerDTO getManagerById(Long managerId);
+
+    UserInfoDTO getAccountInfo(Long userId);
 
     /**
      * 根据username获取管理员信息
@@ -94,4 +98,6 @@ public interface RemoteManagerService
      * 获取账户角色列表
      */
     ListDTO<RoleDTO1> getAccountRoleList(Page page);
+
+    ListDTO<DictDTO> getAccountRoleDict();
 }

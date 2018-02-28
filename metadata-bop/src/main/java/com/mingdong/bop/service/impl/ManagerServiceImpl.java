@@ -13,8 +13,10 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
@@ -22,16 +24,12 @@ import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
-import com.mingdong.core.model.dto.PrivilegeDTO;
-import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleDTO1;
-import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
+import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
-import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +49,6 @@ public class ManagerServiceImpl implements ManagerService
     private RedisDao redisDao;
     @Resource
     private RemoteManagerService remoteManagerService;
-    @Resource
-    private RemoteSystemService remoteSystemService;
 
     @Override
     public void userLogin(String username, String password, String sessionId, RestResp resp)
@@ -192,9 +188,41 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getAccountInfo(Long userId, RestResp resp)
+    public Map<String, Object> getAccountInfoData(Long userId)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(userId);
+        Map<String, Object> data = new HashMap<>(); // TODO zhujun
+        data.put(Field.MANAGER_ID, userId + "");
+        // 查询账户的基本信息及权限配置信息
+        UserInfoDTO userInfoDTO = remoteManagerService.getAccountInfo(userId);
+        data.put(Field.USERNAME, userInfoDTO.getUsername());
+        data.put(Field.NAME, userInfoDTO.getUsername());
+        data.put(Field.PHONE, userInfoDTO.getUsername());
+        data.put(Field.QQ, userInfoDTO.getUsername());
+        data.put(Field.ROLE_ID, userInfoDTO.getUsername());
+        data.put(Field.ENABLED, userInfoDTO.getEnabled());
+        List<String> privilege = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(userInfoDTO.getPrivilegeIdList()))
+        {
+            for(Long o : userInfoDTO.getPrivilegeIdList())
+            {
+                privilege.add(o + "");
+            }
+        }
+        data.put(Field.PRIVILEGE, privilege);
+        // 获取系统账户的角色字典
+        ListDTO<DictDTO> listDTO = remoteManagerService.getAccountRoleDict();
+        List<Dict> roleDict = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
+        {
+            for(DictDTO o : listDTO.getList())
+            {
+                roleDict.add(new Dict(o.getKey(), o.getValue()));
+            }
+        }
+        data.put(Field.ROLE_LIST, roleDict);
+        return data;
+
+        /*ManagerDTO manager = remoteManagerService.getManagerById(userId);
         if(manager == null)
         {
             resp.setError(RestResult.OBJECT_NOT_FOUND);
@@ -210,6 +238,7 @@ public class ManagerServiceImpl implements ManagerService
             privilege.add(mp.getPrivilegeId() + "");
         }
         RoleListDTO roleListDTO = remoteManagerService.getRoleList(null);
+
         List<RoleDTO> roleDataList = roleListDTO.getDataList();
         List<Map<String, Object>> roleList = new ArrayList<>(roleDataList.size());
         for(RoleDTO role : roleDataList)
@@ -219,6 +248,7 @@ public class ManagerServiceImpl implements ManagerService
             map.put(Field.NAME, role.getName());
             roleList.add(map);
         }
+
         resp.addData(Field.MANAGER_ID, userId + "");
         resp.addData(Field.ROLE_ID, manager.getRoleId() + "");
         resp.addData(Field.USERNAME, manager.getUsername());
@@ -227,7 +257,7 @@ public class ManagerServiceImpl implements ManagerService
         resp.addData(Field.QQ, manager.getQq());
         resp.addData(Field.ENABLED, manager.getEnabled());
         resp.addData(Field.PRIVILEGE, privilege);
-        resp.addData(Field.ROLE_LIST, roleList);
+        resp.addData(Field.ROLE_LIST, roleList);*/
     }
 
     @Override
@@ -371,21 +401,5 @@ public class ManagerServiceImpl implements ManagerService
             list.add(mp.getPrivilegeId() + "");
         }
         return list;
-    }
-
-    private String getRoleTopPrivilege(Long roleId)
-    {
-        PrivilegeListDTO privilegeListDTO = remoteSystemService.getPrivilegeTopListByRoleId(roleId);
-        List<PrivilegeDTO> privilegeList = privilegeListDTO.getDataList();
-        StringBuilder sb = new StringBuilder();
-        for(PrivilegeDTO p : privilegeList)
-        {
-            sb.append(",").append(p.getName());
-        }
-        if(sb.length() > 0)
-        {
-            return sb.substring(1);
-        }
-        return "";
     }
 }

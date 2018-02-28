@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService
     private RemoteProductService remoteProductService;
 
     @Override
-    public Map<String, Object> getProductInfo(Long productId)
+    public Map<String, Object> getProductInfoData(Long productId)
     {
         Map<String, Object> map = new HashMap<>();
         map.put(Field.ID, productId + "");

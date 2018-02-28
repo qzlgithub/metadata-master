@@ -32,8 +32,8 @@
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
                         <select name="modules" id="roleId" class="select-list" onchange="resetPrivilege()">
-                            <option th:each="role:${roleList}" th:value="${role.id}"
-                                    th:text="${role.name}" th:selected="${roleId} eq ${role.id}"></option>
+                            <option th:each="role:${roleList}" th:value="${role.key}"
+                                    th:text="${role.value}" th:selected="${roleId} eq ${role.key}"></option>
                         </select>
                     </div>
                 </div>

@@ -7,14 +7,12 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
-import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @Controller
 public class SettingPageController
@@ -118,9 +116,7 @@ public class SettingPageController
     public ModelAndView gotoAccountEditPage(@RequestParam(value = Field.O) Long userId)
     {
         ModelAndView view = new ModelAndView("user/edit");
-        RestResp resp = new RestResp();
-        managerService.getAccountInfo(userId, resp);
-        view.addAllObjects(resp.getData());
+        view.addAllObjects(managerService.getAccountInfoData(userId));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -140,8 +136,7 @@ public class SettingPageController
     public ModelAndView productEdit(@RequestParam(Field.ID) Long id)
     {
         ModelAndView view = new ModelAndView("product/edit");
-        Map<String, Object> map = productService.getProductInfo(id);
-        view.addAllObjects(map);
+        view.addAllObjects(productService.getProductInfoData(id));
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

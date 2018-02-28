@@ -47,7 +47,7 @@ public interface ManagerService
     /**
      * 获取用户信息
      */
-    void getAccountInfo(Long userId, RestResp resp);
+    Map<String, Object> getAccountInfoData(Long userId);
 
     /**
      * 新增管理员信息并赋权

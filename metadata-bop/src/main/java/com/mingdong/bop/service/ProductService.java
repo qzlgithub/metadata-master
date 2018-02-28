@@ -13,7 +13,7 @@ public interface ProductService
     /**
      * 根据产品id获取产品信息
      */
-    Map<String, Object> getProductInfo(Long productId);
+    Map<String, Object> getProductInfoData(Long productId);
 
     /**
      * 修改产品
