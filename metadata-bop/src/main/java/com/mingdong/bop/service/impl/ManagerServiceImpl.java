@@ -26,8 +26,6 @@ import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
-import com.mingdong.core.model.dto.RolePrivilegeDTO;
-import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.IDUtils;
@@ -284,16 +282,18 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public List<String> getRolePrivilege(Long roleId)
+    public void getRolePrivilege(Long roleId, RestResp resp)
     {
-        RolePrivilegeListDTO rolePrivilegeListByRoleId = remoteManagerService.getRolePrivilegeListByRoleId(roleId);
-        List<RolePrivilegeDTO> dataList = rolePrivilegeListByRoleId.getDataList();
-        List<String> list = new ArrayList<>();
-        for(RolePrivilegeDTO rp : dataList)
+        List<String> privilegeList = new ArrayList<>();
+        RoleDTO roleDTO = remoteManagerService.getAccountRoleInfo(roleId);
+        if(!CollectionUtils.isEmpty(roleDTO.getPrivilegeIdList()))
         {
-            list.add(rp.getPrivilegeId() + "");
+            for(Long o : roleDTO.getPrivilegeIdList())
+            {
+                privilegeList.add(o + "");
+            }
         }
-        return list;
+        resp.addData(Field.PRIVILEGE_LIST, privilegeList);
     }
 
     @Override

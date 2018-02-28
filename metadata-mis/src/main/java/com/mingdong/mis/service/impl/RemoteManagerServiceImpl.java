@@ -16,8 +16,6 @@ import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
-import com.mingdong.core.model.dto.RolePrivilegeDTO;
-import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
@@ -216,26 +214,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             }
         }
         return managerPrivilegeListDTO;
-    }
-
-    @Override
-    public RolePrivilegeListDTO getRolePrivilegeListByRoleId(Long roleId)
-    {
-        RolePrivilegeListDTO rolePrivilegeListDTO = new RolePrivilegeListDTO();
-        List<RolePrivilegeDTO> dataList = new ArrayList<>();
-        rolePrivilegeListDTO.setDataList(dataList);
-        RolePrivilegeDTO rolePrivilegeDTO;
-        List<RolePrivilege> rolePrivileges = rolePrivilegeMapper.getByRole(roleId);
-        if(!CollectionUtils.isEmpty(rolePrivileges))
-        {
-            for(RolePrivilege item : rolePrivileges)
-            {
-                rolePrivilegeDTO = new RolePrivilegeDTO();
-                EntityUtils.copyProperties(item, rolePrivilegeDTO);
-                dataList.add(rolePrivilegeDTO);
-            }
-        }
-        return rolePrivilegeListDTO;
     }
 
     @Override

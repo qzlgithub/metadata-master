@@ -69,7 +69,7 @@ public interface ManagerService
     /**
      * 根据角色id获取赋权
      */
-    List<String> getRolePrivilege(Long roleId);
+    void getRolePrivilege(Long roleId, RestResp resp);
 
     /**
      * 根据角色id更改角色状态

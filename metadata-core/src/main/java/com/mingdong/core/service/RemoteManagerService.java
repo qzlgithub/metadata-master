@@ -9,7 +9,6 @@ import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
-import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
 public interface RemoteManagerService
@@ -47,11 +46,6 @@ public interface RemoteManagerService
      * 根据管理员id获取赋权信息列表
      */
     ManagerPrivilegeListDTO getManagerPrivilegeListByManagerId(Long managerId);
-
-    /**
-     * 根据角色id获取角色赋权信息列表
-     */
-    RolePrivilegeListDTO getRolePrivilegeListByRoleId(Long roleId);
 
     /**
      * 更改管理员密码
