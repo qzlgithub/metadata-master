@@ -15,9 +15,7 @@ import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
 import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.RoleDTO1;
-import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
@@ -430,54 +428,11 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public RoleListDTO getRoleList(Page page)
-    {
-        RoleListDTO roleListDTO = new RoleListDTO();
-        List<RoleDTO> dataList = new ArrayList<>();
-        roleListDTO.setDataList(dataList);
-        RoleDTO roleDTO;
-        if(page == null)
-        {
-            List<Role> roleList = roleMapper.getList();
-            if(!CollectionUtils.isEmpty(roleList))
-            {
-                for(Role item : roleList)
-                {
-                    roleDTO = new RoleDTO();
-                    EntityUtils.copyProperties(item, roleDTO);
-                    dataList.add(roleDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = roleMapper.countAll();
-            int pages = page.getTotalPage(total);
-            roleListDTO.setPages(pages);
-            roleListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<Role> roleList = roleMapper.getList();
-                if(!CollectionUtils.isEmpty(roleList))
-                {
-                    for(Role item : roleList)
-                    {
-                        roleDTO = new RoleDTO();
-                        dataList.add(roleDTO);
-                        EntityUtils.copyProperties(item, roleDTO);
-                    }
-                }
-            }
-        }
-        return roleListDTO;
-    }
-
-    @Override
     public ListDTO<RoleDTO1> getAccountRoleList(Page page)
     {
         ListDTO<RoleDTO1> listDTO = new ListDTO<>();
-        if(page == null){
+        if(page == null)
+        {
             List<Role> dataList = roleMapper.getList();
             List<RoleDTO1> list = new ArrayList<>();
             for(Role o : dataList)
@@ -490,7 +445,9 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
                 list.add(r);
             }
             listDTO.setList(list);
-        }else{
+        }
+        else
+        {
             int total = roleMapper.countAll();
             int pages = page.getTotalPage(total);
             listDTO.setTotal(total);

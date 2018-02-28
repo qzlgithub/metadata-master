@@ -9,7 +9,6 @@ import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO1;
-import com.mingdong.core.model.dto.RoleListDTO;
 import com.mingdong.core.model.dto.RolePrivilegeListDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
@@ -88,11 +87,6 @@ public interface RemoteManagerService
      * 创建账户角色
      */
     ResultDTO addAccountRole(RoleDTO1 roleDTO);
-
-    /**
-     * 获取所有角色列表
-     */
-    RoleListDTO getRoleList(Page page);
 
     /**
      * 获取账户角色列表
