@@ -117,9 +117,9 @@
                                 <td th:text="${o.email}" th:id="'email-' + ${o.id}"></td>
                                 <td>
                                     <span class="mr30">
-                                        <a href="#" class="edit-contact" th:attr="data-id=${o.id}">编辑</a></span>
+                                        <a href="javascript:;" class="edit-contact" th:attr="data-id=${o.id}">编辑</a></span>
                                     <span class="mr30">
-                                        <a href="#" class="del-contact" th:attr="data-id=${o.id}">删除</a></span>
+                                        <a href="javascript:;" class="del-contact" th:attr="data-id=${o.id}">删除</a></span>
                                     <span class="layui-form">
                                         <input type="checkbox" title="常用" lay-filter="general"
                                                th:checked="${o.isGeneral == 1}" th:id="'general-' + ${o.id}"

@@ -66,8 +66,8 @@ function productCategoryListInit(){
 }
 
 var rowTr =
-    //'<tr><td>#{id}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30"><a href="#" class="edit">编辑</a></span><a href="#" class="del">停用</a></td></tr>';
-    '<tr><td>#{code}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30 edit cp editclass" id="editclass#{id}" onclick="findProductCategeoryById(\'#{id}\');">编辑</span><a href="#" id="enabledTxt#{id}" onclick="updateStatus(#{id});" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabled}"/></td></tr>';
+    //'<tr><td>#{id}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30"><a href="javascript:;" class="edit">编辑</a></span><a href="javascript:;" class="del">停用</a></td></tr>';
+    '<tr><td>#{code}</td><td>#{name}</td><td>#{remark}</td><td><span class="mr30 edit cp editclass" id="editclass#{id}" onclick="findProductCategeoryById(\'#{id}\');">编辑</span><a href="javascript:;" id="enabledTxt#{id}" onclick="updateStatus(#{id});" class="del">#{enabledTxt}</a><input type="hidden" id="enabled#{id}" value="#{enabled}"/></td></tr>';
 
 function getProductCategoryList(obj, pageFun) {
     $.get(

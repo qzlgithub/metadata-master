@@ -60,13 +60,13 @@
                 </li>
             </ul>
             <div class="clearfix mt20">
-                <a href="#" class="layui-btn layui-btn-normal" onclick="change_status(1)"
+                <a href="javascript:;" class="layui-btn layui-btn-normal" onclick="change_status(1)"
                    th:if="${#lists.contains(i_privilege, '31105')}">解冻账号</a>
-                <a href="#" class="layui-btn layui-btn-danger" onclick="change_status(0)"
+                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="change_status(0)"
                    th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
-                <a href="#" class="layui-btn layui-btn-danger" onclick="del_client()"
+                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="del_client()"
                    th:if="${#lists.contains(i_privilege, '31106')}">停用账号</a>
-                <a href="#" class="layui-btn layui-btn-danger" onclick="reset_password()"
+                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
                 <a th:href="@{/client/add.html}" class="layui-btn fr layui-btn-normal"
                    th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
@@ -145,7 +145,7 @@
 </script>
 <script type="text/html" id="sub-user-bar">
     {{# if(d.accountQty > 0){ }}
-    <li><a href="#" onclick="show_sub_user('{{d.id}}')">{{d.accountQty}}</a></li>
+    <li><a href="javascript:;" onclick="show_sub_user('{{d.id}}')">{{d.accountQty}}</a></li>
     {{# } else { }}
     <li>{{d.accountQty}}</li>
     {{# } }}
