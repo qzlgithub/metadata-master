@@ -116,7 +116,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void getAccountRoleList(Page page, RestListResp res)
     {
-        ListDTO<RoleDTO1> listDTO = remoteManagerService.getAccountRoleList(page);
+        ListDTO<RoleDTO1> listDTO = remoteManagerService.getAccountRoleList(null);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {

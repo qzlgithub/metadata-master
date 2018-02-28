@@ -477,24 +477,39 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ListDTO<RoleDTO1> getAccountRoleList(Page page)
     {
         ListDTO<RoleDTO1> listDTO = new ListDTO<>();
-        int total = roleMapper.countAll();
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+        if(page == null){
             List<Role> dataList = roleMapper.getList();
             List<RoleDTO1> list = new ArrayList<>();
             for(Role o : dataList)
             {
                 RoleDTO1 r = new RoleDTO1();
                 r.setId(o.getId());
-                r.setName(o.getName());
                 r.setEnabled(o.getEnabled());
+                r.setName(o.getName());
                 r.setModuleNameList(getRoleModuleNameList(o.getId()));
                 list.add(r);
             }
             listDTO.setList(list);
+        }else{
+            int total = roleMapper.countAll();
+            int pages = page.getTotalPage(total);
+            listDTO.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<Role> dataList = roleMapper.getList();
+                List<RoleDTO1> list = new ArrayList<>();
+                for(Role o : dataList)
+                {
+                    RoleDTO1 r = new RoleDTO1();
+                    r.setId(o.getId());
+                    r.setName(o.getName());
+                    r.setEnabled(o.getEnabled());
+                    r.setModuleNameList(getRoleModuleNameList(o.getId()));
+                    list.add(r);
+                }
+                listDTO.setList(list);
+            }
         }
         return listDTO;
     }

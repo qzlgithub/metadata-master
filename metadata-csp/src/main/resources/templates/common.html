@@ -135,7 +135,8 @@
                     <i class="close-eye icon" id="org-show"></i>
                 </div>
                 <div class="layui-input-block" id="org-dec-pwd" style="display: none">
-                    <input type="text" id="org-dec-password" placeholder="当前账号密码" class="layui-input position-r"/>
+                    <input type="text" id="org-dec-password" placeholder="当前账号密码"
+                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" class="layui-input position-r"/>
                     <i class="open-eye icon" id="org-hide"></i>
                 </div>
             </div>
@@ -147,7 +148,8 @@
                     <i class="close-eye icon" id="new-show"></i>
                 </div>
                 <div class="layui-input-block" id="new-dec-pwd" style="display: none">
-                    <input type="text" id="new-dec-password" placeholder="使用6位长度的字母加数字组合" class="layui-input position-r"/>
+                    <input type="text" id="new-dec-password" placeholder="使用6位长度的字母加数字组合"
+                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" class="layui-input position-r"/>
                     <i class="open-eye icon" id="new-hide"></i>
                 </div>
             </div>

@@ -116,11 +116,10 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/role/list")
-    public RestListResp getAccountRoleList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    public RestListResp getAccountRoleList()
     {
         RestListResp res = new RestListResp();
-        managerService.getAccountRoleList(new Page(pageNum, pageSize), res);
+        managerService.getAccountRoleList(null, res);
         return res;
     }
 
