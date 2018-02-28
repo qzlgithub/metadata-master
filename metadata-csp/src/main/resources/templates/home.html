@@ -81,7 +81,8 @@
                             <a target="_blank"
                                href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes">
                                 <i class="icon kefu mr5"></i>续约</a> ｜
-                            <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a></p>
+                            <a th:href="'/product/detail.html?id=' + ${o.productId}">查看服务</a>
+                        </p>
                     </li>
                 </ul>
             </dd>
@@ -96,8 +97,10 @@
                             <span class="fr">未开通</span></div>
                         <p class="col2 tl fz-14 p10 important" th:text="${o.remark}"></p>
                         <p class="tc mb15 mt10">
-                            <a href=""><i class="icon kefu mr5"></i>开通</a>
-                            ｜ <a th:href="'/product/introduce.html?id=' + o.id">查看详情</a></p>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><i
+                                    class="icon kefu mr5"></i>开通</a>
+                            ｜ <a th:href="'/product/introduce.html?id=' + o.id">查看详情</a>
+                        </p>
                     </li>
                 </ul>
             </dd>
@@ -158,7 +161,7 @@
 <script type="text/javascript" src="/static/js/public.js"></script>
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
-<script type="text/javascript" src="/static/js/home.js"></script>
+<script type="text/javascript" src="/static/business/home.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 </body>
 </html>

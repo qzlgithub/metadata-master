@@ -70,7 +70,9 @@
                         </p>
                     </div>
                     <div class="col-md-6 bd-left pl20">
-                        <p class="pt10 important"><i class="icon kefu mr5"></i>续约</p>
+                        <p class="pt10 important"><a
+                                href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><i
+                                class="icon kefu mr5"></i>续约</a></p>
                         <p class="ml40">
                             <a th:href="'/product/recharge.html?productId=' + ${productId}" class="mr20">历史充值</a>
                             | <a th:href="'/product/request.html?productId=' + ${productId}" class="ml20">消费明细</a>
@@ -298,8 +300,7 @@
             layer.msg("请先生成产品密钥（AppKey）");
             return;
         }
-        if(reqHost==='')
-        {
+        if(reqHost === '') {
             layer.msg("请配置允许请求接口的IP地址");
             return;
         }
