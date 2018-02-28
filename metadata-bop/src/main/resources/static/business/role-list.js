@@ -9,18 +9,12 @@ layui.config({
     table = layui.table;
     main_table = table.render({
         elem: '#dataTable',
-        page: true,
-        limit: 10,
-        limits: [10, 15, 30, 50],
         url: '/account/role/list',
         cols: [[
             {field: 'name', title: '角色名称', width: '15%'},
             {field: 'module', title: '功能模块'},
             {title: '操作', align: 'center', toolbar: '#operationBar', fixed: 'right', width: '15%'}
         ]],
-        request: {
-            pageName: 'pageNum', limitName: 'pageSize'
-        },
         response: {
             statusName: 'code',
             statusCode: '000000',
