@@ -12,6 +12,7 @@
         <result column="reason" property="reason" jdbcType="VARCHAR" />
     </resultMap>
 
+    <!-- @formatter:off -->
     <insert id="addList" parameterType="List">
         insert into
             `client_operate_log`
@@ -22,10 +23,5 @@
              #{item.type}, #{item.reason})
         </foreach>
     </insert>
-
-    <select id="countByClientUser" parameterType="Long" resultType="int">
-        select count(*)
-        from `client_operate_log`
-        where `client_user_id` = #{clientUserId}
-    </select>
+    <!-- @formatter:on -->
 </mapper>

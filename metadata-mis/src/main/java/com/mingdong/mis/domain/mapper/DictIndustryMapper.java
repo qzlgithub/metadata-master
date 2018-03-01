@@ -17,9 +17,5 @@ public interface DictIndustryMapper
 
     List<DictIndustry> getIndustryInfo();
 
-    int countAll();
-
-    List<DictIndustry> getAll();
-
     DictIndustry findByCode(String code);
 }

@@ -18,22 +18,6 @@
     </resultMap>
 
     <!-- @formatter:off -->
-    <select id="countBy" resultType="Integer">
-        select count(*)
-        from `client` c
-            join `client_user` cu
-                on c.`primary_user_id` = cu.`id`
-                <if test="enabled != null">and cu.`enabled` = #{enabled}</if>
-        where c.`deleted` = 0
-        <if test="cropName != null">and c.`corp_name` like '%${cropName}%'</if>
-        <if test="shortName != null">and c.`short_name` like '%${shortName}%'</if>
-        <if test="account != null">and cu.`username` like '%${account}%'</if>
-        <if test="industryIdList != null and industryIdList.size() > 0">
-            and c.`industry_id` in
-            <foreach collection="industryIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
-        </if>
-    </select>
-
     <select id="getSimilarCorpByName" resultMap="BaseResultMap">
         select c.`corp_name` as corp_name, cu.`name` as name, cu.`phone` as phone, cu.`email` as email, c.`create_time`
         as register_time from `client` c left join `client_user` cu on c.`primary_user_id` = cu.`id` where

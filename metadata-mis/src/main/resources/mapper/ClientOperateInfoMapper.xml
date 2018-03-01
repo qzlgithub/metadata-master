@@ -8,19 +8,6 @@
         <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="getListByClientUser" parameterType="Long" resultMap="BaseResultMap">
-        select
-            col.`create_time` as operate_time,
-            col.`type`        as type,
-            col.`reason`      as reason,
-            m.`name`          as manager_name
-        from `client_operate_log` col
-            left join `manager` m
-                on col.`manager_id` = m.`id`
-        where col.`client_user_id` = #{clientUserId}
-        order by col.`create_time` desc
-    </select>
-
     <select id="countByClient" parameterType="Long" resultType="int">
         select count(*)
         from `client_operate_log`

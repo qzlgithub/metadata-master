@@ -30,8 +30,6 @@ public interface ClientUserMapper
     void updateStatusByIds(@Param("enabled") Integer enabled, @Param("date") Date date,
             @Param("idList") List<Long> idList);
 
-    List<ClientUser> getListByClientsAndPrimary(@Param("clientIdList") List<Long> clientIdList);
-
     List<ClientUser> getListByClient(Long clientId);
 
     List<ClientUser> getAvailableListByClient(Long clientId);

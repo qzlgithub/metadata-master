@@ -50,28 +50,12 @@
         where `id` = #{id}
     </update>
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `code`, `name`, `seq_no`, `parent_id`, `enabled`
-        from `dict_industry`
-    </select>
-    <select id="countAll" resultType="Integer">
-        select count(*)
-        from dict_industry
-    </select>
-
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `code`, `name`, `seq_no`, `parent_id`, `enabled`
         from `dict_industry`
         where
             `id` = #{id}
-    </select>
-
-    <select id="getTopByStatus" parameterType="Integer" resultMap="BaseResultMap">
-        select `id`, `name`, `enabled` from `dict_industry` where `parent_id` = 0
-        <if test="enabled != null">and `enabled` = #{enabled}</if>
-        order by `seq_no` asc
     </select>
 
     <select id="getByParentAndStatus" resultMap="BaseResultMap">
@@ -83,18 +67,6 @@
         order by `seq_no` asc
     </select>
 
-    <select id="findByCode" parameterType="String" resultMap="BaseResultMap">
-        select `id`
-        from `dict_industry`
-        where `code` = #{code}
-    </select>
-
-    <select id="findByName" parameterType="String" resultMap="BaseResultMap">
-        select `id`
-        from `dict_industry`
-        where `name` = #{name}
-    </select>
-
     <select id="getIndustryInfo" resultMap="BaseResultMap">
         select
             c.`id` as id, concat(p.`name`, '/', c.`name`) as name
@@ -103,4 +75,9 @@
         where c.`parent_id` != 0
     </select>
 
+    <select id="findByCode" parameterType="String" resultMap="BaseResultMap">
+        select `id`
+        from `dict_industry`
+        where `code` = #{code}
+    </select>
 </mapper>
