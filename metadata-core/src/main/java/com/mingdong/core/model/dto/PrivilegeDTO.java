@@ -1,47 +1,21 @@
 package com.mingdong.core.model.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class PrivilegeDTO implements Serializable
 {
-    private Long id;
-    private Date createTime;
-    private Date updateTime;
+    private Long privilegeId;
     private String name;
-    private Integer seqNo;
-    private Integer level;
-    private Long parentId;
     private Integer enabled;
 
-    public Long getId()
+    public Long getPrivilegeId()
     {
-        return id;
+        return privilegeId;
     }
 
-    public void setId(Long id)
+    public void setPrivilegeId(Long privilegeId)
     {
-        this.id = id;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
+        this.privilegeId = privilegeId;
     }
 
     public String getName()
@@ -52,36 +26,6 @@ public class PrivilegeDTO implements Serializable
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public Integer getSeqNo()
-    {
-        return seqNo;
-    }
-
-    public void setSeqNo(Integer seqNo)
-    {
-        this.seqNo = seqNo;
-    }
-
-    public Integer getLevel()
-    {
-        return level;
-    }
-
-    public void setLevel(Integer level)
-    {
-        this.level = level;
-    }
-
-    public Long getParentId()
-    {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId)
-    {
-        this.parentId = parentId;
     }
 
     public Integer getEnabled()

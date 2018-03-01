@@ -94,7 +94,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             for(Privilege o : privilegeList)
             {
                 PrivilegeDTO p = new PrivilegeDTO();
-                p.setId(o.getId());
+                p.setPrivilegeId(o.getId());
                 p.setName(o.getName());
                 p.setEnabled(o.getEnabled());
                 list.add(p);
@@ -260,16 +260,17 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public ResultDTO editPrivilegeInfo(PrivilegeDTO privilegeDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Privilege privilege = privilegeMapper.findById(privilegeDTO.getId());
+        Privilege privilege = privilegeMapper.findById(privilegeDTO.getPrivilegeId());
         if(privilege == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        privilege = new Privilege();
-        EntityUtils.copyProperties(privilegeDTO, privilege);
-        privilegeMapper.updateSkipNull(privilege);
-        resultDTO.setResult(RestResult.SUCCESS);
+        Privilege temp = new Privilege();
+        temp.setId(privilegeDTO.getPrivilegeId());
+        temp.setUpdateTime(new Date());
+        temp.setName(privilegeDTO.getName());
+        privilegeMapper.updateSkipNull(temp);
         return resultDTO;
     }
 

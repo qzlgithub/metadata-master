@@ -146,23 +146,23 @@ public class SystemServiceImpl implements SystemService
         {
             Map<String, Object> m1 = new HashMap<>();
             m1.put(Field.NAME, o1.getName());
-            m1.put(Field.ID, o1.getId() + "");
+            m1.put(Field.ID, o1.getPrivilegeId() + "");
             m1.put(Field.ENABLED, o1.getEnabled());
             List<Map<String, Object>> subList = new ArrayList<>();
-            ListDTO<PrivilegeDTO> listDTO2 = remoteSystemService.getPrivilegeListByParent(o1.getId());
+            ListDTO<PrivilegeDTO> listDTO2 = remoteSystemService.getPrivilegeListByParent(o1.getPrivilegeId());
             for(PrivilegeDTO o2 : listDTO2.getList())
             {
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put(Field.NAME, o2.getName());
-                m2.put(Field.ID, o2.getId() + "");
+                m2.put(Field.ID, o2.getPrivilegeId() + "");
                 m2.put(Field.ENABLED, o2.getEnabled());
                 List<Map<String, Object>> thrList = new ArrayList<>();
-                ListDTO<PrivilegeDTO> listDTO3 = remoteSystemService.getPrivilegeListByParent(o2.getId());
+                ListDTO<PrivilegeDTO> listDTO3 = remoteSystemService.getPrivilegeListByParent(o2.getPrivilegeId());
                 for(PrivilegeDTO o3 : listDTO3.getList())
                 {
                     Map<String, Object> m3 = new HashMap<>();
                     m3.put(Field.NAME, o3.getName());
-                    m3.put(Field.ID, o3.getId() + "");
+                    m3.put(Field.ID, o3.getPrivilegeId() + "");
                     m3.put(Field.ENABLED, o3.getEnabled());
                     thrList.add(m3);
                 }
@@ -179,11 +179,10 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void editPrivilegeInfo(Long privilegeId, String name, RestResp resp)
     {
-        PrivilegeDTO privilege = new PrivilegeDTO();
-        privilege.setId(privilegeId);
-        privilege.setUpdateTime(new Date());
-        privilege.setName(name);
-        ResultDTO resultDTO = remoteSystemService.editPrivilegeInfo(privilege);
+        PrivilegeDTO privilegeDTO = new PrivilegeDTO();
+        privilegeDTO.setPrivilegeId(privilegeId);
+        privilegeDTO.setName(name);
+        ResultDTO resultDTO = remoteSystemService.editPrivilegeInfo(privilegeDTO);
         resp.setError(resultDTO.getResult());
     }
 
@@ -301,7 +300,7 @@ public class SystemServiceImpl implements SystemService
         List<PrivilegeDTO> privilegeList = privilegeByLevel.getDataList();
         for(PrivilegeDTO p : privilegeList)
         {
-            map.put("m" + p.getId(), p.getName());
+            map.put("m" + p.getPrivilegeId(), p.getName());
         }
         redisDao.setSystemModule(map);
         return map;
