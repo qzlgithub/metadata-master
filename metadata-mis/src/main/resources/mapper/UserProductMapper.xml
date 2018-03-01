@@ -17,11 +17,11 @@
         select
             `id`, `create_time`, `update_time`, `user_id`, `product_id`, `app_secret`, `req_host`, `access_token`,
             `valid_time`
-        from `user_product`
+        from `client_user_product`
     </sql>
 
     <insert id="add" parameterType="UserProduct">
-        insert into `user_product`
+        insert into `client_user_product`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
@@ -47,7 +47,7 @@
     </insert>
 
     <update id="updateSkipNull" parameterType="UserProduct">
-        update `user_product`
+        update `client_user_product`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -62,7 +62,7 @@
     </update>
 
     <update id="clearAccessToken">
-        update `user_product` set `update_time` = #{date}, `access_token` = null where `id` in
+        update `client_user_product` set `update_time` = #{date}, `access_token` = null where `id` in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
