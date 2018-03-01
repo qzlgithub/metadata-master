@@ -50,7 +50,7 @@
     <!--服务列表 left-->
     <div class="development-nav">
         <dl id="mms1" class="serve-list">
-            <dt>我的服务<a th:href="@{/product/mine.html}" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
+            <dt>我的服务<a href="/product/mine.html" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
             <dd>
                 <ul class="row mr0 ml0">
                     <li th:each="o : ${openedList}">
@@ -88,7 +88,7 @@
             </dd>
         </dl>
         <dl id="mms2" class="serve-list">
-            <dt>新服务<a th:href="@{/product/all.html}" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
+            <dt>新服务<a href="/product/all.html" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
             <dd>
                 <ul class="row mr0 ml0">
                     <li th:each="o : ${toOpenList}">

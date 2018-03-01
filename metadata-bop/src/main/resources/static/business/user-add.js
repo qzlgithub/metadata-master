@@ -35,7 +35,6 @@ $(".privilege").click(function() {
     var allChecked = true;
     $("." + parentId).each(function() {
         var checked = $(this).is(":checked");
-        console.log(checked);
         allChecked = allChecked && checked;
         if(!allChecked) {
             return false;
@@ -80,8 +79,12 @@ function saveManager() {
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
-    console.log("roleId: " + roleId + "\nusername: " + username + "\npassword: " + password + "\nname: " + name
-        + "\nphone: " + phone + "\nqq: " + qq + "\nenabled: " + enabled);
+    if(!isPassword(password)){
+        layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+            time: 2000
+        });
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/account/addition",

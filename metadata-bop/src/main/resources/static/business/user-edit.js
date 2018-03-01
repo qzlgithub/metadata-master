@@ -40,7 +40,6 @@ $(".privilege").click(function() {
     var allChecked = true;
     $("." + parentId).each(function() {
         var checked = $(this).is(":checked");
-        console.log(checked);
         allChecked = allChecked && checked;
         if(!allChecked) {
             return false;

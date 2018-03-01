@@ -31,7 +31,6 @@ layui.config({
     form.on('switch(switchTest)', function(data) {
         //subs handler
         var checked = this.checked;
-        console.log("ckd: " + checked);
         var self = $(this).data('self');
         $(".switch-subs-" + self).each(function(index, sub) {
             $(sub).prop("checked", checked);
