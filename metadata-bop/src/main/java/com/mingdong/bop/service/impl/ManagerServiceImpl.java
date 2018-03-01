@@ -21,8 +21,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
-import com.mingdong.core.model.dto.ManagerPrivilegeDTO;
-import com.mingdong.core.model.dto.ManagerPrivilegeListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.RoleDTO;
@@ -88,11 +86,11 @@ public class ManagerServiceImpl implements ManagerService
         newManager.setManagerDTO(managerUpd);
         remoteManagerService.updateManagerSkipNull(newManager);
         // 缓存用户的账号及权限
-        List<String> privilegeList = getManagerPrivilegeIdList(manager.getId());
+        ListDTO<String> privilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(manager.getId());
         ManagerSession ms = new ManagerSession();
         ms.setManagerId(manager.getId());
         ms.setName(manager.getName());
-        ms.setPrivileges(privilegeList);
+        ms.setPrivileges(privilegeListDTO.getList());
         ms.setAddAt(current.getTime());
         redisDao.saveManagerSession(sessionId, ms);
         resp.addData(Field.NAME, manager.getName());
@@ -345,24 +343,11 @@ public class ManagerServiceImpl implements ManagerService
             for(ManagerInfoDTO item : dataList)
             {
                 dataMap = new HashMap<>();
-                dataListMap.add(dataMap);
                 dataMap.put(Field.ID, item.getManagerId() + "");
                 dataMap.put(Field.NAME, item.getName());
+                dataListMap.add(dataMap);
             }
         }
         return dataListMap;
-    }
-
-    private List<String> getManagerPrivilegeIdList(Long managerId)
-    {
-        ManagerPrivilegeListDTO managerPrivilegeListByManagerId =
-                remoteManagerService.getManagerPrivilegeListByManagerId(managerId);
-        List<ManagerPrivilegeDTO> dataList = managerPrivilegeListByManagerId.getDataList();
-        List<String> list = new ArrayList<>(dataList.size());
-        for(ManagerPrivilegeDTO mp : dataList)
-        {
-            list.add(mp.getPrivilegeId() + "");
-        }
-        return list;
     }
 }
