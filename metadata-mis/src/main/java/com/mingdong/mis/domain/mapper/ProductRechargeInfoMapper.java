@@ -9,24 +9,8 @@ import java.util.List;
 
 public interface ProductRechargeInfoMapper
 {
-
     List<ProductRechargeInfo> getListBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
-
-    int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
-            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
-
-    List<ProductRechargeInfo> getProductRechargeInfoListBy(@Param("shortName") String shortName,
-            @Param("typeId") Long typeId, @Param("productId") Long productId, @Param("managerId") Long managerId,
-            @Param("startDate") Date startDate, @Param("endDate") Date endDate);
-
-    int countProductRechargeInfoBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
-            @Param("productId") Long productId, @Param("managerId") Long managerId, @Param("startDate") Date startDate,
-            @Param("endDate") Date endDate);
-
-    BigDecimal getProductRechargeInfoSumBy(@Param("shortName") String shortName, @Param("typeId") Long typeId,
-            @Param("productId") Long productId, @Param("managerId") Long managerId, @Param("startDate") Date startDate,
-            @Param("endDate") Date endDate);
 
     int countBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
             @Param("managerId") Long managerId, @Param("rechargeType") Long rechargeType,

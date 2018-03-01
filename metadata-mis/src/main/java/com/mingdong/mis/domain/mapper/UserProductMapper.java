@@ -12,13 +12,9 @@ public interface UserProductMapper
 
     void updateSkipNull(UserProduct obj);
 
+    void clearAccessToken(@Param("date") Date date, @Param("idList") List<Long> idList);
+
     UserProduct findByUserAndProduct(@Param("userId") Long userId, @Param("productId") Long productId);
 
-    List<UserProduct> findListBy(@Param("userId") Long userId, @Param("productId") Long productId);
-
-    void updateToken(@Param("updateDate") Date updateDate, @Param("token") String token, @Param("ids") List<Long> ids);
-
     List<UserProduct> getListByProduct(Long productId);
-
-    void clearAccessToken(@Param("date") Date date, @Param("idList") List<Long> idList);
 }

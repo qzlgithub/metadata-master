@@ -73,21 +73,6 @@
         where `user_id` = #{userId} and `product_id` = #{productId}
     </select>
 
-    <select id="findListBy" resultMap="BaseResultMap">
-        <include refid="select_all" />
-        <where>
-            <if test="userId != null">`user_id` = #{userId}</if>
-            <if test="productId != null">and `product_id` = #{productId}</if>
-        </where>
-    </select>
-
-    <update id="updateToken">
-        update `user_product` set `access_token` = #{token},`update_time` = #{updateDate} where `id` in
-        <foreach collection="ids" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
-    </update>
-
     <select id="getListByProduct" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `product_id` = #{productId}
