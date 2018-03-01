@@ -459,6 +459,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
+    @Transactional
     public ResultDTO editProduct(ProductDTO productDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
