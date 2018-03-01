@@ -11,6 +11,7 @@
         <result column="email" property="email" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="TINYINT" />
     </resultMap>
@@ -18,7 +19,7 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `client_id`, `name`, `phone`, `email`, `username`, `password`,
-            `enabled`, `deleted`
+            `app_secret`, `enabled`, `deleted`
         from `client_user`
     </sql>
 
@@ -34,6 +35,7 @@
             <if test="email != null">`email`,</if>
             <if test="username != null">`username`,</if>
             <if test="password != null">`password`,</if>
+            <if test="appSecret != null">`app_secret`,</if>
             <if test="enabled != null">`enabled`,</if>
             <if test="deleted != null">`deleted`,</if>
         </trim>
@@ -47,6 +49,7 @@
             <if test="email != null">#{email},</if>
             <if test="username != null">#{username},</if>
             <if test="password != null">#{password},</if>
+            <if test="appSecret != null">#{appSecret},</if>
             <if test="enabled != null">#{enabled},</if>
             <if test="deleted != null">#{deleted},</if>
         </trim>
@@ -62,6 +65,7 @@
             `email`       = #{email},
             `username`    = #{username},
             `password`    = #{password},
+            `app_secret`  = #{appSecret},
             `enabled`     = #{enabled},
             `deleted`     = #{deleted}
         where `id` = #{id}
@@ -78,6 +82,7 @@
             <if test="email != null">`email` = #{email},</if>
             <if test="username != null">`username` = #{username},</if>
             <if test="password != null">`password` = #{password},</if>
+            <if test="appSecret != null">`app_secret` = #{appSecret},</if>
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="deleted != null">`deleted` = #{deleted},</if>
         </set>
@@ -109,30 +114,21 @@
     </update>
 
     <update id="updateStatusByIds">
-        update `client_user`
-        set `enabled` = #{enabled},
-            `update_time` = #{date}
-        where `id` in
+        update `client_user` set `enabled` = #{enabled}, `update_time` = #{date} where `id` in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>
 
     <select id="getListByClientsAndPrimary" parameterType="List" resultMap="BaseResultMap">
-        select
-            cu.`id`, cu.`create_time`, cu.`update_time`, cu.`client_id`, cu.`name`, cu.`phone`, cu.`email`,
-            cu.`username`, cu.`password`, cu.`enabled`, cu.`deleted`
-        from `client` c
-            left join `client_user` cu
-                on c.`primary_user_id` = cu.`id`
-        where c.`id` in
+        select cu.`id`, cu.`create_time`, cu.`update_time`, cu.`client_id`, cu.`name`, cu.`phone`, cu.`email`,
+        cu.`username`, cu.`password`, cu.`enabled`, cu.`deleted` from `client` c left join `client_user` cu on
+        c.`primary_user_id` = cu.`id` where c.`id` in
         <foreach collection="clientIdList" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </select>
 
     <select id="countByClientAndStatus" resultType="Integer">
-        select count(*)
-        from `client_user`
-        where `client_id` = #{clientId}
+        select count(*) from `client_user` where `client_id` = #{clientId}
         <if test="enabled != null">and `enabled` = #{enabled}</if>
         <if test="deleted != null">and `deleted` = #{deleted}</if>
     </select>
