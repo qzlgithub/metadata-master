@@ -12,9 +12,9 @@ import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.constant.MetadataResult;
 import com.mingdong.mis.data.DataAPIProcessor;
 import com.mingdong.mis.domain.entity.ClientProduct;
-import com.mingdong.mis.domain.entity.ProductRecharge;
+import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
+import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.model.IMetadata;
 import com.mingdong.mis.model.MetadataRes;
 import com.mingdong.mis.model.vo.AbsRequest;
@@ -42,7 +42,7 @@ public class DSDataServiceImpl implements DSDataService
     @Resource
     private ClientProductMapper clientProductMapper;
     @Resource
-    private ProductRechargeMapper productRechargeMapper;
+    private RechargeMapper rechargeMapper;
 
     @Override
     public <T extends AbsRequest> void getData(APIProduct product, Long accountId, Long clientId, Long userId,
@@ -70,7 +70,7 @@ public class DSDataServiceImpl implements DSDataService
                 locked = false;
             }
             // 查询当前有效的充值记录，并验证账户有效性
-            ProductRecharge recharge = productRechargeMapper.findById(account.getLatestRechargeId());
+            Recharge recharge = rechargeMapper.findById(account.getLatestRechargeId());
             if(!checkAccountIsAvailable(recharge, res.getTimestamp()))
             {
                 res.setResult(MetadataResult.RC_10);
@@ -107,7 +107,7 @@ public class DSDataServiceImpl implements DSDataService
         }
     }
 
-    private boolean checkAccountIsAvailable(ProductRecharge recharge, Date current)
+    private boolean checkAccountIsAvailable(Recharge recharge, Date current)
     {
         BillPlan billPlan = BillPlan.getById(recharge.getBillPlan());
         if(BillPlan.BY_TIME == billPlan)

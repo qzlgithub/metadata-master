@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.ProductRechargeMapper">
-    <resultMap id="BaseResultMap" type="ProductRecharge">
+<mapper namespace="com.mingdong.mis.domain.mapper.RechargeMapper">
+    <resultMap id="BaseResultMap" type="Recharge">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -29,7 +29,7 @@
         from `recharge`
     </sql>
 
-    <insert id="add" parameterType="ProductRecharge" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="Recharge" useGeneratedKeys="true" keyProperty="id">
         insert into `recharge`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -71,7 +71,7 @@
         </trim>
     </insert>
 
-    <update id="updateSkipNull" parameterType="ProductRecharge">
+    <update id="updateSkipNull" parameterType="Recharge">
         update `recharge`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>

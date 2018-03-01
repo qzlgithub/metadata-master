@@ -4,10 +4,10 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.mis.domain.entity.ApiReq;
 import com.mingdong.mis.domain.entity.ClientProduct;
-import com.mingdong.mis.domain.entity.ProductRecharge;
+import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
+import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,22 +23,22 @@ public class ChargeServiceImpl implements ChargeService
     @Resource
     private ApiReqMapper apiReqMapper;
     @Resource
-    private ProductRechargeMapper productRechargeMapper;
+    private RechargeMapper rechargeMapper;
     @Resource
     private ClientProductMapper clientProductMapper;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void chargeAndLog(Long requestId, ClientProduct account, Long userId, ProductRecharge recharge,
+    public void chargeAndLog(Long requestId, ClientProduct account, Long userId, Recharge recharge,
             BillPlan billPlan, String ip, String thirdNo, boolean hit, Date date)
     {
         if(BillPlan.PER_USE == billPlan || (BillPlan.PER_HIT == billPlan && hit))
         {
-            ProductRecharge rechargeUpd = new ProductRecharge();
+            Recharge rechargeUpd = new Recharge();
             rechargeUpd.setId(recharge.getId());
             rechargeUpd.setUpdateTime(date);
             rechargeUpd.setBalance(recharge.getBalance().subtract(recharge.getUnitAmt()));
-            productRechargeMapper.updateSkipNull(rechargeUpd);
+            rechargeMapper.updateSkipNull(rechargeUpd);
         }
         ApiReq apiReq = new ApiReq();
         apiReq.setId(requestId);
@@ -67,9 +67,9 @@ public class ChargeServiceImpl implements ChargeService
 
     @Override
     @Transactional
-    public void renewClientProduct(ProductRecharge pr, ClientProduct cp)
+    public void renewClientProduct(Recharge pr, ClientProduct cp)
     {
-        productRechargeMapper.add(pr);
+        rechargeMapper.add(pr);
         clientProductMapper.updateSkipNull(cp);
     }
 }

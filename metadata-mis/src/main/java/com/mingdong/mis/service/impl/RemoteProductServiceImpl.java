@@ -35,7 +35,7 @@ import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductInfo;
-import com.mingdong.mis.domain.entity.ProductRecharge;
+import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
@@ -45,7 +45,7 @@ import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
+import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.ProductTxtMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +59,7 @@ import java.util.List;
 public class RemoteProductServiceImpl implements RemoteProductService
 {
     @Resource
-    private ProductRechargeMapper productRechargeMapper;
+    private RechargeMapper rechargeMapper;
     @Resource
     private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
@@ -105,7 +105,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         else
         {
-            int total = productRechargeMapper.countBy(clientId, productId, fromDate, endDate);
+            int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
             int pages = page.getTotalPage(total);
             productRecListDTO.setTotal(total);
             productRecListDTO.setPages(pages);
@@ -299,7 +299,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
-        ProductRecharge pro = productRechargeMapper.findByContractNo(contractNo);
+        Recharge pro = rechargeMapper.findByContractNo(contractNo);
         if(pro == null)
         {
             return null;
@@ -312,7 +312,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     public ProductRechargeDTO getProductRechargeById(Long id)
     {
         ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
-        ProductRecharge pr = productRechargeMapper.findById(id);
+        Recharge pr = rechargeMapper.findById(id);
         if(pr == null)
         {
             return null;
@@ -324,7 +324,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     @Override
     public BigDecimal sumAmountByClientProduct(Long clientProductId)
     {
-        return productRechargeMapper.sumAmountByClientProduct(clientProductId);
+        return rechargeMapper.sumAmountByClientProduct(clientProductId);
     }
 
     @Override

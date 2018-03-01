@@ -58,7 +58,7 @@ import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
-import com.mingdong.mis.domain.entity.ProductRecharge;
+import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
@@ -75,7 +75,7 @@ import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
+import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
@@ -124,7 +124,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Resource
     private ApiReqInfoMapper apiReqInfoMapper;
     @Resource
-    private ProductRechargeMapper productRechargeMapper;
+    private RechargeMapper rechargeMapper;
     @Resource
     private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
@@ -965,7 +965,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
                     openClientProductDTO.getClientProductDTO().setBalance(
                             openClientProductDTO.getProductRechargeDTO().getAmount());
                 }
-                ProductRecharge pr = new ProductRecharge();
+                Recharge pr = new Recharge();
                 EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
                 cp = new ClientProduct();
                 EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
@@ -1204,7 +1204,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return res;
         }
         Long clientProductId = cp != null ? cp.getId() : IDUtils.getClientProductId(param.getNodeId());
-        ProductRecharge recharge = new ProductRecharge();
+        Recharge recharge = new Recharge();
         recharge.setCreateTime(current);
         recharge.setUpdateTime(current);
         recharge.setClientProductId(clientProductId);
@@ -1228,7 +1228,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             recharge.setBalance(dto.getAmount());
             recharge.setUnitAmt(dto.getUnitAmt());
         }
-        productRechargeMapper.add(recharge);
+        rechargeMapper.add(recharge);
         if(cp == null)
         {
             cp = new ClientProduct();

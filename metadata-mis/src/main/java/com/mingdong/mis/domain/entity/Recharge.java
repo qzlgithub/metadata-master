@@ -3,7 +3,7 @@ package com.mingdong.mis.domain.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductRecharge
+public class Recharge
 {
     private Long id;
     private Date createTime;
