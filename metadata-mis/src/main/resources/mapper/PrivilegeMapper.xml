@@ -15,11 +15,11 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
-        from `privilege`
+        from `function`
     </sql>
 
     <update id="updateSkipNull" parameterType="Privilege">
-        update `privilege`
+        update `function`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -34,7 +34,7 @@
 
     <!-- @formatter:off -->
     <update id="updateModuleStatusByIds">
-        update `privilege`
+        update `function`
         set `update_time` = #{date},
             `enabled`     = #{enabled}
         where `level` &lt;= 3
@@ -51,7 +51,7 @@
     </select>
 
     <select id="getParentIdByChildId" parameterType="List" resultMap="BaseResultMap">
-        select `parent_id` from `privilege` where `id` in
+        select `parent_id` from `function` where `id` in
         <foreach collection="privilegeIdList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
@@ -65,14 +65,14 @@
     <select id="getListByLevel" parameterType="int" resultMap="BaseResultMap">
         select
             `id`, `name`
-        from `privilege`
+        from `function`
         where `level` &lt;= #{level}
     </select>
 
     <select id="getModuleListByRole" parameterType="Long" resultMap="BaseResultMap">
         select
             p.`id`, p.`name`
-        from `privilege` p
+        from `function` p
             join `role_privilege` rp
                 on p.`id` = rp.`privilege_id` and rp.`role_id` = #{roleId}
         where p.`parent_id` = 0
