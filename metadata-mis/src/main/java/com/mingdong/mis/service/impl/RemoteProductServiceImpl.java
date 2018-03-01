@@ -31,13 +31,13 @@ import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
-import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
@@ -47,7 +47,7 @@ import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.ProductTxtMapper;
-import com.mingdong.mis.domain.mapper.UserProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -77,7 +77,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
     @Resource
     private ProductInfoMapper productInfoMapper;
     @Resource
-    private UserProductMapper userProductMapper;
+    private ClientUserProductMapper clientUserProductMapper;
     @Resource
     private RedisDao redisDao;
 
@@ -522,12 +522,12 @@ public class RemoteProductServiceImpl implements RemoteProductService
         // 如果设置为禁用则需清空客户关于该产品的请求凭证
         if(!TrueOrFalse.TRUE.equals(enabled))
         {
-            List<UserProduct> userProductList = userProductMapper.getListByProduct(productId);
-            if(!CollectionUtils.isEmpty(userProductList))
+            List<ClientUserProduct> clientUserProductList = clientUserProductMapper.getListByProduct(productId);
+            if(!CollectionUtils.isEmpty(clientUserProductList))
             {
                 List<Long> idList = new ArrayList<>();
                 List<String> tokenList = new ArrayList<>();
-                for(UserProduct o : userProductList)
+                for(ClientUserProduct o : clientUserProductList)
                 {
                     if(o.getAccessToken() != null)
                     {
@@ -537,7 +537,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 }
                 if(idList.size() > 0)
                 {
-                    userProductMapper.clearAccessToken(new Date(), idList);
+                    clientUserProductMapper.clearAccessToken(new Date(), idList);
                     redisDao.dropUserAuth(tokenList.toArray(new String[tokenList.size()]));
                 }
             }

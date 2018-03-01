@@ -2,7 +2,7 @@ package com.mingdong.mis.domain.entity;
 
 import java.util.Date;
 
-public class ManagerInfo
+public class UserInfo
 {
     private Long managerId;
     private String name;

@@ -2,7 +2,7 @@ package com.mingdong.mis.domain.entity;
 
 import java.util.Date;
 
-public class RolePrivilege
+public class RoleFunction
 {
     private Long id;
     private Date createTime;

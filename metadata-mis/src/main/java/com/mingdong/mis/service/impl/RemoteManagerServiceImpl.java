@@ -18,15 +18,15 @@ import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.Function;
-import com.mingdong.mis.domain.entity.ManagerInfo;
+import com.mingdong.mis.domain.entity.UserInfo;
 import com.mingdong.mis.domain.entity.Role;
-import com.mingdong.mis.domain.entity.RolePrivilege;
+import com.mingdong.mis.domain.entity.RoleFunction;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.UserFunction;
-import com.mingdong.mis.domain.mapper.ManagerInfoMapper;
+import com.mingdong.mis.domain.mapper.UserInfoMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.RoleMapper;
-import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
+import com.mingdong.mis.domain.mapper.RoleFunctionMapper;
 import com.mingdong.mis.domain.mapper.UserFunctionMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +45,9 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     @Resource
     private RoleMapper roleMapper;
     @Resource
-    private RolePrivilegeMapper rolePrivilegeMapper;
+    private RoleFunctionMapper roleFunctionMapper;
     @Resource
-    private ManagerInfoMapper managerInfoMapper;
+    private UserInfoMapper userInfoMapper;
     @Resource
     private UserFunctionMapper userFunctionMapper;
     @Resource
@@ -159,10 +159,10 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         ManagerInfoDTO managerInfoDTO;
         if(page == null)
         {
-            List<ManagerInfo> managerInfoList = managerInfoMapper.getListBy(roleId, enabled);
-            if(!CollectionUtils.isEmpty(managerInfoList))
+            List<UserInfo> userInfoList = userInfoMapper.getListBy(roleId, enabled);
+            if(!CollectionUtils.isEmpty(userInfoList))
             {
-                for(ManagerInfo item : managerInfoList)
+                for(UserInfo item : userInfoList)
                 {
                     managerInfoDTO = new ManagerInfoDTO();
                     EntityUtils.copyProperties(item, managerInfoDTO);
@@ -179,10 +179,10 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ManagerInfo> managerInfoList = managerInfoMapper.getListBy(roleId, enabled);
-                if(!CollectionUtils.isEmpty(managerInfoList))
+                List<UserInfo> userInfoList = userInfoMapper.getListBy(roleId, enabled);
+                if(!CollectionUtils.isEmpty(userInfoList))
                 {
-                    for(ManagerInfo item : managerInfoList)
+                    for(UserInfo item : userInfoList)
                     {
                         managerInfoDTO = new ManagerInfoDTO();
                         dataList.add(managerInfoDTO);
@@ -312,13 +312,13 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         Date date = new Date();
         // 清空角色的旧权限数据
-        rolePrivilegeMapper.deleteByRole(roleDTO.getId());
+        roleFunctionMapper.deleteByRole(roleDTO.getId());
         // 保存角色的新权限数据
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(roleDTO.getPrivilegeIdList());
-        List<RolePrivilege> toAddList = new ArrayList<>();
+        List<RoleFunction> toAddList = new ArrayList<>();
         for(Long id : allPrivilegeIdList)
         {
-            RolePrivilege rp = new RolePrivilege();
+            RoleFunction rp = new RoleFunction();
             rp.setCreateTime(date);
             rp.setUpdateTime(date);
             rp.setRoleId(roleDTO.getId());
@@ -327,7 +327,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         if(!CollectionUtils.isEmpty(toAddList))
         {
-            rolePrivilegeMapper.addList(toAddList);
+            roleFunctionMapper.addList(toAddList);
         }
         // 保存角色名称
         if(!role.getName().equals(roleDTO.getName()))
@@ -351,11 +351,11 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             return roleDTO;
         }
         roleDTO.setName(role.getName());
-        List<RolePrivilege> dataList = rolePrivilegeMapper.getByRole(roleId);
+        List<RoleFunction> dataList = roleFunctionMapper.getByRole(roleId);
         if(!CollectionUtils.isEmpty(dataList))
         {
             List<Long> privilegeIdList = new ArrayList<>();
-            for(RolePrivilege o : dataList)
+            for(RoleFunction o : dataList)
             {
                 privilegeIdList.add(o.getPrivilegeId());
             }
@@ -385,17 +385,17 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         if(!CollectionUtils.isEmpty(roleDTO.getPrivilegeIdList()))
         {
             Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(roleDTO.getPrivilegeIdList());
-            List<RolePrivilege> toAddList = new ArrayList<>();
+            List<RoleFunction> toAddList = new ArrayList<>();
             for(Long id : allPrivilegeIdList)
             {
-                RolePrivilege rp = new RolePrivilege();
+                RoleFunction rp = new RoleFunction();
                 rp.setCreateTime(date);
                 rp.setUpdateTime(date);
                 rp.setRoleId(role.getId());
                 rp.setPrivilegeId(id);
                 toAddList.add(rp);
             }
-            rolePrivilegeMapper.addList(toAddList);
+            roleFunctionMapper.addList(toAddList);
         }
         return resultDTO;
     }

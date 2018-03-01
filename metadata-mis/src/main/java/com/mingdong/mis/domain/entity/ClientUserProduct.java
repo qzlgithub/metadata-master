@@ -2,7 +2,7 @@ package com.mingdong.mis.domain.entity;
 
 import java.util.Date;
 
-public class UserProduct
+public class ClientUserProduct
 {
     private Long id;
     private Date createTime;

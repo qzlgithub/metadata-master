@@ -10,13 +10,13 @@ import com.mingdong.mis.constant.MetadataResult;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
+import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
-import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ClientMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
-import com.mingdong.mis.domain.mapper.UserProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.model.MetadataRes;
 import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.service.ClientService;
@@ -38,7 +38,7 @@ public class ClientServiceImpl implements ClientService
     @Resource
     private ClientProductMapper clientProductMapper;
     @Resource
-    private UserProductMapper userProductMapper;
+    private ClientUserProductMapper clientUserProductMapper;
     @Resource
     private ProductMapper productMapper;
 
@@ -84,42 +84,42 @@ public class ClientServiceImpl implements ClientService
             }
         }
         // 查询用户账号对于产品的安全配置信息
-        UserProduct userProduct = userProductMapper.findByUserAndProduct(user.getId(), product.getId());
-        if(userProduct == null)
+        ClientUserProduct clientUserProduct = clientUserProductMapper.findByUserAndProduct(user.getId(), product.getId());
+        if(clientUserProduct == null)
         {
             res.setResult(MetadataResult.RC_6);
             return;
         }
         // 验证请求密钥
-        //        if(!checkAccessKey(userProduct.getAppSecret(), timestamp, accessKey))
+        //        if(!checkAccessKey(clientUserProduct.getAppSecret(), timestamp, accessKey))
         //        {
         //            res.setResult(MetadataResult.RC_7);
         //            return;
         //        }
         String accessToken;
         Date validTime;
-        if(!TrueOrFalse.TRUE.equals(refresh) && userProduct.getAccessToken() != null &&
-                userProduct.getValidTime() != null && res.getTimestamp().before(userProduct.getValidTime()))
+        if(!TrueOrFalse.TRUE.equals(refresh) && clientUserProduct.getAccessToken() != null &&
+                clientUserProduct.getValidTime() != null && res.getTimestamp().before(clientUserProduct.getValidTime()))
         {
-            accessToken = userProduct.getAccessToken();
-            validTime = userProduct.getValidTime();
+            accessToken = clientUserProduct.getAccessToken();
+            validTime = clientUserProduct.getValidTime();
         }
         else
         {
             accessToken = BusinessUtils.createAccessToken();
             validTime = BusinessUtils.getTokenValidTime(res.getTimestamp());
             // 清除历史凭证
-            if(userProduct.getAccessToken() != null)
+            if(clientUserProduct.getAccessToken() != null)
             {
-                redisDao.dropUserAuth(userProduct.getAccessToken());
+                redisDao.dropUserAuth(clientUserProduct.getAccessToken());
             }
             // 更新数据库中存储的access token
-            UserProduct upUpd = new UserProduct();
-            upUpd.setId(userProduct.getId());
+            ClientUserProduct upUpd = new ClientUserProduct();
+            upUpd.setId(clientUserProduct.getId());
             upUpd.setUpdateTime(res.getTimestamp());
             upUpd.setAccessToken(accessToken);
             upUpd.setValidTime(validTime);
-            userProductMapper.updateSkipNull(upUpd);
+            clientUserProductMapper.updateSkipNull(upUpd);
         }
         // 计算token剩余有效时间（秒）
         long seconds = validTime.getTime() - res.getTimestamp().getTime() + 60;
@@ -129,8 +129,8 @@ public class ClientServiceImpl implements ClientService
         userAuth.setAccountId(prodAcct.getId());
         userAuth.setClientId(prodAcct.getClientId());
         userAuth.setUserId(user.getId());
-        userAuth.setAppSecret(userProduct.getAppSecret());
-        userAuth.setValidIP(userProduct.getReqHost());
+        userAuth.setAppSecret(clientUserProduct.getAppSecret());
+        userAuth.setValidIP(clientUserProduct.getReqHost());
         redisDao.saveUserAuth(accessToken, userAuth, seconds);
         res.add(Field.ACCESS_TOKEN, accessToken);
         res.add(Field.EXPIRATION, validTime);

@@ -53,6 +53,7 @@ import com.mingdong.mis.domain.entity.ClientOperateInfo;
 import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
+import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.Product;
@@ -60,7 +61,6 @@ import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.SysConfig;
-import com.mingdong.mis.domain.entity.UserProduct;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
@@ -78,7 +78,7 @@ import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
-import com.mingdong.mis.domain.mapper.UserProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,7 +112,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Resource
     private ClientMessageMapper clientMessageMapper;
     @Resource
-    private UserProductMapper userProductMapper;
+    private ClientUserProductMapper clientUserProductMapper;
     @Resource
     private ClientInfoMapper clientInfoMapper;
     @Resource
@@ -469,7 +469,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return dto;
         }
         dto.setAppId(cp.getAppId());
-        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
+        ClientUserProduct up = clientUserProductMapper.findByUserAndProduct(userId, productId);
         if(up != null)
         {
             dto.setAppKey(up.getAppSecret());
@@ -496,26 +496,26 @@ public class RemoteClientServiceImpl implements RemoteClientService
             return resultDTO;
         }
         Date current = new Date();
-        UserProduct up = userProductMapper.findByUserAndProduct(userId, productId);
+        ClientUserProduct up = clientUserProductMapper.findByUserAndProduct(userId, productId);
         if(up == null)
         {
-            up = new UserProduct();
+            up = new ClientUserProduct();
             up.setCreateTime(current);
             up.setUpdateTime(current);
             up.setUserId(userId);
             up.setProductId(productId);
             up.setAppSecret(appKey);
             up.setReqHost(reqHost);
-            userProductMapper.add(up);
+            clientUserProductMapper.add(up);
         }
         else
         {
-            UserProduct upUpd = new UserProduct();
+            ClientUserProduct upUpd = new ClientUserProduct();
             upUpd.setId(up.getId());
             upUpd.setUpdateTime(current);
             upUpd.setAppSecret(appKey);
             upUpd.setReqHost(reqHost);
-            userProductMapper.updateSkipNull(upUpd);
+            clientUserProductMapper.updateSkipNull(upUpd);
         }
         return resultDTO;
     }

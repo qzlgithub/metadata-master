@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.UserProductMapper">
-    <resultMap id="BaseResultMap" type="UserProduct">
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientUserProductMapper">
+    <resultMap id="BaseResultMap" type="ClientUserProduct">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -20,7 +20,7 @@
         from `client_user_product`
     </sql>
 
-    <insert id="add" parameterType="UserProduct">
+    <insert id="add" parameterType="ClientUserProduct">
         insert into `client_user_product`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -46,7 +46,7 @@
         </trim>
     </insert>
 
-    <update id="updateSkipNull" parameterType="UserProduct">
+    <update id="updateSkipNull" parameterType="ClientUserProduct">
         update `client_user_product`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
