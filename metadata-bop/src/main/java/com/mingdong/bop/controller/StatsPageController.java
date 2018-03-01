@@ -39,9 +39,9 @@ public class StatsPageController
     public ModelAndView gotoStatsCustomer()
     {
         ModelAndView view = new ModelAndView("stats/client");
-        view.addAllObjects(RequestThread.getMap());
-        RestResp resp = statsService.getClientIndexStats();
+        RestResp resp = statsService.getClientQuantityStats();
         view.addAllObjects(resp.getData());
+        view.addAllObjects(RequestThread.getMap());
         return view;
     }
 

@@ -18,7 +18,7 @@ public interface StatsService
     /**
      * 获取客户统计index页面的数据
      */
-    RestResp getClientIndexStats();
+    RestResp getClientQuantityStats();
 
     /**
      * 获取客户列表

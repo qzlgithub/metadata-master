@@ -108,7 +108,7 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public RestResp getClientIndexStats()
+    public RestResp getClientQuantityStats()
     {
         RestResp resp = new RestResp();
         Map<String, Object> objectMap = redisDao.getObject(CLIENT_INDEX_STATS_KEY, SECONDS,
