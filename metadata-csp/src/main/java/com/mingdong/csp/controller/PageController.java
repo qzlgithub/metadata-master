@@ -164,36 +164,6 @@ public class PageController
         return view;
     }
 
-    /*@LoginRequired
-    @GetMapping(value = {"/product/recharge.html"})
-    public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
-    {
-        ModelAndView view = new ModelAndView("/product/recharge");
-        RestResp resp = RestResp.build();
-        productService.getProductRechargeRecord(RequestThread.getClientId(), productId, fromDate, toDate,
-                new Page(pageNum, pageSize), resp);
-        view.addAllObjects(resp.getData());
-        view.addAllObjects(RequestThread.getPageData());
-        return view;
-    }
-
-    @LoginRequired
-    @GetMapping(value = {"/product/request.html"})
-    public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
-            @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
-            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
-            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
-    {
-        ModelAndView view = new ModelAndView("/product/request");
-        view.addAllObjects(RequestThread.getPageData());
-        return view;
-    }*/
-
     @LoginRequired
     @GetMapping(value = {"/system/account-list.html"})
     public ModelAndView systemAccountList()
