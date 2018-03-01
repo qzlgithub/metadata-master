@@ -202,7 +202,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         ManagerPrivilegeListDTO managerPrivilegeListDTO = new ManagerPrivilegeListDTO();
         List<ManagerPrivilegeDTO> dataList = new ArrayList<>();
         managerPrivilegeListDTO.setDataList(dataList);
-        List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getPrivilegeIdListByManager(managerId);
+        List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getListByUser(managerId);
         ManagerPrivilegeDTO managerPrivilegeDTO;
         if(!CollectionUtils.isEmpty(managerPrivilegeList))
         {

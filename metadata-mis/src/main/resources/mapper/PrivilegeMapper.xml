@@ -12,39 +12,14 @@
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
     </resultMap>
 
-    <insert id="add" parameterType="Privilege">
-        insert into privilege
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">`id`,</if>
-            <if test="createTime != null">`create_time`,</if>
-            <if test="updateTime != null">`update_time`,</if>
-            <if test="name != null">`name`,</if>
-            <if test="seqNo != null">`seq_no`,</if>
-            <if test="level != null">`level`,</if>
-            <if test="parentId != null">`parent_id`,</if>
-            <if test="enabled != null">`enabled`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="name != null">#{name},</if>
-            <if test="seqNo != null">#{seqNo},</if>
-            <if test="level != null">#{level},</if>
-            <if test="parentId != null">#{parentId},</if>
-            <if test="enabled != null">#{enabled},</if>
-        </trim>
-    </insert>
-
-    <update id="updateById" parameterType="Privilege">
-        update privilege
-        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `name` = #{name}, `seq_no` =
-        #{seqNo}, `level` = #{level}, `parent_id` = #{parentId}, `enabled` = #{enabled}
-        where `id` = #{id}
-    </update>
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
+        from `privilege`
+    </sql>
 
     <update id="updateSkipNull" parameterType="Privilege">
-        update privilege
+        update `privilege`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -57,21 +32,22 @@
         where `id` = #{id}
     </update>
 
-    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
-        from privilege
-        where `id` = #{id}
-    </select>
+    <!-- @formatter:off -->
+    <update id="updateModuleStatusByIds">
+        update `privilege`
+        set `update_time` = #{date},
+            `enabled`     = #{enabled}
+        where `level` &lt;= 3
+          and `id` in
+        <foreach collection="idList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+    <!-- @formatter:on -->
 
-    <select id="getAll" resultMap="BaseResultMap">
-        select
-            `id`, `create_time`, `update_time`, `name`, `seq_no`, `level`, `parent_id`, `enabled`
-        from privilege
-    </select>
-    <select id="countAll" resultType="Integer">
-        select count(*)
-        from privilege
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
     </select>
 
     <select id="getParentIdByChildId" parameterType="List" resultMap="BaseResultMap">
@@ -79,15 +55,6 @@
         <foreach collection="privilegeIdList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
-    </select>
-
-    <select id="getTopListByRole" parameterType="Long" resultMap="BaseResultMap">
-        select
-            p.`id`, p.`create_time`, p.`update_time`, p.`name`, p.`seq_no`, p.`level`, p.`parent_id`, p.`enabled`
-        from `role_privilege` rp
-            join `privilege` p
-                on rp.`privilege_id` = p.`id` and p.`level` = 1
-        where rp.`role_id` = #{roleId};
     </select>
 
     <select id="getByParentAndStatus" resultMap="BaseResultMap">
@@ -105,13 +72,6 @@
         from `privilege`
         where `level` &lt;= #{level}
     </select>
-
-    <update id="updateModuleStatusByIds">
-        update `privilege` set `enabled` = #{enabled}, `update_time` = #{date} where `level` &lt;= 3 and `id` in
-        <foreach collection="idList" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
-    </update>
 
     <select id="getModuleListByRole" parameterType="Long" resultMap="BaseResultMap">
         select

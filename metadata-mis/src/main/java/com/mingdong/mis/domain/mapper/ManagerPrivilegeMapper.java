@@ -9,8 +9,6 @@ public interface ManagerPrivilegeMapper
 {
     void addList(@Param("list") List<ManagerPrivilege> list);
 
-    List<ManagerPrivilege> getPrivilegeIdListByManager(Long managerId);
-
     void deleteByManager(Long managerId);
 
     List<ManagerPrivilege> getListByUser(Long managerId);

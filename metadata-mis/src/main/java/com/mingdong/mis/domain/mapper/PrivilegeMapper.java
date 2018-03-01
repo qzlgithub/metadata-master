@@ -8,20 +8,18 @@ import java.util.List;
 
 public interface PrivilegeMapper
 {
+    void updateSkipNull(Privilege privilege);
+
+    void updateModuleStatusByIds(@Param("enabled") Integer enabled, @Param("data") Date date,
+            @Param("idList") List<Long> idList);
+
     Privilege findById(Long id);
 
     List<Privilege> getParentIdByChildId(@Param("privilegeIdList") List<Long> privilegeIdList);
 
-    List<Privilege> getTopListByRole(Long roleId);
-
     List<Privilege> getByParentAndStatus(@Param("parentId") Long parentId, @Param("enabled") Integer enabled);
 
-    void updateSkipNull(Privilege privilege);
-
     List<Privilege> getListByLevel(int level);
-
-    void updateModuleStatusByIds(@Param("enabled") Integer enabled, @Param("data") Date date,
-            @Param("idList") List<Long> idList);
 
     List<Privilege> getModuleListByRole(Long roleId);
 }
