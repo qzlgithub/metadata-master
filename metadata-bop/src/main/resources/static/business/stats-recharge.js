@@ -26,7 +26,7 @@ layui.config({
             {field: 'amount', title: '金额（元）'},
             {field: 'rechargeType', title: '充值类型'},
             {field: 'balance', title: '账户余额（不包含服务）'},
-            {field: 'managerName', title: '经手人'},
+            {field: 'managerName', title: '经手人'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'

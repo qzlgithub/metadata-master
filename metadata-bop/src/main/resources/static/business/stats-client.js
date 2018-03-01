@@ -21,7 +21,7 @@ layui.config({
             {field: 'corpName', title: '公司名称'},
             {field: 'shortName', title: '公司简称'},
             {field: 'username', title: '账号'},
-            {field: 'managerName', title: '商务经理'},
+            {field: 'managerName', title: '商务经理'}
         ]],
         request: {
             pageName: 'pageNum', limitName: 'pageSize'
