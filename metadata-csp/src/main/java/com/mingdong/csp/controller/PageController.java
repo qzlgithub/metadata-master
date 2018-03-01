@@ -82,7 +82,7 @@ public class PageController
     @GetMapping(value = {"/product/all.html"})
     public ModelAndView productAll()
     {
-        ModelAndView view = new ModelAndView("/product/all");
+        ModelAndView view = new ModelAndView("product/all");
         view.addAllObjects(RequestThread.getPageData());
         view.addObject(Field.PRODUCT_TYPE_LIST, ProdType.getProdTypeDict());
         return view;
@@ -92,7 +92,7 @@ public class PageController
     @GetMapping(value = {"/product/detail.html"})
     public ModelAndView productDetail(@RequestParam(value = Field.ID) Long productId)
     {
-        ModelAndView view = new ModelAndView("/product/detail");
+        ModelAndView view = new ModelAndView("product/detail");
         RestResp resp = new RestResp();
         productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
         view.addAllObjects(resp.getData());
@@ -105,7 +105,7 @@ public class PageController
     @GetMapping(value = {"/product/introduce.html"})
     public ModelAndView productIntroduce()
     {
-        ModelAndView view = new ModelAndView("/product/introduce");
+        ModelAndView view = new ModelAndView("product/introduce");
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
@@ -114,7 +114,7 @@ public class PageController
     @GetMapping(value = {"/product/mine.html"})
     public ModelAndView productMine()
     {
-        ModelAndView view = new ModelAndView("/product/mine");
+        ModelAndView view = new ModelAndView("product/mine");
         RestResp resp = new RestResp();
         productService.getClientProductDetailList(RequestThread.getClientId(), resp);
         view.addAllObjects(resp.getData());
@@ -126,7 +126,7 @@ public class PageController
     @GetMapping(value = {"/product/recharge.html"})
     public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
-        ModelAndView view = new ModelAndView("/product/recharge");
+        ModelAndView view = new ModelAndView("product/recharge");
         List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
         view.addObject(Field.PRODUCT_LIST, productList);
         if(productId != null)
@@ -147,7 +147,7 @@ public class PageController
     @GetMapping(value = {"/product/request.html"})
     public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
-        ModelAndView view = new ModelAndView("/product/request");
+        ModelAndView view = new ModelAndView("product/request");
         List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
         view.addObject(Field.PRODUCT_LIST, productList);
         if(productId != null)
@@ -198,7 +198,7 @@ public class PageController
     @GetMapping(value = {"/system/account-list.html"})
     public ModelAndView systemAccountList()
     {
-        ModelAndView view = new ModelAndView("/system/account-list");
+        ModelAndView view = new ModelAndView("system/account-list");
         view.addAllObjects(RequestThread.getPageData());
         view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
         return view;
@@ -208,7 +208,7 @@ public class PageController
     @GetMapping(value = {"/system/message.html"})
     public ModelAndView systemMessage()
     {
-        ModelAndView view = new ModelAndView("/system/message");
+        ModelAndView view = new ModelAndView("system/message");
         view.addAllObjects(RequestThread.getPageData());
         view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
         return view;
