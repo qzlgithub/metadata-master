@@ -17,18 +17,18 @@ import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
-import com.mingdong.mis.domain.entity.Manager;
 import com.mingdong.mis.domain.entity.ManagerInfo;
 import com.mingdong.mis.domain.entity.ManagerPrivilege;
 import com.mingdong.mis.domain.entity.Privilege;
 import com.mingdong.mis.domain.entity.Role;
 import com.mingdong.mis.domain.entity.RolePrivilege;
+import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ManagerInfoMapper;
-import com.mingdong.mis.domain.mapper.ManagerMapper;
 import com.mingdong.mis.domain.mapper.ManagerPrivilegeMapper;
 import com.mingdong.mis.domain.mapper.PrivilegeMapper;
 import com.mingdong.mis.domain.mapper.RoleMapper;
 import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
+import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -41,7 +41,7 @@ import java.util.Set;
 public class RemoteManagerServiceImpl implements RemoteManagerService
 {
     @Resource
-    private ManagerMapper managerMapper;
+    private UserMapper userMapper;
     @Resource
     private RoleMapper roleMapper;
     @Resource
@@ -57,7 +57,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ManagerDTO getManagerById(Long managerId)
     {
         ManagerDTO managerDTO = new ManagerDTO();
-        Manager byId = managerMapper.findById(managerId);
+        User byId = userMapper.findById(managerId);
         if(byId == null)
         {
             return null;
@@ -70,16 +70,16 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public UserInfoDTO getAccountInfo(Long userId)
     {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
-        Manager manager = managerMapper.findById(userId);
-        if(manager != null)
+        User user = userMapper.findById(userId);
+        if(user != null)
         {
             // 基本信息
-            userInfoDTO.setUsername(manager.getUsername());
-            userInfoDTO.setName(manager.getName());
-            userInfoDTO.setPhone(manager.getPhone());
-            userInfoDTO.setQq(manager.getQq());
-            userInfoDTO.setRoleId(manager.getRoleId());
-            userInfoDTO.setEnabled(manager.getEnabled());
+            userInfoDTO.setUsername(user.getUsername());
+            userInfoDTO.setName(user.getName());
+            userInfoDTO.setPhone(user.getPhone());
+            userInfoDTO.setQq(user.getQq());
+            userInfoDTO.setRoleId(user.getRoleId());
+            userInfoDTO.setEnabled(user.getEnabled());
             // 用户权限信息
             List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getListByUser(userId);
             if(!CollectionUtils.isEmpty(managerPrivilegeList))
@@ -99,7 +99,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ManagerDTO getManagerByUsername(String username)
     {
         ManagerDTO managerDTO = new ManagerDTO();
-        Manager byUsername = managerMapper.findByUsername(username);
+        User byUsername = userMapper.findByUsername(username);
         if(byUsername == null)
         {
             return null;
@@ -110,10 +110,10 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO updateManagerSkipNull(NewManager newManager)
+    public ResultDTO updateManagerSkipNull(NewManager newManager) // TODO ddddd
     {
         ResultDTO resultDTO = new ResultDTO();
-        Manager byId = managerMapper.findById(newManager.getManagerDTO().getId());
+        User byId = userMapper.findById(newManager.getManagerDTO().getId());
         if(byId == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
@@ -136,9 +136,9 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             }
             managerPrivilegeMapper.addList(list);
         }
-        Manager manager = new Manager();
-        EntityUtils.copyProperties(newManager.getManagerDTO(), manager);
-        managerMapper.updateSkipNull(manager);
+        User user = new User();
+        EntityUtils.copyProperties(newManager.getManagerDTO(), user);
+        userMapper.updateSkipNull(user);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
@@ -172,7 +172,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         else
         {
-            int total = managerMapper.countBy(roleId, enabled);
+            int total = userMapper.countBy(roleId, enabled);
             int pages = page.getTotalPage(total);
             managerListDTO.setPages(pages);
             managerListDTO.setTotal(total);
@@ -216,25 +216,25 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ResultDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Manager manager = managerMapper.findById(managerId);
-        if(manager == null)
+        User user = userMapper.findById(managerId);
+        if(user == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        else if(!manager.getPassword().equals(Md5Utils.encrypt(oldPwd)))
+        else if(!user.getPassword().equals(Md5Utils.encrypt(oldPwd)))
         {
             resultDTO.setResult(RestResult.INVALID_PASSCODE);
             return resultDTO;
         }
         String newPassword = Md5Utils.encrypt(newPwd);
-        if(!manager.getPassword().equals(newPassword))
+        if(!user.getPassword().equals(newPassword))
         {
-            manager = new Manager();
-            manager.setId(managerId);
-            manager.setUpdateTime(new Date());
-            manager.setPassword(newPassword);
-            managerMapper.updateSkipNull(manager);
+            user = new User();
+            user.setId(managerId);
+            user.setUpdateTime(new Date());
+            user.setPassword(newPassword);
+            userMapper.updateSkipNull(user);
         }
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
@@ -245,7 +245,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ResultDTO addManager(NewManager newManager)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Manager byUsername = managerMapper.findByUsername(newManager.getManagerDTO().getUsername());
+        User byUsername = userMapper.findByUsername(newManager.getManagerDTO().getUsername());
         if(byUsername != null)
         {
             resultDTO.setResult(RestResult.USERNAME_EXIST);
@@ -264,9 +264,9 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             list.add(mp);
         }
         managerPrivilegeMapper.addList(list);
-        Manager manager = new Manager();
-        EntityUtils.copyProperties(newManager.getManagerDTO(), manager);
-        managerMapper.add(manager);
+        User user = new User();
+        EntityUtils.copyProperties(newManager.getManagerDTO(), user);
+        userMapper.add(user);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }

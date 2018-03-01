@@ -54,7 +54,7 @@ import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.DictIndustry;
-import com.mingdong.mis.domain.entity.Manager;
+import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRecharge;
@@ -71,7 +71,7 @@ import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
-import com.mingdong.mis.domain.mapper.ManagerMapper;
+import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
@@ -100,7 +100,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Resource
     private DictIndustryMapper dictIndustryMapper;
     @Resource
-    private ManagerMapper managerMapper;
+    private UserMapper userMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -166,7 +166,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             userDTO.getResultDTO().setResult(RestResult.INVALID_PASSCODE);
             return userDTO;
         }
-        Manager manager = managerMapper.findById(client.getManagerId());
+        User manager = userMapper.findById(client.getManagerId());
         userDTO.setClientId(user.getClientId());
         userDTO.setUserId(user.getId());
         userDTO.setPrimary(user.getId().equals(client.getPrimaryUserId()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
@@ -786,7 +786,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         }
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
         List<ClientUser> clientUserList = clientUserMapper.getListByClientAndStatus(clientId, null, TrueOrFalse.FALSE);
-        Manager manager = managerMapper.findById(client.getManagerId());
+        User manager = userMapper.findById(client.getManagerId());
         res.setClientId(client.getId());
         res.setCorpName(client.getCorpName());
         res.setShortName(client.getShortName());

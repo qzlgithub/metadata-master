@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.ManagerMapper">
-    <resultMap id="BaseResultMap" type="Manager">
+<mapper namespace="com.mingdong.mis.domain.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="User">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -22,7 +22,7 @@
         from `user`
     </sql>
 
-    <insert id="add" parameterType="Manager">
+    <insert id="add" parameterType="User">
         insert into `user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -52,7 +52,7 @@
         </trim>
     </insert>
 
-    <update id="updateSkipNull" parameterType="Manager">
+    <update id="updateSkipNull" parameterType="User">
         update `user`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
