@@ -156,7 +156,7 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE, apiReqInfoListDTO.getResultDTO().getProductCode());
+        resp.addData(Field.CODE, apiReqInfoListDTO.getResultDTO().getCode());
         resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
         resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
         resp.addData(Field.PAGE_NUM, page.getPageNum());
