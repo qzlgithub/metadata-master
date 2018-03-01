@@ -17,17 +17,17 @@ import com.mingdong.core.model.dto.RoleDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
+import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.ManagerInfo;
-import com.mingdong.mis.domain.entity.UserFunction;
-import com.mingdong.mis.domain.entity.Privilege;
 import com.mingdong.mis.domain.entity.Role;
 import com.mingdong.mis.domain.entity.RolePrivilege;
 import com.mingdong.mis.domain.entity.User;
+import com.mingdong.mis.domain.entity.UserFunction;
 import com.mingdong.mis.domain.mapper.ManagerInfoMapper;
-import com.mingdong.mis.domain.mapper.UserFunctionMapper;
-import com.mingdong.mis.domain.mapper.PrivilegeMapper;
+import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.RoleMapper;
 import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
+import com.mingdong.mis.domain.mapper.UserFunctionMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +51,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     @Resource
     private UserFunctionMapper userFunctionMapper;
     @Resource
-    private PrivilegeMapper privilegeMapper;
+    private FunctionMapper functionMapper;
 
     @Override
     public ManagerDTO getManagerById(Long managerId)
@@ -466,9 +466,9 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
      */
     private List<String> getRoleModuleNameList(Long roleId)
     {
-        List<Privilege> dataList = privilegeMapper.getModuleListByRole(roleId);
+        List<Function> dataList = functionMapper.getModuleListByRole(roleId);
         List<String> list = new ArrayList<>();
-        for(Privilege o : dataList)
+        for(Function o : dataList)
         {
             list.add(o.getName());
         }
@@ -491,8 +491,8 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         Set<Long> set = new HashSet<>();
         if(!CollectionUtils.isEmpty(privilege))
         {
-            List<Privilege> privilegeList = privilegeMapper.getParentIdByChildId(new ArrayList<>(privilege));
-            for(Privilege p : privilegeList)
+            List<Function> functionList = functionMapper.getParentIdByChildId(new ArrayList<>(privilege));
+            for(Function p : functionList)
             {
                 if(p.getParentId() != null && p.getParentId() != 0)
                 {

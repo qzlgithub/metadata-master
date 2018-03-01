@@ -19,11 +19,11 @@ import com.mingdong.core.service.RemoteSystemService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
-import com.mingdong.mis.domain.entity.Privilege;
+import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.SysConfig;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
-import com.mingdong.mis.domain.mapper.PrivilegeMapper;
+import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.SysConfigMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +39,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     @Resource
     private DictIndustryMapper dictIndustryMapper;
     @Resource
-    private PrivilegeMapper privilegeMapper;
+    private FunctionMapper functionMapper;
     @Resource
     private DictRechargeTypeMapper dictRechargeTypeMapper;
     @Resource
@@ -86,11 +86,11 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         {
             parentId = 0L;
         }
-        List<Privilege> privilegeList = privilegeMapper.getListByParent(parentId);
-        if(!CollectionUtils.isEmpty(privilegeList))
+        List<Function> functionList = functionMapper.getListByParent(parentId);
+        if(!CollectionUtils.isEmpty(functionList))
         {
-            List<PrivilegeDTO> list = new ArrayList<>(privilegeList.size());
-            for(Privilege o : privilegeList)
+            List<PrivilegeDTO> list = new ArrayList<>(functionList.size());
+            for(Function o : functionList)
             {
                 PrivilegeDTO p = new PrivilegeDTO();
                 p.setPrivilegeId(o.getId());
@@ -107,11 +107,11 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public ListDTO<PrivilegeDTO> getPrivilegeByLevel(Integer level)
     {
         ListDTO<PrivilegeDTO> listDTO = new ListDTO<>();
-        List<Privilege> privilegeList = privilegeMapper.getListByLevel(level);
-        if(!CollectionUtils.isEmpty(privilegeList))
+        List<Function> functionList = functionMapper.getListByLevel(level);
+        if(!CollectionUtils.isEmpty(functionList))
         {
-            List<PrivilegeDTO> list = new ArrayList<>(privilegeList.size());
-            for(Privilege o : privilegeList)
+            List<PrivilegeDTO> list = new ArrayList<>(functionList.size());
+            for(Function o : functionList)
             {
                 PrivilegeDTO p = new PrivilegeDTO();
                 p.setPrivilegeId(o.getId());
@@ -162,7 +162,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public ResultDTO setModuleStatus(Integer status, List<Long> moduleIdList)
     {
         ResultDTO resultDTO = new ResultDTO();
-        privilegeMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
+        functionMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
         resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
@@ -254,17 +254,17 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     public ResultDTO editPrivilegeInfo(PrivilegeDTO privilegeDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Privilege privilege = privilegeMapper.findById(privilegeDTO.getPrivilegeId());
-        if(privilege == null)
+        Function function = functionMapper.findById(privilegeDTO.getPrivilegeId());
+        if(function == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        Privilege temp = new Privilege();
+        Function temp = new Function();
         temp.setId(privilegeDTO.getPrivilegeId());
         temp.setUpdateTime(new Date());
         temp.setName(privilegeDTO.getName());
-        privilegeMapper.updateSkipNull(temp);
+        functionMapper.updateSkipNull(temp);
         return resultDTO;
     }
 
@@ -414,10 +414,10 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
         }
     }
 
-    private void findPrivilegeDTO(List<Privilege> privilegeList, List<PrivilegeDTO> dataList)
+    private void findPrivilegeDTO(List<Function> functionList, List<PrivilegeDTO> dataList)
     {
         PrivilegeDTO privilegeDTO;
-        for(Privilege item : privilegeList)
+        for(Function item : functionList)
         {
             privilegeDTO = new PrivilegeDTO();
             EntityUtils.copyProperties(item, privilegeDTO);
