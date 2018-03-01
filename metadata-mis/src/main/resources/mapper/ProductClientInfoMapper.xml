@@ -29,16 +29,16 @@
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
             left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
-        where (p.`custom` = 0 or cp.`id` is not null)
+        where p.`enabled` = 1 and ((p.`custom` = 0 and cp.`id` is null) or (p.`custom` = 1 and cp.`opened` = 0))
         <if test="typeIdList != null and typeIdList.size() > 0">
             and p.`type` in
             <foreach collection="typeIdList" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test="incOpened == null">and cp.opened != 1</if>
+        <if test="incOpened == null">and (cp.opened != 1 or cp.opened is null)</if>
     </select>
-
+    <!-- @formatter:off -->
     <select id="getListBy" resultMap="BaseResultMap">
         select
             p.`id`          as product_id,
@@ -56,14 +56,14 @@
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
             left join `recharge` pr
                 on cp.`latest_recharge_id` = pr.`id`
-        where (p.`custom` = 0 or cp.`id` is not null)
+        where p.`enabled` = 1
         <if test="typeIdList != null and typeIdList.size() > 0">
             and p.`type` in
             <foreach collection="typeIdList" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test="incOpened == null">and cp.opened != 1</if>
+        <if test="incOpened == null">and (cp.opened != 1 or cp.opened is null)</if>
     </select>
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
@@ -91,6 +91,7 @@
                 on cp.`latest_recharge_id` = pr.`id`
         where p.`enabled` = 1
     </select>
+    <!-- @formatter:on -->
 
     <select id="getClientProductCustomBy" parameterType="Long" resultMap="BaseResultMap">
         select

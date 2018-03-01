@@ -44,10 +44,7 @@
         </dd>
     </dl>
 </div>
-<!--产品服务 end-->
-<!--内容-->
 <div class="container mt20 mb20 bg-white">
-    <!--服务列表 left-->
     <div class="development-nav">
         <dl id="mms1" class="serve-list">
             <dt>我的服务<a href="/product/mine.html" class="fr col3 pr10 fb-normal fz-12 important">查看全部</a></dt>
@@ -56,17 +53,11 @@
                     <li th:each="o : ${openedList}">
                         <div class="serve-list-title">
                             <md th:text="${o.name}"></md>
-                            <!-- 正常 -->
                             <span class="fr" th:if="${o.status == 0}">服务中</span>
-                            <!-- 未开始 -->
                             <i class="wks-icon icon" th:if="${o.status == 1}"></i>
-                            <!-- 即将过期 -->
                             <i class="jjgq-icon icon" th:if="${o.status == 2}"></i>
-                            <!-- 已过期 -->
                             <i class="ygq-icon icon" th:if="${o.status == 3}"></i>
-                            <!-- 余额不足 -->
                             <i class="yebz-icon icon" th:if="${o.status == 4}"></i>
-                            <!-- 已欠费 -->
                             <i class="yqf-icon icon" th:if="${o.status == 5}"></i>
                         </div>
                         <p class="col2 tc fz-14 important" th:if="${o.billPlan == 1}"
@@ -111,42 +102,6 @@
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
 
-<div id="init-password" style="display: none">
-    <div class="layui-layer-title">修改密码</div>
-    <div class="mb30">
-        <div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>
-        <div class="m30">
-            <div class="layui-form-item">
-                <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
-                <div class="layui-input-block" id="init-org-enc-pwd">
-                    <input type="password" id="init-org-enc-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="close-eye icon" id="init-org-show"></i>
-                </div>
-                <div class="layui-input-block" id="init-org-dec-pwd" style="display: none">
-                    <input type="text" id="init-org-dec-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="open-eye icon" id="init-org-hide"></i>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
-                <div class="layui-input-block" id="init-new-enc-pwd">
-                    <input type="password" id="init-new-enc-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="close-eye icon" id="init-new-show"></i>
-                </div>
-                <div class="layui-input-block" id="init-new-dec-pwd" style="display: none">
-                    <input type="text" id="init-new-dec-password" placeholder="请输入" class="layui-input position-r"/>
-                    <i class="open-eye icon" id="init-new-hide"></i>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" id="chg-init-pwd">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="change-password" style="display: none" th:include="common :: password"></div>
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
@@ -161,8 +116,32 @@
 <script type="text/javascript" src="/static/js/public.js"></script>
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
-<script type="text/javascript" src="/static/business/home.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
+<script>
+    var message;
+    layui.config({
+        base: '../build/js/'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        //app.set({type: 'iframe'}).init();
+        $("#home-greeting").text(getGreeting());
+        var first = sessionStorage.getItem("first_login");
+        if(first === "1") {
+            layer.open({
+                title: false,
+                type: 1,
+                content: $('#change-password'),
+                area: ['500px'],
+                shadeClose: true
+            });
+        }
+    });
+</script>
 </body>
 </html>
   
