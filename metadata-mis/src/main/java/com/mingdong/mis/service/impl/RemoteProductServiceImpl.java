@@ -210,7 +210,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     ProductDTO d = new ProductDTO();
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
-                    d.setCode(info.getCode());
+                    d.setProductCode(info.getCode());
                     d.setType(info.getType());
                     d.setTypeName(info.getTypeName());
                     d.setBillPlan(info.getBillPlan());
@@ -238,7 +238,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                     d.setId(info.getProductId());
                     d.setName(info.getProductName());
                     d.setRemark(info.getRemark());
-                    d.setCode(info.getCode());
+                    d.setProductCode(info.getCode());
                     d.setTypeName(info.getTypeName());
                     d.setType(info.getType());
                     toOpen.add(d);
@@ -339,7 +339,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         ProductTxt productTxt = productTxtMapper.findById(productId);
         productDTO.setType(product.getType());
-        productDTO.setCode(product.getCode());
+        productDTO.setProductCode(product.getCode());
         productDTO.setName(product.getName());
         productDTO.setCostAmt(product.getCostAmt());
         productDTO.setCustom(product.getCustom());
@@ -562,7 +562,7 @@ public class RemoteProductServiceImpl implements RemoteProductService
                 ProductDTO pd = new ProductDTO();
                 pd.setId(o.getId());
                 pd.setCreateTime(o.getCreateTime());
-                pd.setCode(o.getCode());
+                pd.setProductCode(o.getCode());
                 pd.setName(o.getName());
                 pd.setType(o.getType());
                 pd.setCustom(o.getCustom());

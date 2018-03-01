@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService
         {
             map.put(Field.CUSTOM, Custom.getById(productDTO.getCustom()).getName());
             map.put(Field.TYPE, ProdType.getNameById(productDTO.getType()));
-            map.put(Field.CODE, productDTO.getCode());
+            map.put(Field.CODE, productDTO.getProductCode());
             map.put(Field.NAME, productDTO.getName());
             map.put(Field.COST_AMT, NumberUtils.formatAmount(productDTO.getCostAmt()));
             map.put(Field.REMARK, productDTO.getRemark());
@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductService
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, o.getId() + "");
                 map.put(Field.ADD_DATE, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD));
-                map.put(Field.CODE, o.getCode());
+                map.put(Field.CODE, o.getProductCode());
                 map.put(Field.NAME, o.getName());
                 map.put(Field.TYPE, ProdType.getNameById(o.getType()));
                 map.put(Field.CUSTOM, o.getCustom());

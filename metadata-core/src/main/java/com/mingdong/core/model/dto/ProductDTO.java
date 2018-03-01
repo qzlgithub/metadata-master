@@ -18,7 +18,7 @@ public class ProductDTO extends ResultDTO implements Serializable
     private Date arrearTime;
     private Date fromDate;
     private Date toDate;
-    private String code;
+    private String productCode;
     private Integer type;
     private Integer opened;
     private Integer enabled;
@@ -36,14 +36,14 @@ public class ProductDTO extends ResultDTO implements Serializable
         this.custom = custom;
     }
 
-    public String getCode()
+    public String getProductCode()
     {
-        return code;
+        return productCode;
     }
 
-    public void setCode(String code)
+    public void setProductCode(String productCode)
     {
-        this.code = code;
+        this.productCode = productCode;
     }
 
     public Long getId()

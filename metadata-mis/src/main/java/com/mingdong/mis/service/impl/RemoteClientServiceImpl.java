@@ -486,13 +486,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            resultDTO.setCode(RestResult.INTERNAL_ERROR.getCode());
+            resultDTO.setResult(RestResult.INTERNAL_ERROR);
             return resultDTO;
         }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
-            resultDTO.setCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            resultDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
             return resultDTO;
         }
         Date current = new Date();
