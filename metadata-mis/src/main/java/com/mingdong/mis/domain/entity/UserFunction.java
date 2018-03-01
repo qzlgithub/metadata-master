@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Date;
 
-public class ManagerPrivilege
+public class UserFunction
 {
     private Long id;
     private Date createTime;
@@ -76,11 +76,11 @@ public class ManagerPrivilege
         {
             return true;
         }
-        if(!(o instanceof ManagerPrivilege))
+        if(!(o instanceof UserFunction))
         {
             return false;
         }
-        ManagerPrivilege privilege = (ManagerPrivilege) o;
+        UserFunction privilege = (UserFunction) o;
         return new EqualsBuilder().append(managerId, privilege.managerId)
                 .append(privilegeId, privilege.privilegeId)
                 .isEquals();

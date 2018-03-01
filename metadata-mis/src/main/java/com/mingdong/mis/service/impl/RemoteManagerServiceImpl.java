@@ -18,13 +18,13 @@ import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.ManagerInfo;
-import com.mingdong.mis.domain.entity.ManagerPrivilege;
+import com.mingdong.mis.domain.entity.UserFunction;
 import com.mingdong.mis.domain.entity.Privilege;
 import com.mingdong.mis.domain.entity.Role;
 import com.mingdong.mis.domain.entity.RolePrivilege;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ManagerInfoMapper;
-import com.mingdong.mis.domain.mapper.ManagerPrivilegeMapper;
+import com.mingdong.mis.domain.mapper.UserFunctionMapper;
 import com.mingdong.mis.domain.mapper.PrivilegeMapper;
 import com.mingdong.mis.domain.mapper.RoleMapper;
 import com.mingdong.mis.domain.mapper.RolePrivilegeMapper;
@@ -49,7 +49,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     @Resource
     private ManagerInfoMapper managerInfoMapper;
     @Resource
-    private ManagerPrivilegeMapper managerPrivilegeMapper;
+    private UserFunctionMapper userFunctionMapper;
     @Resource
     private PrivilegeMapper privilegeMapper;
 
@@ -81,11 +81,11 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             userInfoDTO.setRoleId(user.getRoleId());
             userInfoDTO.setEnabled(user.getEnabled());
             // 用户权限信息
-            List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getListByUser(userId);
-            if(!CollectionUtils.isEmpty(managerPrivilegeList))
+            List<UserFunction> userFunctionList = userFunctionMapper.getListByUser(userId);
+            if(!CollectionUtils.isEmpty(userFunctionList))
             {
-                List<Long> privilegeIdList = new ArrayList<>(managerPrivilegeList.size());
-                for(ManagerPrivilege o : managerPrivilegeList)
+                List<Long> privilegeIdList = new ArrayList<>(userFunctionList.size());
+                for(UserFunction o : userFunctionList)
                 {
                     privilegeIdList.add(o.getPrivilegeId());
                 }
@@ -123,18 +123,18 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         {
             Date current = new Date();
             Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
-            managerPrivilegeMapper.deleteByManager(newManager.getManagerDTO().getId());
-            List<ManagerPrivilege> list = new ArrayList<>();
+            userFunctionMapper.deleteByManager(newManager.getManagerDTO().getId());
+            List<UserFunction> list = new ArrayList<>();
             for(Long privilegeId : allPrivilegeIdList)
             {
-                ManagerPrivilege mp = new ManagerPrivilege();
+                UserFunction mp = new UserFunction();
                 mp.setCreateTime(current);
                 mp.setUpdateTime(current);
                 mp.setManagerId(newManager.getManagerDTO().getId());
                 mp.setPrivilegeId(privilegeId);
                 list.add(mp);
             }
-            managerPrivilegeMapper.addList(list);
+            userFunctionMapper.addList(list);
         }
         User user = new User();
         EntityUtils.copyProperties(newManager.getManagerDTO(), user);
@@ -198,11 +198,11 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     public ListDTO<String> getManagerPrivilegeListByManagerId(Long managerId)
     {
         ListDTO<String> listDTO = new ListDTO<>();
-        List<ManagerPrivilege> managerPrivilegeList = managerPrivilegeMapper.getListByUser(managerId);
-        if(!CollectionUtils.isEmpty(managerPrivilegeList))
+        List<UserFunction> userFunctionList = userFunctionMapper.getListByUser(managerId);
+        if(!CollectionUtils.isEmpty(userFunctionList))
         {
-            List<String> list = new ArrayList<>(managerPrivilegeList.size());
-            for(ManagerPrivilege o : managerPrivilegeList)
+            List<String> list = new ArrayList<>(userFunctionList.size());
+            for(UserFunction o : userFunctionList)
             {
                 list.add(o.getPrivilegeId() + "");
             }
@@ -253,17 +253,17 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         Date current = new Date();
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
-        List<ManagerPrivilege> list = new ArrayList<>();
+        List<UserFunction> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
-            ManagerPrivilege mp = new ManagerPrivilege();
+            UserFunction mp = new UserFunction();
             mp.setUpdateTime(current);
             mp.setCreateTime(current);
             mp.setManagerId(newManager.getManagerDTO().getId());
             mp.setPrivilegeId(privilegeId);
             list.add(mp);
         }
-        managerPrivilegeMapper.addList(list);
+        userFunctionMapper.addList(list);
         User user = new User();
         EntityUtils.copyProperties(newManager.getManagerDTO(), user);
         userMapper.add(user);
