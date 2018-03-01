@@ -80,12 +80,37 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public PrivilegeListDTO getPrivilegeListByParentAndStatus(Long parentId, Integer enabled)
+    public ListDTO<PrivilegeDTO> getPrivilegeListByParent(Long parentId)
+    {
+        ListDTO<PrivilegeDTO> listDTO = new ListDTO<>();
+        if(parentId == null)
+        {
+            parentId = 0L;
+        }
+        List<Privilege> privilegeList = privilegeMapper.getListByParent(parentId);
+        if(!CollectionUtils.isEmpty(privilegeList))
+        {
+            List<PrivilegeDTO> list = new ArrayList<>(privilegeList.size());
+            for(Privilege o : privilegeList)
+            {
+                PrivilegeDTO p = new PrivilegeDTO();
+                p.setId(o.getId());
+                p.setName(o.getName());
+                p.setEnabled(o.getEnabled());
+                list.add(p);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public PrivilegeListDTO getPrivilegeByLevel(Integer level)
     {
         PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
         List<PrivilegeDTO> dataList = new ArrayList<>();
         privilegeListDTO.setDataList(dataList);
-        List<Privilege> privilegeList = privilegeMapper.getByParentAndStatus(parentId, enabled);
+        List<Privilege> privilegeList = privilegeMapper.getListByLevel(level);
         if(!CollectionUtils.isEmpty(privilegeList))
         {
             findPrivilegeDTO(privilegeList, dataList);
@@ -111,20 +136,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             }
         }
         return dictRechargeTypeListDTO;
-    }
-
-    @Override
-    public PrivilegeListDTO getPrivilegeByLevel(Integer level)
-    {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        privilegeListDTO.setDataList(dataList);
-        List<Privilege> privilegeList = privilegeMapper.getListByLevel(level);
-        if(!CollectionUtils.isEmpty(privilegeList))
-        {
-            findPrivilegeDTO(privilegeList, dataList);
-        }
-        return privilegeListDTO;
     }
 
     @Override

@@ -27,19 +27,19 @@ public interface RemoteSystemService
     DictIndustryDTO getDictIndustryByCode(String code);
 
     /**
-     * 根据parentId和状态获取权限信息列表
+     * 查询指定父级的子级功能列表
      */
-    PrivilegeListDTO getPrivilegeListByParentAndStatus(Long parentId, Integer enabled);
-
-    /**
-     * 根据状态获取充值类型列表
-     */
-    DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted);
+    ListDTO<PrivilegeDTO> getPrivilegeListByParent(Long parentId);
 
     /**
      * 根据级数获取权限列表
      */
     PrivilegeListDTO getPrivilegeByLevel(Integer level);
+
+    /**
+     * 根据状态获取充值类型列表
+     */
+    DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted);
 
     /**
      * 获取行业分类列表

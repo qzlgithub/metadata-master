@@ -141,43 +141,37 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getHierarchyPrivilege()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        PrivilegeListDTO privilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(0L, null);
-        List<PrivilegeDTO> parentList = privilegeListDTO.getDataList();
-        for(PrivilegeDTO pl : parentList)
+        ListDTO<PrivilegeDTO> listDTO1 = remoteSystemService.getPrivilegeListByParent(0L);
+        for(PrivilegeDTO o1 : listDTO1.getList())
         {
-            Map<String, Object> p = new HashMap<>();
-            p.put(Field.NAME, pl.getName());
-            p.put(Field.ID, pl.getId() + "");
-            p.put(Field.ENABLED, pl.getEnabled());
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put(Field.NAME, o1.getName());
+            m1.put(Field.ID, o1.getId() + "");
+            m1.put(Field.ENABLED, o1.getEnabled());
             List<Map<String, Object>> subList = new ArrayList<>();
-            PrivilegeListDTO childPrivilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(pl.getId(),
-                    null);
-            List<PrivilegeDTO> childList = childPrivilegeListDTO.getDataList();
-            for(PrivilegeDTO ple : childList)
+            ListDTO<PrivilegeDTO> listDTO2 = remoteSystemService.getPrivilegeListByParent(o1.getId());
+            for(PrivilegeDTO o2 : listDTO2.getList())
             {
-                Map<String, Object> c = new HashMap<>();
-                c.put(Field.NAME, ple.getName());
-                c.put(Field.ID, ple.getId() + "");
-                c.put(Field.ENABLED, ple.getEnabled());
-                //subList.add(c);
+                Map<String, Object> m2 = new HashMap<>();
+                m2.put(Field.NAME, o2.getName());
+                m2.put(Field.ID, o2.getId() + "");
+                m2.put(Field.ENABLED, o2.getEnabled());
                 List<Map<String, Object>> thrList = new ArrayList<>();
-                PrivilegeListDTO thrChildPrivilegeListDTO = remoteSystemService.getPrivilegeListByParentAndStatus(
-                        ple.getId(), null);
-                List<PrivilegeDTO> thrChildList = thrChildPrivilegeListDTO.getDataList();
-                for(PrivilegeDTO pleg : thrChildList)
+                ListDTO<PrivilegeDTO> listDTO3 = remoteSystemService.getPrivilegeListByParent(o2.getId());
+                for(PrivilegeDTO o3 : listDTO3.getList())
                 {
-                    Map<String, Object> cc = new HashMap<>();
-                    cc.put(Field.NAME, pleg.getName());
-                    cc.put(Field.ID, pleg.getId() + "");
-                    cc.put(Field.ENABLED, pleg.getEnabled());
-                    thrList.add(cc);
+                    Map<String, Object> m3 = new HashMap<>();
+                    m3.put(Field.NAME, o3.getName());
+                    m3.put(Field.ID, o3.getId() + "");
+                    m3.put(Field.ENABLED, o3.getEnabled());
+                    thrList.add(m3);
                 }
-                c.put(Field.THR_LIST, thrList);
-                subList.add(c);
+                m2.put(Field.THR_LIST, thrList);
+                subList.add(m2);
 
             }
-            p.put(Field.SUB_LIST, subList);
-            list.add(p);
+            m1.put(Field.SUB_LIST, subList);
+            list.add(m1);
         }
         return list;
     }

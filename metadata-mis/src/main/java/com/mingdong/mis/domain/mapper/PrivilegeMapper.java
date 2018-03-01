@@ -17,7 +17,7 @@ public interface PrivilegeMapper
 
     List<Privilege> getParentIdByChildId(@Param("privilegeIdList") List<Long> privilegeIdList);
 
-    List<Privilege> getByParentAndStatus(@Param("parentId") Long parentId, @Param("enabled") Integer enabled);
+    List<Privilege> getListByParent(Long parentId);
 
     List<Privilege> getListByLevel(int level);
 

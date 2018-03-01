@@ -32,9 +32,9 @@ public interface ProductService
     XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
 
     /**
-     * 根据客户id获取客户产品详细信息
+     * 查询客户产品的详请页信息
      */
-    void getClientProductDetail(Long clientId, Long productId, RestResp resp);
+    void getClientProductInfoData(Long clientId, Long productId, RestResp resp);
 
     List<Dict> getClientProductDict(Long clientId);
 
