@@ -4,7 +4,6 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
@@ -12,7 +11,6 @@ import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 
 import java.math.BigDecimal;
@@ -61,14 +59,9 @@ public interface RemoteProductService
     BigDecimal sumAmountByClientProduct(Long clientProductId);
 
     /**
-     * 根据产品id获取产品信息
+     * 查询产品的详细信息
      */
-    ProductDTO getProductById(Long productId);
-
-    /**
-     * 根据产品id获取产品txt
-     */
-    ProductTxtDTO getProductTxtById(Long productId);
+    ProductDTO getProductInfoData(Long productId);
 
     /**
      * 根据状态获取产品信息列表
@@ -86,9 +79,9 @@ public interface RemoteProductService
     List<ProductClientDetailDTO> getProductInfoList(Long clientId);
 
     /**
-     * 修改产品，校验
+     * 产品信息编辑
      */
-    ResultDTO updateProductSkipNull(NewProductDTO newProductDTO);
+    ResultDTO editProduct(ProductDTO productDTO);
 
     /**
      * 根据产品id修改产品状态

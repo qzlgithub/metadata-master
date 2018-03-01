@@ -61,13 +61,13 @@ public class ProductController
     {
         RestResp resp = new RestResp();
         if(vo.getId() == null || StringUtils.isNullBlank(vo.getName()) || vo.getCostAmt() == null ||
-                vo.getEnabled() == null)
+                (!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        productService.editProduct(vo.getId(), vo.getProductType(), vo.getCode(), vo.getName(), vo.getCostAmt(),
-                vo.getEnabled(), vo.getCustom(), vo.getRemark(), vo.getContent(), resp);
+        productService.editProduct(vo.getId(), vo.getName(), vo.getCostAmt(), vo.getRemark(), vo.getContent(),
+                vo.getEnabled(), resp);
         return resp;
     }
 

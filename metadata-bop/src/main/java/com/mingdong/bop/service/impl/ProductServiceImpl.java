@@ -13,12 +13,10 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
-import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,19 +39,17 @@ public class ProductServiceImpl implements ProductService
     {
         Map<String, Object> map = new HashMap<>();
         map.put(Field.ID, productId + "");
-        ProductDTO product = remoteProductService.getProductById(productId);
-        if(product != null)
+        ProductDTO productDTO = remoteProductService.getProductInfoData(productId);
+        if(productDTO != null)
         {
-            ProductTxtDTO productTxt = remoteProductService.getProductTxtById(productId);
-            map.put(Field.TYPE,
-                    ProdType.getById(product.getType()) != null ? ProdType.getById(product.getType()).getName() : null);
-            map.put(Field.CUSTOM, Custom.getById(product.getCustom()).getName());
-            map.put(Field.CODE, product.getCode());
-            map.put(Field.NAME, product.getName());
-            map.put(Field.COST_AMT, NumberUtils.formatAmount(product.getCostAmt()));
-            map.put(Field.REMARK, product.getRemark());
-            map.put(Field.ENABLED, product.getEnabled());
-            map.put(Field.CONTENT, productTxt == null ? "" : productTxt.getContent());
+            map.put(Field.CUSTOM, Custom.getById(productDTO.getCustom()).getName());
+            map.put(Field.TYPE, ProdType.getNameById(productDTO.getType()));
+            map.put(Field.CODE, productDTO.getCode());
+            map.put(Field.NAME, productDTO.getName());
+            map.put(Field.COST_AMT, NumberUtils.formatAmount(productDTO.getCostAmt()));
+            map.put(Field.REMARK, productDTO.getRemark());
+            map.put(Field.CONTENT, productDTO.getContent());
+            map.put(Field.ENABLED, productDTO.getEnabled());
         }
         map.put(Field.CUSTOM_LIST, Custom.getAllList());
         map.put(Field.PROD_TYPE_DICT, ProdType.getProdTypeDict());
@@ -62,29 +57,17 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            Integer custom, String remark, String content, RestResp resp)
+    public void editProduct(Long productId, String name, BigDecimal costAmt, String remark, String content,
+            Integer enabled, RestResp resp)
     {
-        NewProductDTO newProductDTO = new NewProductDTO();
-        Date current = new Date();
-        ProductDTO product = new ProductDTO();
-        product.setId(id);
-        product.setUpdateTime(current);
-        product.setType(productType);
-        product.setCode(code);
-        product.setName(name);
-        product.setCostAmt(costAmt);
-        product.setEnabled(enabled);
-        product.setRemark(remark);
-        product.setCustom(custom);
-        newProductDTO.setProductDTO(product);
-        ProductTxtDTO productTxt = new ProductTxtDTO();
-        productTxt.setId(id);
-        productTxt.setCreateTime(current);
-        productTxt.setUpdateTime(current);
-        productTxt.setContent(content);
-        newProductDTO.setProductTxtDTO(productTxt);
-        ResultDTO resultDTO = remoteProductService.updateProductSkipNull(newProductDTO);
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(productId);
+        productDTO.setName(name);
+        productDTO.setCostAmt(costAmt);
+        productDTO.setRemark(remark);
+        productDTO.setContent(content);
+        productDTO.setEnabled(enabled);
+        ResultDTO resultDTO = remoteProductService.editProduct(productDTO);
         resp.setError(resultDTO.getResult());
     }
 

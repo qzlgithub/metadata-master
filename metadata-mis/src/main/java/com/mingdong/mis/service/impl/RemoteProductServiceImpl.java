@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
@@ -15,7 +16,6 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
@@ -24,7 +24,6 @@ import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ProductTxtDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.EntityUtils;
@@ -329,29 +328,25 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductDTO getProductById(Long productId)
+    public ProductDTO getProductInfoData(Long productId)
     {
         ProductDTO productDTO = new ProductDTO();
         Product product = productMapper.findById(productId);
         if(product == null)
         {
-            return null;
+            productDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return productDTO;
         }
-        EntityUtils.copyProperties(product, productDTO);
-        return productDTO;
-    }
-
-    @Override
-    public ProductTxtDTO getProductTxtById(Long productId)
-    {
-        ProductTxtDTO productTxtDTO = new ProductTxtDTO();
         ProductTxt productTxt = productTxtMapper.findById(productId);
-        if(productTxt == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(productTxt, productTxtDTO);
-        return productTxtDTO;
+        productDTO.setType(product.getType());
+        productDTO.setCode(product.getCode());
+        productDTO.setName(product.getName());
+        productDTO.setCostAmt(product.getCostAmt());
+        productDTO.setCustom(product.getCustom());
+        productDTO.setRemark(product.getRemark());
+        productDTO.setContent(productTxt == null ? null : productTxt.getContent());
+        productDTO.setEnabled(product.getEnabled());
+        return productDTO;
     }
 
     @Override
@@ -464,39 +459,43 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    @Transactional
-    public ResultDTO updateProductSkipNull(NewProductDTO newProductDTO)
+    public ResultDTO editProduct(ProductDTO productDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        Product product = productMapper.findByCode(newProductDTO.getProductDTO().getCode());
-        if(product != null && !newProductDTO.getProductDTO().getId().equals(product.getId()))
-        {
-            resultDTO.setResult(RestResult.DUPLICATE_PRODUCT_CODE);
-            return resultDTO;
-        }
-        product = productMapper.findById(newProductDTO.getProductDTO().getId());
+        Product product = productMapper.findById(productDTO.getId());
         if(product == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        Product updateProduct = new Product();
-        EntityUtils.copyProperties(newProductDTO.getProductDTO(), updateProduct);
-        productMapper.updateSkipNull(updateProduct);
-        ProductTxt productTxt = productTxtMapper.findById(newProductDTO.getProductDTO().getId());
+        Date date = new Date();
+        Product tempProduct = new Product();
+        tempProduct.setId(productDTO.getId());
+        tempProduct.setUpdateTime(date);
+        tempProduct.setName(productDTO.getName());
+        tempProduct.setCostAmt(productDTO.getCostAmt());
+        tempProduct.setRemark(productDTO.getRemark());
+        tempProduct.setEnabled(productDTO.getEnabled());
+        productMapper.updateSkipNull(tempProduct);
+        ProductTxt productTxt = productTxtMapper.findById(productDTO.getId());
         if(productTxt == null)
         {
-            productTxt = new ProductTxt();
-            EntityUtils.copyProperties(newProductDTO.getProductTxtDTO(), productTxt);
-            productTxtMapper.add(productTxt);
+            if(!StringUtils.isNullBlank(productDTO.getContent()))
+            {
+                productTxt = new ProductTxt();
+                productTxt.setId(productDTO.getId());
+                productTxt.setCreateTime(date);
+                productTxt.setUpdateTime(date);
+                productTxt.setContent(productDTO.getContent());
+                productTxtMapper.add(productTxt);
+            }
         }
         else
         {
-            productTxt.setUpdateTime(new Date());
-            productTxt.setContent(newProductDTO.getProductTxtDTO().getContent());
+            productTxt.setUpdateTime(date);
+            productTxt.setContent(productDTO.getContent());
             productTxtMapper.updateById(productTxt);
         }
-        resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
 

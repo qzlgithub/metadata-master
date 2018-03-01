@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductDTO implements Serializable
+public class ProductDTO extends ResultDTO implements Serializable
 {
     private String errCode;
     private Long id;
@@ -52,6 +52,11 @@ public class ProductDTO implements Serializable
     public void setCode(String code)
     {
         this.code = code;
+    }
+
+    public RestResult getResult()
+    {
+        return RestResult.getByCode(errCode);
     }
 
     public String getErrCode()
@@ -182,11 +187,6 @@ public class ProductDTO implements Serializable
     public void setToDate(Date toDate)
     {
         this.toDate = toDate;
-    }
-
-    public RestResult getResult()
-    {
-        return RestResult.getByCode(errCode);
     }
 
     public Integer getType()

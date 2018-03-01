@@ -18,8 +18,8 @@ public interface ProductService
     /**
      * 修改产品
      */
-    void editProduct(Long id, Integer productType, String code, String name, BigDecimal costAmt, Integer enabled,
-            Integer custom, String remark, String content, RestResp resp);
+    void editProduct(Long productId, String name, BigDecimal costAmt, String remark, String content, Integer enabled,
+            RestResp resp);
 
     /**
      * 更改产品信息
