@@ -50,12 +50,13 @@ layui.config({
     });
 });
 var isSubmit = false;
+
 function editProduct() {
-    if(isSubmit){
+    if(isSubmit) {
         return;
     }
     isSubmit = true;
-    if(!checkDataValid("#data-div-id")){
+    if(!checkDataValid("#data-div-id")) {
         isSubmit = false;
         return;
     }

@@ -26,11 +26,6 @@ public interface SystemService
     void editIndustryInfo(Long id, String code, String name, RestResp resp);
 
     /**
-     * 软删充值类型
-     */
-    void dropRechargeType(Integer rechargeTypeId);
-
-    /**
      * 根据充值类型id更改充值类型信息
      */
     void editRechargeType(Integer rechargeTypeId, String name, String remark, RestResp resp);

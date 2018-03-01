@@ -65,7 +65,7 @@ layui.config({
 });
 $(".edit-manage").on('click', function() {
     var id = $(this).attr("data-id");
-    var obj = $("#menu-id-"+id);
+    var obj = $("#menu-id-" + id);
     var name = $(obj).find(".menu-name-class").text();
     $("#editId").val(id);
     $("#editNameId").val(name);

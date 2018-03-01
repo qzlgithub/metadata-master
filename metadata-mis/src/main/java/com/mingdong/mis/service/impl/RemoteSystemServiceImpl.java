@@ -251,17 +251,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
 
     @Override
     @Transactional
-    public void setRechargeTypeDeleted(Integer rechargeTypeId)
-    {
-        DictRechargeType obj = new DictRechargeType();
-        obj.setId(rechargeTypeId);
-        obj.setUpdateTime(new Date());
-        obj.setDeleted(TrueOrFalse.TRUE);
-        dictRechargeTypeMapper.updateSkipNull(obj);
-    }
-
-    @Override
-    @Transactional
     public ResultDTO editPrivilegeInfo(PrivilegeDTO privilegeDTO)
     {
         ResultDTO resultDTO = new ResultDTO();

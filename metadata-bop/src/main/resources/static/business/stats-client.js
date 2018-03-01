@@ -98,7 +98,7 @@ function showChart() {
                     startValue: data[0][0]
                 }, {
                     type: 'inside',
-                    zoomOnMouseWheel:false
+                    zoomOnMouseWheel: false
                 }],
                 series: {
                     type: 'line',

@@ -50,9 +50,6 @@ layui.config({
                 shadeClose: true
             });
         }
-        else if(layEvent === 'del') {
-            del_recharge_type(data.id);
-        }
     });
     form.on('switch(status)', function(obj) {
         change_status(this.value, obj.elem.checked);
@@ -109,29 +106,6 @@ function add_recharge_type() {
                     time: 2000
                 });
             }
-        }
-    });
-}
-
-/**
- * 删除充值类型
- */
-function del_recharge_type(id) {
-    layer.confirm('确定删除？', {
-        btn: ['确定', '取消'],
-        yes: function() {
-            $.ajax({
-                type: "DELETE",
-                url: "/setting/rechargeType/deletion",
-                contentType: "application/json",
-                data: JSON.stringify({"id": id}),
-                success: function() {
-                    window.location.href = "/setting/recharge.html";
-                }
-            });
-        },
-        no: function() {
-            layer.closeAll();
         }
     });
 }

@@ -1,6 +1,6 @@
 layui.config({
     base: '../../static/build/js/'
-}).use(['app','form', 'table', 'laydate'], function() {
+}).use(['app', 'form', 'table', 'laydate'], function() {
     var form = layui.form,
         laydate = layui.laydate,
         table = layui.table;

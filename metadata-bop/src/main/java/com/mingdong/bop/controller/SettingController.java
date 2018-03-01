@@ -13,7 +13,6 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.SysConfigDTO;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,21 +61,6 @@ public class SettingController
         String remark = jsonReq.getString(Field.REMARK);
         systemService.addRechargeType(name, remark, resp);
         return resp;
-    }
-
-    /**
-     * 充值类型 - 删除
-     */
-    @LoginRequired
-    @DeleteMapping(value = "/setting/rechargeType/deletion")
-    public RestResp dropRechargeType(@RequestBody JSONObject jsonReq)
-    {
-        Integer id = jsonReq.getInteger(Field.ID);
-        if(id != null)
-        {
-            systemService.dropRechargeType(id);
-        }
-        return new RestResp();
     }
 
     /**

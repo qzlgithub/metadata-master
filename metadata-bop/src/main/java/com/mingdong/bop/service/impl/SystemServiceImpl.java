@@ -78,12 +78,6 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void dropRechargeType(Integer rechargeTypeId)
-    {
-        remoteSystemService.setRechargeTypeDeleted(rechargeTypeId);
-    }
-
-    @Override
     public void editRechargeType(Integer rechargeTypeId, String name, String remark, RestResp resp)
     {
         RechargeTypeDTO rt = new RechargeTypeDTO();

@@ -79,7 +79,7 @@ function saveManager() {
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
-    if(!isPassword(password)){
+    if(!isPassword(password)) {
         layer.msg("密码格式不匹配，必须6-20位字母数字！", {
             time: 2000
         });

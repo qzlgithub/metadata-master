@@ -87,13 +87,13 @@ contact.on("click", ".del-contact", function() {
     $("#" + id).remove();
 });
 $("#save-contact").click(function() {
-    if(!checkDataValid("#div-contact")){
+    if(!checkDataValid("#div-contact")) {
         return;
     }
     var name = $("#add-name").val();
     var position = $("#add-position").val();
     var phone = $("#add-phone").val();
-    if(name === '' || position === '' || phone === ''){
+    if(name === '' || position === '' || phone === '') {
         layer.msg("关键字段不能为空！", {
             time: 2000
         });
@@ -206,13 +206,15 @@ function fetchIndustry() {
         }
     )
 }
+
 var isSubmit = false;
+
 function editClient() {
-    if(isSubmit){
+    if(isSubmit) {
         return;
     }
     isSubmit = true;
-    if(!checkDataValid("#data-div-id")){
+    if(!checkDataValid("#data-div-id")) {
         isSubmit = false;
         return;
     }

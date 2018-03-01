@@ -106,7 +106,7 @@ $(".add-child").on('click', function() {
 });
 $(".edit-industry").on('click', function() {
     var id = $(this).attr("data-id");
-    var obj = $("#industry-id-"+id);
+    var obj = $("#industry-id-" + id);
     var name = obj.find(".industry-name-class").text();
     var code = obj.find(".industry-code-class").text();
     $("#edit-id").val(id);

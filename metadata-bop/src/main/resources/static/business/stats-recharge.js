@@ -38,7 +38,7 @@ layui.config({
             countName: 'total',
             dataName: 'list'
         },
-        done: function(res, curr, count){
+        done: function(res, curr, count) {
             var result = res.data;
             $('#chartTitleId').text(result.title);
         }
@@ -56,7 +56,6 @@ layui.config({
         });
     });
 });
-
 //点击展开
 $(document).ready(function() {
     $(".btn-slide").click(function() {
@@ -68,13 +67,14 @@ $(document).ready(function() {
 $(function() {
     showChart();
 });
-function showChart(){
+
+function showChart() {
     var leftChart = echarts.init(document.getElementById('leftPanel'));
     var rightChart = echarts.init(document.getElementById('rightPanel'));
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
     $.get('/stats/client/rechargeListJson',
         {"scopeType": scopeType},
-        function (data) {
+        function(data) {
             var jsonObj = JSON.parse(data);
             leftChart.setOption({
                 tooltip: {
@@ -84,12 +84,12 @@ function showChart(){
                 legend: {
                     orient: 'vertical',
                     x: 'left',
-                    data:jsonObj.leftJson.legendData
+                    data: jsonObj.leftJson.legendData
                 },
                 series: [
                     {
-                        name:'访问来源',
-                        type:'pie',
+                        name: '访问来源',
+                        type: 'pie',
                         radius: ['50%', '70%'],
                         avoidLabelOverlap: false,
                         label: {
@@ -110,12 +110,12 @@ function showChart(){
                                 show: false
                             }
                         },
-                        data:jsonObj.leftJson.data
+                        data: jsonObj.leftJson.data
                     }
                 ]
             });
             rightChart.setOption({
-                tooltip : {
+                tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'shadow',
@@ -125,18 +125,18 @@ function showChart(){
                     }
                 },
                 toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
                         magicType: {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
+                        restore: {show: true},
+                        saveAsImage: {show: true}
                     }
                 },
-                calculable : true,
+                calculable: true,
                 legend: {
-                    data:jsonObj.leftJson.legendData,
+                    data: jsonObj.leftJson.legendData,
                     itemGap: 5
                 },
                 grid: {
@@ -147,16 +147,16 @@ function showChart(){
                 },
                 xAxis: [
                     {
-                        type : 'category',
-                        data : jsonObj.rightJson.names
+                        type: 'category',
+                        data: jsonObj.rightJson.names
                     }
                 ],
                 yAxis: [
                     {
-                        type : 'value',
-                        name : '',
+                        type: 'value',
+                        name: '',
                         axisLabel: {
-                            formatter: function (a) {
+                            formatter: function(a) {
                                 a = +a;
                                 return isFinite(a)
                                     ? echarts.format.addCommas(+a / 1000)
@@ -186,13 +186,13 @@ function showChart(){
                         left: '93%'
                     }
                 ],
-                series : jsonObj.rightJson.series
+                series: jsonObj.rightJson.series
             });
         });
 }
 
-$('#scopeLiId span').click(function(){
-    $('#scopeLiId span').each(function(){
+$('#scopeLiId span').click(function() {
+    $('#scopeLiId span').each(function() {
         $(this).removeClass('active');
     });
     $(this).addClass('active');
@@ -209,9 +209,9 @@ $('#scopeLiId span').click(function(){
     });
 });
 
-function clientOutPrint(){
+function clientOutPrint() {
     var scopeType = $('#scopeLiId').find('.active').attr('otherVal');
-    location.href='/exp/stats/recharge?scopeType='+scopeType;
+    location.href = '/exp/stats/recharge?scopeType=' + scopeType;
 }
 
 

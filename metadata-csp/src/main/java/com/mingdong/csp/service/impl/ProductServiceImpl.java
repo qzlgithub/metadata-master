@@ -239,9 +239,9 @@ public class ProductServiceImpl implements ProductService
         ListDTO<DictDTO> listDTO = productApi.getClientProductDict(clientId);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(DictDTO o:listDTO.getList())
+            for(DictDTO o : listDTO.getList())
             {
-                list.add(new Dict(o.getKey(),o.getValue()));
+                list.add(new Dict(o.getKey(), o.getValue()));
             }
         }
         return list;

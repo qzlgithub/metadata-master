@@ -68,11 +68,6 @@ public interface RemoteSystemService
     ResultDTO editIndustryInfo(DictIndustryDTO industry);
 
     /**
-     * 软删充值类型
-     */
-    void setRechargeTypeDeleted(Integer rechargeTypeId);
-
-    /**
      * 修改权限信息
      */
     ResultDTO editPrivilegeInfo(PrivilegeDTO privilege);
