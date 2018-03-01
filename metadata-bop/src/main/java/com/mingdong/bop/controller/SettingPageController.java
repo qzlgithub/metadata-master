@@ -140,13 +140,4 @@ public class SettingPageController
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
-
-    @LoginRequired
-    @GetMapping(value = "/setting/product/category.html")
-    public ModelAndView productCategoryIndex()
-    {
-        ModelAndView view = new ModelAndView("product/category");
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
 }
