@@ -60,36 +60,6 @@
         </where>
     </select>
 
-    <select id="countClientBillListBy" resultType="Integer">
-        select count(ar.`id`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user`
-        cu on c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
-        <where>
-            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
-            <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
-            <if test="userId != null">and ar.`user_id` = #{userId}</if>
-            <if test="productId != null">and ar.`product_id` = #{productId}</if>
-            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
-            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
-        </where>
-        order by ar.`create_time` desc
-    </select>
-
-    <select id="getClientBillFeeSum" resultType="BigDecimal">
-        select sum(ar.`fee`) from `api_req` ar left join `client` c on ar.`client_id` = c.`id` left join `client_user`
-        cu on c.`primary_user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
-        <where>
-            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
-            <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
-            <if test="userId != null">and ar.`user_id` = #{userId}</if>
-            <if test="productId != null">and ar.`product_id` = #{productId}</if>
-            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
-            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
-        </where>
-        order by ar.`create_time` desc
-    </select>
-
     <select id="countByClient" resultType="int">
         select count(*) from `api_req` where `client_id` = #{clientId}
         <if test="userId != null">and `user_id` = #{userId}</if>
@@ -195,42 +165,7 @@
         </where>
         order by ar.`create_time` desc
     </select>
-    <select id="getClientBillListBy" resultMap="BaseResultMap">
-        select
-        ar.`id`          as id,
-        ar.`create_time` as create_time,
-        ar.`update_time` as update_time,
-        ar.`user_id` as user_id,
-        ar.`client_id` as client_id,
-        ar.`product_id` as product_id,
-        ar.`hit`         as hit,
-        ar.`request_no`     as request_no,
-        ar.`request_ip`     as request_ip,
-        ar.`bill_plan`     as bill_plan,
-        ar.`fee`     as fee,
-        ar.`balance`     as balance,
-        c.`corp_name`    as corp_name,
-        c.`short_name`   as short_name,
-        cu.`username`    as username,
-        p.`name`         as product_name
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on c.`primary_user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
-        <where>
-            <if test="shortName != null">c.`short_name` like '%${shortName}%'</if>
-            <if test="typeId != null">and ar.`bill_plan` = #{typeId}</if>
-            <if test="clientId != null">and ar.`client_id` = #{clientId}</if>
-            <if test="userId != null">and ar.`user_id` = #{userId}</if>
-            <if test="productId != null">and ar.`product_id` = #{productId}</if>
-            <if test="startDate != null">and ar.`create_time` >= #{startDate}</if>
-            <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
-        </where>
-        order by ar.`create_time` desc
-    </select>
+
     <select id="getListByClient" resultMap="BaseResultMap">
         select
             ar.`create_time` as create_time,
