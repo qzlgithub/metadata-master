@@ -18,7 +18,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
@@ -281,17 +280,20 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductDictDTO getClientProductDictDTO(Long clientId)
+    public ListDTO<DictDTO> getClientProductDict(Long clientId)
     {
-        ProductDictDTO dto = new ProductDictDTO();
+        ListDTO<DictDTO> listDTO = new ListDTO<>();
         List<ProductClientInfo> dataList = productClientInfoMapper.getClientDictList(clientId);
-        List<DictDTO> dictList = new ArrayList<>();
-        for(ProductClientInfo o : dataList)
+        if(!CollectionUtils.isEmpty(dataList))
         {
-            dictList.add(new DictDTO(o.getProductId() + "", o.getProductName()));
+            List<DictDTO> list = new ArrayList<>();
+            for(ProductClientInfo o : dataList)
+            {
+                list.add(new DictDTO(o.getProductId() + "", o.getProductName()));
+            }
+            listDTO.setList(list);
         }
-        dto.setProductDictList(dictList);
-        return dto;
+        return listDTO;
     }
 
     @Override

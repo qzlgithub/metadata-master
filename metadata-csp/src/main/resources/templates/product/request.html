@@ -12,7 +12,6 @@
     <meta name="application-name" content="bootcss.com"/>
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
 
-    <!-- Site CSS -->
     <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
@@ -23,39 +22,26 @@
     <link href="/static/css/common.css" rel="stylesheet"/>
     <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="/static/picker-date-range/dateRange.css"/>
-
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
     位置：<a th:href="@{/home.html}">主页</a> > <a th:href="@{/product/mine.html}">我的服务</a> > <span class="col2">历史消费</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
-        <!--left-->
         <div th:include="product-common :: left"></div>
-        <!--left end-->
-        <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
-            <!--tab-->
             <div class="mt30 pl10 pr10 pb30">
                 <div class="border-title">历史消费记录</div>
-                <!--搜索-->
                 <ul class="search-list clearfix border-b2 pb15 mt20">
                     <li>产品服务：
                         <select id="product-sel" name="modules" class="select-list">
                             <option value="">全部</option>
-                            <option th:each="o : ${productList}" th:value="${o.id}" th:text="${o.name}"
-                                    th:selected="${o.id} eq ${productId}"></option>
+                            <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
+                                    th:selected="${o.key} eq ${productId}"></option>
                         </select>
                     </li>
                     <li>
@@ -73,7 +59,6 @@
                         <button class="check-button" id="search">查询</button>
                     </li>
                 </ul>
-                <!--搜索 end-->
                 <div class="clearfix mt30">
                     <span class="fr mb10">
                         <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
@@ -97,26 +82,13 @@
                 </table>
                 <div class="box mt30" id="pagination"></div>
             </div>
-            <!--tab-->
         </div>
-        <!--right end-->
-
     </div>
-
-
 </div>
-<!--内容 end-->
-
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 <div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>

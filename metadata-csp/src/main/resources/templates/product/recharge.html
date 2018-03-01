@@ -41,8 +41,8 @@
                     <li>产品服务：
                         <select id="product-sel" class="select-list">
                             <option value="">全部</option>
-                            <option th:each="o : ${productList}" th:value="${o.id}" th:text="${o.name}"
-                                    th:selected="${o.id} eq ${productId}"></option>
+                            <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
+                                    th:selected="${o.key} eq ${productId}"></option>
                         </select>
                     </li>
                     <li>

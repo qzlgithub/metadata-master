@@ -2,11 +2,11 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoListDTO;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
@@ -43,10 +43,7 @@ public interface RemoteProductService
      */
     ProductDTO getClientProductDetail(Long clientId, Long productId);
 
-    /**
-     * 根据客户id获取客户产品
-     */
-    ProductDictDTO getClientProductDictDTO(Long clientId);
+    ListDTO<DictDTO> getClientProductDict(Long clientId);
 
     /**
      * 根据合同号获取充值记录

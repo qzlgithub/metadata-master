@@ -1,13 +1,13 @@
 package com.mingdong.csp.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public interface ProductService
 {
@@ -36,10 +36,7 @@ public interface ProductService
      */
     void getClientProductDetail(Long clientId, Long productId, RestResp resp);
 
-    /**
-     * 根据客户id获取客户产品列表
-     */
-    List<Map<String, Object>> getClientProductList(Long clientId);
+    List<Dict> getClientProductDict(Long clientId);
 
     /**
      * 根据客户id获取客户产品详细信息列表

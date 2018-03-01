@@ -66,4 +66,5 @@ public interface Field
     String INC_OPENED = "incOpened";
     String IS_OPENED = "isOpened";
     String SUB_ACCOUNT_MAX = "subAccountMax";
+    String PRODUCT_DICT = "productDict";
 }

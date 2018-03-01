@@ -9,6 +9,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
@@ -16,7 +17,6 @@ import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductDictDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
@@ -233,18 +233,15 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public List<Map<String, Object>> getClientProductList(Long clientId)
+    public List<Dict> getClientProductDict(Long clientId)
     {
-        List<Map<String, Object>> list = new ArrayList<>();
-        ProductDictDTO dto = productApi.getClientProductDictDTO(clientId);
-        if(dto.getResultDTO().getResult() == RestResult.SUCCESS)
+        List<Dict> list = new ArrayList<>();
+        ListDTO<DictDTO> listDTO = productApi.getClientProductDict(clientId);
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(DictDTO d : dto.getProductDictList())
+            for(DictDTO o:listDTO.getList())
             {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, d.getKey());
-                map.put(Field.NAME, d.getValue());
-                list.add(map);
+                list.add(new Dict(o.getKey(),o.getValue()));
             }
         }
         return list;

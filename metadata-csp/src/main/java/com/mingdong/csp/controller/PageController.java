@@ -6,6 +6,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.ImageCode;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.util.CaptchaUtils;
@@ -27,7 +28,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class PageController
@@ -127,8 +127,8 @@ public class PageController
     public ModelAndView productRecharge(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("product/recharge");
-        List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
-        view.addObject(Field.PRODUCT_LIST, productList);
+        List<Dict> productDict = productService.getClientProductDict(RequestThread.getClientId());
+        view.addObject(Field.PRODUCT_DICT, productDict);
         if(productId != null)
         {
             view.addObject(Field.PRODUCT_ID, productId + "");
@@ -148,8 +148,8 @@ public class PageController
     public ModelAndView productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("product/request");
-        List<Map<String, Object>> productList = productService.getClientProductList(RequestThread.getClientId());
-        view.addObject(Field.PRODUCT_LIST, productList);
+        List<Dict> productDict = productService.getClientProductDict(RequestThread.getClientId());
+        view.addObject(Field.PRODUCT_DICT, productDict);
         if(productId != null)
         {
             view.addObject(Field.PRODUCT_ID, productId + "");
