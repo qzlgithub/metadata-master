@@ -6,7 +6,6 @@ import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
-import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -32,9 +31,9 @@ public interface RemoteSystemService
     ListDTO<PrivilegeDTO> getPrivilegeListByParent(Long parentId);
 
     /**
-     * 根据级数获取权限列表
+     * 根据菜单功能等级获取功能列表
      */
-    PrivilegeListDTO getPrivilegeByLevel(Integer level);
+    ListDTO<PrivilegeDTO> getPrivilegeByLevel(Integer level);
 
     /**
      * 根据状态获取充值类型列表

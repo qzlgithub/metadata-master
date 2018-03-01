@@ -12,7 +12,6 @@ import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
-import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -105,17 +104,23 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public PrivilegeListDTO getPrivilegeByLevel(Integer level)
+    public ListDTO<PrivilegeDTO> getPrivilegeByLevel(Integer level)
     {
-        PrivilegeListDTO privilegeListDTO = new PrivilegeListDTO();
-        List<PrivilegeDTO> dataList = new ArrayList<>();
-        privilegeListDTO.setDataList(dataList);
+        ListDTO<PrivilegeDTO> listDTO = new ListDTO<>();
         List<Privilege> privilegeList = privilegeMapper.getListByLevel(level);
         if(!CollectionUtils.isEmpty(privilegeList))
         {
-            findPrivilegeDTO(privilegeList, dataList);
+            List<PrivilegeDTO> list = new ArrayList<>(privilegeList.size());
+            for(Privilege o : privilegeList)
+            {
+                PrivilegeDTO p = new PrivilegeDTO();
+                p.setPrivilegeId(o.getId());
+                p.setName(o.getName());
+                list.add(p);
+            }
+            listDTO.setList(list);
         }
-        return privilegeListDTO;
+        return listDTO;
     }
 
     @Override

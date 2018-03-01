@@ -18,7 +18,6 @@ import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
-import com.mingdong.core.model.dto.PrivilegeListDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
@@ -296,11 +295,13 @@ public class SystemServiceImpl implements SystemService
     public Map<String, String> cacheSystemModule()
     {
         Map<String, String> map = new HashMap<>();
-        PrivilegeListDTO privilegeByLevel = remoteSystemService.getPrivilegeByLevel(3);
-        List<PrivilegeDTO> privilegeList = privilegeByLevel.getDataList();
-        for(PrivilegeDTO p : privilegeList)
+        ListDTO<PrivilegeDTO> listDTO = remoteSystemService.getPrivilegeByLevel(3);
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            map.put("m" + p.getPrivilegeId(), p.getName());
+            for(PrivilegeDTO p : listDTO.getList())
+            {
+                map.put("m" + p.getPrivilegeId(), p.getName());
+            }
         }
         redisDao.setSystemModule(map);
         return map;
