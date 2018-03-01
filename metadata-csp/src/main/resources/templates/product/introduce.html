@@ -37,22 +37,14 @@
 </head>
 
 <body data-spy="scroll" data-target="#myScrollspy">
-<!--header-->
 <div th:include="common :: top"></div>
-<!--header end-->
-<!--advimg-->
 <div class="masthead pb0"></div>
-<!--advimg end-->
-<!--面包屑-->
 <div class="container mt45 mb20">
     位置：<a href="/home.html"> 主页</a> > <a href="/product/mine.html">我的服务</a> > <span class="col2">服务详情</span>
 </div>
-<!--面包屑 end-->
-<!--内容-->
 <div class="container mt20 mb20 bg-white">
     <div class="fz-16 bd-bottom pb15 pt15 fb pl5">金融预期常欠客</div>
     <div class="row development">
-        <!--right-->
         <div class="col-lg-10 col-sm-10 col-md-10">
             <div class="tab-pane fade in active tab-content">
                 <div class="development-nav p0 important">
@@ -102,29 +94,18 @@
                 </div>
             </div>
         </div>
-        <!--right end-->
-        <!--left-->
         <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important mt15" style="position: fixed; right: 9%;">
             <a target="_blank"
                href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><img
                     src="/images/lxkf.png" style="width: 79px;"/></a>
         </div>
-        <!--left end-->
     </div>
 
 </div>
-<!--内容 end-->
-
-<!--footer-->
 <div th:include="common :: footer"></div>
-<!--在线客服-->
 <div th:include="common :: right"></div>
-<!--在线客服 end-->
 <div id="change-password" style="display: none" th:include="common :: password"></div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
@@ -143,32 +124,6 @@
     layui.use('form', function() {
         form = layui.form;
     });
-    //点击加背景色
-    /*$(function(){
-      $(".development-menu li").click(function(){
-        $(this).hasClass('active');
-        if($(this).hasClass('active')){
-          var index = $(this).attr('data');
-          $("#mms"+index).css({ "background": "#e3e5e6", "padding-left": "15px" }); 
-        }else{
-        var index = $(this).attr('data');
-        $("#mms"+index).css({ "background": "#fff", "padding-left": "0px" });
-        }  
-      })
-    })*/
-
-    //滚动加背景色
-    /* $(window).scroll(function () {
-       $(".development-menu li").each(function(){
-         if($(this).hasClass('active')){
-         var index = $(this).attr('data');
-         $("#mms"+index).css({ "background": "#e3e5e6", "padding-left": "15px" });
-         }else{
-         var index = $(this).attr('data');
-         $("#mms"+index).css({ "background": "#fff", "padding-left": "0px" });
-         }
-       });
-     })*/
 </script>
 </body>
 </html>

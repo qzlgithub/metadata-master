@@ -23,8 +23,9 @@
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li>
                         <span><i class="icon user"></i><md id="greeting"></md></span>
-                        <span id="exit"><i class="icon exit"></i>&nbsp;退出&nbsp;&nbsp;|</span>
-                        <span id="chgPwd" class="cp">修改密码</span>
+                        <span id="exit"><i class="icon exit"></i><a href="/system/message.html"
+                                                                    class="col6">&nbsp;退出&nbsp;&nbsp;</a>|</span>
+                        <span id="chgPwd" class="cp"><a href="/system/message.html" class="col6">修改密码</a></span>
                         <span><i class="icon eamil"></i><a href="/system/message.html" class="col6">消息</a></span>
                     </li>
                 </ul>
@@ -77,6 +78,7 @@
 <div th:fragment="footer">
     <footer class="footer">
         <div class="container ">
+            <!--
             <ul class="mpFooterLinks">
                 <li><a href="https://www.antgroup.com/introduction.htm" target="_blank" seed="mpFooterLinks-linkT14"
                        smartracker="on">关于蚂蚁</a></li>
@@ -117,7 +119,8 @@
                 <li><a href="https://www.aliyun.com/" target="_blank" seed="mpFooterLinks-linkT26"
                        smartracker="on">阿里云计算</a></li>
             </ul>
-            <span class="mpCopyRight">Copyright © 2017 蚂蚁金融服务集团 | ICP证: 沪ICP备15027489号-2</span>
+            -->
+            <span class="mpCopyRight">Copyright © 2018 浙江明动科技有限公司 版权所有</span>
         </div>
     </footer>
 </div>
@@ -125,7 +128,6 @@
 <div th:fragment="password">
     <div class="layui-layer-title">修改密码</div>
     <div class="mb30">
-        <!--<div class="col1 tc mt15"><i class="icon jg"></i>您当前为初始密码，为确保安全，请修改!</div>-->
         <div class="m30">
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
@@ -135,21 +137,19 @@
                     <i class="close-eye icon" id="org-show"></i>
                 </div>
                 <div class="layui-input-block" id="org-dec-pwd" style="display: none">
-                    <input type="text" id="org-dec-password" placeholder="当前账号密码"
-                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" class="layui-input position-r"/>
+                    <input type="text" id="org-dec-password" placeholder="当前账号密码" class="layui-input position-r"/>
                     <i class="open-eye icon" id="org-hide"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
                 <div class="layui-input-block" id="new-enc-pwd">
-                    <input type="password" id="new-enc-password" placeholder="使用6位长度的字母加数字组合"
+                    <input type="password" id="new-enc-password" placeholder="密码由6-20位字母数字组成"
                            class="layui-input position-r"/>
                     <i class="close-eye icon" id="new-show"></i>
                 </div>
                 <div class="layui-input-block" id="new-dec-pwd" style="display: none">
-                    <input type="text" id="new-dec-password" placeholder="使用6位长度的字母加数字组合"
-                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" class="layui-input position-r"/>
+                    <input type="text" id="new-dec-password" placeholder="密码由6-20位字母数字组成" class="layui-input position-r"/>
                     <i class="open-eye icon" id="new-hide"></i>
                 </div>
             </div>
