@@ -15,16 +15,23 @@ $("#savePwd").click(function() {
     var repPwd = $("#repeatPwd").val();
     if(newPwd == null || newPwd.length === 0 ) {
         layer.msg("新密码不能为空");
-        return false;
+        return;
     }else{
         if(newPwd !== repPwd) {
             layer.msg("新密码不一致");
-            return false;
+            return;
         }else {
             if(oldPwd === newPwd){
                 layer.msg("新密码不能与旧密码相同");
-                return false;
+                return;
             }else{
+                var reg = /^[A-Za-z0-9]{6,20}$/;
+                if (!reg.test(newPwd)) {
+                    layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+                        time: 2000
+                    });
+                    return;
+                }
                 $.ajax({
                     type: "POST",
                     url: "/user/password",

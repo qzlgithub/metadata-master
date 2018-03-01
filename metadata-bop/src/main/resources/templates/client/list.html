@@ -68,7 +68,7 @@
                    th:if="${#lists.contains(i_privilege, '31106')}">停用账号</a>
                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
-                <a th:href="@{/client/add.html}" class="layui-btn fr layui-btn-normal"
+                <a href="/client/add.html" class="layui-btn fr layui-btn-normal"
                    th:if="${#lists.contains(i_privilege, '31102')}">添加客户</a>
             </div>
             <div class="layui-form">

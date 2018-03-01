@@ -34,8 +34,8 @@ function getAccountList() {
             var allowedQty = data.data.allowedQty;
             $("#acountAll").text(list.length);
             $("#canAddNumber").text(allowedQty - list.length);
-            if(allowedQty - list.length <= 0){
-                $("#addaccount").hide();
+            if(allowedQty - list.length > 0){
+                $("#addaccount").show();
             }
         }
     );
@@ -170,85 +170,94 @@ function addAccount() {
 }
 
 var isSubmit = false;
-
 function addSubmitAccount() {
-    if(!isSubmit) {
-        isSubmit = true;
-        var username = $("#add-username").val();
-        var pwd = $("#add-pwd").val();
-        var name = $("#add-name").val();
-        var phone = $("#add-phone").val();
-        var enabled = $('input:radio[name="add-enabled"]:checked').val();
-        $.ajax({
-            type: "POST",
-            url: "/client/account/addition",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({"username": username, "password": MD5(pwd), "name": name, "phone": phone, "enabled": enabled}),
-            success: function(res) {
-                if(res.code === '000000') {
-                    layer.msg("新增成功", {
-                        time: 2000
-                    }, function() {
-                        isSubmit = false;
-                        layer.closeAll();
-                        getAccountList();
-                    });
-                }
-                else {
-                    layer.msg("新增失败，" + res.message, {
-                        time: 2000
-                    }, function() {
-                        isSubmit = false;
-                    });
-                }
-            }
-        });
+    if(isSubmit) {
+        return;
     }
+    isSubmit = true;
+    if(!checkDataValid("#add-account")){
+        isSubmit = false;
+        return;
+    }
+    var username = $("#add-username").val();
+    var pwd = $("#add-pwd").val();
+    var name = $("#add-name").val();
+    var phone = $("#add-phone").val();
+    var enabled = $('input:radio[name="add-enabled"]:checked').val();
+    $.ajax({
+        type: "POST",
+        url: "/client/account/addition",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({"username": username, "password": MD5(pwd), "name": name, "phone": phone, "enabled": enabled}),
+        success: function(res) {
+            if(res.code === '000000') {
+                layer.msg("新增成功", {
+                    time: 2000
+                }, function() {
+                    isSubmit = false;
+                    layer.closeAll();
+                    getAccountList();
+                });
+            }
+            else {
+                layer.msg("新增失败，" + res.message, {
+                    time: 2000
+                }, function() {
+                    isSubmit = false;
+                });
+            }
+        }
+    });
 }
 
 function editSubmitAccount() {
-    if(!isSubmit) {
-        isSubmit = true;
-        var id = $("#edit-id").val();
-        var username = $("#edit-username").val();
-        var pwd = $("#edit-pwd").val();
-        var name = $("#edit-name").val();
-        var phone = $("#edit-phone").val();
-        var enabled = $('input:radio[name="edit-enabled"]:checked').val();
-        $.ajax({
-            type: "POST",
-            url: "/client/editChildAccount",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "clientUserId": id,
-                "username": username,
-                "password": MD5(pwd),
-                "name": name,
-                "phone": phone,
-                "enabled": enabled
-            }),
-            success: function(res) {
-                if(res.code === '000000') {
-                    layer.msg("修改成功", {
-                        time: 2000
-                    }, function() {
-                        isSubmit = false;
-                        layer.closeAll();
-                        getAccountList();
-                    });
-                }
-                else {
-                    layer.msg("修改失败，" + res.message, {
-                        time: 2000
-                    }, function() {
-                        isSubmit = false;
-                    });
-                }
-            }
-        });
+    if(isSubmit) {
+        return;
     }
+    isSubmit = true;
+    if(!checkDataValid("#edit-account")){
+        isSubmit = false;
+        return;
+    }
+    var id = $("#edit-id").val();
+    var username = $("#edit-username").val();
+    var pwd = $("#edit-pwd").val();
+    var name = $("#edit-name").val();
+    var phone = $("#edit-phone").val();
+    var enabled = $('input:radio[name="edit-enabled"]:checked').val();
+    $.ajax({
+        type: "POST",
+        url: "/client/editChildAccount",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "clientUserId": id,
+            "username": username,
+            "password": MD5(pwd),
+            "name": name,
+            "phone": phone,
+            "enabled": enabled
+        }),
+        success: function(res) {
+            if(res.code === '000000') {
+                layer.msg("修改成功", {
+                    time: 2000
+                }, function() {
+                    isSubmit = false;
+                    layer.closeAll();
+                    getAccountList();
+                });
+            }
+            else {
+                layer.msg("修改失败，" + res.message, {
+                    time: 2000
+                }, function() {
+                    isSubmit = false;
+                });
+            }
+        }
+    });
 }
 
 function requestAccount() {

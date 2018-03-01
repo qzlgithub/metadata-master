@@ -73,6 +73,13 @@ function getGreeting() {
 }
 
 function changePwd(orgPwd, newPwd) {
+    var reg = /^[A-Za-z0-9]{6,20}$/;
+    if (!reg.test(newPwd)) {
+        layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+            time: 2000
+        });
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/client/user/password",
