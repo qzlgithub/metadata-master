@@ -251,13 +251,13 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductDTO getClientProductDetail(Long clientId, Long productId)
+    public ProductDTO getClientProductInfo(Long clientId, Long productId)
     {
         ProductDTO dto = new ProductDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
-        if(clientProduct == null)
+        if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
-            dto.setErrCode(RestResult.PRODUCT_NOT_OPEN.getCode());
+            dto.setResult(RestResult.PRODUCT_NOT_OPEN);
             return dto;
         }
         ProductClientInfo info = productClientInfoMapper.getClientProductInfo(clientProduct.getId());

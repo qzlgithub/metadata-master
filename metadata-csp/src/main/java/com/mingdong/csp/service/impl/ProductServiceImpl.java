@@ -206,9 +206,9 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getClientProductDetail(Long clientId, Long productId, RestResp resp)
+    public void getClientProductInfoData(Long clientId, Long productId, RestResp resp)
     {
-        ProductDTO dto = productApi.getClientProductDetail(clientId, productId);
+        ProductDTO dto = productApi.getClientProductInfo(clientId, productId);
         if(dto.getResult() != RestResult.SUCCESS)
         {
             resp.setError(dto.getResult());

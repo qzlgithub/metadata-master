@@ -1,14 +1,11 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.constant.RestResult;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProductDTO extends ResultDTO implements Serializable
 {
-    private String errCode;
     private Long id;
     private String name;
     private String typeName;
@@ -29,11 +26,6 @@ public class ProductDTO extends ResultDTO implements Serializable
     private Date createTime;
     private Date updateTime;
 
-    public ProductDTO()
-    {
-        errCode = "000000";
-    }
-
     public Integer getCustom()
     {
         return custom;
@@ -52,21 +44,6 @@ public class ProductDTO extends ResultDTO implements Serializable
     public void setCode(String code)
     {
         this.code = code;
-    }
-
-    public RestResult getResult()
-    {
-        return RestResult.getByCode(errCode);
-    }
-
-    public String getErrCode()
-    {
-        return errCode;
-    }
-
-    public void setErrCode(String errCode)
-    {
-        this.errCode = errCode;
     }
 
     public Long getId()

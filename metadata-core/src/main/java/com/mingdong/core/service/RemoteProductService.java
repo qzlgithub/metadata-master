@@ -39,7 +39,7 @@ public interface RemoteProductService
     /**
      * 根据条件获取产品信息
      */
-    ProductDTO getClientProductDetail(Long clientId, Long productId);
+    ProductDTO getClientProductInfo(Long clientId, Long productId);
 
     ListDTO<DictDTO> getClientProductDict(Long clientId);
 

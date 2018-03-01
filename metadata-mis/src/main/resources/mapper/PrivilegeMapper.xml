@@ -57,13 +57,9 @@
         </foreach>
     </select>
 
-    <select id="getByParentAndStatus" resultMap="BaseResultMap">
-        select `id`,`name`, `enabled` from `privilege`
-        <where>
-            <if test="parentId != null">`parent_id` = #{parentId}</if>
-            <if test="enabled != null">and `enabled` = #{enabled}</if>
-        </where>
-        order by `seq_no` asc
+    <select id="getListByParent" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `parent_id` = #{parentId} order by `seq_no` asc
     </select>
 
     <select id="getListByLevel" parameterType="int" resultMap="BaseResultMap">

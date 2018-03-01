@@ -94,7 +94,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("product/detail");
         RestResp resp = new RestResp();
-        productService.getClientProductDetail(RequestThread.getClientId(), productId, resp);
+        productService.getClientProductInfoData(RequestThread.getClientId(), productId, resp);
         view.addAllObjects(resp.getData());
         view.addObject(Field.USERNAME, RequestThread.getUsername());
         view.addAllObjects(RequestThread.getPageData());
