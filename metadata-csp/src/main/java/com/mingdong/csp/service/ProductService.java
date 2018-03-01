@@ -33,47 +33,18 @@ public interface ProductService
 
     /**
      * 根据客户id获取客户产品详细信息
-     *
-     * @param clientId
-     * @param productId
-     * @param resp
      */
     void getClientProductDetail(Long clientId, Long productId, RestResp resp);
 
     /**
      * 根据客户id获取客户产品列表
-     *
-     * @param clientId
-     * @return
      */
     List<Map<String, Object>> getClientProductList(Long clientId);
 
     /**
      * 根据客户id获取客户产品详细信息列表
-     *
-     * @param clientId
-     * @param resp
      */
     void getClientProductDetailList(Long clientId, RestResp resp);
-
-    /**
-     * 根据状态获取产品类型列表
-     *
-     * @param enabled
-     * @return
-     */
-    //    List<Map<String, Object>> getDictProductTypeList(Integer enabled);
-
-    /**
-     * 根据条件获取产品信息列表
-     *
-     * @param clientId
-     * @param isOpen
-     * @param selectedType
-     * @param page
-     * @param resp
-     */
-    void getProductListBy(Long clientId, Integer isOpen, Integer[] selectedType, Page page, RestResp resp);
 
     void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page, RestListResp res);
 }
