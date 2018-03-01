@@ -42,7 +42,7 @@
                 on c.`primary_user_id` = cu.`id`
             left join `product` p
                 on pr.`product_id` = p.`id`
-            left join `manager` m
+            left join `user` m
                 on pr.`manager_id` = m.`id`
             left join `dict_recharge_type` rt
                 on pr.`recharge_type` = rt.`id`
@@ -115,7 +115,7 @@
         from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
-            left join `manager` m
+            left join `user` m
                 on pr.`manager_id` = m.`id`
             left join `product` p
                 on pr.`product_id` = p.`id`
@@ -161,7 +161,7 @@
         from `recharge` pr
             left join `product` p
                 on pr.`product_id` = p.`id`
-            left join `manager` m
+            left join `user` m
                 on pr.`manager_id` = m.`id`
             left join `dict_recharge_type` drt
                 on pr.`recharge_type` = drt.`id`

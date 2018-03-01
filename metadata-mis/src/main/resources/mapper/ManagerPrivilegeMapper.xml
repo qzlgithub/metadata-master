@@ -12,13 +12,13 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `manager_id`, `privilege_id`
-        from `manager_privilege`
+        from `user_function`
     </sql>
 
     <!-- @formatter:off -->
     <insert id="addList" parameterType="List">
         insert into
-            `manager_privilege`
+            `user_function`
             (`create_time`, `update_time`, `manager_id`, `privilege_id`)
         values
         <foreach collection="list" item="item" separator=",">
@@ -28,7 +28,7 @@
     <!-- @formatter:on -->
 
     <delete id="deleteByManager" parameterType="Long">
-        delete from `manager_privilege`
+        delete from `user_function`
         where `manager_id` = #{managerId}
     </delete>
 

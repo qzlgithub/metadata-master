@@ -73,7 +73,7 @@
         select
             p.`id`, p.`name`
         from `function` p
-            join `role_privilege` rp
+            join `role_function` rp
                 on p.`id` = rp.`privilege_id` and rp.`role_id` = #{roleId}
         where p.`parent_id` = 0
     </select>

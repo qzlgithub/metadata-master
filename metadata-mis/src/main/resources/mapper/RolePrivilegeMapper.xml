@@ -11,7 +11,7 @@
 
     <insert id="addList" parameterType="List">
         insert into
-            `role_privilege`
+            `role_function`
             (`create_time`, `update_time`, `role_id`, `privilege_id`)
         values
         <foreach collection="list" item="item" separator=",">
@@ -20,7 +20,7 @@
     </insert>
 
     <update id="updateSkipNull" parameterType="RolePrivilege">
-        update `role_privilege`
+        update `role_function`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -31,11 +31,11 @@
     </update>
 
     <delete id="deleteByRole" parameterType="Long">
-        delete from `role_privilege` where `role_id` = #{roleId}
+        delete from `role_function` where `role_id` = #{roleId}
     </delete>
 
     <select id="getByRole" parameterType="Long" resultMap="BaseResultMap">
-        select `privilege_id` from `role_privilege` where `role_id` = #{roleId}
+        select `privilege_id` from `role_function` where `role_id` = #{roleId}
     </select>
 
 </mapper>

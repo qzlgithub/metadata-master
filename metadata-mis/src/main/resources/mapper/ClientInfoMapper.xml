@@ -39,7 +39,7 @@
       from `client` c
          left join `client_user` cu
             on c.`primary_user_id` = cu.`id`
-                left join `manager` m
+                left join `user` m
                     on c.`manager_id` = m.`id`
       where 1 = 1
         <if test="start != null">
@@ -63,7 +63,7 @@
             c.`enabled`     as user_enabled,
             m.`name`        as manager_name
         from `client` c
-            left join `manager` m
+            left join `user` m
                 on c.`manager_id` = m.`id`
         where
             c.`deleted` = 0

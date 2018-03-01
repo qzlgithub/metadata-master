@@ -19,11 +19,11 @@
         select
             `id`, `create_time`, `update_time`, `username`, `password`, `name`, `phone`, `qq`, `role_id`, `enabled`,
             `session_id`
-        from `manager`
+        from `user`
     </sql>
 
     <insert id="add" parameterType="Manager">
-        insert into `manager`
+        insert into `user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
@@ -53,7 +53,7 @@
     </insert>
 
     <update id="updateSkipNull" parameterType="Manager">
-        update `manager`
+        update `user`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -80,7 +80,7 @@
     </select>
 
     <select id="countBy" resultType="Integer">
-        select count(*) from `manager`
+        select count(*) from `user`
         <where>
             <if test="roleId != null">`role_id` = #{roleId}</if>
             <if test="enabled != null">and `enabled` = #{enabled}</if>
