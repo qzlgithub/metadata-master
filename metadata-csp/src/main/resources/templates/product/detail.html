@@ -61,7 +61,7 @@
                                th:text="${status == 0 || status == 2 || status == 4} ? '服务中' : '已停止'"></i></p>
                         <p>
                             服务指标
-                            <em class="ml30" th:if="${status == 0}"><i class="icon pj-icon1 mr5"></i>良好</em>
+                            <em class="ml30" th:if="${status == 0}"><i class="icon pj-icon1 mr5"></i>正常</em>
                             <em class="ml20" th:if="${status == 1}"><i class="icon pj-icon3 mr5"></i>未开始</em>
                             <em class="ml20" th:if="${status == 2}"><i class="icon pj-icon2 mr5"></i>即将过期</em>
                             <em class="ml20" th:if="${status == 3}"><i class="icon pj-icon3 mr5"></i>已过期</em>
