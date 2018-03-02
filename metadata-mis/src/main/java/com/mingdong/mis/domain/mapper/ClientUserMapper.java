@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ClientUserMapper
 {
-    void add(ClientUser obj);
+    void add(ClientUser o);
 
-    void updateById(ClientUser obj);
+    void updateById(ClientUser o);
 
-    void updateSkipNull(ClientUser obj);
+    void updateSkipNull(ClientUser o);
 
     ClientUser findById(Long id);
 

@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface DictRechargeTypeMapper
 {
-    void add(DictRechargeType obj);
+    void add(DictRechargeType o);
 
-    void updateById(DictRechargeType obj);
+    void updateById(DictRechargeType o);
 
     DictRechargeType findById(Integer id);
 
     DictRechargeType findByName(String name);
 
-    void updateSkipNull(DictRechargeType obj);
+    void updateSkipNull(DictRechargeType o);
 
     List<DictRechargeType> getListByStatus(@Param("enabled") Integer enabled, @Param("deleted") Integer deleted);
 

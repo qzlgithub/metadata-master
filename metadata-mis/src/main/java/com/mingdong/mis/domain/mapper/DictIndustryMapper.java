@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface DictIndustryMapper
 {
-    void add(DictIndustry dictIndustry);
+    void add(DictIndustry o);
 
-    void updateSkipNull(DictIndustry industry);
+    void updateSkipNull(DictIndustry o);
 
     DictIndustry findById(Long id);
 

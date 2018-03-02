@@ -7,7 +7,7 @@ import java.util.Date;
 
 public interface ApiReqMapper
 {
-    void add(ApiReq obj);
+    void add(ApiReq o);
 
     int countBy(@Param("clientId") Long clientId, @Param("userId") Long userId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);

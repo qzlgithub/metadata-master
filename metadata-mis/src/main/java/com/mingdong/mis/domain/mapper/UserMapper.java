@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper
 {
-    void add(User user);
+    void add(User o);
 
-    void updateSkipNull(User user);
+    void updateSkipNull(User o);
 
     User findById(Long id);
 

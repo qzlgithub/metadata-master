@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ClientProductMapper
 {
-    void add(ClientProduct clientProduct);
+    void add(ClientProduct o);
 
-    void updateSkipNull(ClientProduct obj);
+    void updateSkipNull(ClientProduct o);
 
     ClientProduct findById(Long id);
 

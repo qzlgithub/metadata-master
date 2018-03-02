@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface RoleMapper
 {
-    void add(Role role);
+    void add(Role o);
 
-    void updateSkipNull(Role role);
+    void updateSkipNull(Role o);
 
     Role findById(Long id);
 

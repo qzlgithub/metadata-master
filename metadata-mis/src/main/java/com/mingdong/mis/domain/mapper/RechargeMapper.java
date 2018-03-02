@@ -8,9 +8,9 @@ import java.util.Date;
 
 public interface RechargeMapper
 {
-    void add(Recharge obj);
+    void add(Recharge o);
 
-    void updateSkipNull(Recharge obj);
+    void updateSkipNull(Recharge o);
 
     Recharge findById(Long id);
 

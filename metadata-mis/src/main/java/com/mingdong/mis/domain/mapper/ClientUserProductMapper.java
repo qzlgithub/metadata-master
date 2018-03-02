@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ClientUserProductMapper
 {
-    void add(ClientUserProduct obj);
+    void add(ClientUserProduct o);
 
-    void updateSkipNull(ClientUserProduct obj);
+    void updateSkipNull(ClientUserProduct o);
 
     void clearAccessToken(@Param("date") Date date, @Param("idList") List<Long> idList);
 

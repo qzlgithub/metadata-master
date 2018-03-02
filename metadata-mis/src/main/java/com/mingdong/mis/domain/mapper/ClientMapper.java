@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ClientMapper
 {
-    void add(Client client);
+    void add(Client o);
 
-    void updateById(Client client);
+    void updateById(Client o);
 
-    void updateSkipNull(Client client);
+    void updateSkipNull(Client o);
 
     void setClientDeleted(@Param("idList") List<Long> idList, @Param("date") Date date);
 

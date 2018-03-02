@@ -4,9 +4,9 @@ import com.mingdong.mis.domain.entity.ProductTxt;
 
 public interface ProductTxtMapper
 {
-    void add(ProductTxt productTxt);
+    void add(ProductTxt o);
 
-    void updateById(ProductTxt productTxt);
+    void updateById(ProductTxt o);
 
     ProductTxt findById(Long id);
 

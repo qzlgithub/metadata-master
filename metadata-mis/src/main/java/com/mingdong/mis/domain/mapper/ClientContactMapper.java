@@ -9,7 +9,7 @@ public interface ClientContactMapper
 {
     void addList(@Param("list") List<ClientContact> list);
 
-    void updateById(ClientContact obj);
+    void updateById(ClientContact o);
 
     void deleteByIds(@Param("idList") List<Long> idList);
 

@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface ProductMapper
 {
-    void add(Product product);
+    void add(Product o);
 
-    void updateById(Product product);
+    void updateById(Product o);
+
+    void updateSkipNull(Product o);
 
     Product findById(Long id);
 
-    List<Product> getListByStatus(Integer enabled);
-
     Product findByName(String name);
 
-    void updateSkipNull(Product product);
+    List<Product> getListByStatus(Integer enabled);
 
     int countBy(@Param("keyword") String keyword, @Param("type") Integer type, @Param("custom") Integer custom,
             @Param("enabled") Integer enabled);

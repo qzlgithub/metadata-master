@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FunctionMapper
 {
-    void updateSkipNull(Function function);
+    void updateSkipNull(Function o);
 
     void updateModuleStatusByIds(@Param("enabled") Integer enabled, @Param("data") Date date,
             @Param("idList") List<Long> idList);

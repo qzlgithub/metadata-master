@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface SistemMapper
 {
-    void add(Sistem obj);
+    void add(Sistem o);
 
-    void updateById(Sistem obj);
+    void updateById(Sistem o);
 
     Sistem findByName(String name);
 
