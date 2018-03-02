@@ -4,10 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -93,19 +96,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             }
         }
         return userInfoDTO;
-    }
-
-    @Override
-    public ManagerDTO getManagerByUsername(String username)
-    {
-        ManagerDTO managerDTO = new ManagerDTO();
-        User byUsername = userMapper.findByUsername(username);
-        if(byUsername == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byUsername, managerDTO);
-        return managerDTO;
     }
 
     @Override
@@ -459,6 +449,53 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             listDTO.setList(list);
         }
         return listDTO;
+    }
+
+    @Override
+    public AdminSessionDTO adminLogin(LoginDTO loginDTO)
+    {
+        AdminSessionDTO adminSessionDTO = new AdminSessionDTO();
+        // 1. 验证登陆信息正确性
+        User manager = userMapper.findByUsername(loginDTO.getUsername());
+        if(manager == null)
+        {
+            adminSessionDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return adminSessionDTO;
+        }
+        else if(TrueOrFalse.FALSE.equals(manager.getEnabled()))
+        {
+            adminSessionDTO.setResult(RestResult.ACCOUNT_DISABLED);
+            return adminSessionDTO;
+        }
+        else if(!manager.getPassword().equals(Md5Utils.encrypt(loginDTO.getPassword())))
+        {
+            adminSessionDTO.setResult(RestResult.INVALID_PASSCODE);
+            return adminSessionDTO;
+        }
+        else if(!TrueOrFalse.TRUE.equals(manager.getEnabled()))
+        {
+            adminSessionDTO.setResult(RestResult.ACCOUNT_DISABLED);
+            return adminSessionDTO;
+        }
+        // 删除用户旧的sessionId
+        if(!StringUtils.isNullBlank(manager.getSessionId()))
+        {
+            adminSessionDTO.setSessionId(manager.getSessionId());
+        }
+        Date current = new Date();
+        // 更新用户的sessionId
+        User temp = new User();
+        temp.setId(manager.getId());
+        temp.setUpdateTime(current);
+        temp.setSessionId(loginDTO.getSessionId());
+        userMapper.updateSkipNull(temp);
+        // 查询用户权限信息
+        ListDTO<String> privilegeListDTO = getManagerPrivilegeListByManagerId(manager.getId());
+
+        adminSessionDTO.setUserId(manager.getId());
+        adminSessionDTO.setName(manager.getName());
+        adminSessionDTO.setFunctionList(privilegeListDTO.getList());
+        return adminSessionDTO;
     }
 
     /**

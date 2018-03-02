@@ -16,8 +16,10 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
@@ -49,51 +51,29 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
-        // 1. 验证登陆信息正确性
-        ManagerDTO manager = remoteManagerService.getManagerByUsername(username);
-        if(manager == null)
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUsername(username);
+        loginDTO.setPassword(password);
+        loginDTO.setSessionId(sessionId);
+        AdminSessionDTO adminSessionDTO = remoteManagerService.adminLogin(loginDTO);
+        if(RestResult.SUCCESS != adminSessionDTO.getResult())
         {
-            resp.setError(RestResult.ACCOUNT_NOT_EXIST);
-            return;
-        }
-        else if(TrueOrFalse.FALSE.equals(manager.getEnabled()))
-        {
-            resp.setError(RestResult.ACCOUNT_DISABLED);
-            return;
-        }
-        else if(!manager.getPassword().equals(Md5Utils.encrypt(password)))
-        {
-            resp.setError(RestResult.INVALID_PASSCODE);
-            return;
-        }
-        else if(!TrueOrFalse.TRUE.equals(manager.getEnabled()))
-        {
-            resp.setError(RestResult.ACCOUNT_DISABLED);
+            resp.setError(adminSessionDTO.getResult());
             return;
         }
         // 删除用户旧的sessionId
-        if(!StringUtils.isNullBlank(manager.getSessionId()))
+        if(adminSessionDTO.getSessionId() != null)
         {
-            redisDao.dropManagerSession(manager.getSessionId());
+            redisDao.dropManagerSession(adminSessionDTO.getSessionId());
         }
-        Date current = new Date();
-        // 更新用户的sessionId
-        ManagerDTO managerUpd = new ManagerDTO();
-        managerUpd.setId(manager.getId());
-        managerUpd.setUpdateTime(current);
-        managerUpd.setSessionId(sessionId);
-        NewManager newManager = new NewManager();
-        newManager.setManagerDTO(managerUpd);
-        remoteManagerService.updateManagerSkipNull(newManager);
         // 缓存用户的账号及权限
-        ListDTO<String> privilegeListDTO = remoteManagerService.getManagerPrivilegeListByManagerId(manager.getId());
         ManagerSession ms = new ManagerSession();
-        ms.setManagerId(manager.getId());
-        ms.setName(manager.getName());
-        ms.setPrivileges(privilegeListDTO.getList());
-        ms.setAddAt(current.getTime());
+        ms.setManagerId(adminSessionDTO.getUserId());
+        ms.setName(adminSessionDTO.getName());
+        ms.setPrivileges(adminSessionDTO.getFunctionList());
+        ms.setAddAt(System.currentTimeMillis());
         redisDao.saveManagerSession(sessionId, ms);
-        resp.addData(Field.NAME, manager.getName());
+        resp.addData(Field.NAME, adminSessionDTO.getName());
     }
 
     @Override
@@ -302,9 +282,9 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeManagerStatus(Long managerId, RestResp resp)
+    public void changeManagerStatus(Long userId, RestResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(managerId);
+        ManagerDTO manager = remoteManagerService.getManagerById(userId);
         if(manager == null)
         {
             resp.setError(RestResult.OBJECT_NOT_FOUND);
@@ -316,7 +296,7 @@ public class ManagerServiceImpl implements ManagerService
             enabled = TrueOrFalse.FALSE;
         }
         ManagerDTO managerUpd = new ManagerDTO();
-        managerUpd.setId(managerId);
+        managerUpd.setId(userId);
         managerUpd.setUpdateTime(new Date());
         managerUpd.setEnabled(enabled);
         NewManager newManager = new NewManager();

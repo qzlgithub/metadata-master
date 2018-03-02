@@ -234,13 +234,13 @@ public class AccountController
     public RestResp changeStatus(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
-        Long managerId = jsonReq.getLong(Field.ID);
-        if(managerId == null)
+        Long userId = jsonReq.getLong(Field.ID);
+        if(userId == null)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.changeManagerStatus(managerId, resp);
+        managerService.changeManagerStatus(userId, resp);
         return resp;
     }
 }
