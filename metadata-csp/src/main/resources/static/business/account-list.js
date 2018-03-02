@@ -140,7 +140,7 @@ function editAccount(id) {
                     html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" />';
                     html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" checked/>';
                 }
-                $('#account-status-div-id').append(html);
+                $('#account-status-div-id').html(html);
                 form.render('radio');
                 layer.open({
                     title: false,
