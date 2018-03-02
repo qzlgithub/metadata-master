@@ -13,6 +13,7 @@
         <module>metadata-csp</module>
         <module>metadata-core</module>
         <module>metadata-mis</module>
+        <module>metadata-schedule</module>
     </modules>
 
     <parent>
