@@ -119,7 +119,7 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
     }
 
     @SuppressWarnings("unchecked")
-    protected Long hIncrBy(int db, String key, String field, int number)
+    protected Long hIncrBy(int db, String key, String field, long number)
     {
         return (Long) redisTemplate.execute((RedisCallback) conn -> {
             conn.select(db);
