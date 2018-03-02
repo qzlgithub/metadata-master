@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.SysConfigMapper">
-    <resultMap id="BaseResultMap" type="SysConfig">
+<mapper namespace="com.mingdong.mis.domain.mapper.SistemMapper">
+    <resultMap id="BaseResultMap" type="Sistem">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -12,11 +12,11 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `name`, `value`
-        from `sys_config`
+        from `sistem`
     </sql>
 
-    <insert id="add" parameterType="SysConfig">
-        insert into `sys_config`
+    <insert id="add" parameterType="Sistem">
+        insert into `sistem`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
@@ -33,8 +33,8 @@
         </trim>
     </insert>
 
-    <update id="updateById" parameterType="SysConfig">
-        update `sys_config`
+    <update id="updateById" parameterType="Sistem">
+        update `sistem`
         set `create_time` = #{createTime},
             `update_time` = #{updateTime},
             `name`        = #{name},
@@ -53,7 +53,7 @@
 
     <select id="getSubAccountMaximum" resultType="String">
         select `value`
-        from `sys_config`
+        from `sistem`
         where `name` = 'CLIENT_SUB_USER_QTY'
     </select>
 </mapper>

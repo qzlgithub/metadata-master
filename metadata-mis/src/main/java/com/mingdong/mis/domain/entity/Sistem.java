@@ -2,7 +2,7 @@ package com.mingdong.mis.domain.entity;
 
 import java.util.Date;
 
-public class SysConfig
+public class Sistem
 {
     private Long id;
     private Date createTime;

@@ -20,11 +20,11 @@ import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
-import com.mingdong.mis.domain.entity.SysConfig;
+import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
-import com.mingdong.mis.domain.mapper.SysConfigMapper;
+import com.mingdong.mis.domain.mapper.SistemMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -43,7 +43,7 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     @Resource
     private DictRechargeTypeMapper dictRechargeTypeMapper;
     @Resource
-    private SysConfigMapper sysConfigMapper;
+    private SistemMapper sistemMapper;
 
     @Override
     public DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse)
@@ -170,9 +170,9 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     @Override
     public Map<String, Object> getSettingData()
     {
-        List<SysConfig> list = sysConfigMapper.getAll();
+        List<Sistem> list = sistemMapper.getAll();
         Map<String, Object> map = new HashMap<>();
-        for(SysConfig o : list)
+        for(Sistem o : list)
         {
             map.put(o.getName(), o.getValue());
         }
@@ -308,24 +308,24 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     {
         ResultDTO resultDTO = new ResultDTO();
         Date current = new Date();
-        SysConfig sysConfig;
+        Sistem sistem;
         for(SysConfigDTO item : sysConfigDTOList)
         {
-            sysConfig = sysConfigMapper.findByName(item.getName());
-            if(sysConfig == null)
+            sistem = sistemMapper.findByName(item.getName());
+            if(sistem == null)
             {
-                sysConfig = new SysConfig();
-                sysConfig.setCreateTime(current);
-                sysConfig.setUpdateTime(current);
-                sysConfig.setName(item.getName());
-                sysConfig.setValue(item.getValue());
-                sysConfigMapper.add(sysConfig);
+                sistem = new Sistem();
+                sistem.setCreateTime(current);
+                sistem.setUpdateTime(current);
+                sistem.setName(item.getName());
+                sistem.setValue(item.getValue());
+                sistemMapper.add(sistem);
             }
-            else if(!sysConfig.getValue().equals(item.getValue()))
+            else if(!sistem.getValue().equals(item.getValue()))
             {
-                sysConfig.setUpdateTime(current);
-                sysConfig.setValue(item.getValue());
-                sysConfigMapper.updateById(sysConfig);
+                sistem.setUpdateTime(current);
+                sistem.setValue(item.getValue());
+                sistemMapper.updateById(sistem);
             }
         }
         resultDTO.setResult(RestResult.SUCCESS);

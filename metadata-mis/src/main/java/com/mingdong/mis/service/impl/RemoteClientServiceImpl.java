@@ -60,7 +60,7 @@ import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
-import com.mingdong.mis.domain.entity.SysConfig;
+import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
@@ -77,7 +77,7 @@ import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
-import com.mingdong.mis.domain.mapper.SysConfigMapper;
+import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +96,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private SysConfigMapper sysConfigMapper;
+    private SistemMapper sistemMapper;
     @Resource
     private DictIndustryMapper dictIndustryMapper;
     @Resource
@@ -267,7 +267,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     {
         ListDTO<SubUserDTO> res = new ListDTO<>();
         // 查询子账号个数限制
-        String max = sysConfigMapper.getSubAccountMaximum();
+        String max = sistemMapper.getSubAccountMaximum();
         res.addExtra(Field.SUB_ACCOUNT_MAX, max);
 
         Client client = clientMapper.findById(clientId);
@@ -349,7 +349,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             resultDTO.setResult(RestResult.USERNAME_EXIST);
             return resultDTO;
         }
-        SysConfig config = sysConfigMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        Sistem config = sistemMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
         int subAccountCount = 0;
         for(ClientUser cu : userList)
