@@ -13,8 +13,6 @@ public interface ProductMapper
 
     Product findById(Long id);
 
-    Product findByCode(String code);
-
     List<Product> getListByStatus(Integer enabled);
 
     Product findByName(String name);

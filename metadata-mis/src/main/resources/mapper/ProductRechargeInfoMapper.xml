@@ -59,7 +59,7 @@
     <select id="countBy1" resultType="int">
         select
             count(*)
-        from recharge pr
+        from `recharge` pr
             left join `client` c
                 on pr.`client_id` = c.`id`
         <where>
