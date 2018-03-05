@@ -1,3 +1,7 @@
+var layer;
+layui.use(['layer'], function() {
+    layer = layui.layer;
+});
 $(document).keydown(function(e) {
     if(e.keyCode === 13) {
         login();
@@ -23,7 +27,6 @@ function login() {
     $.ajax({
         type: "POST",
         url: "/user/login",
-        dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
             "username": $("#username").val(),
