@@ -9,7 +9,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/data/logs/metadata-mis/info.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>/data/logs/metadata-csp/info.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -25,7 +25,7 @@
             <level>WARN</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/data/logs/metadata-mis/error.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>/data/logs/metadata-csp/error.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -37,7 +37,7 @@
 
     <appender name="ACCESS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/data/logs/metadata-mis/access.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>/data/logs/metadata-csp/access.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
