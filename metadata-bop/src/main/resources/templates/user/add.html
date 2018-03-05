@@ -29,7 +29,7 @@
             <div class="form-title mb20">账号信息</div>
             <div class="w40 m30">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">角色：</label>
+                    <label class="layui-form-label">帐号权限：</label>
                     <div class="layui-input-block">
                         <select name="modules" id="roleId" class="select-list" onchange="resetPrivilege()">
                             <option th:each="o : ${roleDict}" th:value="${o.key}" th:text="${o.value}"></option>
@@ -110,7 +110,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>分组管理</td>
+                        <td>权限分组</td>
                         <td class="tl important">
                             <!-- 具体权限 -->
                             <input type="checkbox" class="parent-privilege" id="p11200"/>全选
@@ -162,46 +162,15 @@
                             <input type="checkbox" class="privilege p12400" id="12402" p-id="p12400" checked=""/>设置子账号数量
                         </td>
                     </tr>
-                    <!--
-                        <tr>
-                            <td rowspan="2">产品管理</td>
-                            <td rowspan="2">产品管理</td>
-                            <td>产品类别管理</td>
-                            <td class="tl important">
-                                <input type="checkbox" class="parent-privilege" id="p21100"/>全选
-                                <input type="checkbox" class="privilege p21100" id="21101" p-id="p21100" checked=""
-                                       th:checked="${#lists.contains(privilege,'21101')}"/>添加
-                                <input type="checkbox" class="privilege p21100" id="21102" p-id="p21100" checked=""
-                                       th:checked="${#lists.contains(privilege,'21102')}"/>编辑
-                                <input type="checkbox" class="privilege p21100" id="21103" p-id="p21100" checked=""
-                                       th:checked="${#lists.contains(privilege,'21103')}"/>停用
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>产品列表</td>
-                            <td class="tl important">
-                                <input type="checkbox" class="parent-privilege" id="p21200"/>全选
-                                <input type="checkbox" class="privilege p21200" id="21201" p-id="p21200" checked=""
-                                       th:checked="${#lists.contains(privilege,'21201')}"/>添加
-                                <input type="checkbox" class="privilege p21200" id="21202" p-id="p21200" checked=""
-                                       th:checked="${#lists.contains(privilege,'21202')}"/>编辑
-                                <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""
-                                       th:checked="${#lists.contains(privilege,'21203')}"/>停用
-                            </td>
-                        </tr>
-                    -->
                     <tr>
                         <td>产品管理</td>
                         <td>产品管理</td>
                         <td>产品列表</td>
                         <td class="tl important">
                             <input type="checkbox" class="parent-privilege" id="p21200"/>全选
-                            <input type="checkbox" class="privilege p21200" id="21201" p-id="p21200" checked=""
-                                   th:checked="${#lists.contains(privilege,'21201')}"/>添加
-                            <input type="checkbox" class="privilege p21200" id="21202" p-id="p21200" checked=""
-                                   th:checked="${#lists.contains(privilege,'21202')}"/>编辑
-                            <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""
-                                   th:checked="${#lists.contains(privilege,'21203')}"/>停用
+                            <input type="checkbox" class="privilege p21200" id="21201" p-id="p21200" checked=""/>添加
+                            <input type="checkbox" class="privilege p21200" id="21202" p-id="p21200" checked=""/>编辑
+                            <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""/>停用
                         </td>
                     </tr>
                     <tr>
