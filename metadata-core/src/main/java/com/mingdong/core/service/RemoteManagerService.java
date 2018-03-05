@@ -1,8 +1,10 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.NewManager;
@@ -13,16 +15,16 @@ import com.mingdong.core.model.dto.UserInfoDTO;
 public interface RemoteManagerService
 {
     /**
+     * 管理账号登陆
+     */
+    AdminSessionDTO adminLogin(LoginDTO loginDTO);
+
+    /**
      * 根据管理员id获取管理员信息
      */
     ManagerDTO getManagerById(Long managerId);
 
     UserInfoDTO getAccountInfo(Long userId);
-
-    /**
-     * 根据username获取管理员信息
-     */
-    ManagerDTO getManagerByUsername(String username);
 
     /**
      * 更改管理员信息，null值不修改
@@ -87,4 +89,12 @@ public interface RemoteManagerService
     ListDTO<RoleDTO> getAccountRoleList(Page page);
 
     ListDTO<DictDTO> getAccountRoleDict();
+
+    /**
+     * 变更用户账户的状态
+     *
+     * @param userId 管理用户ID
+     * @param status 1-启用，0-禁用
+     */
+    ResultDTO changeUserStatus(Long userId, Integer status);
 }
