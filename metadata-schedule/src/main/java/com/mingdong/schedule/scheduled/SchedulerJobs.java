@@ -1,6 +1,5 @@
 package com.mingdong.schedule.scheduled;
 
-import com.mingdong.schedule.configurer.SchedulerConfiguration;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -25,7 +24,7 @@ public class SchedulerJobs
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 0/1 * * ?");//每整点
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("statsJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
-        SchedulerConfiguration.addJob(jobDetail, cronTrigger);
+        SchedulerManage.addJob(jobDetail, cronTrigger);
     }
 
 }

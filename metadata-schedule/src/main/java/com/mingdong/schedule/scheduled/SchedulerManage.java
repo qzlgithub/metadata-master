@@ -1,4 +1,4 @@
-package com.mingdong.schedule.configurer;
+package com.mingdong.schedule.scheduled;
 
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -6,7 +6,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
-public class SchedulerConfiguration
+public class SchedulerManage
 {
     private static SchedulerFactory schedulerfactory = new StdSchedulerFactory();
     private static Scheduler scheduler = null;

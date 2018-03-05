@@ -190,14 +190,11 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        System.out.println("date=======" + longSdf.format(date));
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
                 calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
         Date hourBefore = calendar.getTime();
-        System.out.println("hourBefore=======" + longSdf.format(hourBefore));
         calendar.add(Calendar.HOUR_OF_DAY, -1);
         Date hourAfter = calendar.getTime();
-        System.out.println("hourAfter=======" + longSdf.format(hourAfter));
         Date day;
         try
         {
