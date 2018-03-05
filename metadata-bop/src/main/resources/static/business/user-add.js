@@ -21,6 +21,9 @@ layui.config({
         });
     });
 });
+$(function() {
+    checkSubPrivAllChecked();
+});
 $(".parent-privilege").click(function() {
     var pid = $(this).attr("id");
     if(!$(this).is(":checked")) {
