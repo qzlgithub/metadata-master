@@ -21,5 +21,5 @@ public interface FunctionMapper
 
     List<Function> getListByLevel(int level);
 
-    List<Function> getModuleListByRole(Long roleId);
+    List<Function> getModuleListByGroupId(Long groupId);
 }

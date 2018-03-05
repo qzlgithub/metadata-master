@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.ProdRechargeVO;
+import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -76,7 +77,7 @@ public class ClientController
             enabled = null;
         }
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
-        clientService.getClientList(keyword, parentIndustryId, industryId, enabled, page, res);
+        clientService.getClientList(keyword, parentIndustryId, industryId, enabled, RequestThread.isManager()?null:RequestThread.getOperatorId(), page, res);
         return res;
     }
 

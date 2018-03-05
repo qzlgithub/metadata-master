@@ -31,6 +31,7 @@
             <if test="billPlan != null">and ar.`bill_plan` = #{billPlan}</if>
             <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
         </where>
     </select>
 
@@ -44,6 +45,7 @@
             <if test="billPlan != null">and ar.`bill_plan` = #{billPlan}</if>
             <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
         </where>
     </select>
 
@@ -57,6 +59,7 @@
             <if test="billPlan != null">and ar.`bill_plan` = #{billPlan}</if>
             <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
         </where>
     </select>
 
@@ -80,27 +83,6 @@
     </select>
 
     <!-- @formatter:off -->
-    <select id="getRevenueList" resultMap="BaseResultMap">
-        select
-        c.`corp_name`    as corp_name,
-        c.`short_name`   as short_name,
-        cu.`username`    as username,
-        p.`name`         as product_name,
-        count(c.`corp_name`) as request_number,
-        sum(ar.`fee`)         as fee
-        from `api_req` ar
-        left join `client` c
-        on ar.`client_id` = c.`id`
-        left join `client_user` cu
-        on ar.`user_id` = cu.`id`
-        left join `product` p
-        on ar.`product_id` = p.`id`
-        <where>
-            <if test="fromDate != null">ar.`create_time` >= #{fromDate}</if>
-            <if test="toDate != null">and ar.`create_time` &lt;= #{toDate}</if>
-        </where>
-        group by c.`corp_name`,c.`short_name`,cu.`username`,p.`name`
-    </select>
     <select id="getListBy1" resultMap="BaseResultMap">
         select
             ar.`create_time` as create_time,
@@ -128,8 +110,51 @@
             <if test="billPlan != null">and ar.`bill_plan` = #{billPlan}</if>
             <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
         </where>
         order by ar.`create_time` desc
+    </select>
+    <select id="getListByClient" resultMap="BaseResultMap">
+        select
+            ar.`create_time` as create_time,
+            ar.`request_no`  as request_no,
+            cu.`username`    as username,
+            p.`name`         as product_name,
+            ar.`bill_plan`   as bill_plan,
+            ar.`hit`         as hit,
+            ar.`fee`         as fee,
+            ar.`balance`     as balance
+        from `api_req` ar
+            left join `product` p
+                on ar.`product_id` = p.`id`
+            left join `client_user` cu
+                on ar.`user_id` = cu.`id`
+        where ar.`client_id` = #{clientId}
+        <if test="userId != null">and ar.`user_id` = #{userId}</if>
+        <if test="productId != null">and ar.`product_id` = #{productId}</if>
+        <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
+        <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
+    </select>
+    <select id="getRevenueList" resultMap="BaseResultMap">
+        select
+        c.`corp_name`    as corp_name,
+        c.`short_name`   as short_name,
+        cu.`username`    as username,
+        p.`name`         as product_name,
+        count(c.`corp_name`) as request_number,
+        sum(ar.`fee`)         as fee
+        from `api_req` ar
+        left join `client` c
+        on ar.`client_id` = c.`id`
+        left join `client_user` cu
+        on ar.`user_id` = cu.`id`
+        left join `product` p
+        on ar.`product_id` = p.`id`
+        <where>
+            <if test="fromDate != null">ar.`create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and ar.`create_time` &lt;= #{toDate}</if>
+        </where>
+        group by c.`corp_name`,c.`short_name`,cu.`username`,p.`name`
     </select>
     <select id="getListBy" resultMap="BaseResultMap">
         select
@@ -164,28 +189,6 @@
             <if test="endDate != null">and ar.`create_time` &lt;= #{endDate}</if>
         </where>
         order by ar.`create_time` desc
-    </select>
-
-    <select id="getListByClient" resultMap="BaseResultMap">
-        select
-            ar.`create_time` as create_time,
-            ar.`request_no`  as request_no,
-            cu.`username`    as username,
-            p.`name`         as product_name,
-            ar.`bill_plan`   as bill_plan,
-            ar.`hit`         as hit,
-            ar.`fee`         as fee,
-            ar.`balance`     as balance
-        from `api_req` ar
-            left join `product` p
-                on ar.`product_id` = p.`id`
-            left join `client_user` cu
-                on ar.`user_id` = cu.`id`
-        where ar.`client_id` = #{clientId}
-        <if test="userId != null">and ar.`user_id` = #{userId}</if>
-        <if test="productId != null">and ar.`product_id` = #{productId}</if>
-        <if test="fromDate != null">and ar.`create_time` >= #{fromDate}</if>
-        <if test="toDate != null">and ar.`create_time` &lt; #{toDate}</if>
     </select>
     <!-- @formatter:on -->
 </mapper>

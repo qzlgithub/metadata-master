@@ -3,6 +3,7 @@ package com.mingdong.bop.controller;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
+import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
@@ -28,6 +29,8 @@ public class ClientPageController
     private ClientService clientService;
     @Resource
     private ProductService productService;
+    @Resource
+    private ManagerService managerService;
 
     /**
      * 页面：客户列表
@@ -52,7 +55,10 @@ public class ClientPageController
     {
         ModelAndView view = new ModelAndView("client/add");
         view.addAllObjects(systemService.getInitIndustryMap());
+        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
+        view.addObject(Field.MANAGER_LIST,managerList);
         view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
+        view.addObject(Field.MANAGER_ID, RequestThread.getOperatorId());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -67,6 +73,8 @@ public class ClientPageController
         RestResp resp = new RestResp();
         clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
+        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
+        view.addObject(Field.MANAGER_LIST,managerList);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getMap());
         return view;

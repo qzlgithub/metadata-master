@@ -50,6 +50,7 @@ public class FinancePageController
         view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
         view.addObject(Field.MANAGER_LIST, managerList);
+        view.addObject(Field.IS_MANAGER, RequestThread.isManager());
         return view;
     }
 }

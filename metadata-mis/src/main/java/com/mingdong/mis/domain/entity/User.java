@@ -12,9 +12,20 @@ public class User
     private String name;
     private String phone;
     private String qq;
-    private Long roleId;
+    private Long groupId;
     private Integer enabled;
     private String sessionId;
+    private String roleCode;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public Long getId()
     {
@@ -96,14 +107,14 @@ public class User
         this.qq = qq;
     }
 
-    public Long getRoleId()
+    public Long getGroupId()
     {
-        return roleId;
+        return groupId;
     }
 
-    public void setRoleId(Long roleId)
+    public void setGroupId(Long groupId)
     {
-        this.roleId = roleId;
+        this.groupId = groupId;
     }
 
     public Integer getEnabled()

@@ -29,7 +29,7 @@
             <div class="form-title mb20">账号信息</div>
             <div class="w40 m30">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">帐号权限：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>帐号权限：</label>
                     <div class="layui-input-block">
                         <select name="modules" id="roleId" class="select-list" onchange="resetPrivilege()">
                             <option th:each="o : ${roleDict}" th:value="${o.key}" th:text="${o.value}"></option>
@@ -37,27 +37,36 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">账号：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>角色：</label>
+                    <div class="layui-input-block">
+                        <select name="modules" id="roleCode" class="select-list" >
+                            <option value="SALESMAN" >业务员</option>
+                            <option value="MANAGER" >管理员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><i class="col3">*</i>账号：</label>
                     <div class="layui-input-block">
                         <input type="text" id="username" name="username" placeholder="请输入" autocomplete="off"
                                class="layui-input" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="20"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">密码：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>密码：</label>
                     <div class="layui-input-block">
                         <input type="password" id="password" name="password" autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">姓名：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>姓名：</label>
                     <div class="layui-input-block">
                         <input type="text" id="name" name="name" placeholder="请输入" autocomplete="off"
                                class="layui-input" maxlength="20"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">联系电话：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
                     <div class="layui-input-block">
                         <input type="tel" id="phone" name="phone" placeholder="请输入" autocomplete="off"
                                class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"/>
@@ -71,7 +80,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">账号状态：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>账号状态：</label>
                     <div class="layui-input-block layui-form">
                         <input type="radio" name="enabled" value="1" title="正常" checked=""/>
                         <div class="layui-unselect layui-form-radio layui-form-radioed">

@@ -22,7 +22,7 @@
         </where>
     </select>
 
-    <insert id="add" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="Stats" useGeneratedKeys="true" keyProperty="id">
         insert into `stats`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

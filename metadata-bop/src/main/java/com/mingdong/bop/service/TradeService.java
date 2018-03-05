@@ -20,8 +20,8 @@ public interface TradeService
     XSSFWorkbook createProductRechargeInfoListXlsx(String keyword, Long productId, Long managerId, Long rechargeType,
             Date fromDate, Date toDate, Page page);
 
-    void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate, Page page,
-            RestListResp res);
+    void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate, Long managerId,
+            Page page, RestListResp res);
 
     XSSFWorkbook createClientBillListXlsx(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
             Page page);

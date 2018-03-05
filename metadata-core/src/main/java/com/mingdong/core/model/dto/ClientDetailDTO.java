@@ -16,7 +16,18 @@ public class ClientDetailDTO extends ResultDTO implements Serializable
     private List<ClientContactDTO> contacts;
     private List<ClientUserDTO> users;
     private Date addTime;
+    private Long managerId;
     private String managerName;
+
+    public Long getManagerId()
+    {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId)
+    {
+        this.managerId = managerId;
+    }
 
     public Long getClientId()
     {

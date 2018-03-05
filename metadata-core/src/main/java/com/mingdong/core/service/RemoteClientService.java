@@ -108,7 +108,7 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息
      */
-    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Page page);
+    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId, Page page);
 
     /**
      * 根据客户ID将客户设置为删除
@@ -167,7 +167,7 @@ public interface RemoteClientService
     ResultDTO removeCustomClientProduct(Long clientProductId);
 
     ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Page page);
+            Date toDate, Long managerId, Page page);
 
     /**
      * 开通客户产品服务

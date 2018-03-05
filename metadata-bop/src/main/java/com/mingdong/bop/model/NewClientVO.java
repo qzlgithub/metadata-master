@@ -12,8 +12,19 @@ public class NewClientVO
     private String username;
     private String password;
     private Integer enabled;
+    private Long managerId;
     private List<ContactVO> contacts;
     private List<Long> contactDel;
+
+    public Long getManagerId()
+    {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId)
+    {
+        this.managerId = managerId;
+    }
 
     public Long getClientId()
     {

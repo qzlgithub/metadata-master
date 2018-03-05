@@ -73,6 +73,7 @@
                 and (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%' or c.`username` like '%${keyword}%')
             </if>
             <if test="enabled != null">and c.`enabled` = #{enabled}</if>
+            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
             <if test="industryList != null and industryList.size() > 0">
                 and c.`industry_id` in
                 <foreach collection="industryList" item="item" open="(" close=")" separator=",">

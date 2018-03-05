@@ -6,10 +6,21 @@ import java.util.Map;
 public class RequestHolder
 {
     private Long iId;
+    private String iRoleCode;
     private String iName;
     private String iModule;
     private List<String> iPrivilege;
     private Map<String, String> iSystem;
+
+    public String getiRoleCode()
+    {
+        return iRoleCode;
+    }
+
+    public void setiRoleCode(String iRoleCode)
+    {
+        this.iRoleCode = iRoleCode;
+    }
 
     public Long getiId()
     {

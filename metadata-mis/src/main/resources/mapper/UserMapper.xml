@@ -10,15 +10,16 @@
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
         <result column="qq" property="qq" jdbcType="VARCHAR" />
-        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="session_id" property="sessionId" jdbcType="TINYINT" />
+        <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `username`, `password`, `name`, `phone`, `qq`, `role_id`, `enabled`,
-            `session_id`
+            `id`, `create_time`, `update_time`, `username`, `password`, `name`, `phone`, `qq`, `group_id`, `enabled`,
+            `session_id`,`role_code`
         from `user`
     </sql>
 
@@ -33,9 +34,10 @@
             <if test="name != null">`name`,</if>
             <if test="phone != null">`phone`,</if>
             <if test="qq != null">`qq`,</if>
-            <if test="roleId != null">`role_id`,</if>
+            <if test="groupId != null">`group_id`,</if>
             <if test="enabled != null">`enabled`,</if>
             <if test="sessionId != null">`session_id`,</if>
+            <if test="roleCode != null">`role_code`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -46,9 +48,10 @@
             <if test="name != null">#{name},</if>
             <if test="phone != null">#{phone},</if>
             <if test="qq != null">#{qq},</if>
-            <if test="roleId != null">#{roleId},</if>
+            <if test="groupId != null">#{groupId},</if>
             <if test="enabled != null">#{enabled},</if>
             <if test="sessionId != null">#{sessionId},</if>
+            <if test="roleCode != null">#{roleCode},</if>
         </trim>
     </insert>
 
@@ -62,9 +65,10 @@
             <if test="name != null">`name` = #{name},</if>
             <if test="phone != null">`phone` = #{phone},</if>
             <if test="qq != null">`qq` = #{qq},</if>
-            <if test="roleId != null">`role_id` = #{roleId},</if>
+            <if test="groupId != null">`group_id` = #{groupId},</if>
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="sessionId != null">`session_id` = #{sessionId},</if>
+            <if test="roleCode != null">`role_code` = #{roleCode},</if>
         </set>
         where `id` = #{id}
     </update>
@@ -82,7 +86,15 @@
     <select id="countBy" resultType="Integer">
         select count(*) from `user`
         <where>
-            <if test="roleId != null">`role_id` = #{roleId}</if>
+            <if test="roleCode != null">`role_code` = #{roleCode}</if>
+            <if test="enabled != null">and `enabled` = #{enabled}</if>
+        </where>
+    </select>
+
+    <select id="getListBy" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        <where>
+            <if test="roleCode != null">`role_code` = #{roleCode}</if>
             <if test="enabled != null">and `enabled` = #{enabled}</if>
         </where>
     </select>

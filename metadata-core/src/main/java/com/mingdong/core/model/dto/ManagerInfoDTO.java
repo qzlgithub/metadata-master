@@ -9,10 +9,21 @@ public class ManagerInfoDTO implements Serializable
     private String name;
     private String phone;
     private String username;
-    private Long roleId;
+    private Long groupId;
+    private String roleCode;
     private String roleName;
     private Date registerTime;
     private Integer enabled;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public Long getManagerId()
     {
@@ -54,14 +65,14 @@ public class ManagerInfoDTO implements Serializable
         this.username = username;
     }
 
-    public Long getRoleId()
+    public Long getGroupId()
     {
-        return roleId;
+        return groupId;
     }
 
-    public void setRoleId(Long roleId)
+    public void setGroupId(Long groupId)
     {
-        this.roleId = roleId;
+        this.groupId = groupId;
     }
 
     public String getRoleName()

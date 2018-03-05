@@ -119,10 +119,10 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
-            Page page, RestListResp res)
+            Long managerId, Page page, RestListResp res)
     {
         ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan, fromDate,
-                toDate, page);
+                toDate, null, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
         if(listDTO.getList() != null)
@@ -177,7 +177,7 @@ public class TradeServiceImpl implements TradeService
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
         ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan,
-                fromDate, toDate, page);
+                fromDate, toDate, null, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         ApiReqInfoDTO dataInfo;
         for(int i = 0; i < dataList.size(); i++)

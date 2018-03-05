@@ -13,16 +13,20 @@ public interface ApiReqInfoMapper
             @Param("productId") Long productId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     int countBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
-            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
+            @Param("managerId") Long managerId);
 
     BigDecimal sumFeeBy(@Param("keyword") String keyword, @Param("productId") Long productId,
-            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
+            @Param("managerId") Long managerId);
 
     List<ApiReqInfo> getListBy1(@Param("keyword") String keyword, @Param("productId") Long productId,
-            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
+            @Param("managerId") Long managerId);
 
     int countMiss(@Param("keyword") String keyword, @Param("productId") Long productId,
-            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+            @Param("billPlan") Integer billPlan, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
+            @Param("managerId") Long managerId);
 
     int countByClient(@Param("clientId") Long clientId, @Param("userId") Long userId,
             @Param("productId") Long productId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);

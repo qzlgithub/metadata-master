@@ -25,7 +25,7 @@ public interface ClientMapper
     Client findByCorpNameOrCorpLicense(@Param("corpName") String corpName, @Param("license") String license);
 
     int countBy(@Param("keyword") String keyword, @Param("industryList") List<Long> industryList,
-            @Param("enabled") Integer enabled);
+            @Param("enabled") Integer enabled,@Param("managerId") Long managerId);
 
     void updateStatusByIds(@Param("enabled") Integer enabled, @Param("date") Date date,
             @Param("idList") List<Long> idList);

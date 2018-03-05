@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.RoleFunctionMapper">
-    <resultMap id="BaseResultMap" type="RoleFunction">
+<mapper namespace="com.mingdong.mis.domain.mapper.GroupFunctionMapper">
+    <resultMap id="BaseResultMap" type="GroupFunction">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
         <result column="privilege_id" property="privilegeId" jdbcType="BIGINT" />
     </resultMap>
 
     <insert id="addList" parameterType="List">
         insert into
-            `role_function`
-            (`create_time`, `update_time`, `role_id`, `privilege_id`)
+            `group_function`
+            (`create_time`, `update_time`, `group_id`, `privilege_id`)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.createTime}, #{item.updateTime}, #{item.roleId}, #{item.privilegeId})
+            (#{item.createTime}, #{item.updateTime}, #{item.groupId}, #{item.privilegeId})
         </foreach>
     </insert>
 
-    <update id="updateSkipNull" parameterType="RoleFunction">
-        update `role_function`
+    <update id="updateSkipNull" parameterType="GroupFunction">
+        update `group_function`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="roleId != null">`role_id` = #{roleId},</if>
+            <if test="groupId != null">`group_id` = #{groupId},</if>
             <if test="privilegeId != null">`privilege_id` = #{privilegeId},</if>
         </set>
         where `id` = #{id}
     </update>
 
-    <delete id="deleteByRole" parameterType="Long">
-        delete from `role_function` where `role_id` = #{roleId}
+    <delete id="deleteByGroupId" parameterType="Long">
+        delete from `group_function` where `group_id` = #{groupId}
     </delete>
 
-    <select id="getByRole" parameterType="Long" resultMap="BaseResultMap">
-        select `privilege_id` from `role_function` where `role_id` = #{roleId}
+    <select id="getByGroupId" parameterType="Long" resultMap="BaseResultMap">
+        select `privilege_id` from `group_function` where `group_id` = #{groupId}
     </select>
 
 </mapper>

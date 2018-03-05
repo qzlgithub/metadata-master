@@ -6,8 +6,19 @@ public class AdminSessionDTO extends ResultDTO
 {
     private Long userId;
     private String name;
+    private String roleCode;
     private String sessionId;
     private List<String> functionList;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public Long getUserId()
     {

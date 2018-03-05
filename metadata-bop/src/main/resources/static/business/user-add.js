@@ -53,8 +53,9 @@ function resetPrivilege() {
         {"roleId": roleId},
         function(data) {
             $(".privilege").prop("checked", false);
-            for(var i in data) {
-                $("#" + data[i]).prop("checked", true);
+            var list = data.data.privilegeList;
+            for(var i in list) {
+                $("#" + list[i]).prop("checked", true);
             }
             checkSubPrivAllChecked();
         }
@@ -75,6 +76,7 @@ function checkSubPrivAllChecked() {
 
 function saveManager() {
     var roleId = $("#roleId").val();
+    var roleCode = $("#roleCode").val();
     var username = $("#username").val();
     var password = $("#password").val();
     var name = $("#name").val();
@@ -95,6 +97,7 @@ function saveManager() {
         contentType: "application/json",
         data: JSON.stringify({
             "roleId": roleId,
+            "roleCode": roleCode,
             "username": username,
             "password": MD5(password),
             "name": name,

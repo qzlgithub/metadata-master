@@ -143,6 +143,7 @@
                   or `username` like '%${keyword}%')
             </if>
             <if test="enabled != null">and `enabled` = #{enabled}</if>
+            <if test="managerId != null">and `manager_id` = #{managerId}</if>
             <if test="industryList != null and industryList.size() > 0">
                 and `industry_id` in
                 <foreach collection="industryList" item="item" open="(" close=")" separator=",">

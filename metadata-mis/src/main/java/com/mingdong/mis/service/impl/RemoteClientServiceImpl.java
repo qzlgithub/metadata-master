@@ -556,7 +556,8 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Page page)
+    public ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId,
+            Page page)
     {
         List<Long> industryIdList = new ArrayList<>();
         if(industryId != null)
@@ -580,13 +581,13 @@ public class RemoteClientServiceImpl implements RemoteClientService
             }
         }
         ListDTO<ClientInfoDTO> dto = new ListDTO<>();
-        int total = clientMapper.countBy(keyword, industryIdList, enabled);
+        int total = clientMapper.countBy(keyword, industryIdList, enabled, managerId);
         int pages = page.getTotalPage(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled);
+            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled, managerId);
             List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
             for(ClientInfo o : dataList)
             {
@@ -880,6 +881,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
+        res.setManagerId(client.getManagerId());
         res.setClientId(client.getId());
         res.setCorpName(client.getCorpName());
         res.setShortName(client.getShortName());
@@ -1009,6 +1011,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
         clientUpd.setShortName(dto.getShortName());
         clientUpd.setLicense(dto.getLicense());
         clientUpd.setIndustryId(dto.getIndustryId());
+        clientUpd.setManagerId(dto.getManagerId());
         clientMapper.updateSkipNull(clientUpd);
         ClientUser userUpd = new ClientUser();
         userUpd.setId(client.getPrimaryUserId());
@@ -1144,20 +1147,21 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     public ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Page page)
+            Date toDate, Long managerId, Page page)
     {
         ListDTO<ApiReqInfoDTO> dto = new ListDTO<>();
-        int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate);
+        int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate, managerId);
         int pages = page.getTotalPage(total);
-        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate);
-        int missCount = apiReqInfoMapper.countMiss(keyword, productId, billPlan, fromDate, toDate);
+        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate, managerId);
+        int missCount = apiReqInfoMapper.countMiss(keyword, productId, billPlan, fromDate, toDate, managerId);
         dto.setTotal(total);
         dto.addExtra(Field.MISS_COUNT, missCount + "");
         dto.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy1(keyword, productId, billPlan, fromDate, toDate);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy1(keyword, productId, billPlan, fromDate, toDate,
+                    managerId);
             List<ApiReqInfoDTO> list = new ArrayList<>(dataList.size());
             for(ApiReqInfo o : dataList)
             {
@@ -1376,7 +1380,7 @@ public class RemoteClientServiceImpl implements RemoteClientService
     public ListDTO<ApiReqInfoDTO> getRevenueList(Date fromDate, Date toDate, Page page)
     {
         ListDTO<ApiReqInfoDTO> listDTO = new ListDTO<>();
-        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate);
+        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate, null);
         listDTO.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         int total = apiReqInfoMapper.getRevenueListCount(fromDate, toDate);
         int pages = page.getTotalPage(total);

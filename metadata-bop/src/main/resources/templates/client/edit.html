@@ -78,6 +78,16 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><i class="col3">*</i>商务经理：</label>
+                    <div class="layui-input-block clearfix">
+                        <select id="managerId" name="managerId" class="select-list" style="width: 98%">
+                            <option th:each="managerItem:${managerList}" th:value="${managerItem.id}"
+                                    th:text="${managerItem.name}"
+                                    th:selected="${managerItem.id} eq ${managerId}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">账号状态：</label>
                     <div class="layui-input-block layui-form">
                         <input type="radio" name="clientEnabled" value="1" title="正常"
@@ -204,7 +214,7 @@
                 <label class="layui-form-label">联系邮箱：</label>
                 <div class="layui-input-block">
                     <input type="text" id="add-email" placeholder="" autocomplete="off" datatype="email" datames="联系邮箱"
-                           notnull="true" maxlength="40" class="layui-input"/>
+                           maxlength="40" class="layui-input"/>
                     <i class="col3 pl10 tip" id="tip-add-email" style="display: none"></i>
                 </div>
             </div>

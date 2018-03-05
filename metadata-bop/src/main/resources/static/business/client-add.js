@@ -135,6 +135,7 @@ function createUser() {
     var shortName = $("#shortName").val();
     var industryId = $("#industryId").val();
     var license = $("#license").val();
+    var managerId = $("#managerId").val();
     var enabled = $("input[name='enabled']:checked").val();
     var contactList = [];
     for(var o in contacts) {
@@ -156,11 +157,12 @@ function createUser() {
             "industryId": industryId,
             "contacts": contactList,
             "license": license,
+            "managerId": managerId,
             "enabled": enabled
         }),
         success: function(res) {
             if(res.code !== '000000') {
-                layer.msg("添加失败:" + data.message, {
+                layer.msg("添加失败:" + res.message, {
                     time: 2000
                 });
                 isSubmit = false;

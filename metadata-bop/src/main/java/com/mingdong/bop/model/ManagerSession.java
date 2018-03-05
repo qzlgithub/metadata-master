@@ -6,9 +6,20 @@ public class ManagerSession
 {
     private Long managerId;
     private String name;
+    private String roleCode;
     private String avatar;
     private List<String> privileges;
     private Long addAt;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public Long getManagerId()
     {

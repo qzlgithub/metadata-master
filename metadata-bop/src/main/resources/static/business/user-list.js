@@ -14,7 +14,7 @@ layui.config({
         limits: [10, 15, 30, 50],
         url: '/account/list',
         where: {
-            roleId: $("#roleId").val(),
+            roleCode: $("#roleCode").val(),
             enabled: $("#enabled").val()
         },
         cols: [[
@@ -41,7 +41,7 @@ layui.config({
         var params = data.field;
         main_table.reload({
             where: {
-                roleId: params["roleId"],
+                roleCode: params["roleCode"],
                 enabled: params['enabled']
             },
             page: {

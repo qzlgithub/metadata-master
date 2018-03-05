@@ -10,8 +10,19 @@ public class NewManagerVO
     private String phone;
     private String qq;
     private Long roleId;
+    private String roleCode;
     private Integer enabled;
     private List<Long> privilege;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public String getUsername()
     {

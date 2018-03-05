@@ -118,11 +118,11 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page,
-            RestListResp res)
+    public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Long managerId,
+            Page page, RestListResp res)
     {
         ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword,
-                industryId == null ? parentIndustryId : industryId, enabled, page);
+                industryId == null ? parentIndustryId : industryId, enabled, managerId, page);
         res.setTotal(clientInfoListDTO.getTotal());
         List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
@@ -162,7 +162,7 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.LICENSE, dto.getLicense());
         resp.addData(Field.INDUSTRY_ID, dto.getIndustryId() + "");
         resp.addData(Field.USER_STATUS, dto.getUserStatus());
-
+        resp.addData(Field.MANAGER_ID, dto.getManagerId());
         List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
         for(ClientContactDTO d : dto.getContacts())
         {
@@ -470,7 +470,7 @@ public class ClientServiceImpl implements ClientService
         dto.setUsername(vo.getUsername());
         dto.setContactList(contactList);
         dto.setEnabled(vo.getEnabled());
-        dto.setManagerId(RequestThread.getOperatorId());
+        dto.setManagerId(vo.getManagerId());
         ResultDTO res = remoteClientService.addNewClient(dto);
         resp.setError(res.getResult());
     }
@@ -492,6 +492,7 @@ public class ClientServiceImpl implements ClientService
         client.setLicense(vo.getLicense());
         client.setIndustryId(vo.getIndustryId());
         client.setEnabled(vo.getEnabled());
+        client.setManagerId(vo.getManagerId());
         List<ClientContactDTO> contactList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(vo.getContacts()))
         {

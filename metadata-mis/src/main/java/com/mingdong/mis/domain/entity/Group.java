@@ -2,13 +2,13 @@ package com.mingdong.mis.domain.entity;
 
 import java.util.Date;
 
-public class RoleFunction
+public class Group
 {
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Long roleId;
-    private Long privilegeId;
+    private String name;
+    private Integer enabled;
 
     public Long getId()
     {
@@ -40,24 +40,24 @@ public class RoleFunction
         this.updateTime = updateTime;
     }
 
-    public Long getRoleId()
+    public String getName()
     {
-        return roleId;
+        return name;
     }
 
-    public void setRoleId(Long roleId)
+    public void setName(String name)
     {
-        this.roleId = roleId;
+        this.name = name;
     }
 
-    public Long getPrivilegeId()
+    public Integer getEnabled()
     {
-        return privilegeId;
+        return enabled;
     }
 
-    public void setPrivilegeId(Long privilegeId)
+    public void setEnabled(Integer enabled)
     {
-        this.privilegeId = privilegeId;
+        this.enabled = enabled;
     }
 }
 

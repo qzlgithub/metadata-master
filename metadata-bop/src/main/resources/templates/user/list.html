@@ -30,9 +30,10 @@
                 <li>
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-inline" style="width: 180px">
-                        <select id="roleId" name="roleId">
+                        <select id="roleCode" name="roleCode">
                             <option value="">全部</option>
-                            <option th:each="o : ${roleDict}" th:value="${o.key}" th:text="${o.value}"></option>
+                            <option value="SALESMAN" >业务员</option>
+                            <option value="MANAGER" >管理员</option>
                         </select>
                     </div>
                 </li>

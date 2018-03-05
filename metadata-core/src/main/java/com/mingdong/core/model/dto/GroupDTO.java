@@ -3,7 +3,7 @@ package com.mingdong.core.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class RoleDTO implements Serializable
+public class GroupDTO implements Serializable
 {
     private Long id;
     private String name;

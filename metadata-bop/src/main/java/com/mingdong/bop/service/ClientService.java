@@ -26,7 +26,7 @@ public interface ClientService
     /**
      * 根据条件获取客户信息列表
      */
-    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Page page,
+    void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Long managerId, Page page,
             RestListResp res);
 
     void getClientInfoForEdit(Long clientId, RestResp resp);

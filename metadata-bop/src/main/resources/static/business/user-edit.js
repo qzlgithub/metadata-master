@@ -15,8 +15,9 @@ layui.config({
             {"roleId": roleId},
             function(data) {
                 $(".privilege").prop("checked", false);
-                for(var i in data) {
-                    $("#" + data[i]).prop("checked", true);
+                var list = data.data.privilegeList;
+                for(var i in list) {
+                    $("#" + list[i]).prop("checked", true);
                 }
                 checkSubPrivAllChecked();
             }
@@ -63,6 +64,7 @@ function checkSubPrivAllChecked() {
 function saveManager() {
     var managerId = $("#managerId").val();
     var roleId = $("#roleId").val();
+    var roleCode = $("#roleCode").val();
     var username = $("#username").val();
     var name = $("#name").val();
     var phone = $("#phone").val();
@@ -77,6 +79,7 @@ function saveManager() {
         data: JSON.stringify({
             "managerId": managerId,
             "roleId": roleId,
+            "roleCode": roleCode,
             "username": username,
             "name": name,
             "phone": phone,

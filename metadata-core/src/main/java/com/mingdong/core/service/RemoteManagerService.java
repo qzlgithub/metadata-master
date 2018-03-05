@@ -9,7 +9,7 @@ import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.RoleDTO;
+import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
 public interface RemoteManagerService
@@ -41,7 +41,7 @@ public interface RemoteManagerService
     /**
      * 根据条件获取管理员信息列表
      */
-    ManagerInfoListDTO getManagerInfoList(Long roleId, Integer enabled, Page page);
+    ManagerInfoListDTO getManagerInfoList(String roleCode, Integer enabled, Page page);
 
     /**
      * 根据管理员id获取赋权信息列表
@@ -61,32 +61,32 @@ public interface RemoteManagerService
     /**
      * 变更账户角色状态
      *
-     * @param roleId 角色ID
+     * @param groupId 角色ID
      * @param status 状态：1-启用，2-禁用
      */
-    ResultDTO changeRoleStatus(Long roleId, Integer status);
+    ResultDTO changeRoleStatus(Long groupId, Integer status);
 
     /**
      * 编辑账户角色信息
      */
-    ResultDTO editAccountRole(RoleDTO roleDTO);
+    ResultDTO editAccountRole(GroupDTO groupDTO);
 
     /**
      * 获取账户角色信息
      *
-     * @param roleId 角色ID
+     * @param groupId 角色ID
      */
-    RoleDTO getAccountRoleInfo(Long roleId);
+    GroupDTO getAccountRoleInfo(Long groupId);
 
     /**
      * 创建账户角色
      */
-    ResultDTO addAccountRole(RoleDTO roleDTO);
+    ResultDTO addAccountRole(GroupDTO groupDTO);
 
     /**
      * 获取账户角色列表
      */
-    ListDTO<RoleDTO> getAccountRoleList(Page page);
+    ListDTO<GroupDTO> getAccountGroupList(Page page);
 
     ListDTO<DictDTO> getAccountRoleDict();
 

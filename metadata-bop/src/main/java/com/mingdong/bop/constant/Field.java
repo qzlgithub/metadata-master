@@ -45,6 +45,7 @@ public interface Field
     String IMAGE = "image";
     String INDUSTRY = "industry";
     String ROLE_ID = "roleId";
+    String ROLE_CODE = "roleCode";
     String ROLE_LIST = "roleList";
     String INDUSTRY_LIST = "industryList";
     String PARENT_INDUSTRY_ID = "parentIndustryId";
@@ -151,4 +152,5 @@ public interface Field
     String O = "o";
     String PRIVILEGE_LIST = "privilegeList";
     String ROLE_DICT = "roleDict";
+    String IS_MANAGER = "isManager";
 }

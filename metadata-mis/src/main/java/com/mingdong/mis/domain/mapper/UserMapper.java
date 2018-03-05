@@ -3,6 +3,8 @@ package com.mingdong.mis.domain.mapper;
 import com.mingdong.mis.domain.entity.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper
 {
     void add(User o);
@@ -13,5 +15,7 @@ public interface UserMapper
 
     User findByUsername(String username);
 
-    int countBy(@Param("roleId") Long roleId, @Param("enabled") Integer enabled);
+    int countBy(@Param("roleCode") String roleCode, @Param("enabled") Integer enabled);
+
+    List<User> getListBy(@Param("roleCode") String roleCode, @Param("enabled") Integer enabled);
 }

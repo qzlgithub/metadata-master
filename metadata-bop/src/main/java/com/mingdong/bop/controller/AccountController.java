@@ -168,8 +168,7 @@ public class AccountController
             return resp;
         }
         // 保存管理账号
-        managerService.addManager(vo.getUsername(), vo.getPassword(), vo.getName(), vo.getPhone(), vo.getQq(),
-                vo.getRoleId(), vo.getEnabled(), vo.getPrivilege(), resp);
+        managerService.addManager(vo, resp);
         return resp;
     }
 
@@ -178,23 +177,23 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/list")
-    public RestListResp getManagerList(@RequestParam(value = Field.ROLE_ID, required = false) Long roleId,
+    public RestListResp getManagerList(@RequestParam(value = Field.ROLE_CODE, required = false) String roleCode,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestListResp res = new RestListResp();
         // 校验各个字段值
-        if(roleId != null && roleId <= 0)
+        if(StringUtils.isNullBlank(roleCode))
         {
-            roleId = null;
+            roleCode = null;
         }
         if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
         {
             enabled = null;
         }
         Page page = new Page(pageNum, pageSize);
-        managerService.getManagerList(roleId, enabled, page, res);
+        managerService.getManagerList(roleCode, enabled, page, res);
         return res;
     }
 
@@ -206,6 +205,11 @@ public class AccountController
     public RestResp editManager(@RequestBody ManagerVO vo)
     {
         RestResp resp = new RestResp();
+        if(StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()))
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
         if(vo.getRoleId() == null || vo.getRoleId() <= 0)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
@@ -221,8 +225,7 @@ public class AccountController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.editManager(vo.getManagerId(), vo.getRoleId(), vo.getName(), vo.getPhone(), vo.getQq(),
-                vo.getEnabled(), vo.getPrivilege(), resp);
+        managerService.editManager(vo, resp);
         return resp;
     }
 

@@ -240,6 +240,7 @@ function editClient() {
             "shortName": $("#shortName").val(),
             "license": $("#license").val(),
             "industryId": $("#industry").val(),
+            "managerId": $("#managerId").val(),
             "contactDel": del_obj,
             "contacts": update,
             "enabled": $("input[name='clientEnabled']:checked").val()

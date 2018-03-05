@@ -49,7 +49,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter
                     response.getOutputStream().write(resp.getBytes("UTF-8"));
                     return false;
                 }
-                RequestThread.set(ms.getManagerId(), ms.getName(), ms.getPrivileges());
+                RequestThread.set(ms.getManagerId(), ms.getName(), ms.getRoleCode(), ms.getPrivileges());
                 String module = ModulePath.getByPath(path);
                 RequestThread.setModule(module != null ? module : "");
                 Map<String, String> system = redisDao.getSystemModule();

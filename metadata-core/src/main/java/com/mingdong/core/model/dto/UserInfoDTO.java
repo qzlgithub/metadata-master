@@ -9,9 +9,20 @@ public class UserInfoDTO implements Serializable
     private String name;
     private String phone;
     private String qq;
-    private Long roleId;
+    private Long groupId;
+    private String roleCode;
     private Integer enabled;
     private List<Long> privilegeIdList;
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
+    }
 
     public String getUsername()
     {
@@ -53,14 +64,14 @@ public class UserInfoDTO implements Serializable
         this.qq = qq;
     }
 
-    public Long getRoleId()
+    public Long getGroupId()
     {
-        return roleId;
+        return groupId;
     }
 
-    public void setRoleId(Long roleId)
+    public void setGroupId(Long groupId)
     {
-        this.roleId = roleId;
+        this.groupId = groupId;
     }
 
     public Integer getEnabled()

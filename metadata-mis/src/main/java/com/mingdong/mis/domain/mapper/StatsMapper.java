@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface StatsMapper
 {
-    List<Stats> findStatsBy(@Param("day") Date day,@Param("hour") Integer hour);
+    List<Stats> findStatsBy(@Param("day") Date day, @Param("hour") Integer hour);
 
     void add(Stats stats);
 }

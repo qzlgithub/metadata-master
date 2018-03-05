@@ -11,7 +11,7 @@ layui.config({
         elem: '#dataTable',
         url: '/account/role/list',
         cols: [[
-            {field: 'name', title: '角色名称', width: '15%'},
+            {field: 'name', title: '名称', width: '15%'},
             {field: 'module', title: '功能模块'},
             {title: '操作', align: 'center', toolbar: '#operationBar', fixed: 'right', width: '15%'}
         ]],
@@ -35,7 +35,7 @@ layui.config({
                 remind_txt = '启用';
                 status = 1;
             }
-            layer.confirm('确定' + remind_txt + '该角色？', {
+            layer.confirm('确定' + remind_txt + '？', {
                 btn: ['确定', '取消'],
                 yes: function() {
                     $.ajax({

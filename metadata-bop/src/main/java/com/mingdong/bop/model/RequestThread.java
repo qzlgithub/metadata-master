@@ -1,5 +1,7 @@
 package com.mingdong.bop.model;
 
+import com.mingdong.core.constant.RoleEnum;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +10,13 @@ public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
-    public static void set(Long managerId, String managerName, List<String> privilege)
+    public static void set(Long managerId, String managerName, String roleCode, List<String> privilege)
     {
         RequestHolder holder = new RequestHolder();
         holder.setiId(managerId);
         holder.setiName(managerName);
         holder.setiPrivilege(privilege);
+        holder.setiRoleCode(roleCode);
         threadHolder.set(holder);
     }
 
@@ -44,6 +47,15 @@ public class RequestThread
     public static Long getOperatorId()
     {
         return get().getiId();
+    }
+
+    public static boolean isManager()
+    {
+        if(RoleEnum.MANAGER.equals(RoleEnum.getByCode(get().getiRoleCode())))
+        {
+            return true;
+        }
+        return false;
     }
 
     public static void cleanup()

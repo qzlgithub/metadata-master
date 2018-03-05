@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mingdong.mis.domain.mapper.RoleMapper">
-    <resultMap id="BaseResultMap" type="Role">
+<mapper namespace="com.mingdong.mis.domain.mapper.GroupMapper">
+    <resultMap id="BaseResultMap" type="Group">
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -9,8 +9,8 @@
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
     </resultMap>
 
-    <insert id="add" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
-        insert into `role`
+    <insert id="add" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
+        insert into `group`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
@@ -27,8 +27,8 @@
         </trim>
     </insert>
 
-    <update id="updateSkipNull" parameterType="Role">
-        update `role`
+    <update id="updateSkipNull" parameterType="Group">
+        update `group`
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
@@ -41,31 +41,31 @@
     <select id="getList" resultMap="BaseResultMap">
         select
             `id`, `name`, `enabled`
-        from `role`
+        from `group`
         order by `enabled` desc, id asc
     </select>
 
     <select id="countAll" resultType="Integer">
         select count(*)
-        from `role`
+        from `group`
     </select>
 
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `name`, `enabled`
-        from `role`
+        from `group`
         where `id` = #{id}
     </select>
 
     <select id="findByName" parameterType="String" resultMap="BaseResultMap">
         select
             `id`, `create_time`, `update_time`, `name`, `enabled`
-        from `role`
+        from `group`
         where `name` = #{name}
     </select>
 
     <select id="getByStatus" parameterType="Integer" resultMap="BaseResultMap">
-        select `id`, `name` from `role`
+        select `id`, `name` from `group`
         <where>
             <if test="enabled != null">`enabled` = #{enabled}</if>
         </where>
