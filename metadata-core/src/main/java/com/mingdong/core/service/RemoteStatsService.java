@@ -4,6 +4,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 
 import java.math.BigDecimal;
@@ -49,4 +50,6 @@ public interface RemoteStatsService
     ListDTO<StatsDateInfoDTO> getRequestListStats(Date fromDate, Date toDate, String name, Long productId);
 
     ListDTO<StatsDateInfoDTO> getRevenueListStats(Date fromDate, Date toDate);
+
+    ResultDTO statsDataForHour(Date date);
 }

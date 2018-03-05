@@ -27,7 +27,7 @@
              #{billPlan}, #{requestIp}, #{hit}, #{fee}, #{balance})
     </insert>
 
-    <select id="countBy" resultType="int">
+    <select id="countBy" resultType="Long">
         select count(*) from `api_req`
         <where>
             <if test="clientId != null">`client_id` = #{clientId}</if>

@@ -30,6 +30,7 @@ public enum RestResult
     CLIENT_NAME_EXIST("100025", "公司名称已存在"),
     CLIENT_LICENSE_EXIST("100026", "社会信用代码已存在"),
     CLIENT_PRODUCT_NO_DELETE("100027", "服务已被开通无法移除"),
+    STATS_EXIST("100028", "统计时间已经存在"),
 
     SYSTEM_ERROR("999997", "发生错误，请联系管理员"),
     ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),

@@ -3,24 +3,33 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteStatsService;
 import com.mingdong.core.util.EntityUtils;
+import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.domain.entity.ClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
+import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
+import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
+import com.mingdong.mis.domain.mapper.StatsMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +41,10 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     private ClientInfoMapper clientInfoMapper;
     @Resource
     private ProductRechargeInfoMapper productRechargeInfoMapper;
+    @Resource
+    private ApiReqMapper apiReqMapper;
+    @Resource
+    private StatsMapper statsMapper;
 
     @Override
     public Integer getAllClientCount()
@@ -166,6 +179,58 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         }
         listDTO.setList(listData);
         return listDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResultDTO statsDataForHour(Date date)
+    {
+        ResultDTO resultDTO = new ResultDTO();
+        SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        System.out.println("date=======" + longSdf.format(date));
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
+                calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+        Date hourBefore = calendar.getTime();
+        System.out.println("hourBefore=======" + longSdf.format(hourBefore));
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        Date hourAfter = calendar.getTime();
+        System.out.println("hourAfter=======" + longSdf.format(hourAfter));
+        Date day;
+        try
+        {
+            day = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            resultDTO.setResult(RestResult.SYSTEM_ERROR);
+            return resultDTO;
+        }
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        List<Stats> statsList = statsMapper.findStatsBy(day, hour);
+        if(!CollectionUtils.isEmpty(statsList))
+        {
+            resultDTO.setResult(RestResult.STATS_EXIST);
+            return resultDTO;
+        }
+        Integer clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
+        Long requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
+        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
+        Stats stats = new Stats();
+        stats.setId(IDUtils.getStatsId(1));
+        Date nowDate = new Date();
+        stats.setCreateTime(nowDate);
+        stats.setUpdateTime(nowDate);
+        stats.setStatsDay(day);
+        stats.setStatsHour(hour);
+        stats.setClientIncrement(clientCount != null ? clientCount : 0);
+        stats.setClientRequest(requestCount != null ? requestCount : 0);
+        stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
+        statsMapper.add(stats);
+        return resultDTO;
     }
 
     private void findClientInfoDTO(List<ClientInfo> clientInfoList, List<ClientInfoDTO> dataList)

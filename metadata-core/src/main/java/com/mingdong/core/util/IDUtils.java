@@ -12,6 +12,7 @@ public class IDUtils
     private static AtomicLong clientProduct = new AtomicLong(0);
     private static AtomicLong productRecharge = new AtomicLong(0);
     private static AtomicLong apiReq = new AtomicLong(0);
+    private static AtomicLong stats = new AtomicLong(0);
 
     private static long createID(AtomicLong atomicLong, int nodeId)
     {
@@ -62,5 +63,10 @@ public class IDUtils
     public static Long getApiReqId(int nodeId)
     {
         return createID(apiReq, nodeId);
+    }
+
+    public static Long getStatsId(int nodeId)
+    {
+        return createID(stats, nodeId);
     }
 }
