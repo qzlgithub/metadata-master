@@ -10,7 +10,6 @@ import java.util.Date;
 public class StatsJob implements Job
 {
 
-
     @Override
     public void execute(JobExecutionContext context)
     {
