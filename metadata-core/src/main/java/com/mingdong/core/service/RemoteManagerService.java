@@ -89,4 +89,12 @@ public interface RemoteManagerService
     ListDTO<RoleDTO> getAccountRoleList(Page page);
 
     ListDTO<DictDTO> getAccountRoleDict();
+
+    /**
+     * 变更用户账户的状态
+     *
+     * @param userId 管理用户ID
+     * @param status 1-启用，0-禁用
+     */
+    ResultDTO changeUserStatus(Long userId, Integer status);
 }

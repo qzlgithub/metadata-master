@@ -12,7 +12,6 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
@@ -282,27 +281,10 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void changeManagerStatus(Long userId, RestResp resp)
+    public void changeManagerStatus(Long userId, Integer status, RestResp resp)
     {
-        ManagerDTO manager = remoteManagerService.getManagerById(userId);
-        if(manager == null)
-        {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        Integer enabled = TrueOrFalse.TRUE;
-        if(TrueOrFalse.TRUE.equals(manager.getEnabled()))
-        {
-            enabled = TrueOrFalse.FALSE;
-        }
-        ManagerDTO managerUpd = new ManagerDTO();
-        managerUpd.setId(userId);
-        managerUpd.setUpdateTime(new Date());
-        managerUpd.setEnabled(enabled);
-        NewManager newManager = new NewManager();
-        newManager.setManagerDTO(managerUpd);
-        remoteManagerService.updateManagerSkipNull(newManager);
-        resp.addData(Field.ENABLED, enabled);
+        ResultDTO resultDTO = remoteManagerService.changeUserStatus(userId, status);
+        resp.setError(resultDTO.getResult());
     }
 
     @Override

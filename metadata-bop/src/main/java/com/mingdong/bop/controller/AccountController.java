@@ -235,12 +235,13 @@ public class AccountController
     {
         RestResp resp = new RestResp();
         Long userId = jsonReq.getLong(Field.ID);
-        if(userId == null)
+        Integer status = jsonReq.getInteger(Field.STATUS);
+        if(userId == null || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(status)))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.changeManagerStatus(userId, resp);
+        managerService.changeManagerStatus(userId, status, resp);
         return resp;
     }
 }

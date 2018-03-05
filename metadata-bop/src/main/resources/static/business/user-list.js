@@ -8,7 +8,7 @@ layui.config({
     form = layui.form;
     table = layui.table;
     main_table = table.render({
-        elem: '#data-table',
+        elem: '#dataTable',
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
@@ -48,6 +48,41 @@ layui.config({
                 curr: 1
             }
         });
+    });
+    table.on('tool(dataTable)', function(obj) {
+        var data = obj.data, layEvent = obj.event;
+        if(layEvent === 'enable' || layEvent === 'disable') {
+            var tip, status;
+            if(layEvent === 'enable') {
+                tip = '启用';
+                status = 1;
+            }
+            else {
+                tip = '禁用';
+                status = 0;
+            }
+            layer.confirm('确定' + tip + '？', {
+                btn: ['确定', '取消'],
+                yes: function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/account/status",
+                        contentType: "application/json",
+                        data: JSON.stringify({"id": data.id, "status": status}),
+                        success: function(res) {
+                            if(res.code === '000000') {
+                                layer.msg(tip + "成功", {time: 2000});
+                                main_table.reload();
+                            }
+                        }
+                    });
+                    layer.closeAll();
+                },
+                no: function() {
+                    layer.closeAll();
+                }
+            });
+        }
     });
 });
 

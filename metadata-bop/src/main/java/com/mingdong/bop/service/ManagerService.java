@@ -79,7 +79,7 @@ public interface ManagerService
     /**
      * 根据管理员id更改管理员状态
      */
-    void changeManagerStatus(Long userId, RestResp resp);
+    void changeManagerStatus(Long userId, Integer status, RestResp resp);
 
     /**
      * 判断角色名称是否存在
