@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.StatsMapper">
+    <resultMap id="BaseResultMap" type="Stats">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="statsDay" property="statsDay" jdbcType="TIMESTAMP" />
+        <result column="statsHour" property="statsHour" jdbcType="TINYINT" />
+        <result column="clientIncrement" property="clientIncrement" jdbcType="INTEGER" />
+        <result column="clientRequest" property="clientRequest" jdbcType="BIGINT" />
+        <result column="clientRecharge" property="clientRecharge" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <select id="findStatsBy" resultMap="BaseResultMap">
+        select
+        `id`,`create_time`,`update_time`,`stats_day`,`stats_hour`,`client_increment`,`client_request`,`client_recharge`
+        from `stats`
+        <where>
+            <if test="day != null">`stats_day` = #{day}</if>
+            <if test="hour != null">and `stats_hour` = #{hour}</if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+        insert into `stats`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="statsDay != null">`stats_day`,</if>
+            <if test="statsHour != null">`stats_hour`,</if>
+            <if test="clientIncrement != null">`client_increment`,</if>
+            <if test="clientRequest != null">`client_request`,</if>
+            <if test="clientRecharge != null">`client_recharge`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="statsDay != null">#{statsDay},</if>
+            <if test="statsHour != null">#{statsHour},</if>
+            <if test="clientIncrement != null">#{clientIncrement},</if>
+            <if test="clientRequest != null">#{clientRequest},</if>
+            <if test="clientRecharge != null">#{clientRecharge},</if>
+        </trim>
+    </insert>
+</mapper>

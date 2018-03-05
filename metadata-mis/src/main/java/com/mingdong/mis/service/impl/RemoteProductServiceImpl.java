@@ -150,10 +150,10 @@ public class RemoteProductServiceImpl implements RemoteProductService
         }
         else
         {
-            int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
-            int pages = page.getTotalPage(total);
+            Long total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
+            int pages = page.getTotalPage(total.intValue());
             apiReqInfoListDTO.setPages(pages);
-            apiReqInfoListDTO.setTotal(total);
+            apiReqInfoListDTO.setTotal(total.intValue());
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
