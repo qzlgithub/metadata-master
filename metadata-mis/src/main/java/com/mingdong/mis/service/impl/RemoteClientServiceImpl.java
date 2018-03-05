@@ -55,12 +55,12 @@ import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.DictIndustry;
-import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
-import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
+import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.Sistem;
+import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
@@ -70,15 +70,15 @@ import com.mingdong.mis.domain.mapper.ClientOperateInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
+import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
-import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
-import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
-import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
+import com.mingdong.mis.domain.mapper.StatsClientMapper;
+import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -534,23 +534,25 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientInfoListDTO getSimilarCorpByName(String name, Long clientId)
+    public ListDTO<ClientInfoDTO> getSimilarCorpByName(String name, Long clientId)
     {
-        List<ClientInfo> similarCorpByName = clientInfoMapper.getSimilarCorpByName(name, clientId);
-        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
-        List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
-        clientInfoListDTO.setDataList(clientInfoDTOList);
-        if(!CollectionUtils.isEmpty(similarCorpByName))
+        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        List<ClientInfo> clientInfoList = clientInfoMapper.getSimilarCorpByName(name, clientId);
+        if(!CollectionUtils.isEmpty(clientInfoList))
         {
-            ClientInfoDTO clientInfoDTO;
-            for(ClientInfo item : similarCorpByName)
+            List<ClientInfoDTO> list = new ArrayList<>(clientInfoList.size());
+            for(ClientInfo o : clientInfoList)
             {
-                clientInfoDTO = new ClientInfoDTO();
-                EntityUtils.copyProperties(item, clientInfoDTO);
-                clientInfoDTOList.add(clientInfoDTO);
+                ClientInfoDTO ci = new ClientInfoDTO();
+                ci.setCorpName(o.getCorpName());
+                ci.setLicense(o.getLicense());
+                ci.setManagerName(o.getManagerName());
+                ci.setRegisterTime(o.getRegisterTime());
+                list.add(ci);
             }
+            listDTO.setList(list);
         }
-        return clientInfoListDTO;
+        return listDTO;
     }
 
     @Override

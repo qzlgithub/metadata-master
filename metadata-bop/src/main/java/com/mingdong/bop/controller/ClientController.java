@@ -183,12 +183,12 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "/client/same")
-    private Map<String, Object> getSameClient(@RequestParam(value = Field.NAME) String name,
+    private RestListResp getSameClient(@RequestParam(value = Field.NAME) String name,
             @RequestParam(value = Field.ID, required = false) Long clientId)
     {
-        RestResp resp = new RestResp();
+        RestListResp resp = new RestListResp();
         clientService.getSimilarCorp(name, clientId, resp);
-        return resp.getData();
+        return resp;
     }
 
     @LoginRequired

@@ -160,9 +160,8 @@ $("#save-contact").click(function() {
     form.render();
 });
 var sc_str = "<tr><td>#{corpName}</td>" +
-    "<td>#{name}</td>" +
-    "<td>#{phone}</td>" +
-    "<td>#{email}</td>" +
+    "<td>#{license}</td>" +
+    "<td>#{managerName}</td>" +
     "<td>#{registerDate}</td></tr>";
 $("#sameCompany").click(function() {
     var corpName = $("#corpName").val();
@@ -173,16 +172,15 @@ $("#sameCompany").click(function() {
             "name": corpName.replace(/有限/g, "").replace(/公司/g, "").replace(/责任/g, "").replace(/股份/g, ""),
             "id": $("#clientId").val()
         },
-        function(data) {
+        function(res) {
             $("#sameCompanyBody").empty();
-            var list = data.list;
+            var list = res.list;
             for(var i in list) {
-                var tr = sc_str.replace("#{corpName}", list[i].corpName).replace("#{name}", list[i].name)
-                .replace("#{phone}", list[i].phone).replace("#{email}", list[i].email)
-                .replace("#{registerDate}", list[i].registerDate);
+                var tr = sc_str.replace("#{corpName}", list[i].corpName).replace("#{license}", list[i].license)
+                .replace("#{managerName}", list[i].managerName).replace("#{registerDate}", list[i].registerDate);
                 $("#sameCompanyBody").append(tr);
             }
-            $("#sameTotal").text("共" + data.total + "家");
+            $("#sameTotal").text("共" + res.total + "家");
             layer.open({
                 title: false,
                 type: 1,

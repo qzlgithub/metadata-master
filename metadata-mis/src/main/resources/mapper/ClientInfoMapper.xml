@@ -19,9 +19,15 @@
 
     <!-- @formatter:off -->
     <select id="getSimilarCorpByName" resultMap="BaseResultMap">
-        select c.`corp_name` as corp_name, cu.`name` as name, cu.`phone` as phone, cu.`email` as email, c.`create_time`
-        as register_time from `client` c left join `client_user` cu on c.`primary_user_id` = cu.`id` where
-        (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
+        select
+            c.`corp_name`   as corp_name,
+            c.`license`     as license,
+            u.`name`        as manager_name,
+            c.`create_time` as register_time
+        from `client` c
+            left join `user` u
+                on c.`manager_id` = u.`id`
+        where (c.`corp_name` like '%${name}%' or c.`short_name` like '%${name}%')
         <if test="clientId != null">and c.`id` != #{clientId}</if>
         limit 5
     </select>
@@ -35,20 +41,17 @@
           cu.`name`       as name,
           cu.`phone`      as phone,
           cu.`email`      as email,
-          m.`name`  as manager_name
+          m.`name`        as manager_name
       from `client` c
-         left join `client_user` cu
-            on c.`primary_user_id` = cu.`id`
-                left join `user` m
-                    on c.`manager_id` = m.`id`
-      where 1 = 1
-        <if test="start != null">
-            and c.`create_time` &gt;= #{start}
-        </if>
-        <if test="end != null">
-            and c.`create_time` &lt;= #{end}
-        </if>
-        order by c.`create_time`
+          left join `client_user` cu
+              on c.`primary_user_id` = cu.`id`
+          left join `user` m
+              on c.`manager_id` = m.`id`
+      <where>
+          <if test="start != null">and c.`create_time` &gt;= #{start}</if>
+          <if test="end != null">and c.`create_time` &lt;= #{end}</if>
+      </where>
+      order by c.`create_time`
     </select>
 
     <select id="getListBy" resultMap="BaseResultMap">
@@ -65,12 +68,9 @@
         from `client` c
             left join `user` m
                 on c.`manager_id` = m.`id`
-        where
-            c.`deleted` = 0
+        where c.`deleted` = 0
             <if test="keyword != null">
-                and (c.`corp_name` like '%${keyword}%'
-                  or c.`short_name` like '%${keyword}%'
-                  or c.`username` like '%${keyword}%')
+                and (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%' or c.`username` like '%${keyword}%')
             </if>
             <if test="enabled != null">and c.`enabled` = #{enabled}</if>
             <if test="industryList != null and industryList.size() > 0">

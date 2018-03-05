@@ -27,7 +27,6 @@ import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
@@ -93,24 +92,29 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getSimilarCorp(String name, Long clientId, RestResp resp)
+    public void getSimilarCorp(String name, Long clientId, RestListResp resp)
     {
-        List<Map<String, Object>> list = new ArrayList<>();
-        ClientInfoListDTO similarCorpByName = remoteClientService.getSimilarCorpByName(name, clientId);
-        List<ClientInfoDTO> dataList = similarCorpByName.getDataList();
+        ListDTO<ClientInfoDTO> listDTO = remoteClientService.getSimilarCorpByName(name, clientId);
+        List<ClientInfoDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
-            for(ClientInfoDTO client : dataList)
+            resp.setTotal(dataList.size());
+            List<Map<String, Object>> list = new ArrayList<>(dataList.size());
+            for(ClientInfoDTO o : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.CORP_NAME, client.getCorpName());
-                map.put(Field.LICENSE, client.getLicense());
-                map.put(Field.REGISTER_DATE, DateUtils.format(client.getRegisterTime(), DateFormat.YYYY_MM_DD));
+                map.put(Field.REGISTER_DATE, DateUtils.format(o.getRegisterTime(), DateFormat.YYYY_MM_DD));
+                map.put(Field.CORP_NAME, o.getCorpName());
+                map.put(Field.LICENSE, o.getLicense());
+                map.put(Field.MANAGER_NAME, o.getManagerName());
                 list.add(map);
             }
+            resp.setList(list);
         }
-        resp.addData(Field.LIST, list);
-        resp.addData(Field.TOTAL, dataList.size());
+        else
+        {
+            resp.setTotal(0);
+        }
     }
 
     @Override

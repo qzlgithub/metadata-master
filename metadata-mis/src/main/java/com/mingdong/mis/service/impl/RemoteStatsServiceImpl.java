@@ -3,13 +3,11 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
-import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
-import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteStatsService;
 import com.mingdong.core.util.EntityUtils;
@@ -23,6 +21,8 @@ import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -35,6 +35,7 @@ import java.util.List;
 
 public class RemoteStatsServiceImpl implements RemoteStatsService
 {
+    private static Logger logger = LoggerFactory.getLogger(RemoteStatsServiceImpl.class);
     @Resource
     private StatsClientMapper statsClientMapper;
     @Resource
@@ -183,9 +184,8 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
 
     @Override
     @Transactional
-    public ResultDTO statsDataForHour(Date date)
+    public void statsDataForHour(Date date)
     {
-        ResultDTO resultDTO = new ResultDTO();
         SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
@@ -202,16 +202,15 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         }
         catch(Exception e)
         {
-            e.printStackTrace();
-            resultDTO.setResult(RestResult.SYSTEM_ERROR);
-            return resultDTO;
+            logger.error(e.getMessage());
+            return;
         }
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         List<Stats> statsList = statsMapper.findStatsBy(day, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
-            resultDTO.setResult(RestResult.STATS_EXIST);
-            return resultDTO;
+            logger.error("......");
+            return;
         }
         Integer clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
         Long requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
@@ -227,7 +226,6 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         stats.setClientRequest(requestCount != null ? requestCount : 0);
         stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
         statsMapper.add(stats);
-        return resultDTO;
     }
 
     private void findClientInfoDTO(List<ClientInfo> clientInfoList, List<ClientInfoDTO> dataList)

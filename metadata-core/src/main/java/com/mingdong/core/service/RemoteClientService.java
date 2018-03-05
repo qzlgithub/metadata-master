@@ -101,9 +101,9 @@ public interface RemoteClientService
     UserDTO findByUsername(String username);
 
     /**
-     * 根据客户的公司全称OR简称来获取客户信息列表
+     * 查看名称相似的客户信息列表
      */
-    ClientInfoListDTO getSimilarCorpByName(String name, Long clientId);
+    ListDTO<ClientInfoDTO> getSimilarCorpByName(String name, Long clientId);
 
     /**
      * 根据条件获取客户信息

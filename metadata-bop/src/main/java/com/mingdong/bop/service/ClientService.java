@@ -21,7 +21,7 @@ public interface ClientService
     /**
      * 根据客户的公司全称OR简称来获取客户信息列表
      */
-    void getSimilarCorp(String name, Long clientId, RestResp resp);
+    void getSimilarCorp(String name, Long clientId, RestListResp resp);
 
     /**
      * 根据条件获取客户信息列表

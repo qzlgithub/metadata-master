@@ -117,9 +117,11 @@
                                 <td th:text="${o.email}" th:id="'email-' + ${o.id}"></td>
                                 <td>
                                     <span class="mr30">
-                                        <a href="javascript:;" class="edit-contact" th:attr="data-id=${o.id}">编辑</a></span>
+                                        <a href="javascript:;" class="edit-contact"
+                                           th:attr="data-id=${o.id}">编辑</a></span>
                                     <span class="mr30">
-                                        <a href="javascript:;" class="del-contact" th:attr="data-id=${o.id}">删除</a></span>
+                                        <a href="javascript:;" class="del-contact"
+                                           th:attr="data-id=${o.id}">删除</a></span>
                                     <span class="layui-form">
                                         <input type="checkbox" title="常用" lay-filter="general"
                                                th:checked="${o.isGeneral == 1}" th:id="'general-' + ${o.id}"
@@ -144,40 +146,30 @@
 
 </div>
 
-<!--查看公司  提示层-->
 <div id="check-company" class="modal">
-    <!--form-->
     <div class="layui-layer-title">相似企业</div>
     <div class="mb30">
-        <!--<form class="layui-form" action="">-->
         <div class="m30">
             <div class="tc fz-14" id="thisCorpName"></div>
             <div class="col2 mt20" id="sameTotal"></div>
-            <!--table-->
             <table cellspacing="0" cellpadding="0" border="0" class="layui-table mt20">
                 <thead>
                 <tr>
                     <th>公司名称</th>
-                    <th>联系人</th>
-                    <th>联系电话</th>
-                    <th>邮箱</th>
+                    <th>社会信用代码</th>
+                    <th>所属商务经理</th>
                     <th>创建时间</th>
                 </tr>
                 </thead>
                 <tbody id="sameCompanyBody"></tbody>
             </table>
-            <!--table end-->
         </div>
         <div class="layui-form-item tc">
             <a class="layui-btn" onclick="layer.closeAll()">关闭</a>
         </div>
-        <!--</form>-->
     </div>
-    <!--form end-->
 </div>
-<!--提示层 end-->
 
-<!--修改密码  提示层-->
 <div id="editpwd-manage" class="modal" th:include="common :: point"></div>
 
 <div id="div-contact" class="modal">
