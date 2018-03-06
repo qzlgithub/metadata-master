@@ -1,6 +1,7 @@
 package com.mingdong.mis.model.metadata;
 
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.model.IMetadata;
 
 import java.util.HashMap;
@@ -503,7 +504,7 @@ public class MultipleApp implements IMetadata
         Map<String, Object> map = new HashMap<>();
         if(-1 != hit)
         {
-            map.put("hit", hit);
+            map.put(Field.IS_HIT, hit);
             map.put("orderNo", orderNo);
         }
         else
@@ -513,6 +514,15 @@ public class MultipleApp implements IMetadata
             map.put("msg", msg);
             if(TrueOrFalse.TRUE.equals(status))
             {
+                map.put("dataSize",dataSize);//模糊 range 范围，表示后面带次数的字段模糊区间。 如： 3
+                map.put("idCardMpTimesType",idCardMpTimesType);//证件查询次数级别，0,1,2,3……
+                map.put("idCardMpTimesRange",idCardMpTimesRange);//证件查询平台数，0， [1,3],[4,6]……以下 type 以此类推
+                map.put("idCardFirstTime",idCardFirstTime);//证件最早出现日期
+                map.put("idCardEndTime",idCardEndTime);//证件最近出现日期
+                map.put("phoneMpTimesType",phoneMpTimesType);//手机查询次数级别
+                map.put("phoneMpTimesRange",phoneMpTimesRange);//手机查询平台数
+                map.put("phoneFirstTime",phoneFirstTime);//手机最早出现日期
+                map.put("phoneEndTime",phoneEndTime);//手机最近出现日期
                 map.put("todayIdCardApplicationTimeType", todayIdCardApplicationTimeType);//证件当日查询次数级别
                 map.put("todayIdCardApplicationTimeRange", todayIdCardApplicationTimeRange);//证件当日查询平台数
                 map.put("lastThreeDayIdCardApplicationTimeType", lastThreeDayIdCardApplicationTimeType);//证件3天内查询次数级别
