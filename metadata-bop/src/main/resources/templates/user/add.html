@@ -31,7 +31,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>帐号权限：</label>
                     <div class="layui-input-block">
-                        <select name="modules" id="roleId" class="select-list" onchange="resetPrivilege()">
+                        <select name="group" id="groupId" onchange="resetPrivilege()">
                             <option th:each="o : ${roleDict}" th:value="${o.key}" th:text="${o.value}"></option>
                         </select>
                     </div>

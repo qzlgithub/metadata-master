@@ -1,25 +1,30 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.constant.RestResult;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 public class ManagerDTO implements Serializable
 {
-    private Long id;
-    private Date createTime;
-    private Date updateTime;
+    private Long userId;
+    private Integer roleType;
+    private Long groupId;
     private String username;
     private String password;
     private String name;
     private String phone;
     private String qq;
-    private Long groupId;
-    private Integer roleType;
     private Integer enabled;
-    private String sessionId;
-    private ResultDTO resultDTO;
+    private List<Long> privilegeIdList;
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
 
     public Integer getRoleType()
     {
@@ -31,45 +36,14 @@ public class ManagerDTO implements Serializable
         this.roleType = roleType;
     }
 
-    public ManagerDTO()
+    public Long getGroupId()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        return groupId;
     }
 
-    public ResultDTO getResultDTO()
+    public void setGroupId(Long groupId)
     {
-        return resultDTO;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
+        this.groupId = groupId;
     }
 
     public String getUsername()
@@ -122,16 +96,6 @@ public class ManagerDTO implements Serializable
         this.qq = qq;
     }
 
-    public Long getGroupId()
-    {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId)
-    {
-        this.groupId = groupId;
-    }
-
     public Integer getEnabled()
     {
         return enabled;
@@ -142,13 +106,13 @@ public class ManagerDTO implements Serializable
         this.enabled = enabled;
     }
 
-    public String getSessionId()
+    public List<Long> getPrivilegeIdList()
     {
-        return sessionId;
+        return privilegeIdList;
     }
 
-    public void setSessionId(String sessionId)
+    public void setPrivilegeIdList(List<Long> privilegeIdList)
     {
-        this.sessionId = sessionId;
+        this.privilegeIdList = privilegeIdList;
     }
 }

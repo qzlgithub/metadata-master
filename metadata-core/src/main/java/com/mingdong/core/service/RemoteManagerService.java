@@ -8,7 +8,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
-import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
@@ -27,9 +26,9 @@ public interface RemoteManagerService
     UserInfoDTO getAccountInfo(Long userId);
 
     /**
-     * 更改管理员信息，null值不修改
+     * 编辑管理账号的基本信息及权限配置
      */
-    ResultDTO updateManagerSkipNull(NewManager newManager);
+    ResultDTO editAdminUser(ManagerDTO userDTO);
 
     /**
      * 检测角色名称是否已存在
@@ -56,7 +55,7 @@ public interface RemoteManagerService
     /**
      * 新增管理员并赋权
      */
-    ResultDTO addManager(NewManager newManager);
+    ResultDTO addAdminUser(ManagerDTO userDTO);
 
     /**
      * 变更账户角色状态

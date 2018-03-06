@@ -76,7 +76,7 @@ function checkSubPrivAllChecked() {
 }
 
 function saveManager() {
-    var roleId = $("#roleId").val();
+    var groupId = $("#groupId").val();
     var roleCode = $("#roleCode").val();
     var username = $("#username").val();
     var password = $("#password").val();
@@ -97,7 +97,7 @@ function saveManager() {
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
-            "roleId": roleId,
+            "groupId": groupId,
             "roleCode": roleCode,
             "username": username,
             "password": MD5(password),

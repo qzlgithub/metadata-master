@@ -4,7 +4,7 @@ import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.model.ManagerVO;
+import com.mingdong.bop.model.AdminUserVO;
 import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.constant.DateFormat;
@@ -25,16 +25,13 @@ import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
-import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
-import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,46 +201,35 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void addManager(NewManagerVO newManagerVO, RestResp resp)
+    public void addAdminUser(NewManagerVO newManagerVO, RestResp resp)
     {
-        NewManager newManager = new NewManager();
-        ManagerDTO manager = new ManagerDTO();
-        Long managerId = IDUtils.getManagerId(param.getNodeId());
-        Date current = new Date();
-        manager.setId(managerId);
-        manager.setCreateTime(current);
-        manager.setUpdateTime(current);
-        manager.setUsername(newManagerVO.getUsername());
-        manager.setPassword(Md5Utils.encrypt(newManagerVO.getPassword()));
-        manager.setName(newManagerVO.getName());
-        manager.setPhone(newManagerVO.getPhone());
-        manager.setQq(newManagerVO.getQq());
-        manager.setGroupId(newManagerVO.getRoleId());
-        manager.setEnabled(newManagerVO.getEnabled());
-        manager.setRoleType(newManagerVO.getRoleType());
-        newManager.setManagerDTO(manager);
-        newManager.setPrivilege(newManagerVO.getPrivilege());
-        ResultDTO resultDTO = remoteManagerService.addManager(newManager);
+        ManagerDTO userDTO = new ManagerDTO();
+        userDTO.setRoleType(newManagerVO.getRoleType());
+        userDTO.setGroupId(newManagerVO.getGroupId());
+        userDTO.setUsername(newManagerVO.getUsername());
+        userDTO.setPassword(Md5Utils.encrypt(newManagerVO.getPassword()));
+        userDTO.setName(newManagerVO.getName());
+        userDTO.setPhone(newManagerVO.getPhone());
+        userDTO.setQq(newManagerVO.getQq());
+        userDTO.setEnabled(newManagerVO.getEnabled());
+        userDTO.setPrivilegeIdList(newManagerVO.getPrivilege());
+        ResultDTO resultDTO = remoteManagerService.addAdminUser(userDTO);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
-    public void editManager(ManagerVO vo, RestResp resp)
+    public void editAdminUser(AdminUserVO adminUserVO, RestResp resp)
     {
-        NewManager newManager = new NewManager();
-        ManagerDTO manager = new ManagerDTO();
-        Date current = new Date();
-        manager.setId(vo.getManagerId());
-        manager.setUpdateTime(current);
-        manager.setGroupId(vo.getRoleId());
-        manager.setName(vo.getName());
-        manager.setPhone(vo.getPhone());
-        manager.setQq(vo.getQq());
-        manager.setEnabled(vo.getEnabled());
-        manager.setRoleType(vo.getRoleType());
-        newManager.setManagerDTO(manager);
-        newManager.setPrivilege(vo.getPrivilege());
-        ResultDTO resultDTO = remoteManagerService.updateManagerSkipNull(newManager);
+        ManagerDTO userDTO = new ManagerDTO();
+        userDTO.setUserId(adminUserVO.getManagerId());
+        userDTO.setGroupId(adminUserVO.getGroupId());
+        userDTO.setName(adminUserVO.getName());
+        userDTO.setPhone(adminUserVO.getPhone());
+        userDTO.setQq(adminUserVO.getQq());
+        userDTO.setEnabled(adminUserVO.getEnabled());
+        userDTO.setRoleType(adminUserVO.getRoleType());
+        userDTO.setPrivilegeIdList(adminUserVO.getPrivilege());
+        ResultDTO resultDTO = remoteManagerService.editAdminUser(userDTO);
         resp.setError(resultDTO.getResult());
     }
 

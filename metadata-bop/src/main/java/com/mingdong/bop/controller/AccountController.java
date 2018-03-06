@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ManagerVO;
+import com.mingdong.bop.model.AdminUserVO;
 import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.model.Page;
@@ -143,7 +143,7 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/addition")
-    public RestResp addNewUser(@RequestBody NewManagerVO vo)
+    public RestResp addAdminUser(@RequestBody NewManagerVO vo)
     {
         RestResp resp = new RestResp();
         // 校验各个字段值
@@ -153,7 +153,7 @@ public class AccountController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        if(vo.getRoleId() == null || vo.getRoleId() <= 0)
+        if(vo.getGroupId() == null || vo.getGroupId() <= 0)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
@@ -169,7 +169,7 @@ public class AccountController
             return resp;
         }
         // 保存管理账号
-        managerService.addManager(vo, resp);
+        managerService.addAdminUser(vo, resp);
         return resp;
     }
 
@@ -203,30 +203,30 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account")
-    public RestResp editManager(@RequestBody ManagerVO vo)
+    public RestResp editAdminUser(@RequestBody AdminUserVO adminUserVO)
     {
         RestResp resp = new RestResp();
-        if(StringUtils.isNullBlank(vo.getName()) || StringUtils.isNullBlank(vo.getPhone()))
+        if(StringUtils.isNullBlank(adminUserVO.getName()) || StringUtils.isNullBlank(adminUserVO.getPhone()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        if(vo.getRoleId() == null || vo.getRoleId() <= 0)
+        if(adminUserVO.getGroupId() == null || adminUserVO.getGroupId() <= 0)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        if(!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled()))
+        if(!TrueOrFalse.TRUE.equals(adminUserVO.getEnabled()) && !TrueOrFalse.FALSE.equals(adminUserVO.getEnabled()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        if(CollectionUtils.isEmpty(vo.getPrivilege()))
+        if(CollectionUtils.isEmpty(adminUserVO.getPrivilege()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        managerService.editManager(vo, resp);
+        managerService.editAdminUser(adminUserVO, resp);
         return resp;
     }
 

@@ -15,7 +15,6 @@ import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
-import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
@@ -149,48 +148,43 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO updateManagerSkipNull(NewManager newManager) // TODO ddddd
+    public ResultDTO editAdminUser(ManagerDTO userDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        User byId = userMapper.findById(newManager.getManagerDTO().getId());
-        if(byId == null)
+        User user = userMapper.findById(userDTO.getUserId());
+        if(user == null)
         {
             resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return resultDTO;
         }
-        if(newManager.getPrivilege() != null)
+        Date date = new Date();
+        // 修改管理账号基本信息
+        User tempUser = new User();
+        tempUser.setId(userDTO.getUserId());
+        tempUser.setUpdateTime(date);
+        tempUser.setRoleType(userDTO.getRoleType());
+        tempUser.setGroupId(userDTO.getGroupId());
+        tempUser.setUsername(userDTO.getUsername());
+        tempUser.setPassword(userDTO.getPassword());
+        tempUser.setName(userDTO.getName());
+        tempUser.setPhone(userDTO.getPhone());
+        tempUser.setQq(userDTO.getQq());
+        tempUser.setEnabled(userDTO.getEnabled());
+        userMapper.updateSkipNull(tempUser);
+        // 修改管理账号的权限信息
+        userFunctionMapper.deleteByManager(userDTO.getUserId());
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(userDTO.getPrivilegeIdList());
+        List<UserFunction> list = new ArrayList<>();
+        for(Long privilegeId : allPrivilegeIdList)
         {
-            Date current = new Date();
-            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
-            userFunctionMapper.deleteByManager(newManager.getManagerDTO().getId());
-            List<UserFunction> list = new ArrayList<>();
-            for(Long privilegeId : allPrivilegeIdList)
-            {
-                UserFunction mp = new UserFunction();
-                mp.setCreateTime(current);
-                mp.setUpdateTime(current);
-                mp.setManagerId(newManager.getManagerDTO().getId());
-                mp.setPrivilegeId(privilegeId);
-                list.add(mp);
-            }
-            userFunctionMapper.addList(list);
+            UserFunction mp = new UserFunction();
+            mp.setCreateTime(date);
+            mp.setUpdateTime(date);
+            mp.setManagerId(userDTO.getUserId());
+            mp.setPrivilegeId(privilegeId);
+            list.add(mp);
         }
-        ManagerDTO managerDTO = newManager.getManagerDTO();
-        User user = new User();
-        user.setId(managerDTO.getId());
-        user.setUpdateTime(managerDTO.getUpdateTime());
-        user.setEnabled(managerDTO.getEnabled());
-        user.setPassword(managerDTO.getPassword());
-        user.setSessionId(managerDTO.getSessionId());
-        user.setCreateTime(managerDTO.getCreateTime());
-        user.setGroupId(managerDTO.getGroupId());
-        user.setName(managerDTO.getName());
-        user.setPhone(managerDTO.getPhone());
-        user.setQq(managerDTO.getQq());
-        user.setRoleType(managerDTO.getRoleType());
-        user.setUsername(managerDTO.getUsername());
-        userMapper.updateSkipNull(user);
-        resultDTO.setResult(RestResult.SUCCESS);
+        userFunctionMapper.addList(list);
         return resultDTO;
     }
 
@@ -309,44 +303,42 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO addManager(NewManager newManager)
+    public ResultDTO addAdminUser(ManagerDTO userDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
-        User byUsername = userMapper.findByUsername(newManager.getManagerDTO().getUsername());
-        if(byUsername != null)
+        User user = userMapper.findByUsername(userDTO.getUsername());
+        if(user != null)
         {
             resultDTO.setResult(RestResult.USERNAME_EXIST);
             return resultDTO;
         }
         Date current = new Date();
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(newManager.getPrivilege());
+        // 保存管理账号
+        user = new User();
+        user.setCreateTime(current);
+        user.setUpdateTime(current);
+        user.setGroupId(userDTO.getGroupId());
+        user.setRoleType(userDTO.getRoleType());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setName(userDTO.getName());
+        user.setPhone(userDTO.getPhone());
+        user.setQq(userDTO.getQq());
+        user.setEnabled(userDTO.getEnabled());
+        userMapper.add(user);
+        // 保存管理账号的权限配置
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(userDTO.getPrivilegeIdList());
         List<UserFunction> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
             UserFunction mp = new UserFunction();
             mp.setUpdateTime(current);
             mp.setCreateTime(current);
-            mp.setManagerId(newManager.getManagerDTO().getId());
+            mp.setManagerId(user.getId());
             mp.setPrivilegeId(privilegeId);
             list.add(mp);
         }
         userFunctionMapper.addList(list);
-        ManagerDTO managerDTO = newManager.getManagerDTO();
-        User user = new User();
-        user.setId(managerDTO.getId());
-        user.setUpdateTime(managerDTO.getUpdateTime());
-        user.setEnabled(managerDTO.getEnabled());
-        user.setPassword(managerDTO.getPassword());
-        user.setSessionId(managerDTO.getSessionId());
-        user.setCreateTime(managerDTO.getCreateTime());
-        user.setGroupId(managerDTO.getGroupId());
-        user.setName(managerDTO.getName());
-        user.setPhone(managerDTO.getPhone());
-        user.setQq(managerDTO.getQq());
-        user.setRoleType(managerDTO.getRoleType());
-        user.setUsername(managerDTO.getUsername());
-        userMapper.add(user);
-        resultDTO.setResult(RestResult.SUCCESS);
         return resultDTO;
     }
 

@@ -1,6 +1,6 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.ManagerVO;
+import com.mingdong.bop.model.AdminUserVO;
 import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestListResp;
@@ -54,12 +54,12 @@ public interface ManagerService
     /**
      * 新增管理员信息并赋权
      */
-    void addManager(NewManagerVO newManagerVO, RestResp resp);
+    void addAdminUser(NewManagerVO newManagerVO, RestResp resp);
 
     /**
      * 修改管理员信息并赋权
      */
-    void editManager(ManagerVO vo, RestResp resp);
+    void editAdminUser(AdminUserVO adminUserVO, RestResp resp);
 
     /**
      * 根据角色id获取角色信息

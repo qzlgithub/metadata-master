@@ -2,26 +2,16 @@ package com.mingdong.bop.model;
 
 import java.util.List;
 
-public class ManagerVO
+public class AdminUserVO
 {
     private Long managerId;
+    private Long groupId;
+    private Integer roleType;
     private String name;
     private String phone;
     private String qq;
-    private Long roleId;
-    private Integer roleType;
-    private Integer enabled;
     private List<Long> privilege;
-
-    public Integer getRoleType()
-    {
-        return roleType;
-    }
-
-    public void setRoleType(Integer roleType)
-    {
-        this.roleType = roleType;
-    }
+    private Integer enabled;
 
     public Long getManagerId()
     {
@@ -31,6 +21,26 @@ public class ManagerVO
     public void setManagerId(Long managerId)
     {
         this.managerId = managerId;
+    }
+
+    public Long getGroupId()
+    {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId)
+    {
+        this.groupId = groupId;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getName()
@@ -63,14 +73,14 @@ public class ManagerVO
         this.qq = qq;
     }
 
-    public Long getRoleId()
+    public List<Long> getPrivilege()
     {
-        return roleId;
+        return privilege;
     }
 
-    public void setRoleId(Long roleId)
+    public void setPrivilege(List<Long> privilege)
     {
-        this.roleId = roleId;
+        this.privilege = privilege;
     }
 
     public Integer getEnabled()
@@ -81,15 +91,5 @@ public class ManagerVO
     public void setEnabled(Integer enabled)
     {
         this.enabled = enabled;
-    }
-
-    public List<Long> getPrivilege()
-    {
-        return privilege;
-    }
-
-    public void setPrivilege(List<Long> privilege)
-    {
-        this.privilege = privilege;
     }
 }
