@@ -5,17 +5,17 @@
     <parent>
         <groupId>com.mingdong</groupId>
         <artifactId>metadata-master</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.1</version>
     </parent>
 
     <artifactId>metadata-mis</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1</version>
 
     <dependencies>
         <dependency>
             <groupId>com.mingdong</groupId>
             <artifactId>metadata-core</artifactId>
-            <version>1.0.0</version>
+            <version>0.0.1</version>
         </dependency>
         <!-- spring-boot -->
         <dependency>
