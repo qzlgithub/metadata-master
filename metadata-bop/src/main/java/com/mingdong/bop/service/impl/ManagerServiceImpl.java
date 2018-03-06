@@ -155,6 +155,7 @@ public class ManagerServiceImpl implements ManagerService
                 map.put(Field.ID, manager.getManagerId() + "");
                 map.put(Field.USERNAME, manager.getUsername());
                 map.put(Field.ROLE_NAME, manager.getRoleName());
+                map.put(Field.GROUP_NAME,manager.getGroupName());
                 map.put(Field.NAME, manager.getName());
                 map.put(Field.PHONE, manager.getPhone());
                 map.put(Field.REGISTER_DATE, DateUtils.format(manager.getRegisterTime(), DateFormat.YYYY_MM_DD));

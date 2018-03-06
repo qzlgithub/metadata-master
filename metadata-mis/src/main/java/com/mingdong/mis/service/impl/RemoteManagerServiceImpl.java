@@ -10,6 +10,7 @@ import com.mingdong.core.constant.RoleEnum;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
@@ -17,7 +18,6 @@ import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.EntityUtils;
@@ -26,10 +26,12 @@ import com.mingdong.mis.domain.entity.Group;
 import com.mingdong.mis.domain.entity.GroupFunction;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.entity.UserFunction;
+import com.mingdong.mis.domain.entity.UserInfo;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.GroupFunctionMapper;
 import com.mingdong.mis.domain.mapper.GroupMapper;
 import com.mingdong.mis.domain.mapper.UserFunctionMapper;
+import com.mingdong.mis.domain.mapper.UserInfoMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +54,8 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     private UserFunctionMapper userFunctionMapper;
     @Resource
     private FunctionMapper functionMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @Override
     public AdminSessionDTO adminLogin(LoginDTO loginDTO)
@@ -207,21 +211,23 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         ManagerInfoDTO managerInfoDTO;
         if(page == null)
         {
-            List<User> userInfoList = userMapper.getListBy(roleCode, enabled);
+            List<UserInfo> userInfoList = userInfoMapper.getListBy(roleCode, enabled);
             if(!CollectionUtils.isEmpty(userInfoList))
             {
-                for(User item : userInfoList)
+                for(UserInfo item : userInfoList)
                 {
                     managerInfoDTO = new ManagerInfoDTO();
                     managerInfoDTO.setEnabled(item.getEnabled());
-                    managerInfoDTO.setManagerId(item.getId());
+                    managerInfoDTO.setManagerId(item.getManagerId());
                     managerInfoDTO.setName(item.getName());
                     managerInfoDTO.setPhone(item.getPhone());
-                    managerInfoDTO.setRegisterTime(item.getCreateTime());
+                    managerInfoDTO.setRegisterTime(item.getRegisterTime());
                     //                    managerInfoDTO.setRoleId(item.getRoleId());
                     managerInfoDTO.setUsername(item.getUsername());
                     managerInfoDTO.setRoleCode(item.getRoleCode());
                     managerInfoDTO.setRoleName(RoleEnum.getNameByCode(item.getRoleCode()));
+                    managerInfoDTO.setGroupId(item.getGroupId());
+                    managerInfoDTO.setGroupName(item.getGroupName());
                     dataList.add(managerInfoDTO);
                 }
             }
@@ -235,21 +241,23 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<User> userInfoList = userMapper.getListBy(roleCode, enabled);
+                List<UserInfo> userInfoList = userInfoMapper.getListBy(roleCode, enabled);
                 if(!CollectionUtils.isEmpty(userInfoList))
                 {
-                    for(User item : userInfoList)
+                    for(UserInfo item : userInfoList)
                     {
                         managerInfoDTO = new ManagerInfoDTO();
                         managerInfoDTO.setEnabled(item.getEnabled());
-                        managerInfoDTO.setManagerId(item.getId());
+                        managerInfoDTO.setManagerId(item.getManagerId());
                         managerInfoDTO.setName(item.getName());
                         managerInfoDTO.setPhone(item.getPhone());
-                        managerInfoDTO.setRegisterTime(item.getCreateTime());
+                        managerInfoDTO.setRegisterTime(item.getRegisterTime());
                         //                    managerInfoDTO.setRoleId(item.getRoleId());
                         managerInfoDTO.setRoleCode(item.getRoleCode());
                         managerInfoDTO.setUsername(item.getUsername());
                         managerInfoDTO.setRoleName(RoleEnum.getNameByCode(item.getRoleCode()));
+                        managerInfoDTO.setGroupId(item.getGroupId());
+                        managerInfoDTO.setGroupName(item.getGroupName());
                         dataList.add(managerInfoDTO);
                     }
                 }
