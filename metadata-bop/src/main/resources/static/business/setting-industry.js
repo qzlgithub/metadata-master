@@ -17,7 +17,13 @@ layui.config({
     });
     form.on('switch(switchTest)', function() {
         var id = $(this).parent().attr("obj-id");
-        enable_recharge_type(id, this.checked);
+        var checked = this.checked;
+        var parent = $(this).data('parent');
+        if(parent) {
+            $(".switch-" + parent).prop("checked", checked);
+        }
+        enable_recharge_type(id, checked);
+        form.render('checkbox');
     });
 });
 
