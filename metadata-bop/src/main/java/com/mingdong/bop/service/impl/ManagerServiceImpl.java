@@ -178,7 +178,7 @@ public class ManagerServiceImpl implements ManagerService
         data.put(Field.PHONE, userInfoDTO.getPhone());
         data.put(Field.QQ, userInfoDTO.getQq());
         data.put(Field.ROLE_ID, userInfoDTO.getGroupId());
-        data.put(Field.ROLE_CODE, userInfoDTO.getRoleType());
+        data.put(Field.ROLE_TYPE, userInfoDTO.getRoleType());
         data.put(Field.ENABLED, userInfoDTO.getEnabled());
         List<String> privilege = new ArrayList<>();
         if(!CollectionUtils.isEmpty(userInfoDTO.getPrivilegeIdList()))
