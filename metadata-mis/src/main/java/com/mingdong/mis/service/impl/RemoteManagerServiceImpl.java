@@ -12,7 +12,7 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -104,16 +104,16 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public ManagerDTO getManagerById(Long managerId)
+    public AdminUserDTO getManagerById(Long managerId)
     {
-        ManagerDTO managerDTO = new ManagerDTO();
+        AdminUserDTO adminUserDTO = new AdminUserDTO();
         User byId = userMapper.findById(managerId);
         if(byId == null)
         {
             return null;
         }
-        EntityUtils.copyProperties(byId, managerDTO);
-        return managerDTO;
+        EntityUtils.copyProperties(byId, adminUserDTO);
+        return adminUserDTO;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO editAdminUser(ManagerDTO userDTO)
+    public ResultDTO editAdminUser(AdminUserDTO userDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
         User user = userMapper.findById(userDTO.getUserId());
@@ -303,7 +303,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
     @Override
     @Transactional
-    public ResultDTO addAdminUser(ManagerDTO userDTO)
+    public ResultDTO addAdminUser(AdminUserDTO userDTO)
     {
         ResultDTO resultDTO = new ResultDTO();
         User user = userMapper.findByUsername(userDTO.getUsername());

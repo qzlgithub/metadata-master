@@ -22,7 +22,7 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -203,7 +203,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void addAdminUser(NewManagerVO newManagerVO, RestResp resp)
     {
-        ManagerDTO userDTO = new ManagerDTO();
+        AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setRoleType(newManagerVO.getRoleType());
         userDTO.setGroupId(newManagerVO.getGroupId());
         userDTO.setUsername(newManagerVO.getUsername());
@@ -220,7 +220,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void editAdminUser(AdminUserVO adminUserVO, RestResp resp)
     {
-        ManagerDTO userDTO = new ManagerDTO();
+        AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setUserId(adminUserVO.getManagerId());
         userDTO.setGroupId(adminUserVO.getGroupId());
         userDTO.setName(adminUserVO.getName());

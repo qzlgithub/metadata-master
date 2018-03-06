@@ -6,7 +6,7 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.ManagerDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
@@ -21,14 +21,14 @@ public interface RemoteManagerService
     /**
      * 根据管理员id获取管理员信息
      */
-    ManagerDTO getManagerById(Long managerId);
+    AdminUserDTO getManagerById(Long managerId);
 
     UserInfoDTO getAccountInfo(Long userId);
 
     /**
      * 编辑管理账号的基本信息及权限配置
      */
-    ResultDTO editAdminUser(ManagerDTO userDTO);
+    ResultDTO editAdminUser(AdminUserDTO userDTO);
 
     /**
      * 检测角色名称是否已存在
@@ -55,7 +55,7 @@ public interface RemoteManagerService
     /**
      * 新增管理员并赋权
      */
-    ResultDTO addAdminUser(ManagerDTO userDTO);
+    ResultDTO addAdminUser(AdminUserDTO userDTO);
 
     /**
      * 变更账户角色状态
