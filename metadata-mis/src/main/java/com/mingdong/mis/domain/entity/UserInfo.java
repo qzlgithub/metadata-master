@@ -1,30 +1,18 @@
-package com.mingdong.core.model.dto;
+package com.mingdong.mis.domain.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class ManagerInfoDTO implements Serializable
+public class UserInfo
 {
     private Long managerId;
     private String name;
     private String phone;
     private String username;
     private Long groupId;
-    private String roleCode;
-    private String roleName;
+    private String groupName;
     private Date registerTime;
     private Integer enabled;
-    private String groupName;
-
-    public String getGroupName()
-    {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName)
-    {
-        this.groupName = groupName;
-    }
+    private String roleCode;
 
     public String getRoleCode()
     {
@@ -34,6 +22,26 @@ public class ManagerInfoDTO implements Serializable
     public void setRoleCode(String roleCode)
     {
         this.roleCode = roleCode;
+    }
+
+    public Long getGroupId()
+    {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId)
+    {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName()
+    {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName)
+    {
+        this.groupName = groupName;
     }
 
     public Long getManagerId()
@@ -74,26 +82,6 @@ public class ManagerInfoDTO implements Serializable
     public void setUsername(String username)
     {
         this.username = username;
-    }
-
-    public Long getGroupId()
-    {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId)
-    {
-        this.groupId = groupId;
-    }
-
-    public String getRoleName()
-    {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName)
-    {
-        this.roleName = roleName;
     }
 
     public Date getRegisterTime()
