@@ -15,7 +15,7 @@ public interface UserMapper
 
     User findByUsername(String username);
 
-    int countBy(@Param("roleCode") String roleCode, @Param("enabled") Integer enabled);
+    int countBy(@Param("roleType") Integer roleType, @Param("enabled") Integer enabled);
 
-    List<User> getListBy(@Param("roleCode") String roleCode, @Param("enabled") Integer enabled);
+    List<User> getListBy(@Param("roleType") Integer roleType, @Param("enabled") Integer enabled);
 }

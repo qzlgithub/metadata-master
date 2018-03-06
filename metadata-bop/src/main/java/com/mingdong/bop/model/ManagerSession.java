@@ -5,21 +5,11 @@ import java.util.List;
 public class ManagerSession
 {
     private Long managerId;
+    private Integer roleType;
     private String name;
-    private String roleCode;
     private String avatar;
     private List<String> privileges;
     private Long addAt;
-
-    public String getRoleCode()
-    {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode)
-    {
-        this.roleCode = roleCode;
-    }
 
     public Long getManagerId()
     {
@@ -29,6 +19,16 @@ public class ManagerSession
     public void setManagerId(Long managerId)
     {
         this.managerId = managerId;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getName()

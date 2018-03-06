@@ -38,7 +38,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter
             response.sendRedirect("/index.html");
             return false;
         }
-        RequestThread.set(ms.getManagerId(), ms.getName(), ms.getRoleCode(), ms.getPrivileges());
+        RequestThread.set(ms.getManagerId(), ms.getName(), ms.getRoleType(), ms.getPrivileges());
         String module = ModulePath.getByPath(path);
         RequestThread.setModule(module != null ? module : "");
         Map<String, String> system = redisDao.getSystemModule();

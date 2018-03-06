@@ -14,14 +14,14 @@ layui.config({
         limits: [10, 15, 30, 50],
         url: '/account/list',
         where: {
-            roleCode: $("#roleCode").val(),
+            roleType: $("#roleType").val(),
             enabled: $("#enabled").val()
         },
         cols: [[
             {field: 'username', title: '用户名', width: '10%'},
             {field: 'name', title: '姓名', width: '15%'},
             {field: 'phone', title: '联系电话', width: '10%'},
-            {field: 'roleName', title: '角色', width: '15%'},
+            {title: '角色', width: '15%', templet: "#roleTypeTpl"},
             {field: 'groupName', title: '分组', width: '15%'},
             {title: '状态', width: '10%', templet: "#status-tpl"},
             {field: 'registerDate', title: '注册日期', sort: true, width: '10%'},
@@ -42,7 +42,7 @@ layui.config({
         var params = data.field;
         main_table.reload({
             where: {
-                roleCode: params["roleCode"],
+                roleType: params["roleType"],
                 enabled: params['enabled']
             },
             page: {
@@ -86,39 +86,3 @@ layui.config({
         }
     });
 });
-
-function changeStatus(id) {
-    layer.confirm('是否确定？', {
-        btn: ['确定', '取消'],
-        yes: function() {
-            $(this).click();
-            $.ajax({
-                type: "POST",
-                url: "/account/status",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({"id": id}),
-                success: function(res) {
-                    if(res.code === '000000') {
-                        var obj = res.data;
-                        if(obj.enabled === 1) {
-                            layer.msg("启用成功", {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            layer.msg("禁用成功", {
-                                time: 2000
-                            });
-                        }
-                        main_table.reload();
-                    }
-                }
-            });
-            layer.closeAll();
-        },
-        btn2: function() {
-            layer.closeAll();
-        }
-    });
-}

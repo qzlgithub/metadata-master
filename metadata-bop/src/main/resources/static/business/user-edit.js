@@ -64,7 +64,7 @@ function checkSubPrivAllChecked() {
 function saveManager() {
     var managerId = $("#managerId").val();
     var roleId = $("#roleId").val();
-    var roleCode = $("#roleCode").val();
+    var roleType = $("#roleType").val();
     var username = $("#username").val();
     var name = $("#name").val();
     var phone = $("#phone").val();
@@ -79,7 +79,7 @@ function saveManager() {
         data: JSON.stringify({
             "managerId": managerId,
             "roleId": roleId,
-            "roleCode": roleCode,
+            "roleType": roleType,
             "username": username,
             "name": name,
             "phone": phone,

@@ -16,19 +16,19 @@ public class ManagerDTO implements Serializable
     private String phone;
     private String qq;
     private Long groupId;
-    private String roleCode;
+    private Integer roleType;
     private Integer enabled;
     private String sessionId;
     private ResultDTO resultDTO;
 
-    public String getRoleCode()
+    public Integer getRoleType()
     {
-        return roleCode;
+        return roleType;
     }
 
-    public void setRoleCode(String roleCode)
+    public void setRoleType(Integer roleType)
     {
-        this.roleCode = roleCode;
+        this.roleType = roleType;
     }
 
     public ManagerDTO()

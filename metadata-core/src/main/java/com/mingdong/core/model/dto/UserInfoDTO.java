@@ -10,18 +10,18 @@ public class UserInfoDTO implements Serializable
     private String phone;
     private String qq;
     private Long groupId;
-    private String roleCode;
+    private Integer roleType;
     private Integer enabled;
     private List<Long> privilegeIdList;
 
-    public String getRoleCode()
+    public Integer getRoleType()
     {
-        return roleCode;
+        return roleType;
     }
 
-    public void setRoleCode(String roleCode)
+    public void setRoleType(Integer roleType)
     {
-        this.roleCode = roleCode;
+        this.roleType = roleType;
     }
 
     public String getUsername()

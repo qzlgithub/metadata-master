@@ -6,35 +6,14 @@ import java.util.Date;
 public class ManagerInfoDTO implements Serializable
 {
     private Long managerId;
+    private Integer roleType;
     private String name;
     private String phone;
     private String username;
     private Long groupId;
-    private String roleCode;
-    private String roleName;
     private Date registerTime;
     private Integer enabled;
     private String groupName;
-
-    public String getGroupName()
-    {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName)
-    {
-        this.groupName = groupName;
-    }
-
-    public String getRoleCode()
-    {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode)
-    {
-        this.roleCode = roleCode;
-    }
 
     public Long getManagerId()
     {
@@ -44,6 +23,16 @@ public class ManagerInfoDTO implements Serializable
     public void setManagerId(Long managerId)
     {
         this.managerId = managerId;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getName()
@@ -86,16 +75,6 @@ public class ManagerInfoDTO implements Serializable
         this.groupId = groupId;
     }
 
-    public String getRoleName()
-    {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName)
-    {
-        this.roleName = roleName;
-    }
-
     public Date getRegisterTime()
     {
         return registerTime;
@@ -114,5 +93,15 @@ public class ManagerInfoDTO implements Serializable
     public void setEnabled(Integer enabled)
     {
         this.enabled = enabled;
+    }
+
+    public String getGroupName()
+    {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName)
+    {
+        this.groupName = groupName;
     }
 }

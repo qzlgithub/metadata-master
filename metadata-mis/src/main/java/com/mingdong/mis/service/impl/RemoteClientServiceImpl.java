@@ -521,16 +521,10 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public UserDTO findByUsername(String username)
+    public Integer checkIfClientExist(String username)
     {
         ClientUser user = clientUserMapper.findByUsername(username);
-        if(user == null)
-        {
-            return null;
-        }
-        UserDTO userDTO = new UserDTO();
-        TransformDTO.userToDTO(user, userDTO);
-        return userDTO;
+        return user != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override

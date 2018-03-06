@@ -5,6 +5,7 @@ import java.util.Date;
 public class UserInfo
 {
     private Long managerId;
+    private Integer roleType;
     private String name;
     private String phone;
     private String username;
@@ -12,37 +13,6 @@ public class UserInfo
     private String groupName;
     private Date registerTime;
     private Integer enabled;
-    private String roleCode;
-
-    public String getRoleCode()
-    {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode)
-    {
-        this.roleCode = roleCode;
-    }
-
-    public Long getGroupId()
-    {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId)
-    {
-        this.groupId = groupId;
-    }
-
-    public String getGroupName()
-    {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName)
-    {
-        this.groupName = groupName;
-    }
 
     public Long getManagerId()
     {
@@ -52,6 +22,16 @@ public class UserInfo
     public void setManagerId(Long managerId)
     {
         this.managerId = managerId;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getName()
@@ -82,6 +62,26 @@ public class UserInfo
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public Long getGroupId()
+    {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId)
+    {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName()
+    {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName)
+    {
+        this.groupName = groupName;
     }
 
     public Date getRegisterTime()
