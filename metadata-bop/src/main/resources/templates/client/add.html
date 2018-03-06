@@ -83,16 +83,6 @@
                         </div>
                     </div>
                     <div class="layui-form-item" style="display: none;">
-                        <label class="layui-form-label"><i class="col3">*</i>商务经理：</label>
-                        <div class="layui-input-block clearfix">
-                            <select id="managerId" name="managerId" class="select-list" style="width: 98%">
-                                <option th:each="managerItem:${managerList}" th:value="${managerItem.id}"
-                                        th:text="${managerItem.name}"
-                                        th:selected="${managerItem.id} eq ${managerId}"></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item" style="display: none;">
                         <label class="layui-form-label">账号状态：</label>
                         <div class="layui-input-block layui-form">
                             <input type="radio" name="enabled" value="1" title="正常" checked=""/>
@@ -109,8 +99,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人：</label>
                     <div class="layui-input-block layui-form">
-                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="addcontacts"><i
-                                class="layui-icon"></i>添加联系人</span>
+                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="addcontacts">
+                            <i class="layui-icon"></i>添加联系人
+                        </span>
                         <em class="col3">至少添加一位联系人</em>
                     </div>
                 </div>

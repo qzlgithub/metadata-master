@@ -30,10 +30,10 @@
                 <li>
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-inline" style="width: 180px">
-                        <select id="roleCode" name="roleCode">
+                        <select id="roleType" name="roleType">
                             <option value="">全部</option>
-                            <option value="SALESMAN" >业务员</option>
-                            <option value="MANAGER" >管理员</option>
+                            <option value="1">管理员</option>
+                            <option value="2">业务员</option>
                         </select>
                     </div>
                 </li>
@@ -79,6 +79,13 @@
     <div>正常</div>
     {{# } else { }}
     <div>已禁用</div>
+    {{# } }}
+</script>
+<script type="text/html" id="roleTypeTpl">
+    {{# if(d.roleType === 1){ }}
+    <div>管理员</div>
+    {{# } else if(d.roleType === 2) { }}
+    <div>业务员</div>
     {{# } }}
 </script>
 </body>

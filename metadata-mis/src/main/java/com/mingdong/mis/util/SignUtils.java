@@ -61,19 +61,14 @@ public class SignUtils
     public static void main(String[] args) throws MetadataCoreException
     {
         Map<String, Object> m = new HashMap<>();
-        m.put("idNo", "413001197306040513");
-        m.put("name", "詹海欧");
-        m.put("phone", "13911059220");
+        m.put("idNo", "330721198910115417");
+        m.put("name", "祝俊");
+        m.put("phone", "18868429798");
         m.put("timestamp", 1234567890);
-        //        m.put("orderNo", "6367286835493068800");
         SortedMap sm = MapUtils.sortKey(m);
         String str = JSON.toJSONString(sm);
         System.out.println("str: " + str);
-        String[] keys = {"8a4b2c4dbaa8441da4bcf960a9fc6bb6", "ae4424f35023493ebeb2b395bf4319b7",
-                "35e57260f7134c73a687018c8e3362b4", "3478c0f522404708aee59c0f851021cb",
-                "bc550ba163fd4dca86f94a531757a318", "093d2fa5d213409d8b169f50861040f2",
-                "78b49616e5c34940997bc7d15d350c24", "33ed867e46cc45ef94fcb171926636a8",
-                "71740c1021954947a26fba0cdb79a556", "eea8b73ae58a4fc4b952df1a0d8e15e9"};
+        String[] keys = {"8c8c0eaf81a84a809d8f3acce71905b1"};
         for(String key : keys)
         {
             String sign = sign(str, key);

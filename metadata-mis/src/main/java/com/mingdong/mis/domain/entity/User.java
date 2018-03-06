@@ -7,6 +7,7 @@ public class User
     private Long id;
     private Date createTime;
     private Date updateTime;
+    private Integer roleType;
     private String username;
     private String password;
     private String name;
@@ -15,17 +16,6 @@ public class User
     private Long groupId;
     private Integer enabled;
     private String sessionId;
-    private String roleCode;
-
-    public String getRoleCode()
-    {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode)
-    {
-        this.roleCode = roleCode;
-    }
 
     public Long getId()
     {
@@ -55,6 +45,16 @@ public class User
     public void setUpdateTime(Date updateTime)
     {
         this.updateTime = updateTime;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getUsername()

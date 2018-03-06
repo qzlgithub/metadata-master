@@ -6,21 +6,11 @@ import java.util.Map;
 public class RequestHolder
 {
     private Long iId;
-    private String iRoleCode;
+    private Integer roleType;
     private String iName;
     private String iModule;
     private List<String> iPrivilege;
     private Map<String, String> iSystem;
-
-    public String getiRoleCode()
-    {
-        return iRoleCode;
-    }
-
-    public void setiRoleCode(String iRoleCode)
-    {
-        this.iRoleCode = iRoleCode;
-    }
 
     public Long getiId()
     {
@@ -30,6 +20,16 @@ public class RequestHolder
     public void setiId(Long iId)
     {
         this.iId = iId;
+    }
+
+    public Integer getRoleType()
+    {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType)
+    {
+        this.roleType = roleType;
     }
 
     public String getiName()

@@ -77,7 +77,8 @@ public class ClientController
             enabled = null;
         }
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
-        clientService.getClientList(keyword, parentIndustryId, industryId, enabled, RequestThread.isManager()?null:RequestThread.getOperatorId(), page, res);
+        clientService.getClientList(keyword, parentIndustryId, industryId, enabled,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), page, res);
         return res;
     }
 

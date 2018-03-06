@@ -6,7 +6,6 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.constant.RoleEnum;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
@@ -100,7 +99,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
 
         adminSessionDTO.setUserId(manager.getId());
         adminSessionDTO.setName(manager.getName());
-        adminSessionDTO.setRoleCode(manager.getRoleCode());
+        adminSessionDTO.setRoleType(manager.getRoleType());
         adminSessionDTO.setFunctionList(privilegeListDTO.getList());
         return adminSessionDTO;
     }
@@ -132,7 +131,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
             userInfoDTO.setQq(user.getQq());
             userInfoDTO.setGroupId(user.getGroupId());
             userInfoDTO.setEnabled(user.getEnabled());
-            userInfoDTO.setRoleCode(user.getRoleCode());
+            userInfoDTO.setRoleType(user.getRoleType());
             // 用户权限信息
             List<UserFunction> userFunctionList = userFunctionMapper.getListByUser(userId);
             if(!CollectionUtils.isEmpty(userFunctionList))
@@ -188,7 +187,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         user.setName(managerDTO.getName());
         user.setPhone(managerDTO.getPhone());
         user.setQq(managerDTO.getQq());
-        user.setRoleCode(managerDTO.getRoleCode());
+        user.setRoleType(managerDTO.getRoleType());
         user.setUsername(managerDTO.getUsername());
         userMapper.updateSkipNull(user);
         resultDTO.setResult(RestResult.SUCCESS);
@@ -196,14 +195,14 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public Integer isRoleNameExist(String name)
+    public Integer checkIfGroupExist(String name)
     {
         Group role = groupMapper.findByName(name);
         return role != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override
-    public ManagerInfoListDTO getManagerInfoList(String roleCode, Integer enabled, Page page)
+    public ManagerInfoListDTO getManagerInfoList(Integer roleType, Integer enabled, Page page)
     {
         ManagerInfoListDTO managerListDTO = new ManagerInfoListDTO();
         List<ManagerInfoDTO> dataList = new ArrayList<>();
@@ -211,7 +210,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         ManagerInfoDTO managerInfoDTO;
         if(page == null)
         {
-            List<UserInfo> userInfoList = userInfoMapper.getListBy(roleCode, enabled);
+            List<UserInfo> userInfoList = userInfoMapper.getListBy(roleType, enabled);
             if(!CollectionUtils.isEmpty(userInfoList))
             {
                 for(UserInfo item : userInfoList)
@@ -222,10 +221,8 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
                     managerInfoDTO.setName(item.getName());
                     managerInfoDTO.setPhone(item.getPhone());
                     managerInfoDTO.setRegisterTime(item.getRegisterTime());
-                    //                    managerInfoDTO.setRoleId(item.getRoleId());
                     managerInfoDTO.setUsername(item.getUsername());
-                    managerInfoDTO.setRoleCode(item.getRoleCode());
-                    managerInfoDTO.setRoleName(RoleEnum.getNameByCode(item.getRoleCode()));
+                    managerInfoDTO.setRoleType(item.getRoleType());
                     managerInfoDTO.setGroupId(item.getGroupId());
                     managerInfoDTO.setGroupName(item.getGroupName());
                     dataList.add(managerInfoDTO);
@@ -234,14 +231,14 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         else
         {
-            int total = userMapper.countBy(roleCode, enabled);
+            int total = userMapper.countBy(roleType, enabled);
             int pages = page.getTotalPage(total);
             managerListDTO.setPages(pages);
             managerListDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<UserInfo> userInfoList = userInfoMapper.getListBy(roleCode, enabled);
+                List<UserInfo> userInfoList = userInfoMapper.getListBy(roleType, enabled);
                 if(!CollectionUtils.isEmpty(userInfoList))
                 {
                     for(UserInfo item : userInfoList)
@@ -252,10 +249,8 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
                         managerInfoDTO.setName(item.getName());
                         managerInfoDTO.setPhone(item.getPhone());
                         managerInfoDTO.setRegisterTime(item.getRegisterTime());
-                        //                    managerInfoDTO.setRoleId(item.getRoleId());
-                        managerInfoDTO.setRoleCode(item.getRoleCode());
+                        managerInfoDTO.setRoleType(item.getRoleType());
                         managerInfoDTO.setUsername(item.getUsername());
-                        managerInfoDTO.setRoleName(RoleEnum.getNameByCode(item.getRoleCode()));
                         managerInfoDTO.setGroupId(item.getGroupId());
                         managerInfoDTO.setGroupName(item.getGroupName());
                         dataList.add(managerInfoDTO);
@@ -348,7 +343,7 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         user.setName(managerDTO.getName());
         user.setPhone(managerDTO.getPhone());
         user.setQq(managerDTO.getQq());
-        user.setRoleCode(managerDTO.getRoleCode());
+        user.setRoleType(managerDTO.getRoleType());
         user.setUsername(managerDTO.getUsername());
         userMapper.add(user);
         resultDTO.setResult(RestResult.SUCCESS);

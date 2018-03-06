@@ -8,7 +8,7 @@
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="group_id" property="groupId" jdbcType="BIGINT" />
         <result column="group_name" property="groupName" jdbcType="VARCHAR" />
-        <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+        <result column="role_type" property="roleType" jdbcType="INTEGER" />
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
     </resultMap>
@@ -20,7 +20,7 @@
             m.`name`        as name,
             m.`phone`       as phone,
             m.`username`    as username,
-            m.`role_code`   as role_code,
+            m.`role_type`   as role_type,
             r.`id`          as group_id,
             r.`name`        as group_name,
             m.`create_time` as register_time,
@@ -29,7 +29,7 @@
             left join `group` r
                 on m.`group_id` = r.`id`
         <where>
-            <if test="roleCode != null">m.`role_code` = #{roleCode}</if>
+            <if test="roleType != null">m.`role_type` = #{roleType}</if>
             <if test="enabled != null">and m.`enabled` = #{enabled}</if>
         </where>
     </select>

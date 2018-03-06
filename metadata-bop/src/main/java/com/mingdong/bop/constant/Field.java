@@ -154,4 +154,5 @@ public interface Field
     String ROLE_DICT = "roleDict";
     String IS_MANAGER = "isManager";
     String GROUP_NAME = "groupName";
+    String ROLE_TYPE = "roleType";
 }

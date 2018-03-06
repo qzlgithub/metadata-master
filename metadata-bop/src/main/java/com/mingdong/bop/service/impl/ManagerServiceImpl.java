@@ -19,6 +19,7 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
@@ -26,7 +27,6 @@ import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
 import com.mingdong.core.util.IDUtils;
@@ -73,7 +73,7 @@ public class ManagerServiceImpl implements ManagerService
         ms.setName(adminSessionDTO.getName());
         ms.setPrivileges(adminSessionDTO.getFunctionList());
         ms.setAddAt(System.currentTimeMillis());
-        ms.setRoleCode(adminSessionDTO.getRoleCode());
+        ms.setRoleType(adminSessionDTO.getRoleType());
         redisDao.saveManagerSession(sessionId, ms);
         resp.addData(Field.NAME, adminSessionDTO.getName());
     }
@@ -141,9 +141,9 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void getManagerList(String roleCode, Integer enabled, Page page, RestListResp res)
+    public void getManagerList(Integer roleType, Integer enabled, Page page, RestListResp res)
     {
-        ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleCode, enabled, page);
+        ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleType, enabled, page);
         res.setTotal(managerListDTO.getTotal());
         List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
         List<Map<String, Object>> list = new ArrayList<>(managerList.size());
@@ -154,8 +154,8 @@ public class ManagerServiceImpl implements ManagerService
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, manager.getManagerId() + "");
                 map.put(Field.USERNAME, manager.getUsername());
-                map.put(Field.ROLE_NAME, manager.getRoleName());
-                map.put(Field.GROUP_NAME,manager.getGroupName());
+                map.put(Field.ROLE_TYPE, manager.getRoleType());
+                map.put(Field.GROUP_NAME, manager.getGroupName());
                 map.put(Field.NAME, manager.getName());
                 map.put(Field.PHONE, manager.getPhone());
                 map.put(Field.REGISTER_DATE, DateUtils.format(manager.getRegisterTime(), DateFormat.YYYY_MM_DD));
@@ -178,7 +178,7 @@ public class ManagerServiceImpl implements ManagerService
         data.put(Field.PHONE, userInfoDTO.getPhone());
         data.put(Field.QQ, userInfoDTO.getQq());
         data.put(Field.ROLE_ID, userInfoDTO.getGroupId());
-        data.put(Field.ROLE_CODE, userInfoDTO.getRoleCode());
+        data.put(Field.ROLE_CODE, userInfoDTO.getRoleType());
         data.put(Field.ENABLED, userInfoDTO.getEnabled());
         List<String> privilege = new ArrayList<>();
         if(!CollectionUtils.isEmpty(userInfoDTO.getPrivilegeIdList()))
@@ -220,7 +220,7 @@ public class ManagerServiceImpl implements ManagerService
         manager.setQq(newManagerVO.getQq());
         manager.setGroupId(newManagerVO.getRoleId());
         manager.setEnabled(newManagerVO.getEnabled());
-        manager.setRoleCode(newManagerVO.getRoleCode());
+        manager.setRoleType(newManagerVO.getRoleType());
         newManager.setManagerDTO(manager);
         newManager.setPrivilege(newManagerVO.getPrivilege());
         ResultDTO resultDTO = remoteManagerService.addManager(newManager);
@@ -240,7 +240,7 @@ public class ManagerServiceImpl implements ManagerService
         manager.setPhone(vo.getPhone());
         manager.setQq(vo.getQq());
         manager.setEnabled(vo.getEnabled());
-        manager.setRoleCode(vo.getRoleCode());
+        manager.setRoleType(vo.getRoleType());
         newManager.setManagerDTO(manager);
         newManager.setPrivilege(vo.getPrivilege());
         ResultDTO resultDTO = remoteManagerService.updateManagerSkipNull(newManager);
@@ -293,9 +293,9 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void checkIfRoleNameExist(String name, RestResp resp)
+    public void checkIfGroupExist(String name, RestResp resp)
     {
-        resp.addData(Field.EXIST, remoteManagerService.isRoleNameExist(name));
+        resp.addData(Field.EXIST, remoteManagerService.checkIfGroupExist(name));
     }
 
     @Override

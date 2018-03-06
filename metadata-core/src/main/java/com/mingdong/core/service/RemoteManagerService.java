@@ -3,13 +3,13 @@ package com.mingdong.core.service;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerDTO;
 import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.NewManager;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
 public interface RemoteManagerService
@@ -36,12 +36,12 @@ public interface RemoteManagerService
      *
      * @return 1-存在，0-不存在
      */
-    Integer isRoleNameExist(String name);
+    Integer checkIfGroupExist(String name);
 
     /**
      * 根据条件获取管理员信息列表
      */
-    ManagerInfoListDTO getManagerInfoList(String roleCode, Integer enabled, Page page);
+    ManagerInfoListDTO getManagerInfoList(Integer roleType, Integer enabled, Page page);
 
     /**
      * 根据管理员id获取赋权信息列表
@@ -62,7 +62,7 @@ public interface RemoteManagerService
      * 变更账户角色状态
      *
      * @param groupId 角色ID
-     * @param status 状态：1-启用，2-禁用
+     * @param status  状态：1-启用，2-禁用
      */
     ResultDTO changeRoleStatus(Long groupId, Integer status);
 

@@ -11,6 +11,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.RoleType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
@@ -133,7 +134,7 @@ public class AccountController
     public Map<String, Object> checkIfRoleNameExist(@RequestParam(value = Field.NAME) String name)
     {
         RestResp resp = new RestResp();
-        managerService.checkIfRoleNameExist(name, resp);
+        managerService.checkIfGroupExist(name, resp);
         return resp.getData();
     }
 
@@ -142,7 +143,7 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/addition")
-    public RestResp addNewManager(@RequestBody NewManagerVO vo)
+    public RestResp addNewUser(@RequestBody NewManagerVO vo)
     {
         RestResp resp = new RestResp();
         // 校验各个字段值
@@ -177,23 +178,23 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/list")
-    public RestListResp getManagerList(@RequestParam(value = Field.ROLE_CODE, required = false) String roleCode,
+    public RestListResp getManagerList(@RequestParam(value = Field.ROLE_TYPE, required = false) Integer roleType,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestListResp res = new RestListResp();
         // 校验各个字段值
-        if(StringUtils.isNullBlank(roleCode))
+        if(RoleType.getById(roleType) == null)
         {
-            roleCode = null;
+            roleType = null;
         }
         if(!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(enabled))
         {
             enabled = null;
         }
         Page page = new Page(pageNum, pageSize);
-        managerService.getManagerList(roleCode, enabled, page, res);
+        managerService.getManagerList(roleType, enabled, page, res);
         return res;
     }
 

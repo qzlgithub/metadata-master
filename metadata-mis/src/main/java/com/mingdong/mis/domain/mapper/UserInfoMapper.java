@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface UserInfoMapper
 {
-    List<UserInfo> getListBy(@Param("roleCode") String roleCode, @Param("enabled") Integer enabled);
+    List<UserInfo> getListBy(@Param("roleType") Integer roleType, @Param("enabled") Integer enabled);
 }

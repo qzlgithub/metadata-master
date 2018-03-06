@@ -96,9 +96,11 @@ public interface RemoteClientService
     ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
 
     /**
-     * 根据username获取帐号信息
+     * 查询指定的客户用户名是否已被占用
+     *
+     * @return 1-已占用，0-未占用
      */
-    UserDTO findByUsername(String username);
+    Integer checkIfClientExist(String username);
 
     /**
      * 查看名称相似的客户信息列表
@@ -108,7 +110,8 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息
      */
-    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId, Page page);
+    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId,
+            Page page);
 
     /**
      * 根据客户ID将客户设置为删除

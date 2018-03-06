@@ -44,7 +44,7 @@ public interface ManagerService
     /**
      * 根据条件获取管理员列表
      */
-    void getManagerList(String roleCode, Integer enabled, Page page, RestListResp res);
+    void getManagerList(Integer roleType, Integer enabled, Page page, RestListResp res);
 
     /**
      * 获取用户信息
@@ -84,7 +84,7 @@ public interface ManagerService
     /**
      * 判断角色名称是否存在
      */
-    void checkIfRoleNameExist(String name, RestResp resp);
+    void checkIfGroupExist(String name, RestResp resp);
 
     /**
      * 根据enabled获取管理员信息列表

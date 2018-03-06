@@ -45,7 +45,6 @@ import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.service.RemoteSystemService;
@@ -87,8 +86,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void checkIfUsernameExist(String username, RestResp resp)
     {
-        UserDTO user = remoteClientService.findByUsername(username);
-        resp.addData(Field.EXIST, user == null ? 0 : 1);
+        resp.addData(Field.EXIST, remoteClientService.checkIfClientExist(username));
     }
 
     @Override

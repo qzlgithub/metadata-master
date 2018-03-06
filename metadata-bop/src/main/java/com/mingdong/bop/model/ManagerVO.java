@@ -9,29 +9,18 @@ public class ManagerVO
     private String phone;
     private String qq;
     private Long roleId;
-    private String roleCode;
-    private String roleName;
+    private Integer roleType;
     private Integer enabled;
     private List<Long> privilege;
 
-    public String getRoleCode()
+    public Integer getRoleType()
     {
-        return roleCode;
+        return roleType;
     }
 
-    public void setRoleCode(String roleCode)
+    public void setRoleType(Integer roleType)
     {
-        this.roleCode = roleCode;
-    }
-
-    public String getRoleName()
-    {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName)
-    {
-        this.roleName = roleName;
+        this.roleType = roleType;
     }
 
     public Long getManagerId()

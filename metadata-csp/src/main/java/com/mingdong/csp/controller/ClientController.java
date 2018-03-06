@@ -5,6 +5,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.csp.constant.Field;
@@ -29,7 +30,7 @@ public class ClientController
     /**
      * 用户登陆
      */
-    @PostMapping(value = "client/user/login")
+    @PostMapping(value = "/client/user/login")
     public RestResp userLogin(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -55,7 +56,7 @@ public class ClientController
     /**
      * 用户注销
      */
-    @PostMapping(value = "client/user/logout")
+    @PostMapping(value = "/client/user/logout")
     public RestResp userLogout(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
@@ -68,7 +69,7 @@ public class ClientController
      * 用户修改密码
      */
     @LoginRequired
-    @PostMapping(value = "client/user/password")
+    @PostMapping(value = "/client/user/password")
     public RestResp changePassword(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -87,7 +88,7 @@ public class ClientController
      * 获取用户产品凭证信息
      */
     @LoginRequired
-    @GetMapping(value = "client/user/credential")
+    @GetMapping(value = "/client/user/credential")
     public RestResp getUserCredential(@RequestParam(value = Field.PRODUCT_ID) Long productId,
             @RequestParam(value = Field.PASSWORD) String password)
     {
@@ -100,7 +101,7 @@ public class ClientController
      * 更新用户产品凭证信息
      */
     @LoginRequired
-    @PostMapping(value = "client/user/credential")
+    @PostMapping(value = "/client/user/credential")
     public RestResp saveUserCredential(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -120,7 +121,7 @@ public class ClientController
      * 添加子账号
      */
     @LoginRequired
-    @PostMapping(value = "client/account/addition")
+    @PostMapping(value = "/client/account/addition")
     public RestResp addAccount(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -142,7 +143,7 @@ public class ClientController
      * 获取子账号列表
      */
     @LoginRequired
-    @GetMapping(value = "client/sub-account/list")
+    @GetMapping(value = "/client/sub-account/list")
     public RestListResp getClientSubAccountList()
     {
         RestListResp res = new RestListResp();
@@ -154,10 +155,15 @@ public class ClientController
      * 子账号的启用禁用
      */
     @LoginRequired
-    @PostMapping(value = "client/changeStatus")
-    public RestResp changeStatus(@RequestBody JSONObject jsonObject)
+    @PostMapping(value = "/client/changeStatus")
+    public RestResp changeSubUserStatus(@RequestBody JSONObject jsonObject)
     {
         RestResp resp = new RestResp();
+        if(!TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
+        {
+            resp.setError(RestResult.ONLY_PRIMARY_USER);
+            return resp;
+        }
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
         clientService.changeStatus(RequestThread.getUserId(), clientUserId, resp);
         return resp;
