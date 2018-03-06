@@ -61,7 +61,7 @@ public class ClientServiceImpl implements ClientService
         }
         // 校验客户账号是否禁用
         Client client = clientMapper.findById(prodAcct.getClientId());
-        if(!TrueOrFalse.TRUE.equals(client.getEnabled()) || !TrueOrFalse.TRUE.equals(client.getDeleted()))
+        if(!TrueOrFalse.TRUE.equals(client.getEnabled()) || !TrueOrFalse.FALSE.equals(client.getDeleted()))
         {
             res.setResult(MetadataResult.RC_14); // 企业账号已被禁用
             return;
