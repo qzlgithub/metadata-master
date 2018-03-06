@@ -1,9 +1,10 @@
 var message;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'message'], function() {
+}).use(['app', 'message', 'form'], function() {
     var app = layui.app,
         $ = layui.jquery,
+        form = layui.form,
         layer = layui.layer;
     //将message设置为全局以便子页面调用
     message = layui.message;
