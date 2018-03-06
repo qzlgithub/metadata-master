@@ -44,7 +44,8 @@
                         <a class="w10 pt0 important">
                             <div class="layui-form" th:attr="obj-id=${parent.id}">
                                 <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                       class="parent-industry" th:checked="${parent.enabled == 1}"/>
+                                       class="parent-industry" th:checked="${parent.enabled == 1}"
+                                       th:attr="data-parent=${parent.id}"/>
                             </div>
                         </a>
                         <a class="w30">
@@ -62,7 +63,7 @@
                             <em class="w10 pt0 important">
                                 <div class="layui-form" th:attr="obj-id=${child.id}">
                                     <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
-                                           class="child-industry"
+                                           class="child-industry" th:attrappend="class=' switch-'+ ${child.parentId}"
                                            th:checked="${child.enabled == 1 &amp;&amp; parent.enabled == 1}"/>
                                 </div>
                             </em>

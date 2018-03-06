@@ -59,7 +59,7 @@
     </select>
 
     <select id="getByParentAndStatus" resultMap="BaseResultMap">
-        select `id`, `code`, `name`, `enabled` from `dict_industry`
+        select `id`, `code`, `name`, `enabled`,`parent_id` from `dict_industry`
         <where>
             <if test="parentId != null">`parent_id` = #{parentId}</if>
             <if test="enabled != null">and `enabled` = #{enabled}</if>

@@ -122,6 +122,7 @@ public class SystemServiceImpl implements SystemService
                 c.put(Field.CODE, ind.getCode());
                 c.put(Field.NAME, ind.getName());
                 c.put(Field.ENABLED, ind.getEnabled());
+                c.put(Field.PARENT_ID, ind.getParentId());
                 subList.add(c);
             }
             p.put(Field.SUB_LIST, subList);
