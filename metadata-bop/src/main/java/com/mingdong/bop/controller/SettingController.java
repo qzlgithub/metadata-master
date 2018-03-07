@@ -215,7 +215,7 @@ public class SettingController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        systemService.setModuleStatus(moduleIdList, status, resp);
+        systemService.setModuleStatus(moduleIdList, status);
         return resp;
     }
 

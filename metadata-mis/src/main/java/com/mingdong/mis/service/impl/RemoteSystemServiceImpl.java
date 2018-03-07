@@ -6,9 +6,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
@@ -46,23 +44,26 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     private SistemMapper sistemMapper;
 
     @Override
-    public DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse)
+    public ListDTO<DictIndustryDTO> getIndustryList(Long parentIndustryId, Integer enabled)
     {
-        DictIndustryListDTO dictIndustryListDTO = new DictIndustryListDTO();
-        List<DictIndustryDTO> dataList = new ArrayList<>();
-        dictIndustryListDTO.setDataList(dataList);
-        List<DictIndustry> dictIndustryList = dictIndustryMapper.getByParentAndStatus(parentIndustryId, trueOrFalse);
-        if(!CollectionUtils.isEmpty(dictIndustryList))
+        ListDTO<DictIndustryDTO> listDTO = new ListDTO<>();
+        List<DictIndustry> dataList = dictIndustryMapper.getByParentAndStatus(parentIndustryId, enabled);
+        if(!CollectionUtils.isEmpty(dataList))
         {
-            DictIndustryDTO dictIndustryDTO;
-            for(DictIndustry item : dictIndustryList)
+            List<DictIndustryDTO> list = new ArrayList<>(dataList.size());
+            for(DictIndustry o : dataList)
             {
-                dictIndustryDTO = new DictIndustryDTO();
-                EntityUtils.copyProperties(item, dictIndustryDTO);
-                dataList.add(dictIndustryDTO);
+                DictIndustryDTO di = new DictIndustryDTO();
+                di.setId(o.getId());
+                di.setCode(o.getCode());
+                di.setName(o.getName());
+                di.setEnabled(o.getEnabled());
+                di.setParentId(o.getParentId());
+                list.add(di);
             }
+            listDTO.setList(list);
         }
-        return dictIndustryListDTO;
+        return listDTO;
     }
 
     @Override
@@ -124,47 +125,52 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted)
+    public ListDTO<DictRechargeTypeDTO> getRechargeTypeList(Integer enabled, Integer deleted)
     {
-        DictRechargeTypeListDTO dictRechargeTypeListDTO = new DictRechargeTypeListDTO();
-        List<DictRechargeTypeDTO> dataList = new ArrayList<>();
-        dictRechargeTypeListDTO.setDataList(dataList);
-        DictRechargeTypeDTO dictRechargeTypeDTO;
+        ListDTO<DictRechargeTypeDTO> listDTO = new ListDTO<>();
         List<DictRechargeType> rechargeTypeList = dictRechargeTypeMapper.getListByStatus(enabled, deleted);
         if(!CollectionUtils.isEmpty(rechargeTypeList))
         {
-            for(DictRechargeType item : rechargeTypeList)
+            List<DictRechargeTypeDTO> list = new ArrayList<>();
+            for(DictRechargeType o : rechargeTypeList)
             {
-                dictRechargeTypeDTO = new DictRechargeTypeDTO();
-                EntityUtils.copyProperties(item, dictRechargeTypeDTO);
-                dataList.add(dictRechargeTypeDTO);
+                DictRechargeTypeDTO drt = new DictRechargeTypeDTO();
+                drt.setId(o.getId());
+                drt.setName(o.getName());
+                drt.setRemark(o.getRemark());
+                drt.setEnabled(o.getEnabled());
+                list.add(drt);
             }
+            listDTO.setList(list);
         }
-        return dictRechargeTypeListDTO;
+        return listDTO;
     }
 
     @Override
-    public DictIndustryListDTO getDictIndustryInfoList()
+    public ListDTO<DictIndustryDTO> getDictIndustryInfoList()
     {
-        DictIndustryListDTO dictIndustryListDTO = new DictIndustryListDTO();
-        List<DictIndustryDTO> dataList = new ArrayList<>();
-        dictIndustryListDTO.setDataList(dataList);
+        ListDTO<DictIndustryDTO> listDTO = new ListDTO<>();
         List<DictIndustry> dictIndustryList = dictIndustryMapper.getIndustryInfo();
         if(!CollectionUtils.isEmpty(dictIndustryList))
         {
-            findDictIndustryDTO(dictIndustryList, dataList);
+            List<DictIndustryDTO> list = new ArrayList<>(dictIndustryList.size());
+            for(DictIndustry o : dictIndustryList)
+            {
+                DictIndustryDTO di = new DictIndustryDTO();
+                di.setId(o.getId());
+                di.setName(o.getName());
+                list.add(di);
+            }
+            listDTO.setList(list);
         }
-        return dictIndustryListDTO;
+        return listDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO setModuleStatus(Integer status, List<Long> moduleIdList)
+    public void setModuleStatus(Integer status, List<Long> moduleIdList)
     {
-        ResultDTO resultDTO = new ResultDTO();
         functionMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
@@ -411,17 +417,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             dictIndustryDTO = new DictIndustryDTO();
             EntityUtils.copyProperties(item, dictIndustryDTO);
             dataList.add(dictIndustryDTO);
-        }
-    }
-
-    private void findPrivilegeDTO(List<Function> functionList, List<PrivilegeDTO> dataList)
-    {
-        PrivilegeDTO privilegeDTO;
-        for(Function item : functionList)
-        {
-            privilegeDTO = new PrivilegeDTO();
-            EntityUtils.copyProperties(item, privilegeDTO);
-            dataList.add(privilegeDTO);
         }
     }
 }

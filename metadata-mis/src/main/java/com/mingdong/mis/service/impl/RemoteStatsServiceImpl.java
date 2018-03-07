@@ -140,8 +140,8 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                 List<ProductRechargeInfoDTO> list = new ArrayList<>();
                 for(ProductRechargeInfo o : productRechargeInfoList)
                 {
-                    // TODO zhujun
                     ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                    pri.setRechargeType(o.getRechargeType());
                     pri.setAmount(o.getAmount());
                     pri.setBalance(o.getBalance());
                     pri.setTradeTime(o.getTradeTime());
@@ -157,15 +157,15 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     public ListDTO<ProductRechargeInfoDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
     {
         ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
-        List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
-        listDTO.setTotal(productRechargeInfoList.size());
-        if(!CollectionUtils.isEmpty(productRechargeInfoList))
+        List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
+        listDTO.setTotal(dataList.size());
+        if(!CollectionUtils.isEmpty(dataList))
         {
             List<ProductRechargeInfoDTO> list = new ArrayList<>();
-            for(ProductRechargeInfo o : productRechargeInfoList)
+            for(ProductRechargeInfo o : dataList)
             {
-                // TODO zhujun
                 ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                pri.setRechargeType(o.getRechargeType());
                 pri.setAmount(o.getAmount());
                 pri.setBalance(o.getBalance());
                 pri.setTradeTime(o.getTradeTime());

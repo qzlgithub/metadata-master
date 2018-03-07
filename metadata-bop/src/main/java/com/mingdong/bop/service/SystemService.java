@@ -98,7 +98,7 @@ public interface SystemService
     /**
      * 根据权限id更改状态
      */
-    void setModuleStatus(List<Long> moduleIdList, Integer status, RestResp resp);
+    void setModuleStatus(List<Long> moduleIdList, Integer status);
 
     /**
      * 获取系统参数

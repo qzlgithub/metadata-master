@@ -13,9 +13,7 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictIndustryListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
@@ -99,34 +97,37 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public List<Map<String, Object>> getHierarchyIndustry()//TODO HERE
+    public List<Map<String, Object>> getHierarchyIndustry()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(0L, null);
-        List<DictIndustryDTO> parentList = dictIndustryListDTO.getDataList();
-        for(DictIndustryDTO di : parentList)
+        ListDTO<DictIndustryDTO> listDTO1 = remoteSystemService.getIndustryList(0L, null);
+        if(!CollectionUtils.isEmpty(listDTO1.getList()))
         {
-            Map<String, Object> p = new HashMap<>();
-            p.put(Field.ID, di.getId() + "");
-            p.put(Field.CODE, di.getCode());
-            p.put(Field.NAME, di.getName());
-            p.put(Field.ENABLED, di.getEnabled());
-            List<Map<String, Object>> subList = new ArrayList<>();
-            DictIndustryListDTO dictIndustryListByParentAndStatus =
-                    remoteSystemService.getDictIndustryListByParentAndStatus(di.getId(), null);
-            List<DictIndustryDTO> childList = dictIndustryListByParentAndStatus.getDataList();
-            for(DictIndustryDTO ind : childList)
+            for(DictIndustryDTO o : listDTO1.getList())
             {
-                Map<String, Object> c = new HashMap<>();
-                c.put(Field.ID, ind.getId() + "");
-                c.put(Field.CODE, ind.getCode());
-                c.put(Field.NAME, ind.getName());
-                c.put(Field.ENABLED, ind.getEnabled());
-                c.put(Field.PARENT_ID, ind.getParentId());
-                subList.add(c);
+                Map<String, Object> p = new HashMap<>();
+                p.put(Field.ID, o.getId() + "");
+                p.put(Field.CODE, o.getCode());
+                p.put(Field.NAME, o.getName());
+                p.put(Field.ENABLED, o.getEnabled());
+                ListDTO<DictIndustryDTO> listDTO2 = remoteSystemService.getIndustryList(o.getId(), null);
+                if(!CollectionUtils.isEmpty(listDTO2.getList()))
+                {
+                    List<Map<String, Object>> subList = new ArrayList<>();
+                    for(DictIndustryDTO ind : listDTO2.getList())
+                    {
+                        Map<String, Object> c = new HashMap<>();
+                        c.put(Field.ID, ind.getId() + "");
+                        c.put(Field.CODE, ind.getCode());
+                        c.put(Field.NAME, ind.getName());
+                        c.put(Field.ENABLED, ind.getEnabled());
+                        c.put(Field.PARENT_ID, ind.getParentId());
+                        subList.add(c);
+                    }
+                    p.put(Field.SUB_LIST, subList);
+                }
+                list.add(p);
             }
-            p.put(Field.SUB_LIST, subList);
-            list.add(p);
         }
         return list;
     }
@@ -184,9 +185,8 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getRechargeDict()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(
-                TrueOrFalse.TRUE, null);
-        List<DictRechargeTypeDTO> rechargeTypeList = dictRechargeTypeListDTO.getDataList();
+        ListDTO<DictRechargeTypeDTO> listDTO = remoteSystemService.getRechargeTypeList(TrueOrFalse.TRUE, null);
+        List<DictRechargeTypeDTO> rechargeTypeList = listDTO.getList();
         for(DictRechargeTypeDTO drt : rechargeTypeList)
         {
             Map<String, Object> map = new HashMap<>();
@@ -201,9 +201,8 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getRechargeTypeList(Integer enabled, Integer deleted)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(enabled,
-                deleted);
-        List<DictRechargeTypeDTO> dataList = dictRechargeTypeListDTO.getDataList();
+        ListDTO<DictRechargeTypeDTO> listDTO = remoteSystemService.getRechargeTypeList(enabled, deleted);
+        List<DictRechargeTypeDTO> dataList = listDTO.getList();
         for(DictRechargeTypeDTO o : dataList)
         {
             Map<String, Object> m = new HashMap<>();
@@ -226,9 +225,8 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled)
     {
-        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(parentId,
-                enabled);
-        List<DictIndustryDTO> dataList = dictIndustryListDTO.getDataList();
+        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getIndustryList(parentId, enabled);
+        List<DictIndustryDTO> dataList = listDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
         for(DictIndustryDTO parent : dataList)
         {
@@ -246,9 +244,8 @@ public class SystemServiceImpl implements SystemService
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> parentIndustryList = new ArrayList<>();
         List<Map<String, Object>> industryList = new ArrayList<>();
-        DictIndustryListDTO dictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(0L,
-                TrueOrFalse.TRUE);
-        List<DictIndustryDTO> parentList = dictIndustryListDTO.getDataList();
+        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getIndustryList(0L, TrueOrFalse.TRUE);
+        List<DictIndustryDTO> parentList = listDTO.getList();
         for(DictIndustryDTO industry : parentList)
         {
             Map<String, Object> pm = new HashMap<>();
@@ -258,9 +255,9 @@ public class SystemServiceImpl implements SystemService
         }
         if(!CollectionUtils.isEmpty(parentList))
         {
-            DictIndustryListDTO childDictIndustryListDTO = remoteSystemService.getDictIndustryListByParentAndStatus(
-                    parentList.get(0).getId(), TrueOrFalse.TRUE);
-            List<DictIndustryDTO> childList = childDictIndustryListDTO.getDataList();
+            ListDTO<DictIndustryDTO> listDTO2 = remoteSystemService.getIndustryList(parentList.get(0).getId(),
+                    TrueOrFalse.TRUE);
+            List<DictIndustryDTO> childList = listDTO2.getList();
             for(DictIndustryDTO industry : childList)
             {
                 Map<String, Object> pm = new HashMap<>();
@@ -317,7 +314,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void setModuleStatus(List<Long> moduleIdList, Integer status, RestResp resp)
+    public void setModuleStatus(List<Long> moduleIdList, Integer status)
     {
         remoteSystemService.setModuleStatus(status, moduleIdList);
     }
@@ -364,12 +361,13 @@ public class SystemServiceImpl implements SystemService
 
     private void cacheAllIndustryData()
     {
-        DictIndustryListDTO dictIndustryInfoList = remoteSystemService.getDictIndustryInfoList();
-        List<DictIndustryDTO> dataList = dictIndustryInfoList.getDataList();
-        for(DictIndustryDTO industry : dataList)
+        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getDictIndustryInfoList();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            redisDao.saveIndustryInfo(industry.getId(), industry.getName());
+            for(DictIndustryDTO o : listDTO.getList())
+            {
+                redisDao.saveIndustryInfo(o.getId(), o.getName());
+            }
         }
     }
-
 }
