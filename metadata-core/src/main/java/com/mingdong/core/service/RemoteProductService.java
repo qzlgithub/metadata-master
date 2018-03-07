@@ -28,12 +28,12 @@ public interface RemoteProductService
      * 根据条件获取获取客户消费记录
      */
     ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate, Date endDate,
-            Page page);
+            Page page); // TODO review
 
     /**
      * 根据条件获取产品信息列表
      */
-    ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page);
+    ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page); // TODO review
 
     /**
      * 根据条件获取产品信息
@@ -65,12 +65,12 @@ public interface RemoteProductService
     /**
      * 根据状态获取产品信息列表
      */
-    ProductListDTO getProductListByStatus(Integer enabled);
+    ProductListDTO getProductListByStatus(Integer enabled); // TODO review
 
     /**
      * 根据状态获取项目信息列表
      */
-    ProductInfoListDTO getProductInfoList(Integer enabled, Page page);
+    ProductInfoListDTO getProductInfoList(Integer enabled, Page page); // TODO review
 
     /**
      * 根据客户id获取客户项目详细

@@ -121,7 +121,7 @@ public interface RemoteClientService
     /**
      * 根据客户ids获取客户信息列表
      */
-    ClientListDTO getClientListByIds(List<Long> idList);
+    ClientListDTO getClientListByIds(List<Long> idList); // TODO review
 
     /**
      * 根据客户帐号ID重置密码
@@ -136,7 +136,7 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
+    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page); // TODO review
 
     /**
      * 新增客户

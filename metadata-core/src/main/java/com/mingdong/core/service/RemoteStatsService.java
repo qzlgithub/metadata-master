@@ -24,7 +24,7 @@ public interface RemoteStatsService
     /**
      * 根据日期获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date fromDate, Date toDate, Page page);
+    ClientInfoListDTO getClientInfoListByDate(Date fromDate, Date toDate, Page page); // TODO review
 
     /**
      * 根据日期获取充值总额
