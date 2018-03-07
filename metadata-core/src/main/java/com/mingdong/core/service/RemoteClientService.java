@@ -5,7 +5,6 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
@@ -133,7 +132,7 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page); // TODO review
+    ListDTO<ClientInfoDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
 
     /**
      * 新增客户

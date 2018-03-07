@@ -137,31 +137,32 @@ public class StatsServiceImpl implements StatsService
     }
 
     @Override
-    public void getClientList(ScopeType scopeTypeEnum, Page page, RestListResp res)
+    public void getClientList(ScopeType scopeType, Page page, RestListResp resp)
     {
         Date currentDay = new Date();
-        Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
+        Date beforeDate = findDateByScopeType(scopeType, currentDay);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
-        ClientInfoListDTO clientInfoListDTO = remoteClientService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoDTO> clientInfoListByDate = clientInfoListDTO.getDataList();
-        Integer total = clientInfoListDTO.getTotal();
-        res.setTotal(total);
-        res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + total + "个");
-        List<Map<String, Object>> dataList = new ArrayList<>(clientInfoListByDate.size());
-        Map<String, Object> map;
-        for(ClientInfoDTO item : clientInfoListByDate)
+        ListDTO<ClientInfoDTO> listDTO = remoteClientService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoDTO> list = listDTO.getList();
+        resp.setTotal(listDTO.getTotal());
+        resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + listDTO.getTotal() + "个");
+        if(!CollectionUtils.isEmpty(list))
         {
-            map = new HashMap<>();
-            map.put(Field.REGISTER_DATE, DateUtils.format(item.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            map.put(Field.CORP_NAME, item.getCorpName());
-            map.put(Field.SHORT_NAME, item.getShortName());
-            map.put(Field.USERNAME, item.getUsername());
-            map.put(Field.MANAGER_NAME, item.getManagerName());
-            dataList.add(map);
+            List<Map<String, Object>> dataList = new ArrayList<>(list.size());
+            for(ClientInfoDTO o : list)
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.REGISTER_DATE, DateUtils.format(o.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                m.put(Field.CORP_NAME, o.getCorpName());
+                m.put(Field.SHORT_NAME, o.getShortName());
+                m.put(Field.USERNAME, o.getUsername());
+                m.put(Field.MANAGER_NAME, o.getManagerName());
+                dataList.add(m);
+            }
+            resp.setList(dataList);
         }
-        res.setList(dataList);
     }
 
     @Override
@@ -716,7 +717,8 @@ public class StatsServiceImpl implements StatsService
                         dataMap.put(Field.ALL_FEE, new BigDecimal(0));
                         for(StatsDateInfoDTO item : list)
                         {
-                            if(item.getFee() == null){
+                            if(item.getFee() == null)
+                            {
                                 continue;
                             }
                             if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate()))

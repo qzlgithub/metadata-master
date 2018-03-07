@@ -26,10 +26,10 @@ public class StatsController
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        RestListResp res = new RestListResp();
+        RestListResp resp = new RestListResp();
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
-        statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize), res);
-        return res;
+        statsService.getClientList(scopeTypeEnum, new Page(pageNum, pageSize), resp);
+        return resp;
     }
 
     @LoginRequired

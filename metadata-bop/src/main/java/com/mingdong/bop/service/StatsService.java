@@ -23,7 +23,7 @@ public interface StatsService
     /**
      * 获取客户列表
      */
-    void getClientList(ScopeType scopeTypeEnum, Page page, RestListResp res);
+    void getClientList(ScopeType scopeTypeEnum, Page page, RestListResp resp);
 
     /**
      * 导出客户列表
