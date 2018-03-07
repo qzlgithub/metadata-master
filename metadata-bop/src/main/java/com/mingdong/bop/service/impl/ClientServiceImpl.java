@@ -24,10 +24,8 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ClientContactDTO;
-import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
@@ -215,25 +213,13 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void deleteClient(List<Long> idList)
     {
-        ResultDTO dto = remoteClientService.setClientDeleted(idList);
-        logger.info("set client[{}] deleted: ", idList, dto.getCode());
+        remoteClientService.setClientDeleted(idList);
     }
 
     @Override
-    public void resetPassword(List<Long> idList, RestResp resp)
+    public void resetPassword(List<Long> idList)
     {
-        ClientListDTO clientListByIds = remoteClientService.getClientListByIds(idList);
-        List<ClientDTO> clientList = clientListByIds.getDataList();
-        if(!CollectionUtils.isEmpty(clientList))
-        {
-            List<Long> clientUserIdList = new ArrayList<>(clientList.size());
-            for(ClientDTO client : clientList)
-            {
-                clientUserIdList.add(client.getPrimaryUserId());
-            }
-            ResultDTO dto = remoteClientService.resetPasswordByIds(Constant.DEFAULT_ENC_PWD, clientUserIdList);
-            logger.info("set client[{}] deleted: ", idList, dto.getCode());
-        }
+        remoteClientService.setClientPassword(idList, Constant.DEFAULT_ENC_PWD);
     }
 
     @Override

@@ -13,11 +13,9 @@ import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
-import com.mingdong.core.model.dto.ClientDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
-import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
@@ -604,42 +602,18 @@ public class RemoteClientServiceImpl implements RemoteClientService
 
     @Override
     @Transactional
-    public ResultDTO setClientDeleted(List<Long> idList)
+    public void setClientDeleted(List<Long> idList)
     {
-        ResultDTO resultDTO = new ResultDTO();
         clientMapper.setClientDeleted(idList, new Date());
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override
-    public ClientListDTO getClientListByIds(List<Long> idList)
+    public void setClientPassword(List<Long> idList, String password)
     {
-        ClientListDTO clientListDTO = new ClientListDTO();
-        List<ClientDTO> dataList = new ArrayList<>();
-        clientListDTO.setDataList(dataList);
-        List<Client> clientList = clientMapper.getListByIdList(idList);
-        if(!CollectionUtils.isEmpty(clientList))
+        if(!CollectionUtils.isEmpty(idList))
         {
-            ClientDTO clientDTO;
-            for(Client item : clientList)
-            {
-                clientDTO = new ClientDTO();
-                EntityUtils.copyProperties(item, clientDTO);
-                dataList.add(clientDTO);
-            }
+            clientUserMapper.resetPasswordByIds(password, new Date(), idList);
         }
-        return clientListDTO;
-    }
-
-    @Override
-    @Transactional
-    public ResultDTO resetPasswordByIds(String newPassword, List<Long> idList)
-    {
-        ResultDTO resultDTO = new ResultDTO();
-        clientUserMapper.resetPasswordByIds(newPassword, new Date(), idList);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
     }
 
     @Override

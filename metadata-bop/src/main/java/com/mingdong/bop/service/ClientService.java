@@ -42,9 +42,11 @@ public interface ClientService
     void deleteClient(List<Long> idList);
 
     /**
-     * 根据客户ids重置主帐号的密码
+     * 批量重置客户主帐号的密码
+     *
+     * @param idList 客户ID列表
      */
-    void resetPassword(List<Long> idList, RestResp resp);
+    void resetPassword(List<Long> idList);
 
     /**
      * 根据客户id获取帐号列表
