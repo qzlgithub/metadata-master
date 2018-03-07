@@ -7,6 +7,7 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,11 +46,11 @@ public class FinancePageController
         List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
         List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
+        List<Dict> adminUserDict = managerService.getAdminUserDict();
 
         view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
         view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
-        view.addObject(Field.MANAGER_LIST, managerList);
+        view.addObject(Field.ADMIN_USER_DICT, adminUserDict);
         view.addObject(Field.IS_MANAGER, RequestThread.isManager());
         return view;
     }
