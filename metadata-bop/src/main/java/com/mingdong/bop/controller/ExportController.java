@@ -205,7 +205,7 @@ public class ExportController
         }
         to = BusinessUtils.getLastDayStartTime(to);
         XSSFWorkbook wb = tradeService.createClientBillListXlsx(keyword, productId, billPlan, from, to,
-                new Page(1, 1000));
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");

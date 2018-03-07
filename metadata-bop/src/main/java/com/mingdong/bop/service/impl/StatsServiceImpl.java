@@ -716,7 +716,8 @@ public class StatsServiceImpl implements StatsService
                         dataMap.put(Field.ALL_FEE, new BigDecimal(0));
                         for(StatsDateInfoDTO item : list)
                         {
-                            if(item.getFee() == null){
+                            if(item.getFee() == null)
+                            {
                                 continue;
                             }
                             if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate()))

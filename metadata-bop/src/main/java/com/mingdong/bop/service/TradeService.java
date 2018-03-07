@@ -24,5 +24,5 @@ public interface TradeService
             Page page, RestListResp res);
 
     XSSFWorkbook createClientBillListXlsx(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
-            Page page);
+            Long manager, Page page);
 }
