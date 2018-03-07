@@ -257,17 +257,6 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         statsMapper.add(stats);
     }
 
-    private void findClientInfoDTO(List<ClientInfo> clientInfoList, List<ClientInfoDTO> dataList)
-    {
-        ClientInfoDTO clientInfoDTO;
-        for(ClientInfo item : clientInfoList)
-        {
-            clientInfoDTO = new ClientInfoDTO();
-            EntityUtils.copyProperties(item, clientInfoDTO);
-            dataList.add(clientInfoDTO);
-        }
-    }
-
     private void findProductRechargeInfoDTO(List<ProductRechargeInfo> productRechargeInfoList,
             List<ProductRechargeInfoDTO> dataList)
     {
