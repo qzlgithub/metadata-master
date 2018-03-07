@@ -20,7 +20,6 @@ import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
@@ -368,9 +367,9 @@ public class StatsServiceImpl implements StatsService
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
-        DictRechargeTypeListDTO dictRechargeTypeListDTO = remoteSystemService.getDictRechargeTypeListByStatus(
+        ListDTO<DictRechargeTypeDTO> dictRechargeTypeListDTO = remoteSystemService.getRechargeTypeList(
                 TrueOrFalse.TRUE, TrueOrFalse.FALSE);
-        List<DictRechargeTypeDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getDataList();
+        List<DictRechargeTypeDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Map<String, BigDecimal>> dateMap = new LinkedHashMap<>();
         Map<String, BigDecimal> bigMapTemp;

@@ -149,18 +149,18 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     public ListDTO<ProductRechargeInfoDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
     {
         ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
-        List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
-        listDTO.setTotal(productRechargeInfoList.size());
-        if(!CollectionUtils.isEmpty(productRechargeInfoList))
+        List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
+        listDTO.setTotal(dataList.size());
+        if(!CollectionUtils.isEmpty(dataList))
         {
             List<ProductRechargeInfoDTO> list = new ArrayList<>();
-            for(ProductRechargeInfo o : productRechargeInfoList)
+            for(ProductRechargeInfo o : dataList)
             {
-                // TODO zhujun
                 ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
-                pri.setAmount(o.getAmount());
-                pri.setTradeTime(o.getTradeTime());
                 pri.setRechargeType(o.getRechargeType());
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                pri.setTradeTime(o.getTradeTime());
                 list.add(pri);
             }
             listDTO.setList(list);

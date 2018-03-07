@@ -1,8 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictIndustryListDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
+import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
@@ -18,7 +17,7 @@ public interface RemoteSystemService
     /**
      * 根据条件获取行业分类信息列表
      */
-    DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse); // TODO review
+    ListDTO<DictIndustryDTO> getIndustryList(Long parentIndustryId, Integer enabled);
 
     /**
      * 根据行业分类code获取行业分类
@@ -38,17 +37,17 @@ public interface RemoteSystemService
     /**
      * 根据状态获取充值类型列表
      */
-    DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted); // TODO review
+    ListDTO<DictRechargeTypeDTO> getRechargeTypeList(Integer enabled, Integer deleted);
 
     /**
      * 获取行业分类列表
      */
-    DictIndustryListDTO getDictIndustryInfoList(); // TODO review
+    ListDTO<DictIndustryDTO> getDictIndustryInfoList();
 
     /**
      * 修改模块状态
      */
-    ResultDTO setModuleStatus(Integer status, List<Long> moduleIdList);
+    void setModuleStatus(Integer status, List<Long> moduleIdList);
 
     /**
      * 获取系统参数信息 key为name
