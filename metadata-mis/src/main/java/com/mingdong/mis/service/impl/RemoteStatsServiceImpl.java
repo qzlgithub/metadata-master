@@ -124,6 +124,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                     ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
                     pri.setAmount(o.getAmount());
                     pri.setBalance(o.getBalance());
+                    pri.setTradeTime(o.getTradeTime());
                     list.add(pri);
                 }
                 listDTO.setList(list);
@@ -147,6 +148,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                 ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
                 pri.setAmount(o.getAmount());
                 pri.setBalance(o.getBalance());
+                pri.setTradeTime(o.getTradeTime());
                 list.add(pri);
             }
             listDTO.setList(list);
