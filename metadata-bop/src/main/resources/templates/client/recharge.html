@@ -29,7 +29,7 @@
                 <li>
                     <label class="layui-form-label">产品名称：</label>
                     <div class="layui-inline" style="width: 180px">
-                        <select name="product-id" id="productId">
+                        <select name="product-id" id="productId" lay-search="">
                             <option value="">全部</option>
                             <option th:each="o : ${productDict}" th:value="${o.id}" th:text="${o.name}"
                                     th:selected="${o.id eq productId}"></option>

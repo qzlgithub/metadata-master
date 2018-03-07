@@ -36,7 +36,7 @@
                     <label class="layui-form-label">产品：</label>
                     <div class="layui-inline">
                         <div class="layui-input-inline layui-form">
-                            <select name="product" id="product" title="产品">
+                            <select name="product" id="product" title="产品" lay-search="">
                                 <option value="">全部</option>
                                 <option th:each="o : ${productDict}" th:value="${o.id}" th:text="${o.name}"></option>
                             </select>
@@ -46,7 +46,7 @@
                 <li>
                     <label class="layui-form-label">计费方式：</label>
                     <div class="layui-input-inline">
-                        <select name="bill-plan" id="billPlan" title="计费方式">
+                        <select name="bill-plan" id="billPlan" title="计费方式" lay-search="">
                             <option value="">全部</option>
                             <option value="1">按时间计费</option>
                             <option value="2">按次计费</option>

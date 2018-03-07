@@ -111,9 +111,9 @@ public class SystemServiceImpl implements SystemService
                 p.put(Field.NAME, o.getName());
                 p.put(Field.ENABLED, o.getEnabled());
                 ListDTO<DictIndustryDTO> listDTO2 = remoteSystemService.getIndustryList(o.getId(), null);
+                List<Map<String, Object>> subList = new ArrayList<>();
                 if(!CollectionUtils.isEmpty(listDTO2.getList()))
                 {
-                    List<Map<String, Object>> subList = new ArrayList<>();
                     for(DictIndustryDTO ind : listDTO2.getList())
                     {
                         Map<String, Object> c = new HashMap<>();
@@ -124,8 +124,8 @@ public class SystemServiceImpl implements SystemService
                         c.put(Field.PARENT_ID, ind.getParentId());
                         subList.add(c);
                     }
-                    p.put(Field.SUB_LIST, subList);
                 }
+                p.put(Field.SUB_LIST, subList);
                 list.add(p);
             }
         }

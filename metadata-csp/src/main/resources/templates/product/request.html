@@ -38,7 +38,7 @@
                 <div class="border-title">历史消费记录</div>
                 <ul class="search-list clearfix border-b2 pb15 mt20">
                     <li>产品服务：
-                        <select id="product-sel" name="modules" class="select-list">
+                        <select id="product-sel" name="modules" class="select-list" lay-search="">
                             <option value="">全部</option>
                             <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
                                     th:selected="${o.key} eq ${productId}"></option>
