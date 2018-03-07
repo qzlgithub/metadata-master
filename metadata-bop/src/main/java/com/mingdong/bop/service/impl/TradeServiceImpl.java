@@ -84,7 +84,7 @@ public class TradeServiceImpl implements TradeService
         row.createCell(6).setCellValue("充值类型");
         row.createCell(7).setCellValue("充值金额");
         row.createCell(8).setCellValue("产品服务余额");
-        row.createCell(9).setCellValue("商务经理");
+        row.createCell(9).setCellValue("经手人");
         row.createCell(10).setCellValue("合同编号");
         row.createCell(11).setCellValue("备注");
         Row dataRow;

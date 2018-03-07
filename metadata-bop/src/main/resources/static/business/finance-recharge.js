@@ -37,7 +37,7 @@ layui.config({
             {field: 'rechargeType', title: '充值类型'},
             {field: 'amount', title: '充值金额'},
             {field: 'balance', title: '产品余额'},
-            {field: 'manager', title: '商务经理'},
+            {field: 'manager', title: '经手人'},
             {field: 'contractNo', title: '合同编号'},
             {field: 'remark', title: '备注'}
         ]],

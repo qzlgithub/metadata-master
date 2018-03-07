@@ -137,17 +137,9 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                     currentDay);
             if(!CollectionUtils.isEmpty(productRechargeInfoList))
             {
-                List<ProductRechargeInfoDTO> list = new ArrayList<>();
-                for(ProductRechargeInfo o : productRechargeInfoList)
-                {
-                    // TODO zhujun
-                    ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
-                    pri.setAmount(o.getAmount());
-                    pri.setBalance(o.getBalance());
-                    pri.setTradeTime(o.getTradeTime());
-                    list.add(pri);
-                }
-                listDTO.setList(list);
+                List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
+                findProductRechargeInfoDTO(productRechargeInfoList, dataList);
+                listDTO.setList(dataList);
             }
         }
         return listDTO;
@@ -167,8 +159,8 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
                 // TODO zhujun
                 ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
                 pri.setAmount(o.getAmount());
-                pri.setBalance(o.getBalance());
                 pri.setTradeTime(o.getTradeTime());
+                pri.setRechargeType(o.getRechargeType());
                 list.add(pri);
             }
             listDTO.setList(list);
