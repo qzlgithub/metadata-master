@@ -33,7 +33,7 @@
                 <li>
                     类别：
                     <div class="inline-flex" style="width: 180px">
-                        <select id="type">
+                        <select id="type" lay-search="">
                             <option value="" selected="selected">全部</option>
                             <option th:each="o : ${productTypeDict}" th:value="${o.key}" th:text="${o.value}"></option>
                         </select>
@@ -42,7 +42,7 @@
                 <li>
                     种类：
                     <div class="inline-flex" style="width: 120px">
-                        <select id="custom">
+                        <select id="custom" lay-search="">
                             <option value="" selected="selected">全部</option>
                             <option value="1">定制</option>
                             <option value="0">普通</option>
@@ -52,7 +52,7 @@
                 <li>
                     状态：
                     <div class="inline-flex" style="width: 120px">
-                        <select id="status" title="状态">
+                        <select id="status" title="状态" lay-search="">
                             <option value="" selected="selected">全部</option>
                             <option value="1">正常</option>
                             <option value="0">已禁用</option>
