@@ -2,12 +2,12 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.AdminSessionDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
-import com.mingdong.core.model.dto.ManagerInfoListDTO;
+import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
@@ -17,11 +17,6 @@ public interface RemoteManagerService
      * 管理账号登陆
      */
     AdminSessionDTO adminLogin(LoginDTO loginDTO);
-
-    /**
-     * 根据管理员id获取管理员信息
-     */
-    AdminUserDTO getManagerById(Long managerId);
 
     UserInfoDTO getAccountInfo(Long userId);
 
@@ -37,10 +32,9 @@ public interface RemoteManagerService
      */
     Integer checkIfGroupExist(String name);
 
-    /**
-     * 根据条件获取管理员信息列表
-     */
-    ManagerInfoListDTO getManagerInfoList(Integer roleType, Integer enabled, Page page);
+    ListDTO<DictDTO> getAdminUserDict();
+
+    ListDTO<ManagerInfoDTO> getAdminUserList(Integer roleType, Integer enabled, Page page);
 
     /**
      * 根据管理员id获取赋权信息列表

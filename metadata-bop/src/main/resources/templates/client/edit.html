@@ -81,9 +81,8 @@
                     <label class="layui-form-label"><i class="col3">*</i>商务经理：</label>
                     <div class="layui-input-block clearfix">
                         <select id="managerId" name="managerId" class="select-list" style="width: 98%">
-                            <option th:each="managerItem:${managerList}" th:value="${managerItem.id}"
-                                    th:text="${managerItem.name}"
-                                    th:selected="${managerItem.id} eq ${managerId}"></option>
+                            <option th:each="o : ${adminUserDict}" th:value="${o.key}" th:text="${o.value}"
+                                    th:selected="${o.key} eq ${managerId}"></option>
                         </select>
                     </div>
                 </div>

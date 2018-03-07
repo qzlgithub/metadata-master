@@ -51,8 +51,6 @@ public class ProductServiceImpl implements ProductService
             map.put(Field.CONTENT, productDTO.getContent());
             map.put(Field.ENABLED, productDTO.getEnabled());
         }
-        map.put(Field.CUSTOM_LIST, Custom.getAllList());
-        map.put(Field.PROD_TYPE_DICT, ProdType.getProdTypeDict());
         return map;
     }
 

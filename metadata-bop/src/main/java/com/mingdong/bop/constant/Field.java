@@ -9,8 +9,6 @@ public interface Field
     String REMARK = "remark";
     String ENABLED = "enabled";
     String LIST = "list";
-    String TOTAL = "total";
-    String PAGES = "pages";
     String PAGE_NUM = "pageNum";
     String PAGE_SIZE = "pageSize";
     String TYPE = "type";
@@ -45,8 +43,6 @@ public interface Field
     String IMAGE = "image";
     String INDUSTRY = "industry";
     String ROLE_ID = "roleId";
-    String ROLE_CODE = "roleCode";
-    String ROLE_LIST = "roleList";
     String INDUSTRY_LIST = "industryList";
     String PARENT_INDUSTRY_ID = "parentIndustryId";
     String CLIENT_ID = "clientId";
@@ -59,16 +55,13 @@ public interface Field
     String OLD_PWD = "oldPwd";
     String NEW_PWD = "newPwd";
     String EXIST = "exist";
-    String PRODUCT_TYPE_DICT = "productTypeDict";
     String THR_LIST = "thrList";
     String CLIENT_PRODUCT_ID = "clientProductId";
     String OPENED = "opened";
     String TO_OPEN = "toOpen";
     String PRODUCT_ID = "productId";
-    String PRODUCT_DICT = "productDict";
     String DEFAULT_PASSWORD = "defaultPassword";
     String APP_ID = "appId";
-    String RECHARGE_DICT = "rechargeDict";
     String START_DATE = "startDate";
     String END_DATE = "endDate";
     String TOTAL_AMT = "totalAmt";
@@ -101,12 +94,8 @@ public interface Field
     String IS_GENERAL = "isGeneral";
     String KEY = "key";
     String VALUE = "value";
-    String INDUSTRY_PARENT_DICT = "industryParentDict";
-    String INDUSTRY_DICT = "industryDict";
     String CONTACTS = "contacts";
     String CUSTOM = "custom";
-    String CUSTOM_LIST = "customList";
-    String PROD_TYPE_DICT = "prodTypeDict";
     String BILL_PLAN_LIST = "billPlanList";
     String USER_ID = "userId";
     String PRODUCT_CUSTOM_LIST = "productCustomList";
@@ -135,10 +124,6 @@ public interface Field
     String ALL_COUNT = "allCount";
     String ALL_MISS_COUNT = "allMissCount";
 
-    String C = "c";
-    String P = "p";
-    String U = "u";
-    String ACCOUNT_DICT = "accountDict";
     String REQUEST_NO = "requestNo";
     String RECHARGE_NO = "rechargeNo";
     String RECHARGE_TYPE_NAME = "rechargeTypeName";
@@ -149,10 +134,22 @@ public interface Field
     String YESTERDAY_FEE = "yesterdayFee";
     String MONTH_FEE = "monthFee";
     String ALL_FEE = "allFee";
-    String O = "o";
     String PRIVILEGE_LIST = "privilegeList";
-    String ROLE_DICT = "roleDict";
     String IS_MANAGER = "isManager";
     String GROUP_NAME = "groupName";
     String ROLE_TYPE = "roleType";
+    // 系统字典参数名
+    String ACCOUNT_DICT = "accountDict";
+    String ADMIN_USER_DICT = "adminUserDict";
+    String ROLE_DICT = "roleDict";
+    String PRODUCT_TYPE_DICT = "productTypeDict";
+    String PRODUCT_DICT = "productDict";
+    String RECHARGE_DICT = "rechargeDict";
+    String INDUSTRY_PARENT_DICT = "industryParentDict";
+    String INDUSTRY_DICT = "industryDict";
+    // GET url 参数
+    String C = "c";
+    String O = "o";
+    String P = "p";
+    String U = "u";
 }

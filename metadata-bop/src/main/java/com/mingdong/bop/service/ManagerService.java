@@ -3,6 +3,7 @@ package com.mingdong.bop.service;
 import com.mingdong.bop.model.AdminUserVO;
 import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 
@@ -87,7 +88,7 @@ public interface ManagerService
     void checkIfGroupExist(String name, RestResp resp);
 
     /**
-     * 根据enabled获取管理员信息列表
+     * 获取管理账号的字典列表
      */
-    List<Map<String, Object>> getManagerListMap(Integer enabled);
+    List<Dict> getAdminUserDict();
 }

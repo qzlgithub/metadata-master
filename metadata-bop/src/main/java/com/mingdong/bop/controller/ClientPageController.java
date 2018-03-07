@@ -10,6 +10,7 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,8 +56,6 @@ public class ClientPageController
     {
         ModelAndView view = new ModelAndView("client/add");
         view.addAllObjects(systemService.getInitIndustryMap());
-        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
-        view.addObject(Field.MANAGER_LIST,managerList);
         view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
         view.addObject(Field.MANAGER_ID, RequestThread.getOperatorId());
         view.addAllObjects(RequestThread.getMap());
@@ -73,8 +72,8 @@ public class ClientPageController
         RestResp resp = new RestResp();
         clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
-        List<Map<String, Object>> managerList = managerService.getManagerListMap(TrueOrFalse.TRUE);
-        view.addObject(Field.MANAGER_LIST,managerList);
+        List<Dict> adminUserDict = managerService.getAdminUserDict();
+        view.addObject(Field.ADMIN_USER_DICT, adminUserDict);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getMap());
         return view;

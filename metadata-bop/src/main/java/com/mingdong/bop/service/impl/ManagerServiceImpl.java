@@ -1,10 +1,9 @@
 package com.mingdong.bop.service.impl;
 
-import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.model.AdminUserVO;
+import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.model.NewManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.constant.DateFormat;
@@ -18,13 +17,12 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.AdminSessionDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
@@ -39,8 +37,6 @@ import java.util.Map;
 @Service
 public class ManagerServiceImpl implements ManagerService
 {
-    @Resource
-    private Param param;
     @Resource
     private RedisDao redisDao;
     @Resource
@@ -140,13 +136,12 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void getManagerList(Integer roleType, Integer enabled, Page page, RestListResp res)
     {
-        ManagerInfoListDTO managerListDTO = remoteManagerService.getManagerInfoList(roleType, enabled, page);
-        res.setTotal(managerListDTO.getTotal());
-        List<ManagerInfoDTO> managerList = managerListDTO.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>(managerList.size());
-        if(!CollectionUtils.isEmpty(managerList))
+        ListDTO<ManagerInfoDTO> listDTO = remoteManagerService.getAdminUserList(roleType, enabled, page);
+        res.setTotal(listDTO.getTotal());
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(ManagerInfoDTO manager : managerList)
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            for(ManagerInfoDTO manager : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, manager.getManagerId() + "");
@@ -159,8 +154,8 @@ public class ManagerServiceImpl implements ManagerService
                 map.put(Field.ENABLED, manager.getEnabled());
                 list.add(map);
             }
+            res.setList(list);
         }
-        res.setList(list);
     }
 
     @Override
@@ -285,22 +280,18 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public List<Map<String, Object>> getManagerListMap(Integer enabled)
+    public List<Dict> getAdminUserDict()
     {
-        ManagerInfoListDTO managerInfoList = remoteManagerService.getManagerInfoList(null, enabled, null);
-        List<ManagerInfoDTO> dataList = managerInfoList.getDataList();
-        List<Map<String, Object>> dataListMap = new ArrayList<>();
+        List<Dict> list = new ArrayList<>();
+        ListDTO<DictDTO> listDTO = remoteManagerService.getAdminUserDict();
+        List<DictDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
-            Map<String, Object> dataMap;
-            for(ManagerInfoDTO item : dataList)
+            for(DictDTO o : dataList)
             {
-                dataMap = new HashMap<>();
-                dataMap.put(Field.ID, item.getManagerId() + "");
-                dataMap.put(Field.NAME, item.getName());
-                dataListMap.add(dataMap);
+                list.add(new Dict(o.getKey(), o.getValue()));
             }
         }
-        return dataListMap;
+        return list;
     }
 }

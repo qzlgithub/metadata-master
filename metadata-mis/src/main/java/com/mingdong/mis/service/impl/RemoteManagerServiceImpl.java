@@ -8,17 +8,15 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.AdminSessionDTO;
+import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.ManagerInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.RemoteManagerService;
-import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.Group;
 import com.mingdong.mis.domain.entity.GroupFunction;
@@ -104,19 +102,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public AdminUserDTO getManagerById(Long managerId)
-    {
-        AdminUserDTO adminUserDTO = new AdminUserDTO();
-        User byId = userMapper.findById(managerId);
-        if(byId == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byId, adminUserDTO);
-        return adminUserDTO;
-    }
-
-    @Override
     public UserInfoDTO getAccountInfo(Long userId)
     {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
@@ -196,63 +181,51 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
     }
 
     @Override
-    public ManagerInfoListDTO getManagerInfoList(Integer roleType, Integer enabled, Page page)
+    public ListDTO<DictDTO> getAdminUserDict()
     {
-        ManagerInfoListDTO managerListDTO = new ManagerInfoListDTO();
-        List<ManagerInfoDTO> dataList = new ArrayList<>();
-        managerListDTO.setDataList(dataList);
-        ManagerInfoDTO managerInfoDTO;
-        if(page == null)
+        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        List<User> userList = userMapper.getListBy(null, TrueOrFalse.TRUE);
+        if(!CollectionUtils.isEmpty(userList))
         {
-            List<UserInfo> userInfoList = userInfoMapper.getListBy(roleType, enabled);
-            if(!CollectionUtils.isEmpty(userInfoList))
+            List<DictDTO> list = new ArrayList<>();
+            for(User o : userList)
             {
-                for(UserInfo item : userInfoList)
-                {
-                    managerInfoDTO = new ManagerInfoDTO();
-                    managerInfoDTO.setEnabled(item.getEnabled());
-                    managerInfoDTO.setManagerId(item.getManagerId());
-                    managerInfoDTO.setName(item.getName());
-                    managerInfoDTO.setPhone(item.getPhone());
-                    managerInfoDTO.setRegisterTime(item.getRegisterTime());
-                    managerInfoDTO.setUsername(item.getUsername());
-                    managerInfoDTO.setRoleType(item.getRoleType());
-                    managerInfoDTO.setGroupId(item.getGroupId());
-                    managerInfoDTO.setGroupName(item.getGroupName());
-                    dataList.add(managerInfoDTO);
-                }
+                list.add(new DictDTO(o.getId() + "", o.getName()));
             }
+            listDTO.setList(list);
         }
-        else
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<ManagerInfoDTO> getAdminUserList(Integer roleType, Integer enabled, Page page)
+    {
+        ListDTO<ManagerInfoDTO> listDTO = new ListDTO<>();
+        int total = userMapper.countBy(roleType, enabled);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
-            int total = userMapper.countBy(roleType, enabled);
-            int pages = page.getTotalPage(total);
-            managerListDTO.setPages(pages);
-            managerListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<UserInfo> dataList = userInfoMapper.getListBy(roleType, enabled);
+            List<ManagerInfoDTO> list = new ArrayList<>(dataList.size());
+            for(UserInfo o : dataList)
             {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<UserInfo> userInfoList = userInfoMapper.getListBy(roleType, enabled);
-                if(!CollectionUtils.isEmpty(userInfoList))
-                {
-                    for(UserInfo item : userInfoList)
-                    {
-                        managerInfoDTO = new ManagerInfoDTO();
-                        managerInfoDTO.setEnabled(item.getEnabled());
-                        managerInfoDTO.setManagerId(item.getManagerId());
-                        managerInfoDTO.setName(item.getName());
-                        managerInfoDTO.setPhone(item.getPhone());
-                        managerInfoDTO.setRegisterTime(item.getRegisterTime());
-                        managerInfoDTO.setRoleType(item.getRoleType());
-                        managerInfoDTO.setUsername(item.getUsername());
-                        managerInfoDTO.setGroupId(item.getGroupId());
-                        managerInfoDTO.setGroupName(item.getGroupName());
-                        dataList.add(managerInfoDTO);
-                    }
-                }
+                ManagerInfoDTO mi = new ManagerInfoDTO();
+                mi.setEnabled(o.getEnabled());
+                mi.setManagerId(o.getManagerId());
+                mi.setName(o.getName());
+                mi.setPhone(o.getPhone());
+                mi.setRegisterTime(o.getRegisterTime());
+                mi.setRoleType(o.getRoleType());
+                mi.setUsername(o.getUsername());
+                mi.setGroupId(o.getGroupId());
+                mi.setGroupName(o.getGroupName());
+                list.add(mi);
             }
+            listDTO.setList(list);
         }
-        return managerListDTO;
+        return listDTO;
     }
 
     @Override
