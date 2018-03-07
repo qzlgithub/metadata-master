@@ -1,7 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.ApiReqInfoListDTO;
+import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
@@ -27,8 +27,8 @@ public interface RemoteProductService
     /**
      * 根据条件获取获取客户消费记录
      */
-    ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate, Date endDate,
-            Page page); // TODO review
+    ListDTO<ApiReqInfoDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate, Date endDate,
+            Page page);
 
     /**
      * 根据条件获取产品信息列表
@@ -70,7 +70,7 @@ public interface RemoteProductService
     /**
      * 根据状态获取项目信息列表
      */
-    ProductInfoListDTO getProductInfoList(Integer enabled, Page page); // TODO review
+    ProductInfoListDTO getProductInfoList(Integer enabled, Page page);
 
     /**
      * 根据客户id获取客户项目详细
