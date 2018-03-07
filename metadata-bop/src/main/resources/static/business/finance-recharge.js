@@ -80,7 +80,7 @@ function exportXlsx() {
     for(var o in params) {
         field = params[o];
         val = $("#" + field).val();
-        if(val !== '') {
+        if(val !== '' && val !== undefined) {
             uri_param = uri_param + "&" + field + "=" + val;
         }
     }
