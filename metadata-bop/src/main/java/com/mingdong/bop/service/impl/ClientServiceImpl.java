@@ -408,8 +408,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void checkIfContractExist(String contractNo, RestResp resp)
     {
-        ProductRechargeDTO pr = remoteProductService.getProductRechargeByContractNo(contractNo);
-        resp.addData(Field.EXIST, pr == null ? 0 : 1);
+        resp.addData(Field.EXIST, remoteProductService.checkIfContractExist(contractNo));
     }
 
     @Override

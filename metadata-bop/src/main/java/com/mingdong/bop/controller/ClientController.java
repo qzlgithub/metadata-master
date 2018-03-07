@@ -51,7 +51,7 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "/client/checkContract")
-    public Map<String, Object> getContractList(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
+    public Map<String, Object> checkIfContractExist(@RequestParam(value = Field.CONTRACT_NO) String contractNo)
     {
         RestResp resp = new RestResp();
         clientService.checkIfContractExist(contractNo, resp);

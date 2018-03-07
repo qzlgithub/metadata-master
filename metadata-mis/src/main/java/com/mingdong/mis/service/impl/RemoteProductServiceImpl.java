@@ -269,16 +269,10 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductRechargeDTO getProductRechargeByContractNo(String contractNo)
+    public Integer checkIfContractExist(String contractNo)
     {
-        ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
         Recharge pro = rechargeMapper.findByContractNo(contractNo);
-        if(pro == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(pro, productRechargeDTO);
-        return productRechargeDTO;
+        return pro != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override
@@ -320,26 +314,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         productDTO.setContent(productTxt == null ? null : productTxt.getContent());
         productDTO.setEnabled(product.getEnabled());
         return productDTO;
-    }
-
-    @Override
-    public ProductListDTO getProductListByStatus(Integer enabled)
-    {
-        ProductListDTO productListDTO = new ProductListDTO();
-        List<ProductDTO> dataList = new ArrayList<>();
-        productListDTO.setDataList(dataList);
-        ProductDTO productDTO;
-        List<Product> productList = productMapper.getListByStatus(enabled);
-        if(!CollectionUtils.isEmpty(productList))
-        {
-            for(Product item : productList)
-            {
-                productDTO = new ProductDTO();
-                EntityUtils.copyProperties(item, productDTO);
-                dataList.add(productDTO);
-            }
-        }
-        return productListDTO;
     }
 
     @Override
@@ -639,5 +613,22 @@ public class RemoteProductServiceImpl implements RemoteProductService
             dto.setList(list);
         }
         return dto;
+    }
+
+    @Override
+    public ListDTO<DictDTO> getProductDict()
+    {
+        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        List<Product> dataList = productMapper.getListByStatus(TrueOrFalse.TRUE);
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<DictDTO> list = new ArrayList<>(dataList.size());
+            for(Product o : dataList)
+            {
+                list.add(new DictDTO(o.getId() + "", o.getName()));
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 }

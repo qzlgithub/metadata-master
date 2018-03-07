@@ -9,14 +9,14 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
-import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
-import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.springframework.stereotype.Service;
@@ -77,17 +77,16 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public List<Map<String, Object>> getProductDict()
+    public List<Dict> getProductDict()
     {
-        ProductListDTO productListByStatus = remoteProductService.getProductListByStatus(TrueOrFalse.TRUE);
-        List<ProductDTO> productList = productListByStatus.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>();
-        for(ProductDTO p : productList)
+        List<Dict> list = new ArrayList<>();
+        ListDTO<DictDTO> listDTO = remoteProductService.getProductDict();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, p.getId() + "");
-            map.put(Field.NAME, p.getName());
-            list.add(map);
+            for(DictDTO o : listDTO.getList())
+            {
+                list.add(new Dict(o.getKey(), o.getValue()));
+            }
         }
         return list;
     }

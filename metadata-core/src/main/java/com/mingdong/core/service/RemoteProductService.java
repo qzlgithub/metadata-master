@@ -27,8 +27,8 @@ public interface RemoteProductService
     /**
      * 根据条件获取获取客户消费记录
      */
-    ListDTO<ApiReqInfoDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate, Date endDate,
-            Page page);
+    ListDTO<ApiReqInfoDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+            Date endDate, Page page);
 
     /**
      * 根据条件获取产品信息列表
@@ -45,7 +45,7 @@ public interface RemoteProductService
     /**
      * 根据合同号获取充值记录
      */
-    ProductRechargeDTO getProductRechargeByContractNo(String contractNo);
+    Integer checkIfContractExist(String contractNo);
 
     /**
      * 根据充值记录id获取充值记录
@@ -61,11 +61,6 @@ public interface RemoteProductService
      * 查询产品的详细信息
      */
     ProductDTO getProductInfoData(Long productId);
-
-    /**
-     * 根据状态获取产品信息列表
-     */
-    ProductListDTO getProductListByStatus(Integer enabled); // TODO review
 
     /**
      * 根据状态获取项目信息列表
@@ -93,4 +88,9 @@ public interface RemoteProductService
             Long rechargeType, Date fromDate, Date toDate, Page page);
 
     ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
+
+    /**
+     * 产品字典
+     */
+    ListDTO<DictDTO> getProductDict();
 }

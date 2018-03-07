@@ -1,6 +1,7 @@
 package com.mingdong.bop.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 
@@ -29,7 +30,7 @@ public interface ProductService
     /**
      * 获取产品信息列表
      */
-    List<Map<String, Object>> getProductDict();
+    List<Dict> getProductDict();
 
     /**
      * 根据状态获取产品信息列表

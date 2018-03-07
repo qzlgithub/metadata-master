@@ -43,8 +43,8 @@
                     <div class="layui-inline" style="width: 180px">
                         <select name="product-id" id="productId">
                             <option value="">全部</option>
-                            <option th:each="o : ${productDict}" th:value="${o.id}" th:text="${o.name}"
-                                    th:selected="${o.id eq productId}"></option>
+                            <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
+                                    th:selected="${o.key eq productId}"></option>
                         </select>
                     </div>
                 </li>
