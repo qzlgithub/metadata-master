@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class SettingController
@@ -108,12 +106,11 @@ public class SettingController
      */
     @LoginRequired
     @GetMapping(value = "/setting/industry/verification")
-    public Map<String, Integer> configIndustry(@RequestParam(value = Field.CODE) String code)
+    public RestResp configIndustry(@RequestParam(value = Field.CODE) String code)
     {
-        Map<String, Integer> map = new HashMap<>();
-        boolean exist = systemService.checkIndustryCodeExist(code);
-        map.put(Field.EXIST, exist ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-        return map;
+        RestResp resp = new RestResp();
+        systemService.checkIfIndustryExist(code, resp);
+        return resp;
     }
 
     /**

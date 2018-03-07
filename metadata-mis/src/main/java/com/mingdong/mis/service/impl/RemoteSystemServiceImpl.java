@@ -67,16 +67,10 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
     }
 
     @Override
-    public DictIndustryDTO getDictIndustryByCode(String code)
+    public Integer checkIfIndustryExist(String code)
     {
-        DictIndustryDTO dictIndustryDTO = new DictIndustryDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(code);
-        if(byCode == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(byCode, dictIndustryDTO);
-        return dictIndustryDTO;
+        DictIndustry o = dictIndustryMapper.findByCode(code);
+        return o != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override

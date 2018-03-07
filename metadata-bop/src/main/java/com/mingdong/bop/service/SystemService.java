@@ -13,7 +13,7 @@ public interface SystemService
     /**
      * 判断是否存在该code数据
      */
-    boolean checkIndustryCodeExist(String code);
+    void checkIfIndustryExist(String code, RestResp resp);
 
     /**
      * 新增行业分类信息

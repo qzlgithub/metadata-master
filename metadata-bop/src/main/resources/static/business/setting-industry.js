@@ -133,8 +133,8 @@ function checkNewCode() {
         $.get(
             "/setting/industry/verification",
             {"code": code},
-            function(data) {
-                if(data.exist === 1) {
+            function(res) {
+                if(res.code === '000000' && res.data.exist === 1) {
                     $("#tip-new-code").text("该行业编号已被占用");
                 }
                 else {

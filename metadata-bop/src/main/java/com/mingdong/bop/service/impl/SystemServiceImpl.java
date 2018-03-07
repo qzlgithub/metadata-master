@@ -41,10 +41,9 @@ public class SystemServiceImpl implements SystemService
     private RemoteManagerService remoteManagerService;
 
     @Override
-    public boolean checkIndustryCodeExist(String code)
+    public void checkIfIndustryExist(String code, RestResp resp)
     {
-        DictIndustryDTO industry = remoteSystemService.getDictIndustryByCode(code.toUpperCase());
-        return industry != null;
+        resp.addData(Field.EXIST, remoteSystemService.checkIfIndustryExist(code.toUpperCase()));
     }
 
     @Override
