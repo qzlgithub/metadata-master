@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
@@ -59,36 +58,57 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     }
 
     @Override
-    public ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
     {
-        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
-        List<ClientInfoDTO> dataList = new ArrayList<>();
-        clientInfoListDTO.setDataList(dataList);
-        if(page == null)
+        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        int total = statsClientMapper.getClientCountByDate(date, currentDay);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
-            List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            if(!CollectionUtils.isEmpty(clientInfoList))
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
+            if(!CollectionUtils.isEmpty(dataList))
             {
-                findClientInfoDTO(clientInfoList, dataList);
-            }
-        }
-        else
-        {
-            int total = statsClientMapper.getClientCountByDate(date, currentDay);
-            int pages = page.getTotalPage(total);
-            clientInfoListDTO.setPages(pages);
-            clientInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-                if(!CollectionUtils.isEmpty(clientInfoList))
+                List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
+                for(ClientInfo o : dataList)
                 {
-                    findClientInfoDTO(clientInfoList, dataList);
+                    ClientInfoDTO ci = new ClientInfoDTO();
+                    ci.setRegisterTime(o.getRegisterTime());
+                    ci.setCorpName(o.getCorpName());
+                    ci.setShortName(o.getShortName());
+                    ci.setUsername(o.getUsername());
+                    ci.setManagerName(o.getManagerName());
+                    list.add(ci);
                 }
+                listDTO.setList(list);
             }
         }
-        return clientInfoListDTO;
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<ClientInfoDTO> getClientInfoListByDate(Date fromDate, Date toDate)
+    {
+        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(fromDate, toDate);
+        listDTO.setTotal(dataList.size());
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<ClientInfoDTO> list = new ArrayList<>();
+            for(ClientInfo o : dataList)
+            {
+                ClientInfoDTO ci = new ClientInfoDTO();
+                ci.setRegisterTime(o.getRegisterTime());
+                ci.setCorpName(o.getCorpName());
+                ci.setShortName(o.getShortName());
+                ci.setUsername(o.getUsername());
+                ci.setManagerName(o.getManagerName());
+                list.add(ci);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 
     @Override
