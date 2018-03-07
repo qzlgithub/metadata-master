@@ -15,7 +15,6 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
@@ -630,44 +629,30 @@ public class RemoteClientServiceImpl implements RemoteClientService
     }
 
     @Override
-    public ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page)
     {
-        ClientInfoListDTO clientInfoListDTO = new ClientInfoListDTO();
-        List<ClientInfoDTO> clientInfoDTOList = new ArrayList<>();
-        clientInfoListDTO.setDataList(clientInfoDTOList);
-        ClientInfoDTO clientInfoDTO;
-        if(page == null)
+        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        int total = statsClientMapper.getClientCountByDate(startTime, endTime);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
-            List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            if(!CollectionUtils.isEmpty(clientInfoList))
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(startTime, endTime);
+            List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
+            for(ClientInfo item : dataList)
             {
-                for(ClientInfo item : clientInfoList)
-                {
-                    clientInfoDTO = new ClientInfoDTO();
-                    EntityUtils.copyProperties(item, clientInfoDTO);
-                    clientInfoDTOList.add(clientInfoDTO);
-                }
+                ClientInfoDTO clientInfoDTO = new ClientInfoDTO();
+                clientInfoDTO.setRegisterTime(item.getRegisterTime());
+                clientInfoDTO.setCorpName(item.getCorpName());
+                clientInfoDTO.setShortName(item.getShortName());
+                clientInfoDTO.setUsername(item.getUsername());
+                clientInfoDTO.setManagerName(item.getManagerName());
+                list.add(clientInfoDTO);
             }
+            listDTO.setList(list);
         }
-        else
-        {
-            int total = statsClientMapper.getClientCountByDate(date, currentDay);
-            int pages = page.getTotalPage(total);
-            clientInfoListDTO.setPages(pages);
-            clientInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ClientInfo> clientInfoList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-                for(ClientInfo item : clientInfoList)
-                {
-                    clientInfoDTO = new ClientInfoDTO();
-                    EntityUtils.copyProperties(item, clientInfoDTO);
-                    clientInfoDTOList.add(clientInfoDTO);
-                }
-            }
-        }
-        return clientInfoListDTO;
+        return listDTO;
     }
 
     @Override
