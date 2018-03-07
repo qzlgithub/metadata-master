@@ -56,11 +56,6 @@ public interface SystemService
     List<Map<String, Object>> getRechargeDict();
 
     /**
-     * 根据状态获取充值类型列表
-     */
-    List<Map<String, Object>> getRechargeTypeList(Integer enabled, Integer deleted);
-
-    /**
      * 新增充值类型
      */
     void addRechargeType(String name, String remark, RestResp resp);

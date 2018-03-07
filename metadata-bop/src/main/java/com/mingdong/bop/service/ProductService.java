@@ -32,10 +32,5 @@ public interface ProductService
      */
     List<Dict> getProductDict();
 
-    /**
-     * 根据状态获取产品信息列表
-     */
-    List<Map<String, Object>> getProductInfoListMap(Integer enabled);
-
     void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res);
 }

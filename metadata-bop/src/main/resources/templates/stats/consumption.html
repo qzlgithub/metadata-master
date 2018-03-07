@@ -91,12 +91,12 @@
                                    style="width: 240px"/>
                         </li>
                         <li>
-                            <label class="layui-form-label">产品：</label>
+                            <label class="layui-form-label">产品服务：</label>
                             <div class="layui-inline" style="width: 160px">
                                 <select name="product" id="product" title="产品" lay-search="">
                                     <option value="">全部</option>
-                                    <option th:each="o:${productInfoList}" th:value="${o.id}"
-                                            th:text="${o.name}"></option>
+                                    <option th:each="o : ${productDict}" th:value="${o.key}"
+                                            th:text="${o.value}"></option>
                                 </select>
                             </div>
                         </li>

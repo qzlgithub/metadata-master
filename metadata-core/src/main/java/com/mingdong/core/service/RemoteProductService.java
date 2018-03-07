@@ -6,7 +6,7 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductInfoListDTO;
+import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -65,11 +65,6 @@ public interface RemoteProductService
      * 查询产品的详细信息
      */
     ProductDTO getProductInfoData(Long productId);
-
-    /**
-     * 根据状态获取项目信息列表
-     */
-    ProductInfoListDTO getProductInfoList(Integer enabled, Page page);
 
     /**
      * 根据客户id获取客户项目详细

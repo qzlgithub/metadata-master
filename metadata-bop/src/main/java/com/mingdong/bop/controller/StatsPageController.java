@@ -5,15 +5,12 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class StatsPageController
@@ -61,8 +58,7 @@ public class StatsPageController
     public ModelAndView gotoStatsRequest()
     {
         ModelAndView view = new ModelAndView("stats/consumption");
-        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
+        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
         view.addAllObjects(RequestThread.getMap());
         RestResp resp = statsService.getRequestIndexStats();
         view.addAllObjects(resp.getData());

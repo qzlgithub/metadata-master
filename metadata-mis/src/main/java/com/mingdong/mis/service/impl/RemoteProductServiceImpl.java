@@ -6,8 +6,6 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
-import com.mingdong.core.constant.Custom;
-import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -16,8 +14,6 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductInfoDTO;
-import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -30,7 +26,6 @@ import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
-import com.mingdong.mis.domain.entity.ProductInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
 import com.mingdong.mis.domain.entity.Recharge;
@@ -303,58 +298,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
         productDTO.setContent(productTxt == null ? null : productTxt.getContent());
         productDTO.setEnabled(product.getEnabled());
         return productDTO;
-    }
-
-    @Override
-    public ProductInfoListDTO getProductInfoList(Integer enabled, Page page)
-    {
-        ProductInfoListDTO productInfoListDTO = new ProductInfoListDTO();
-        List<ProductInfoDTO> dataList = new ArrayList<>();
-        productInfoListDTO.setDataList(dataList);
-        ProductInfoDTO productInfoDTO;
-        if(page == null)
-        {
-            List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
-            if(!CollectionUtils.isEmpty(productInfoList))
-            {
-                for(ProductInfo item : productInfoList)
-                {
-                    productInfoDTO = new ProductInfoDTO();
-                    EntityUtils.copyProperties(item, productInfoDTO);
-                    productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()) != null ?
-                            Custom.getById(productInfoDTO.getCustom()).getName() : null);
-                    productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()) != null ?
-                            ProdType.getById(productInfoDTO.getType()).getName() : null);
-                    dataList.add(productInfoDTO);
-                }
-            }
-        }
-        else
-        {
-            int total = productInfoMapper.countByEnabled(enabled);
-            int pages = page.getTotalPage(total);
-            productInfoListDTO.setPages(pages);
-            productInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductInfo> productInfoList = productInfoMapper.getListByEnabled(enabled);
-                if(!CollectionUtils.isEmpty(productInfoList))
-                {
-                    for(ProductInfo item : productInfoList)
-                    {
-                        productInfoDTO = new ProductInfoDTO();
-                        dataList.add(productInfoDTO);
-                        EntityUtils.copyProperties(item, productInfoDTO);
-                        productInfoDTO.setCustomName(Custom.getById(productInfoDTO.getCustom()) != null ?
-                                Custom.getById(productInfoDTO.getCustom()).getName() : null);
-                        productInfoDTO.setTypeName(ProdType.getById(productInfoDTO.getType()) != null ?
-                                ProdType.getById(productInfoDTO.getType()).getName() : null);
-                    }
-                }
-            }
-        }
-        return productInfoListDTO;
     }
 
     @Override

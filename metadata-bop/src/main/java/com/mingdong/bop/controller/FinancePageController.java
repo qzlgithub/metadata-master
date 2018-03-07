@@ -6,15 +6,11 @@ import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.Dict;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class FinancePageController
@@ -31,9 +27,8 @@ public class FinancePageController
     public ModelAndView gotoBillListPage()
     {
         ModelAndView view = new ModelAndView("finance/consumption");
+        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
         view.addAllObjects(RequestThread.getMap());
-        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        view.addObject(Field.PRODUCT_DICT, productInfoList);
         return view;
     }
 
@@ -42,16 +37,11 @@ public class FinancePageController
     public ModelAndView gotoRechargeListPage()
     {
         ModelAndView view = new ModelAndView("finance/recharge");
-        view.addAllObjects(RequestThread.getMap());
-        List<Map<String, Object>> rechargeTypeList = systemService.getRechargeTypeList(TrueOrFalse.TRUE,
-                TrueOrFalse.FALSE);
-        List<Map<String, Object>> productInfoList = productService.getProductInfoListMap(TrueOrFalse.TRUE);
-        List<Dict> adminUserDict = managerService.getAdminUserDict();
-
-        view.addObject(Field.RECHARGE_TYPE_LIST, rechargeTypeList);
-        view.addObject(Field.PRODUCT_INFO_LIST, productInfoList);
-        view.addObject(Field.ADMIN_USER_DICT, adminUserDict);
+        view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
+        view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
+        view.addObject(Field.ADMIN_USER_DICT, managerService.getAdminUserDict());
         view.addObject(Field.IS_MANAGER, RequestThread.isManager());
+        view.addAllObjects(RequestThread.getMap());
         return view;
     }
 }

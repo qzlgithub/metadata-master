@@ -15,8 +15,6 @@ import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductInfoDTO;
-import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import org.springframework.stereotype.Service;
@@ -86,30 +84,6 @@ public class ProductServiceImpl implements ProductService
             for(DictDTO o : listDTO.getList())
             {
                 list.add(new Dict(o.getKey(), o.getValue()));
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public List<Map<String, Object>> getProductInfoListMap(Integer enabled)
-    {
-        ProductInfoListDTO productInfoListDTO = remoteProductService.getProductInfoList(enabled, null);
-        List<ProductInfoDTO> productInfoList = productInfoListDTO.getDataList();
-        List<Map<String, Object>> list = new ArrayList<>(productInfoList.size());
-        if(!CollectionUtils.isEmpty(productInfoList))
-        {
-            for(ProductInfoDTO productInfo : productInfoList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, productInfo.getId() + "");
-                map.put(Field.CODE, productInfo.getCode());
-                map.put(Field.NAME, productInfo.getName());
-                map.put(Field.REMARK, productInfo.getRemark());
-                map.put(Field.ENABLED, productInfo.getEnabled() + "");
-                map.put(Field.COST_AMT, productInfo.getCostAmt());
-                map.put(Field.TYPE_NAME, productInfo.getTypeName());
-                list.add(map);
             }
         }
         return list;
