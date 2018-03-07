@@ -205,7 +205,7 @@ public class ClientController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.resetPassword(idList, resp);
+        clientService.resetPassword(idList);
         return resp;
     }
 

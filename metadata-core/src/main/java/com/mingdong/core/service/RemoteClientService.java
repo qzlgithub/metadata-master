@@ -6,7 +6,6 @@ import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
-import com.mingdong.core.model.dto.ClientListDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
@@ -114,19 +113,17 @@ public interface RemoteClientService
             Page page);
 
     /**
-     * 根据客户ID将客户设置为删除
+     * 批量将客户设置为删除
      */
-    ResultDTO setClientDeleted(List<Long> idList);
+    void setClientDeleted(List<Long> idList);
 
     /**
-     * 根据客户ids获取客户信息列表
+     * 批量设置客户主账号的密码
+     *
+     * @param idList   客户ID列表
+     * @param password 新的密码
      */
-    ClientListDTO getClientListByIds(List<Long> idList);
-
-    /**
-     * 根据客户帐号ID重置密码
-     */
-    ResultDTO resetPasswordByIds(String newPassword, List<Long> idList);
+    void setClientPassword(List<Long> idList, String password);
 
     /**
      * 根据客户产品id获取客户产品信息
@@ -136,7 +133,7 @@ public interface RemoteClientService
     /**
      * 根据条件获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page);
+    ClientInfoListDTO getClientInfoListByDate(Date date, Date currentDay, Page page); // TODO review
 
     /**
      * 新增客户

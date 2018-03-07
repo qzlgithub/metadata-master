@@ -18,7 +18,7 @@ public interface RemoteSystemService
     /**
      * 根据条件获取行业分类信息列表
      */
-    DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse);
+    DictIndustryListDTO getDictIndustryListByParentAndStatus(Long parentIndustryId, Integer trueOrFalse); // TODO review
 
     /**
      * 根据行业分类code获取行业分类
@@ -38,12 +38,12 @@ public interface RemoteSystemService
     /**
      * 根据状态获取充值类型列表
      */
-    DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted);
+    DictRechargeTypeListDTO getDictRechargeTypeListByStatus(Integer enabled, Integer deleted); // TODO review
 
     /**
      * 获取行业分类列表
      */
-    DictIndustryListDTO getDictIndustryInfoList();
+    DictIndustryListDTO getDictIndustryInfoList(); // TODO review
 
     /**
      * 修改模块状态
