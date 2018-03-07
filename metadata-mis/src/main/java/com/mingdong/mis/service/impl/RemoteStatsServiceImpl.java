@@ -242,7 +242,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
             return;
         }
         Integer clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
-        Long requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
+        int requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
         Stats stats = new Stats();
         stats.setId(IDUtils.getStatsId(1));
@@ -252,7 +252,7 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
         stats.setStatsDay(day);
         stats.setStatsHour(hour);
         stats.setClientIncrement(clientCount != null ? clientCount : 0);
-        stats.setClientRequest(requestCount != null ? requestCount : 0);
+        stats.setClientRequest(Long.valueOf(requestCount + ""));
         stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
         statsMapper.add(stats);
     }
