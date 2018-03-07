@@ -13,5 +13,5 @@ public interface ClientInfoMapper
     List<ClientInfo> getClientInfoListByDate(@Param("start") Date start, @Param("end") Date end);
 
     List<ClientInfo> getListBy(@Param("keyword") String keyword, @Param("industryList") List<Long> industryList,
-            @Param("enabled") Integer enabled,@Param("managerId") Long managerId);
+            @Param("enabled") Integer enabled, @Param("managerId") Long managerId);
 }

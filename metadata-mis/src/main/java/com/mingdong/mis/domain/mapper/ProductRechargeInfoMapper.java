@@ -29,4 +29,6 @@ public interface ProductRechargeInfoMapper
 
     List<ProductRechargeInfo> getListByClient(@Param("clientId") Long clientId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    List<ProductRechargeInfo> getListByTime(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

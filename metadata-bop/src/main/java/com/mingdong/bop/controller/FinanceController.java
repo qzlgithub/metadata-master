@@ -44,7 +44,8 @@ public class FinanceController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        tradeService.getProductRechargeInfoList(keyword, product, RequestThread.isManager()?manager:RequestThread.getOperatorId(), rechargeType, from, to,
+        tradeService.getProductRechargeInfoList(keyword, product,
+                RequestThread.isManager() ? manager : RequestThread.getOperatorId(), rechargeType, from, to,
                 new Page(pageNum, pageSize), res);
         return res;
     }
@@ -71,7 +72,8 @@ public class FinanceController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        tradeService.getClientBillList(keyword, productId, billPlan, from, to, RequestThread.isManager()?null:RequestThread.getOperatorId(), new Page(pageNum, pageSize), res);
+        tradeService.getClientBillList(keyword, productId, billPlan, from, to,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), new Page(pageNum, pageSize), res);
         return res;
     }
 }

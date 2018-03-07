@@ -7,7 +7,6 @@ import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteStatsService;
 import com.mingdong.core.util.EntityUtils;
@@ -105,38 +104,54 @@ public class RemoteStatsServiceImpl implements RemoteStatsService
     }
 
     @Override
-    public ProductRechargeInfoListDTO getProductRechargeInfoListBy(Date date, Date currentDay, Page page)
+    public ListDTO<ProductRechargeInfoDTO> getProductRechargeInfoListBy(Date date, Date currentDay, Page page)
     {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = new ProductRechargeInfoListDTO();
-        List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
-        productRechargeInfoListDTO.setDataList(dataList);
-        if(page == null)
+        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        int total = statsClientMapper.countClientRechargeByDate(date, currentDay);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null, date,
                     currentDay);
             if(!CollectionUtils.isEmpty(productRechargeInfoList))
             {
-                findProductRechargeInfoDTO(productRechargeInfoList, dataList);
-            }
-        }
-        else
-        {
-            int total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-            int pages = page.getTotalPage(total);
-            productRechargeInfoListDTO.setPages(pages);
-            productRechargeInfoListDTO.setTotal(total);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null,
-                        date, currentDay);
-                if(!CollectionUtils.isEmpty(productRechargeInfoList))
+                List<ProductRechargeInfoDTO> list = new ArrayList<>();
+                for(ProductRechargeInfo o : productRechargeInfoList)
                 {
-                    findProductRechargeInfoDTO(productRechargeInfoList, dataList);
+                    // TODO zhujun
+                    ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                    pri.setAmount(o.getAmount());
+                    pri.setBalance(o.getBalance());
+                    list.add(pri);
                 }
+                listDTO.setList(list);
             }
         }
-        return productRechargeInfoListDTO;
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<ProductRechargeInfoDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
+    {
+        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
+        listDTO.setTotal(productRechargeInfoList.size());
+        if(!CollectionUtils.isEmpty(productRechargeInfoList))
+        {
+            List<ProductRechargeInfoDTO> list = new ArrayList<>();
+            for(ProductRechargeInfo o : productRechargeInfoList)
+            {
+                // TODO zhujun
+                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                list.add(pri);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 
     @Override

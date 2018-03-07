@@ -3,7 +3,7 @@ package com.mingdong.core.service;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
+import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 
 import java.math.BigDecimal;
@@ -39,7 +39,9 @@ public interface RemoteStatsService
     /**
      * 根据日期获取充值信息列表
      */
-    ProductRechargeInfoListDTO getProductRechargeInfoListBy(Date fromDate, Date toDate, Page page);
+    ListDTO<ProductRechargeInfoDTO> getProductRechargeInfoListBy(Date fromDate, Date toDate, Page page);
+
+    ListDTO<ProductRechargeInfoDTO> getRechargeInfoListBy(Date fromDate, Date toDate);
 
     /**
      * 根据日期获取客户充值次数

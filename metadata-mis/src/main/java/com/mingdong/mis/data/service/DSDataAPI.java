@@ -170,7 +170,8 @@ public class DSDataAPI
                     {
                         multipleApp.setDataSize(res.getInteger("dataSize"));//模糊 range 范围，表示后面带次数的字段模糊区间。 如： 3
                         multipleApp.setIdCardMpTimesType(res.getInteger("idCardMpTimesType"));//证件查询次数级别，0,1,2,3……
-                        multipleApp.setIdCardMpTimesRange(res.getString("idCardMpTimesRange"));//证件查询平台数，0， [1,3],[4,6]……以下 type 以此类推
+                        multipleApp.setIdCardMpTimesRange(
+                                res.getString("idCardMpTimesRange"));//证件查询平台数，0， [1,3],[4,6]……以下 type 以此类推
                         multipleApp.setIdCardFirstTime(res.getString("idCardFirstTime"));//证件最早出现日期
                         multipleApp.setIdCardEndTime(res.getString("idCardEndTime"));//证件最近出现日期
                         multipleApp.setPhoneMpTimesType(res.getInteger("phoneMpTimesType"));//手机查询次数级别

@@ -24,7 +24,6 @@ import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import com.mingdong.core.service.RemoteClientService;
 import com.mingdong.core.service.RemoteProductService;
@@ -300,9 +299,9 @@ public class StatsServiceImpl implements StatsService
         row.createCell(9).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
-                beforeDate, currentDay, page);
-        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteStatsService.getProductRechargeInfoListBy(beforeDate,
+                currentDay, page);
+        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
@@ -340,10 +339,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteStatsService.getProductRechargeInfoListBy(
-                beforeDate, currentDay, null);
-        List<ProductRechargeInfoDTO> dataList = productRechargeInfoListDTO.getDataList();
-        //left
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteStatsService.getRechargeInfoListBy(beforeDate, currentDay);
+        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         Map<String, BigDecimal> typeNameBigDecMap = new HashMap<>();
         Set<String> setTemp = new HashSet<>();
         BigDecimal bigDecimalTemp;
@@ -846,8 +843,8 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getProductRechargeRecord(null,
-                null, start, end, page);
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getProductRechargeRecord(null, null, start, end,
+                page);
         List<ProductRechargeInfoDTO> infoDateList = listDTO.getList();
         return getProductRechargeInfoDateList(infoDateList);
     }
