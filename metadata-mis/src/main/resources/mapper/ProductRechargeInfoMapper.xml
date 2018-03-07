@@ -103,7 +103,7 @@
                 or pr.`contract_no` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
+            <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
             <if test="rechargeType != null">and pr.`recharge_type` = #{rechargeType}</if>
             <if test="fromDate != null">and pr.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and pr.`create_time` &lt; #{toDate}</if>
@@ -124,7 +124,7 @@
                 or pr.`contract_no` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
+            <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
             <if test="rechargeType != null">and pr.`recharge_type` = #{rechargeType}</if>
             <if test="fromDate != null">and pr.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and pr.`create_time` &lt; #{toDate}</if>
@@ -162,7 +162,7 @@
                  or pr.`contract_no` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="managerId != null">and c.`manager_id` = #{managerId}</if>
+            <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
             <if test="rechargeType != null">and pr.`recharge_type` = #{rechargeType}</if>
             <if test="fromDate != null">and pr.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and pr.`create_time` &lt; #{toDate}</if>
