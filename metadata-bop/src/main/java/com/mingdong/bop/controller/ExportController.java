@@ -2,6 +2,7 @@ package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.constant.ScopeType;
+import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.StatsService;
 import com.mingdong.bop.service.TradeService;
@@ -171,8 +172,9 @@ public class ExportController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        XSSFWorkbook wb = tradeService.createProductRechargeInfoListXlsx(keyword, product, manager, rechargeType, from,
-                to, new Page(1, 1000));
+        XSSFWorkbook wb = tradeService.createProductRechargeInfoListXlsx(keyword, product,
+                RequestThread.isManager() ? manager : RequestThread.getOperatorId(), rechargeType, from, to,
+                new Page(1, 1000));
         String filename = new String("充值记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");
