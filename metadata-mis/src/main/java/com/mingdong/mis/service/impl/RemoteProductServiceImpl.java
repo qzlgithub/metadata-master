@@ -6,7 +6,6 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
-import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.ProductStatus;
@@ -19,7 +18,6 @@ import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
-import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -148,79 +146,70 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page)
+    public ListDTO<ProductDTO> getOpenedProductList(Long clientId)
     {
-        ProductListDTO dto = new ProductListDTO();
-        List<ProductClientInfo> dataList;
-        if(page == null)
+        ListDTO<ProductDTO> listDTO = new ListDTO<>();
+        int total = productClientInfoMapper.countByClientOpened(clientId, TrueOrFalse.TRUE);
+        listDTO.setTotal(total);
+        if(total > 0)
         {
-            dataList = productClientInfoMapper.getInfoListBy(clientId, isOpen, selectedType);
-        }
-        else
-        {
-            int total = productClientInfoMapper.countInfoListBy(clientId, isOpen, selectedType);
-            int pages = page.getTotalPage(total);
-            dto.setTotal(total);
-            dto.setPages(pages);
-            if(total > 0 && page.getPageNum() <= pages)
+            List<ProductClientInfo> dataList = productClientInfoMapper.getListByClientOpened(clientId,
+                    TrueOrFalse.TRUE);
+            List<ProductDTO> list = new ArrayList<>();
+            for(ProductClientInfo o : dataList)
             {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                dataList = productClientInfoMapper.getInfoListBy(clientId, isOpen, selectedType);
-            }
-            else
-            {
-                dataList = new ArrayList<>();
-            }
-        }
-        List<ProductDTO> opened = new ArrayList<>();
-        List<ProductDTO> toOpen = new ArrayList<>();
-        for(ProductClientInfo info : dataList)
-        {
-            if(info.getClientProductId() != null && TrueOrFalse.TRUE.equals(info.getOpened()))
-            {
-                if(opened.size() < Constant.HOME_PRODUCT_QTY)
+                ProductDTO p = new ProductDTO();
+                p.setId(o.getProductId());
+                p.setName(o.getProductName());
+                p.setProductCode(o.getCode());
+                p.setType(o.getType());
+                p.setTypeName(o.getTypeName());
+                p.setBillPlan(o.getBillPlan());
+                if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
                 {
-                    ProductDTO d = new ProductDTO();
-                    d.setId(info.getProductId());
-                    d.setName(info.getProductName());
-                    d.setProductCode(info.getCode());
-                    d.setType(info.getType());
-                    d.setTypeName(info.getTypeName());
-                    d.setBillPlan(info.getBillPlan());
-                    if(BillPlan.BY_TIME.getId().equals(info.getBillPlan()))
-                    {
-                        d.setStatus(ProductStatus.getStatusByDate(info.getStartDate(), info.getEndDate()));
-                        d.setFromDate(info.getStartDate());
-                        d.setToDate(info.getEndDate());
-                    }
-                    else
-                    {
-                        d.setStatus(ProductStatus.getStatusByBalance(info.getUnitAmt(), info.getBalance()));
-                        d.setCostAmt(info.getUnitAmt());
-                        d.setBalance(info.getBalance());
-                        d.setArrearTime(info.getArrearTime());
-                    }
-                    opened.add(d);
+                    p.setStatus(ProductStatus.getStatusByDate(o.getStartDate(), o.getEndDate()));
+                    p.setFromDate(o.getStartDate());
+                    p.setToDate(o.getEndDate());
                 }
-            }
-            else
-            {
-                if(toOpen.size() < Constant.HOME_PRODUCT_QTY)
+                else
                 {
-                    ProductDTO d = new ProductDTO();
-                    d.setId(info.getProductId());
-                    d.setName(info.getProductName());
-                    d.setRemark(info.getRemark());
-                    d.setProductCode(info.getCode());
-                    d.setTypeName(info.getTypeName());
-                    d.setType(info.getType());
-                    toOpen.add(d);
+                    p.setStatus(ProductStatus.getStatusByBalance(o.getUnitAmt(), o.getBalance()));
+                    p.setCostAmt(o.getUnitAmt());
+                    p.setBalance(o.getBalance());
+                    p.setArrearTime(o.getArrearTime());
                 }
+                list.add(p);
             }
+            listDTO.setList(list);
         }
-        dto.setOpened(opened);
-        dto.setToOpen(toOpen);
-        return dto;
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<ProductDTO> getUnopenedProductList(Long clientId)
+    {
+        ListDTO<ProductDTO> listDTO = new ListDTO<>();
+        int total = productClientInfoMapper.countByClientOpened(clientId, TrueOrFalse.FALSE);
+        listDTO.setTotal(total);
+        if(total > 0)
+        {
+            List<ProductClientInfo> dataList = productClientInfoMapper.getListByClientOpened(clientId,
+                    TrueOrFalse.FALSE);
+            List<ProductDTO> list = new ArrayList<>();
+            for(ProductClientInfo o : dataList)
+            {
+                ProductDTO p = new ProductDTO();
+                p.setId(o.getProductId());
+                p.setName(o.getProductName());
+                p.setRemark(o.getRemark());
+                p.setProductCode(o.getCode());
+                p.setTypeName(o.getTypeName());
+                p.setType(o.getType());
+                list.add(p);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 
     @Override

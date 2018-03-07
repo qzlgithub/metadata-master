@@ -14,7 +14,6 @@ import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -156,12 +155,11 @@ public class ClientServiceImpl implements ClientService
             resp.addData(Field.ALLOWED_QTY, subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX));
             resp.addData(Field.SUB_USER_LIST, list);
         }
-        ProductListDTO productListDTO = productApi.getIndexProductList(RequestThread.getClientId(), null, null, null);
+        ListDTO<ProductDTO> openedList = productApi.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();
-        List<Map<String, Object>> toOpen = new ArrayList<>();
-        if(productListDTO.getResultDTO().getResult() == RestResult.SUCCESS)
+        if(!CollectionUtils.isEmpty(openedList.getList()))
         {
-            for(ProductDTO d : productListDTO.getOpened())
+            for(ProductDTO d : openedList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.PRODUCT_ID, d.getId() + "");
@@ -181,17 +179,22 @@ public class ClientServiceImpl implements ClientService
                 }
                 opened.add(map);
             }
-            for(ProductDTO d : productListDTO.getToOpen())
+        }
+        ListDTO<ProductDTO> unopenedList = productApi.getUnopenedProductList(RequestThread.getClientId());
+        List<Map<String, Object>> unopened = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(openedList.getList()))
+        {
+            for(ProductDTO d : unopenedList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.PRODUCT_ID, d.getId() + "");
                 map.put(Field.NAME, d.getName());
                 map.put(Field.REMARK, d.getRemark());
-                toOpen.add(map);
+                unopened.add(map);
             }
         }
         resp.addData(Field.OPENED_LIST, opened);
-        resp.addData(Field.TO_OPEN_LIST, toOpen);
+        resp.addData(Field.TO_OPEN_LIST, unopened);
         resp.addData(Field.IS_PRIMARY, RequestThread.getPrimary());
     }
 

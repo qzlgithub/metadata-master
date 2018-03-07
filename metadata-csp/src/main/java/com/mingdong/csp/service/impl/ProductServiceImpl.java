@@ -16,7 +16,6 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
@@ -233,58 +232,60 @@ public class ProductServiceImpl implements ProductService
         List<Map<String, Object>> remindList = new ArrayList<>();
         List<Map<String, Object>> trashList = new ArrayList<>();
         List<Map<String, Object>> productList = new ArrayList<>();
-        ProductListDTO dto = productApi.getIndexProductList(clientId, null, null, null);
-        List<ProductDTO> list = dto.getOpened();
-        Map<String, List<Map<String, Object>>> typeGroupProduct = new HashMap<>();
-        for(ProductDTO o : list)
+        ListDTO<ProductDTO> listDTO = productApi.getOpenedProductList(clientId);
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            Map<String, Object> map = new HashMap<>();
-            Integer status;
-            map.put(Field.PRODUCT_ID, o.getId() + "");
-            map.put(Field.PRODUCT_NAME, o.getName());
-            map.put(Field.BILL_PLAN, o.getBillPlan());
-            if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
+            Map<String, List<Map<String, Object>>> typeGroupProduct = new HashMap<>();
+            for(ProductDTO o : listDTO.getList())
             {
-                status = ProductStatus.getStatusByDate(o.getFromDate(), o.getToDate());
-                map.put(Field.FROM_DATE, DateUtils.format(o.getFromDate(), DateFormat.YYYY_MM_DD_2));
-                map.put(Field.TO_DATE, DateUtils.format(o.getToDate(), DateFormat.YYYY_MM_DD_2));
-                map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(o.getFromDate(), o.getToDate()) + "");
-            }
-            else
-            {
-                status = ProductStatus.getStatusByBalance(o.getCostAmt(), o.getBalance());
-                map.put(Field.UNIT_AMT, NumberUtils.formatAmount(o.getCostAmt()));
-                map.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
-            }
-            map.put(Field.STATUS, status);
-            if(ProductStatus.NEARLY_EXPIRE.getId().equals(status) || ProductStatus.EXPIRED.getId().equals(status) ||
-                    ProductStatus.INSUFFICIENT_BALANCE.getId().equals(status) || ProductStatus.IN_ARREAR.getId().equals(
-                    status))
-            {
-                if((ProductStatus.EXPIRED.getId().equals(status) &&
-                        System.currentTimeMillis() - o.getToDate().getTime() > 7 * 24 * 3600 * 1000) ||
-                        (ProductStatus.IN_ARREAR.getId().equals(status) &&
-                                System.currentTimeMillis() - o.getArrearTime().getTime() > 7 * 24 * 3600 * 1000))
+                Map<String, Object> map = new HashMap<>();
+                Integer status;
+                map.put(Field.PRODUCT_ID, o.getId() + "");
+                map.put(Field.PRODUCT_NAME, o.getName());
+                map.put(Field.BILL_PLAN, o.getBillPlan());
+                if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
                 {
-                    trashList.add(map);
-                    continue;
+                    status = ProductStatus.getStatusByDate(o.getFromDate(), o.getToDate());
+                    map.put(Field.FROM_DATE, DateUtils.format(o.getFromDate(), DateFormat.YYYY_MM_DD_2));
+                    map.put(Field.TO_DATE, DateUtils.format(o.getToDate(), DateFormat.YYYY_MM_DD_2));
+                    map.put(Field.REMAIN_DAYS, BusinessUtils.getDayDiffFromNow(o.getFromDate(), o.getToDate()) + "");
                 }
-                remindList.add(map);
+                else
+                {
+                    status = ProductStatus.getStatusByBalance(o.getCostAmt(), o.getBalance());
+                    map.put(Field.UNIT_AMT, NumberUtils.formatAmount(o.getCostAmt()));
+                    map.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                }
+                map.put(Field.STATUS, status);
+                if(ProductStatus.NEARLY_EXPIRE.getId().equals(status) || ProductStatus.EXPIRED.getId().equals(status) ||
+                        ProductStatus.INSUFFICIENT_BALANCE.getId().equals(status) ||
+                        ProductStatus.IN_ARREAR.getId().equals(status))
+                {
+                    if((ProductStatus.EXPIRED.getId().equals(status) &&
+                            System.currentTimeMillis() - o.getToDate().getTime() > 7 * 24 * 3600 * 1000) ||
+                            (ProductStatus.IN_ARREAR.getId().equals(status) &&
+                                    System.currentTimeMillis() - o.getArrearTime().getTime() > 7 * 24 * 3600 * 1000))
+                    {
+                        trashList.add(map);
+                        continue;
+                    }
+                    remindList.add(map);
+                }
+                List<Map<String, Object>> l = typeGroupProduct.get(o.getTypeName());
+                if(CollectionUtils.isEmpty(l))
+                {
+                    l = new ArrayList<>();
+                }
+                l.add(map);
+                typeGroupProduct.put(o.getTypeName(), l);
             }
-            List<Map<String, Object>> l = typeGroupProduct.get(o.getTypeName());
-            if(CollectionUtils.isEmpty(l))
+            for(Map.Entry entry : typeGroupProduct.entrySet())
             {
-                l = new ArrayList<>();
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.TYPE_NAME, entry.getKey());
+                map.put(Field.PRODUCT_LIST, entry.getValue());
+                productList.add(map);
             }
-            l.add(map);
-            typeGroupProduct.put(o.getTypeName(), l);
-        }
-        for(Map.Entry entry : typeGroupProduct.entrySet())
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.TYPE_NAME, entry.getKey());
-            map.put(Field.PRODUCT_LIST, entry.getValue());
-            productList.add(map);
         }
         resp.addData(Field.REMIND_LIST, remindList);
         resp.addData(Field.TRASH_LIST, trashList);

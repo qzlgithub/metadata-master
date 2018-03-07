@@ -7,7 +7,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductInfoListDTO;
-import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -31,9 +30,14 @@ public interface RemoteProductService
             Date endDate, Page page);
 
     /**
-     * 根据条件获取产品信息列表
+     * 获取指定客户已开通的产品服务信息列表
      */
-    ProductListDTO getIndexProductList(Long clientId, Integer isOpen, Integer[] selectedType, Page page); // TODO review
+    ListDTO<ProductDTO> getOpenedProductList(Long clientId);
+
+    /**
+     * 获取指定客户未开通的产品服务信息列表
+     */
+    ListDTO<ProductDTO> getUnopenedProductList(Long clientId);
 
     /**
      * 根据条件获取产品信息
