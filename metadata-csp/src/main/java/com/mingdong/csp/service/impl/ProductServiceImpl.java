@@ -13,7 +13,6 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -117,14 +116,9 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
-                toDate, page);
-        if(apiReqInfoListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.setError(apiReqInfoListDTO.getResultDTO().getResult());
-            return;
-        }
-        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
+        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId,
+                fromDate, toDate, page);
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
@@ -133,7 +127,7 @@ public class ProductServiceImpl implements ProductService
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, item.getId());
                 map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, item.getId() + "");
+                map.put(Field.TRADE_NO, item.getRequestNo() + "");
                 map.put(Field.PRODUCT_NAME, item.getProductName() == null ? "" : item.getProductName());
                 map.put(Field.BILL_PLAN, BillPlan.getById(item.getBillPlan()).getName());
                 map.put(Field.HIT, TrueOrFalse.TRUE.equals(item.getHit()) ? "是" : "否");
@@ -143,9 +137,8 @@ public class ProductServiceImpl implements ProductService
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.CODE, apiReqInfoListDTO.getResultDTO().getCode());
         resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, apiReqInfoListDTO.getPages());
+        resp.addData(Field.PAGES, page.getTotalPage(apiReqInfoListDTO.getTotal()));
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
@@ -164,9 +157,9 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ApiReqInfoListDTO apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId, fromDate,
-                toDate, page);
-        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getDataList();
+        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId,
+                fromDate, toDate, page);
+        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             ApiReqInfoDTO dataDTO;

@@ -13,7 +13,6 @@ import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.ApiReqInfoListDTO;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
@@ -117,51 +116,35 @@ public class RemoteProductServiceImpl implements RemoteProductService
     }
 
     @Override
-    public ApiReqInfoListDTO getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+    public ListDTO<ApiReqInfoDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
             Date endDate, Page page)
     {
-        ApiReqInfoListDTO apiReqInfoListDTO = new ApiReqInfoListDTO();
-        List<ApiReqInfoDTO> apiReqInfoDTOList = new ArrayList<>();
-        apiReqInfoListDTO.setDataList(apiReqInfoDTOList);
-        ApiReqInfoDTO apiReqInfoDTO;
-        if(page == null)
+        ListDTO<ApiReqInfoDTO> listDTO = new ListDTO<>();
+        int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
                     endDate);
-            if(!CollectionUtils.isEmpty(apiReqInfoList))
+            List<ApiReqInfoDTO> list = new ArrayList<>(apiReqInfoList.size());
+            for(ApiReqInfo o : apiReqInfoList)
             {
-                for(ApiReqInfo item : apiReqInfoList)
-                {
-                    apiReqInfoDTO = new ApiReqInfoDTO();
-                    EntityUtils.copyProperties(item, apiReqInfoDTO);
-                    apiReqInfoDTOList.add(apiReqInfoDTO);
-                }
+                ApiReqInfoDTO ari = new ApiReqInfoDTO();
+                ari.setId(o.getId());
+                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestNo(o.getRequestNo());
+                ari.setProductName(o.getProductName());
+                ari.setBillPlan(o.getBillPlan());
+                ari.setHit(o.getHit());
+                ari.setFee(o.getFee());
+                ari.setBalance(o.getBalance());
+                list.add(ari);
             }
+            listDTO.setList(list);
         }
-        else
-        {
-            Long total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
-            int pages = page.getTotalPage(total.intValue());
-            apiReqInfoListDTO.setPages(pages);
-            apiReqInfoListDTO.setTotal(total.intValue());
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
-                        endDate);
-                if(!CollectionUtils.isEmpty(apiReqInfoList))
-                {
-                    for(ApiReqInfo item : apiReqInfoList)
-                    {
-                        apiReqInfoDTO = new ApiReqInfoDTO();
-                        apiReqInfoDTOList.add(apiReqInfoDTO);
-                        EntityUtils.copyProperties(item, apiReqInfoDTO);
-                    }
-                }
-            }
-        }
-        return apiReqInfoListDTO;
-
+        return listDTO;
     }
 
     @Override
