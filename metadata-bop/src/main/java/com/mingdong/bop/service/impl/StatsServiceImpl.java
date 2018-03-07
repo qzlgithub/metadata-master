@@ -19,7 +19,6 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeListDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -178,8 +177,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(4).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
+        ListDTO<ClientInfoDTO> listDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoDTO> dataList = listDTO.getList();
 
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -211,8 +210,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ClientInfoListDTO clientInfoListDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay, null);
-        List<ClientInfoDTO> dataList = clientInfoListDTO.getDataList();
+        ListDTO<ClientInfoDTO> listDTO = remoteStatsService.getClientInfoListByDate(beforeDate, currentDay);
+        List<ClientInfoDTO> dataList = listDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Integer> dateMap = new LinkedHashMap<>();
         Calendar c = Calendar.getInstance();

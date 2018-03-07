@@ -1,7 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.ClientInfoListDTO;
+import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
@@ -24,7 +24,9 @@ public interface RemoteStatsService
     /**
      * 根据日期获取客户信息列表
      */
-    ClientInfoListDTO getClientInfoListByDate(Date fromDate, Date toDate, Page page); // TODO review
+    ListDTO<ClientInfoDTO> getClientInfoListByDate(Date fromDate, Date toDate, Page page);
+
+    ListDTO<ClientInfoDTO> getClientInfoListByDate(Date fromDate, Date toDate);
 
     /**
      * 根据日期获取充值总额
