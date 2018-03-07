@@ -33,7 +33,7 @@
                     <span class="w20">编号</span>
                     <span class="w10">是否显示</span>
                     <span class="w30">操作</span>
-                    <span class="w15">排序</span>
+                    <span class="w15" style="display: none;">排序</span>
                 </dt>
                 <dd th:each="parent: ${list}">
                     <div class="clearfix jurisdiction-list-div" th:id="'industry-id-'+${parent.id}">
@@ -52,7 +52,7 @@
                             <span class="edit cp mr30 add-child" th:attr="data-id=${parent.id}">新增子行业</span>
                             <span class="mr30 edit cp edit-industry" th:attr="data-id=${parent.id}">编辑</span>
                         </a>
-                        <a class="w15"><i class="icon sort-icon"></i></a>
+                        <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                     </div>
                     <ul class="accordion-content accordionItem is-collapsed jurisdiction-list-li" id="accordion1"
                         aria-hidden="true">
@@ -70,7 +70,7 @@
                             <em class="w30">
                                 <a class="mr30 edit cp edit-industry" th:attr="data-id=${child.id}">编辑</a>
                             </em>
-                            <em class="w15"><i class="icon sort-icon"></i></em>
+                            <em class="w15" style="display: none;"><i class="icon sort-icon"></i></em>
                         </li>
                     </ul>
                 </dd>

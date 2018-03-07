@@ -30,11 +30,11 @@
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
                     <span class="w20 tl">栏目名称</span>
-                    <span class="w20">编号</span>
-                    <span class="w10">图片</span>
-                    <span class="w10">是否显示</span>
+                    <span class="w20" style="display: none;">编号</span>
+                    <span class="w10" style="display: none;">图片</span>
+                    <span class="w10" style="display: none;">是否显示</span>
                     <span class="w20">操作</span>
-                    <span class="w15">排序</span>
+                    <span class="w15" style="display: none;">排序</span>
                 </dt>
                 <dd class="st_tree">
                     <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 important">
@@ -42,14 +42,14 @@
                             <li class="clearfix jurisdiction-list-div" th:id="'menu-id-'+${parent.id}">
                                 <em class="js-accordionTrigger w5"></em>
                                 <a class="w20 tl important menu-name-class" th:text="${parent.name}"></a>
-                                <a class="w20" th:text="${parent.id}"></a>
-                                <a class="w10">
+                                <a class="w20" th:text="${parent.id}" style="display: none;"></a>
+                                <a class="w10"  style="display: none;">
                                     <div class="file">
                                         <img src="/static/images/add-img.png"/>
                                         <input type="file" name=""/>
                                     </div>
                                 </a>
-                                <a class="w10 pt0 important">
+                                <a class="w10 pt0 important" style="display: none;">
                                     <div class="layui-form">
                                         <input type="checkbox" checked="" name="open" lay-skin="switch"
                                                lay-filter="switchTest" lay-text="ON|OFF" class="switch-"
@@ -59,7 +59,7 @@
                                 <a class="w20">
                                     <span class="mr20 edit cp edit-manage" th:attr="data-id=${parent.id}">编辑</span>
                                 </a>
-                                <a class="w15"><i class="icon sort-icon"></i></a>
+                                <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                             </li>
                             <!--二级-->
                             <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 ml20 important">
@@ -67,9 +67,9 @@
                                     <li class="clearfix pb20 pl30 important" th:id="'menu-id-'+${child.id}">
                                         <em class="js-accordionTrigger w5"></em>
                                         <a class="w20 tl important menu-name-class" th:text="${child.name}"></a>
-                                        <a class="w20" th:text="${child.id}"></a>
-                                        <a class="w10">&nbsp;</a>
-                                        <a class="w10 pt0 important">
+                                        <a class="w20" style="display: none;" th:text="${child.id}"></a>
+                                        <a class="w10" style="display: none;">&nbsp;</a>
+                                        <a class="w10 pt0 important" style="display: none;">
                                             <div class="layui-form">
                                                 <input type="checkbox" checked="" name="open" lay-skin="switch"
                                                        lay-filter="switchTest" lay-text="ON|OFF" data-type="2"
@@ -82,7 +82,7 @@
                                             <span class="mr20 edit cp edit-manage"
                                                   th:attr="data-id=${child.id}">编辑</span>
                                         </a>
-                                        <a class="w15"><i class="icon sort-icon"></i></a>
+                                        <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                                     </li>
                                     <!--三级-->
                                     <ul class="jurisdiction-list-div jurisdiction-list-li colum-list-li">
@@ -90,9 +90,9 @@
                                             <li class="clearfix pb20 pl45 important" th:id="'menu-id-'+${tChild.id}">
                                                 <em class="js-accordionTrigger w5"></em>
                                                 <a class="w20 tl important menu-name-class" th:text="${tChild.name}"></a>
-                                                <a class="w20" th:text="${tChild.id}"></a>
-                                                <a class="w10">&nbsp;</a>
-                                                <a class="w10 pt0 important">
+                                                <a class="w20" style="display: none;" th:text="${tChild.id}"></a>
+                                                <a class="w10" style="display: none;">&nbsp;</a>
+                                                <a class="w10 pt0 important" style="display: none;">
                                                     <div class="layui-form">
                                                         <input type="checkbox" checked="" name="open" lay-skin="switch"
                                                                lay-filter="switchTest" lay-text="ON|OFF"
@@ -104,7 +104,7 @@
                                             <span class="mr20 edit cp edit-manage"
                                                   th:attr="data-id=${tChild.id}">编辑</span>
                                                 </a>
-                                                <a class="w15"><i class="icon sort-icon"></i></a>
+                                                <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                                             </li>
                                         </block>
                                     </ul>
