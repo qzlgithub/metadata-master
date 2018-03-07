@@ -19,7 +19,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
@@ -48,40 +47,28 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
+        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
                 fromDate, toDate, page);
-        if(productRecListDTO.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.setError(productRecListDTO.getResultDTO().getResult());
-            return;
-        }
-        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
+        resp.addData(Field.TOTAL, productRecListDTO.getTotal());
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeInfoDTO item : dataList)
+            for(ProductRechargeInfoDTO o : dataList)
             {
-                Map<String, Object> map = new HashMap<>();
-                // map.put(Field.ID, item.getId());
-                map.put(Field.AMOUNT, NumberUtils.formatAmount(item.getAmount()));
-                map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
-                map.put(Field.CONTRACT_NO, item.getContractNo());
-                // map.put(Field.CORP_NAME, item.getCorpName());
-                map.put(Field.PRODUCT_NAME, item.getProductName());
-                map.put(Field.BILL_PLAN, item.getBillPlan()); // TODO
-                map.put(Field.RECHARGE_TYPE, item.getRechargeType());
-                // map.put(Field.REMARK, item.getRemark());
-                // map.put(Field.SHORT_NAME, item.getShortName());
-                map.put(Field.TRADE_NO, item.getTradeNo());
-                map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                list.add(map);
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.TRADE_TIME, DateUtils.format(o.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                m.put(Field.TRADE_NO, o.getTradeNo());
+                m.put(Field.RECHARGE_TYPE, o.getRechargeType());
+                m.put(Field.BILL_PLAN, o.getBillPlan());
+                m.put(Field.PRODUCT_NAME, o.getProductName());
+                m.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
+                m.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
+                m.put(Field.CONTRACT_NO, o.getContractNo());
+                list.add(m);
             }
             resp.addData(Field.LIST, list);
         }
-        resp.addData(Field.TOTAL, productRecListDTO.getTotal());
-        resp.addData(Field.PAGES, productRecListDTO.getPages());
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
 
     @Override
@@ -95,12 +82,12 @@ public class ProductServiceImpl implements ProductService
         row.createCell(2).setCellValue("产品服务");
         row.createCell(3).setCellValue("充值类型");
         row.createCell(4).setCellValue("充值金额");
-        row.createCell(5).setCellValue("产品服务余额");
+        row.createCell(5).setCellValue("产品余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ProductRechargeInfoListDTO productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
+        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
                 fromDate, toDate, page);
-        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getDataList();
+        List<ProductRechargeInfoDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             ProductRechargeInfoDTO dataDTO;

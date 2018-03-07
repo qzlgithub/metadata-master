@@ -23,7 +23,6 @@ import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.RemoteProductService;
 import com.mingdong.core.util.EntityUtils;
@@ -82,48 +81,39 @@ public class RemoteProductServiceImpl implements RemoteProductService
     private RedisDao redisDao;
 
     @Override
-    public ProductRechargeInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
+    public ListDTO<ProductRechargeInfoDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
             Date endDate, Page page)
     {
-        ProductRechargeInfoListDTO productRecListDTO = new ProductRechargeInfoListDTO();
-        List<ProductRechargeInfoDTO> dataDtoList = new ArrayList<>();
-        productRecListDTO.setDataList(dataDtoList);
-        if(page == null)
+        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
                     endDate);
-            if(!CollectionUtils.isEmpty(dataList))
+            List<ProductRechargeInfoDTO> list = new ArrayList<>(dataList.size());
+            for(ProductRechargeInfo o : dataList)
             {
-                ProductRechargeInfoDTO productRechargeDTO;
-                for(ProductRechargeInfo item : dataList)
-                {
-                    productRechargeDTO = new ProductRechargeInfoDTO();
-                    dataDtoList.add(productRechargeDTO);
-                    EntityUtils.copyProperties(item, productRechargeDTO);
-                }
+                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                pri.setTradeTime(o.getTradeTime());
+                pri.setTradeNo(o.getTradeNo());
+                pri.setRechargeType(o.getRechargeType());
+                pri.setBillPlan(o.getBillPlan());
+                pri.setProductName(o.getProductName());
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                pri.setContractNo(o.getContractNo());
+                pri.setCorpName(o.getCorpName());
+                pri.setShortName(o.getShortName());
+                pri.setUsername(o.getUsername());
+                pri.setManagerName(o.getManagerName());
+                list.add(pri);
             }
+            listDTO.setList(list);
         }
-        else
-        {
-            int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
-            int pages = page.getTotalPage(total);
-            productRecListDTO.setTotal(total);
-            productRecListDTO.setPages(pages);
-            if(total > 0 && page.getPageNum() <= pages)
-            {
-                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
-                        endDate);
-                ProductRechargeInfoDTO productRechargeDTO;
-                for(ProductRechargeInfo item : dataList)
-                {
-                    productRechargeDTO = new ProductRechargeInfoDTO();
-                    dataDtoList.add(productRechargeDTO);
-                    EntityUtils.copyProperties(item, productRechargeDTO);
-                }
-            }
-        }
-        return productRecListDTO;
+        return listDTO;
     }
 
     @Override

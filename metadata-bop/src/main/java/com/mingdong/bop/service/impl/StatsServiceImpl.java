@@ -846,9 +846,9 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ProductRechargeInfoListDTO productRechargeInfoListDTO = remoteProductService.getProductRechargeRecord(null,
+        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getProductRechargeRecord(null,
                 null, start, end, page);
-        List<ProductRechargeInfoDTO> infoDateList = productRechargeInfoListDTO.getDataList();
+        List<ProductRechargeInfoDTO> infoDateList = listDTO.getList();
         return getProductRechargeInfoDateList(infoDateList);
     }
 
@@ -859,7 +859,6 @@ public class StatsServiceImpl implements StatsService
         for(ProductRechargeInfoDTO item : infoDateList)
         {
             map = new HashMap<>();
-            dataList.add(map);
             map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
             map.put(Field.TRADE_NO, item.getTradeNo());
             map.put(Field.CORP_NAME, item.getCorpName());
@@ -870,6 +869,7 @@ public class StatsServiceImpl implements StatsService
             map.put(Field.RECHARGE_TYPE, item.getRechargeType());
             map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
             map.put(Field.MANAGER_NAME, item.getManagerName());
+            dataList.add(map);
         }
         return dataList;
     }

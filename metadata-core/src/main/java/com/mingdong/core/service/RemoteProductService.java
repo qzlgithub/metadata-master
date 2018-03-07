@@ -10,7 +10,6 @@ import com.mingdong.core.model.dto.ProductInfoListDTO;
 import com.mingdong.core.model.dto.ProductListDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoListDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public interface RemoteProductService
     /**
      * 根据条件获取客户充值记录
      */
-    ProductRechargeInfoListDTO getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    ListDTO<ProductRechargeInfoDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page);
 
     /**
