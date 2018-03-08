@@ -2,12 +2,14 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ClientInfoDTO;
+import com.mingdong.core.model.dto.IntervalDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public interface StatsRpcService
 {
@@ -55,4 +57,6 @@ public interface StatsRpcService
     ListDTO<StatsDateInfoDTO> getRevenueListStats(Date fromDate, Date toDate);
 
     void statsDataForHour(Date date);
+
+    void clientAccessTrend(List<Long> clientIdList, List<IntervalDTO> intervalList);
 }

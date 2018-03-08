@@ -36,7 +36,8 @@ public enum RestResult
     ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),
     INTERNAL_ERROR("999999", "系统繁忙，请稍后重试"),
     PRODUCT_NOT_EXIST("100028", "指定产品不存在"),
-    SPECIFIED_PRODUCT("100029", "定制产品无权开通");
+    SPECIFIED_PRODUCT("100029", "定制产品无权开通"),
+    SUB_USER_NOT_EXIST("100030", "子账号不存在");
 
     private final String code;
     private final String message;

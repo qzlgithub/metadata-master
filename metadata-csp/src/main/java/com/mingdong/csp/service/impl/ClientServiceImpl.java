@@ -84,7 +84,8 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientSubAccountList(RestListResp res)
     {
-        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
+        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(),
+                RequestThread.getUserId());
         res.addData(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -105,18 +106,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeStatus(Long primaryAccountId, Long clientUserId, RestResp resp)
+    public void changeSubUserStatus(Long clientUserId, RestResp resp)
     {
-        UserDTO userDTO = clientRpcService.changeStatus(primaryAccountId, clientUserId);
+        UserDTO userDTO = clientRpcService.changeSubUserStatus(RequestThread.getClientId(), clientUserId);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(userDTO.getResultDTO().getResult());
             return;
         }
-        resp.addData(Field.USER_ID, userDTO.getUserId() + "");
-        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
-        resp.addData(Field.NAME, userDTO.getName());
-        resp.addData(Field.PHONE, userDTO.getPhone());
         resp.addData(Field.ENABLED, userDTO.getEnabled());
     }
 
@@ -124,8 +121,8 @@ public class ClientServiceImpl implements ClientService
     public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
             String name, String phone, Integer enabled, RestResp resp)
     {
-        UserDTO userDTO = clientRpcService.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone,
-                enabled);
+        UserDTO userDTO = clientRpcService.editChildAccount(primaryAccountId, clientUserId, username, password, name,
+                phone, enabled);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(userDTO.getResultDTO().getResult());

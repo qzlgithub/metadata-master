@@ -34,7 +34,7 @@ function getAccountList() {
             var allowedQty = data.data.allowedQty;
             $("#acountAll").text(list.length);
             $("#canAddNumber").text(allowedQty - list.length);
-            if(allowedQty - list.length > 0){
+            if(allowedQty - list.length > 0) {
                 $("#addaccount").show();
             }
         }
@@ -49,8 +49,7 @@ function stopAccount(id) {
             $(this).click();
             $.ajax({
                 type: "POST",
-                url: "/client/changeStatus",
-                dataType: "json",
+                url: "/client/sub-account/status",
                 contentType: "application/json",
                 data: JSON.stringify({"clientUserId": id}),
                 success: function(res) {
@@ -73,7 +72,7 @@ function stopAccount(id) {
             });
             layer.closeAll();
         },
-        btn2: function() {
+        no: function() {
             layer.closeAll();
         }
     });
@@ -133,12 +132,12 @@ function editAccount(id) {
                 $('#account-status-div-id').html('');
                 var html = '';
                 if(obj.enabled === 1) {
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" checked/>';
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" />';
+                    html += '<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" checked/>';
+                    html += '<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" />';
                 }
                 else {
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" />';
-                    html+='<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" checked/>';
+                    html += '<input type="radio" name="edit-enabled" id="edit-enabled-1" value="1" title="正常" />';
+                    html += '<input type="radio" name="edit-enabled" id="edit-enabled-0" value="0" title="禁用" checked/>';
                 }
                 $('#account-status-div-id').html(html);
                 form.render('radio');
@@ -170,12 +169,13 @@ function addAccount() {
 }
 
 var isSubmit = false;
+
 function addSubmitAccount() {
     if(isSubmit) {
         return;
     }
     isSubmit = true;
-    if(!checkDataValid("#add-account")){
+    if(!checkDataValid("#add-account")) {
         isSubmit = false;
         return;
     }
@@ -189,7 +189,13 @@ function addSubmitAccount() {
         url: "/client/account/addition",
         dataType: "json",
         contentType: "application/json",
-        data: JSON.stringify({"username": username, "password": MD5(pwd), "name": name, "phone": phone, "enabled": enabled}),
+        data: JSON.stringify({
+            "username": username,
+            "password": MD5(pwd),
+            "name": name,
+            "phone": phone,
+            "enabled": enabled
+        }),
         success: function(res) {
             if(res.code === '000000') {
                 layer.msg("新增成功", {
@@ -216,7 +222,7 @@ function editSubmitAccount() {
         return;
     }
     isSubmit = true;
-    if(!checkDataValid("#edit-account")){
+    if(!checkDataValid("#edit-account")) {
         isSubmit = false;
         return;
     }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.model.dto.ClientInfoDTO;
+import com.mingdong.core.model.dto.IntervalDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
@@ -255,6 +256,16 @@ public class StatsRpcServiceImpl implements StatsRpcService
         stats.setClientRequest(Long.valueOf(requestCount + ""));
         stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
         statsMapper.add(stats);
+    }
+
+    @Override
+    public void clientAccessTrend(List<Long> clientIdList, List<IntervalDTO> intervalList) // TODO 客户请求走势图
+    {
+        if(!CollectionUtils.isEmpty(clientIdList) || !CollectionUtils.isEmpty(intervalList))
+        {
+            return;
+        }
+        logger.info("{}: {}", clientIdList, intervalList);
     }
 
     private void findProductRechargeInfoDTO(List<ProductRechargeInfo> productRechargeInfoList,

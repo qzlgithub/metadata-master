@@ -155,7 +155,7 @@ public class ClientController
      * 子账号的启用禁用
      */
     @LoginRequired
-    @PostMapping(value = "/client/changeStatus")
+    @PostMapping(value = "/client/sub-account/status")
     public RestResp changeSubUserStatus(@RequestBody JSONObject jsonObject)
     {
         RestResp resp = new RestResp();
@@ -165,7 +165,12 @@ public class ClientController
             return resp;
         }
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        clientService.changeStatus(RequestThread.getUserId(), clientUserId, resp);
+        if(clientUserId == null)
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
+        clientService.changeSubUserStatus(clientUserId, resp);
         return resp;
     }
 

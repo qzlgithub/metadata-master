@@ -382,16 +382,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public UserDTO changeStatus(Long primaryAccountId, Long clientUserId)
+    public UserDTO changeSubUserStatus(Long clientId, Long clientUserId)
     {
-        Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
         UserDTO userDTO = new UserDTO();
-        if(client == null)
+        ClientUser clientUser = clientUserMapper.findById(clientUserId);
+        if(clientUser == null || !clientId.equals(clientUser.getClientId()))
         {
-            userDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
+            userDTO.getResultDTO().setResult(RestResult.SUB_USER_NOT_EXIST);
             return userDTO;
         }
-        ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(TrueOrFalse.TRUE.equals(clientUser.getEnabled()))
         {
             clientUser.setEnabled(TrueOrFalse.FALSE);
