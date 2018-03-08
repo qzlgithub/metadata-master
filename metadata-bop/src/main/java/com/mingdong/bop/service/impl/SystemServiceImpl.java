@@ -19,8 +19,8 @@ import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
-import com.mingdong.core.service.RemoteManagerService;
-import com.mingdong.core.service.RemoteSystemService;
+import com.mingdong.core.service.CommonRpcService;
+import com.mingdong.core.service.SystemRpcService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,14 +36,14 @@ public class SystemServiceImpl implements SystemService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private RemoteSystemService remoteSystemService;
+    private CommonRpcService commonRpcService;
     @Resource
-    private RemoteManagerService remoteManagerService;
+    private SystemRpcService systemRpcService;
 
     @Override
     public void checkIfIndustryExist(String code, RestResp resp)
     {
-        resp.addData(Field.EXIST, remoteSystemService.checkIfIndustryExist(code.toUpperCase()));
+        resp.addData(Field.EXIST, commonRpcService.checkIfIndustryExist(code.toUpperCase()));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SystemServiceImpl implements SystemService
         industry.setSeqNo(1); // TODO 序号
         industry.setParentId(id != null ? id : 0L);
         industry.setEnabled(TrueOrFalse.TRUE);
-        ResultDTO resultDTO = remoteSystemService.addIndustryType(industry);
+        ResultDTO resultDTO = systemRpcService.addIndustryType(industry);
         resp.setError(resultDTO.getResult());
     }
 
@@ -70,7 +70,7 @@ public class SystemServiceImpl implements SystemService
         industry.setUpdateTime(new Date());
         industry.setCode(code);
         industry.setName(name);
-        ResultDTO resultDTO = remoteSystemService.editIndustryInfo(industry);
+        ResultDTO resultDTO = systemRpcService.editIndustryInfo(industry);
         resp.setError(resultDTO.getResult());
     }
 
@@ -81,7 +81,7 @@ public class SystemServiceImpl implements SystemService
         rt.setId(rechargeTypeId);
         rt.setName(name);
         rt.setRemark(remark);
-        ResultDTO res = remoteSystemService.editRechargeType(rt);
+        ResultDTO res = systemRpcService.editRechargeType(rt);
         resp.setError(res.getResult());
     }
 
@@ -91,7 +91,7 @@ public class SystemServiceImpl implements SystemService
         RechargeTypeDTO rt = new RechargeTypeDTO();
         rt.setId(rechargeTypeId);
         rt.setEnabled(enabled);
-        ResultDTO res = remoteSystemService.editRechargeType(rt);
+        ResultDTO res = systemRpcService.editRechargeType(rt);
         resp.setError(res.getResult());
     }
 
@@ -99,7 +99,7 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getHierarchyIndustry()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<DictIndustryDTO> listDTO1 = remoteSystemService.getIndustryList(0L, null);
+        ListDTO<DictIndustryDTO> listDTO1 = systemRpcService.getIndustryList(0L, null);
         if(!CollectionUtils.isEmpty(listDTO1.getList()))
         {
             for(DictIndustryDTO o : listDTO1.getList())
@@ -109,7 +109,7 @@ public class SystemServiceImpl implements SystemService
                 p.put(Field.CODE, o.getCode());
                 p.put(Field.NAME, o.getName());
                 p.put(Field.ENABLED, o.getEnabled());
-                ListDTO<DictIndustryDTO> listDTO2 = remoteSystemService.getIndustryList(o.getId(), null);
+                ListDTO<DictIndustryDTO> listDTO2 = systemRpcService.getIndustryList(o.getId(), null);
                 List<Map<String, Object>> subList = new ArrayList<>();
                 if(!CollectionUtils.isEmpty(listDTO2.getList()))
                 {
@@ -135,7 +135,7 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getHierarchyPrivilege()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<PrivilegeDTO> listDTO1 = remoteSystemService.getPrivilegeListByParent(0L);
+        ListDTO<PrivilegeDTO> listDTO1 = systemRpcService.getPrivilegeListByParent(0L);
         for(PrivilegeDTO o1 : listDTO1.getList())
         {
             Map<String, Object> m1 = new HashMap<>();
@@ -143,7 +143,7 @@ public class SystemServiceImpl implements SystemService
             m1.put(Field.ID, o1.getPrivilegeId() + "");
             m1.put(Field.ENABLED, o1.getEnabled());
             List<Map<String, Object>> subList = new ArrayList<>();
-            ListDTO<PrivilegeDTO> listDTO2 = remoteSystemService.getPrivilegeListByParent(o1.getPrivilegeId());
+            ListDTO<PrivilegeDTO> listDTO2 = systemRpcService.getPrivilegeListByParent(o1.getPrivilegeId());
             for(PrivilegeDTO o2 : listDTO2.getList())
             {
                 Map<String, Object> m2 = new HashMap<>();
@@ -151,7 +151,7 @@ public class SystemServiceImpl implements SystemService
                 m2.put(Field.ID, o2.getPrivilegeId() + "");
                 m2.put(Field.ENABLED, o2.getEnabled());
                 List<Map<String, Object>> thrList = new ArrayList<>();
-                ListDTO<PrivilegeDTO> listDTO3 = remoteSystemService.getPrivilegeListByParent(o2.getPrivilegeId());
+                ListDTO<PrivilegeDTO> listDTO3 = systemRpcService.getPrivilegeListByParent(o2.getPrivilegeId());
                 for(PrivilegeDTO o3 : listDTO3.getList())
                 {
                     Map<String, Object> m3 = new HashMap<>();
@@ -176,7 +176,7 @@ public class SystemServiceImpl implements SystemService
         PrivilegeDTO privilegeDTO = new PrivilegeDTO();
         privilegeDTO.setPrivilegeId(privilegeId);
         privilegeDTO.setName(name);
-        ResultDTO resultDTO = remoteSystemService.editPrivilegeInfo(privilegeDTO);
+        ResultDTO resultDTO = systemRpcService.editPrivilegeInfo(privilegeDTO);
         resp.setError(resultDTO.getResult());
     }
 
@@ -184,7 +184,7 @@ public class SystemServiceImpl implements SystemService
     public List<Map<String, Object>> getRechargeDict()
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<DictRechargeTypeDTO> listDTO = remoteSystemService.getRechargeTypeList(TrueOrFalse.TRUE, null);
+        ListDTO<DictRechargeTypeDTO> listDTO = systemRpcService.getRechargeTypeList(TrueOrFalse.TRUE, null);
         List<DictRechargeTypeDTO> rechargeTypeList = listDTO.getList();
         for(DictRechargeTypeDTO drt : rechargeTypeList)
         {
@@ -199,14 +199,14 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addRechargeType(String name, String remark, RestResp resp)
     {
-        ResultDTO res = remoteSystemService.addRechargeType(name, remark);
+        ResultDTO res = systemRpcService.addRechargeType(name, remark);
         resp.setError(res.getResult());
     }
 
     @Override
     public List<Map<String, Object>> getIndustryList(Long parentId, Integer enabled)
     {
-        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getIndustryList(parentId, enabled);
+        ListDTO<DictIndustryDTO> listDTO = systemRpcService.getIndustryList(parentId, enabled);
         List<DictIndustryDTO> dataList = listDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
         for(DictIndustryDTO parent : dataList)
@@ -225,7 +225,7 @@ public class SystemServiceImpl implements SystemService
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> parentIndustryList = new ArrayList<>();
         List<Map<String, Object>> industryList = new ArrayList<>();
-        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getIndustryList(0L, TrueOrFalse.TRUE);
+        ListDTO<DictIndustryDTO> listDTO = systemRpcService.getIndustryList(0L, TrueOrFalse.TRUE);
         List<DictIndustryDTO> parentList = listDTO.getList();
         for(DictIndustryDTO industry : parentList)
         {
@@ -236,7 +236,7 @@ public class SystemServiceImpl implements SystemService
         }
         if(!CollectionUtils.isEmpty(parentList))
         {
-            ListDTO<DictIndustryDTO> listDTO2 = remoteSystemService.getIndustryList(parentList.get(0).getId(),
+            ListDTO<DictIndustryDTO> listDTO2 = systemRpcService.getIndustryList(parentList.get(0).getId(),
                     TrueOrFalse.TRUE);
             List<DictIndustryDTO> childList = listDTO2.getList();
             for(DictIndustryDTO industry : childList)
@@ -268,7 +268,7 @@ public class SystemServiceImpl implements SystemService
     public Map<String, String> cacheSystemModule()
     {
         Map<String, String> map = new HashMap<>();
-        ListDTO<PrivilegeDTO> listDTO = remoteSystemService.getPrivilegeByLevel(3);
+        ListDTO<PrivilegeDTO> listDTO = systemRpcService.getPrivilegeByLevel(3);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(PrivilegeDTO p : listDTO.getList())
@@ -283,33 +283,33 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, RestResp resp)
     {
-        ResultDTO resultDTO = remoteSystemService.addOrUpdateSetting(sysConfigDTOList);
+        ResultDTO resultDTO = systemRpcService.addOrUpdateSetting(sysConfigDTOList);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void changeIndustryStatus(Long industryTypeId, Integer enabled, RestResp resp)
     {
-        ResultDTO resultDTO = remoteSystemService.changeIndustryStatus(industryTypeId, enabled);
+        ResultDTO resultDTO = systemRpcService.changeIndustryStatus(industryTypeId, enabled);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void setModuleStatus(List<Long> moduleIdList, Integer status)
     {
-        remoteSystemService.setModuleStatus(status, moduleIdList);
+        systemRpcService.setModuleStatus(status, moduleIdList);
     }
 
     @Override
     public Map<String, Object> getSettings()
     {
-        return remoteSystemService.getSettingData();
+        return systemRpcService.getSettingData();
     }
 
     @Override
     public void getRechargeTypeList(RestListResp res)
     {
-        ListDTO<RechargeTypeDTO> dto = remoteSystemService.getRechargeList();
+        ListDTO<RechargeTypeDTO> dto = systemRpcService.getRechargeList();
         res.setTotal(dto.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         for(RechargeTypeDTO o : dto.getList())
@@ -329,7 +329,7 @@ public class SystemServiceImpl implements SystemService
     public List<Dict> getAccountRoleDict()
     {
         List<Dict> roleDict = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = remoteManagerService.getAccountRoleDict();
+        ListDTO<DictDTO> listDTO = commonRpcService.getAdminGroupDict();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(DictDTO o : listDTO.getList())
@@ -342,7 +342,7 @@ public class SystemServiceImpl implements SystemService
 
     private void cacheAllIndustryData()
     {
-        ListDTO<DictIndustryDTO> listDTO = remoteSystemService.getDictIndustryInfoList();
+        ListDTO<DictIndustryDTO> listDTO = systemRpcService.getDictIndustryInfoList();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(DictIndustryDTO o : listDTO.getList())

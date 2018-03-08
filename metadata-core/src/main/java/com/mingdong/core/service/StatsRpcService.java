@@ -9,7 +9,7 @@ import com.mingdong.core.model.dto.StatsDateInfoDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public interface RemoteStatsService
+public interface StatsRpcService
 {
     /**
      * 获取总客户数量

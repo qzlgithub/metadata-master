@@ -2,11 +2,9 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductInfoDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
@@ -15,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public interface RemoteProductService
+public interface ProductRpcService
 {
     /**
      * 根据条件获取客户充值记录
@@ -43,8 +41,6 @@ public interface RemoteProductService
      * 根据条件获取产品信息
      */
     ProductDTO getClientProductInfo(Long clientId, Long productId);
-
-    ListDTO<DictDTO> getClientProductDict(Long clientId);
 
     /**
      * 根据合同号获取充值记录
@@ -87,9 +83,4 @@ public interface RemoteProductService
             Long rechargeType, Date fromDate, Date toDate, Page page);
 
     ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
-
-    /**
-     * 产品字典
-     */
-    ListDTO<DictDTO> getProductDict();
 }

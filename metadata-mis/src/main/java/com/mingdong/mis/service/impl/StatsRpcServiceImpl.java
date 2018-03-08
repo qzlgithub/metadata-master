@@ -7,7 +7,7 @@ import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.StatsDateInfoDTO;
-import com.mingdong.core.service.RemoteStatsService;
+import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.domain.entity.ClientInfo;
@@ -31,9 +31,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RemoteStatsServiceImpl implements RemoteStatsService
+public class StatsRpcServiceImpl implements StatsRpcService
 {
-    private static Logger logger = LoggerFactory.getLogger(RemoteStatsServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StatsRpcServiceImpl.class);
     @Resource
     private StatsClientMapper statsClientMapper;
     @Resource

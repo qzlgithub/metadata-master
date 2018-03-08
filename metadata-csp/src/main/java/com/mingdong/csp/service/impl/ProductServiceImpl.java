@@ -17,7 +17,8 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.CommonRpcService;
+import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.service.ProductService;
@@ -39,14 +40,16 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService
 {
     @Resource
-    private RemoteProductService productApi;
+    private CommonRpcService commonRpcService;
+    @Resource
+    private ProductRpcService productRpcService;
 
     @Override
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
-                fromDate, toDate, page);
+        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productRpcService.getProductRechargeRecord(clientId,
+                productId, fromDate, toDate, page);
         resp.addData(Field.TOTAL, productRecListDTO.getTotal());
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -83,8 +86,8 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productApi.getProductRechargeRecord(clientId, productId,
-                fromDate, toDate, page);
+        ListDTO<ProductRechargeInfoDTO> productRecListDTO = productRpcService.getProductRechargeRecord(clientId,
+                productId, fromDate, toDate, page);
         List<ProductRechargeInfoDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -115,7 +118,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId,
+        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -156,7 +159,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productApi.getProductRequestRecord(clientId, null, productId,
+        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -187,7 +190,7 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getClientProductInfoData(Long clientId, Long productId, RestResp resp)
     {
-        ProductDTO dto = productApi.getClientProductInfo(clientId, productId);
+        ProductDTO dto = productRpcService.getClientProductInfo(clientId, productId);
         if(dto.getResult() != RestResult.SUCCESS)
         {
             resp.setError(dto.getResult());
@@ -215,7 +218,7 @@ public class ProductServiceImpl implements ProductService
     public List<Dict> getClientProductDict(Long clientId)
     {
         List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = productApi.getClientProductDict(clientId);
+        ListDTO<DictDTO> listDTO = commonRpcService.getClientProductDict(clientId);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(DictDTO o : listDTO.getList())
@@ -232,7 +235,7 @@ public class ProductServiceImpl implements ProductService
         List<Map<String, Object>> remindList = new ArrayList<>();
         List<Map<String, Object>> trashList = new ArrayList<>();
         List<Map<String, Object>> productList = new ArrayList<>();
-        ListDTO<ProductDTO> listDTO = productApi.getOpenedProductList(clientId);
+        ListDTO<ProductDTO> listDTO = productRpcService.getOpenedProductList(clientId);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             Map<String, List<Map<String, Object>>> typeGroupProduct = new HashMap<>();
@@ -296,7 +299,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page,
             RestListResp res)
     {
-        ListDTO<ProductDTO> listDTO = productApi.getProductList(clientId, productTypeList, incOpened, page);
+        ListDTO<ProductDTO> listDTO = productRpcService.getProductList(clientId, productTypeList, incOpened, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
         if(!CollectionUtils.isEmpty(listDTO.getList()))

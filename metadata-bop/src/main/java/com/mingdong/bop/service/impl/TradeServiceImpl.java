@@ -12,8 +12,8 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.service.RemoteClientService;
-import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.service.ProductRpcService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,15 +32,15 @@ import java.util.Map;
 public class TradeServiceImpl implements TradeService
 {
     @Resource
-    private RemoteProductService remoteProductService;
+    private ProductRpcService productRpcService;
     @Resource
-    private RemoteClientService remoteClientService;
+    private ClientRpcService clientRpcService;
 
     @Override
     public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
             Date fromDate, Date toDate, Page page, RestListResp res)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
+        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId,
                 managerId, rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
@@ -91,7 +91,7 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ProductRechargeInfoDTO> listDTO = remoteProductService.getRechargeInfoList(keyword, productId,
+        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId,
                 managerId, rechargeType, fromDate, toDate, page);
         List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         ProductRechargeInfoDTO dataInfo;
@@ -121,7 +121,7 @@ public class TradeServiceImpl implements TradeService
     public void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
             Long managerId, Page page, RestListResp res)
     {
-        ListDTO<ApiReqInfoDTO> listDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan, fromDate,
+        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan, fromDate,
                 toDate, managerId, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
@@ -176,7 +176,7 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = remoteClientService.getClientBillListBy(keyword, productId, billPlan,
+        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
                 fromDate, toDate, manager, page);
         List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
         ApiReqInfoDTO dataInfo;

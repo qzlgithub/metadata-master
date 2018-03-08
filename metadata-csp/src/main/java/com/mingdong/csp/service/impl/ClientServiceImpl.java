@@ -17,8 +17,8 @@ import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.service.RemoteClientService;
-import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.constant.Field;
@@ -39,14 +39,14 @@ public class ClientServiceImpl implements ClientService
     @Resource
     private RedisDao redisDao;
     @Resource
-    private RemoteClientService clientApi;
+    private ClientRpcService clientRpcService;
     @Resource
-    private RemoteProductService productApi;
+    private ProductRpcService productRpcService;
 
     @Override
     public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
-        UserDTO dto = clientApi.userLogin(username, password);
+        UserDTO dto = clientRpcService.userLogin(username, password);
         if(RestResult.SUCCESS != dto.getResultDTO().getResult())
         {
             resp.setError(dto.getResultDTO().getResult());
@@ -69,7 +69,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changePassword(Long userId, String oldPwd, String newPwd, RestResp resp)
     {
-        ResultDTO dto = clientApi.changeUserPassword(userId, oldPwd, newPwd);
+        ResultDTO dto = clientRpcService.changeUserPassword(userId, oldPwd, newPwd);
         resp.setError(dto.getResult());
     }
 
@@ -77,14 +77,14 @@ public class ClientServiceImpl implements ClientService
     public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
             RestResp resp)
     {
-        ResultDTO dto = clientApi.addAccount(primaryAccountId, username, password, name, phone);
+        ResultDTO dto = clientRpcService.addAccount(primaryAccountId, username, password, name, phone);
         resp.setError(dto.getResult());
     }
 
     @Override
     public void getClientSubAccountList(RestListResp res)
     {
-        ListDTO<SubUserDTO> listDTO = clientApi.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
+        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(), RequestThread.getUserId());
         res.addData(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -107,7 +107,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changeStatus(Long primaryAccountId, Long clientUserId, RestResp resp)
     {
-        UserDTO userDTO = clientApi.changeStatus(primaryAccountId, clientUserId);
+        UserDTO userDTO = clientRpcService.changeStatus(primaryAccountId, clientUserId);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(userDTO.getResultDTO().getResult());
@@ -124,7 +124,7 @@ public class ClientServiceImpl implements ClientService
     public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
             String name, String phone, Integer enabled, RestResp resp)
     {
-        UserDTO userDTO = clientApi.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone,
+        UserDTO userDTO = clientRpcService.editChildAccount(primaryAccountId, clientUserId, username, password, name, phone,
                 enabled);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
@@ -143,7 +143,7 @@ public class ClientServiceImpl implements ClientService
     {
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
-            ListDTO<SubUserDTO> subUserList = clientApi.getSubUserList(RequestThread.getClientId(),
+            ListDTO<SubUserDTO> subUserList = clientRpcService.getSubUserList(RequestThread.getClientId(),
                     RequestThread.getUserId());
             List<Map<String, Object>> list = new ArrayList<>();
             for(SubUserDTO u : subUserList.getList())
@@ -155,7 +155,7 @@ public class ClientServiceImpl implements ClientService
             resp.addData(Field.ALLOWED_QTY, subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX));
             resp.addData(Field.SUB_USER_LIST, list);
         }
-        ListDTO<ProductDTO> openedList = productApi.getOpenedProductList(RequestThread.getClientId());
+        ListDTO<ProductDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();
         if(!CollectionUtils.isEmpty(openedList.getList()))
         {
@@ -180,7 +180,7 @@ public class ClientServiceImpl implements ClientService
                 opened.add(map);
             }
         }
-        ListDTO<ProductDTO> unopenedList = productApi.getUnopenedProductList(RequestThread.getClientId());
+        ListDTO<ProductDTO> unopenedList = productRpcService.getUnopenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> unopened = new ArrayList<>();
         if(!CollectionUtils.isEmpty(openedList.getList()))
         {
@@ -201,7 +201,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientMessageList(Page page, RestListResp res)
     {
-        ListDTO<MessageDTO> listDTO = clientApi.getClientMessage(RequestThread.getClientId(), page);
+        ListDTO<MessageDTO> listDTO = clientRpcService.getClientMessage(RequestThread.getClientId(), page);
         List<Map<String, Object>> list = new ArrayList<>();
         for(MessageDTO o : listDTO.getList())
         {
@@ -218,14 +218,14 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void setSubUserDeleted(Long primaryUserId, Long subUserId, RestResp resp)
     {
-        ResultDTO dto = clientApi.setSubUserDeleted(primaryUserId, subUserId);
+        ResultDTO dto = clientRpcService.setSubUserDeleted(primaryUserId, subUserId);
         resp.setError(dto.getResult());
     }
 
     @Override
     public void getAccountByUserId(Long userId, RestResp resp)
     {
-        UserDTO userDTO = clientApi.getAccountByUserId(userId);
+        UserDTO userDTO = clientRpcService.getAccountByUserId(userId);
         if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(userDTO.getResultDTO().getResult());
@@ -242,7 +242,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getUserCredential(Long userId, String password, Long productId, RestResp resp)
     {
-        CredentialDTO dto = clientApi.getUserCredential(userId, password, productId);
+        CredentialDTO dto = clientRpcService.getUserCredential(userId, password, productId);
         if(dto.getResultDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(dto.getResultDTO().getResult());
@@ -256,7 +256,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, RestResp resp)
     {
-        ResultDTO dto = clientApi.saveUserCredential(userId, productId, appKey, reqHost);
+        ResultDTO dto = clientRpcService.saveUserCredential(userId, productId, appKey, reqHost);
         resp.setError(dto.getResult());
     }
 }

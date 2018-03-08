@@ -32,7 +32,7 @@ import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.service.RemoteClientService;
+import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
@@ -85,9 +85,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RemoteClientServiceImpl implements RemoteClientService
+public class ClientRpcServiceImpl implements ClientRpcService
 {
-
     @Resource
     private Param param;
     @Resource
@@ -515,13 +514,6 @@ public class RemoteClientServiceImpl implements RemoteClientService
             clientUserProductMapper.updateSkipNull(upUpd);
         }
         return resultDTO;
-    }
-
-    @Override
-    public Integer checkIfClientExist(String username)
-    {
-        ClientUser user = clientUserMapper.findByUsername(username);
-        return user != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override

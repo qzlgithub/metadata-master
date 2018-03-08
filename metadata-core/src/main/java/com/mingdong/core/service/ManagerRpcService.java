@@ -3,7 +3,6 @@ package com.mingdong.core.service;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.AdminUserDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
@@ -11,7 +10,7 @@ import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
-public interface RemoteManagerService
+public interface ManagerRpcService
 {
     /**
      * 管理账号登陆
@@ -24,15 +23,6 @@ public interface RemoteManagerService
      * 编辑管理账号的基本信息及权限配置
      */
     ResultDTO editAdminUser(AdminUserDTO userDTO);
-
-    /**
-     * 检测角色名称是否已存在
-     *
-     * @return 1-存在，0-不存在
-     */
-    Integer checkIfGroupExist(String name);
-
-    ListDTO<DictDTO> getAdminUserDict();
 
     ListDTO<ManagerInfoDTO> getAdminUserList(Integer roleType, Integer enabled, Page page);
 
@@ -80,8 +70,6 @@ public interface RemoteManagerService
      * 获取账户角色列表
      */
     ListDTO<GroupDTO> getAccountGroupList(Page page);
-
-    ListDTO<DictDTO> getAccountRoleDict();
 
     /**
      * 变更用户账户的状态

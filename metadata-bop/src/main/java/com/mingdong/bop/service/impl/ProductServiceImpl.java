@@ -16,7 +16,8 @@ import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.CommonRpcService;
+import com.mingdong.core.service.ProductRpcService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,14 +31,16 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService
 {
     @Resource
-    private RemoteProductService remoteProductService;
+    private CommonRpcService commonRpcService;
+    @Resource
+    private ProductRpcService productRpcService;
 
     @Override
     public Map<String, Object> getProductInfoData(Long productId)
     {
         Map<String, Object> map = new HashMap<>();
         map.put(Field.ID, productId + "");
-        ProductDTO productDTO = remoteProductService.getProductInfoData(productId);
+        ProductDTO productDTO = productRpcService.getProductInfoData(productId);
         if(productDTO != null)
         {
             map.put(Field.CUSTOM, Custom.getById(productDTO.getCustom()).getName());
@@ -63,14 +66,14 @@ public class ProductServiceImpl implements ProductService
         productDTO.setRemark(remark);
         productDTO.setContent(content);
         productDTO.setEnabled(enabled);
-        ResultDTO resultDTO = remoteProductService.editProduct(productDTO);
+        ResultDTO resultDTO = productRpcService.editProduct(productDTO);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void changeProductStatus(Long productId, Integer enabled, RestResp resp)
     {
-        ResultDTO resultDTO = remoteProductService.changeProductStatus(productId, enabled);
+        ResultDTO resultDTO = productRpcService.changeProductStatus(productId, enabled);
         resp.setError(resultDTO.getResult());
     }
 
@@ -78,7 +81,7 @@ public class ProductServiceImpl implements ProductService
     public List<Dict> getProductDict()
     {
         List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = remoteProductService.getProductDict();
+        ListDTO<DictDTO> listDTO = commonRpcService.getProductDict();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(DictDTO o : listDTO.getList())
@@ -93,7 +96,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page,
             RestListResp res)
     {
-        ListDTO<ProductDTO> dto = remoteProductService.getProductList(keyword, type, custom, status, page);
+        ListDTO<ProductDTO> dto = productRpcService.getProductList(keyword, type, custom, status, page);
         res.setTotal(dto.getTotal());
         if(!CollectionUtils.isEmpty(dto.getList()))
         {

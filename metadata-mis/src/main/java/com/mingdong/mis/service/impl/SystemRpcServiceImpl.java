@@ -13,7 +13,7 @@ import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
-import com.mingdong.core.service.RemoteSystemService;
+import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RemoteSystemServiceImpl implements RemoteSystemService
+public class SystemRpcServiceImpl implements SystemRpcService
 {
     @Resource
     private DictIndustryMapper dictIndustryMapper;
@@ -64,13 +64,6 @@ public class RemoteSystemServiceImpl implements RemoteSystemService
             listDTO.setList(list);
         }
         return listDTO;
-    }
-
-    @Override
-    public Integer checkIfIndustryExist(String code)
-    {
-        DictIndustry o = dictIndustryMapper.findByCode(code);
-        return o != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
     }
 
     @Override

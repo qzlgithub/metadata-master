@@ -17,18 +17,19 @@
     <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" dispather="all" threadpool="cached" threads="5000" />
 
     <!-- 声明需要暴露的服务接口 -->
-    <!-- version="1.0" registry="zookeeper" owner="chcree" -->
-    <dubbo:service interface="com.mingdong.core.service.RemoteProductService" ref="productApi" />
-    <dubbo:service interface="com.mingdong.core.service.RemoteClientService" ref="clientApi" />
-    <dubbo:service interface="com.mingdong.core.service.RemoteManagerService" ref="managerApi" />
-    <dubbo:service interface="com.mingdong.core.service.RemoteStatsService" ref="statsApi" />
-    <dubbo:service interface="com.mingdong.core.service.RemoteSystemService" ref="systemApi" />
+    <!-- version="1.0" registry="zookeeper" owner="" -->
+    <dubbo:service interface="com.mingdong.core.service.CommonRpcService" ref="commonRpcService" />
+    <dubbo:service interface="com.mingdong.core.service.ProductRpcService" ref="productRpcService" />
+    <dubbo:service interface="com.mingdong.core.service.ClientRpcService" ref="clientRpcService" />
+    <dubbo:service interface="com.mingdong.core.service.ManagerRpcService" ref="managerRpcService" />
+    <dubbo:service interface="com.mingdong.core.service.StatsRpcService" ref="statsRpcService" />
+    <dubbo:service interface="com.mingdong.core.service.SystemRpcService" ref="systemRpcService" />
 
     <!-- 具体服务接口的实现 -->
-    <bean id="productApi" class="com.mingdong.mis.service.impl.RemoteProductServiceImpl" />
-    <bean id="clientApi" class="com.mingdong.mis.service.impl.RemoteClientServiceImpl" />
-    <bean id="managerApi" class="com.mingdong.mis.service.impl.RemoteManagerServiceImpl" />
-    <bean id="statsApi" class="com.mingdong.mis.service.impl.RemoteStatsServiceImpl" />
-    <bean id="systemApi" class="com.mingdong.mis.service.impl.RemoteSystemServiceImpl" />
-
+    <bean id="commonRpcService" class="com.mingdong.mis.service.impl.CommonRpcServiceImpl" />
+    <bean id="productRpcService" class="com.mingdong.mis.service.impl.ProductRpcServiceImpl" />
+    <bean id="clientRpcService" class="com.mingdong.mis.service.impl.ClientRpcServiceImpl" />
+    <bean id="managerRpcService" class="com.mingdong.mis.service.impl.ManagerRpcServiceImpl" />
+    <bean id="statsRpcService" class="com.mingdong.mis.service.impl.StatsRpcServiceImpl" />
+    <bean id="systemRpcService" class="com.mingdong.mis.service.impl.SystemRpcServiceImpl" />
 </beans>

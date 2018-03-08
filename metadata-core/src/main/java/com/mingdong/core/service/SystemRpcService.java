@@ -12,19 +12,12 @@ import com.mingdong.core.model.dto.SysConfigDTO;
 import java.util.List;
 import java.util.Map;
 
-public interface RemoteSystemService
+public interface SystemRpcService
 {
     /**
      * 根据条件获取行业分类信息列表
      */
     ListDTO<DictIndustryDTO> getIndustryList(Long parentIndustryId, Integer enabled);
-
-    /**
-     * 检查是否已存在指定编码的行业分类
-     *
-     * @return 1-已存在，0-不存在
-     */
-    Integer checkIfIndustryExist(String code);
 
     /**
      * 查询指定父级的子级功能列表

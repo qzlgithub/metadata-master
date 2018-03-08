@@ -43,9 +43,10 @@ import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.service.RemoteClientService;
-import com.mingdong.core.service.RemoteProductService;
-import com.mingdong.core.service.RemoteSystemService;
+import com.mingdong.core.service.CommonRpcService;
+import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.service.ProductRpcService;
+import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.IDUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -75,22 +76,24 @@ public class ClientServiceImpl implements ClientService
     @Resource
     private SystemService systemService;
     @Resource
-    private RemoteClientService remoteClientService;
+    private CommonRpcService commonRpcService;
     @Resource
-    private RemoteProductService remoteProductService;
+    private ClientRpcService clientRpcService;
     @Resource
-    private RemoteSystemService remoteSystemService;
+    private ProductRpcService productRpcService;
+    @Resource
+    private SystemRpcService systemRpcService;
 
     @Override
     public void checkIfUsernameExist(String username, RestResp resp)
     {
-        resp.addData(Field.EXIST, remoteClientService.checkIfClientExist(username));
+        resp.addData(Field.EXIST, commonRpcService.checkIfClientExist(username));
     }
 
     @Override
     public void getSimilarCorp(String name, Long clientId, RestListResp resp)
     {
-        ListDTO<ClientInfoDTO> listDTO = remoteClientService.getSimilarCorpByName(name, clientId);
+        ListDTO<ClientInfoDTO> listDTO = clientRpcService.getSimilarCorpByName(name, clientId);
         List<ClientInfoDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -117,7 +120,7 @@ public class ClientServiceImpl implements ClientService
     public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Long managerId,
             Page page, RestListResp res)
     {
-        ListDTO<ClientInfoDTO> clientInfoListDTO = remoteClientService.getClientInfoListBy(keyword,
+        ListDTO<ClientInfoDTO> clientInfoListDTO = clientRpcService.getClientInfoListBy(keyword,
                 industryId == null ? parentIndustryId : industryId, enabled, managerId, page);
         res.setTotal(clientInfoListDTO.getTotal());
         List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
@@ -145,7 +148,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientInfoForEdit(Long clientId, RestResp resp)
     {
-        ClientDetailDTO dto = remoteClientService.getClientInfoForEdit(clientId);
+        ClientDetailDTO dto = clientRpcService.getClientInfoForEdit(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
             resp.setError(dto.getResult());
@@ -173,7 +176,7 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.CONTACTS, contacts);
 
-        IndustryDTO industry = remoteSystemService.getIndustryDictOfTarget(dto.getIndustryId());
+        IndustryDTO industry = systemRpcService.getIndustryDictOfTarget(dto.getIndustryId());
         if(RestResult.SUCCESS == industry.getResult())
         {
             resp.addData(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
@@ -206,27 +209,27 @@ public class ClientServiceImpl implements ClientService
         dto.setEnabled(enabled);
         dto.setReason(reason);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO resultDTO = remoteClientService.changeClientStatus(dto);
+        ResultDTO resultDTO = clientRpcService.changeClientStatus(dto);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void deleteClient(List<Long> idList)
     {
-        remoteClientService.setClientDeleted(idList);
+        clientRpcService.setClientDeleted(idList);
     }
 
     @Override
     public void resetPassword(List<Long> idList)
     {
-        remoteClientService.setClientPassword(idList, Constant.DEFAULT_ENC_PWD);
+        clientRpcService.setClientPassword(idList, Constant.DEFAULT_ENC_PWD);
     }
 
     @Override
     public List<Map<String, Object>> getClientSubUserList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<SubUserDTO> listDTO = remoteClientService.getSubUserList(clientId, false);
+        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(clientId, false);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(SubUserDTO o : listDTO.getList())
@@ -258,7 +261,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContractNo(contractNo);
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO res = remoteClientService.openProduct(dto);
+        ResultDTO res = clientRpcService.openProduct(dto);
         resp.setError(res.getResult());
     }
 
@@ -276,20 +279,20 @@ public class ClientServiceImpl implements ClientService
         dto.setContractNo(contractNo);
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO res = remoteClientService.openProduct(dto);
+        ResultDTO res = clientRpcService.openProduct(dto);
         resp.setError(res.getResult());
     }
 
     @Override
     public void getProductRenewInfo(Long clientProductId, RestResp resp)
     {
-        ClientProductDTO cp = remoteClientService.getClientProductById(clientProductId);
+        ClientProductDTO cp = clientRpcService.getClientProductById(clientProductId);
         if(cp == null)
         {
             resp.setError(RestResult.OBJECT_NOT_FOUND);
             return;
         }
-        ProductRechargeDTO pr = remoteProductService.getProductRechargeById(cp.getLatestRechargeId());
+        ProductRechargeDTO pr = productRpcService.getProductRechargeById(cp.getLatestRechargeId());
         if(pr == null)
         {
             resp.setError(RestResult.OBJECT_NOT_FOUND);
@@ -307,7 +310,7 @@ public class ClientServiceImpl implements ClientService
             resp.addData(Field.BALANCE, NumberUtils.formatAmount(pr.getBalance()));
             resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(pr.getUnitAmt()));
         }
-        BigDecimal totalAmt = remoteProductService.sumAmountByClientProduct(clientProductId);
+        BigDecimal totalAmt = productRpcService.sumAmountByClientProduct(clientProductId);
         resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
     }
 
@@ -344,7 +347,7 @@ public class ClientServiceImpl implements ClientService
         cp.setLatestRechargeId(productRechargeId);
         cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
-        ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
+        ResultDTO resultDTO = clientRpcService.renewClientProduct(openClientProductDTO);
         resp.setError(resultDTO.getResult());
     }
 
@@ -380,14 +383,14 @@ public class ClientServiceImpl implements ClientService
         cpUpd.setLatestRechargeId(productRechargeId);
         cpUpd.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cpUpd);
-        ResultDTO resultDTO = remoteClientService.renewClientProduct(openClientProductDTO);
+        ResultDTO resultDTO = clientRpcService.renewClientProduct(openClientProductDTO);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void getClientOperateLog(Long clientId, Page page, RestListResp resp)
     {
-        ListDTO<ClientOperateLogDTO> listDTO = remoteClientService.getClientOperateLog(clientId, page);
+        ListDTO<ClientOperateLogDTO> listDTO = clientRpcService.getClientOperateLog(clientId, page);
         resp.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -408,7 +411,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void checkIfContractExist(String contractNo, RestResp resp)
     {
-        resp.addData(Field.EXIST, remoteProductService.checkIfContractExist(contractNo));
+        resp.addData(Field.EXIST, productRpcService.checkIfContractExist(contractNo));
     }
 
     @Override
@@ -454,7 +457,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContactList(contactList);
         dto.setEnabled(vo.getEnabled());
         dto.setManagerId(vo.getManagerId());
-        ResultDTO res = remoteClientService.addNewClient(dto);
+        ResultDTO res = clientRpcService.addNewClient(dto);
         resp.setError(res.getResult());
     }
 
@@ -498,14 +501,14 @@ public class ClientServiceImpl implements ClientService
                 contactList.add(o);
             }
         }
-        ResultDTO dto = remoteClientService.editClient(client, contactList, vo.getContactDel());
+        ResultDTO dto = clientRpcService.editClient(client, contactList, vo.getContactDel());
         resp.setError(dto.getResult());
     }
 
     @Override
     public void findClientDetail(Long clientId, RestResp resp)
     {
-        ClientDetailDTO dto = remoteClientService.getClientDetail(clientId);
+        ClientDetailDTO dto = clientRpcService.getClientDetail(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
             resp.setError(dto.getResult());
@@ -543,7 +546,7 @@ public class ClientServiceImpl implements ClientService
             contactList.add(m);
         }
         resp.addData(Field.CONTACT_LIST, contactList);
-        List<ProductClientDetailDTO> productDTOList = remoteProductService.getProductInfoList(clientId);
+        List<ProductClientDetailDTO> productDTOList = productRpcService.getProductInfoList(clientId);
         List<Map<String, Object>> opened = new ArrayList<>();
         List<Map<String, Object>> toOpen = new ArrayList<>();
         List<Map<String, Object>> custom = new ArrayList<>();
@@ -608,14 +611,14 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp)
     {
-        ResultDTO resultDTO = remoteClientService.selectCustomProduct(clientId, productIds);
+        ResultDTO resultDTO = clientRpcService.selectCustomProduct(clientId, productIds);
         resp.setError(resultDTO.getResult());
     }
 
     @Override
     public void removeCustomClientProduct(Long clientProductId, RestResp resp)
     {
-        ResultDTO resultDTO = remoteClientService.removeCustomClientProduct(clientProductId);
+        ResultDTO resultDTO = clientRpcService.removeCustomClientProduct(clientProductId);
         resp.setError(resultDTO.getResult());
     }
 
@@ -623,7 +626,7 @@ public class ClientServiceImpl implements ClientService
     public Map<String, Object> getClientAccountDict(Long clientId)
     {
         Map<String, Object> map = new HashMap<>();
-        ClientUserDictDTO res = remoteClientService.getClientAccountDict(clientId);
+        ClientUserDictDTO res = clientRpcService.getClientAccountDict(clientId);
         map.put(Field.CORP_NAME, res.getCorpName());
         map.put(Field.ACCOUNT_DICT, res.getUserDict());
         return map;
@@ -633,7 +636,7 @@ public class ClientServiceImpl implements ClientService
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, fromDate,
+        ListDTO<RequestDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
@@ -667,14 +670,14 @@ public class ClientServiceImpl implements ClientService
     @Override
     public String getClientCorpName(Long clientId)
     {
-        return remoteClientService.getClientCorpName(clientId);
+        return clientRpcService.getClientCorpName(clientId);
     }
 
     @Override
     public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, fromDate, toDate,
+        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
                 page);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -713,7 +716,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(5).setCellValue("是否击中");
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
-        ListDTO<RequestDTO> listDTO = remoteClientService.getClientRequestList(clientId, userId, productId, startTime,
+        ListDTO<RequestDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
                 endTime, page);
         List<RequestDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
@@ -764,7 +767,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(7).setCellValue("经手人");
         row.createCell(8).setCellValue("合同编号");
 
-        ListDTO<RechargeDTO> listDTO = remoteClientService.getClientRechargeList(clientId, productId, startTime,
+        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
                 endTime, page);
         List<RechargeDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))

@@ -24,7 +24,7 @@ import com.mingdong.core.model.dto.UserDTO;
 import java.util.Date;
 import java.util.List;
 
-public interface RemoteClientService
+public interface ClientRpcService
 {
     /**
      * 客户帐号登录
@@ -93,12 +93,6 @@ public interface RemoteClientService
      */
     ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
 
-    /**
-     * 查询指定的客户用户名是否已被占用
-     *
-     * @return 1-已占用，0-未占用
-     */
-    Integer checkIfClientExist(String username);
 
     /**
      * 查看名称相似的客户信息列表

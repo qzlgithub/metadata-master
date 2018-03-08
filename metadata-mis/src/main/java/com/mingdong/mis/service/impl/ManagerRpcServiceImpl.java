@@ -9,14 +9,13 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.AdminUserDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
-import com.mingdong.core.service.RemoteManagerService;
+import com.mingdong.core.service.ManagerRpcService;
 import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.Group;
 import com.mingdong.mis.domain.entity.GroupFunction;
@@ -38,7 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RemoteManagerServiceImpl implements RemoteManagerService
+public class ManagerRpcServiceImpl implements ManagerRpcService
 {
     @Resource
     private UserMapper userMapper;
@@ -171,30 +170,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
         }
         userFunctionMapper.addList(list);
         return resultDTO;
-    }
-
-    @Override
-    public Integer checkIfGroupExist(String name)
-    {
-        Group role = groupMapper.findByName(name);
-        return role != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
-    }
-
-    @Override
-    public ListDTO<DictDTO> getAdminUserDict()
-    {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
-        List<User> userList = userMapper.getListBy(null, TrueOrFalse.TRUE);
-        if(!CollectionUtils.isEmpty(userList))
-        {
-            List<DictDTO> list = new ArrayList<>();
-            for(User o : userList)
-            {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
     }
 
     @Override
@@ -484,23 +459,6 @@ public class RemoteManagerServiceImpl implements RemoteManagerService
                 }
                 listDTO.setList(list);
             }
-        }
-        return listDTO;
-    }
-
-    @Override
-    public ListDTO<DictDTO> getAccountRoleDict()
-    {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
-        List<Group> roleList = groupMapper.getByStatus(TrueOrFalse.TRUE);
-        if(!CollectionUtils.isEmpty(roleList))
-        {
-            List<DictDTO> list = new ArrayList<>(roleList.size());
-            for(Group o : roleList)
-            {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
-            }
-            listDTO.setList(list);
         }
         return listDTO;
     }

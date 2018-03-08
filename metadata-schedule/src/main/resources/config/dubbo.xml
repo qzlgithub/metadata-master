@@ -16,13 +16,13 @@
     <!--***************************************************************************-->
     <!-- consumer配置：生成远程服务代理，和本地bean一样调用 -->
     <dubbo:reference retries="0" timeout="5000" check="false" id="productApi"
-                     interface="com.mingdong.core.service.RemoteProductService" />
+                     interface="com.mingdong.core.service.ProductRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="clientApi"
-                     interface="com.mingdong.core.service.RemoteClientService" />
+                     interface="com.mingdong.core.service.ClientRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="managerApi"
-                     interface="com.mingdong.core.service.RemoteManagerService" />
+                     interface="com.mingdong.core.service.ManagerRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="statsApi"
-                     interface="com.mingdong.core.service.RemoteStatsService" />
+                     interface="com.mingdong.core.service.StatsRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="systemApi"
-                     interface="com.mingdong.core.service.RemoteSystemService" />
+                     interface="com.mingdong.core.service.SystemRpcService" />
 </beans>

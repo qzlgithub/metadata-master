@@ -10,14 +10,13 @@ import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
-import com.mingdong.core.service.RemoteProductService;
+import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RemoteProductServiceImpl implements RemoteProductService
+public class ProductRpcServiceImpl implements ProductRpcService
 {
     @Resource
     private RechargeMapper rechargeMapper;
@@ -233,23 +232,6 @@ public class RemoteProductServiceImpl implements RemoteProductService
             dto.setBalance(info.getBalance());
         }
         return dto;
-    }
-
-    @Override
-    public ListDTO<DictDTO> getClientProductDict(Long clientId)
-    {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
-        List<ProductClientInfo> dataList = productClientInfoMapper.getClientDictList(clientId);
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            List<DictDTO> list = new ArrayList<>();
-            for(ProductClientInfo o : dataList)
-            {
-                list.add(new DictDTO(o.getProductId() + "", o.getProductName()));
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
     }
 
     @Override
@@ -545,22 +527,5 @@ public class RemoteProductServiceImpl implements RemoteProductService
             dto.setList(list);
         }
         return dto;
-    }
-
-    @Override
-    public ListDTO<DictDTO> getProductDict()
-    {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
-        List<Product> dataList = productMapper.getListByStatus(TrueOrFalse.TRUE);
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            List<DictDTO> list = new ArrayList<>(dataList.size());
-            for(Product o : dataList)
-            {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
     }
 }
