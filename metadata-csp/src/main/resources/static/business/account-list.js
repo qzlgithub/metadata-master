@@ -6,9 +6,9 @@ $(function() {
     getAccountList();
 });
 var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username}</td><td>#{name}</td><td>#{phone}</td>' +
-    '<td><span class="mr30"><a class="edit cp" href="javascript:" onclick="editAccount(\'#{id}\')">编辑</a></span>' +
-    '<span class="mr30"><a href="javascript:" class="del" onclick="stopAccount(\'#{id}\')" id="statusAction#{id}">#{statusName}</a></span>' +
-    '<span class="mr30"><a href="javascript:" class="del" onclick="delAccount(\'#{id}\')">删除</a></span>' +
+    '<td><span class="mr30"><a class="edit cp" onclick="editAccount(\'#{id}\')">编辑</a></span>' +
+    '<span class="mr30"><a class="edit" onclick="stopAccount(this)" id="statusAction#{id}" data-id="#{id}" data-status="#{enabled}">#{statusName}</a></span>' +
+    '<span class="mr30"><a class="del" onclick="delAccount(\'#{id}\')">删除</a></span>' +
     '</td>' +
     '</tr>';
 
@@ -21,7 +21,7 @@ function getAccountList() {
             $("#dataBody").empty();
             for(var d in list) {
                 var row = rowStr.replace(/#{id}/g, list[d].userId).replace("#{username}", list[d].username)
-                .replace("#{name}", list[d].name)
+                .replace("#{name}", list[d].name).replace("#{enabled}", list[d].enabled)
                 .replace("#{phone}", list[d].phone);
                 if(list[d].enabled === 1) {
                     row = row.replace("#{statusName}", "禁用");
@@ -41,32 +41,33 @@ function getAccountList() {
     );
 }
 
-function stopAccount(id) {
-    var txt = $("#accountUserName" + id).text();
-    layer.confirm('是否确定操作' + txt + '？', {
+function stopAccount(obj) {
+    var obj_id = $(obj).data("id");
+    var obj_status = $(obj).data("status");
+    var tip, status;
+    if(obj_status === 1) {
+        tip = "禁用";
+        status = 0;
+    }
+    else {
+        tip = "启用";
+        status = 1;
+    }
+    layer.confirm('是否确定' + tip + '该账号？', {
         btn: ['确定', '取消'],
         yes: function() {
-            $(this).click();
             $.ajax({
                 type: "POST",
                 url: "/client/sub-account/status",
                 contentType: "application/json",
-                data: JSON.stringify({"clientUserId": id}),
+                data: JSON.stringify({"clientUserId": obj_id, "status": status}),
                 success: function(res) {
                     if(res.code === '000000') {
-                        var obj = res.data;
-                        if(obj.enabled === 1) {
-                            $("#statusAction" + id).text("禁用");
-                            layer.msg("启用成功", {
-                                time: 2000
-                            });
-                        }
-                        else {
-                            $("#statusAction" + id).text("启用");
-                            layer.msg("禁用成功", {
-                                time: 2000
-                            });
-                        }
+                        $("#statusAction" + id).text(obj_status === 1 ? "启用" : "禁用");
+                        layer.msg(tip + "成功", {time: 2000});
+                    }
+                    else {
+                        layer.msg(res.message, {time: 2000});
                     }
                 }
             });

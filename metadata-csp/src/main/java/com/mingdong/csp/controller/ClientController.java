@@ -165,12 +165,13 @@ public class ClientController
             return resp;
         }
         Long clientUserId = jsonObject.getLong(Field.CLIENT_USER_ID);
-        if(clientUserId == null)
+        Integer status = jsonObject.getInteger(Field.STATUS);
+        if(clientUserId == null || (!TrueOrFalse.TRUE.equals(status) && !TrueOrFalse.FALSE.equals(status)))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.changeSubUserStatus(clientUserId, resp);
+        clientService.changeSubUserStatus(clientUserId, status, resp);
         return resp;
     }
 

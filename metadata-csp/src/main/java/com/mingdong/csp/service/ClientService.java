@@ -32,9 +32,9 @@ public interface ClientService
     void getClientSubAccountList(RestListResp res);
 
     /**
-     * 禁用/启用子账号
+     * 禁用/启用客户子账号
      */
-    void changeSubUserStatus(Long clientUserId, RestResp resp);
+    void changeSubUserStatus(Long clientUserId, Integer enabled, RestResp resp);
 
     /**
      * 编辑子账号

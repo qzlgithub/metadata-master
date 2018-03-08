@@ -70,7 +70,7 @@ public interface ClientRpcService
     /**
      * 更改客户子帐号状态
      */
-    UserDTO changeSubUserStatus(Long clientId, Long clientUserId);
+    ResultDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled);
 
     /**
      * 根据客户帐号id获取帐号信息

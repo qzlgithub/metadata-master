@@ -106,15 +106,10 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changeSubUserStatus(Long clientUserId, RestResp resp)
+    public void changeSubUserStatus(Long clientUserId, Integer enabled, RestResp resp)
     {
-        UserDTO userDTO = clientRpcService.changeSubUserStatus(RequestThread.getClientId(), clientUserId);
-        if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.setError(userDTO.getResultDTO().getResult());
-            return;
-        }
-        resp.addData(Field.ENABLED, userDTO.getEnabled());
+        ResultDTO resultDTO = clientRpcService.changeSubUserStatus(RequestThread.getClientId(), clientUserId, enabled);
+        resp.setError(resultDTO.getResult());
     }
 
     @Override
