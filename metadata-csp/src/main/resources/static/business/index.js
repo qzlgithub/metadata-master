@@ -50,19 +50,19 @@ function changeImage() {
 }
 
 function userLogin() {
-    var username = $("#username").val();
+    var username = $.trim($("#username").val());
     var password = $("#enc-passcode").val();
-    var code = $("#captcha-code").val();
+    var code = $.trim($("#captcha-code").val());
     if(username === '') {
-        layer.msg("请填写正确的用户名！");
+        layer.msg("用户名不能为空！");
         return;
     }
     if(password === '') {
-        layer.msg("请填写您的密码！");
+        layer.msg("密码不能为空！");
         return;
     }
     if(code === '') {
-        layer.msg("请填写验证码！");
+        layer.msg("验证码不能为空！");
         return;
     }
     $.ajax({

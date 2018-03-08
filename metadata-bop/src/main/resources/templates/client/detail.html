@@ -268,7 +268,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>单价：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-unit" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display: inline;" onblur="checkUnitPrice()"/> 元/次
+                           class="layui-input" style="width:70%; display: inline;" onblur="checkUnitPrice()" maxlength="4"/> 元/次
                     <i class="col3 pl10" id="unitPriceTip" style="display: none"></i>
                 </div>
             </div>
@@ -276,14 +276,14 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-amt" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge()"/> 元
+                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge()" maxlength="8"/> 元
                     <i class="col3 pl10" id="rechargeTip" style="display: none"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
                 <div class="layui-input-block renew-input-block tl">
-                    <select id="renew-recharge-type" class="select-list" onblur="checkRechargeType()">
+                    <select id="renew-recharge-type" class="select-list">
                         <option th:each="rt : ${rechargeDict}" th:value="${rt.id}" th:text="${rt.name}"></option>
                     </select>
                     <i class="col3 pl10" id="rechargeTypeTip" style="display: none"></i>
@@ -293,7 +293,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>合同编号：</label>
                 <div class="layui-input-block renew-input-block">
                     <input type="text" id="renew-contract" placeholder="请输入" autocomplete="off" class="layui-input"
-                           onblur="checkContNumber()"/>
+                           onblur="checkContNumber()" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" maxlength="30"/>
                     <i class="col3 pl10" id="contNumberTip" style="display: none"></i>
                 </div>
             </div>
