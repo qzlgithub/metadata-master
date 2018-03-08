@@ -9,8 +9,7 @@ var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username
     '<td><span class="mr30"><a class="edit cp" onclick="editAccount(\'#{id}\')">编辑</a></span>' +
     '<span class="mr30"><a class="edit cp" onclick="stopAccount(this)" id="statusAction#{id}" data-id="#{id}" data-status="#{enabled}">#{statusName}</a></span>' +
     '<span class="mr30"><a class="del cp" onclick="delAccount(\'#{id}\')">删除</a></span>' +
-    '</td>' +
-    '</tr>';
+    '</td></tr>';
 
 function getAccountList() {
     $.get(
@@ -71,7 +70,7 @@ function stopAccount(obj) {
                         layer.msg(tip + "成功", {time: 2000});
                     }
                     else {
-                        layer.msg(res.message, {time: 2000});
+                        layer.msg("操作失败：" + res.message, {time: 2000});
                     }
                 }
             });
@@ -269,8 +268,4 @@ function editSubmitAccount() {
             }
         }
     });
-}
-
-function requestAccount() {
-    window.location.href = "/product/request.html";
 }
