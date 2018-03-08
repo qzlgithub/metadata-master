@@ -4,6 +4,7 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
@@ -113,21 +114,19 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
-            String name, String phone, Integer enabled, RestResp resp)
+    public void editSubUser(Long clientUserId, String username, String password, String name, String phone,
+            Integer enabled, RestResp resp)
     {
-        UserDTO userDTO = clientRpcService.editChildAccount(primaryAccountId, clientUserId, username, password, name,
-                phone, enabled);
-        if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
-        {
-            resp.setError(userDTO.getResultDTO().getResult());
-            return;
-        }
-        resp.addData(Field.USER_ID, userDTO.getUserId() + "");
-        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
-        resp.addData(Field.NAME, userDTO.getName());
-        resp.addData(Field.PHONE, userDTO.getPhone());
-        resp.addData(Field.ENABLED, userDTO.getEnabled());
+        SubUserDTO subUserDTO = new SubUserDTO();
+        subUserDTO.setClientId(RequestThread.getClientId());
+        subUserDTO.setUserId(clientUserId);
+        subUserDTO.setUsername(username);
+        subUserDTO.setPassword(password == null ? null : Md5Utils.encrypt(password));
+        subUserDTO.setName(name);
+        subUserDTO.setPhone(phone);
+        subUserDTO.setEnabled(enabled);
+        ResultDTO resultDTO = clientRpcService.editSubUser(subUserDTO);
+        resp.setError(resultDTO.getResult());
     }
 
     @Override

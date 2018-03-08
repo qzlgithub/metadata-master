@@ -208,8 +208,12 @@ public class ClientController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.editChildAccount(RequestThread.getUserId(), clientUserId, username, password, name, phone,
-                enabled, resp);
+        if(!TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
+        {
+            resp.setError(RestResult.ONLY_PRIMARY_USER);
+            return resp;
+        }
+        clientService.editSubUser(clientUserId, username, password, name, phone, enabled, resp);
         return resp;
     }
 

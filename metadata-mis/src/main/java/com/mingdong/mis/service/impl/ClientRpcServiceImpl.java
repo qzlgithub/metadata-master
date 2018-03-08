@@ -414,32 +414,31 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public UserDTO editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password,
-            String name, String phone, Integer enabled)
+    public ResultDTO editSubUser(SubUserDTO subUserDTO)
     {
-        Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
-        UserDTO userDTO = new UserDTO();
-        if(client == null)
+        ResultDTO resultDTO = new ResultDTO();
+        ClientUser clientUser = clientUserMapper.findById(subUserDTO.getUserId());
+        if(clientUser == null || !subUserDTO.getClientId().equals(clientUser.getClientId()))
         {
-            userDTO.getResultDTO().setResult(RestResult.ONLY_PRIMARY_USER);
-            return userDTO;
+            resultDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
+            return resultDTO;
         }
-        ClientUser clientUserByUserName = clientUserMapper.findByUsername(username);
-        if(clientUserByUserName != null && clientUserByUserName.getId().longValue() != clientUserId.longValue())
+        ClientUser temp = clientUserMapper.findByUsername(subUserDTO.getUsername());
+        if(temp != null && !subUserDTO.getUserId().equals(temp.getId()))
         {
-            userDTO.getResultDTO().setResult(RestResult.USERNAME_EXIST);
-            return userDTO;
+            resultDTO.setResult(RestResult.USERNAME_EXIST);
+            return resultDTO;
         }
-        ClientUser clientUser = clientUserMapper.findById(clientUserId);
-        clientUser.setUsername(username);
-        clientUser.setPassword(
-                StringUtils.isNullBlank(password) ? clientUser.getPassword() : Md5Utils.encrypt(password));
-        clientUser.setName(name);
-        clientUser.setPhone(phone);
-        clientUser.setEnabled(enabled);
-        clientUserMapper.updateById(clientUser);
-        TransformDTO.userToDTO(clientUser, userDTO);
-        return userDTO;
+        temp = new ClientUser();
+        temp.setId(subUserDTO.getUserId());
+        temp.setUpdateTime(new Date());
+        temp.setUsername(subUserDTO.getUsername());
+        temp.setPassword(subUserDTO.getPassword());
+        temp.setName(subUserDTO.getName());
+        temp.setPhone(subUserDTO.getPhone());
+        temp.setEnabled(subUserDTO.getEnabled());
+        clientUserMapper.updateSkipNull(temp);
+        return resultDTO;
     }
 
     @Override

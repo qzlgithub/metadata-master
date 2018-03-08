@@ -39,8 +39,8 @@ public interface ClientService
     /**
      * 编辑子账号
      */
-    void editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name,
-            String phone, Integer enabled, RestResp resp);
+    void editSubUser(Long clientUserId, String username, String password, String name, String phone, Integer enabled,
+            RestResp resp);
 
     /**
      * 获取首页信息

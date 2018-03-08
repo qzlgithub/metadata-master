@@ -80,8 +80,7 @@ public interface ClientRpcService
     /**
      * 修改客户子帐号信息
      */
-    UserDTO editChildAccount(Long primaryAccountId, Long clientUserId, String username, String password, String name,
-            String phone, Integer enabled);
+    ResultDTO editSubUser(SubUserDTO subUserDTO);
 
     /**
      * 获取帐号token
@@ -92,7 +91,6 @@ public interface ClientRpcService
      * 新增帐号token
      */
     ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
-
 
     /**
      * 查看名称相似的客户信息列表
