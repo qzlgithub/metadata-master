@@ -90,7 +90,7 @@ public class ClientPageController
         clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("client/detail");
         view.addAllObjects(resp.getData());
-        view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
+        view.addObject(Field.RECHARGE_TYPE_DICT, systemService.getRechargeDict());
         view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
         view.addAllObjects(RequestThread.getMap());
         return view;

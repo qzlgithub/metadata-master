@@ -144,7 +144,7 @@ public interface Field
     String ROLE_DICT = "roleDict";
     String PRODUCT_TYPE_DICT = "productTypeDict";
     String PRODUCT_DICT = "productDict";
-    String RECHARGE_DICT = "rechargeDict";
+    String RECHARGE_TYPE_DICT = "rechargeTypeDict";
     String INDUSTRY_PARENT_DICT = "industryParentDict";
     String INDUSTRY_DICT = "industryDict";
     // GET url 参数

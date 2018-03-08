@@ -7,12 +7,14 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.DictIndustry;
+import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Group;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
+import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.GroupMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
@@ -34,6 +36,8 @@ public class CommonRpcServiceImpl implements CommonRpcService
     private ClientUserMapper clientUserMapper;
     @Resource
     private DictIndustryMapper dictIndustryMapper;
+    @Resource
+    private DictRechargeTypeMapper dictRechargeTypeMapper;
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
 
@@ -120,6 +124,24 @@ public class CommonRpcServiceImpl implements CommonRpcService
             for(ProductClientInfo o : dataList)
             {
                 list.add(new DictDTO(o.getProductId() + "", o.getProductName()));
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<DictDTO> getRechargeTypeDict()
+    {
+        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        List<DictRechargeType> rechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
+        if(!CollectionUtils.isEmpty(rechargeTypeList))
+        {
+            List<DictDTO> list = new ArrayList<>();
+            for(DictRechargeType o : rechargeTypeList)
+            {
+                list.add(new DictDTO(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }

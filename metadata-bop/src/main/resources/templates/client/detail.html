@@ -284,7 +284,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <select id="renew-recharge-type" class="select-list">
-                        <option th:each="rt : ${rechargeDict}" th:value="${rt.id}" th:text="${rt.name}"></option>
+                        <option th:each="o : ${rechargeTypeDict}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                     <i class="col3 pl10" id="rechargeTypeTip" style="display: none"></i>
                 </div>
@@ -359,7 +359,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值类型：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <select id="open-recharge-type" lay-verify="required" lay-search="" class="select-list">
-                        <option th:each="rt : ${rechargeDict}" th:value="${rt.id}" th:text="${rt.name}"></option>
+                        <option th:each="o : ${rechargeTypeDict}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                 </div>
             </div>

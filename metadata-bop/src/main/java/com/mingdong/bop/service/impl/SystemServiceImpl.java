@@ -13,7 +13,6 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
@@ -181,17 +180,16 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public List<Map<String, Object>> getRechargeDict()
+    public List<Dict> getRechargeDict()
     {
-        List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<DictRechargeTypeDTO> listDTO = systemRpcService.getRechargeTypeList(TrueOrFalse.TRUE, null);
-        List<DictRechargeTypeDTO> rechargeTypeList = listDTO.getList();
-        for(DictRechargeTypeDTO drt : rechargeTypeList)
+        List<Dict> list = new ArrayList<>();
+        ListDTO<DictDTO> listDTO = commonRpcService.getRechargeTypeDict();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, drt.getId() + "");
-            map.put(Field.NAME, drt.getName());
-            list.add(map);
+            for(DictDTO o : listDTO.getList())
+            {
+                list.add(new Dict(o.getKey(), o.getValue()));
+            }
         }
         return list;
     }

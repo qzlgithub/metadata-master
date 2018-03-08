@@ -45,4 +45,9 @@ public interface CommonRpcService
      * 客户产品字典
      */
     ListDTO<DictDTO> getClientProductDict(Long clientId);
+
+    /**
+     * 充值类型字典
+     */
+    ListDTO<DictDTO> getRechargeTypeDict();
 }

@@ -53,7 +53,7 @@ public interface SystemService
     /**
      * 获取充值类型列表
      */
-    List<Map<String, Object>> getRechargeDict();
+    List<Dict> getRechargeDict();
 
     /**
      * 新增充值类型

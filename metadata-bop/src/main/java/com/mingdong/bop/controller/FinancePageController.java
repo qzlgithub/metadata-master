@@ -37,7 +37,7 @@ public class FinancePageController
     public ModelAndView gotoRechargeListPage()
     {
         ModelAndView view = new ModelAndView("finance/recharge");
-        view.addObject(Field.RECHARGE_DICT, systemService.getRechargeDict());
+        view.addObject(Field.RECHARGE_TYPE_DICT, systemService.getRechargeDict());
         view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
         view.addObject(Field.ADMIN_USER_DICT, managerService.getAdminUserDict());
         view.addObject(Field.IS_MANAGER, RequestThread.isManager());
