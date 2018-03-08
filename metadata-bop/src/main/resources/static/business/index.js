@@ -24,14 +24,29 @@ function refresh_code() {
 }
 
 function login() {
+    var username = $.trim($("#username").val());
+    if(username == ""){
+        layer.msg("用户名不能为空！");
+        return;
+    }
+    var password = $("#password").val();
+    if(password == ""){
+        layer.msg("密码不能为空！");
+        return;
+    }
+    var imageCode = $.trim($("#code").val());
+    if(imageCode == ""){
+        layer.msg("验证码不能为空！");
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/user/login",
         contentType: "application/json",
         data: JSON.stringify({
-            "username": $("#username").val(),
+            "username": $.trim($("#username").val()),
             "password": MD5($("#password").val()),
-            "imageCode": $("#code").val()
+            "imageCode": $.trim($("#code").val())
         }),
         success: function(res) {
             if(res.code !== '000000') {

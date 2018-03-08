@@ -199,6 +199,7 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.PRODUCT_ID, dto.getId() + "");
         resp.addData(Field.PRODUCT_NAME, dto.getName());
         resp.addData(Field.BILL_PLAN, dto.getBillPlan());
+        resp.addData(Field.CONTENT, dto.getContent());
         if(BillPlan.BY_TIME.getId().equals(dto.getBillPlan()))
         {
             resp.addData(Field.STATUS, ProductStatus.getStatusByDate(dto.getFromDate(), dto.getToDate()));
@@ -337,5 +338,13 @@ public class ProductServiceImpl implements ProductService
             }
             res.setList(list);
         }
+    }
+
+    @Override
+    public void getProductInfo(Long productId, RestResp resp)
+    {
+        ProductDTO productInfoData = productRpcService.getProductInfoData(productId);
+        resp.addData(Field.NAME,productInfoData.getName());
+        resp.addData(Field.CONTENT,productInfoData.getContent());
     }
 }

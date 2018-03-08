@@ -43,55 +43,10 @@
     位置：<a href="/home.html"> 主页</a> > <a href="/product/mine.html">我的服务</a> > <span class="col2">服务详情</span>
 </div>
 <div class="container mt20 mb20 bg-white">
-    <div class="fz-16 bd-bottom pb15 pt15 fb pl5">金融预期常欠客</div>
+    <div class="fz-16 bd-bottom pb15 pt15 fb pl5"><span th:text="${name}"></span></div>
     <div class="row development">
-        <div class="col-lg-10 col-sm-10 col-md-10">
-            <div class="tab-pane fade in active tab-content">
-                <div class="development-nav p0 important">
-                    <div id="voice1">
-                        <div class="msghoverbg">
-                            <h1>1.语音接口地址与示例</h1>
-                            通用接口地址：http://client.movek.net:8888<br/>
-                        </div>
-                        <div class="msghoverbg">
-                            <p>1.1 语音平台接口地址</p>
-                            通用接口地址：http://client.movek.net:8888
-                        </div>
-                        <div class="msghoverbg">
-                            <p>1.2 快速应用示例</p>
-                            <p>发送语音</p>
-                            http://client.movek.net:8888/sendvms.aspx?action=send&amp;account=序列号&amp;password=密码&amp;userid=特服号&amp;title=标题&amp;mobile=手机号1,手机号2,手机号&amp;Vmsmsg=内容
-                        </div>
-                    </div>
-                    <div id="voice2">
-                        <div class="msghoverbg">
-                            <h1>2.语音发送接口</h1>
-                            <p>2.1 HTTP 发送接口</p>
-                            发送接口地址：http://client.movek.net:8888/sendvms.aspx<br/>
-                        </div>
-                        <div class="msghoverbg">
-                            <p>2.2 语音示例</p>
-                            <div>请求方式：<i>POST、GET</i>,数据编码：UTF-8</div>
-                            http://client.movek.net:8888/sendvms.aspx?action=send&amp;userid=12&amp;account=zhouyang&amp;password=123456&amp;mobile=138********,135********&amp;title=abc&amp;Vmsmsg
-                            =内容<br/>
-                        </div>
-                        <div class="msghoverbg">
-                            <p>2.3发送返回值</p>
-                            在接收到客户端发送的http请求后，返回以xml的方式返回处理结果（JSON返回一致）。格式为：<br/>
-                            &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;<br/>
-                            &lt;returnvms&gt;<br/>
-                            &lt;returnstatus&gt;返回状态值：成功返回Success 失败返回：Faild&lt;/returnstatus&gt;<br/>
-                            &lt;message&gt;返回信息&lt;/message&gt;<br/>
-                            &lt;remainpoint&gt; 返回余额&lt;/remainpoint&gt; <br/>
-                            &lt;taskID&gt;返回本次任务的序列ID &lt;/taskID&gt;<br/>
-                            &lt;successCounts&gt;成功短信数：当成功后返回提交成功短信数&lt;/successCounts&gt; <br/>
-                            &lt;/returnvms&gt;<br/>
-                            JSON返回值：<br/>
-                            {"code":"Success","data":{"returnstatus":"返回状态值：成功返回Success
-                            失败返回：Faild","message":"返回信息","remainpoint":返回余额,"taskID":"返回本次任务的ID","successCounts":"成功短信数"},"msg":"ok"}
-                        </div>
-                    </div>
-                </div>
+        <div class="col-lg-10 col-sm-10 col-md-10" >
+            <div class="tab-pane fade in active tab-content" id="content">
             </div>
         </div>
         <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important mt15" style="position: fixed; right: 9%;">
@@ -119,10 +74,14 @@
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
-<script>
+<script th:inline="javascript">
     var form;
     layui.use('form', function() {
         form = layui.form;
+    });
+    $(function (){
+        var content = [[${content}]];
+        $("#content").html(content);
     });
 </script>
 </body>
