@@ -60,7 +60,7 @@ public interface ClientService
     /**
      * 根据userId获取账户信息
      */
-    void getAccountByUserId(Long userId, RestResp resp);
+    void getClientUserInfo(Long userId, RestResp resp);
 
     /**
      * 获取token信息

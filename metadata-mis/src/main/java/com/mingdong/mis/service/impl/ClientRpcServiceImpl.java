@@ -40,7 +40,6 @@ import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.constant.Trade;
-import com.mingdong.mis.domain.TransformDTO;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientContact;
@@ -133,33 +132,33 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Override
     public UserDTO userLogin(String username, String password)
     {
-        ClientUser user = clientUserMapper.findByUsername(username);
         UserDTO userDTO = new UserDTO();
+        ClientUser user = clientUserMapper.findByUsername(username);
         if(user == null || !TrueOrFalse.FALSE.equals(user.getDeleted()))
         {
-            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_NOT_EXIST);
+            userDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
             return userDTO;
         }
         else if(!TrueOrFalse.TRUE.equals(user.getEnabled()))
         {
-            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_DISABLED);
+            userDTO.setResult(RestResult.ACCOUNT_DISABLED);
             return userDTO;
         }
         Client client = clientMapper.findById(user.getClientId());
         if(client == null || client.getPrimaryUserId() == null)
         {
-            userDTO.getResultDTO().setResult(RestResult.INTERNAL_ERROR);
+            userDTO.setResult(RestResult.INTERNAL_ERROR);
             return userDTO;
         }
         ClientUser primaryUser = clientUserMapper.findById(client.getPrimaryUserId());
         if(primaryUser == null || !TrueOrFalse.TRUE.equals(primaryUser.getEnabled()))
         {
-            userDTO.getResultDTO().setResult(RestResult.ACCOUNT_DISABLED);
+            userDTO.setResult(RestResult.ACCOUNT_DISABLED);
             return userDTO;
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(password)))
         {
-            userDTO.getResultDTO().setResult(RestResult.INVALID_PASSCODE);
+            userDTO.setResult(RestResult.INVALID_PASSCODE);
             return userDTO;
         }
         User manager = userMapper.findById(client.getManagerId());
@@ -402,13 +401,19 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Override
     public UserDTO getAccountByUserId(Long clientUserId)
     {
+        UserDTO userDTO = new UserDTO();
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(clientUser == null)
         {
-            return null;
+            userDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return userDTO;
         }
-        UserDTO userDTO = new UserDTO();
-        TransformDTO.userToDTO(clientUser, userDTO);
+        userDTO.setClientId(clientUser.getClientId());
+        userDTO.setUserId(clientUser.getId());
+        userDTO.setName(clientUser.getName());
+        userDTO.setPhone(clientUser.getPhone());
+        userDTO.setUsername(clientUser.getUsername());
+        userDTO.setEnabled(clientUser.getEnabled());
         return userDTO;
     }
 

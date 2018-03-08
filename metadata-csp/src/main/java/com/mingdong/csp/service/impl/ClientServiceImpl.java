@@ -48,9 +48,9 @@ public class ClientServiceImpl implements ClientService
     public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
         UserDTO dto = clientRpcService.userLogin(username, password);
-        if(RestResult.SUCCESS != dto.getResultDTO().getResult())
+        if(RestResult.SUCCESS != dto.getResult())
         {
-            resp.setError(dto.getResultDTO().getResult());
+            resp.setError(dto.getResult());
             return;
         }
         UserSession session = new UserSession(dto.getClientId(), dto.getUserId(), dto.getName(), username,
@@ -214,16 +214,16 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getAccountByUserId(Long userId, RestResp resp)
+    public void getClientUserInfo(Long userId, RestResp resp)
     {
         UserDTO userDTO = clientRpcService.getAccountByUserId(userId);
-        if(userDTO.getResultDTO().getResult() != RestResult.SUCCESS)
+        if(userDTO.getResult() != RestResult.SUCCESS)
         {
-            resp.setError(userDTO.getResultDTO().getResult());
+            resp.setError(userDTO.getResult());
             return;
         }
-        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "");
         resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
+        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "");
         resp.addData(Field.USERNAME, userDTO.getUsername());
         resp.addData(Field.NAME, userDTO.getName());
         resp.addData(Field.PHONE, userDTO.getPhone());

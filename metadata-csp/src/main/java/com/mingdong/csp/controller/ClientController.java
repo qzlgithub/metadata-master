@@ -177,10 +177,10 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "/client/user")
-    public RestResp getAccountDetail(@RequestParam(value = Field.USER_ID) Long userId)
+    public RestResp getClientUserInfo(@RequestParam(value = Field.USER_ID) Long userId)
     {
         RestResp resp = new RestResp();
-        clientService.getAccountByUserId(userId, resp);
+        clientService.getClientUserInfo(userId, resp);
         return resp;
     }
 
