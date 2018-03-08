@@ -395,7 +395,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         tempUser.setId(clientUserId);
         tempUser.setUpdateTime(new Date());
         tempUser.setEnabled(enabled);
-        clientUserMapper.updateById(tempUser);
+        clientUserMapper.updateSkipNull(tempUser);
         return resultDTO;
     }
 
