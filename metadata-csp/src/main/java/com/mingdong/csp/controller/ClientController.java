@@ -176,11 +176,11 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "/client/childAccountDetail")
-    public RestResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
+    @GetMapping(value = "/client/user")
+    public RestResp getAccountDetail(@RequestParam(value = Field.USER_ID) Long userId)
     {
         RestResp resp = new RestResp();
-        clientService.getAccountByUserId(clientUserId, resp);
+        clientService.getAccountByUserId(userId, resp);
         return resp;
     }
 

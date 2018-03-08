@@ -122,8 +122,8 @@ function delAccount(id) {
 
 function editAccount(id) {
     $.get(
-        "/client/childAccountDetail",
-        {"clientUserId": id},
+        "/client/user",
+        {"userId": id},
         function(res) {
             if(res.code === '000000') {
                 var obj = res.data;
