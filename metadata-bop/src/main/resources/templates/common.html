@@ -18,12 +18,12 @@
                     <p th:text="${i_system.m30000}">客户管理</p>
                 </a>
             </li>
-            <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'20000')}">
+            <!--<li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'20000')}">
                 <a href="/setting/product.html">
                     <img src="/static/images/icon/menu-icon2.png"/>
                     <p th:text="${i_system.m20000}">产品管理</p>
                 </a>
-            </li>
+            </li>-->
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'50000')}">
                 <a href="/finance/recharge.html">
                     <img src="/static/images/icon/menu-icon5.png"/>

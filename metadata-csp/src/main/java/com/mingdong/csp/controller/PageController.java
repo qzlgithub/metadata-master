@@ -103,9 +103,12 @@ public class PageController
 
     @LoginRequired
     @GetMapping(value = {"/product/introduce.html"})
-    public ModelAndView productIntroduce()
+    public ModelAndView productIntroduce(@RequestParam(value = Field.ID) Long productId)
     {
         ModelAndView view = new ModelAndView("product/introduce");
+        RestResp resp = new RestResp();
+        productService.getProductInfo(productId,resp);
+        view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }
