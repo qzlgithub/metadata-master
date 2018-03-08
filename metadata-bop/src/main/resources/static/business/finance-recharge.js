@@ -28,17 +28,15 @@ layui.config({
             toDate: $("#toDate").val()
         },
         cols: [[
-            {field: 'rechargeAt', title: '充值时间'},
-            {field: 'tradeNo', title: '充值单号'},
-            {field: 'corpName', title: '公司全称'},
-            {field: 'shortName', title: '公司简称'},
-            {field: 'username', title: '用户名'},
-            {field: 'product', title: '产品服务'},
-            {field: 'rechargeType', title: '充值类型'},
-            {field: 'amount', title: '充值金额'},
-            {field: 'balance', title: '产品余额'},
-            {field: 'manager', title: '经手人'},
-            {field: 'contractNo', title: '合同编号'},
+            {field: 'rechargeAt', title: '充值时间', width: '10%'},
+            {field: 'tradeNo', title: '充值单号', width: '10%'},
+            {field: 'corpName', title: '公司名称', width: '10%'},
+            {field: 'product', title: '产品服务', width: '10%'},
+            {field: 'rechargeType', title: '充值类型', width: '6%'},
+            {field: 'amount', title: '充值金额', width: '10%'},
+            {field: 'content', title: '服务时间/单价', width: '15%'},
+            {field: 'manager', title: '经手人', width: '10%'},
+            {field: 'contractNo', title: '合同编号', width: '10%'},
             {field: 'remark', title: '备注'}
         ]],
         request: {

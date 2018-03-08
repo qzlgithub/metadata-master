@@ -46,7 +46,7 @@
                     <div class="layui-inline" style="width: 120px">
                         <select name="recharge-type" id="rechargeType" title="充值类型" lay-search="">
                             <option value="">全部</option>
-                            <option th:each="o : ${rechargeTypeDict}" th:value="${o.key}" th:text="${o.value}"></option>
+                            <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"></option>
                         </select>
                     </div>
                 </li>

@@ -27,11 +27,10 @@ layui.config({
             toDate: $("#toDate").val()
         },
         cols: [[
-            {field: 'requestAt', title: '请求时间'},
+            {field: 'requestAt', title: '消费时间'},
             {field: 'tradeNo', title: '消费单号'},
-            {field: 'corpName', title: '公司全称'},
-            {field: 'shortName', title: '公司简称'},
-            {field: 'username', title: '公司账号'},
+            {field: 'corpName', title: '公司名称'},
+            {field: 'username', title: '消费账号'},
             {field: 'product', title: '产品服务'},
             {field: 'billPlan', title: '计费方式'},
             {title: '是否击中', templet: "#hittpl"},

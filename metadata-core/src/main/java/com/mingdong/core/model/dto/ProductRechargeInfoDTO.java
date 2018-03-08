@@ -17,9 +17,42 @@ public class ProductRechargeInfoDTO implements Serializable
     private String rechargeType;
     private BigDecimal amount;
     private BigDecimal balance;
+    private BigDecimal unitAmt;
     private String contractNo;
     private String remark;
     private String managerName;
+    private Date startDate;
+    private Date endDate;
+
+    public BigDecimal getUnitAmt()
+    {
+        return unitAmt;
+    }
+
+    public void setUnitAmt(BigDecimal unitAmt)
+    {
+        this.unitAmt = unitAmt;
+    }
+
+    public Date getStartDate()
+    {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate)
+    {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate()
+    {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate)
+    {
+        this.endDate = endDate;
+    }
 
     public String getManagerName()
     {

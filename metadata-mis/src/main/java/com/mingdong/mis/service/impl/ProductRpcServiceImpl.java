@@ -445,6 +445,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
                 pri.setManagerName(o.getManagerName());
                 pri.setContractNo(o.getContractNo());
                 pri.setRemark(o.getRemark());
+                pri.setStartDate(o.getStartDate());
+                pri.setEndDate(o.getEndDate());
+                pri.setBillPlan(o.getBillPlan());
+                pri.setUnitAmt(o.getUnitAmt());
                 list.add(pri);
             }
             dto.setList(list);

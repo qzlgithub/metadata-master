@@ -22,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,13 +41,15 @@ public class TradeServiceImpl implements TradeService
     public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
             Date fromDate, Date toDate, Page page, RestListResp res)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId,
-                managerId, rechargeType, fromDate, toDate, page);
+        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+                rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
         if(listDTO.getList() != null)
         {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
+            StringBuffer sbf;
             for(ProductRechargeInfoDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
@@ -62,6 +65,16 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.MANAGER, o.getManagerName());
                 map.put(Field.CONTRACT_NO, o.getContractNo());
                 map.put(Field.REMARK, o.getRemark());
+                sbf = new StringBuffer();
+                if(BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    sbf.append(sdf.format(o.getStartDate()) + "-" + sdf.format(o.getEndDate()));
+                }
+                else
+                {
+                    sbf.append(NumberUtils.formatAmount(o.getUnitAmt()));
+                }
+                map.put(Field.CONTENT, sbf.toString());
                 list.add(map);
             }
             res.setList(list);
@@ -75,26 +88,26 @@ public class TradeServiceImpl implements TradeService
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值数据");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("时间");
+        row.createCell(0).setCellValue("充值时间");
         row.createCell(1).setCellValue("充值单号");
         row.createCell(2).setCellValue("公司名称");
-        row.createCell(3).setCellValue("公司简称");
-        row.createCell(4).setCellValue("账号");
-        row.createCell(5).setCellValue("产品服务");
-        row.createCell(6).setCellValue("充值类型");
-        row.createCell(7).setCellValue("充值金额");
-        row.createCell(8).setCellValue("产品服务余额");
-        row.createCell(9).setCellValue("经手人");
-        row.createCell(10).setCellValue("合同编号");
-        row.createCell(11).setCellValue("备注");
+        row.createCell(3).setCellValue("产品服务");
+        row.createCell(4).setCellValue("充值类型");
+        row.createCell(5).setCellValue("充值金额");
+        row.createCell(6).setCellValue("服务时间/单价");
+        row.createCell(7).setCellValue("经手人");
+        row.createCell(8).setCellValue("合同编号");
+        row.createCell(9).setCellValue("备注");
         Row dataRow;
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId,
-                managerId, rechargeType, fromDate, toDate, page);
+        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+                rechargeType, fromDate, toDate, page);
         List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         ProductRechargeInfoDTO dataInfo;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        StringBuffer sbf;
         for(int i = 0; i < dataList.size(); i++)
         {
             dataInfo = dataList.get(i);
@@ -104,15 +117,22 @@ public class TradeServiceImpl implements TradeService
             cell.setCellStyle(timeStyle);
             dataRow.createCell(1).setCellValue(dataInfo.getTradeNo());
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
-            dataRow.createCell(3).setCellValue(dataInfo.getShortName());
-            dataRow.createCell(4).setCellValue(dataInfo.getUsername());
-            dataRow.createCell(5).setCellValue(dataInfo.getProductName() == null ? "" : dataInfo.getProductName());
-            dataRow.createCell(6).setCellValue(dataInfo.getRechargeType());
-            dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
-            dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
-            dataRow.createCell(9).setCellValue(dataInfo.getManagerName());
-            dataRow.createCell(10).setCellValue(dataInfo.getContractNo());
-            dataRow.createCell(11).setCellValue(dataInfo.getRemark());
+            dataRow.createCell(3).setCellValue(dataInfo.getProductName() == null ? "" : dataInfo.getProductName());
+            dataRow.createCell(4).setCellValue(dataInfo.getRechargeType());
+            dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
+            sbf = new StringBuffer();
+            if(BillPlan.BY_TIME.equals(dataInfo.getBillPlan()))
+            {
+                sbf.append(sdf.format(dataInfo.getStartDate()) + "-" + sdf.format(dataInfo.getEndDate()));
+            }
+            else
+            {
+                sbf.append(NumberUtils.formatAmount(dataInfo.getUnitAmt()));
+            }
+            dataRow.createCell(6).setCellValue(sbf.toString());
+            dataRow.createCell(7).setCellValue(dataInfo.getManagerName());
+            dataRow.createCell(8).setCellValue(dataInfo.getContractNo());
+            dataRow.createCell(9).setCellValue(dataInfo.getRemark());
         }
         return wb;
     }
@@ -135,7 +155,7 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.TRADE_NO, o.getRequestNo());
                 map.put(Field.CORP_NAME, o.getCorpName());
                 map.put(Field.SHORT_NAME, o.getShortName());
-                map.put(Field.USERNAME, o.getUsername());
+                map.put(Field.USERNAME, o.getUsername() + (o.getPrimaryUserId().equals(o.getUserId()) ? "" : "（子）"));
                 map.put(Field.PRODUCT, o.getProductName());
                 map.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
                 if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
@@ -162,16 +182,15 @@ public class TradeServiceImpl implements TradeService
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("消费数据");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("请求时间");
-        row.createCell(1).setCellValue("请求单号");
+        row.createCell(0).setCellValue("消费时间");
+        row.createCell(1).setCellValue("消费单号");
         row.createCell(2).setCellValue("公司名称");
-        row.createCell(3).setCellValue("公司简称");
-        row.createCell(4).setCellValue("账号");
-        row.createCell(5).setCellValue("产品服务");
-        row.createCell(6).setCellValue("计费方式");
-        row.createCell(7).setCellValue("是否击中");
-        row.createCell(8).setCellValue("消费(元)");
-        row.createCell(9).setCellValue("余额(元)");
+        row.createCell(3).setCellValue("消费账号");
+        row.createCell(4).setCellValue("产品服务");
+        row.createCell(5).setCellValue("计费方式");
+        row.createCell(6).setCellValue("是否击中");
+        row.createCell(7).setCellValue("消费(元)");
+        row.createCell(8).setCellValue("余额(元)");
         Row dataRow;
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
@@ -189,20 +208,20 @@ public class TradeServiceImpl implements TradeService
             cell.setCellStyle(timeStyle);
             dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
-            dataRow.createCell(3).setCellValue(dataInfo.getShortName());
-            dataRow.createCell(4).setCellValue(dataInfo.getUsername());
-            dataRow.createCell(5).setCellValue(dataInfo.getProductName());
-            dataRow.createCell(6).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
-            dataRow.createCell(7).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
+            dataRow.createCell(3).setCellValue(
+                    dataInfo.getUsername() + (dataInfo.getPrimaryUserId().equals(dataInfo.getUserId()) ? "" : "（子）"));
+            dataRow.createCell(4).setCellValue(dataInfo.getProductName());
+            dataRow.createCell(5).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
+            dataRow.createCell(6).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
             if(BillPlan.BY_TIME.getId().equals(dataInfo.getBillPlan()))
             {
+                dataRow.createCell(7).setCellValue("/");
                 dataRow.createCell(8).setCellValue("/");
-                dataRow.createCell(9).setCellValue("/");
             }
             else
             {
-                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
-                dataRow.createCell(9).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+                dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
             }
         }
         return wb;

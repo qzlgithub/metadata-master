@@ -1106,6 +1106,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 ari.setHit(o.getHit());
                 ari.setFee(o.getFee());
                 ari.setBalance(o.getBalance());
+                ari.setUserId(o.getUserId());
+                ari.setPrimaryUserId(o.getPrimaryUserId());
                 list.add(ari);
             }
             dto.setList(list);

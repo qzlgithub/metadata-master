@@ -4,6 +4,8 @@
     <resultMap id="BaseResultMap" type="ProductRechargeInfo">
         <result column="id" property="id" jdbcType="BIGINT" />
         <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
         <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
@@ -13,6 +15,7 @@
         <result column="recharge_type" property="rechargeType" jdbcType="VARCHAR" />
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="unit_amt" property="unitAmt" jdbcType="DECIMAL" />
         <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
         <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -135,6 +138,10 @@
         select
             pr.`create_time` as trade_time,
             pr.`trade_no`    as trade_no,
+            pr.`start_date`  as start_date,
+            pr.`end_date`    as end_date,
+            pr.`unit_amt`    as unit_amt,
+            pr.`bill_plan`   as bill_plan,
             c.`corp_name`    as corp_name,
             c.`short_name`   as short_name,
             c.`username`     as username,

@@ -8,7 +8,8 @@ public class ApiReqInfo
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Long userId;
+    private Long primaryUserId;//客户主帐号id
+    private Long userId;//消费者帐号id
     private Long clientId;
     private Long productId;
     private Integer hit;//成功与否
@@ -23,6 +24,16 @@ public class ApiReqInfo
     private String productName;
     private String billPlanName;
     private Integer requestNumber;//请求次数-统计那边用到
+
+    public Long getPrimaryUserId()
+    {
+        return primaryUserId;
+    }
+
+    public void setPrimaryUserId(Long primaryUserId)
+    {
+        this.primaryUserId = primaryUserId;
+    }
 
     public Integer getRequestNumber()
     {

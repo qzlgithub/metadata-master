@@ -122,8 +122,7 @@ public class StatsServiceImpl implements StatsService
                         Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);//当前月第一天00:00:00
                         Integer allClientCount = statsRpcService.getAllClientCount();
                         Integer clientCountByWeek = statsRpcService.getClientCountByDate(weekDay, currentDay);
-                        Integer clientCountByMonthFirst = statsRpcService.getClientCountByDate(monthFirst,
-                                currentDay);
+                        Integer clientCountByMonthFirst = statsRpcService.getClientCountByDate(monthFirst, currentDay);
                         map.put(Field.ALL_CLIENT_COUNT, allClientCount + "");
                         map.put(Field.CLIENT_COUNT_BY_WEEK, clientCountByWeek + "");
                         map.put(Field.CLIENT_COUNT_BY_MONTH_FRIST, clientCountByMonthFirst + "");
@@ -256,8 +255,7 @@ public class StatsServiceImpl implements StatsService
                         Date weekDay = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
                         Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
                         BigDecimal rechargeByNow = statsRpcService.getClientRechargeStatsByDate(nowDay, currentDay);
-                        BigDecimal rechargeByWeek = statsRpcService.getClientRechargeStatsByDate(weekDay,
-                                currentDay);
+                        BigDecimal rechargeByWeek = statsRpcService.getClientRechargeStatsByDate(weekDay, currentDay);
                         BigDecimal rechargeByMonthFirst = statsRpcService.getClientRechargeStatsByDate(monthFirst,
                                 currentDay);
                         BigDecimal rechargeByAll = statsRpcService.getClientRechargeStatsAll();
@@ -298,8 +296,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(9).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ProductRechargeInfoDTO> listDTO = statsRpcService.getProductRechargeInfoListBy(beforeDate,
-                currentDay, page);
+        ListDTO<ProductRechargeInfoDTO> listDTO = statsRpcService.getProductRechargeInfoListBy(beforeDate, currentDay,
+                page);
         List<ProductRechargeInfoDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -367,8 +365,8 @@ public class StatsServiceImpl implements StatsService
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
-        ListDTO<DictRechargeTypeDTO> dictRechargeTypeListDTO = systemRpcService.getRechargeTypeList(
-                TrueOrFalse.TRUE, TrueOrFalse.FALSE);
+        ListDTO<DictRechargeTypeDTO> dictRechargeTypeListDTO = systemRpcService.getRechargeTypeList(TrueOrFalse.TRUE,
+                TrueOrFalse.FALSE);
         List<DictRechargeTypeDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Map<String, BigDecimal>> dateMap = new LinkedHashMap<>();

@@ -16,11 +16,44 @@ public class ProductRechargeInfo
     private String rechargeType;
     private BigDecimal amount;
     private BigDecimal balance;
+    private BigDecimal unitAmt;
     private String managerName;
     private String contractNo;
     private String remark;
     private Integer rechargeTypeInt;
     private BigDecimal rechargeTypeSum;
+    private Date startDate;
+    private Date endDate;
+
+    public BigDecimal getUnitAmt()
+    {
+        return unitAmt;
+    }
+
+    public void setUnitAmt(BigDecimal unitAmt)
+    {
+        this.unitAmt = unitAmt;
+    }
+
+    public Date getStartDate()
+    {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate)
+    {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate()
+    {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate)
+    {
+        this.endDate = endDate;
+    }
 
     public Integer getRechargeTypeInt()
     {
