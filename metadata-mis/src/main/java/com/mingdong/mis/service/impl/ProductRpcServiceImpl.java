@@ -13,11 +13,9 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.service.ProductRpcService;
-import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
@@ -236,25 +234,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
     {
         Recharge pro = rechargeMapper.findByContractNo(contractNo);
         return pro != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
-    }
-
-    @Override
-    public ProductRechargeDTO getProductRechargeById(Long id)
-    {
-        ProductRechargeDTO productRechargeDTO = new ProductRechargeDTO();
-        Recharge pr = rechargeMapper.findById(id);
-        if(pr == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(pr, productRechargeDTO);
-        return productRechargeDTO;
-    }
-
-    @Override
-    public BigDecimal sumAmountByClientProduct(Long clientProductId)
-    {
-        return rechargeMapper.sumAmountByClientProduct(clientProductId);
     }
 
     @Override

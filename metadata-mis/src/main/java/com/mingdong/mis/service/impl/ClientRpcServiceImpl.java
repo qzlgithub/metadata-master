@@ -16,7 +16,6 @@ import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
-import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
@@ -28,6 +27,7 @@ import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
+import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
@@ -603,19 +603,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             clientUserMapper.resetPasswordByIds(password, new Date(), idList);
         }
-    }
-
-    @Override
-    public ClientProductDTO getClientProductById(Long clientProductId)
-    {
-        ClientProductDTO clientProductDTO = new ClientProductDTO();
-        ClientProduct cp = clientProductMapper.findById(clientProductId);
-        if(cp == null)
-        {
-            return null;
-        }
-        EntityUtils.copyProperties(cp, clientProductDTO);
-        return clientProductDTO;
     }
 
     @Override
@@ -1371,6 +1358,31 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
         }
         return listDTO;
+    }
+
+    @Override
+    public RechargeInfoDTO getLatestRechargeInfo(Long clientProductId)
+    {
+        RechargeInfoDTO rechargeInfoDTO = new RechargeInfoDTO();
+        ClientProduct clientProduct = clientProductMapper.findById(clientProductId);
+        if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
+        {
+            rechargeInfoDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
+            return rechargeInfoDTO;
+        }
+        Recharge recharge = rechargeMapper.findById(clientProduct.getLatestRechargeId());
+        if(recharge != null)
+        {
+            rechargeInfoDTO.setBillPlan(recharge.getBillPlan());
+            rechargeInfoDTO.setAmount(recharge.getAmount());
+            rechargeInfoDTO.setBalance(recharge.getBalance());
+            rechargeInfoDTO.setStartDate(recharge.getStartDate());
+            rechargeInfoDTO.setEndDate(recharge.getEndDate());
+            rechargeInfoDTO.setUnitAmt(recharge.getUnitAmt());
+        }
+        BigDecimal totalRecharge = rechargeMapper.sumAmountByClientProduct(clientProductId);
+        rechargeInfoDTO.setTotalRecharge(totalRecharge);
+        return rechargeInfoDTO;
     }
 
     /**

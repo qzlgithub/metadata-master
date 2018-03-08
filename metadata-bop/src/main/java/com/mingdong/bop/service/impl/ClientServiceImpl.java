@@ -40,11 +40,12 @@ import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
+import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.IDUtils;
@@ -286,32 +287,25 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getProductRenewInfo(Long clientProductId, RestResp resp)
     {
-        ClientProductDTO cp = clientRpcService.getClientProductById(clientProductId);
-        if(cp == null)
+        RechargeInfoDTO rechargeInfoDTO = clientRpcService.getLatestRechargeInfo(clientProductId);
+        if(rechargeInfoDTO.getResult() != RestResult.SUCCESS)
         {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
+            resp.setError(rechargeInfoDTO.getResult());
             return;
         }
-        ProductRechargeDTO pr = productRpcService.getProductRechargeById(cp.getLatestRechargeId());
-        if(pr == null)
+        resp.addData(Field.BILL_PLAN, rechargeInfoDTO.getBillPlan());
+        if(BillPlan.BY_TIME.getId().equals(rechargeInfoDTO.getBillPlan()))
         {
-            resp.setError(RestResult.OBJECT_NOT_FOUND);
-            return;
-        }
-        resp.addData(Field.BILL_PLAN, pr.getBillPlan());
-        if(BillPlan.BY_TIME.getId().equals(pr.getBillPlan()))
-        {
-            resp.addData(Field.START_DATE, DateUtils.format(pr.getStartDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.END_DATE, DateUtils.format(pr.getEndDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(pr.getAmount()));
+            resp.addData(Field.START_DATE, DateUtils.format(rechargeInfoDTO.getStartDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.END_DATE, DateUtils.format(rechargeInfoDTO.getEndDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(rechargeInfoDTO.getAmount()));
         }
         else
         {
-            resp.addData(Field.BALANCE, NumberUtils.formatAmount(pr.getBalance()));
-            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(pr.getUnitAmt()));
+            resp.addData(Field.BALANCE, NumberUtils.formatAmount(rechargeInfoDTO.getBalance()));
+            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(rechargeInfoDTO.getUnitAmt()));
         }
-        BigDecimal totalAmt = productRpcService.sumAmountByClientProduct(clientProductId);
-        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
+        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(rechargeInfoDTO.getTotalRecharge()));
     }
 
     @Override
@@ -767,8 +761,8 @@ public class ClientServiceImpl implements ClientService
         row.createCell(7).setCellValue("经手人");
         row.createCell(8).setCellValue("合同编号");
 
-        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
-                endTime, page);
+        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime, endTime,
+                page);
         List<RechargeDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {

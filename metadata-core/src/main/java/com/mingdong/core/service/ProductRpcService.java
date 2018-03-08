@@ -5,11 +5,9 @@ import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,16 +44,6 @@ public interface ProductRpcService
      * 根据合同号获取充值记录
      */
     Integer checkIfContractExist(String contractNo);
-
-    /**
-     * 根据充值记录id获取充值记录
-     */
-    ProductRechargeDTO getProductRechargeById(Long id);
-
-    /**
-     * 根据客户产品id获取总的充值金额
-     */
-    BigDecimal sumAmountByClientProduct(Long clientProductId);
 
     /**
      * 查询产品的详细信息

@@ -6,7 +6,6 @@ import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
-import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.DisableClientDTO;
@@ -16,6 +15,7 @@ import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
+import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RequestDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
@@ -117,11 +117,6 @@ public interface ClientRpcService
     void setClientPassword(List<Long> idList, String password);
 
     /**
-     * 根据客户产品id获取客户产品信息
-     */
-    ClientProductDTO getClientProductById(Long clientProductId);
-
-    /**
      * 根据条件获取客户信息列表
      */
     ListDTO<ClientInfoDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
@@ -177,4 +172,9 @@ public interface ClientRpcService
     ListDTO<ApiReqInfoDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 
     ListDTO<ClientOperateLogDTO> getClientOperateLog(Long clientId, Page page);
+
+    /**
+     * 查询客户最近的充值记录信息
+     */
+    RechargeInfoDTO getLatestRechargeInfo(Long clientProductId);
 }
