@@ -169,7 +169,8 @@ public class CaptchaUtils
 
     public static ImageCode buildImageCode() throws IOException
     {
-        String code = getRandomString(4);
+//        String code = getRandomString(4);
+        String code = "0";
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         outputImage(100, 40, bos, code);
         InputStream in = new ByteArrayInputStream(bos.toByteArray());

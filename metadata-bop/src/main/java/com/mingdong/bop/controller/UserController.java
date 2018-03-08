@@ -38,10 +38,11 @@ public class UserController
         String sessionId = session.getId();
         String realCode = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
         String code = jsonReq.getString(Field.IMAGE_CODE);
-        /*if(code == null || !code.equalsIgnoreCase(realCode))
+        if(code == null || !code.equalsIgnoreCase(realCode))
         {
-            return resp.setError(RestResult.INVALID_CAPTCHA);
-        }*/
+            resp.setError(RestResult.INVALID_CAPTCHA);
+            return resp;
+        }
         session.removeAttribute(Field.IMAGE_CAPTCHA);
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);

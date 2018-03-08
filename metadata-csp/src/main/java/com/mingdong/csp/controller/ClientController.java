@@ -35,13 +35,13 @@ public class ClientController
     {
         RestResp resp = new RestResp();
         HttpSession session = request.getSession();
-        // TODO 开发过程暂时注释掉
-        /*String userCode = jsonReq.getString(Field.CODE);
+        String userCode = jsonReq.getString(Field.CODE);
         String code = (String) session.getAttribute(Field.IMAGE_CAPTCHA);
         if(StringUtils.isNullBlank(userCode) || !userCode.equalsIgnoreCase(code))
         {
-            return resp.setError(RestResult.INVALID_CAPTCHA);
-        }*/
+            resp.setError(RestResult.INVALID_CAPTCHA);
+            return resp;
+        }
         String username = jsonReq.getString(Field.USERNAME);
         String password = jsonReq.getString(Field.PASSWORD);
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password))
