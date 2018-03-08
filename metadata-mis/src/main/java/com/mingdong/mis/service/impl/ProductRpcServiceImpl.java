@@ -33,7 +33,6 @@ import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
-import com.mingdong.mis.domain.mapper.ProductInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductTxtMapper;
@@ -64,8 +63,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
     private ProductMapper productMapper;
     @Resource
     private ProductTxtMapper productTxtMapper;
-    @Resource
-    private ProductInfoMapper productInfoMapper;
     @Resource
     private ClientUserProductMapper clientUserProductMapper;
     @Resource

@@ -170,7 +170,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "client/childAccountDetail")
+    @GetMapping(value = "/client/childAccountDetail")
     public RestResp getAccountDetail(@RequestParam(value = Field.CLIENT_USER_ID, required = false) Long clientUserId)
     {
         RestResp resp = new RestResp();
@@ -182,7 +182,7 @@ public class ClientController
      * 编辑子账号
      */
     @LoginRequired
-    @PostMapping(value = "client/editChildAccount")
+    @PostMapping(value = "/client/editChildAccount")
     public RestResp editChildAccount(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -208,7 +208,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @PostMapping(value = "client/user/deletion")
+    @PostMapping(value = "/client/user/deletion")
     public RestResp dropSubUser(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
@@ -223,7 +223,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "client/message")
+    @GetMapping(value = "/client/message")
     public RestListResp getClientMessageList(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {

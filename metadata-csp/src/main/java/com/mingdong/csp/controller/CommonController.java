@@ -14,7 +14,7 @@ import java.io.IOException;
 @RestController
 public class CommonController
 {
-    @GetMapping(value = "captcha")
+    @GetMapping(value = "/captcha")
     public RestResp getImageCaptcha(HttpServletRequest request) throws IOException
     {
         RestResp resp = new RestResp();

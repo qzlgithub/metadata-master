@@ -32,7 +32,7 @@ public class ProductController
      * 查询产品充值记录
      */
     @LoginRequired
-    @GetMapping(value = "product/recharge")
+    @GetMapping(value = "/product/recharge")
     public RestResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
@@ -51,7 +51,7 @@ public class ProductController
      * 导出产品充值记录
      */
     @LoginRequired
-    @GetMapping(value = "product/recharge/export")
+    @GetMapping(value = "/product/recharge/export")
     public void exportProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
@@ -74,7 +74,7 @@ public class ProductController
      * 查询产品服务消费记录
      */
     @LoginRequired
-    @GetMapping(value = "product/request/list")
+    @GetMapping(value = "/product/request/list")
     public RestResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
@@ -93,7 +93,7 @@ public class ProductController
      * 导出产品服务消费记录
      */
     @LoginRequired
-    @GetMapping(value = "product/request/export")
+    @GetMapping(value = "/product/request/export")
     public void exportProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
@@ -113,7 +113,7 @@ public class ProductController
     }
 
     @LoginRequired
-    @GetMapping(value = "product/all")
+    @GetMapping(value = "/product/all")
     public RestListResp getProductByParam(
             @RequestParam(value = Field.PRODUCT_TYPE, required = false) String productType,
             @RequestParam(value = Field.INC_OPENED, required = false) Integer incOpened,

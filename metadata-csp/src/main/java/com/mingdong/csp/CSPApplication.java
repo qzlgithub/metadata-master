@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.HttpStatus;
 
 @SpringBootApplication
-@ImportResource({"classpath:config/dubbo.xml"})
+@ImportResource({"classpath:dubbo.xml"})
 public class CSPApplication
 {
     /**
