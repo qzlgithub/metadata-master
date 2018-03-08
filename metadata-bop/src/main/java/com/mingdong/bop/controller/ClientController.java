@@ -279,7 +279,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @PostMapping(value = "/client/product/renew")
+    @PostMapping(value = "/client/product/renew") // TODO zhujun
     public RestResp renewProductService(@RequestBody ProdRechargeVO vo)
     {
         RestResp resp = new RestResp();
