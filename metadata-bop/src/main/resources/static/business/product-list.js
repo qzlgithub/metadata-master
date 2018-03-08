@@ -20,7 +20,7 @@ layui.config({base: '../../build/js/'}).use(['app', 'message'], function() {
         },
         cols: [[
             {field: 'code', title: '产品编码'},
-            {field: 'name', title: '名称'},
+            {field: 'name', title: '产品名称'},
             {field: 'type', title: '类别'},
             {title: '种类', templet: '#customTpl'},
             {field: 'costAmt', title: '成本价'},
