@@ -7,8 +7,8 @@ $(function() {
 });
 var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username}</td><td>#{name}</td><td>#{phone}</td>' +
     '<td><span class="mr30"><a class="edit cp" onclick="editAccount(\'#{id}\')">编辑</a></span>' +
-    '<span class="mr30"><a class="edit" onclick="stopAccount(this)" id="statusAction#{id}" data-id="#{id}" data-status="#{enabled}">#{statusName}</a></span>' +
-    '<span class="mr30"><a class="del" onclick="delAccount(\'#{id}\')">删除</a></span>' +
+    '<span class="mr30"><a class="edit cp" onclick="stopAccount(this)" id="statusAction#{id}" data-id="#{id}" data-status="#{enabled}">#{statusName}</a></span>' +
+    '<span class="mr30"><a class="del cp" onclick="delAccount(\'#{id}\')">删除</a></span>' +
     '</td>' +
     '</tr>';
 
@@ -44,13 +44,15 @@ function getAccountList() {
 function stopAccount(obj) {
     var obj_id = $(obj).data("id");
     var obj_status = $(obj).data("status");
-    var tip, status;
+    var tip, txt, status;
     if(obj_status === 1) {
         tip = "禁用";
+        txt = "启用";
         status = 0;
     }
     else {
         tip = "启用";
+        txt = "禁用";
         status = 1;
     }
     layer.confirm('是否确定' + tip + '该账号？', {
@@ -63,7 +65,9 @@ function stopAccount(obj) {
                 data: JSON.stringify({"clientUserId": obj_id, "status": status}),
                 success: function(res) {
                     if(res.code === '000000') {
-                        $("#statusAction" + id).text(obj_status === 1 ? "启用" : "禁用");
+                        var elem = $("#statusAction" + obj_id);
+                        elem.text(txt);
+                        elem.data("status", status);
                         layer.msg(tip + "成功", {time: 2000});
                     }
                     else {
@@ -111,7 +115,7 @@ function delAccount(id) {
             });
             layer.closeAll();
         },
-        btn2: function() {
+        no: function() {
             layer.closeAll();
         }
     });
