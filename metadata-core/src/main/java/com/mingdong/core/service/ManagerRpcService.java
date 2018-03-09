@@ -7,7 +7,7 @@ import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 
 public interface ManagerRpcService
@@ -22,7 +22,7 @@ public interface ManagerRpcService
     /**
      * 编辑管理账号的基本信息及权限配置
      */
-    ResultDTO editAdminUser(AdminUserDTO userDTO);
+    ResponseDTO editAdminUser(AdminUserDTO userDTO);
 
     ListDTO<ManagerInfoDTO> getAdminUserList(Integer roleType, Integer enabled, Page page);
 
@@ -34,12 +34,12 @@ public interface ManagerRpcService
     /**
      * 更改管理员密码
      */
-    ResultDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd);
+    ResponseDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd);
 
     /**
      * 新增管理员并赋权
      */
-    ResultDTO addAdminUser(AdminUserDTO userDTO);
+    ResponseDTO addAdminUser(AdminUserDTO userDTO);
 
     /**
      * 变更账户角色状态
@@ -47,12 +47,12 @@ public interface ManagerRpcService
      * @param groupId 角色ID
      * @param status  状态：1-启用，2-禁用
      */
-    ResultDTO changeRoleStatus(Long groupId, Integer status);
+    ResponseDTO changeRoleStatus(Long groupId, Integer status);
 
     /**
      * 编辑账户角色信息
      */
-    ResultDTO editAccountRole(GroupDTO groupDTO);
+    ResponseDTO editAccountRole(GroupDTO groupDTO);
 
     /**
      * 获取账户角色信息
@@ -64,7 +64,7 @@ public interface ManagerRpcService
     /**
      * 创建账户角色
      */
-    ResultDTO addAccountRole(GroupDTO groupDTO);
+    ResponseDTO addAccountRole(GroupDTO groupDTO);
 
     /**
      * 获取账户角色列表
@@ -77,5 +77,5 @@ public interface ManagerRpcService
      * @param userId 管理用户ID
      * @param status 1-启用，0-禁用
      */
-    ResultDTO changeUserStatus(Long userId, Integer status);
+    ResponseDTO changeUserStatus(Long userId, Integer status);
 }

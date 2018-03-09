@@ -6,7 +6,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -58,12 +58,12 @@ public interface ProductRpcService
     /**
      * 产品信息编辑
      */
-    ResultDTO editProduct(ProductDTO productDTO);
+    ResponseDTO editProduct(ProductDTO productDTO);
 
     /**
      * 根据产品id修改产品状态
      */
-    ResultDTO changeProductStatus(Long productId, Integer enabled);
+    ResponseDTO changeProductStatus(Long productId, Integer enabled);
 
     ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
 

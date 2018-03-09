@@ -1,8 +1,8 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
 
-public class SubUserDTO implements Serializable
+public class SubUserDTO extends RequestDTO
 {
     private Long clientId;
     private Long userId;

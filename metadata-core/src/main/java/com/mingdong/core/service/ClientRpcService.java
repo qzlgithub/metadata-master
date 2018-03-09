@@ -17,7 +17,7 @@ import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 
@@ -34,7 +34,7 @@ public interface ClientRpcService
     /**
      * 更改客户帐号的密码
      */
-    ResultDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
+    ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
 
     /**
      * 根据客户id获取客户消息列表
@@ -44,7 +44,7 @@ public interface ClientRpcService
     /**
      * 软删客户子帐号
      */
-    ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
+    ResponseDTO setSubUserDeleted(Long primaryUserId, Long subUserId);
 
     /**
      * 查询客户子账号列表，不包括已删除的账号
@@ -65,12 +65,12 @@ public interface ClientRpcService
     /**
      * 新增客户子帐号
      */
-    ResultDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone);
+    ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone);
 
     /**
      * 更改客户子帐号状态
      */
-    ResultDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled);
+    ResponseDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled);
 
     /**
      * 根据客户帐号id获取帐号信息
@@ -80,7 +80,7 @@ public interface ClientRpcService
     /**
      * 修改客户子帐号信息
      */
-    ResultDTO editSubUser(SubUserDTO subUserDTO);
+    ResponseDTO editSubUser(SubUserDTO subUserDTO);
 
     /**
      * 获取帐号token
@@ -90,7 +90,7 @@ public interface ClientRpcService
     /**
      * 新增帐号token
      */
-    ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
+    ResponseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
 
     /**
      * 查看名称相似的客户信息列表
@@ -124,7 +124,7 @@ public interface ClientRpcService
     /**
      * 新增客户
      */
-    ResultDTO addNewClient(NewClientDTO dto);
+    ResponseDTO addNewClient(NewClientDTO dto);
 
     /**
      * 获取客户信息和帐号信息
@@ -134,7 +134,7 @@ public interface ClientRpcService
     /**
      * 更改客户帐号状态
      */
-    ResultDTO changeClientStatus(DisableClientDTO disableClientDTO);
+    ResponseDTO changeClientStatus(DisableClientDTO disableClientDTO);
 
     /**
      * 获取客户信息
@@ -144,13 +144,13 @@ public interface ClientRpcService
     /**
      * 客户续费产品
      */
-    ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO);
+    ResponseDTO renewClientProduct(OpenClientProductDTO openClientProductDTO);
 
-    ResultDTO editClient(NewClientDTO clientDTO, List<ClientContactDTO> contacts, List<Long> delIds);
+    ResponseDTO editClient(NewClientDTO clientDTO, List<ClientContactDTO> contacts, List<Long> delIds);
 
-    ResultDTO selectCustomProduct(Long clientId, List<Long> productIds);
+    ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds);
 
-    ResultDTO removeCustomClientProduct(Long clientProductId);
+    ResponseDTO removeCustomClientProduct(Long clientProductId);
 
     ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
             Date toDate, Long managerId, Page page);
@@ -158,7 +158,7 @@ public interface ClientRpcService
     /**
      * 开通客户产品服务
      */
-    ResultDTO openProduct(ProductOpenDTO dto);
+    ResponseDTO openProduct(ProductOpenDTO dto);
 
     ClientUserDictDTO getClientAccountDict(Long clientId);
 

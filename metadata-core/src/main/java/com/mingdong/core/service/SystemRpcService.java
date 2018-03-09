@@ -6,7 +6,7 @@ import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
 
 import java.util.List;
@@ -54,32 +54,32 @@ public interface SystemRpcService
     /**
      * 新增行业分类，判断code
      */
-    ResultDTO addIndustryType(DictIndustryDTO industry);
+    ResponseDTO addIndustryType(DictIndustryDTO industry);
 
     /**
      * 修改行业分类，判断code
      */
-    ResultDTO editIndustryInfo(DictIndustryDTO industry);
+    ResponseDTO editIndustryInfo(DictIndustryDTO industry);
 
     /**
      * 修改权限信息
      */
-    ResultDTO editPrivilegeInfo(PrivilegeDTO privilege);
+    ResponseDTO editPrivilegeInfo(PrivilegeDTO privilege);
 
     /**
      * 新增or修改充值类型备注
      */
-    ResultDTO addRechargeType(String name, String remark);
+    ResponseDTO addRechargeType(String name, String remark);
 
     /**
      * 新增or修改系统参数
      */
-    ResultDTO addOrUpdateSetting(List<SysConfigDTO> sysConfigDTOList);
+    ResponseDTO addOrUpdateSetting(List<SysConfigDTO> sysConfigDTOList);
 
     /**
      * 修改行业分类状态
      */
-    ResultDTO changeIndustryStatus(Long industryTypeId, Integer enabled);
+    ResponseDTO changeIndustryStatus(Long industryTypeId, Integer enabled);
 
     /**
      * 查询充值类型列表
@@ -89,5 +89,5 @@ public interface SystemRpcService
     /**
      * 根据ID编辑充值类型
      */
-    ResultDTO editRechargeType(RechargeTypeDTO rechargeTypeDTO);
+    ResponseDTO editRechargeType(RechargeTypeDTO rechargeTypeDTO);
 }

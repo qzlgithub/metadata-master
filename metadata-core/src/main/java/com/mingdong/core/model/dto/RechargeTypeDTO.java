@@ -1,9 +1,11 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class RechargeTypeDTO implements Serializable
+public class RechargeTypeDTO extends RequestDTO
 {
     private Integer id;
     private String name;

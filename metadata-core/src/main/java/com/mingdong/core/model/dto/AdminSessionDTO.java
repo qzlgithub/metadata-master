@@ -1,8 +1,10 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.ResponseDTO;
+
 import java.util.List;
 
-public class AdminSessionDTO extends ResultDTO
+public class AdminSessionDTO extends ResponseDTO
 {
     private Long userId;
     private String name;

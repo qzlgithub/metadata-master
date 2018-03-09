@@ -42,7 +42,7 @@ import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
@@ -210,8 +210,8 @@ public class ClientServiceImpl implements ClientService
         dto.setEnabled(enabled);
         dto.setReason(reason);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO resultDTO = clientRpcService.changeClientStatus(dto);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = clientRpcService.changeClientStatus(dto);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -262,7 +262,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContractNo(contractNo);
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO res = clientRpcService.openProduct(dto);
+        ResponseDTO res = clientRpcService.openProduct(dto);
         resp.setError(res.getResult());
     }
 
@@ -280,7 +280,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContractNo(contractNo);
         dto.setRemark(remark);
         dto.setManagerId(RequestThread.getOperatorId());
-        ResultDTO res = clientRpcService.openProduct(dto);
+        ResponseDTO res = clientRpcService.openProduct(dto);
         resp.setError(res.getResult());
     }
 
@@ -341,8 +341,8 @@ public class ClientServiceImpl implements ClientService
         cp.setLatestRechargeId(productRechargeId);
         cp.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cp);
-        ResultDTO resultDTO = clientRpcService.renewClientProduct(openClientProductDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = clientRpcService.renewClientProduct(openClientProductDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -377,8 +377,8 @@ public class ClientServiceImpl implements ClientService
         cpUpd.setLatestRechargeId(productRechargeId);
         cpUpd.setIsOpened(TrueOrFalse.TRUE);
         openClientProductDTO.setClientProductDTO(cpUpd);
-        ResultDTO resultDTO = clientRpcService.renewClientProduct(openClientProductDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = clientRpcService.renewClientProduct(openClientProductDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -451,7 +451,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContactList(contactList);
         dto.setEnabled(vo.getEnabled());
         dto.setManagerId(vo.getManagerId());
-        ResultDTO res = clientRpcService.addNewClient(dto);
+        ResponseDTO res = clientRpcService.addNewClient(dto);
         resp.setError(res.getResult());
     }
 
@@ -495,7 +495,7 @@ public class ClientServiceImpl implements ClientService
                 contactList.add(o);
             }
         }
-        ResultDTO dto = clientRpcService.editClient(client, contactList, vo.getContactDel());
+        ResponseDTO dto = clientRpcService.editClient(client, contactList, vo.getContactDel());
         resp.setError(dto.getResult());
     }
 
@@ -605,15 +605,15 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp)
     {
-        ResultDTO resultDTO = clientRpcService.selectCustomProduct(clientId, productIds);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = clientRpcService.selectCustomProduct(clientId, productIds);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
     public void removeCustomClientProduct(Long clientProductId, RestResp resp)
     {
-        ResultDTO resultDTO = clientRpcService.removeCustomClientProduct(clientProductId);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = clientRpcService.removeCustomClientProduct(clientProductId);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override

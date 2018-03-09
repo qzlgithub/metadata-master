@@ -1,8 +1,8 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
 
-public class LoginDTO implements Serializable
+public class LoginDTO extends RequestDTO
 {
     private String username;
     private String password;

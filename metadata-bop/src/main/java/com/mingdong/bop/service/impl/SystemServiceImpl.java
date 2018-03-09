@@ -16,7 +16,7 @@ import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.SystemRpcService;
@@ -57,8 +57,8 @@ public class SystemServiceImpl implements SystemService
         industry.setSeqNo(1); // TODO 序号
         industry.setParentId(id != null ? id : 0L);
         industry.setEnabled(TrueOrFalse.TRUE);
-        ResultDTO resultDTO = systemRpcService.addIndustryType(industry);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = systemRpcService.addIndustryType(industry);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -69,8 +69,8 @@ public class SystemServiceImpl implements SystemService
         industry.setUpdateTime(new Date());
         industry.setCode(code);
         industry.setName(name);
-        ResultDTO resultDTO = systemRpcService.editIndustryInfo(industry);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = systemRpcService.editIndustryInfo(industry);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SystemServiceImpl implements SystemService
         rt.setId(rechargeTypeId);
         rt.setName(name);
         rt.setRemark(remark);
-        ResultDTO res = systemRpcService.editRechargeType(rt);
+        ResponseDTO res = systemRpcService.editRechargeType(rt);
         resp.setError(res.getResult());
     }
 
@@ -90,7 +90,7 @@ public class SystemServiceImpl implements SystemService
         RechargeTypeDTO rt = new RechargeTypeDTO();
         rt.setId(rechargeTypeId);
         rt.setEnabled(enabled);
-        ResultDTO res = systemRpcService.editRechargeType(rt);
+        ResponseDTO res = systemRpcService.editRechargeType(rt);
         resp.setError(res.getResult());
     }
 
@@ -175,8 +175,8 @@ public class SystemServiceImpl implements SystemService
         PrivilegeDTO privilegeDTO = new PrivilegeDTO();
         privilegeDTO.setPrivilegeId(privilegeId);
         privilegeDTO.setName(name);
-        ResultDTO resultDTO = systemRpcService.editPrivilegeInfo(privilegeDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = systemRpcService.editPrivilegeInfo(privilegeDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -197,7 +197,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addRechargeType(String name, String remark, RestResp resp)
     {
-        ResultDTO res = systemRpcService.addRechargeType(name, remark);
+        ResponseDTO res = systemRpcService.addRechargeType(name, remark);
         resp.setError(res.getResult());
     }
 
@@ -281,15 +281,15 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, RestResp resp)
     {
-        ResultDTO resultDTO = systemRpcService.addOrUpdateSetting(sysConfigDTOList);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = systemRpcService.addOrUpdateSetting(sysConfigDTOList);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
     public void changeIndustryStatus(Long industryTypeId, Integer enabled, RestResp resp)
     {
-        ResultDTO resultDTO = systemRpcService.changeIndustryStatus(industryTypeId, enabled);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = systemRpcService.changeIndustryStatus(industryTypeId, enabled);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
