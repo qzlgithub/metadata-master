@@ -65,7 +65,7 @@
                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="change_status(0)"
                    th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="del_client()"
-                   th:if="${#lists.contains(i_privilege, '31106')}">停用账号</a>
+                   th:if="${#lists.contains(i_privilege, '31106')}" style="display: none">停用账号</a>
                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
                 <a href="/client/add.html" class="layui-btn fr layui-btn-normal"
