@@ -8,7 +8,6 @@ public class ClientMessage
     private Date createTime;
     private Date updateTime;
     private Long clientId;
-    private Long messagerId;
     private Integer type;
     private String content;
 
@@ -50,16 +49,6 @@ public class ClientMessage
     public void setClientId(Long clientId)
     {
         this.clientId = clientId;
-    }
-
-    public Long getMessagerId()
-    {
-        return messagerId;
-    }
-
-    public void setMessagerId(Long messagerId)
-    {
-        this.messagerId = messagerId;
     }
 
     public Integer getType()

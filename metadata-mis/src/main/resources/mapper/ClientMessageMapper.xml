@@ -16,7 +16,7 @@
         from `client_message`
     </sql>
 
-    <insert id="add" parameterType="ClientMessage">
+    <insert id="add" parameterType="ClientMessage" useGeneratedKeys="true" keyProperty="id">
         insert into `client_message`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

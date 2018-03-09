@@ -37,7 +37,8 @@
                 <ul class="user-list clearfix">
                     <li th:each="o : ${subUserList}">
                         <p><img src="/images/account-img.png" alt=""/></p>
-                        <p th:text="${o.name}"></p>
+                        <p th:text="${o.username}"></p>
+                        <p th:text="'（'+${o.name}+'）'"></p>
                     </li>
                 </ul>
             </div>
@@ -90,7 +91,7 @@
                         <p class="tc mb15 mt10">
                             <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=3415212827&amp;site=qq&amp;menu=yes"><i
                                     class="icon kefu mr5"></i>开通</a>
-                            ｜ <a th:href="'/product/introduce.html?id=' + o.id">查看详情</a>
+                            ｜ <a th:href="'/product/introduce.html?id=' + ${o.productId}">查看详情</a>
                         </p>
                     </li>
                 </ul>

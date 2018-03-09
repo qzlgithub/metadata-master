@@ -7,6 +7,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.MessageType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
@@ -141,6 +142,7 @@ public class ClientServiceImpl implements ClientService
             for(SubUserDTO u : subUserList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
+                map.put(Field.USERNAME, u.getUsername());
                 map.put(Field.NAME, u.getName());
                 list.add(map);
             }
@@ -201,7 +203,7 @@ public class ClientServiceImpl implements ClientService
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ADD_AT, DateUtils.format(o.getAddAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            m.put(Field.TYPE, o.getType());
+            m.put(Field.TYPE, MessageType.getNameById(o.getType()));
             m.put(Field.CONTENT, o.getContent());
             list.add(m);
         }
