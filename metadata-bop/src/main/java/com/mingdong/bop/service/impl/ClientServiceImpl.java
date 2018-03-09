@@ -477,13 +477,13 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
         resp.addData(Field.MANAGER_NAME, dto.getManagerName());
         List<Map<String, Object>> userList = new ArrayList<>();
-        for(ClientUserDTO cu : dto.getUsers())
+        for(ClientUserDTO o : dto.getUsers())
         {
             Map<String, Object> m = new HashMap<>();
-            m.put(Field.ID, cu.getId() + "");
-            m.put(Field.USERNAME, cu.getUsername());
-            m.put(Field.NAME, cu.getName());
-            m.put(Field.PHONE, cu.getPhone());
+            m.put(Field.ID, o.getId() + "");
+            m.put(Field.USERNAME, o.getUsername());
+            m.put(Field.NAME, o.getName());
+            m.put(Field.PHONE, o.getPhone());
             userList.add(m);
         }
         resp.addData(Field.USER_LIST, userList);
