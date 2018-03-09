@@ -1,8 +1,5 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.dto.base.ResponseDTO;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,18 +17,6 @@ public class ClientUserDTO implements Serializable
     private String appKey;
     private Integer enabled;
     private Integer deleted;
-    private ResponseDTO responseDTO;
-
-    public ClientUserDTO()
-    {
-        this.responseDTO = new ResponseDTO();
-        responseDTO.setResult(RestResult.SUCCESS);
-    }
-
-    public ResponseDTO getResponseDTO()
-    {
-        return responseDTO;
-    }
 
     public Long getId()
     {
