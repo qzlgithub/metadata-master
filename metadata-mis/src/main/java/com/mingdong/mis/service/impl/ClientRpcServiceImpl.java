@@ -28,7 +28,7 @@ import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.RequestDTO;
+`import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -1238,10 +1238,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
+    public ListDTO<AccessDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
             Date toDate, Page page)
     {
-        ListDTO<RequestDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessDTO> listDTO = new ListDTO<>();
         int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1249,10 +1249,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, fromDate, toDate);
-            List<RequestDTO> list = new ArrayList<>();
+            List<AccessDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                RequestDTO r = new RequestDTO();
+                AccessDTO r = new AccessDTO();
                 r.setRequestAt(o.getCreateTime());
                 r.setRequestNo(o.getRequestNo());
                 r.setUsername(o.getUsername());

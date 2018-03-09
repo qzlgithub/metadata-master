@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class RequestDTO implements Serializable
+public class AccessDTO implements Serializable
 {
     private Date requestAt;
     private String requestNo;

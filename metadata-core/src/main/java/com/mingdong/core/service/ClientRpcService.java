@@ -16,7 +16,7 @@ import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.RequestDTO;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
@@ -162,7 +162,7 @@ public interface ClientRpcService
 
     ClientUserDictDTO getClientAccountDict(Long clientId);
 
-    ListDTO<RequestDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
+    ListDTO<AccessDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
 
     String getClientCorpName(Long clientId);

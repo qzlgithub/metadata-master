@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.NewClientVO;
-import com.mingdong.bop.model.ProdRechargeVO;
+import com.mingdong.bop.model.RechargeVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.common.model.Page;
@@ -211,7 +211,7 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/product/open")
-    public RestResp openProductService(@RequestBody ProdRechargeVO vo)
+    public RestResp openProductService(@RequestBody RechargeVO vo)
     {
         RestResp resp = new RestResp();
         if(vo.getClientId() == null || vo.getProductId() == null || vo.getBillPlan() == null ||
@@ -280,7 +280,7 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/product/renew") // TODO zhujun
-    public RestResp renewProductService(@RequestBody ProdRechargeVO vo)
+    public RestResp renewProductService(@RequestBody RechargeVO vo)
     {
         RestResp resp = new RestResp();
         if(vo.getClientProductId() == null || vo.getBillPlan() == null || vo.getRechargeType() == null ||

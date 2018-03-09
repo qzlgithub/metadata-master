@@ -3,7 +3,7 @@ package com.mingdong.bop.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProdRechargeVO
+public class RechargeVO
 {
     private Long clientId;
     private Long productId;

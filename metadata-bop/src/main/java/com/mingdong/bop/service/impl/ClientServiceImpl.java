@@ -41,7 +41,7 @@ import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.ProductRechargeDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.RequestDTO;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -630,13 +630,13 @@ public class ClientServiceImpl implements ClientService
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<RequestDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
+        ListDTO<AccessDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(RequestDTO o : listDTO.getList())
+            for(AccessDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -710,9 +710,9 @@ public class ClientServiceImpl implements ClientService
         row.createCell(5).setCellValue("是否击中");
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
-        ListDTO<RequestDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
+        ListDTO<AccessDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
                 endTime, page);
-        List<RequestDTO> list = listDTO.getList();
+        List<AccessDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {
             CellStyle timeStyle = wb.createCellStyle();
@@ -720,7 +720,7 @@ public class ClientServiceImpl implements ClientService
                     wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
             for(int i = 0; i < list.size(); i++)
             {
-                RequestDTO dataInfo = list.get(i);
+                AccessDTO dataInfo = list.get(i);
                 Row dataRow = sheet.createRow(i + 1);
                 Cell cell = dataRow.createCell(0);
                 cell.setCellValue(dataInfo.getRequestAt());
