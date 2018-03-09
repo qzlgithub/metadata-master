@@ -15,7 +15,7 @@ import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import org.springframework.stereotype.Service;
@@ -66,15 +66,15 @@ public class ProductServiceImpl implements ProductService
         productDTO.setRemark(remark);
         productDTO.setContent(content);
         productDTO.setEnabled(enabled);
-        ResultDTO resultDTO = productRpcService.editProduct(productDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = productRpcService.editProduct(productDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
     public void changeProductStatus(Long productId, Integer enabled, RestResp resp)
     {
-        ResultDTO resultDTO = productRpcService.changeProductStatus(productId, enabled);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = productRpcService.changeProductStatus(productId, enabled);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override

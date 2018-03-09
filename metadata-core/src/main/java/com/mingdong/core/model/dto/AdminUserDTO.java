@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.util.List;
 
-public class AdminUserDTO implements Serializable
+public class AdminUserDTO extends RequestDTO
 {
     private Long userId;
     private Long groupId;

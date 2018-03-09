@@ -1,9 +1,11 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class ClientInfoDTO implements Serializable
+public class ClientInfoDTO extends RequestDTO
 {
     private Long clientId;
     private Date registerTime; // 注册时间

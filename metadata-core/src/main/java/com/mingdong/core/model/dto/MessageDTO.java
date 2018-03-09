@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.util.Date;
 
-public class MessageDTO implements Serializable
+public class MessageDTO extends RequestDTO
 {
     private Date addAt;
     private Integer type;

@@ -1,11 +1,13 @@
 package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+// TODO review
 public class ClientProductDTO implements Serializable
 {
     private Long id;
@@ -18,12 +20,12 @@ public class ClientProductDTO implements Serializable
     private BigDecimal balance;
     private Long latestRechargeId;
     private Integer isOpened;
-    private ResultDTO resultDTO;
+    private ResponseDTO responseDTO;
 
     public ClientProductDTO()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        this.responseDTO = new ResponseDTO();
+        responseDTO.setResult(RestResult.SUCCESS);
     }
 
     public Integer getIsOpened()
@@ -36,9 +38,9 @@ public class ClientProductDTO implements Serializable
         this.isOpened = isOpened;
     }
 
-    public ResultDTO getResultDTO()
+    public ResponseDTO getResponseDTO()
     {
-        return resultDTO;
+        return responseDTO;
     }
 
     public Long getId()

@@ -1,8 +1,8 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
 
-public class DictDTO implements Serializable
+public class DictDTO extends RequestDTO
 {
     private String key;
     private String value;

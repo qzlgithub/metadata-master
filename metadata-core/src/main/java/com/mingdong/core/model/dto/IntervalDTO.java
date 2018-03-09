@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.util.Date;
 
-public class IntervalDTO implements Serializable
+public class IntervalDTO extends RequestDTO
 {
     private Date startTime;
     private Date endTime;

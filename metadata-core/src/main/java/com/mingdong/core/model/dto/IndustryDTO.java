@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.ResponseDTO;
+
 import java.util.List;
 
-public class IndustryDTO extends ResultDTO implements Serializable
+public class IndustryDTO extends ResponseDTO
 {
     private Long parentId;
     private List<DictDTO> parents;

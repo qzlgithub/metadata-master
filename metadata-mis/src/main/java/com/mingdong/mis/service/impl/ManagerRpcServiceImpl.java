@@ -13,7 +13,7 @@ import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.ManagerRpcService;
 import com.mingdong.mis.domain.entity.Function;
@@ -132,14 +132,14 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResultDTO editAdminUser(AdminUserDTO userDTO)
+    public ResponseDTO editAdminUser(AdminUserDTO userDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findById(userDTO.getUserId());
         if(user == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         Date date = new Date();
         // 修改管理账号基本信息
@@ -169,7 +169,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             list.add(mp);
         }
         userFunctionMapper.addList(list);
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -222,19 +222,19 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResultDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd)
+    public ResponseDTO updateManagerPwd(Long managerId, String newPwd, String oldPwd)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findById(managerId);
         if(user == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         else if(!user.getPassword().equals(Md5Utils.encrypt(oldPwd)))
         {
-            resultDTO.setResult(RestResult.INVALID_PASSCODE);
-            return resultDTO;
+            responseDTO.setResult(RestResult.INVALID_PASSCODE);
+            return responseDTO;
         }
         String newPassword = Md5Utils.encrypt(newPwd);
         if(!user.getPassword().equals(newPassword))
@@ -245,20 +245,20 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             user.setPassword(newPassword);
             userMapper.updateSkipNull(user);
         }
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        responseDTO.setResult(RestResult.SUCCESS);
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO addAdminUser(AdminUserDTO userDTO)
+    public ResponseDTO addAdminUser(AdminUserDTO userDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findByUsername(userDTO.getUsername());
         if(user != null)
         {
-            resultDTO.setResult(RestResult.USERNAME_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.USERNAME_EXIST);
+            return responseDTO;
         }
         Date current = new Date();
         // 保存管理账号
@@ -287,19 +287,19 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             list.add(mp);
         }
         userFunctionMapper.addList(list);
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO changeRoleStatus(Long groupId, Integer status)
+    public ResponseDTO changeRoleStatus(Long groupId, Integer status)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         Group role = groupMapper.findById(groupId);
         if(role == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         if(!role.getEnabled().equals(status))
         {
@@ -309,25 +309,25 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             obj.setEnabled(status);
             groupMapper.updateSkipNull(obj);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO editAccountRole(GroupDTO groupDTO)
+    public ResponseDTO editAccountRole(GroupDTO groupDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         Group role = groupMapper.findById(groupDTO.getId());
         if(role == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         Group obj = groupMapper.findByName(groupDTO.getName());
         if(obj != null && !groupDTO.getId().equals(obj.getId()))
         {
-            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return responseDTO;
         }
         Date date = new Date();
         // 清空角色的旧权限数据
@@ -357,7 +357,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             obj.setName(groupDTO.getName());
             groupMapper.updateSkipNull(obj);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -385,14 +385,14 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResultDTO addAccountRole(GroupDTO groupDTO)
+    public ResponseDTO addAccountRole(GroupDTO groupDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         Group role = groupMapper.findByName(groupDTO.getName());
         if(role != null)
         {
-            resultDTO.setResult(RestResult.ROLE_NAME_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ROLE_NAME_EXIST);
+            return responseDTO;
         }
         Date date = new Date();
         role = new Group();
@@ -416,7 +416,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             }
             groupFunctionMapper.addList(toAddList);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -465,21 +465,21 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResultDTO changeUserStatus(Long userId, Integer status)
+    public ResponseDTO changeUserStatus(Long userId, Integer status)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findById(userId);
         if(user == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         User temp = new User();
         temp.setId(userId);
         temp.setUpdateTime(new Date());
         temp.setEnabled(status);
         userMapper.updateSkipNull(temp);
-        return resultDTO;
+        return responseDTO;
     }
 
     /**

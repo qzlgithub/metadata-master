@@ -1,11 +1,12 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListDTO<T> implements Serializable
+public class ListDTO<T> extends RequestDTO
 {
     private int total;
     private List<T> list;

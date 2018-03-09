@@ -1,6 +1,7 @@
 package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,17 +15,17 @@ public class DictRechargeTypeDTO implements Serializable
     private String remark;
     private Integer enabled;
     private Integer deleted;
-    private ResultDTO resultDTO;
+    private ResponseDTO responseDTO;
 
     public DictRechargeTypeDTO()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        this.responseDTO = new ResponseDTO();
+        responseDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ResultDTO getResultDTO()
+    public ResponseDTO getResponseDTO()
     {
-        return resultDTO;
+        return responseDTO;
     }
 
     public Integer getId()

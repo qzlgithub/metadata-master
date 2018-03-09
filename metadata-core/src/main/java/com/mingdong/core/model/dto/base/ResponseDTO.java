@@ -1,15 +1,15 @@
-package com.mingdong.core.model.dto;
+package com.mingdong.core.model.dto.base;
 
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 
 import java.io.Serializable;
 
-public class ResultDTO implements Serializable
+public class ResponseDTO implements Serializable
 {
     private String code;
 
-    public ResultDTO()
+    public ResponseDTO()
     {
         code = RestResult.SUCCESS.getCode();
     }

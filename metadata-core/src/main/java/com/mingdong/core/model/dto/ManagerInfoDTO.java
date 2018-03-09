@@ -1,9 +1,11 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class ManagerInfoDTO implements Serializable
+public class ManagerInfoDTO extends RequestDTO
 {
     private Long managerId;
     private Integer roleType;

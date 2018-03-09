@@ -1,9 +1,11 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.ResponseDTO;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class RechargeInfoDTO extends ResultDTO
+public class RechargeInfoDTO extends ResponseDTO
 {
     private Integer billPlan;
     private BigDecimal amount;

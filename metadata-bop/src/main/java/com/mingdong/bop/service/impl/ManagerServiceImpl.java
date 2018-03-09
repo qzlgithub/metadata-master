@@ -23,7 +23,7 @@ import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ManagerRpcService;
@@ -83,8 +83,8 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void changePassword(Long managerId, String oldPwd, String newPwd, RestResp resp)
     {
-        ResultDTO resultDTO = managerRpcService.updateManagerPwd(managerId, newPwd, oldPwd);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.updateManagerPwd(managerId, newPwd, oldPwd);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -121,8 +121,8 @@ public class ManagerServiceImpl implements ManagerService
         GroupDTO roleDTO = new GroupDTO();
         roleDTO.setName(name);
         roleDTO.setPrivilegeIdList(privilegeIdList);
-        ResultDTO resultDTO = managerRpcService.addAccountRole(roleDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.addAccountRole(roleDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -132,8 +132,8 @@ public class ManagerServiceImpl implements ManagerService
         roleDTO.setId(groupId);
         roleDTO.setName(groupName);
         roleDTO.setPrivilegeIdList(privilege);
-        ResultDTO resultDTO = managerRpcService.editAccountRole(roleDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.editAccountRole(roleDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -211,8 +211,8 @@ public class ManagerServiceImpl implements ManagerService
         userDTO.setQq(newManagerVO.getQq());
         userDTO.setEnabled(newManagerVO.getEnabled());
         userDTO.setPrivilegeIdList(newManagerVO.getPrivilege());
-        ResultDTO resultDTO = managerRpcService.addAdminUser(userDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.addAdminUser(userDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -227,8 +227,8 @@ public class ManagerServiceImpl implements ManagerService
         userDTO.setEnabled(adminUserVO.getEnabled());
         userDTO.setRoleType(adminUserVO.getRoleType());
         userDTO.setPrivilegeIdList(adminUserVO.getPrivilege());
-        ResultDTO resultDTO = managerRpcService.editAdminUser(userDTO);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.editAdminUser(userDTO);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
@@ -265,15 +265,15 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void changeRoleStatus(Long groupId, Integer status, RestResp resp)
     {
-        ResultDTO resultDTO = managerRpcService.changeRoleStatus(groupId, status);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.changeRoleStatus(groupId, status);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override
     public void changeManagerStatus(Long userId, Integer status, RestResp resp)
     {
-        ResultDTO resultDTO = managerRpcService.changeUserStatus(userId, status);
-        resp.setError(resultDTO.getResult());
+        ResponseDTO responseDTO = managerRpcService.changeUserStatus(userId, status);
+        resp.setError(responseDTO.getResult());
     }
 
     @Override

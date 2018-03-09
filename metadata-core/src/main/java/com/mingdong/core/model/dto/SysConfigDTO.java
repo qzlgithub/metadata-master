@@ -1,6 +1,7 @@
 package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,17 +13,17 @@ public class SysConfigDTO implements Serializable
     private Date updateTime;
     private String name;
     private String value;
-    private ResultDTO resultDTO;
+    private ResponseDTO responseDTO;
 
     public SysConfigDTO()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        this.responseDTO = new ResponseDTO();
+        responseDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ResultDTO getResultDTO()
+    public ResponseDTO getResponseDTO()
     {
-        return resultDTO;
+        return responseDTO;
     }
 
     public Long getId()

@@ -1,6 +1,7 @@
 package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.io.Serializable;
 
@@ -9,17 +10,17 @@ public class CredentialDTO implements Serializable
     private String appId;
     private String appKey;
     private String reqHost;
-    private ResultDTO resultDTO;
+    private ResponseDTO responseDTO;
 
     public CredentialDTO()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        this.responseDTO = new ResponseDTO();
+        responseDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ResultDTO getResultDTO()
+    public ResponseDTO getResponseDTO()
     {
-        return resultDTO;
+        return responseDTO;
     }
 
     public String getAppId()

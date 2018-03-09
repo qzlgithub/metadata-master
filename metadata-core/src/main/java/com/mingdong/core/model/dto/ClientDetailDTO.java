@@ -1,10 +1,11 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.ResponseDTO;
+
 import java.util.Date;
 import java.util.List;
 
-public class ClientDetailDTO extends ResultDTO implements Serializable
+public class ClientDetailDTO extends ResponseDTO
 {
     private Long clientId;
     private String corpName;

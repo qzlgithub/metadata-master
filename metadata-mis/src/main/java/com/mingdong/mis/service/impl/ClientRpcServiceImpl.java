@@ -11,6 +11,7 @@ import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -28,8 +29,6 @@ import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductOpenDTO;
 import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.ResultDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -174,27 +173,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO changeUserPassword(Long userId, String orgPassword, String newPassword)
+    public ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            resultDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return responseDTO;
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(orgPassword)))
         {
-            resultDTO.setResult(RestResult.INVALID_PASSCODE);
-            return resultDTO;
+            responseDTO.setResult(RestResult.INVALID_PASSCODE);
+            return responseDTO;
         }
         ClientUser userUpd = new ClientUser();
         userUpd.setId(userId);
         userUpd.setUpdateTime(new Date());
         userUpd.setPassword(Md5Utils.encrypt(newPassword));
         clientUserMapper.updateSkipNull(userUpd);
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        responseDTO.setResult(RestResult.SUCCESS);
+        return responseDTO;
     }
 
     @Override
@@ -224,27 +223,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO setSubUserDeleted(Long primaryUserId, Long subUserId)
+    public ResponseDTO setSubUserDeleted(Long primaryUserId, Long subUserId)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientUser primaryUser = clientUserMapper.findById(primaryUserId);
         if(primaryUser == null)
         {
-            resultDTO.setResult(RestResult.INTERNAL_ERROR);
-            return resultDTO;
+            responseDTO.setResult(RestResult.INTERNAL_ERROR);
+            return responseDTO;
         }
         Client client = clientMapper.findById(primaryUser.getClientId());
         if(client == null || !primaryUserId.equals(client.getPrimaryUserId()))
         {
-            resultDTO.setResult(RestResult.ONLY_PRIMARY_USER);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ONLY_PRIMARY_USER);
+            return responseDTO;
         }
         ClientUser subUser = clientUserMapper.findById(subUserId);
         if(subUser == null || !TrueOrFalse.FALSE.equals(subUser.getDeleted()) || !primaryUser.getClientId().equals(
                 subUser.getClientId()))
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         Date current = new Date();
         ClientUser userUpd = new ClientUser();
@@ -253,8 +252,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userUpd.setDeleted(TrueOrFalse.TRUE);
         clientUserMapper.updateSkipNull(userUpd);
         updateClientAccountQty(client.getId());
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        responseDTO.setResult(RestResult.SUCCESS);
+        return responseDTO;
     }
 
     @Override
@@ -329,20 +328,20 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
+    public ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
         if(client == null)
         {
-            resultDTO.setResult(RestResult.ONLY_PRIMARY_USER);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ONLY_PRIMARY_USER);
+            return responseDTO;
         }
         ClientUser account = clientUserMapper.findByUsername(username);
         if(account != null)
         {
-            resultDTO.setResult(RestResult.USERNAME_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.USERNAME_EXIST);
+            return responseDTO;
         }
         Sistem config = sistemMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
@@ -357,8 +356,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
         int canSubAccountCount = config == null ? 5 : Integer.parseInt(config.getValue());
         if(subAccountCount >= canSubAccountCount)
         {
-            resultDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
-            return resultDTO;
+            responseDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
+            return responseDTO;
         }
 
         Date current = new Date();
@@ -375,27 +374,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
         account.setDeleted(TrueOrFalse.FALSE);
         clientUserMapper.add(account);
         updateClientAccountQty(client.getId());
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        responseDTO.setResult(RestResult.SUCCESS);
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled)
+    public ResponseDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(clientUser == null || !clientId.equals(clientUser.getClientId()))
         {
-            resultDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
+            return responseDTO;
         }
         ClientUser tempUser = new ClientUser();
         tempUser.setId(clientUserId);
         tempUser.setUpdateTime(new Date());
         tempUser.setEnabled(enabled);
         clientUserMapper.updateSkipNull(tempUser);
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -419,20 +418,20 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO editSubUser(SubUserDTO subUserDTO)
+    public ResponseDTO editSubUser(SubUserDTO subUserDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientUser clientUser = clientUserMapper.findById(subUserDTO.getUserId());
         if(clientUser == null || !subUserDTO.getClientId().equals(clientUser.getClientId()))
         {
-            resultDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
+            return responseDTO;
         }
         ClientUser temp = clientUserMapper.findByUsername(subUserDTO.getUsername());
         if(temp != null && !subUserDTO.getUserId().equals(temp.getId()))
         {
-            resultDTO.setResult(RestResult.USERNAME_EXIST);
-            return resultDTO;
+            responseDTO.setResult(RestResult.USERNAME_EXIST);
+            return responseDTO;
         }
         temp = new ClientUser();
         temp.setId(subUserDTO.getUserId());
@@ -443,7 +442,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         temp.setPhone(subUserDTO.getPhone());
         temp.setEnabled(subUserDTO.getEnabled());
         clientUserMapper.updateSkipNull(temp);
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -453,13 +452,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null || !user.getPassword().equals(Md5Utils.encrypt(password)))
         {
-            dto.getResultDTO().setResult(RestResult.INVALID_PASSCODE);
+            dto.getResponseDTO().setResult(RestResult.INVALID_PASSCODE);
             return dto;
         }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
-            dto.getResultDTO().setResult(RestResult.PRODUCT_NOT_OPEN);
+            dto.getResponseDTO().setResult(RestResult.PRODUCT_NOT_OPEN);
             return dto;
         }
         dto.setAppId(cp.getAppId());
@@ -474,20 +473,20 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
+    public ResponseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
-            resultDTO.setResult(RestResult.INTERNAL_ERROR);
-            return resultDTO;
+            responseDTO.setResult(RestResult.INTERNAL_ERROR);
+            return responseDTO;
         }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
-            resultDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
-            return resultDTO;
+            responseDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
+            return responseDTO;
         }
         Date current = new Date();
         ClientUserProduct up = clientUserProductMapper.findByUserAndProduct(userId, productId);
@@ -511,7 +510,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             upUpd.setReqHost(reqHost);
             clientUserProductMapper.updateSkipNull(upUpd);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -634,9 +633,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO addNewClient(NewClientDTO req)
+    public ResponseDTO addNewClient(NewClientDTO req)
     {
-        ResultDTO res = new ResultDTO();
+        ResponseDTO res = new ResponseDTO();
         ClientUser user = clientUserMapper.findByUsername(req.getUsername());
         if(user != null)
         {
@@ -763,13 +762,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO changeClientStatus(DisableClientDTO disableClientDTO)
+    public ResponseDTO changeClientStatus(DisableClientDTO disableClientDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         List<Client> clientList = clientMapper.getListByIdList(disableClientDTO.getClientIdList());
         if(CollectionUtils.isEmpty(clientList))
         {
-            return resultDTO;
+            return responseDTO;
         }
         Date date = new Date();
         List<Long> clientIdList = new ArrayList<>();
@@ -798,7 +797,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             clientUserMapper.updateStatusByIds(disableClientDTO.getEnabled(), date, userIdList);
             clientMapper.updateStatusByIds(disableClientDTO.getEnabled(), date, clientIdList);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
@@ -838,27 +837,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ResultDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
+    public ResponseDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         ClientProduct clientProduct = clientProductMapper.findById(
                 openClientProductDTO.getProductRechargeDTO().getClientProductId());
         if(clientProduct == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         Product productById = productMapper.findById(clientProduct.getProductId());
         if(productById == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         APIProduct product = APIProduct.getByCode(productById.getCode());
         if(product == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         String lockAccount = product.name() + "-C" + openClientProductDTO.getProductRechargeDTO().getClientId();
         String lockUUID = StringUtils.getUuid();
@@ -877,9 +876,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         openClientProductDTO.getProductRechargeDTO().getClientProductId());
                 if(cp == null)
                 {
-                    resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+                    responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
                     redisDao.freeProductAccount(lockAccount, lockUUID);
-                    return resultDTO;
+                    return responseDTO;
                 }
                 openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
                 openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
@@ -918,15 +917,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 redisDao.freeProductAccount(lockAccount, lockUUID);
             }
         }
-        resultDTO.setResult(RestResult.SUCCESS);
-        return resultDTO;
+        responseDTO.setResult(RestResult.SUCCESS);
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO editClient(NewClientDTO dto, List<ClientContactDTO> contacts, List<Long> delIds)
+    public ResponseDTO editClient(NewClientDTO dto, List<ClientContactDTO> contacts, List<Long> delIds)
     {
-        ResultDTO res = new ResultDTO();
+        ResponseDTO res = new ResponseDTO();
         Client client = clientMapper.findById(dto.getClientId());
         if(client == null)
         {
@@ -996,9 +995,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO selectCustomProduct(Long clientId, List<Long> productIds)
+    public ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds)
     {
-        ResultDTO res = new ResultDTO();
+        ResponseDTO res = new ResponseDTO();
         List<ProductClientInfo> productClientInfoList = productClientInfoMapper.getClientProductCustomBy(clientId);
         if(productIds == null)
         {
@@ -1057,9 +1056,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO removeCustomClientProduct(Long clientProductId)
+    public ResponseDTO removeCustomClientProduct(Long clientProductId)
     {
-        ResultDTO res = new ResultDTO();
+        ResponseDTO res = new ResponseDTO();
         ProductClientInfo clientProductInfo = productClientInfoMapper.getClientProductInfo(clientProductId);
         if(clientProductInfo == null)
         {
@@ -1117,10 +1116,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResultDTO openProduct(ProductOpenDTO dto)
+    public ResponseDTO openProduct(ProductOpenDTO dto)
     {
         Date current = new Date();
-        ResultDTO res = new ResultDTO();
+        ResponseDTO res = new ResponseDTO();
         Product p = productMapper.findById(dto.getProductId());
         // 判断产品是否存在
         if(p == null)

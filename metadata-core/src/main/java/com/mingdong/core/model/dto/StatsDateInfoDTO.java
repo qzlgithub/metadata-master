@@ -1,10 +1,12 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class StatsDateInfoDTO implements Serializable
+public class StatsDateInfoDTO extends RequestDTO
 {
     private Date date;
     //request

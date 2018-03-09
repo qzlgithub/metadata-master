@@ -14,7 +14,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.ResultDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
@@ -297,14 +297,14 @@ public class ProductRpcServiceImpl implements ProductRpcService
 
     @Override
     @Transactional
-    public ResultDTO editProduct(ProductDTO productDTO)
+    public ResponseDTO editProduct(ProductDTO productDTO)
     {
-        ResultDTO resultDTO = new ResultDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         Product product = productMapper.findById(productDTO.getId());
         if(product == null)
         {
-            resultDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return resultDTO;
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
         }
         Date date = new Date();
         Product tempProduct = new Product();
@@ -334,14 +334,14 @@ public class ProductRpcServiceImpl implements ProductRpcService
             productTxt.setContent(productDTO.getContent());
             productTxtMapper.updateById(productTxt);
         }
-        return resultDTO;
+        return responseDTO;
     }
 
     @Override
     @Transactional
-    public ResultDTO changeProductStatus(Long productId, Integer enabled)
+    public ResponseDTO changeProductStatus(Long productId, Integer enabled)
     {
-        ResultDTO dto = new ResultDTO();
+        ResponseDTO dto = new ResponseDTO();
         Product product = productMapper.findById(productId);
         if(product == null)
         {

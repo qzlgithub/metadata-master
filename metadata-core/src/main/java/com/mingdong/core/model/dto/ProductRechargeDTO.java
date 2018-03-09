@@ -1,6 +1,7 @@
 package com.mingdong.core.model.dto;
 
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -25,17 +26,17 @@ public class ProductRechargeDTO implements Serializable
     private BigDecimal unitAmt;
     private String remark;
     private Long managerId;
-    private ResultDTO resultDTO;
+    private ResponseDTO responseDTO;
 
     public ProductRechargeDTO()
     {
-        this.resultDTO = new ResultDTO();
-        resultDTO.setResult(RestResult.SUCCESS);
+        this.responseDTO = new ResponseDTO();
+        responseDTO.setResult(RestResult.SUCCESS);
     }
 
-    public ResultDTO getResultDTO()
+    public ResponseDTO getResponseDTO()
     {
-        return resultDTO;
+        return responseDTO;
     }
 
     public Long getId()

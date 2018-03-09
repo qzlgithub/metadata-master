@@ -1,9 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import java.io.Serializable;
+import com.mingdong.core.model.dto.base.RequestDTO;
+
 import java.util.Date;
 
-public class ClientOperateLogDTO implements Serializable
+public class ClientOperateLogDTO extends RequestDTO
 {
     private Date operateTime;
     private Integer type;
