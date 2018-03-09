@@ -7,8 +7,8 @@ import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 public interface ManagerRpcService
 {

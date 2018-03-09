@@ -6,8 +6,8 @@ import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.util.List;
 import java.util.Map;

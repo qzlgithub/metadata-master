@@ -2,8 +2,6 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.model.dto.base.RequestDTO;
 
-import java.io.Serializable;
-
 public class OpenClientProductDTO extends RequestDTO
 {
     private ClientProductDTO clientProductDTO;

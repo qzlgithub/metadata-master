@@ -13,8 +13,8 @@ import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RechargeReqDTO;
+import com.mingdong.core.model.dto.RechargeRespDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
@@ -164,5 +164,5 @@ public interface ClientRpcService
     /**
      * 查询客户最近的充值记录信息
      */
-    RechargeInfoDTO getLatestRechargeInfo(Long clientId, Long productId);
+    RechargeRespDTO getLatestRechargeInfo(Long clientId, Long productId);
 }

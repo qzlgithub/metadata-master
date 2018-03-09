@@ -34,8 +34,8 @@ import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RechargeReqDTO;
+import com.mingdong.core.model.dto.RechargeRespDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -280,25 +280,25 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getProductRenewInfo(Long clientId, Long productId, RestResp resp)
     {
-        RechargeInfoDTO rechargeInfoDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
-        if(rechargeInfoDTO.getResult() != RestResult.SUCCESS)
+        RechargeRespDTO respDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
+        if(respDTO.getResult() != RestResult.SUCCESS)
         {
-            resp.setError(rechargeInfoDTO.getResult());
+            resp.setError(respDTO.getResult());
             return;
         }
-        resp.addData(Field.BILL_PLAN, rechargeInfoDTO.getBillPlan());
-        if(BillPlan.BY_TIME.getId().equals(rechargeInfoDTO.getBillPlan()))
+        resp.addData(Field.BILL_PLAN, respDTO.getBillPlan());
+        if(BillPlan.BY_TIME.getId().equals(respDTO.getBillPlan()))
         {
-            resp.addData(Field.START_DATE, DateUtils.format(rechargeInfoDTO.getStartDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.END_DATE, DateUtils.format(rechargeInfoDTO.getEndDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(rechargeInfoDTO.getAmount()));
+            resp.addData(Field.START_DATE, DateUtils.format(respDTO.getStartDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.END_DATE, DateUtils.format(respDTO.getEndDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(respDTO.getAmount()));
         }
         else
         {
-            resp.addData(Field.BALANCE, NumberUtils.formatAmount(rechargeInfoDTO.getBalance()));
-            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(rechargeInfoDTO.getUnitAmt()));
+            resp.addData(Field.BALANCE, NumberUtils.formatAmount(respDTO.getBalance()));
+            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(respDTO.getUnitAmt()));
         }
-        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(rechargeInfoDTO.getTotalRecharge()));
+        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(respDTO.getTotalRecharge()));
     }
 
     @Override

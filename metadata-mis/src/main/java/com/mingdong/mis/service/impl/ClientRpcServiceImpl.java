@@ -24,8 +24,8 @@ import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.RechargeInfoDTO;
 import com.mingdong.core.model.dto.RechargeReqDTO;
+import com.mingdong.core.model.dto.RechargeRespDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
@@ -1177,28 +1177,28 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public RechargeInfoDTO getLatestRechargeInfo(Long clientId, Long productId)
+    public RechargeRespDTO getLatestRechargeInfo(Long clientId, Long productId)
     {
-        RechargeInfoDTO rechargeInfoDTO = new RechargeInfoDTO();
+        RechargeRespDTO respDTO = new RechargeRespDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
-            rechargeInfoDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
-            return rechargeInfoDTO;
+            respDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
+            return respDTO;
         }
         Recharge recharge = rechargeMapper.findById(clientProduct.getLatestRechargeId());
         if(recharge != null)
         {
-            rechargeInfoDTO.setBillPlan(recharge.getBillPlan());
-            rechargeInfoDTO.setAmount(recharge.getAmount());
-            rechargeInfoDTO.setBalance(recharge.getBalance());
-            rechargeInfoDTO.setStartDate(recharge.getStartDate());
-            rechargeInfoDTO.setEndDate(recharge.getEndDate());
-            rechargeInfoDTO.setUnitAmt(recharge.getUnitAmt());
+            respDTO.setBillPlan(recharge.getBillPlan());
+            respDTO.setAmount(recharge.getAmount());
+            respDTO.setBalance(recharge.getBalance());
+            respDTO.setStartDate(recharge.getStartDate());
+            respDTO.setEndDate(recharge.getEndDate());
+            respDTO.setUnitAmt(recharge.getUnitAmt());
         }
         BigDecimal totalRecharge = rechargeMapper.sumRechargeAmount(clientId, productId);
-        rechargeInfoDTO.setTotalRecharge(totalRecharge);
-        return rechargeInfoDTO;
+        respDTO.setTotalRecharge(totalRecharge);
+        return respDTO;
     }
 
     /**

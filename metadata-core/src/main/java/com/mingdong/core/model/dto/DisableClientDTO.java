@@ -2,7 +2,6 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.model.dto.base.RequestDTO;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class DisableClientDTO extends RequestDTO

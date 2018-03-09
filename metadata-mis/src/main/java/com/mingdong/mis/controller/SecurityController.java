@@ -44,19 +44,21 @@ public class SecurityController
     @PostMapping(value = "/sign")
     public String sign(@RequestBody JSONObject jsonReq) throws MetadataCoreException
     {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Set<String> strings = jsonReq.keySet();
         String key = "";
-        for(String str : strings){
-            if("appKey".equals(str)){
+        for(String str : strings)
+        {
+            if("appKey".equals(str))
+            {
                 key = jsonReq.getString("appKey");
                 continue;
             }
-            map.put(str,jsonReq.get(str));
+            map.put(str, jsonReq.get(str));
         }
         SortedMap sm = MapUtils.sortKey(map);
         String str = JSON.toJSONString(sm);
-        System.out.println("str:"+str);
+        System.out.println("str:" + str);
         String sign = SignUtils.sign(str, key);
         return sign;
     }
