@@ -1,6 +1,6 @@
 package com.mingdong.core.constant;
 
-import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.Dict;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +42,12 @@ public enum ProdType
         return null;
     }
 
-    public static List<DictDTO> getProdTypeDict()
+    public static List<Dict> getProdTypeDict()
     {
-        List<DictDTO> list = new ArrayList<>();
+        List<Dict> list = new ArrayList<>();
         for(ProdType o : ProdType.values())
         {
-            list.add(new DictDTO(o.getId() + "", o.getName()));
+            list.add(new Dict(o.getId() + "", o.getName()));
         }
         return list;
     }

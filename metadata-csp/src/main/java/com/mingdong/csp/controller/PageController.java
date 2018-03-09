@@ -107,7 +107,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("product/introduce");
         RestResp resp = new RestResp();
-        productService.getProductInfo(productId,resp);
+        productService.getProductInfo(productId, resp);
         view.addAllObjects(resp.getData());
         view.addAllObjects(RequestThread.getPageData());
         return view;

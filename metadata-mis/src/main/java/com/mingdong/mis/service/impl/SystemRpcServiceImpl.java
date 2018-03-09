@@ -4,7 +4,7 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
@@ -184,17 +184,17 @@ public class SystemRpcServiceImpl implements SystemRpcService
         }
         dto.setParentId(self.getParentId());
         List<DictIndustry> peerList = dictIndustryMapper.getByParentAndStatus(self.getParentId(), TrueOrFalse.TRUE);
-        List<DictDTO> peers = new ArrayList<>();
+        List<Dict> peers = new ArrayList<>();
         for(DictIndustry d : peerList)
         {
-            peers.add(new DictDTO(d.getId() + "", d.getName()));
+            peers.add(new Dict(d.getId() + "", d.getName()));
         }
         dto.setPeers(peers);
         List<DictIndustry> parentList = dictIndustryMapper.getByParentAndStatus(0L, TrueOrFalse.TRUE);
-        List<DictDTO> parents = new ArrayList<>();
+        List<Dict> parents = new ArrayList<>();
         for(DictIndustry d : parentList)
         {
-            parents.add(new DictDTO(d.getId() + "", d.getName()));
+            parents.add(new Dict(d.getId() + "", d.getName()));
         }
         dto.setParents(parents);
         return dto;

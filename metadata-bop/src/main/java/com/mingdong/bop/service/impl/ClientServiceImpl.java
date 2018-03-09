@@ -19,6 +19,7 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.AccessDTO;
@@ -28,7 +29,6 @@ import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -173,7 +173,7 @@ public class ClientServiceImpl implements ClientService
         {
             resp.addData(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
             List<Map<String, Object>> industryParentDict = new ArrayList<>();
-            for(DictDTO d : industry.getParents())
+            for(Dict d : industry.getParents())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.KEY, d.getKey());
@@ -182,7 +182,7 @@ public class ClientServiceImpl implements ClientService
             }
             resp.addData(Field.INDUSTRY_PARENT_DICT, industryParentDict);
             List<Map<String, Object>> industryDict = new ArrayList<>();
-            for(DictDTO d : industry.getPeers())
+            for(Dict d : industry.getPeers())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.KEY, d.getKey());

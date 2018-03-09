@@ -13,7 +13,6 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
@@ -218,16 +217,9 @@ public class ProductServiceImpl implements ProductService
     @Override
     public List<Dict> getClientProductDict(Long clientId)
     {
-        List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = commonRpcService.getClientProductDict(clientId);
-        if(!CollectionUtils.isEmpty(listDTO.getList()))
-        {
-            for(DictDTO o : listDTO.getList())
-            {
-                list.add(new Dict(o.getKey(), o.getValue()));
-            }
-        }
-        return list;
+        ListDTO<Dict> listDTO = commonRpcService.getClientProductDict(clientId);
+        List<Dict> dict = listDTO.getList();
+        return dict != null ? dict : new ArrayList<>();
     }
 
     @Override
@@ -344,7 +336,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductInfo(Long productId, RestResp resp)
     {
         ProductDTO productInfoData = productRpcService.getProductInfoData(productId);
-        resp.addData(Field.NAME,productInfoData.getName());
-        resp.addData(Field.CONTENT,productInfoData.getContent());
+        resp.addData(Field.NAME, productInfoData.getName());
+        resp.addData(Field.CONTENT, productInfoData.getContent());
     }
 }

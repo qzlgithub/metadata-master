@@ -1,6 +1,6 @@
 package com.mingdong.core.constant;
 
-import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.Dict;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +50,12 @@ public enum BillPlan
         return null;
     }
 
-    public static List<DictDTO> getAllList()
+    public static List<Dict> getAllList()
     {
-        List<DictDTO> dictDTOList = new ArrayList<>();
+        List<Dict> dictDTOList = new ArrayList<>();
         for(BillPlan billPlan : BillPlan.values())
         {
-            dictDTOList.add(new DictDTO(billPlan.id + "", billPlan.name));
+            dictDTOList.add(new Dict(billPlan.id + "", billPlan.name));
         }
         return dictDTOList;
     }

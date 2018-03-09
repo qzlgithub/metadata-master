@@ -11,13 +11,12 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DictIndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.PrivilegeDTO;
 import com.mingdong.core.model.dto.RechargeTypeDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import org.springframework.stereotype.Service;
@@ -182,16 +181,12 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Dict> getRechargeDict()
     {
-        List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = commonRpcService.getRechargeTypeDict();
+        ListDTO<Dict> listDTO = commonRpcService.getRechargeTypeDict();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(DictDTO o : listDTO.getList())
-            {
-                list.add(new Dict(o.getKey(), o.getValue()));
-            }
+            return listDTO.getList();
         }
-        return list;
+        return new ArrayList<>();
     }
 
     @Override
@@ -326,16 +321,12 @@ public class SystemServiceImpl implements SystemService
     @Override
     public List<Dict> getAccountRoleDict()
     {
-        List<Dict> roleDict = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = commonRpcService.getAdminGroupDict();
+        ListDTO<Dict> listDTO = commonRpcService.getAdminGroupDict();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(DictDTO o : listDTO.getList())
-            {
-                roleDict.add(new Dict(o.getKey(), o.getValue()));
-            }
+            return listDTO.getList();
         }
-        return roleDict;
+        return new ArrayList<>();
     }
 
     private void cacheAllIndustryData()

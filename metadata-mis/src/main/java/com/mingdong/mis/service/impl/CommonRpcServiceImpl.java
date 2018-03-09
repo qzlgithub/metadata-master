@@ -2,7 +2,7 @@ package com.mingdong.mis.service.impl;
 
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.mis.domain.entity.ClientUser;
@@ -63,16 +63,16 @@ public class CommonRpcServiceImpl implements CommonRpcService
     }
 
     @Override
-    public ListDTO<DictDTO> getProductDict()
+    public ListDTO<Dict> getProductDict()
     {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        ListDTO<Dict> listDTO = new ListDTO<>();
         List<Product> dataList = productMapper.getListByStatus(TrueOrFalse.TRUE);
         if(!CollectionUtils.isEmpty(dataList))
         {
-            List<DictDTO> list = new ArrayList<>(dataList.size());
+            List<Dict> list = new ArrayList<>(dataList.size());
             for(Product o : dataList)
             {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
+                list.add(new Dict(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }
@@ -80,16 +80,16 @@ public class CommonRpcServiceImpl implements CommonRpcService
     }
 
     @Override
-    public ListDTO<DictDTO> getAdminGroupDict()
+    public ListDTO<Dict> getAdminGroupDict()
     {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        ListDTO<Dict> listDTO = new ListDTO<>();
         List<Group> roleList = groupMapper.getByStatus(TrueOrFalse.TRUE);
         if(!CollectionUtils.isEmpty(roleList))
         {
-            List<DictDTO> list = new ArrayList<>(roleList.size());
+            List<Dict> list = new ArrayList<>(roleList.size());
             for(Group o : roleList)
             {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
+                list.add(new Dict(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }
@@ -97,16 +97,16 @@ public class CommonRpcServiceImpl implements CommonRpcService
     }
 
     @Override
-    public ListDTO<DictDTO> getAdminUserDict()
+    public ListDTO<Dict> getAdminUserDict()
     {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        ListDTO<Dict> listDTO = new ListDTO<>();
         List<User> userList = userMapper.getListBy(null, TrueOrFalse.TRUE);
         if(!CollectionUtils.isEmpty(userList))
         {
-            List<DictDTO> list = new ArrayList<>();
+            List<Dict> list = new ArrayList<>();
             for(User o : userList)
             {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
+                list.add(new Dict(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }
@@ -114,16 +114,16 @@ public class CommonRpcServiceImpl implements CommonRpcService
     }
 
     @Override
-    public ListDTO<DictDTO> getClientProductDict(Long clientId)
+    public ListDTO<Dict> getClientProductDict(Long clientId)
     {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        ListDTO<Dict> listDTO = new ListDTO<>();
         List<ProductClientInfo> dataList = productClientInfoMapper.getClientDictList(clientId);
         if(!CollectionUtils.isEmpty(dataList))
         {
-            List<DictDTO> list = new ArrayList<>();
+            List<Dict> list = new ArrayList<>();
             for(ProductClientInfo o : dataList)
             {
-                list.add(new DictDTO(o.getProductId() + "", o.getProductName()));
+                list.add(new Dict(o.getProductId() + "", o.getProductName()));
             }
             listDTO.setList(list);
         }
@@ -131,17 +131,17 @@ public class CommonRpcServiceImpl implements CommonRpcService
     }
 
     @Override
-    public ListDTO<DictDTO> getRechargeTypeDict()
+    public ListDTO<Dict> getRechargeTypeDict()
     {
-        ListDTO<DictDTO> listDTO = new ListDTO<>();
+        ListDTO<Dict> listDTO = new ListDTO<>();
         List<DictRechargeType> rechargeTypeList = dictRechargeTypeMapper.getListByStatus(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
         if(!CollectionUtils.isEmpty(rechargeTypeList))
         {
-            List<DictDTO> list = new ArrayList<>();
+            List<Dict> list = new ArrayList<>();
             for(DictRechargeType o : rechargeTypeList)
             {
-                list.add(new DictDTO(o.getId() + "", o.getName()));
+                list.add(new Dict(o.getId() + "", o.getName()));
             }
             listDTO.setList(list);
         }

@@ -1,17 +1,12 @@
 package com.mingdong.core.constant;
 
-import com.mingdong.core.model.dto.DictDTO;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public enum Custom
 {
     COMMON(0, "普通"),
     CUSTOMIZATION(1, "定制");
 
-    private Integer id;
-    private String name;
+    private final Integer id;
+    private final String name;
 
     Custom(Integer id, String name)
     {
@@ -32,16 +27,6 @@ public enum Custom
             }
         }
         return null;
-    }
-
-    public static List<DictDTO> getAllList()
-    {
-        List<DictDTO> dictDTOList = new ArrayList<>();
-        for(Custom productGroupType : Custom.values())
-        {
-            dictDTOList.add(new DictDTO(productGroupType.id + "", productGroupType.name));
-        }
-        return dictDTOList;
     }
 
     public Integer getId()

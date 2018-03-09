@@ -18,13 +18,12 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.AdminSessionDTO;
 import com.mingdong.core.model.dto.AdminUserDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
 import com.mingdong.core.model.dto.ManagerInfoDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.UserInfoDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ManagerRpcService;
 import org.springframework.stereotype.Service;
@@ -185,16 +184,9 @@ public class ManagerServiceImpl implements ManagerService
         }
         data.put(Field.PRIVILEGE, privilege);
         // 获取系统账户的角色字典
-        ListDTO<DictDTO> listDTO = commonRpcService.getAdminGroupDict();
-        List<Dict> roleDict = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(listDTO.getList()))
-        {
-            for(DictDTO o : listDTO.getList())
-            {
-                roleDict.add(new Dict(o.getKey(), o.getValue()));
-            }
-        }
-        data.put(Field.ROLE_DICT, roleDict);
+        ListDTO<Dict> listDTO = commonRpcService.getAdminGroupDict();
+        List<Dict> roleDict = listDTO.getList();
+        data.put(Field.ROLE_DICT, roleDict != null ? roleDict : new ArrayList<>());
         return data;
     }
 
@@ -285,16 +277,8 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public List<Dict> getAdminUserDict()
     {
-        List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = commonRpcService.getAdminUserDict();
-        List<DictDTO> dataList = listDTO.getList();
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            for(DictDTO o : dataList)
-            {
-                list.add(new Dict(o.getKey(), o.getValue()));
-            }
-        }
-        return list;
+        ListDTO<Dict> listDTO = commonRpcService.getAdminUserDict();
+        List<Dict> dict = listDTO.getList();
+        return dict != null ? dict : new ArrayList<>();
     }
 }

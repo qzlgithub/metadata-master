@@ -10,6 +10,7 @@ import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
@@ -19,7 +20,6 @@ import com.mingdong.core.model.dto.ClientOperateLogDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.CredentialDTO;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
@@ -1035,16 +1035,16 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         res.setCorpName(client.getCorpName());
         List<ClientUser> userList = clientUserMapper.getAvailableListByClient(clientId);
-        List<DictDTO> userDict = new ArrayList<>();
+        List<Dict> userDict = new ArrayList<>();
         for(ClientUser o : userList)
         {
             if(o.getId().equals(client.getPrimaryUserId()))
             {
-                userDict.add(new DictDTO(o.getId() + "", o.getUsername() + "（主）"));
+                userDict.add(new Dict(o.getId() + "", o.getUsername() + "（主）"));
             }
             else
             {
-                userDict.add(new DictDTO(o.getId() + "", o.getUsername() + "（" + o.getName() + "）"));
+                userDict.add(new Dict(o.getId() + "", o.getUsername() + "（" + o.getName() + "）"));
             }
         }
         res.setUserDict(userDict);

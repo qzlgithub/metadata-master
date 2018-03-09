@@ -1,5 +1,6 @@
 package com.mingdong.core.model.dto;
 
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.util.List;
@@ -7,8 +8,8 @@ import java.util.List;
 public class IndustryDTO extends ResponseDTO
 {
     private Long parentId;
-    private List<DictDTO> parents;
-    private List<DictDTO> peers;
+    private List<Dict> parents;
+    private List<Dict> peers;
 
     public Long getParentId()
     {
@@ -20,22 +21,22 @@ public class IndustryDTO extends ResponseDTO
         this.parentId = parentId;
     }
 
-    public List<DictDTO> getParents()
+    public List<Dict> getParents()
     {
         return parents;
     }
 
-    public void setParents(List<DictDTO> parents)
+    public void setParents(List<Dict> parents)
     {
         this.parents = parents;
     }
 
-    public List<DictDTO> getPeers()
+    public List<Dict> getPeers()
     {
         return peers;
     }
 
-    public void setPeers(List<DictDTO> peers)
+    public void setPeers(List<Dict> peers)
     {
         this.peers = peers;
     }

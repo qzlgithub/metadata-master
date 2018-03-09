@@ -1,6 +1,6 @@
 package com.mingdong.core.service;
 
-import com.mingdong.core.model.dto.DictDTO;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 
 public interface CommonRpcService
@@ -29,25 +29,25 @@ public interface CommonRpcService
     /**
      * 产品字典
      */
-    ListDTO<DictDTO> getProductDict();
+    ListDTO<Dict> getProductDict();
 
     /**
      * 管理权限分组字典
      */
-    ListDTO<DictDTO> getAdminGroupDict();
+    ListDTO<Dict> getAdminGroupDict();
 
     /**
      * 管理账号字典
      */
-    ListDTO<DictDTO> getAdminUserDict();
+    ListDTO<Dict> getAdminUserDict();
 
     /**
      * 客户产品字典
      */
-    ListDTO<DictDTO> getClientProductDict(Long clientId);
+    ListDTO<Dict> getClientProductDict(Long clientId);
 
     /**
      * 充值类型字典
      */
-    ListDTO<DictDTO> getRechargeTypeDict();
+    ListDTO<Dict> getRechargeTypeDict();
 }

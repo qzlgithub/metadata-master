@@ -12,7 +12,6 @@ import com.mingdong.core.constant.ProdType;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.DictDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
@@ -80,16 +79,9 @@ public class ProductServiceImpl implements ProductService
     @Override
     public List<Dict> getProductDict()
     {
-        List<Dict> list = new ArrayList<>();
-        ListDTO<DictDTO> listDTO = commonRpcService.getProductDict();
-        if(!CollectionUtils.isEmpty(listDTO.getList()))
-        {
-            for(DictDTO o : listDTO.getList())
-            {
-                list.add(new Dict(o.getKey(), o.getValue()));
-            }
-        }
-        return list;
+        ListDTO<Dict> listDTO = commonRpcService.getProductDict();
+        List<Dict> dict = listDTO.getList();
+        return dict != null ? dict : new ArrayList<>();
     }
 
     @Override

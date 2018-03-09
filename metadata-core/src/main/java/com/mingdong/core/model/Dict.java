@@ -1,6 +1,8 @@
 package com.mingdong.core.model;
 
-public class Dict
+import java.io.Serializable;
+
+public class Dict implements Serializable
 {
     private String key;
     private String value;
