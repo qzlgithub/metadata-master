@@ -13,7 +13,7 @@ public class NewClientDTO extends RequestDTO
     private Long industryId;
     private String username;
     private Integer enabled;
-    private List<ClientContactDTO> contactList;
+    private List<ClientContactReqDTO> contactList;
     private Long managerId;
 
     public Long getClientId()
@@ -86,12 +86,12 @@ public class NewClientDTO extends RequestDTO
         this.enabled = enabled;
     }
 
-    public List<ClientContactDTO> getContactList()
+    public List<ClientContactReqDTO> getContactList()
     {
         return contactList;
     }
 
-    public void setContactList(List<ClientContactDTO> contactList)
+    public void setContactList(List<ClientContactReqDTO> contactList)
     {
         this.contactList = contactList;
     }

@@ -14,7 +14,7 @@ public class ClientDetailDTO extends ResponseDTO
     private Long industryId;
     private String username;
     private Integer userStatus;
-    private List<ClientContactDTO> contacts;
+    private List<ClientContactReqDTO> contacts;
     private List<ClientUserDTO> users;
     private Date addTime;
     private Long managerId;
@@ -100,12 +100,12 @@ public class ClientDetailDTO extends ResponseDTO
         this.userStatus = userStatus;
     }
 
-    public List<ClientContactDTO> getContacts()
+    public List<ClientContactReqDTO> getContacts()
     {
         return contacts;
     }
 
-    public void setContacts(List<ClientContactDTO> contacts)
+    public void setContacts(List<ClientContactReqDTO> contacts)
     {
         this.contacts = contacts;
     }

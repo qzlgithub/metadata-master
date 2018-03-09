@@ -4,7 +4,7 @@ import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.util.List;
 
-public class AdminSessionDTO extends ResponseDTO
+public class AdminSessionResDTO extends ResponseDTO
 {
     private Long userId;
     private String name;

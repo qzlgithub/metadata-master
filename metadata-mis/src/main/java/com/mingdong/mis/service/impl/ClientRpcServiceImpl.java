@@ -11,9 +11,9 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
-import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.ApiReqInfoDTO;
-import com.mingdong.core.model.dto.ClientContactDTO;
+import com.mingdong.core.model.dto.AccessReqDTO;
+import com.mingdong.core.model.dto.AccessResDTO;
+import com.mingdong.core.model.dto.ClientContactReqDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
@@ -25,7 +25,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.RechargeReqDTO;
-import com.mingdong.core.model.dto.RechargeRespDTO;
+import com.mingdong.core.model.dto.RechargeResDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
@@ -653,7 +653,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         Long userId = IDUtils.createUserId(param.getNodeId());
         // build corporation contact data list
         List<ClientContact> contactList = new ArrayList<>();
-        for(ClientContactDTO o : req.getContactList())
+        for(ClientContactReqDTO o : req.getContactList())
         {
             ClientContact cc = new ClientContact();
             cc.setCreateTime(current);
@@ -721,16 +721,16 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setIndustryId(client.getIndustryId());
         res.setAddTime(client.getCreateTime());
         res.setManagerName(manager.getName());
-        List<ClientContactDTO> contacts = new ArrayList<>();
-        for(ClientContact cc : clientContactList)
+        List<ClientContactReqDTO> contacts = new ArrayList<>();
+        for(ClientContact o : clientContactList)
         {
-            ClientContactDTO clientContactDTO = new ClientContactDTO();
-            clientContactDTO.setName(cc.getName());
-            clientContactDTO.setPosition(cc.getPosition());
-            clientContactDTO.setPhone(cc.getPhone());
-            clientContactDTO.setEmail(cc.getEmail());
-            clientContactDTO.setGeneral(cc.getGeneral());
-            contacts.add(clientContactDTO);
+            ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+            reqDTO.setName(o.getName());
+            reqDTO.setPosition(o.getPosition());
+            reqDTO.setPhone(o.getPhone());
+            reqDTO.setEmail(o.getEmail());
+            reqDTO.setGeneral(o.getGeneral());
+            contacts.add(reqDTO);
         }
         res.setContacts(contacts);
         List<ClientUserDTO> users = new ArrayList<>();
@@ -815,17 +815,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setUsername(clientUser.getUsername());
         res.setUserStatus(clientUser.getEnabled());
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
-        List<ClientContactDTO> contacts = new ArrayList<>();
-        for(ClientContact cc : clientContactList)
+        List<ClientContactReqDTO> contacts = new ArrayList<>();
+        for(ClientContact o : clientContactList)
         {
-            ClientContactDTO clientContactDTO = new ClientContactDTO();
-            clientContactDTO.setId(cc.getId());
-            clientContactDTO.setName(cc.getName());
-            clientContactDTO.setPosition(cc.getPosition());
-            clientContactDTO.setPhone(cc.getPhone());
-            clientContactDTO.setEmail(cc.getEmail());
-            clientContactDTO.setGeneral(cc.getGeneral());
-            contacts.add(clientContactDTO);
+            ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+            reqDTO.setId(o.getId());
+            reqDTO.setName(o.getName());
+            reqDTO.setPosition(o.getPosition());
+            reqDTO.setPhone(o.getPhone());
+            reqDTO.setEmail(o.getEmail());
+            reqDTO.setGeneral(o.getGeneral());
+            contacts.add(reqDTO);
         }
         res.setContacts(contacts);
         return res;
@@ -833,7 +833,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editClient(NewClientDTO dto, List<ClientContactDTO> contacts, List<Long> delIds)
+    public ResponseDTO editClient(NewClientDTO dto, List<ClientContactReqDTO> contacts, List<Long> delIds)
     {
         ResponseDTO res = new ResponseDTO();
         Client client = clientMapper.findById(dto.getClientId());
@@ -864,7 +864,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(!CollectionUtils.isEmpty(contacts))
         {
             List<ClientContact> addList = new ArrayList<>();
-            for(ClientContactDTO o : contacts)
+            for(ClientContactReqDTO o : contacts)
             {
                 if(o.getId() == null)
                 {
@@ -985,10 +985,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
+    public ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
             Date toDate, Long managerId, Page page)
     {
-        ListDTO<ApiReqInfoDTO> dto = new ListDTO<>();
+        ListDTO<AccessResDTO> dto = new ListDTO<>();
         int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate, managerId);
         int pages = page.getTotalPage(total);
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate, managerId);
@@ -1001,10 +1001,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy1(keyword, productId, billPlan, fromDate, toDate,
                     managerId);
-            List<ApiReqInfoDTO> list = new ArrayList<>(dataList.size());
+            List<AccessResDTO> list = new ArrayList<>(dataList.size());
             for(ApiReqInfo o : dataList)
             {
-                ApiReqInfoDTO ari = new ApiReqInfoDTO();
+                AccessResDTO ari = new AccessResDTO();
                 ari.setCreateTime(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setCorpName(o.getCorpName());
@@ -1052,10 +1052,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<AccessDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
+    public ListDTO<AccessReqDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
             Date toDate, Page page)
     {
-        ListDTO<AccessDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessReqDTO> listDTO = new ListDTO<>();
         int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1063,10 +1063,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, fromDate, toDate);
-            List<AccessDTO> list = new ArrayList<>();
+            List<AccessReqDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                AccessDTO r = new AccessDTO();
+                AccessReqDTO r = new AccessReqDTO();
                 r.setRequestAt(o.getCreateTime());
                 r.setRequestNo(o.getRequestNo());
                 r.setUsername(o.getUsername());
@@ -1123,9 +1123,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<ApiReqInfoDTO> getRevenueList(Date fromDate, Date toDate, Page page)
+    public ListDTO<AccessResDTO> getRevenueList(Date fromDate, Date toDate, Page page)
     {
-        ListDTO<ApiReqInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate, null);
         listDTO.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         int total = apiReqInfoMapper.getRevenueListCount(fromDate, toDate);
@@ -1135,10 +1135,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getRevenueList(fromDate, toDate);
-            List<ApiReqInfoDTO> list = new ArrayList<>();
+            List<AccessResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                ApiReqInfoDTO r = new ApiReqInfoDTO();
+                AccessResDTO r = new AccessResDTO();
                 EntityUtils.copyProperties(o, r);
                 list.add(r);
             }
@@ -1177,28 +1177,28 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public RechargeRespDTO getLatestRechargeInfo(Long clientId, Long productId)
+    public RechargeResDTO getLatestRechargeInfo(Long clientId, Long productId)
     {
-        RechargeRespDTO respDTO = new RechargeRespDTO();
+        RechargeResDTO resDTO = new RechargeResDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
-            respDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
-            return respDTO;
+            resDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
+            return resDTO;
         }
         Recharge recharge = rechargeMapper.findById(clientProduct.getLatestRechargeId());
         if(recharge != null)
         {
-            respDTO.setBillPlan(recharge.getBillPlan());
-            respDTO.setAmount(recharge.getAmount());
-            respDTO.setBalance(recharge.getBalance());
-            respDTO.setStartDate(recharge.getStartDate());
-            respDTO.setEndDate(recharge.getEndDate());
-            respDTO.setUnitAmt(recharge.getUnitAmt());
+            resDTO.setBillPlan(recharge.getBillPlan());
+            resDTO.setAmount(recharge.getAmount());
+            resDTO.setBalance(recharge.getBalance());
+            resDTO.setStartDate(recharge.getStartDate());
+            resDTO.setEndDate(recharge.getEndDate());
+            resDTO.setUnitAmt(recharge.getUnitAmt());
         }
         BigDecimal totalRecharge = rechargeMapper.sumRechargeAmount(clientId, productId);
-        respDTO.setTotalRecharge(totalRecharge);
-        return respDTO;
+        resDTO.setTotalRecharge(totalRecharge);
+        return resDTO;
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.AdminSessionDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
+import com.mingdong.core.model.dto.AdminSessionResDTO;
+import com.mingdong.core.model.dto.AdminUserReqDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
@@ -15,14 +15,14 @@ public interface ManagerRpcService
     /**
      * 管理账号登陆
      */
-    AdminSessionDTO adminLogin(LoginDTO loginDTO);
+    AdminSessionResDTO adminLogin(LoginDTO loginDTO);
 
     UserInfoDTO getAccountInfo(Long userId);
 
     /**
      * 编辑管理账号的基本信息及权限配置
      */
-    ResponseDTO editAdminUser(AdminUserDTO userDTO);
+    ResponseDTO editAdminUser(AdminUserReqDTO userDTO);
 
     ListDTO<ManagerInfoDTO> getAdminUserList(Integer roleType, Integer enabled, Page page);
 
@@ -39,7 +39,7 @@ public interface ManagerRpcService
     /**
      * 新增管理员并赋权
      */
-    ResponseDTO addAdminUser(AdminUserDTO userDTO);
+    ResponseDTO addAdminUser(AdminUserReqDTO userDTO);
 
     /**
      * 变更账户角色状态

@@ -1,11 +1,10 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.model.dto.base.RequestDTO;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ApiReqInfoDTO extends RequestDTO
+public class AccessResDTO implements Serializable
 {
     private Long id;
     private Date createTime;

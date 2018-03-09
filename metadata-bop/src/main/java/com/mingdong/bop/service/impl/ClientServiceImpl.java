@@ -22,8 +22,8 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.ClientContactDTO;
+import com.mingdong.core.model.dto.AccessReqDTO;
+import com.mingdong.core.model.dto.ClientContactReqDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
@@ -35,7 +35,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.RechargeReqDTO;
-import com.mingdong.core.model.dto.RechargeRespDTO;
+import com.mingdong.core.model.dto.RechargeResDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -155,15 +155,15 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.USER_STATUS, dto.getUserStatus());
         resp.addData(Field.MANAGER_ID, dto.getManagerId());
         List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
-        for(ClientContactDTO d : dto.getContacts())
+        for(ClientContactReqDTO o : dto.getContacts())
         {
             Map<String, Object> m = new HashMap<>();
-            m.put(Field.ID, d.getId() + "");
-            m.put(Field.NAME, d.getName());
-            m.put(Field.POSITION, d.getPosition());
-            m.put(Field.PHONE, d.getPhone());
-            m.put(Field.EMAIL, d.getEmail());
-            m.put(Field.IS_GENERAL, d.getGeneral());
+            m.put(Field.ID, o.getId() + "");
+            m.put(Field.NAME, o.getName());
+            m.put(Field.POSITION, o.getPosition());
+            m.put(Field.PHONE, o.getPhone());
+            m.put(Field.EMAIL, o.getEmail());
+            m.put(Field.IS_GENERAL, o.getGeneral());
             contacts.add(m);
         }
         resp.addData(Field.CONTACTS, contacts);
@@ -280,25 +280,25 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getProductRenewInfo(Long clientId, Long productId, RestResp resp)
     {
-        RechargeRespDTO respDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
-        if(respDTO.getResult() != RestResult.SUCCESS)
+        RechargeResDTO resDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
+        if(resDTO.getResult() != RestResult.SUCCESS)
         {
-            resp.setError(respDTO.getResult());
+            resp.setError(resDTO.getResult());
             return;
         }
-        resp.addData(Field.BILL_PLAN, respDTO.getBillPlan());
-        if(BillPlan.BY_TIME.getId().equals(respDTO.getBillPlan()))
+        resp.addData(Field.BILL_PLAN, resDTO.getBillPlan());
+        if(BillPlan.BY_TIME.getId().equals(resDTO.getBillPlan()))
         {
-            resp.addData(Field.START_DATE, DateUtils.format(respDTO.getStartDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.END_DATE, DateUtils.format(respDTO.getEndDate(), DateFormat.YYYY_MM_DD));
-            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(respDTO.getAmount()));
+            resp.addData(Field.START_DATE, DateUtils.format(resDTO.getStartDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.END_DATE, DateUtils.format(resDTO.getEndDate(), DateFormat.YYYY_MM_DD));
+            resp.addData(Field.AMOUNT, NumberUtils.formatAmount(resDTO.getAmount()));
         }
         else
         {
-            resp.addData(Field.BALANCE, NumberUtils.formatAmount(respDTO.getBalance()));
-            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(respDTO.getUnitAmt()));
+            resp.addData(Field.BALANCE, NumberUtils.formatAmount(resDTO.getBalance()));
+            resp.addData(Field.UNIT_AMT, NumberUtils.formatAmount(resDTO.getUnitAmt()));
         }
-        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(respDTO.getTotalRecharge()));
+        resp.addData(Field.TOTAL_AMT, NumberUtils.formatAmount(resDTO.getTotalRecharge()));
     }
 
     @Override
@@ -379,7 +379,7 @@ public class ClientServiceImpl implements ClientService
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
-        List<ClientContactDTO> contactList = new ArrayList<>(vo.getContacts().size());
+        List<ClientContactReqDTO> contactList = new ArrayList<>(vo.getContacts().size());
         for(ContactVO o : vo.getContacts())
         {
             if(StringUtils.isNullBlank(o.getName()) || StringUtils.isNullBlank(o.getPosition()) ||
@@ -393,13 +393,13 @@ public class ClientServiceImpl implements ClientService
                 resp.setError(RestResult.KEY_FIELD_MISSING);
                 return;
             }
-            ClientContactDTO cd = new ClientContactDTO();
-            cd.setName(o.getName());
-            cd.setPosition(o.getPosition());
-            cd.setPhone(o.getPhone());
-            cd.setEmail(o.getEmail());
-            cd.setGeneral(o.getGeneral());
-            contactList.add(cd);
+            ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+            reqDTO.setName(o.getName());
+            reqDTO.setPosition(o.getPosition());
+            reqDTO.setPhone(o.getPhone());
+            reqDTO.setEmail(o.getEmail());
+            reqDTO.setGeneral(o.getGeneral());
+            contactList.add(reqDTO);
         }
         NewClientDTO dto = new NewClientDTO();
         dto.setCorpName(vo.getCorpName());
@@ -432,7 +432,7 @@ public class ClientServiceImpl implements ClientService
         client.setIndustryId(vo.getIndustryId());
         client.setEnabled(vo.getEnabled());
         client.setManagerId(vo.getManagerId());
-        List<ClientContactDTO> contactList = new ArrayList<>();
+        List<ClientContactReqDTO> contactList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(vo.getContacts()))
         {
             for(ContactVO c : vo.getContacts())
@@ -444,14 +444,14 @@ public class ClientServiceImpl implements ClientService
                     resp.setError(RestResult.KEY_FIELD_MISSING);
                     return;
                 }
-                ClientContactDTO o = new ClientContactDTO();
-                o.setId(c.getId());
-                o.setName(c.getName());
-                o.setPosition(c.getPosition());
-                o.setPhone(c.getPhone());
-                o.setEmail(c.getEmail());
-                o.setGeneral(c.getGeneral());
-                contactList.add(o);
+                ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+                reqDTO.setId(c.getId());
+                reqDTO.setName(c.getName());
+                reqDTO.setPosition(c.getPosition());
+                reqDTO.setPhone(c.getPhone());
+                reqDTO.setEmail(c.getEmail());
+                reqDTO.setGeneral(c.getGeneral());
+                contactList.add(reqDTO);
             }
         }
         ResponseDTO dto = clientRpcService.editClient(client, contactList, vo.getContactDel());
@@ -488,14 +488,14 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.USER_LIST, userList);
         List<Map<String, Object>> contactList = new ArrayList<>();
-        for(ClientContactDTO cc : dto.getContacts())
+        for(ClientContactReqDTO o : dto.getContacts())
         {
             Map<String, Object> m = new HashMap<>();
-            m.put(Field.NAME, cc.getName());
-            m.put(Field.POSITION, cc.getPosition());
-            m.put(Field.PHONE, cc.getPhone());
-            m.put(Field.EMAIL, cc.getEmail());
-            m.put(Field.IS_GENERAL, cc.getGeneral());
+            m.put(Field.NAME, o.getName());
+            m.put(Field.POSITION, o.getPosition());
+            m.put(Field.PHONE, o.getPhone());
+            m.put(Field.EMAIL, o.getEmail());
+            m.put(Field.IS_GENERAL, o.getGeneral());
             contactList.add(m);
         }
         resp.addData(Field.CONTACT_LIST, contactList);
@@ -589,13 +589,13 @@ public class ClientServiceImpl implements ClientService
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<AccessDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
+        ListDTO<AccessReqDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(AccessDTO o : listDTO.getList())
+            for(AccessReqDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -669,9 +669,9 @@ public class ClientServiceImpl implements ClientService
         row.createCell(5).setCellValue("是否击中");
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
-        ListDTO<AccessDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
+        ListDTO<AccessReqDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
                 endTime, page);
-        List<AccessDTO> list = listDTO.getList();
+        List<AccessReqDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {
             CellStyle timeStyle = wb.createCellStyle();
@@ -679,7 +679,7 @@ public class ClientServiceImpl implements ClientService
                     wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
             for(int i = 0; i < list.size(); i++)
             {
-                AccessDTO dataInfo = list.get(i);
+                AccessReqDTO dataInfo = list.get(i);
                 Row dataRow = sheet.createRow(i + 1);
                 Cell cell = dataRow.createCell(0);
                 cell.setCellValue(dataInfo.getRequestAt());

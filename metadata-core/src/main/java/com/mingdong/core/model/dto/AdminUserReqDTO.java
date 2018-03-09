@@ -4,7 +4,7 @@ import com.mingdong.core.model.dto.base.RequestDTO;
 
 import java.util.List;
 
-public class AdminUserDTO extends RequestDTO
+public class AdminUserReqDTO extends RequestDTO
 {
     private Long userId;
     private Long groupId;

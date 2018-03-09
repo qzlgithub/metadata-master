@@ -16,8 +16,8 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.AdminSessionDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
+import com.mingdong.core.model.dto.AdminSessionResDTO;
+import com.mingdong.core.model.dto.AdminUserReqDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
@@ -51,26 +51,26 @@ public class ManagerServiceImpl implements ManagerService
         loginDTO.setUsername(username);
         loginDTO.setPassword(password);
         loginDTO.setSessionId(sessionId);
-        AdminSessionDTO adminSessionDTO = managerRpcService.adminLogin(loginDTO);
-        if(RestResult.SUCCESS != adminSessionDTO.getResult())
+        AdminSessionResDTO resDTO = managerRpcService.adminLogin(loginDTO);
+        if(RestResult.SUCCESS != resDTO.getResult())
         {
-            resp.setError(adminSessionDTO.getResult());
+            resp.setError(resDTO.getResult());
             return;
         }
         // 删除用户旧的sessionId
-        if(adminSessionDTO.getSessionId() != null)
+        if(resDTO.getSessionId() != null)
         {
-            redisDao.dropManagerSession(adminSessionDTO.getSessionId());
+            redisDao.dropManagerSession(resDTO.getSessionId());
         }
         // 缓存用户的账号及权限
         ManagerSession ms = new ManagerSession();
-        ms.setManagerId(adminSessionDTO.getUserId());
-        ms.setName(adminSessionDTO.getName());
-        ms.setPrivileges(adminSessionDTO.getFunctionList());
+        ms.setManagerId(resDTO.getUserId());
+        ms.setName(resDTO.getName());
+        ms.setPrivileges(resDTO.getFunctionList());
         ms.setAddAt(System.currentTimeMillis());
-        ms.setRoleType(adminSessionDTO.getRoleType());
+        ms.setRoleType(resDTO.getRoleType());
         redisDao.saveManagerSession(sessionId, ms);
-        resp.addData(Field.NAME, adminSessionDTO.getName());
+        resp.addData(Field.NAME, resDTO.getName());
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void addAdminUser(NewManagerVO newManagerVO, RestResp resp)
     {
-        AdminUserDTO userDTO = new AdminUserDTO();
+        AdminUserReqDTO userDTO = new AdminUserReqDTO();
         userDTO.setRoleType(newManagerVO.getRoleType());
         userDTO.setGroupId(newManagerVO.getGroupId());
         userDTO.setUsername(newManagerVO.getUsername());
@@ -210,7 +210,7 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void editAdminUser(AdminUserVO adminUserVO, RestResp resp)
     {
-        AdminUserDTO userDTO = new AdminUserDTO();
+        AdminUserReqDTO userDTO = new AdminUserReqDTO();
         userDTO.setUserId(adminUserVO.getManagerId());
         userDTO.setGroupId(adminUserVO.getGroupId());
         userDTO.setName(adminUserVO.getName());

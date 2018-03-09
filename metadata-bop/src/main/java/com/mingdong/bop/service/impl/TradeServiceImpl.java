@@ -9,7 +9,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
-import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -141,14 +141,14 @@ public class TradeServiceImpl implements TradeService
     public void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
             Long managerId, Page page, RestListResp res)
     {
-        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan, fromDate,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan, fromDate,
                 toDate, managerId, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(ApiReqInfoDTO o : listDTO.getList())
+            for(AccessResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.REQUEST_AT, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -195,10 +195,10 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
                 fromDate, toDate, manager, page);
-        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
-        ApiReqInfoDTO dataInfo;
+        List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
+        AccessResDTO dataInfo;
         for(int i = 0; i < dataList.size(); i++)
         {
             dataInfo = dataList.get(i);

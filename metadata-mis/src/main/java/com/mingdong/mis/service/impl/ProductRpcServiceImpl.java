@@ -9,7 +9,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
 import com.mingdong.core.model.dto.ProductDTO;
@@ -103,10 +103,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ApiReqInfoDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+    public ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
             Date endDate, Page page)
     {
-        ListDTO<ApiReqInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
         int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -115,10 +115,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
                     endDate);
-            List<ApiReqInfoDTO> list = new ArrayList<>(apiReqInfoList.size());
+            List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
             for(ApiReqInfo o : apiReqInfoList)
             {
-                ApiReqInfoDTO ari = new ApiReqInfoDTO();
+                AccessResDTO ari = new AccessResDTO();
                 ari.setId(o.getId());
                 ari.setCreateTime(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());

@@ -5,7 +5,7 @@ import com.mingdong.core.model.dto.base.RequestDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AccessDTO extends RequestDTO
+public class AccessReqDTO extends RequestDTO
 {
     private Date requestAt;
     private String requestNo;

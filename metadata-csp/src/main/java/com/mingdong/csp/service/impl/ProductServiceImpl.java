@@ -12,7 +12,7 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.ProductDTO;
 import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
@@ -117,13 +117,13 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
-        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
+        List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ApiReqInfoDTO item : dataList)
+            for(AccessResDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, item.getId());
@@ -158,12 +158,12 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ListDTO<ApiReqInfoDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
-        List<ApiReqInfoDTO> dataList = apiReqInfoListDTO.getList();
+        List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
-            ApiReqInfoDTO dataDTO;
+            AccessResDTO dataDTO;
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();

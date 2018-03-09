@@ -17,7 +17,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.ApiReqInfoDTO;
+import com.mingdong.core.model.dto.AccessResDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.DictRechargeTypeDTO;
 import com.mingdong.core.model.dto.ListDTO;
@@ -432,7 +432,7 @@ public class StatsServiceImpl implements StatsService
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
-        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
                 currentDay, null, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
@@ -441,7 +441,7 @@ public class StatsServiceImpl implements StatsService
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(ApiReqInfoDTO o : listDTO.getList())
+            for(AccessResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.REQUEST_AT, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -485,16 +485,16 @@ public class StatsServiceImpl implements StatsService
         row.createCell(8).setCellValue("利润（元）");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
                 currentDay, null, page);
-        List<ApiReqInfoDTO> dataList = listDTO.getList();
+        List<AccessResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ApiReqInfoDTO dataInfo;
+            AccessResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -578,14 +578,14 @@ public class StatsServiceImpl implements StatsService
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
-        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getRevenueList(beforeDate, currentDay, page);
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getRevenueList(beforeDate, currentDay, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TITLE,
                 dateStr + "-" + currentDayStr + " 总收入" + listDTO.getExtradata().get(Field.TOTAL_FEE) + "元");
         if(listDTO.getList() != null)
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(ApiReqInfoDTO o : listDTO.getList())
+            for(AccessResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.CORP_NAME, o.getCorpName());
@@ -614,12 +614,12 @@ public class StatsServiceImpl implements StatsService
         row.createCell(5).setCellValue("利润（元）");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ApiReqInfoDTO> listDTO = clientRpcService.getRevenueList(beforeDate, currentDay, page);
-        List<ApiReqInfoDTO> dataList = listDTO.getList();
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getRevenueList(beforeDate, currentDay, page);
+        List<AccessResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
-            ApiReqInfoDTO dataInfo;
+            AccessResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);

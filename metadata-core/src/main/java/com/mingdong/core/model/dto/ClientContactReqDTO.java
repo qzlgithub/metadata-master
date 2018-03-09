@@ -2,7 +2,7 @@ package com.mingdong.core.model.dto;
 
 import com.mingdong.core.model.dto.base.RequestDTO;
 
-public class ClientContactDTO extends RequestDTO
+public class ClientContactReqDTO extends RequestDTO
 {
     private Long id;
     private String name;

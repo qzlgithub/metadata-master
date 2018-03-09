@@ -7,8 +7,8 @@ import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.AdminSessionDTO;
-import com.mingdong.core.model.dto.AdminUserDTO;
+import com.mingdong.core.model.dto.AdminSessionResDTO;
+import com.mingdong.core.model.dto.AdminUserReqDTO;
 import com.mingdong.core.model.dto.GroupDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.LoginDTO;
@@ -53,35 +53,35 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public AdminSessionDTO adminLogin(LoginDTO loginDTO)
+    public AdminSessionResDTO adminLogin(LoginDTO loginDTO)
     {
-        AdminSessionDTO adminSessionDTO = new AdminSessionDTO();
+        AdminSessionResDTO resDTO = new AdminSessionResDTO();
         // 1. 验证登陆信息正确性
         User manager = userMapper.findByUsername(loginDTO.getUsername());
         if(manager == null)
         {
-            adminSessionDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
-            return adminSessionDTO;
+            resDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return resDTO;
         }
         else if(TrueOrFalse.FALSE.equals(manager.getEnabled()))
         {
-            adminSessionDTO.setResult(RestResult.ACCOUNT_DISABLED);
-            return adminSessionDTO;
+            resDTO.setResult(RestResult.ACCOUNT_DISABLED);
+            return resDTO;
         }
         else if(!manager.getPassword().equals(Md5Utils.encrypt(loginDTO.getPassword())))
         {
-            adminSessionDTO.setResult(RestResult.INVALID_PASSCODE);
-            return adminSessionDTO;
+            resDTO.setResult(RestResult.INVALID_PASSCODE);
+            return resDTO;
         }
         else if(!TrueOrFalse.TRUE.equals(manager.getEnabled()))
         {
-            adminSessionDTO.setResult(RestResult.ACCOUNT_DISABLED);
-            return adminSessionDTO;
+            resDTO.setResult(RestResult.ACCOUNT_DISABLED);
+            return resDTO;
         }
         // 删除用户旧的sessionId
         if(!StringUtils.isNullBlank(manager.getSessionId()))
         {
-            adminSessionDTO.setSessionId(manager.getSessionId());
+            resDTO.setSessionId(manager.getSessionId());
         }
         Date current = new Date();
         // 更新用户的sessionId
@@ -93,11 +93,11 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         // 查询用户权限信息
         ListDTO<String> privilegeListDTO = getManagerPrivilegeListByManagerId(manager.getId());
 
-        adminSessionDTO.setUserId(manager.getId());
-        adminSessionDTO.setName(manager.getName());
-        adminSessionDTO.setRoleType(manager.getRoleType());
-        adminSessionDTO.setFunctionList(privilegeListDTO.getList());
-        return adminSessionDTO;
+        resDTO.setUserId(manager.getId());
+        resDTO.setName(manager.getName());
+        resDTO.setRoleType(manager.getRoleType());
+        resDTO.setFunctionList(privilegeListDTO.getList());
+        return resDTO;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editAdminUser(AdminUserDTO userDTO)
+    public ResponseDTO editAdminUser(AdminUserReqDTO userDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findById(userDTO.getUserId());
@@ -251,7 +251,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addAdminUser(AdminUserDTO userDTO)
+    public ResponseDTO addAdminUser(AdminUserReqDTO userDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userMapper.findByUsername(userDTO.getUsername());
