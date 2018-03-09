@@ -6,8 +6,8 @@ $("#changePwd").click(function() {
         area: ['500px'],
         shadeClose: true
     });
-    $("#layui-layer1").show();
-    $("#layui-layer-shade1").show();
+    //$("#layui-layer1").show();
+    //$("#layui-layer-shade1").show();
 });
 $("#savePwd").click(function() {
     var oldPwd = $("#oldPwd").val();
