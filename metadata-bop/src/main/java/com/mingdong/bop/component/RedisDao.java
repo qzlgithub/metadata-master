@@ -5,15 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.mingdong.bop.constant.Trade;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.common.constant.DateFormat;
-import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,23 +94,6 @@ public class RedisDao extends RedisBaseDao
     {
         String str = JSON.toJSONString(systemModule);
         set(DB.SYSTEM, Key.SYSTEM_MODULE, str);
-    }
-
-    /**
-     * 生成交易流水号
-     *
-     * @param trade 交易类型
-     * @return 交易流水号
-     */
-    public String createTradeNo(Trade trade)
-    {
-        String dateStr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
-        Long num = incr(DB.SYSTEM, trade.getCode() + dateStr);
-        if(num == 1)
-        {
-            expire(DB.SYSTEM, trade.getCode() + dateStr, 86500L);
-        }
-        return trade.getCode() + dateStr + String.format("%06d", num);
     }
 
     interface DB
