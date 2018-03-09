@@ -10,7 +10,8 @@ public class SimpleTest
     private static Logger logger = LoggerFactory.getLogger(SimpleTest.class);
 
     @Test
-    public void secretConfig(){
+    public void secretConfig()
+    {
         logger.info("SimpleTest---secretConfig正确返回！");
     }
 }

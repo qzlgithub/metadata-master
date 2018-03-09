@@ -233,7 +233,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         }
         else if(!user.getPassword().equals(Md5Utils.encrypt(oldPwd)))
         {
-            responseDTO.setResult(RestResult.INVALID_PASSCODE);
+            responseDTO.setResult(RestResult.OLD_PASSCODE);
             return responseDTO;
         }
         String newPassword = Md5Utils.encrypt(newPwd);

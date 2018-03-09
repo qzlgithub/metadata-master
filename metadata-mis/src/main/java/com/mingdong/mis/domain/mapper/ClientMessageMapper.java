@@ -11,4 +11,5 @@ public interface ClientMessageMapper
     int countByClient(Long clientId);
 
     List<ClientMessage> getListByClient(Long clientId);
+
 }

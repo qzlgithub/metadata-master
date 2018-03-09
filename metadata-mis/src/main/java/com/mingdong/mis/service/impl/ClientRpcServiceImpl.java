@@ -70,6 +70,7 @@ import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.service.ChargeService;
+import com.mingdong.mis.service.ClientMessageService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -122,6 +123,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private ChargeService chargeService;
     @Resource
     private ProductMapper productMapper;
+    @Resource
+    private ClientMessageService clientMessageService;
 
     @Override
     public UserDTO userLogin(String username, String password)
@@ -179,7 +182,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(orgPassword)))
         {
-            responseDTO.setResult(RestResult.INVALID_PASSCODE);
+            responseDTO.setResult(RestResult.OLD_PASSCODE);
             return responseDTO;
         }
         ClientUser userUpd = new ClientUser();
@@ -672,7 +675,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         user.setCreateTime(current);
         user.setUpdateTime(current);
         user.setClientId(clientId);
-        user.setName("");
+        user.setName(req.getCorpName());
         user.setPhone("");
         user.setEmail("");
         user.setUsername(req.getUsername());
