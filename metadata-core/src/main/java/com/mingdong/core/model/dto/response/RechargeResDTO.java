@@ -1,7 +1,5 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.ResponseDTO;
-
 import java.math.BigDecimal;
 import java.util.Date;
 

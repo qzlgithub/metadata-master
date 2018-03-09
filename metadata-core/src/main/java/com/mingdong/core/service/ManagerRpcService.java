@@ -1,28 +1,29 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.response.AdminSessionResDTO;
+import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.AdminUserReqDTO;
 import com.mingdong.core.model.dto.request.GroupReqDTO;
-import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.LoginReqDTO;
+import com.mingdong.core.model.dto.response.AdminSessionResDTO;
+import com.mingdong.core.model.dto.response.GroupResDTO;
 import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
 
 public interface ManagerRpcService
 {
     /**
      * 管理账号登陆
      */
-    AdminSessionResDTO adminLogin(LoginReqDTO loginReqDTO);
+    AdminSessionResDTO adminLogin(LoginReqDTO reqDTO);
 
     UserInfoResDTO getAccountInfo(Long userId);
 
     /**
      * 编辑管理账号的基本信息及权限配置
      */
-    ResponseDTO editAdminUser(AdminUserReqDTO userDTO);
+    ResponseDTO editAdminUser(AdminUserReqDTO reqDTO);
 
     ListDTO<ManagerInfoResDTO> getAdminUserList(Integer roleType, Integer enabled, Page page);
 
@@ -39,7 +40,7 @@ public interface ManagerRpcService
     /**
      * 新增管理员并赋权
      */
-    ResponseDTO addAdminUser(AdminUserReqDTO userDTO);
+    ResponseDTO addAdminUser(AdminUserReqDTO reqDTO);
 
     /**
      * 变更账户角色状态
@@ -52,24 +53,24 @@ public interface ManagerRpcService
     /**
      * 编辑账户角色信息
      */
-    ResponseDTO editAccountRole(GroupReqDTO groupReqDTO);
+    ResponseDTO editAccountRole(GroupReqDTO reqDTO);
 
     /**
      * 获取账户角色信息
      *
      * @param groupId 角色ID
      */
-    GroupReqDTO getAccountRoleInfo(Long groupId);
+    GroupResDTO getAccountRoleInfo(Long groupId);
 
     /**
      * 创建账户角色
      */
-    ResponseDTO addAccountRole(GroupReqDTO groupReqDTO);
+    ResponseDTO addAccountRole(GroupReqDTO reqDTO);
 
     /**
      * 获取账户角色列表
      */
-    ListDTO<GroupReqDTO> getAccountGroupList(Page page);
+    ListDTO<GroupResDTO> getAccountGroupList(Page page);
 
     /**
      * 变更用户账户的状态

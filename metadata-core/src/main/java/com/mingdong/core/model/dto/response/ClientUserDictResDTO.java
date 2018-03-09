@@ -1,11 +1,11 @@
 package com.mingdong.core.model.dto.response;
 
 import com.mingdong.core.model.Dict;
-import com.mingdong.core.model.dto.RequestDTO;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClientUserDictResDTO extends RequestDTO
+public class ClientUserDictResDTO implements Serializable
 {
     private String corpName;
     private List<Dict> userDict;

@@ -1,6 +1,5 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 
 import java.util.Date;

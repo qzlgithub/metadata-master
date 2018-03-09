@@ -1,12 +1,13 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.request.ProductReqDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -58,7 +59,7 @@ public interface ProductRpcService
     /**
      * 产品信息编辑
      */
-    ResponseDTO editProduct(ProductResDTO productResDTO);
+    ResponseDTO editProduct(ProductReqDTO reqDTO);
 
     /**
      * 根据产品id修改产品状态

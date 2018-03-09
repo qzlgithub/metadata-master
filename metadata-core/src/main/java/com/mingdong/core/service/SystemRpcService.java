@@ -1,13 +1,16 @@
 package com.mingdong.core.service;
 
+import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
+import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
-import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -54,17 +57,17 @@ public interface SystemRpcService
     /**
      * 新增行业分类，判断code
      */
-    ResponseDTO addIndustryType(DictIndustryResDTO industry);
+    ResponseDTO addIndustryType(DictIndustryReqDTO reqDTO);
 
     /**
      * 修改行业分类，判断code
      */
-    ResponseDTO editIndustryInfo(DictIndustryResDTO industry);
+    ResponseDTO editIndustryInfo(DictIndustryReqDTO reqDTO);
 
     /**
      * 修改权限信息
      */
-    ResponseDTO editPrivilegeInfo(PrivilegeResDTO privilege);
+    ResponseDTO editPrivilegeInfo(PrivilegeReqDTO reqDTO);
 
     /**
      * 新增or修改充值类型备注
@@ -89,5 +92,5 @@ public interface SystemRpcService
     /**
      * 根据ID编辑充值类型
      */
-    ResponseDTO editRechargeType(RechargeTypeResDTO rechargeTypeResDTO);
+    ResponseDTO editRechargeType(RechargeTypeReqDTO reqDTO);
 }

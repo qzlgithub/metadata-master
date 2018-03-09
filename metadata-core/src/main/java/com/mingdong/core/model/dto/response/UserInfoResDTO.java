@@ -1,10 +1,9 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.RequestDTO;
-
+import java.io.Serializable;
 import java.util.List;
 
-public class UserInfoResDTO extends RequestDTO
+public class UserInfoResDTO implements Serializable
 {
     private String username;
     private String name;

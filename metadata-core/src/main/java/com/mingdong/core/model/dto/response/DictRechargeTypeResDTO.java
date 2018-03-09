@@ -1,7 +1,6 @@
 package com.mingdong.core.model.dto.response;
 
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.dto.ResponseDTO;
 
 import java.io.Serializable;
 import java.util.Date;

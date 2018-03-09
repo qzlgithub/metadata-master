@@ -12,13 +12,14 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.request.SubUserReqDTO;
+import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -119,15 +120,15 @@ public class ClientServiceImpl implements ClientService
     public void editSubUser(Long clientUserId, String username, String password, String name, String phone,
             Integer enabled, RestResp resp)
     {
-        SubUserResDTO subUserResDTO = new SubUserResDTO();
-        subUserResDTO.setClientId(RequestThread.getClientId());
-        subUserResDTO.setUserId(clientUserId);
-        subUserResDTO.setUsername(username);
-        subUserResDTO.setPassword(password == null ? null : Md5Utils.encrypt(password));
-        subUserResDTO.setName(name);
-        subUserResDTO.setPhone(phone);
-        subUserResDTO.setEnabled(enabled);
-        ResponseDTO responseDTO = clientRpcService.editSubUser(subUserResDTO);
+        SubUserReqDTO reqDTO = new SubUserReqDTO();
+        reqDTO.setClientId(RequestThread.getClientId());
+        reqDTO.setUserId(clientUserId);
+        reqDTO.setUsername(username);
+        reqDTO.setPassword(password == null ? null : Md5Utils.encrypt(password));
+        reqDTO.setName(name);
+        reqDTO.setPhone(phone);
+        reqDTO.setEnabled(enabled);
+        ResponseDTO responseDTO = clientRpcService.editSubUser(reqDTO);
         resp.setError(responseDTO.getResult());
     }
 

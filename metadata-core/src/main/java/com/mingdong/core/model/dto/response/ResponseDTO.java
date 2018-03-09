@@ -1,4 +1,4 @@
-package com.mingdong.core.model.dto;
+package com.mingdong.core.model.dto.response;
 
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;

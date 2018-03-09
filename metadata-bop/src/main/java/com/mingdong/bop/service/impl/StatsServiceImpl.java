@@ -17,10 +17,10 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.response.AccessResDTO;
-import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
-import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
+import com.mingdong.core.model.dto.response.ClientInfoResDTO;
+import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -141,14 +141,14 @@ public class StatsServiceImpl implements StatsService
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
-        ListDTO<ClientInfoReqDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoReqDTO> list = listDTO.getList();
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoResDTO> list = listDTO.getList();
         resp.setTotal(listDTO.getTotal());
         resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + listDTO.getTotal() + "个");
         if(!CollectionUtils.isEmpty(list))
         {
             List<Map<String, Object>> dataList = new ArrayList<>(list.size());
-            for(ClientInfoReqDTO o : list)
+            for(ClientInfoResDTO o : list)
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.REGISTER_DATE, DateUtils.format(o.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -175,8 +175,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(4).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoReqDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoReqDTO> dataList = listDTO.getList();
+        ListDTO<ClientInfoResDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoResDTO> dataList = listDTO.getList();
 
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -184,7 +184,7 @@ public class StatsServiceImpl implements StatsService
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ClientInfoReqDTO dataInfo;
+            ClientInfoResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -208,8 +208,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoReqDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay);
-        List<ClientInfoReqDTO> dataList = listDTO.getList();
+        ListDTO<ClientInfoResDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay);
+        List<ClientInfoResDTO> dataList = listDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Integer> dateMap = new LinkedHashMap<>();
         Calendar c = Calendar.getInstance();
@@ -221,7 +221,7 @@ public class StatsServiceImpl implements StatsService
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
         Integer intTemp;
-        for(ClientInfoReqDTO item : dataList)
+        for(ClientInfoResDTO item : dataList)
         {
             String strTemp = sdf.format(item.getRegisterTime());
             intTemp = dateMap.get(strTemp);

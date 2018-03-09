@@ -12,9 +12,10 @@ import com.mingdong.core.model.dto.request.AdminUserReqDTO;
 import com.mingdong.core.model.dto.request.GroupReqDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.LoginReqDTO;
+import com.mingdong.core.model.dto.response.GroupResDTO;
 import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ManagerRpcService;
 import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.Group;
@@ -53,11 +54,11 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public AdminSessionResDTO adminLogin(LoginReqDTO loginReqDTO)
+    public AdminSessionResDTO adminLogin(LoginReqDTO reqDTO)
     {
         AdminSessionResDTO resDTO = new AdminSessionResDTO();
         // 1. 验证登陆信息正确性
-        User manager = userMapper.findByUsername(loginReqDTO.getUsername());
+        User manager = userMapper.findByUsername(reqDTO.getUsername());
         if(manager == null)
         {
             resDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
@@ -68,7 +69,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             resDTO.setResult(RestResult.ACCOUNT_DISABLED);
             return resDTO;
         }
-        else if(!manager.getPassword().equals(Md5Utils.encrypt(loginReqDTO.getPassword())))
+        else if(!manager.getPassword().equals(Md5Utils.encrypt(reqDTO.getPassword())))
         {
             resDTO.setResult(RestResult.INVALID_PASSCODE);
             return resDTO;
@@ -88,7 +89,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         User temp = new User();
         temp.setId(manager.getId());
         temp.setUpdateTime(current);
-        temp.setSessionId(loginReqDTO.getSessionId());
+        temp.setSessionId(reqDTO.getSessionId());
         userMapper.updateSkipNull(temp);
         // 查询用户权限信息
         ListDTO<String> privilegeListDTO = getManagerPrivilegeListByManagerId(manager.getId());
@@ -132,10 +133,10 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editAdminUser(AdminUserReqDTO userDTO)
+    public ResponseDTO editAdminUser(AdminUserReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        User user = userMapper.findById(userDTO.getUserId());
+        User user = userMapper.findById(reqDTO.getUserId());
         if(user == null)
         {
             responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
@@ -144,27 +145,27 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         Date date = new Date();
         // 修改管理账号基本信息
         User tempUser = new User();
-        tempUser.setId(userDTO.getUserId());
+        tempUser.setId(reqDTO.getUserId());
         tempUser.setUpdateTime(date);
-        tempUser.setRoleType(userDTO.getRoleType());
-        tempUser.setGroupId(userDTO.getGroupId());
-        tempUser.setUsername(userDTO.getUsername());
-        tempUser.setPassword(userDTO.getPassword());
-        tempUser.setName(userDTO.getName());
-        tempUser.setPhone(userDTO.getPhone());
-        tempUser.setQq(userDTO.getQq());
-        tempUser.setEnabled(userDTO.getEnabled());
+        tempUser.setRoleType(reqDTO.getRoleType());
+        tempUser.setGroupId(reqDTO.getGroupId());
+        tempUser.setUsername(reqDTO.getUsername());
+        tempUser.setPassword(reqDTO.getPassword());
+        tempUser.setName(reqDTO.getName());
+        tempUser.setPhone(reqDTO.getPhone());
+        tempUser.setQq(reqDTO.getQq());
+        tempUser.setEnabled(reqDTO.getEnabled());
         userMapper.updateSkipNull(tempUser);
         // 修改管理账号的权限信息
-        userFunctionMapper.deleteByManager(userDTO.getUserId());
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(userDTO.getPrivilegeIdList());
+        userFunctionMapper.deleteByManager(reqDTO.getUserId());
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(reqDTO.getPrivilegeIdList());
         List<UserFunction> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
             UserFunction mp = new UserFunction();
             mp.setCreateTime(date);
             mp.setUpdateTime(date);
-            mp.setManagerId(userDTO.getUserId());
+            mp.setManagerId(reqDTO.getUserId());
             mp.setPrivilegeId(privilegeId);
             list.add(mp);
         }
@@ -251,10 +252,10 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addAdminUser(AdminUserReqDTO userDTO)
+    public ResponseDTO addAdminUser(AdminUserReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        User user = userMapper.findByUsername(userDTO.getUsername());
+        User user = userMapper.findByUsername(reqDTO.getUsername());
         if(user != null)
         {
             responseDTO.setResult(RestResult.USERNAME_EXIST);
@@ -265,17 +266,17 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         user = new User();
         user.setCreateTime(current);
         user.setUpdateTime(current);
-        user.setGroupId(userDTO.getGroupId());
-        user.setRoleType(userDTO.getRoleType());
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setName(userDTO.getName());
-        user.setPhone(userDTO.getPhone());
-        user.setQq(userDTO.getQq());
-        user.setEnabled(userDTO.getEnabled());
+        user.setGroupId(reqDTO.getGroupId());
+        user.setRoleType(reqDTO.getRoleType());
+        user.setUsername(reqDTO.getUsername());
+        user.setPassword(reqDTO.getPassword());
+        user.setName(reqDTO.getName());
+        user.setPhone(reqDTO.getPhone());
+        user.setQq(reqDTO.getQq());
+        user.setEnabled(reqDTO.getEnabled());
         userMapper.add(user);
         // 保存管理账号的权限配置
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(userDTO.getPrivilegeIdList());
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(reqDTO.getPrivilegeIdList());
         List<UserFunction> list = new ArrayList<>();
         for(Long privilegeId : allPrivilegeIdList)
         {
@@ -314,33 +315,33 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editAccountRole(GroupReqDTO groupReqDTO)
+    public ResponseDTO editAccountRole(GroupReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Group role = groupMapper.findById(groupReqDTO.getId());
+        Group role = groupMapper.findById(reqDTO.getId());
         if(role == null)
         {
             responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return responseDTO;
         }
-        Group obj = groupMapper.findByName(groupReqDTO.getName());
-        if(obj != null && !groupReqDTO.getId().equals(obj.getId()))
+        Group obj = groupMapper.findByName(reqDTO.getName());
+        if(obj != null && !reqDTO.getId().equals(obj.getId()))
         {
             responseDTO.setResult(RestResult.ROLE_NAME_EXIST);
             return responseDTO;
         }
         Date date = new Date();
         // 清空角色的旧权限数据
-        groupFunctionMapper.deleteByGroupId(groupReqDTO.getId());
+        groupFunctionMapper.deleteByGroupId(reqDTO.getId());
         // 保存角色的新权限数据
-        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(groupReqDTO.getPrivilegeIdList());
+        Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(reqDTO.getPrivilegeIdList());
         List<GroupFunction> toAddList = new ArrayList<>();
         for(Long id : allPrivilegeIdList)
         {
             GroupFunction rp = new GroupFunction();
             rp.setCreateTime(date);
             rp.setUpdateTime(date);
-            rp.setGroupId(groupReqDTO.getId());
+            rp.setGroupId(reqDTO.getId());
             rp.setPrivilegeId(id);
             toAddList.add(rp);
         }
@@ -349,21 +350,21 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             groupFunctionMapper.addList(toAddList);
         }
         // 保存角色名称
-        if(!role.getName().equals(groupReqDTO.getName()))
+        if(!role.getName().equals(reqDTO.getName()))
         {
             obj = new Group();
-            obj.setId(groupReqDTO.getId());
+            obj.setId(reqDTO.getId());
             obj.setUpdateTime(date);
-            obj.setName(groupReqDTO.getName());
+            obj.setName(reqDTO.getName());
             groupMapper.updateSkipNull(obj);
         }
         return responseDTO;
     }
 
     @Override
-    public GroupReqDTO getAccountRoleInfo(Long groupId)
+    public GroupResDTO getAccountRoleInfo(Long groupId)
     {
-        GroupReqDTO roleDTO = new GroupReqDTO();
+        GroupResDTO roleDTO = new GroupResDTO();
         Group role = groupMapper.findById(groupId);
         if(role == null)
         {
@@ -385,10 +386,10 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addAccountRole(GroupReqDTO groupReqDTO)
+    public ResponseDTO addAccountRole(GroupReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Group role = groupMapper.findByName(groupReqDTO.getName());
+        Group role = groupMapper.findByName(reqDTO.getName());
         if(role != null)
         {
             responseDTO.setResult(RestResult.ROLE_NAME_EXIST);
@@ -398,12 +399,12 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         role = new Group();
         role.setCreateTime(date);
         role.setUpdateTime(date);
-        role.setName(groupReqDTO.getName());
+        role.setName(reqDTO.getName());
         role.setEnabled(TrueOrFalse.TRUE);
         groupMapper.add(role);
-        if(!CollectionUtils.isEmpty(groupReqDTO.getPrivilegeIdList()))
+        if(!CollectionUtils.isEmpty(reqDTO.getPrivilegeIdList()))
         {
-            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(groupReqDTO.getPrivilegeIdList());
+            Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(reqDTO.getPrivilegeIdList());
             List<GroupFunction> toAddList = new ArrayList<>();
             for(Long id : allPrivilegeIdList)
             {
@@ -420,16 +421,16 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
     }
 
     @Override
-    public ListDTO<GroupReqDTO> getAccountGroupList(Page page)
+    public ListDTO<GroupResDTO> getAccountGroupList(Page page)
     {
-        ListDTO<GroupReqDTO> listDTO = new ListDTO<>();
+        ListDTO<GroupResDTO> listDTO = new ListDTO<>();
         if(page == null)
         {
             List<Group> dataList = groupMapper.getList();
-            List<GroupReqDTO> list = new ArrayList<>();
+            List<GroupResDTO> list = new ArrayList<>();
             for(Group o : dataList)
             {
-                GroupReqDTO r = new GroupReqDTO();
+                GroupResDTO r = new GroupResDTO();
                 r.setId(o.getId());
                 r.setEnabled(o.getEnabled());
                 r.setName(o.getName());
@@ -447,10 +448,10 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
                 List<Group> dataList = groupMapper.getList();
-                List<GroupReqDTO> list = new ArrayList<>();
+                List<GroupResDTO> list = new ArrayList<>();
                 for(Group o : dataList)
                 {
-                    GroupReqDTO r = new GroupReqDTO();
+                    GroupResDTO r = new GroupResDTO();
                     r.setId(o.getId());
                     r.setName(o.getName());
                     r.setEnabled(o.getEnabled());

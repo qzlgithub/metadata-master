@@ -6,7 +6,7 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.TradeRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MessageType;

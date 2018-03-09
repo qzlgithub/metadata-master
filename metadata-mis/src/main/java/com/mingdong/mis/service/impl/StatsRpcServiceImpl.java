@@ -3,9 +3,9 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
-import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
-import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.request.IntervalReqDTO;
+import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.StatsRpcService;
@@ -59,9 +59,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoReqDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
     {
-        ListDTO<ClientInfoReqDTO> listDTO = new ListDTO<>();
+        ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.getClientCountByDate(date, currentDay);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -71,10 +71,10 @@ public class StatsRpcServiceImpl implements StatsRpcService
             List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
             if(!CollectionUtils.isEmpty(dataList))
             {
-                List<ClientInfoReqDTO> list = new ArrayList<>(dataList.size());
+                List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
                 for(ClientInfo o : dataList)
                 {
-                    ClientInfoReqDTO ci = new ClientInfoReqDTO();
+                    ClientInfoResDTO ci = new ClientInfoResDTO();
                     ci.setRegisterTime(o.getRegisterTime());
                     ci.setCorpName(o.getCorpName());
                     ci.setShortName(o.getShortName());
@@ -89,17 +89,17 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoReqDTO> getClientInfoListByDate(Date fromDate, Date toDate)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date fromDate, Date toDate)
     {
-        ListDTO<ClientInfoReqDTO> listDTO = new ListDTO<>();
+        ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(fromDate, toDate);
         listDTO.setTotal(dataList.size());
         if(!CollectionUtils.isEmpty(dataList))
         {
-            List<ClientInfoReqDTO> list = new ArrayList<>();
+            List<ClientInfoResDTO> list = new ArrayList<>();
             for(ClientInfo o : dataList)
             {
-                ClientInfoReqDTO ci = new ClientInfoReqDTO();
+                ClientInfoResDTO ci = new ClientInfoResDTO();
                 ci.setRegisterTime(o.getRegisterTime());
                 ci.setCorpName(o.getCorpName());
                 ci.setShortName(o.getShortName());

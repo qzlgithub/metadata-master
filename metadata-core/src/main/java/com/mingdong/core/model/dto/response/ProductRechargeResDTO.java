@@ -1,11 +1,10 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.RequestDTO;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductRechargeResDTO extends RequestDTO
+public class ProductRechargeResDTO implements Serializable
 {
     private Long id;
     private Date tradeTime;

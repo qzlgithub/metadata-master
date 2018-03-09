@@ -1,9 +1,10 @@
-package com.mingdong.core.model.dto.response;
+package com.mingdong.core.model.dto.request;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductResDTO extends ResponseDTO
+public class ProductReqDTO implements Serializable
 {
     private Long id;
     private String name;

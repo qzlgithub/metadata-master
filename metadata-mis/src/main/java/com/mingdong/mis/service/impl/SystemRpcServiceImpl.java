@@ -5,14 +5,17 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
+import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
+import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
-import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
@@ -202,17 +205,17 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addIndustryType(DictIndustryResDTO industry)
+    public ResponseDTO addIndustryType(DictIndustryReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(industry.getCode());
+        DictIndustry byCode = dictIndustryMapper.findByCode(reqDTO.getCode());
         if(byCode != null)
         {
             responseDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
             return responseDTO;
         }
         DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(industry, dictIndustry);
+        EntityUtils.copyProperties(reqDTO, dictIndustry);
         dictIndustryMapper.add(dictIndustry);
         responseDTO.setResult(RestResult.SUCCESS);
         return responseDTO;
@@ -220,23 +223,23 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editIndustryInfo(DictIndustryResDTO dictIndustryResDTO)
+    public ResponseDTO editIndustryInfo(DictIndustryReqDTO reqDTO)
     {
         ResponseDTO res = new ResponseDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(dictIndustryResDTO.getCode());
-        if(byCode != null && !byCode.getId().equals(dictIndustryResDTO.getId()))
+        DictIndustry byCode = dictIndustryMapper.findByCode(reqDTO.getCode());
+        if(byCode != null && !byCode.getId().equals(reqDTO.getId()))
         {
             res.setResult(RestResult.INDUSTRY_CODE_EXIST);
             return res;
         }
-        DictIndustry byId = dictIndustryMapper.findById(dictIndustryResDTO.getId());
+        DictIndustry byId = dictIndustryMapper.findById(reqDTO.getId());
         if(byId == null)
         {
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
         DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(dictIndustryResDTO, dictIndustry);
+        EntityUtils.copyProperties(reqDTO, dictIndustry);
         dictIndustryMapper.updateSkipNull(dictIndustry);
         res.setResult(RestResult.SUCCESS);
         return res;
@@ -244,19 +247,19 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editPrivilegeInfo(PrivilegeResDTO privilegeResDTO)
+    public ResponseDTO editPrivilegeInfo(PrivilegeReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Function function = functionMapper.findById(privilegeResDTO.getPrivilegeId());
+        Function function = functionMapper.findById(reqDTO.getPrivilegeId());
         if(function == null)
         {
             responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
             return responseDTO;
         }
         Function temp = new Function();
-        temp.setId(privilegeResDTO.getPrivilegeId());
+        temp.setId(reqDTO.getPrivilegeId());
         temp.setUpdateTime(new Date());
-        temp.setName(privilegeResDTO.getName());
+        temp.setName(reqDTO.getName());
         functionMapper.updateSkipNull(temp);
         return responseDTO;
     }
@@ -366,44 +369,33 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editRechargeType(RechargeTypeResDTO rechargeTypeResDTO)
+    public ResponseDTO editRechargeType(RechargeTypeReqDTO reqDTO)
     {
         ResponseDTO res = new ResponseDTO();
-        DictRechargeType objUpd = dictRechargeTypeMapper.findById(rechargeTypeResDTO.getId());
+        DictRechargeType objUpd = dictRechargeTypeMapper.findById(reqDTO.getId());
         if(objUpd == null)
         {
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
-        if(!StringUtils.isNullBlank(rechargeTypeResDTO.getName()))
+        if(!StringUtils.isNullBlank(reqDTO.getName()))
         {
-            DictRechargeType temp = dictRechargeTypeMapper.findByName(rechargeTypeResDTO.getName());
+            DictRechargeType temp = dictRechargeTypeMapper.findByName(reqDTO.getName());
             if(temp != null && !temp.getId().equals(objUpd.getId()))
             {
                 res.setResult(RestResult.CATEGORY_NAME_EXIST);
                 return res;
             }
-            objUpd.setName(rechargeTypeResDTO.getName());
-            objUpd.setRemark(rechargeTypeResDTO.getRemark());
+            objUpd.setName(reqDTO.getName());
+            objUpd.setRemark(reqDTO.getRemark());
         }
-        if(TrueOrFalse.TRUE.equals(rechargeTypeResDTO.getEnabled()) || TrueOrFalse.FALSE.equals(
-                rechargeTypeResDTO.getEnabled()))
+        if(TrueOrFalse.TRUE.equals(reqDTO.getEnabled()) || TrueOrFalse.FALSE.equals(
+                reqDTO.getEnabled()))
         {
-            objUpd.setEnabled(rechargeTypeResDTO.getEnabled());
+            objUpd.setEnabled(reqDTO.getEnabled());
         }
         objUpd.setUpdateTime(new Date());
         dictRechargeTypeMapper.updateById(objUpd);
         return res;
-    }
-
-    private void findDictIndustryDTO(List<DictIndustry> dictIndustryList, List<DictIndustryResDTO> dataList)
-    {
-        DictIndustryResDTO dictIndustryResDTO;
-        for(DictIndustry item : dictIndustryList)
-        {
-            dictIndustryResDTO = new DictIndustryResDTO();
-            EntityUtils.copyProperties(item, dictIndustryResDTO);
-            dataList.add(dictIndustryResDTO);
-        }
     }
 }

@@ -9,12 +9,13 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
@@ -297,10 +298,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editProduct(ProductResDTO productResDTO)
+    public ResponseDTO editProduct(ProductReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Product product = productMapper.findById(productResDTO.getId());
+        Product product = productMapper.findById(reqDTO.getId());
         if(product == null)
         {
             responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
@@ -308,30 +309,30 @@ public class ProductRpcServiceImpl implements ProductRpcService
         }
         Date date = new Date();
         Product tempProduct = new Product();
-        tempProduct.setId(productResDTO.getId());
+        tempProduct.setId(reqDTO.getId());
         tempProduct.setUpdateTime(date);
-        tempProduct.setName(productResDTO.getName());
-        tempProduct.setCostAmt(productResDTO.getCostAmt());
-        tempProduct.setRemark(productResDTO.getRemark());
-        tempProduct.setEnabled(productResDTO.getEnabled());
+        tempProduct.setName(reqDTO.getName());
+        tempProduct.setCostAmt(reqDTO.getCostAmt());
+        tempProduct.setRemark(reqDTO.getRemark());
+        tempProduct.setEnabled(reqDTO.getEnabled());
         productMapper.updateSkipNull(tempProduct);
-        ProductTxt productTxt = productTxtMapper.findById(productResDTO.getId());
+        ProductTxt productTxt = productTxtMapper.findById(reqDTO.getId());
         if(productTxt == null)
         {
-            if(!StringUtils.isNullBlank(productResDTO.getContent()))
+            if(!StringUtils.isNullBlank(reqDTO.getContent()))
             {
                 productTxt = new ProductTxt();
-                productTxt.setId(productResDTO.getId());
+                productTxt.setId(reqDTO.getId());
                 productTxt.setCreateTime(date);
                 productTxt.setUpdateTime(date);
-                productTxt.setContent(productResDTO.getContent());
+                productTxt.setContent(reqDTO.getContent());
                 productTxtMapper.add(productTxt);
             }
         }
         else
         {
             productTxt.setUpdateTime(date);
-            productTxt.setContent(productResDTO.getContent());
+            productTxt.setContent(reqDTO.getContent());
             productTxtMapper.updateById(productTxt);
         }
         return responseDTO;

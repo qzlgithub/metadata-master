@@ -1,8 +1,5 @@
 package com.mingdong.core.model.dto.request;
 
-import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.model.dto.ResponseDTO;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,18 +10,6 @@ public class SysConfigReqDTO implements Serializable
     private Date updateTime;
     private String name;
     private String value;
-    private ResponseDTO responseDTO;
-
-    public SysConfigReqDTO()
-    {
-        this.responseDTO = new ResponseDTO();
-        responseDTO.setResult(RestResult.SUCCESS);
-    }
-
-    public ResponseDTO getResponseDTO()
-    {
-        return responseDTO;
-    }
 
     public Long getId()
     {

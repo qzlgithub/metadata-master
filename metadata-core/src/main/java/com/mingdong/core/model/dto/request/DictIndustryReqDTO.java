@@ -1,10 +1,9 @@
-package com.mingdong.core.model.dto;
+package com.mingdong.core.model.dto.request;
 
-import com.mingdong.core.model.dto.base.RequestDTO;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class DictIndustryDTO extends RequestDTO
+public class DictIndustryReqDTO implements Serializable
 {
     private Long id;
     private Date createTime;

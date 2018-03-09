@@ -1,8 +1,8 @@
-package com.mingdong.core.model.dto.response;
+package com.mingdong.core.model.dto.request;
 
 import java.io.Serializable;
 
-public class SubUserResDTO implements Serializable
+public class SubUserReqDTO implements Serializable
 {
     private Long clientId;
     private Long userId;

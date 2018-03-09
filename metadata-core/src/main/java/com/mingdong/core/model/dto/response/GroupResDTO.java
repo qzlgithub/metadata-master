@@ -1,9 +1,9 @@
-package com.mingdong.core.model.dto.request;
+package com.mingdong.core.model.dto.response;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class GroupReqDTO implements Serializable
+public class GroupResDTO implements Serializable
 {
     private Long id;
     private String name;

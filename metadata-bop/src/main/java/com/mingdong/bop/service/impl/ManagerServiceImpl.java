@@ -16,14 +16,15 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.response.AdminSessionResDTO;
+import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.AdminUserReqDTO;
 import com.mingdong.core.model.dto.request.GroupReqDTO;
-import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.LoginReqDTO;
+import com.mingdong.core.model.dto.response.AdminSessionResDTO;
+import com.mingdong.core.model.dto.response.GroupResDTO;
 import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ManagerRpcService;
 import org.springframework.stereotype.Service;
@@ -89,12 +90,12 @@ public class ManagerServiceImpl implements ManagerService
     @Override
     public void getAccountRoleList(Page page, RestListResp res)
     {
-        ListDTO<GroupReqDTO> listDTO = managerRpcService.getAccountGroupList(null);
+        ListDTO<GroupResDTO> listDTO = managerRpcService.getAccountGroupList(null);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(GroupReqDTO o : listDTO.getList())
+            for(GroupResDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.ID, o.getId() + "");
@@ -227,7 +228,7 @@ public class ManagerServiceImpl implements ManagerService
     public Map<String, Object> getAccountRoleInfo(Long groupId)
     {
         Map<String, Object> map = new HashMap<>();
-        GroupReqDTO roleDTO = managerRpcService.getAccountRoleInfo(groupId);
+        GroupResDTO roleDTO = managerRpcService.getAccountRoleInfo(groupId);
         map.put(Field.ROLE_ID, groupId + "");
         map.put(Field.ROLE_NAME, roleDTO.getName());
         List<String> privilegeList = new ArrayList<>();
@@ -243,7 +244,7 @@ public class ManagerServiceImpl implements ManagerService
     public void getRolePrivilege(Long groupId, RestResp resp)
     {
         List<String> privilegeList = new ArrayList<>();
-        GroupReqDTO roleDTO = managerRpcService.getAccountRoleInfo(groupId);
+        GroupResDTO roleDTO = managerRpcService.getAccountRoleInfo(groupId);
         if(!CollectionUtils.isEmpty(roleDTO.getPrivilegeIdList()))
         {
             for(Long o : roleDTO.getPrivilegeIdList())

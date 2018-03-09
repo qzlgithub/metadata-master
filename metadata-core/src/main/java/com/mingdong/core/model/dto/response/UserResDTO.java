@@ -1,10 +1,6 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.ResponseDTO;
-
-import java.io.Serializable;
-
-public class UserResDTO extends ResponseDTO implements Serializable
+public class UserResDTO extends ResponseDTO
 {
     private Long clientId;
     private Long userId;

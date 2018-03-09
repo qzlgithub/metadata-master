@@ -1,7 +1,5 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.ResponseDTO;
-
 import java.util.List;
 
 public class AdminSessionResDTO extends ResponseDTO

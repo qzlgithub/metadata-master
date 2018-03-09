@@ -13,8 +13,9 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import org.springframework.stereotype.Service;
@@ -58,14 +59,14 @@ public class ProductServiceImpl implements ProductService
     public void editProduct(Long productId, String name, BigDecimal costAmt, String remark, String content,
             Integer enabled, RestResp resp)
     {
-        ProductResDTO productResDTO = new ProductResDTO();
-        productResDTO.setId(productId);
-        productResDTO.setName(name);
-        productResDTO.setCostAmt(costAmt);
-        productResDTO.setRemark(remark);
-        productResDTO.setContent(content);
-        productResDTO.setEnabled(enabled);
-        ResponseDTO responseDTO = productRpcService.editProduct(productResDTO);
+        ProductReqDTO reqDTO = new ProductReqDTO();
+        reqDTO.setId(productId);
+        reqDTO.setName(name);
+        reqDTO.setCostAmt(costAmt);
+        reqDTO.setRemark(remark);
+        reqDTO.setContent(content);
+        reqDTO.setEnabled(enabled);
+        ResponseDTO responseDTO = productRpcService.editProduct(reqDTO);
         resp.setError(responseDTO.getResult());
     }
 

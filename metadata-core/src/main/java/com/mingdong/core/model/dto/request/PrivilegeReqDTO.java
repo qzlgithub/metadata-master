@@ -1,8 +1,8 @@
-package com.mingdong.core.model.dto.response;
+package com.mingdong.core.model.dto.request;
 
 import java.io.Serializable;
 
-public class PrivilegeResDTO implements Serializable
+public class PrivilegeReqDTO implements Serializable
 {
     private Long privilegeId;
     private String name;

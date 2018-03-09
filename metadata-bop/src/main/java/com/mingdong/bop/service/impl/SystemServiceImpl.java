@@ -11,12 +11,15 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
+import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.request.SysConfigReqDTO;
-import com.mingdong.core.model.dto.ResponseDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,7 @@ public class SystemServiceImpl implements SystemService
     public void addIndustryType(Long id, String code, String name, RestResp resp)
     {
         Date current = new Date();
-        DictIndustryResDTO industry = new DictIndustryResDTO();
+        DictIndustryReqDTO industry = new DictIndustryReqDTO();
         industry.setCreateTime(current);
         industry.setUpdateTime(current);
         industry.setCode(code.toUpperCase());
@@ -63,7 +66,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void editIndustryInfo(Long id, String code, String name, RestResp resp)
     {
-        DictIndustryResDTO industry = new DictIndustryResDTO();
+        DictIndustryReqDTO industry = new DictIndustryReqDTO();
         industry.setId(id);
         industry.setUpdateTime(new Date());
         industry.setCode(code);
@@ -75,7 +78,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void editRechargeType(Integer rechargeTypeId, String name, String remark, RestResp resp)
     {
-        RechargeTypeResDTO rt = new RechargeTypeResDTO();
+        RechargeTypeReqDTO rt = new RechargeTypeReqDTO();
         rt.setId(rechargeTypeId);
         rt.setName(name);
         rt.setRemark(remark);
@@ -86,7 +89,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void enableRechargeType(Integer rechargeTypeId, Integer enabled, RestResp resp)
     {
-        RechargeTypeResDTO rt = new RechargeTypeResDTO();
+        RechargeTypeReqDTO rt = new RechargeTypeReqDTO();
         rt.setId(rechargeTypeId);
         rt.setEnabled(enabled);
         ResponseDTO res = systemRpcService.editRechargeType(rt);
@@ -171,7 +174,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void editPrivilegeInfo(Long privilegeId, String name, RestResp resp)
     {
-        PrivilegeResDTO privilegeResDTO = new PrivilegeResDTO();
+        PrivilegeReqDTO privilegeResDTO = new PrivilegeReqDTO();
         privilegeResDTO.setPrivilegeId(privilegeId);
         privilegeResDTO.setName(name);
         ResponseDTO responseDTO = systemRpcService.editPrivilegeInfo(privilegeResDTO);

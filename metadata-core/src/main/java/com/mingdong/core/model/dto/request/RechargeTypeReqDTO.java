@@ -1,9 +1,9 @@
-package com.mingdong.core.model.dto.response;
+package com.mingdong.core.model.dto.request;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class RechargeTypeResDTO implements Serializable
+public class RechargeTypeReqDTO implements Serializable
 {
     private Integer id;
     private String name;
