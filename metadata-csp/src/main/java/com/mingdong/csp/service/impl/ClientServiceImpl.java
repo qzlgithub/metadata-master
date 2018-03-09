@@ -15,9 +15,9 @@ import com.mingdong.core.model.dto.CredentialDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -109,7 +109,8 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changeSubUserStatus(Long clientUserId, Integer enabled, RestResp resp)
     {
-        ResponseDTO responseDTO = clientRpcService.changeSubUserStatus(RequestThread.getClientId(), clientUserId, enabled);
+        ResponseDTO responseDTO = clientRpcService.changeSubUserStatus(RequestThread.getClientId(), clientUserId,
+                enabled);
         resp.setError(responseDTO.getResult());
     }
 
@@ -145,6 +146,8 @@ public class ClientServiceImpl implements ClientService
             }
             resp.addData(Field.ALLOWED_QTY, subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX));
             resp.addData(Field.SUB_USER_LIST, list);
+            int count = Integer.valueOf(subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX)) - list.size();
+            resp.addData(Field.COUNT, count < 0 ? 0 : count);
         }
         ListDTO<ProductDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();
