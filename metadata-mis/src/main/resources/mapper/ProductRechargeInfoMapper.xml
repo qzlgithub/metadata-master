@@ -163,10 +163,7 @@
                 on pr.`recharge_type` = drt.`id`
         <where>
             <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%'
-                 or c.`short_name` like '%${keyword}%'
-                 or pr.`trade_no` like '%${keyword}%'
-                 or pr.`contract_no` like '%${keyword}%')
+                (c.`corp_name` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>

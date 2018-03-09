@@ -107,7 +107,7 @@
                 on ar.`product_id` = p.`id`
         <where>
             <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%')
+                (c.`corp_name` like '%${keyword}%')
             </if>
             <if test="productId != null">and ar.`product_id` = #{productId}</if>
             <if test="billPlan != null">and ar.`bill_plan` = #{billPlan}</if>

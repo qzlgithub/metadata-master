@@ -54,7 +54,7 @@
                     <label class="layui-form-label"><i class="col3">*</i>姓名：</label>
                     <div class="layui-input-block">
                         <input type="text" id="name" name="name" th:value="${name}" placeholder="请输入" autocomplete="off"
-                               class="layui-input" maxlength="20"/>
+                               class="layui-input" maxlength="20" notnull="true" datames="姓名"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -62,7 +62,8 @@
                     <div class="layui-input-block">
                         <input type="tel" id="phone" name="phone" th:value="${phone}" placeholder="请输入"
                                autocomplete="off" class="layui-input"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"/>
+                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"
+                               notnull="true" datatype="phoneOrMobile" datames="联系电话"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
