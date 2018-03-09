@@ -1,6 +1,5 @@
 package com.mingdong.bop.service.impl;
 
-import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ContactVO;
@@ -49,8 +48,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -64,9 +61,6 @@ import java.util.Map;
 @Service
 public class ClientServiceImpl implements ClientService
 {
-    private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
-    @Resource
-    private Param param;
     @Resource
     private RedisDao redisDao;
     @Resource
