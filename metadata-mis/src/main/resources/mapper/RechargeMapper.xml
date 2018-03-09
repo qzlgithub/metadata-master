@@ -5,7 +5,6 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="client_product_id" property="clientProductId" jdbcType="BIGINT" />
         <result column="client_id" property="clientId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
@@ -23,9 +22,8 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `client_product_id`, `client_id`, `product_id`, `trade_no`,
-            `contract_no`, `bill_plan`, `recharge_type`, `amount`, `balance`, `start_date`, `end_date`, `unit_amt`,
-            `remark`, `manager_id`
+            `id`, `create_time`, `update_time`, `client_id`, `product_id`, `trade_no`, `contract_no`, `bill_plan`,
+            `recharge_type`, `amount`, `balance`, `start_date`, `end_date`, `unit_amt`, `remark`, `manager_id`
         from `recharge`
     </sql>
 
@@ -35,7 +33,6 @@
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
             <if test="updateTime != null">`update_time`,</if>
-            <if test="clientProductId != null">`client_product_id`,</if>
             <if test="clientId != null">`client_id`,</if>
             <if test="productId != null">`product_id`,</if>
             <if test="tradeNo != null">`trade_no`,</if>
@@ -54,7 +51,6 @@
             <if test="id != null">#{id},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-            <if test="clientProductId != null">#{clientProductId},</if>
             <if test="clientId != null">#{clientId},</if>
             <if test="productId != null">#{productId},</if>
             <if test="tradeNo != null">#{tradeNo},</if>
@@ -76,7 +72,6 @@
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
-            <if test="clientProductId != null">`client_product_id` = #{clientProductId},</if>
             <if test="clientId != null">`client_id` = #{clientId},</if>
             <if test="productId != null">`product_id` = #{productId},</if>
             <if test="tradeNo != null">`trade_no` = #{tradeNo},</if>
@@ -99,15 +94,8 @@
         where `id` = #{id}
     </select>
 
-    <select id="sumAmountByClientProduct" parameterType="Long" resultType="BigDecimal">
-        select sum(`amount`)
-        from `recharge`
-        where `client_product_id` = #{clientProductId}
-    </select>
-
     <select id="countBy" resultType="int">
-        select count(*)
-        from `recharge`
+        select count(*) from `recharge`
         <where>
             <if test="clientId != null">`client_id` = #{clientId}</if>
             <if test="productId != null">and `product_id` = #{productId}</if>
@@ -119,5 +107,13 @@
     <select id="findByContractNo" parameterType="String" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `contract_no` = #{contractNo}
+    </select>
+
+    <select id="sumRechargeAmount" resultType="BigDecimal">
+        select sum(`amount`) from `recharge`
+        <where>
+            <if test="clientId != null">`client_id` = #{clientId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+        </where>
     </select>
 </mapper>

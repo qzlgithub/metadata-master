@@ -7,15 +7,14 @@ public class RechargeVO
 {
     private Long clientId;
     private Long productId;
-    private Long clientProductId;
-    private Integer billPlan;
     private Integer rechargeType;
     private BigDecimal amount;
-    private String contractNo;
-    private String remark;
+    private Integer billPlan;
     private Date startDate;
     private Date endDate;
     private BigDecimal unitAmt;
+    private String contractNo;
+    private String remark;
 
     public Long getClientId()
     {
@@ -35,26 +34,6 @@ public class RechargeVO
     public void setProductId(Long productId)
     {
         this.productId = productId;
-    }
-
-    public Long getClientProductId()
-    {
-        return clientProductId;
-    }
-
-    public void setClientProductId(Long clientProductId)
-    {
-        this.clientProductId = clientProductId;
-    }
-
-    public Integer getBillPlan()
-    {
-        return billPlan;
-    }
-
-    public void setBillPlan(Integer billPlan)
-    {
-        this.billPlan = billPlan;
     }
 
     public Integer getRechargeType()
@@ -77,24 +56,14 @@ public class RechargeVO
         this.amount = amount;
     }
 
-    public String getContractNo()
+    public Integer getBillPlan()
     {
-        return contractNo;
+        return billPlan;
     }
 
-    public void setContractNo(String contractNo)
+    public void setBillPlan(Integer billPlan)
     {
-        this.contractNo = contractNo;
-    }
-
-    public String getRemark()
-    {
-        return remark;
-    }
-
-    public void setRemark(String remark)
-    {
-        this.remark = remark;
+        this.billPlan = billPlan;
     }
 
     public Date getStartDate()
@@ -125,5 +94,25 @@ public class RechargeVO
     public void setUnitAmt(BigDecimal unitAmt)
     {
         this.unitAmt = unitAmt;
+    }
+
+    public String getContractNo()
+    {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo)
+    {
+        this.contractNo = contractNo;
+    }
+
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
     }
 }

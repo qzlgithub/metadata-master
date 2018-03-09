@@ -14,10 +14,10 @@ public interface RechargeMapper
 
     Recharge findById(Long id);
 
-    BigDecimal sumAmountByClientProduct(Long clientProductId);
-
     int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     Recharge findByContractNo(String contractNo);
+
+    BigDecimal sumRechargeAmount(@Param("clientId") Long clientId, @Param("productId") Long productId);
 }

@@ -5,7 +5,6 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
-import com.mingdong.mis.constant.Trade;
 import com.mingdong.mis.model.UserAuth;
 import org.springframework.stereotype.Repository;
 
@@ -65,20 +64,17 @@ public class RedisDao extends RedisBaseDao
     }
 
     /**
-     * 生成交易流水号
-     *
-     * @param trade 交易类型
-     * @return 交易流水号
+     * 生成充值订单号
      */
-    public String createTradeNo(Trade trade)
+    public String getRechargeOrderNo()
     {
         String dateStr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
-        Long num = incr(DB.SYSTEM, trade.getCode() + dateStr);
+        Long num = incr(DB.SYSTEM, "RECHARGE-ORDER-" + dateStr);
         if(num == 1)
         {
-            expire(DB.SYSTEM, trade.getCode() + dateStr, 86500L);
+            expire(DB.SYSTEM, "RECHARGE-ORDER-" + dateStr, 86500L);
         }
-        return trade.getCode() + dateStr + String.format("%06d", num);
+        return "RO" + dateStr + String.format("%06d", num);
     }
 
     interface DB

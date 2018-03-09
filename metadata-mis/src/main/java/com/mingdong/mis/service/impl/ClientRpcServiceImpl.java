@@ -6,11 +6,11 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -24,22 +24,17 @@ import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.OpenClientProductDTO;
-import com.mingdong.core.model.dto.ProductOpenDTO;
-import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-`import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.RechargeReqDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
-import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.constant.Trade;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientContact;
@@ -51,7 +46,6 @@ import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.DictIndustry;
-import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Recharge;
@@ -838,91 +832,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ResponseDTO renewClientProduct(OpenClientProductDTO openClientProductDTO)
-    {
-        ResponseDTO responseDTO = new ResponseDTO();
-        ClientProduct clientProduct = clientProductMapper.findById(
-                openClientProductDTO.getProductRechargeDTO().getClientProductId());
-        if(clientProduct == null)
-        {
-            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return responseDTO;
-        }
-        Product productById = productMapper.findById(clientProduct.getProductId());
-        if(productById == null)
-        {
-            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return responseDTO;
-        }
-        APIProduct product = APIProduct.getByCode(productById.getCode());
-        if(product == null)
-        {
-            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return responseDTO;
-        }
-        String lockAccount = product.name() + "-C" + openClientProductDTO.getProductRechargeDTO().getClientId();
-        String lockUUID = StringUtils.getUuid();
-        boolean locked = false;
-        try
-        {
-            while(true)
-            {
-                locked = redisDao.lockProductAccount(lockAccount, lockUUID);
-                if(!locked)
-                {
-                    Thread.sleep(100);
-                    continue;
-                }
-                ClientProduct cp = clientProductMapper.findById(
-                        openClientProductDTO.getProductRechargeDTO().getClientProductId());
-                if(cp == null)
-                {
-                    responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-                    redisDao.freeProductAccount(lockAccount, lockUUID);
-                    return responseDTO;
-                }
-                openClientProductDTO.getProductRechargeDTO().setClientId(cp.getClientId());
-                openClientProductDTO.getProductRechargeDTO().setProductId(cp.getProductId());
-                if(!BillPlan.BY_TIME.equals(cp.getBillPlan()))
-                {
-                    //上一次非包年形式-余额相加
-                    openClientProductDTO.getProductRechargeDTO().setBalance(
-                            openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
-                    openClientProductDTO.getClientProductDTO().setBalance(
-                            openClientProductDTO.getProductRechargeDTO().getAmount().add(cp.getBalance()));
-                }
-                else
-                {
-                    //上一次为包年形式-余额重置
-                    openClientProductDTO.getProductRechargeDTO().setBalance(
-                            openClientProductDTO.getProductRechargeDTO().getAmount());
-                    openClientProductDTO.getClientProductDTO().setBalance(
-                            openClientProductDTO.getProductRechargeDTO().getAmount());
-                }
-                Recharge pr = new Recharge();
-                EntityUtils.copyProperties(openClientProductDTO.getProductRechargeDTO(), pr);
-                cp = new ClientProduct();
-                EntityUtils.copyProperties(openClientProductDTO.getClientProductDTO(), cp);
-                chargeService.renewClientProduct(pr, cp);
-                break;
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if(locked)
-            {
-                redisDao.freeProductAccount(lockAccount, lockUUID);
-            }
-        }
-        responseDTO.setResult(RestResult.SUCCESS);
-        return responseDTO;
-    }
-
-    @Override
     @Transactional
     public ResponseDTO editClient(NewClientDTO dto, List<ClientContactDTO> contacts, List<Long> delIds)
     {
@@ -1116,101 +1025,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    @Transactional
-    public ResponseDTO openProduct(ProductOpenDTO dto)
-    {
-        Date current = new Date();
-        ResponseDTO res = new ResponseDTO();
-        Product p = productMapper.findById(dto.getProductId());
-        // 判断产品是否存在
-        if(p == null)
-        {
-            res.setResult(RestResult.PRODUCT_NOT_EXIST);
-            return res;
-        }
-        ClientProduct cp = clientProductMapper.findByClientAndProduct(dto.getClientId(), dto.getProductId());
-        // 判断客户是否已开通该产品
-        if(cp != null && TrueOrFalse.TRUE.equals(cp.getOpened()))
-        {
-            res.setResult(RestResult.PRODUCT_OPENED);
-            return res;
-        }
-        // 判断客户是否有权开通该产品
-        if(TrueOrFalse.TRUE.equals(p.getCustom()) && cp == null)
-        {
-            res.setResult(RestResult.SPECIFIED_PRODUCT);
-            return res;
-        }
-        Long clientProductId = cp != null ? cp.getId() : IDUtils.getClientProductId(param.getNodeId());
-        Recharge recharge = new Recharge();
-        recharge.setCreateTime(current);
-        recharge.setUpdateTime(current);
-        recharge.setClientProductId(clientProductId);
-        recharge.setClientId(dto.getClientId());
-        recharge.setProductId(dto.getProductId());
-        recharge.setTradeNo(redisDao.createTradeNo(Trade.OPEN));
-        recharge.setContractNo(dto.getContractNo());
-        recharge.setBillPlan(dto.getBillPlan());
-        recharge.setRechargeType(dto.getRechargeType());
-        recharge.setAmount(dto.getAmount());
-        recharge.setRemark(dto.getRemark());
-        recharge.setManagerId(dto.getManagerId());
-        if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-        {
-            recharge.setBalance(new BigDecimal(0));
-            recharge.setStartDate(dto.getFromDate());
-            recharge.setEndDate(dto.getToDate());
-        }
-        else
-        {
-            recharge.setBalance(dto.getAmount());
-            recharge.setUnitAmt(dto.getUnitAmt());
-        }
-        rechargeMapper.add(recharge);
-        if(cp == null)
-        {
-            cp = new ClientProduct();
-            cp.setId(clientProductId);
-            cp.setCreateTime(current);
-            cp.setUpdateTime(current);
-            cp.setClientId(dto.getClientId());
-            cp.setProductId(dto.getProductId());
-            cp.setAppId(StringUtils.getUuid());
-            cp.setBillPlan(dto.getBillPlan());
-            cp.setLatestRechargeId(recharge.getId());
-            cp.setOpened(TrueOrFalse.TRUE);
-            //            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-            //            {
-            //                cp.setBalance(new BigDecimal(0));
-            //            }
-            //            else
-            //            {
-            cp.setBalance(dto.getAmount());
-            //            }
-            clientProductMapper.add(cp);
-        }
-        else
-        {
-            ClientProduct cpUpd = new ClientProduct();
-            cpUpd.setId(clientProductId);
-            cpUpd.setUpdateTime(current);
-            cpUpd.setBillPlan(dto.getBillPlan());
-            cpUpd.setLatestRechargeId(recharge.getId());
-            cpUpd.setOpened(TrueOrFalse.TRUE);
-            //            if(BillPlan.BY_TIME.equals(dto.getBillPlan()))
-            //            {
-            //                cpUpd.setBalance(new BigDecimal(0));
-            //            }
-            //            else
-            //            {
-            cpUpd.setBalance(dto.getAmount());
-            //            }
-            clientProductMapper.updateSkipNull(cpUpd);
-        }
-        return res;
-    }
-
-    @Override
     public ClientUserDictDTO getClientAccountDict(Long clientId)
     {
         ClientUserDictDTO res = new ClientUserDictDTO();
@@ -1276,10 +1090,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
+    public ListDTO<RechargeReqDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
             Page page)
     {
-        ListDTO<RechargeDTO> listDTO = new ListDTO<>();
+        ListDTO<RechargeReqDTO> listDTO = new ListDTO<>();
         int total = productRechargeInfoMapper.countByClient(clientId, productId, fromDate, toDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1288,10 +1102,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
                     fromDate, toDate);
-            List<RechargeDTO> list = new ArrayList<>();
+            List<RechargeReqDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)
             {
-                RechargeDTO r = new RechargeDTO();
+                RechargeReqDTO r = new RechargeReqDTO();
                 r.setRechargeAt(o.getTradeTime());
                 r.setRechargeNo(o.getTradeNo());
                 r.setProductName(o.getProductName());
@@ -1363,10 +1177,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public RechargeInfoDTO getLatestRechargeInfo(Long clientProductId)
+    public RechargeInfoDTO getLatestRechargeInfo(Long clientId, Long productId)
     {
         RechargeInfoDTO rechargeInfoDTO = new RechargeInfoDTO();
-        ClientProduct clientProduct = clientProductMapper.findById(clientProductId);
+        ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
             rechargeInfoDTO.setResult(RestResult.PRODUCT_NOT_OPEN);
@@ -1382,7 +1196,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             rechargeInfoDTO.setEndDate(recharge.getEndDate());
             rechargeInfoDTO.setUnitAmt(recharge.getUnitAmt());
         }
-        BigDecimal totalRecharge = rechargeMapper.sumAmountByClientProduct(clientProductId);
+        BigDecimal totalRecharge = rechargeMapper.sumRechargeAmount(clientId, productId);
         rechargeInfoDTO.setTotalRecharge(totalRecharge);
         return rechargeInfoDTO;
     }

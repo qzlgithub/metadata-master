@@ -3,7 +3,6 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.constant.Trade;
 import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.NewClientVO;
 import com.mingdong.bop.model.RequestThread;
@@ -23,11 +22,11 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
 import com.mingdong.core.model.dto.ClientInfoDTO;
 import com.mingdong.core.model.dto.ClientOperateLogDTO;
-import com.mingdong.core.model.dto.ClientProductDTO;
 import com.mingdong.core.model.dto.ClientUserDTO;
 import com.mingdong.core.model.dto.ClientUserDictDTO;
 import com.mingdong.core.model.dto.DictDTO;
@@ -35,20 +34,16 @@ import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.IndustryDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.OpenClientProductDTO;
 import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductOpenDTO;
-import com.mingdong.core.model.dto.ProductRechargeDTO;
-import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.RechargeReqDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.SystemRpcService;
-import com.mingdong.core.util.IDUtils;
+import com.mingdong.core.service.TradeRpcService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -84,6 +79,8 @@ public class ClientServiceImpl implements ClientService
     private ProductRpcService productRpcService;
     @Resource
     private SystemRpcService systemRpcService;
+    @Resource
+    private TradeRpcService tradeRpcService;
 
     @Override
     public void checkIfUsernameExist(String username, RestResp resp)
@@ -251,43 +248,45 @@ public class ClientServiceImpl implements ClientService
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
             Integer rechargeType, BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
     {
-        ProductOpenDTO dto = new ProductOpenDTO();
-        dto.setClientId(clientId);
-        dto.setProductId(productId);
-        dto.setRechargeType(rechargeType);
-        dto.setBillPlan(billPlan);
-        dto.setAmount(amount);
-        dto.setFromDate(startDate);
-        dto.setToDate(endDate);
-        dto.setContractNo(contractNo);
-        dto.setRemark(remark);
-        dto.setManagerId(RequestThread.getOperatorId());
-        ResponseDTO res = clientRpcService.openProduct(dto);
-        resp.setError(res.getResult());
+        RechargeReqDTO reqDTO = new RechargeReqDTO();
+        reqDTO.setRenew(TrueOrFalse.FALSE);
+        reqDTO.setClientId(clientId);
+        reqDTO.setProductId(productId);
+        reqDTO.setRechargeType(rechargeType);
+        reqDTO.setAmount(amount);
+        reqDTO.setContractNo(contractNo);
+        reqDTO.setRemark(remark);
+        reqDTO.setBillPlan(billPlan);
+        reqDTO.setStartDate(startDate);
+        reqDTO.setEndDate(endDate);
+        reqDTO.setManagerId(RequestThread.getOperatorId());
+        ResponseDTO respDTO = tradeRpcService.productRecharge(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override
     public void openProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
             Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
     {
-        ProductOpenDTO dto = new ProductOpenDTO();
-        dto.setClientId(clientId);
-        dto.setProductId(productId);
-        dto.setRechargeType(rechargeType);
-        dto.setBillPlan(billPlan);
-        dto.setAmount(amount);
-        dto.setUnitAmt(unitAmt);
-        dto.setContractNo(contractNo);
-        dto.setRemark(remark);
-        dto.setManagerId(RequestThread.getOperatorId());
-        ResponseDTO res = clientRpcService.openProduct(dto);
-        resp.setError(res.getResult());
+        RechargeReqDTO reqDTO = new RechargeReqDTO();
+        reqDTO.setRenew(TrueOrFalse.FALSE);
+        reqDTO.setClientId(clientId);
+        reqDTO.setProductId(productId);
+        reqDTO.setRechargeType(rechargeType);
+        reqDTO.setAmount(amount);
+        reqDTO.setContractNo(contractNo);
+        reqDTO.setRemark(remark);
+        reqDTO.setBillPlan(billPlan);
+        reqDTO.setUnitAmt(unitAmt);
+        reqDTO.setManagerId(RequestThread.getOperatorId());
+        ResponseDTO respDTO = tradeRpcService.productRecharge(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override
-    public void getProductRenewInfo(Long clientProductId, RestResp resp)
+    public void getProductRenewInfo(Long clientId, Long productId, RestResp resp)
     {
-        RechargeInfoDTO rechargeInfoDTO = clientRpcService.getLatestRechargeInfo(clientProductId);
+        RechargeInfoDTO rechargeInfoDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
         if(rechargeInfoDTO.getResult() != RestResult.SUCCESS)
         {
             resp.setError(rechargeInfoDTO.getResult());
@@ -309,76 +308,42 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
+    public void renewProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
+            Integer rechargeType, BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp)
     {
-        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
-        Date current = new Date();
-        Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        ProductRechargeDTO pr = new ProductRechargeDTO();
-        pr.setId(productRechargeId);
-        pr.setCreateTime(current);
-        pr.setUpdateTime(current);
-        pr.setClientProductId(clientProductId);
-        //        pr.setClientId(cp.getClientId());
-        //        pr.setProductId(cp.getProductId());
-        pr.setTradeNo(redisDao.createTradeNo(Trade.PRODUCT_RECHARGE));
-        pr.setContractNo(contractNo);
-        pr.setBillPlan(billPlan);
-        pr.setRechargeType(rechargeType);
-        pr.setAmount(amount);
-        //        pr.setBalance(amount);
-        pr.setStartDate(startDate);
-        pr.setEndDate(endDate);
-        pr.setRemark(remark);
-        pr.setManagerId(RequestThread.getOperatorId());
-        openClientProductDTO.setProductRechargeDTO(pr);
-        ClientProductDTO cp = new ClientProductDTO();
-        cp.setId(clientProductId);
-        cp.setUpdateTime(current);
-        cp.setBillPlan(billPlan);
-        //        cp.setBalance(amount);
-        cp.setLatestRechargeId(productRechargeId);
-        cp.setIsOpened(TrueOrFalse.TRUE);
-        openClientProductDTO.setClientProductDTO(cp);
-        ResponseDTO responseDTO = clientRpcService.renewClientProduct(openClientProductDTO);
-        resp.setError(responseDTO.getResult());
+        RechargeReqDTO reqDTO = new RechargeReqDTO();
+        reqDTO.setRenew(TrueOrFalse.TRUE);
+        reqDTO.setClientId(clientId);
+        reqDTO.setProductId(productId);
+        reqDTO.setRechargeType(rechargeType);
+        reqDTO.setAmount(amount);
+        reqDTO.setContractNo(contractNo);
+        reqDTO.setRemark(remark);
+        reqDTO.setBillPlan(billPlan);
+        reqDTO.setStartDate(startDate);
+        reqDTO.setEndDate(endDate);
+        reqDTO.setManagerId(RequestThread.getOperatorId());
+        ResponseDTO respDTO = tradeRpcService.productRecharge(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override
-    public void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
-            BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
+    public void renewProductService(Long clientId, Long productId, String contractNo, Integer billPlan,
+            Integer rechargeType, BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp)
     {
-        OpenClientProductDTO openClientProductDTO = new OpenClientProductDTO();
-        Date current = new Date();
-        Long productRechargeId = IDUtils.getProductRechargeId(param.getNodeId());
-        ProductRechargeDTO pr = new ProductRechargeDTO();
-        pr.setId(productRechargeId);
-        pr.setCreateTime(current);
-        pr.setUpdateTime(current);
-        pr.setClientProductId(clientProductId);
-        //        pr.setClientId(cp.getClientId());
-        //        pr.setProductId(cp.getProductId());
-        pr.setTradeNo(redisDao.createTradeNo(Trade.PRODUCT_RECHARGE));
-        pr.setContractNo(contractNo);
-        pr.setBillPlan(billPlan);
-        pr.setRechargeType(rechargeType);
-        pr.setAmount(amount);
-        //        pr.setBalance(amount.add(cp.getBalance()));
-        pr.setUnitAmt(unitAmt);
-        pr.setRemark(remark);
-        pr.setManagerId(RequestThread.getOperatorId());
-        openClientProductDTO.setProductRechargeDTO(pr);
-        ClientProductDTO cpUpd = new ClientProductDTO();
-        cpUpd.setId(clientProductId);
-        cpUpd.setUpdateTime(current);
-        cpUpd.setBillPlan(billPlan);
-        //        cpUpd.setBalance(amount.add(cp.getBalance()));
-        cpUpd.setLatestRechargeId(productRechargeId);
-        cpUpd.setIsOpened(TrueOrFalse.TRUE);
-        openClientProductDTO.setClientProductDTO(cpUpd);
-        ResponseDTO responseDTO = clientRpcService.renewClientProduct(openClientProductDTO);
-        resp.setError(responseDTO.getResult());
+        RechargeReqDTO reqDTO = new RechargeReqDTO();
+        reqDTO.setRenew(TrueOrFalse.TRUE);
+        reqDTO.setClientId(clientId);
+        reqDTO.setProductId(productId);
+        reqDTO.setRechargeType(rechargeType);
+        reqDTO.setAmount(amount);
+        reqDTO.setContractNo(contractNo);
+        reqDTO.setRemark(remark);
+        reqDTO.setBillPlan(billPlan);
+        reqDTO.setUnitAmt(unitAmt);
+        reqDTO.setManagerId(RequestThread.getOperatorId());
+        ResponseDTO respDTO = tradeRpcService.productRecharge(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override
@@ -671,13 +636,13 @@ public class ClientServiceImpl implements ClientService
     public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
+        ListDTO<RechargeReqDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
                 page);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(RechargeDTO o : listDTO.getList())
+            for(RechargeReqDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.RECHARGE_AT, DateUtils.format(o.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -761,9 +726,9 @@ public class ClientServiceImpl implements ClientService
         row.createCell(7).setCellValue("经手人");
         row.createCell(8).setCellValue("合同编号");
 
-        ListDTO<RechargeDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime, endTime,
-                page);
-        List<RechargeDTO> list = listDTO.getList();
+        ListDTO<RechargeReqDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
+                endTime, page);
+        List<RechargeReqDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {
             CellStyle timeStyle = wb.createCellStyle();
@@ -771,7 +736,7 @@ public class ClientServiceImpl implements ClientService
                     wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
             for(int i = 0; i < list.size(); i++)
             {
-                RechargeDTO pri = list.get(i);
+                RechargeReqDTO pri = list.get(i);
                 Row dataRow = sheet.createRow(i + 1);
                 Cell cell = dataRow.createCell(0);
                 cell.setCellValue(pri.getRechargeAt());

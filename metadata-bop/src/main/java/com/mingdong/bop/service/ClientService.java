@@ -68,18 +68,18 @@ public interface ClientService
     /**
      * 根据客户产品id获取最后一次充值记录
      */
-    void getProductRenewInfo(Long clientProductId, RestResp resp);
+    void getProductRenewInfo(Long clientId, Long productId, RestResp resp);
 
     /**
      * 根据客户产品id续费按包时间形式，新增充值记录，更新客户产品信息
      */
-    void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
+    void renewProductService(Long clientId, Long productId, String contractNo, Integer billPlan, Integer rechargeType,
             BigDecimal amount, Date startDate, Date endDate, String remark, RestResp resp);
 
     /**
      * 根据客户产品id续费按计次形式，新增充值记录，更新客户产品信息
      */
-    void renewProductService(Long clientProductId, String contractNo, Integer billPlan, Integer rechargeType,
+    void renewProductService(Long clientId, Long productId, String contractNo, Integer billPlan, Integer rechargeType,
             BigDecimal amount, BigDecimal unitAmt, String remark, RestResp resp);
 
     /**

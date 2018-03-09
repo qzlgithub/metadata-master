@@ -8,7 +8,6 @@ public class Recharge
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Long clientProductId;
     private Long clientId;
     private Long productId;
     private String tradeNo;
@@ -51,16 +50,6 @@ public class Recharge
     public void setUpdateTime(Date updateTime)
     {
         this.updateTime = updateTime;
-    }
-
-    public Long getClientProductId()
-    {
-        return clientProductId;
-    }
-
-    public void setClientProductId(Long clientProductId)
-    {
-        this.clientProductId = clientProductId;
     }
 
     public Long getClientId()

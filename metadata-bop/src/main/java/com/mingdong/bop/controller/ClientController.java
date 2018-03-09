@@ -283,8 +283,8 @@ public class ClientController
     public RestResp renewProductService(@RequestBody RechargeVO vo)
     {
         RestResp resp = new RestResp();
-        if(vo.getClientProductId() == null || vo.getBillPlan() == null || vo.getRechargeType() == null ||
-                StringUtils.isNullBlank(vo.getContractNo()) || vo.getAmount() == null)
+        if(vo.getClientId() == null || vo.getProductId() == null || vo.getBillPlan() == null ||
+                vo.getRechargeType() == null || StringUtils.isNullBlank(vo.getContractNo()) || vo.getAmount() == null)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
@@ -302,7 +302,7 @@ public class ClientController
                 resp.setError(RestResult.KEY_FIELD_MISSING);
                 return resp;
             }
-            clientService.renewProductService(vo.getClientProductId(), vo.getContractNo(), vo.getBillPlan(),
+            clientService.renewProductService(vo.getClientId(), vo.getProductId(), vo.getContractNo(), vo.getBillPlan(),
                     vo.getRechargeType(), vo.getAmount(), vo.getStartDate(), vo.getEndDate(), vo.getRemark(), resp);
         }
         else
@@ -312,7 +312,7 @@ public class ClientController
                 resp.setError(RestResult.KEY_FIELD_MISSING);
                 return resp;
             }
-            clientService.renewProductService(vo.getClientProductId(), vo.getContractNo(), vo.getBillPlan(),
+            clientService.renewProductService(vo.getClientId(), vo.getProductId(), vo.getContractNo(), vo.getBillPlan(),
                     vo.getRechargeType(), vo.getAmount(), vo.getUnitAmt(), vo.getRemark(), resp);
         }
         return resp;
@@ -320,10 +320,11 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "/client/product/renewInfo")
-    public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_PRODUCT_ID) Long clientProductId)
+    public Map<String, Object> getProductRenewInfo(@RequestParam(value = Field.CLIENT_ID) Long clientId,
+            @RequestParam(value = Field.PRODUCT_ID) Long productId)
     {
         RestResp resp = new RestResp();
-        clientService.getProductRenewInfo(clientProductId, resp);
+        clientService.getProductRenewInfo(clientId, productId, resp);
         return resp.getData();
     }
 

@@ -1,6 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.model.dto.AccessDTO;
 import com.mingdong.core.model.dto.ApiReqInfoDTO;
 import com.mingdong.core.model.dto.ClientContactDTO;
 import com.mingdong.core.model.dto.ClientDetailDTO;
@@ -12,14 +13,11 @@ import com.mingdong.core.model.dto.DisableClientDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.MessageDTO;
 import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.OpenClientProductDTO;
-import com.mingdong.core.model.dto.ProductOpenDTO;
-import com.mingdong.core.model.dto.RechargeDTO;
 import com.mingdong.core.model.dto.RechargeInfoDTO;
-import com.mingdong.core.model.dto.AccessDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.RechargeReqDTO;
 import com.mingdong.core.model.dto.SubUserDTO;
 import com.mingdong.core.model.dto.UserDTO;
+import com.mingdong.core.model.dto.base.ResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -141,11 +139,6 @@ public interface ClientRpcService
      */
     ClientDetailDTO getClientInfoForEdit(Long clientId);
 
-    /**
-     * 客户续费产品
-     */
-    ResponseDTO renewClientProduct(OpenClientProductDTO openClientProductDTO);
-
     ResponseDTO editClient(NewClientDTO clientDTO, List<ClientContactDTO> contacts, List<Long> delIds);
 
     ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds);
@@ -155,11 +148,6 @@ public interface ClientRpcService
     ListDTO<ApiReqInfoDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
             Date toDate, Long managerId, Page page);
 
-    /**
-     * 开通客户产品服务
-     */
-    ResponseDTO openProduct(ProductOpenDTO dto);
-
     ClientUserDictDTO getClientAccountDict(Long clientId);
 
     ListDTO<AccessDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
@@ -167,7 +155,7 @@ public interface ClientRpcService
 
     String getClientCorpName(Long clientId);
 
-    ListDTO<RechargeDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
+    ListDTO<RechargeReqDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page);
 
     ListDTO<ApiReqInfoDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 
@@ -176,5 +164,5 @@ public interface ClientRpcService
     /**
      * 查询客户最近的充值记录信息
      */
-    RechargeInfoDTO getLatestRechargeInfo(Long clientProductId);
+    RechargeInfoDTO getLatestRechargeInfo(Long clientId, Long productId);
 }

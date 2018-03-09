@@ -38,8 +38,8 @@ layui.config({
         });
     });
     $('.renew').on('click', function() {
-        var clientProductId = $(this).attr("client-product-id");
-        $("#renew-client-product-id").val(clientProductId);
+        var productId = $(this).data("product");
+        $("#renewProduct").val(productId);
         if($(this).hasClass('is-selected-class')) {
             $("#renew-info").empty();
             $("#renew-server-id").html("开通服务");
@@ -53,9 +53,10 @@ layui.config({
             return;
         }
         $("#renew-server-id").html("续费服务");
+        var clientId = $("#client-id").val();
         $.get(
-            "/client/product/renewInfo",
-            {"clientProductId": clientProductId},
+            "/client/product/renewInfo", // TODO ===========
+            {"clientId": clientId, "productId": productId},
             function(res) {
                 $("#renew-info").empty();
                 var row1 =
@@ -215,7 +216,8 @@ function openProduct() {
 }
 
 function renewProduct() {
-    var clientProductId = $("#renew-client-product-id").val();
+    var clientId = $("#client-id").val();
+    var productId = $("#renewProduct").val();
     var billPlan = $("#renew-bill-plan").val();
     var startDate = $("#renew-start").val();
     var endDate = $("#renew-end").val();
@@ -230,7 +232,8 @@ function renewProduct() {
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify({
-            "clientProductId": clientProductId,
+            "clientId": clientId,
+            "productId": productId,
             "billPlan": billPlan,
             "rechargeType": rechargeType,
             "contractNo": contract,

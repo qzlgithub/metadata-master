@@ -27,4 +27,6 @@
                      interface="com.mingdong.core.service.SystemRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService"
                      interface="com.mingdong.core.service.CommonRpcService"/>
+    <dubbo:reference retries="0" timeout="5000" check="false" id="tradeRpcService"
+                     interface="com.mingdong.core.service.TradeRpcService"/>
 </beans>
