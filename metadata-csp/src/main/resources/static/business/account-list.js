@@ -32,8 +32,9 @@ function getAccountList() {
             }
             var allowedQty = data.data.allowedQty;
             $("#acountAll").text(list.length);
-            $("#canAddNumber").text(allowedQty - list.length);
-            if(allowedQty - list.length > 0) {
+            var count = allowedQty - list.length;
+            $("#canAddNumber").text(count < 0 ? 0 : count);
+            if(count > 0) {
                 $("#addaccount").show();
             }
         }

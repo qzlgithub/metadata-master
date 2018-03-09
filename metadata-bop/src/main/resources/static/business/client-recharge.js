@@ -3,8 +3,20 @@ layui.config({
 }).use(['app', 'form', 'table', 'message', 'laydate'], function() {
     var app = layui.app, form = layui.form, table = layui.table, laydate = layui.laydate;
     app.set({type: 'iframe'}).init();
-    laydate.render({elem: '#fromDate'});
-    laydate.render({elem: '#toDate'});
+    laydate.render({
+        elem: '#dates'
+        ,range: true,
+        done: function(value, date){
+            if(value != ""){
+                var dates = value.split(" - ");
+                $("#fromDate").val(dates[0]);
+                $("#toDate").val(dates[1]);
+            }else{
+                $("#fromDate").val("");
+                $("#toDate").val("");
+            }
+        }
+    });
     var main_table = table.render({
         elem: '#dataTable',
         page: true,
@@ -45,8 +57,8 @@ layui.config({
             where: {
                 clientId: params['client-id'],
                 productId: params['product-id'],
-                fromDate: params['from-date'],
-                toDate: params['to-date']
+                fromDate: params['fromDate'],
+                toDate: params['toDate']
             },
             page: {
                 curr: 1

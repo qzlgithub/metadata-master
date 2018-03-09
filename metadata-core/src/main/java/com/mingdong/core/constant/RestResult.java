@@ -17,7 +17,7 @@ public enum RestResult
     INVALID_CAPTCHA("100012", "验证码不匹配"),
     INVALID_PRODUCT_NAME("100013", "无效的产品类型名称"),
     KEY_FIELD_MISSING("100014", "关键字段不能为空"),
-    ROLE_NAME_EXIST("100015", "角色名已存在"),
+    ROLE_NAME_EXIST("100015", "分组名称已存在"),
     INDUSTRY_CODE_EXIST("100016", "行业编号已被占用"),
     PRODUCT_OPENED("100017", "该产品服务已开通"),
     ONLY_PRIMARY_USER("100018", "非主账号无此操作权限"),

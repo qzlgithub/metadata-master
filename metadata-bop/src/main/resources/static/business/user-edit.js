@@ -71,6 +71,15 @@ function saveManager() {
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
+    if(!checkDataValid("#userInfoDivId")) {
+        return;
+    }
+    if(privilege.length == 0){
+        layer.msg("请至少选择一个权限！", {
+            time: 2000
+        });
+        return;
+    }
     $.ajax({
         type: "POST",
         url: "/account",

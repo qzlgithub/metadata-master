@@ -12,15 +12,9 @@ layui.config({
     app.set({
         type: 'iframe'
     }).init();
-    $('#pay').on('click', function() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: '<img src="/static/build/images/pay.png"/>',
-            area: ['500px', '250px'],
-            shadeClose: true
-        });
-    });
+    form.on('select(role-dict)', function(obj) {
+        resetPrivilege();
+    })
 });
 $(function() {
     checkSubPrivAllChecked();
@@ -48,7 +42,7 @@ $(".privilege").click(function() {
 });
 
 function resetPrivilege() {
-    var roleId = $("#roleId").val();
+    var roleId = $("#groupId").val();
     $.get(
         "/account/role/privilege",
         {"roleId": roleId},
@@ -77,7 +71,7 @@ function checkSubPrivAllChecked() {
 
 function saveManager() {
     var groupId = $("#groupId").val();
-    var roleCode = $("#roleCode").val();
+    var roleType = $("#roleCode").val();
     var username = $("#username").val();
     var password = $("#password").val();
     var name = $("#name").val();
@@ -85,8 +79,11 @@ function saveManager() {
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
     var privilege = build_privilege();
-    if(!isPassword(password)) {
-        layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+    if(!checkDataValid("#userInfoDivId")) {
+        return;
+    }
+    if(privilege.length == 0){
+        layer.msg("请至少选择一个权限！", {
             time: 2000
         });
         return;
@@ -98,7 +95,7 @@ function saveManager() {
         contentType: "application/json",
         data: JSON.stringify({
             "groupId": groupId,
-            "roleCode": roleCode,
+            "roleType": roleType,
             "username": username,
             "password": MD5(password),
             "name": name,

@@ -4,12 +4,17 @@ layui.config({
 }).use(['app', 'table', 'form', 'laydate'], function() {
     table = layui.table;
     var form = layui.form, laydate = layui.laydate;
-    laydate.render({elem: '#fromDate'});
-    laydate.render({elem: '#toDate'});
-    form.verify({
-        none_date: function(val) {
-            if(val !== '' && !new RegExp('^\\d{4}\\-\\d{2}\\-\\d{2}$').test(val)) {
-                return '日期格式不正确';
+    laydate.render({
+        elem: '#dates'
+        ,range: true,
+        done: function(value, date){
+            if(value != ""){
+                var dates = value.split(" - ");
+                $("#fromDate").val(dates[0]);
+                $("#toDate").val(dates[1]);
+            }else{
+                $("#fromDate").val("");
+                $("#toDate").val("");
             }
         }
     });
@@ -61,8 +66,8 @@ layui.config({
                 product: params['product'],
                 manager: params['manager'],
                 rechargeType: params['recharge-type'],
-                fromDate: params['recharge-from'],
-                toDate: params['recharge-to']
+                fromDate: params['fromDate'],
+                toDate: params['toDate']
             },
             page: {
                 curr: 1

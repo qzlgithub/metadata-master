@@ -43,7 +43,7 @@ $("#savePwd").click(function() {
                     }),
                     success: function(res) {
                         if(res.code !== "000000") {
-                            layer.msg("密码修改失败:" + data.message);
+                            layer.msg("密码修改失败:" + res.message);
                         }
                         else {
                             layer.closeAll();
