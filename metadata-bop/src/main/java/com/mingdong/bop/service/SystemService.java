@@ -3,7 +3,7 @@ package com.mingdong.bop.service;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -83,7 +83,7 @@ public interface SystemService
     /**
      * 修改系统参数
      */
-    void setGlobalSetting(List<SysConfigDTO> sysConfigDTOList, RestResp resp);
+    void setGlobalSetting(List<SysConfigReqDTO> sysConfigReqDTOList, RestResp resp);
 
     /**
      * 根据行业分类id更改状态

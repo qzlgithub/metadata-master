@@ -3,11 +3,11 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
-import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.IntervalDTO;
+import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
+import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.StatsDateInfoDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
@@ -59,9 +59,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoReqDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
     {
-        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<ClientInfoReqDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.getClientCountByDate(date, currentDay);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -71,10 +71,10 @@ public class StatsRpcServiceImpl implements StatsRpcService
             List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
             if(!CollectionUtils.isEmpty(dataList))
             {
-                List<ClientInfoDTO> list = new ArrayList<>(dataList.size());
+                List<ClientInfoReqDTO> list = new ArrayList<>(dataList.size());
                 for(ClientInfo o : dataList)
                 {
-                    ClientInfoDTO ci = new ClientInfoDTO();
+                    ClientInfoReqDTO ci = new ClientInfoReqDTO();
                     ci.setRegisterTime(o.getRegisterTime());
                     ci.setCorpName(o.getCorpName());
                     ci.setShortName(o.getShortName());
@@ -89,17 +89,17 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoDTO> getClientInfoListByDate(Date fromDate, Date toDate)
+    public ListDTO<ClientInfoReqDTO> getClientInfoListByDate(Date fromDate, Date toDate)
     {
-        ListDTO<ClientInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<ClientInfoReqDTO> listDTO = new ListDTO<>();
         List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(fromDate, toDate);
         listDTO.setTotal(dataList.size());
         if(!CollectionUtils.isEmpty(dataList))
         {
-            List<ClientInfoDTO> list = new ArrayList<>();
+            List<ClientInfoReqDTO> list = new ArrayList<>();
             for(ClientInfo o : dataList)
             {
-                ClientInfoDTO ci = new ClientInfoDTO();
+                ClientInfoReqDTO ci = new ClientInfoReqDTO();
                 ci.setRegisterTime(o.getRegisterTime());
                 ci.setCorpName(o.getCorpName());
                 ci.setShortName(o.getShortName());
@@ -125,9 +125,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ProductRechargeInfoDTO> getProductRechargeInfoListBy(Date date, Date currentDay, Page page)
+    public ListDTO<ProductRechargeResDTO> getProductRechargeInfoListBy(Date date, Date currentDay, Page page)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.countClientRechargeByDate(date, currentDay);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -138,7 +138,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
                     currentDay);
             if(!CollectionUtils.isEmpty(productRechargeInfoList))
             {
-                List<ProductRechargeInfoDTO> dataList = new ArrayList<>();
+                List<ProductRechargeResDTO> dataList = new ArrayList<>();
                 findProductRechargeInfoDTO(productRechargeInfoList, dataList);
                 listDTO.setList(dataList);
             }
@@ -147,17 +147,17 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ProductRechargeInfoDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
+    public ListDTO<ProductRechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
         List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
         listDTO.setTotal(productRechargeInfoList.size());
         if(!CollectionUtils.isEmpty(productRechargeInfoList))
         {
-            List<ProductRechargeInfoDTO> list = new ArrayList<>();
+            List<ProductRechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : productRechargeInfoList)
             {
-                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                ProductRechargeResDTO pri = new ProductRechargeResDTO();
                 pri.setRechargeType(o.getRechargeType());
                 pri.setAmount(o.getAmount());
                 pri.setBalance(o.getBalance());
@@ -176,15 +176,15 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<StatsDateInfoDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId)
+    public ListDTO<StatsDateInfoResDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId)
     {
         List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name, productId);
-        ListDTO<StatsDateInfoDTO> listDTO = new ListDTO<>();
-        List<StatsDateInfoDTO> listData = new ArrayList<>();
-        StatsDateInfoDTO statsDateDTO;
+        ListDTO<StatsDateInfoResDTO> listDTO = new ListDTO<>();
+        List<StatsDateInfoResDTO> listData = new ArrayList<>();
+        StatsDateInfoResDTO statsDateDTO;
         for(StatsDateInfo item : list)
         {
-            statsDateDTO = new StatsDateInfoDTO();
+            statsDateDTO = new StatsDateInfoResDTO();
             statsDateDTO.setDate(item.getDate());
             statsDateDTO.setCount(item.getCount());
             statsDateDTO.setMissCount(item.getMissCount());
@@ -195,15 +195,15 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<StatsDateInfoDTO> getRevenueListStats(Date fromDate, Date toDate)
+    public ListDTO<StatsDateInfoResDTO> getRevenueListStats(Date fromDate, Date toDate)
     {
         List<StatsDateInfo> list = statsClientMapper.getRevenueListStats(fromDate, toDate);
-        ListDTO<StatsDateInfoDTO> listDTO = new ListDTO<>();
-        List<StatsDateInfoDTO> listData = new ArrayList<>();
-        StatsDateInfoDTO statsDateDTO;
+        ListDTO<StatsDateInfoResDTO> listDTO = new ListDTO<>();
+        List<StatsDateInfoResDTO> listData = new ArrayList<>();
+        StatsDateInfoResDTO statsDateDTO;
         for(StatsDateInfo item : list)
         {
-            statsDateDTO = new StatsDateInfoDTO();
+            statsDateDTO = new StatsDateInfoResDTO();
             statsDateDTO.setDate(item.getDate());
             statsDateDTO.setFee(item.getFee());
             listData.add(statsDateDTO);
@@ -259,7 +259,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public void clientAccessTrend(List<Long> clientIdList, List<IntervalDTO> intervalList) // TODO 客户请求走势图
+    public void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList) // TODO 客户请求走势图
     {
         if(!CollectionUtils.isEmpty(clientIdList) || !CollectionUtils.isEmpty(intervalList))
         {
@@ -269,14 +269,14 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     private void findProductRechargeInfoDTO(List<ProductRechargeInfo> productRechargeInfoList,
-            List<ProductRechargeInfoDTO> dataList)
+            List<ProductRechargeResDTO> dataList)
     {
-        ProductRechargeInfoDTO productRechargeInfoDTO;
+        ProductRechargeResDTO productRechargeResDTO;
         for(ProductRechargeInfo item : productRechargeInfoList)
         {
-            productRechargeInfoDTO = new ProductRechargeInfoDTO();
-            dataList.add(productRechargeInfoDTO);
-            EntityUtils.copyProperties(item, productRechargeInfoDTO);
+            productRechargeResDTO = new ProductRechargeResDTO();
+            dataList.add(productRechargeResDTO);
+            EntityUtils.copyProperties(item, productRechargeResDTO);
         }
     }
 }

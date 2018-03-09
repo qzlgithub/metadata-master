@@ -12,7 +12,7 @@ import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.SysConfigDTO;
+import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -231,16 +231,16 @@ public class SettingController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        List<SysConfigDTO> sysConfigDTOList = new ArrayList<>();
-        SysConfigDTO sysConfigDTO = new SysConfigDTO();
-        sysConfigDTO.setName(SysParam.CLIENT_SUB_USER_QTY);
-        sysConfigDTO.setValue(subUserQty + "");
-        sysConfigDTOList.add(sysConfigDTO);
-        sysConfigDTO = new SysConfigDTO();
-        sysConfigDTO.setName(SysParam.SERVICE_QQ);
-        sysConfigDTO.setValue(serviceQQ + "");
-        sysConfigDTOList.add(sysConfigDTO);
-        systemService.setGlobalSetting(sysConfigDTOList, resp);
+        List<SysConfigReqDTO> sysConfigReqDTOList = new ArrayList<>();
+        SysConfigReqDTO sysConfigReqDTO = new SysConfigReqDTO();
+        sysConfigReqDTO.setName(SysParam.CLIENT_SUB_USER_QTY);
+        sysConfigReqDTO.setValue(subUserQty + "");
+        sysConfigReqDTOList.add(sysConfigReqDTO);
+        sysConfigReqDTO = new SysConfigReqDTO();
+        sysConfigReqDTO.setName(SysParam.SERVICE_QQ);
+        sysConfigReqDTO.setValue(serviceQQ + "");
+        sysConfigReqDTOList.add(sysConfigReqDTO);
+        systemService.setGlobalSetting(sysConfigReqDTOList, resp);
         return resp;
     }
 }

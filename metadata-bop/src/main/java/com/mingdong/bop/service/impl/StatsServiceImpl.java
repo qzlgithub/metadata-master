@@ -17,12 +17,12 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.AccessResDTO;
-import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
+import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
+import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.StatsDateInfoDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.StatsRpcService;
@@ -141,14 +141,14 @@ public class StatsServiceImpl implements StatsService
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
-        ListDTO<ClientInfoDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoDTO> list = listDTO.getList();
+        ListDTO<ClientInfoReqDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoReqDTO> list = listDTO.getList();
         resp.setTotal(listDTO.getTotal());
         resp.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 新增客户数量" + listDTO.getTotal() + "个");
         if(!CollectionUtils.isEmpty(list))
         {
             List<Map<String, Object>> dataList = new ArrayList<>(list.size());
-            for(ClientInfoDTO o : list)
+            for(ClientInfoReqDTO o : list)
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.REGISTER_DATE, DateUtils.format(o.getRegisterTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -175,8 +175,8 @@ public class StatsServiceImpl implements StatsService
         row.createCell(4).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
-        List<ClientInfoDTO> dataList = listDTO.getList();
+        ListDTO<ClientInfoReqDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
+        List<ClientInfoReqDTO> dataList = listDTO.getList();
 
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -184,7 +184,7 @@ public class StatsServiceImpl implements StatsService
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ClientInfoDTO dataInfo;
+            ClientInfoReqDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -208,8 +208,8 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay);
-        List<ClientInfoDTO> dataList = listDTO.getList();
+        ListDTO<ClientInfoReqDTO> listDTO = statsRpcService.getClientInfoListByDate(beforeDate, currentDay);
+        List<ClientInfoReqDTO> dataList = listDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Integer> dateMap = new LinkedHashMap<>();
         Calendar c = Calendar.getInstance();
@@ -221,7 +221,7 @@ public class StatsServiceImpl implements StatsService
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
         Integer intTemp;
-        for(ClientInfoDTO item : dataList)
+        for(ClientInfoReqDTO item : dataList)
         {
             String strTemp = sdf.format(item.getRegisterTime());
             intTemp = dateMap.get(strTemp);
@@ -296,16 +296,16 @@ public class StatsServiceImpl implements StatsService
         row.createCell(9).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ProductRechargeInfoDTO> listDTO = statsRpcService.getProductRechargeInfoListBy(beforeDate, currentDay,
+        ListDTO<ProductRechargeResDTO> listDTO = statsRpcService.getProductRechargeInfoListBy(beforeDate, currentDay,
                 page);
-        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
+        List<ProductRechargeResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-            ProductRechargeInfoDTO dataInfo;
+            ProductRechargeResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
@@ -336,12 +336,12 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ProductRechargeInfoDTO> listDTO = statsRpcService.getRechargeInfoListBy(beforeDate, currentDay);
-        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
+        ListDTO<ProductRechargeResDTO> listDTO = statsRpcService.getRechargeInfoListBy(beforeDate, currentDay);
+        List<ProductRechargeResDTO> dataList = listDTO.getList();
         Map<String, BigDecimal> typeNameBigDecMap = new HashMap<>();
         Set<String> setTemp = new HashSet<>();
         BigDecimal bigDecimalTemp;
-        for(ProductRechargeInfoDTO item : dataList)
+        for(ProductRechargeResDTO item : dataList)
         {
             bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeType());
             if(bigDecimalTemp == null)
@@ -365,9 +365,9 @@ public class StatsServiceImpl implements StatsService
         leftObject.put("legendData", jsonArrayTemp1);
         leftObject.put("data", jsonArrayTemp);
         //right
-        ListDTO<DictRechargeTypeDTO> dictRechargeTypeListDTO = systemRpcService.getRechargeTypeList(TrueOrFalse.TRUE,
+        ListDTO<DictRechargeTypeResDTO> dictRechargeTypeListDTO = systemRpcService.getRechargeTypeList(TrueOrFalse.TRUE,
                 TrueOrFalse.FALSE);
-        List<DictRechargeTypeDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getList();
+        List<DictRechargeTypeResDTO> dictRechargeTypeList = dictRechargeTypeListDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Map<String, BigDecimal>> dateMap = new LinkedHashMap<>();
         Map<String, BigDecimal> bigMapTemp;
@@ -377,14 +377,14 @@ public class StatsServiceImpl implements StatsService
         for(int i = 0; i < difInt; i++)
         {
             bigMapTemp = new LinkedHashMap<>();
-            for(DictRechargeTypeDTO item : dictRechargeTypeList)
+            for(DictRechargeTypeResDTO item : dictRechargeTypeList)
             {
                 bigMapTemp.put(item.getName(), new BigDecimal(0));
             }
             dateMap.put(sdf.format(c.getTime()), bigMapTemp);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
-        for(ProductRechargeInfoDTO item : dataList)
+        for(ProductRechargeResDTO item : dataList)
         {
             String dateStrTemp = sdf.format(item.getTradeTime());
             bigMapTemp = dateMap.get(dateStrTemp);
@@ -522,14 +522,14 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<StatsDateInfoDTO> listDTO = statsRpcService.getRequestListStats(beforeDate, currentDay, name,
+        ListDTO<StatsDateInfoResDTO> listDTO = statsRpcService.getRequestListStats(beforeDate, currentDay, name,
                 productId);
-        List<StatsDateInfoDTO> list = listDTO.getList();
+        List<StatsDateInfoResDTO> list = listDTO.getList();
         Map<String, Integer> dateIntMap = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(!CollectionUtils.isEmpty(list))
         {
-            for(StatsDateInfoDTO item : list)
+            for(StatsDateInfoResDTO item : list)
             {
                 dateIntMap.put(sdf.format(item.getDate()), item.getCount());
             }
@@ -650,13 +650,13 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<StatsDateInfoDTO> listDTO = statsRpcService.getRevenueListStats(beforeDate, currentDay);
-        List<StatsDateInfoDTO> list = listDTO.getList();
+        ListDTO<StatsDateInfoResDTO> listDTO = statsRpcService.getRevenueListStats(beforeDate, currentDay);
+        List<StatsDateInfoResDTO> list = listDTO.getList();
         Map<String, BigDecimal> dateIntMap = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(!CollectionUtils.isEmpty(list))
         {
-            for(StatsDateInfoDTO item : list)
+            for(StatsDateInfoResDTO item : list)
             {
                 dateIntMap.put(sdf.format(item.getDate()), item.getFee());
             }
@@ -700,8 +700,8 @@ public class StatsServiceImpl implements StatsService
                     public Map<String, Object> queryData()
                     {
                         Map<String, Object> map = new HashMap<>();
-                        ListDTO<StatsDateInfoDTO> requestListStats = statsRpcService.getRevenueListStats(null, null);
-                        List<StatsDateInfoDTO> list = requestListStats.getList();
+                        ListDTO<StatsDateInfoResDTO> requestListStats = statsRpcService.getRevenueListStats(null, null);
+                        List<StatsDateInfoResDTO> list = requestListStats.getList();
                         Date currentDay = new Date();
                         Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
                         Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
@@ -711,7 +711,7 @@ public class StatsServiceImpl implements StatsService
                         dataMap.put(Field.YESTERDAY_FEE, new BigDecimal(0));
                         dataMap.put(Field.MONTH_FEE, new BigDecimal(0));
                         dataMap.put(Field.ALL_FEE, new BigDecimal(0));
-                        for(StatsDateInfoDTO item : list)
+                        for(StatsDateInfoResDTO item : list)
                         {
                             if(item.getFee() == null)
                             {
@@ -757,9 +757,9 @@ public class StatsServiceImpl implements StatsService
                     public Map<String, Object> queryData()
                     {
                         Map<String, Object> map = new HashMap<>();
-                        ListDTO<StatsDateInfoDTO> requestListStats = statsRpcService.getRequestListStats(null, null,
+                        ListDTO<StatsDateInfoResDTO> requestListStats = statsRpcService.getRequestListStats(null, null,
                                 null, null);
-                        List<StatsDateInfoDTO> list = requestListStats.getList();
+                        List<StatsDateInfoResDTO> list = requestListStats.getList();
                         Date currentDay = new Date();
                         Date nowDate = DateCalculateUtils.getCurrentDate(currentDay);
                         Date yesterdayDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
@@ -773,7 +773,7 @@ public class StatsServiceImpl implements StatsService
                         dataMap.put(Field.MONTH_MISS_COUNT, 0);
                         dataMap.put(Field.ALL_COUNT, 0);
                         dataMap.put(Field.ALL_MISS_COUNT, 0);
-                        for(StatsDateInfoDTO item : list)
+                        for(StatsDateInfoResDTO item : list)
                         {
                             if(nowDate.equals(item.getDate()) || nowDate.before(item.getDate()))
                             {
@@ -844,17 +844,17 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getProductRechargeRecord(null, null, start, end,
+        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getProductRechargeRecord(null, null, start, end,
                 page);
-        List<ProductRechargeInfoDTO> infoDateList = listDTO.getList();
+        List<ProductRechargeResDTO> infoDateList = listDTO.getList();
         return getProductRechargeInfoDateList(infoDateList);
     }
 
-    private List<Map<String, Object>> getProductRechargeInfoDateList(List<ProductRechargeInfoDTO> infoDateList)
+    private List<Map<String, Object>> getProductRechargeInfoDateList(List<ProductRechargeResDTO> infoDateList)
     {
         List<Map<String, Object>> dataList = new ArrayList<>(infoDateList.size());
         Map<String, Object> map;
-        for(ProductRechargeInfoDTO item : infoDateList)
+        for(ProductRechargeResDTO item : infoDateList)
         {
             map = new HashMap<>();
             map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));

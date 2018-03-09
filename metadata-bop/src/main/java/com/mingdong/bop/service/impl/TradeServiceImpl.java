@@ -9,9 +9,9 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
-import com.mingdong.core.model.dto.AccessResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import org.apache.poi.ss.usermodel.Cell;
@@ -41,7 +41,7 @@ public class TradeServiceImpl implements TradeService
     public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
             Date fromDate, Date toDate, Page page, RestListResp res)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
                 rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
@@ -50,7 +50,7 @@ public class TradeServiceImpl implements TradeService
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
             StringBuffer sbf;
-            for(ProductRechargeInfoDTO o : listDTO.getList())
+            for(ProductRechargeResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.RECHARGE_AT, DateUtils.format(o.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -102,10 +102,10 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ProductRechargeInfoDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
                 rechargeType, fromDate, toDate, page);
-        List<ProductRechargeInfoDTO> dataList = listDTO.getList();
-        ProductRechargeInfoDTO dataInfo;
+        List<ProductRechargeResDTO> dataList = listDTO.getList();
+        ProductRechargeResDTO dataInfo;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         StringBuffer sbf;
         for(int i = 0; i < dataList.size(); i++)

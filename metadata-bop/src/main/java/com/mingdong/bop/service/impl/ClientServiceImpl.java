@@ -22,22 +22,22 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.AccessReqDTO;
-import com.mingdong.core.model.dto.ClientContactReqDTO;
-import com.mingdong.core.model.dto.ClientDetailDTO;
-import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientOperateLogDTO;
-import com.mingdong.core.model.dto.ClientUserDTO;
-import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.DisableClientDTO;
-import com.mingdong.core.model.dto.IndustryDTO;
+import com.mingdong.core.model.dto.request.AccessReqDTO;
+import com.mingdong.core.model.dto.request.ClientContactReqDTO;
+import com.mingdong.core.model.dto.response.ClientDetailResDTO;
+import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
+import com.mingdong.core.model.dto.request.ClientOperateLogReqDTO;
+import com.mingdong.core.model.dto.response.ClientUserResDTO;
+import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
+import com.mingdong.core.model.dto.request.DisableClientReqDTO;
+import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.RechargeReqDTO;
-import com.mingdong.core.model.dto.RechargeResDTO;
-import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.request.NewClientReqDTO;
+import com.mingdong.core.model.dto.response.ProductDetailResDTO;
+import com.mingdong.core.model.dto.request.RechargeReqDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.SubUserResDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -85,13 +85,13 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getSimilarCorp(String name, Long clientId, RestListResp resp)
     {
-        ListDTO<ClientInfoDTO> listDTO = clientRpcService.getSimilarCorpByName(name, clientId);
-        List<ClientInfoDTO> dataList = listDTO.getList();
+        ListDTO<ClientInfoReqDTO> listDTO = clientRpcService.getSimilarCorpByName(name, clientId);
+        List<ClientInfoReqDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             resp.setTotal(dataList.size());
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ClientInfoDTO o : dataList)
+            for(ClientInfoReqDTO o : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.REGISTER_DATE, DateUtils.format(o.getRegisterTime(), DateFormat.YYYY_MM_DD));
@@ -112,14 +112,14 @@ public class ClientServiceImpl implements ClientService
     public void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Long managerId,
             Page page, RestListResp res)
     {
-        ListDTO<ClientInfoDTO> clientInfoListDTO = clientRpcService.getClientInfoListBy(keyword,
+        ListDTO<ClientInfoReqDTO> clientInfoListDTO = clientRpcService.getClientInfoListBy(keyword,
                 industryId == null ? parentIndustryId : industryId, enabled, managerId, page);
         res.setTotal(clientInfoListDTO.getTotal());
-        List<ClientInfoDTO> clientInfoList = clientInfoListDTO.getList();
+        List<ClientInfoReqDTO> clientInfoList = clientInfoListDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(clientInfoList))
         {
-            for(ClientInfoDTO clientInfo : clientInfoList)
+            for(ClientInfoReqDTO clientInfo : clientInfoList)
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, clientInfo.getClientId() + "");
@@ -140,7 +140,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientInfoForEdit(Long clientId, RestResp resp)
     {
-        ClientDetailDTO dto = clientRpcService.getClientInfoForEdit(clientId);
+        ClientDetailResDTO dto = clientRpcService.getClientInfoForEdit(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
             resp.setError(dto.getResult());
@@ -168,7 +168,7 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.CONTACTS, contacts);
 
-        IndustryDTO industry = systemRpcService.getIndustryDictOfTarget(dto.getIndustryId());
+        IndustryResDTO industry = systemRpcService.getIndustryDictOfTarget(dto.getIndustryId());
         if(RestResult.SUCCESS == industry.getResult())
         {
             resp.addData(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
@@ -196,7 +196,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void changeClientStatus(List<Long> clientIdList, Integer enabled, String reason, RestResp resp)
     {
-        DisableClientDTO dto = new DisableClientDTO();
+        DisableClientReqDTO dto = new DisableClientReqDTO();
         dto.setClientIdList(clientIdList);
         dto.setEnabled(enabled);
         dto.setReason(reason);
@@ -221,10 +221,10 @@ public class ClientServiceImpl implements ClientService
     public List<Map<String, Object>> getClientSubUserList(Long clientId)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(clientId, false);
+        ListDTO<SubUserResDTO> listDTO = clientRpcService.getSubUserList(clientId, false);
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(SubUserDTO o : listDTO.getList())
+            for(SubUserResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.ID, o.getUserId() + "");
@@ -343,12 +343,12 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientOperateLog(Long clientId, Page page, RestListResp resp)
     {
-        ListDTO<ClientOperateLogDTO> listDTO = clientRpcService.getClientOperateLog(clientId, page);
+        ListDTO<ClientOperateLogReqDTO> listDTO = clientRpcService.getClientOperateLog(clientId, page);
         resp.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(ClientOperateLogDTO info : listDTO.getList())
+            for(ClientOperateLogReqDTO info : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.OPERATE_TIME, DateUtils.format(info.getOperateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -401,7 +401,7 @@ public class ClientServiceImpl implements ClientService
             reqDTO.setGeneral(o.getGeneral());
             contactList.add(reqDTO);
         }
-        NewClientDTO dto = new NewClientDTO();
+        NewClientReqDTO dto = new NewClientReqDTO();
         dto.setCorpName(vo.getCorpName());
         dto.setShortName(vo.getShortName());
         dto.setIndustryId(vo.getIndustryId());
@@ -424,7 +424,7 @@ public class ClientServiceImpl implements ClientService
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
-        NewClientDTO client = new NewClientDTO();
+        NewClientReqDTO client = new NewClientReqDTO();
         client.setClientId(vo.getClientId());
         client.setCorpName(vo.getCorpName());
         client.setShortName(vo.getShortName());
@@ -461,7 +461,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void findClientDetail(Long clientId, RestResp resp)
     {
-        ClientDetailDTO dto = clientRpcService.getClientDetail(clientId);
+        ClientDetailResDTO dto = clientRpcService.getClientDetail(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
             resp.setError(dto.getResult());
@@ -477,7 +477,7 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
         resp.addData(Field.MANAGER_NAME, dto.getManagerName());
         List<Map<String, Object>> userList = new ArrayList<>();
-        for(ClientUserDTO o : dto.getUsers())
+        for(ClientUserResDTO o : dto.getUsers())
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ID, o.getId() + "");
@@ -499,11 +499,11 @@ public class ClientServiceImpl implements ClientService
             contactList.add(m);
         }
         resp.addData(Field.CONTACT_LIST, contactList);
-        List<ProductClientDetailDTO> productDTOList = productRpcService.getProductInfoList(clientId);
+        List<ProductDetailResDTO> productDTOList = productRpcService.getProductInfoList(clientId);
         List<Map<String, Object>> opened = new ArrayList<>();
         List<Map<String, Object>> toOpen = new ArrayList<>();
         List<Map<String, Object>> custom = new ArrayList<>();
-        for(ProductClientDetailDTO d : productDTOList)
+        for(ProductDetailResDTO d : productDTOList)
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.PRODUCT_ID, d.getProductId() + "");
@@ -579,7 +579,7 @@ public class ClientServiceImpl implements ClientService
     public Map<String, Object> getClientAccountDict(Long clientId)
     {
         Map<String, Object> map = new HashMap<>();
-        ClientUserDictDTO res = clientRpcService.getClientAccountDict(clientId);
+        ClientUserDictResDTO res = clientRpcService.getClientAccountDict(clientId);
         map.put(Field.CORP_NAME, res.getCorpName());
         map.put(Field.ACCOUNT_DICT, res.getUserDict());
         return map;

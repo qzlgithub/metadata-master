@@ -1,23 +1,23 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.AccessReqDTO;
-import com.mingdong.core.model.dto.AccessResDTO;
-import com.mingdong.core.model.dto.ClientContactReqDTO;
-import com.mingdong.core.model.dto.ClientDetailDTO;
-import com.mingdong.core.model.dto.ClientInfoDTO;
-import com.mingdong.core.model.dto.ClientOperateLogDTO;
-import com.mingdong.core.model.dto.ClientUserDictDTO;
-import com.mingdong.core.model.dto.CredentialDTO;
-import com.mingdong.core.model.dto.DisableClientDTO;
+import com.mingdong.core.model.dto.request.AccessReqDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
+import com.mingdong.core.model.dto.request.ClientContactReqDTO;
+import com.mingdong.core.model.dto.response.ClientDetailResDTO;
+import com.mingdong.core.model.dto.request.ClientInfoReqDTO;
+import com.mingdong.core.model.dto.request.ClientOperateLogReqDTO;
+import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
+import com.mingdong.core.model.dto.response.CredentialResDTO;
+import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.MessageDTO;
-import com.mingdong.core.model.dto.NewClientDTO;
-import com.mingdong.core.model.dto.RechargeReqDTO;
-import com.mingdong.core.model.dto.RechargeResDTO;
-import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.response.MessageResDTO;
+import com.mingdong.core.model.dto.request.NewClientReqDTO;
+import com.mingdong.core.model.dto.request.RechargeReqDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.SubUserResDTO;
+import com.mingdong.core.model.dto.response.UserResDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -27,7 +27,7 @@ public interface ClientRpcService
     /**
      * 客户帐号登录
      */
-    UserDTO userLogin(String username, String password);
+    UserResDTO userLogin(String username, String password);
 
     /**
      * 更改客户帐号的密码
@@ -37,7 +37,7 @@ public interface ClientRpcService
     /**
      * 根据客户id获取客户消息列表
      */
-    ListDTO<MessageDTO> getClientMessage(Long clientId, Page page);
+    ListDTO<MessageResDTO> getClientMessage(Long clientId, Page page);
 
     /**
      * 软删客户子帐号
@@ -50,7 +50,7 @@ public interface ClientRpcService
      * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
      */
-    ListDTO<SubUserDTO> getSubUserList(Long clientId, Long userId);
+    ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId);
 
     /**
      * 查询客户子账号列表
@@ -58,7 +58,7 @@ public interface ClientRpcService
      * @param clientId       客户ID
      * @param includeDeleted 是否包含已删除账号
      */
-    ListDTO<SubUserDTO> getSubUserList(Long clientId, boolean includeDeleted);
+    ListDTO<SubUserResDTO> getSubUserList(Long clientId, boolean includeDeleted);
 
     /**
      * 新增客户子帐号
@@ -73,17 +73,17 @@ public interface ClientRpcService
     /**
      * 根据客户帐号id获取帐号信息
      */
-    UserDTO getAccountByUserId(Long clientUserId);
+    UserResDTO getAccountByUserId(Long clientUserId);
 
     /**
      * 修改客户子帐号信息
      */
-    ResponseDTO editSubUser(SubUserDTO subUserDTO);
+    ResponseDTO editSubUser(SubUserResDTO subUserResDTO);
 
     /**
      * 获取帐号token
      */
-    CredentialDTO getUserCredential(Long userId, String password, Long productId);
+    CredentialResDTO getUserCredential(Long userId, String password, Long productId);
 
     /**
      * 新增帐号token
@@ -93,12 +93,12 @@ public interface ClientRpcService
     /**
      * 查看名称相似的客户信息列表
      */
-    ListDTO<ClientInfoDTO> getSimilarCorpByName(String name, Long clientId);
+    ListDTO<ClientInfoReqDTO> getSimilarCorpByName(String name, Long clientId);
 
     /**
      * 根据条件获取客户信息
      */
-    ListDTO<ClientInfoDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId,
+    ListDTO<ClientInfoReqDTO> getClientInfoListBy(String keyword, Long industryId, Integer enabled, Long managerId,
             Page page);
 
     /**
@@ -117,29 +117,29 @@ public interface ClientRpcService
     /**
      * 根据条件获取客户信息列表
      */
-    ListDTO<ClientInfoDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
+    ListDTO<ClientInfoReqDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
 
     /**
      * 新增客户
      */
-    ResponseDTO addNewClient(NewClientDTO dto);
+    ResponseDTO addNewClient(NewClientReqDTO dto);
 
     /**
      * 获取客户信息和帐号信息
      */
-    ClientDetailDTO getClientDetail(Long clientId);
+    ClientDetailResDTO getClientDetail(Long clientId);
 
     /**
      * 更改客户帐号状态
      */
-    ResponseDTO changeClientStatus(DisableClientDTO disableClientDTO);
+    ResponseDTO changeClientStatus(DisableClientReqDTO disableClientReqDTO);
 
     /**
      * 获取客户信息
      */
-    ClientDetailDTO getClientInfoForEdit(Long clientId);
+    ClientDetailResDTO getClientInfoForEdit(Long clientId);
 
-    ResponseDTO editClient(NewClientDTO clientDTO, List<ClientContactReqDTO> contacts, List<Long> delIds);
+    ResponseDTO editClient(NewClientReqDTO clientDTO, List<ClientContactReqDTO> contacts, List<Long> delIds);
 
     ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds);
 
@@ -148,7 +148,7 @@ public interface ClientRpcService
     ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
             Date toDate, Long managerId, Page page);
 
-    ClientUserDictDTO getClientAccountDict(Long clientId);
+    ClientUserDictResDTO getClientAccountDict(Long clientId);
 
     ListDTO<AccessReqDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
@@ -159,7 +159,7 @@ public interface ClientRpcService
 
     ListDTO<AccessResDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 
-    ListDTO<ClientOperateLogDTO> getClientOperateLog(Long clientId, Page page);
+    ListDTO<ClientOperateLogReqDTO> getClientOperateLog(Long clientId, Page page);
 
     /**
      * 查询客户最近的充值记录信息

@@ -12,13 +12,13 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.CredentialDTO;
+import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.MessageDTO;
-import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.SubUserDTO;
-import com.mingdong.core.model.dto.UserDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.response.MessageResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.SubUserResDTO;
+import com.mingdong.core.model.dto.response.UserResDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -48,7 +48,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void userLogin(String username, String password, String sessionId, RestResp resp)
     {
-        UserDTO dto = clientRpcService.userLogin(username, password);
+        UserResDTO dto = clientRpcService.userLogin(username, password);
         if(RestResult.SUCCESS != dto.getResult())
         {
             resp.setError(dto.getResult());
@@ -86,14 +86,14 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientSubAccountList(RestListResp res)
     {
-        ListDTO<SubUserDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(),
+        ListDTO<SubUserResDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(),
                 RequestThread.getUserId());
         res.addData(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             res.setTotal(listDTO.getTotal());
-            for(SubUserDTO o : listDTO.getList())
+            for(SubUserResDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.USER_ID, o.getUserId() + "");
@@ -119,15 +119,15 @@ public class ClientServiceImpl implements ClientService
     public void editSubUser(Long clientUserId, String username, String password, String name, String phone,
             Integer enabled, RestResp resp)
     {
-        SubUserDTO subUserDTO = new SubUserDTO();
-        subUserDTO.setClientId(RequestThread.getClientId());
-        subUserDTO.setUserId(clientUserId);
-        subUserDTO.setUsername(username);
-        subUserDTO.setPassword(password == null ? null : Md5Utils.encrypt(password));
-        subUserDTO.setName(name);
-        subUserDTO.setPhone(phone);
-        subUserDTO.setEnabled(enabled);
-        ResponseDTO responseDTO = clientRpcService.editSubUser(subUserDTO);
+        SubUserResDTO subUserResDTO = new SubUserResDTO();
+        subUserResDTO.setClientId(RequestThread.getClientId());
+        subUserResDTO.setUserId(clientUserId);
+        subUserResDTO.setUsername(username);
+        subUserResDTO.setPassword(password == null ? null : Md5Utils.encrypt(password));
+        subUserResDTO.setName(name);
+        subUserResDTO.setPhone(phone);
+        subUserResDTO.setEnabled(enabled);
+        ResponseDTO responseDTO = clientRpcService.editSubUser(subUserResDTO);
         resp.setError(responseDTO.getResult());
     }
 
@@ -136,10 +136,10 @@ public class ClientServiceImpl implements ClientService
     {
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
-            ListDTO<SubUserDTO> subUserList = clientRpcService.getSubUserList(RequestThread.getClientId(),
+            ListDTO<SubUserResDTO> subUserList = clientRpcService.getSubUserList(RequestThread.getClientId(),
                     RequestThread.getUserId());
             List<Map<String, Object>> list = new ArrayList<>();
-            for(SubUserDTO u : subUserList.getList())
+            for(SubUserResDTO u : subUserList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.USERNAME, u.getUsername());
@@ -151,11 +151,11 @@ public class ClientServiceImpl implements ClientService
             int count = Integer.valueOf(subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX)) - list.size();
             resp.addData(Field.COUNT, count < 0 ? 0 : count);
         }
-        ListDTO<ProductDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
+        ListDTO<ProductResDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();
         if(!CollectionUtils.isEmpty(openedList.getList()))
         {
-            for(ProductDTO d : openedList.getList())
+            for(ProductResDTO d : openedList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.PRODUCT_ID, d.getId() + "");
@@ -176,11 +176,11 @@ public class ClientServiceImpl implements ClientService
                 opened.add(map);
             }
         }
-        ListDTO<ProductDTO> unopenedList = productRpcService.getUnopenedProductList(RequestThread.getClientId());
+        ListDTO<ProductResDTO> unopenedList = productRpcService.getUnopenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> unopened = new ArrayList<>();
         if(!CollectionUtils.isEmpty(openedList.getList()))
         {
-            for(ProductDTO d : unopenedList.getList())
+            for(ProductResDTO d : unopenedList.getList())
             {
                 Map<String, Object> map = new HashMap<>();
                 map.put(Field.PRODUCT_ID, d.getId() + "");
@@ -197,9 +197,9 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientMessageList(Page page, RestListResp res)
     {
-        ListDTO<MessageDTO> listDTO = clientRpcService.getClientMessage(RequestThread.getClientId(), page);
+        ListDTO<MessageResDTO> listDTO = clientRpcService.getClientMessage(RequestThread.getClientId(), page);
         List<Map<String, Object>> list = new ArrayList<>();
-        for(MessageDTO o : listDTO.getList())
+        for(MessageResDTO o : listDTO.getList())
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ADD_AT, DateUtils.format(o.getAddAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -221,24 +221,24 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getClientUserInfo(Long userId, RestResp resp)
     {
-        UserDTO userDTO = clientRpcService.getAccountByUserId(userId);
-        if(userDTO.getResult() != RestResult.SUCCESS)
+        UserResDTO userResDTO = clientRpcService.getAccountByUserId(userId);
+        if(userResDTO.getResult() != RestResult.SUCCESS)
         {
-            resp.setError(userDTO.getResult());
+            resp.setError(userResDTO.getResult());
             return;
         }
-        resp.addData(Field.CLIENT_ID, userDTO.getClientId() + "");
-        resp.addData(Field.CLIENT_USER_ID, userDTO.getUserId() + "");
-        resp.addData(Field.USERNAME, userDTO.getUsername());
-        resp.addData(Field.NAME, userDTO.getName());
-        resp.addData(Field.PHONE, userDTO.getPhone());
-        resp.addData(Field.ENABLED, userDTO.getEnabled());
+        resp.addData(Field.CLIENT_ID, userResDTO.getClientId() + "");
+        resp.addData(Field.CLIENT_USER_ID, userResDTO.getUserId() + "");
+        resp.addData(Field.USERNAME, userResDTO.getUsername());
+        resp.addData(Field.NAME, userResDTO.getName());
+        resp.addData(Field.PHONE, userResDTO.getPhone());
+        resp.addData(Field.ENABLED, userResDTO.getEnabled());
     }
 
     @Override
     public void getUserCredential(Long userId, String password, Long productId, RestResp resp)
     {
-        CredentialDTO dto = clientRpcService.getUserCredential(userId, password, productId);
+        CredentialResDTO dto = clientRpcService.getUserCredential(userId, password, productId);
         if(dto.getResponseDTO().getResult() != RestResult.SUCCESS)
         {
             resp.setError(dto.getResponseDTO().getResult());

@@ -9,12 +9,12 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.AccessResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.response.ProductDetailResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
@@ -67,10 +67,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
     private RedisDao redisDao;
 
     @Override
-    public ListDTO<ProductRechargeInfoDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
+    public ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
             Date endDate, Page page)
     {
-        ListDTO<ProductRechargeInfoDTO> listDTO = new ListDTO<>();
+        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
         int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -79,10 +79,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
                     endDate);
-            List<ProductRechargeInfoDTO> list = new ArrayList<>(dataList.size());
+            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
             for(ProductRechargeInfo o : dataList)
             {
-                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                ProductRechargeResDTO pri = new ProductRechargeResDTO();
                 pri.setTradeTime(o.getTradeTime());
                 pri.setTradeNo(o.getTradeNo());
                 pri.setRechargeType(o.getRechargeType());
@@ -135,19 +135,19 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductDTO> getOpenedProductList(Long clientId)
+    public ListDTO<ProductResDTO> getOpenedProductList(Long clientId)
     {
-        ListDTO<ProductDTO> listDTO = new ListDTO<>();
+        ListDTO<ProductResDTO> listDTO = new ListDTO<>();
         int total = productClientInfoMapper.countByClientOpened(clientId, TrueOrFalse.TRUE);
         listDTO.setTotal(total);
         if(total > 0)
         {
             List<ProductClientInfo> dataList = productClientInfoMapper.getListByClientOpened(clientId,
                     TrueOrFalse.TRUE);
-            List<ProductDTO> list = new ArrayList<>();
+            List<ProductResDTO> list = new ArrayList<>();
             for(ProductClientInfo o : dataList)
             {
-                ProductDTO p = new ProductDTO();
+                ProductResDTO p = new ProductResDTO();
                 p.setId(o.getProductId());
                 p.setName(o.getProductName());
                 p.setProductCode(o.getCode());
@@ -175,19 +175,19 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductDTO> getUnopenedProductList(Long clientId)
+    public ListDTO<ProductResDTO> getUnopenedProductList(Long clientId)
     {
-        ListDTO<ProductDTO> listDTO = new ListDTO<>();
+        ListDTO<ProductResDTO> listDTO = new ListDTO<>();
         int total = productClientInfoMapper.countByClientOpened(clientId, TrueOrFalse.FALSE);
         listDTO.setTotal(total);
         if(total > 0)
         {
             List<ProductClientInfo> dataList = productClientInfoMapper.getListByClientOpened(clientId,
                     TrueOrFalse.FALSE);
-            List<ProductDTO> list = new ArrayList<>();
+            List<ProductResDTO> list = new ArrayList<>();
             for(ProductClientInfo o : dataList)
             {
-                ProductDTO p = new ProductDTO();
+                ProductResDTO p = new ProductResDTO();
                 p.setId(o.getProductId());
                 p.setName(o.getProductName());
                 p.setRemark(o.getRemark());
@@ -202,9 +202,9 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ProductDTO getClientProductInfo(Long clientId, Long productId)
+    public ProductResDTO getClientProductInfo(Long clientId, Long productId)
     {
-        ProductDTO dto = new ProductDTO();
+        ProductResDTO dto = new ProductResDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
@@ -237,35 +237,35 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ProductDTO getProductInfoData(Long productId)
+    public ProductResDTO getProductInfoData(Long productId)
     {
-        ProductDTO productDTO = new ProductDTO();
+        ProductResDTO productResDTO = new ProductResDTO();
         Product product = productMapper.findById(productId);
         if(product == null)
         {
-            productDTO.setResult(RestResult.OBJECT_NOT_FOUND);
-            return productDTO;
+            productResDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return productResDTO;
         }
         ProductTxt productTxt = productTxtMapper.findById(productId);
-        productDTO.setType(product.getType());
-        productDTO.setProductCode(product.getCode());
-        productDTO.setName(product.getName());
-        productDTO.setCostAmt(product.getCostAmt());
-        productDTO.setCustom(product.getCustom());
-        productDTO.setRemark(product.getRemark());
-        productDTO.setContent(productTxt == null ? null : productTxt.getContent());
-        productDTO.setEnabled(product.getEnabled());
-        return productDTO;
+        productResDTO.setType(product.getType());
+        productResDTO.setProductCode(product.getCode());
+        productResDTO.setName(product.getName());
+        productResDTO.setCostAmt(product.getCostAmt());
+        productResDTO.setCustom(product.getCustom());
+        productResDTO.setRemark(product.getRemark());
+        productResDTO.setContent(productTxt == null ? null : productTxt.getContent());
+        productResDTO.setEnabled(product.getEnabled());
+        return productResDTO;
     }
 
     @Override
-    public List<ProductClientDetailDTO> getProductInfoList(Long clientId)
+    public List<ProductDetailResDTO> getProductInfoList(Long clientId)
     {
-        List<ProductClientDetailDTO> list = new ArrayList<>();
+        List<ProductDetailResDTO> list = new ArrayList<>();
         List<ProductClientInfo> dataList = productClientInfoMapper.getListByClient(clientId);
         for(ProductClientInfo d : dataList)
         {
-            ProductClientDetailDTO o = new ProductClientDetailDTO();
+            ProductDetailResDTO o = new ProductDetailResDTO();
             o.setProductId(d.getProductId());
             o.setName(d.getProductName());
             o.setCustom(d.getCustom());
@@ -297,10 +297,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editProduct(ProductDTO productDTO)
+    public ResponseDTO editProduct(ProductResDTO productResDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Product product = productMapper.findById(productDTO.getId());
+        Product product = productMapper.findById(productResDTO.getId());
         if(product == null)
         {
             responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
@@ -308,30 +308,30 @@ public class ProductRpcServiceImpl implements ProductRpcService
         }
         Date date = new Date();
         Product tempProduct = new Product();
-        tempProduct.setId(productDTO.getId());
+        tempProduct.setId(productResDTO.getId());
         tempProduct.setUpdateTime(date);
-        tempProduct.setName(productDTO.getName());
-        tempProduct.setCostAmt(productDTO.getCostAmt());
-        tempProduct.setRemark(productDTO.getRemark());
-        tempProduct.setEnabled(productDTO.getEnabled());
+        tempProduct.setName(productResDTO.getName());
+        tempProduct.setCostAmt(productResDTO.getCostAmt());
+        tempProduct.setRemark(productResDTO.getRemark());
+        tempProduct.setEnabled(productResDTO.getEnabled());
         productMapper.updateSkipNull(tempProduct);
-        ProductTxt productTxt = productTxtMapper.findById(productDTO.getId());
+        ProductTxt productTxt = productTxtMapper.findById(productResDTO.getId());
         if(productTxt == null)
         {
-            if(!StringUtils.isNullBlank(productDTO.getContent()))
+            if(!StringUtils.isNullBlank(productResDTO.getContent()))
             {
                 productTxt = new ProductTxt();
-                productTxt.setId(productDTO.getId());
+                productTxt.setId(productResDTO.getId());
                 productTxt.setCreateTime(date);
                 productTxt.setUpdateTime(date);
-                productTxt.setContent(productDTO.getContent());
+                productTxt.setContent(productResDTO.getContent());
                 productTxtMapper.add(productTxt);
             }
         }
         else
         {
             productTxt.setUpdateTime(date);
-            productTxt.setContent(productDTO.getContent());
+            productTxt.setContent(productResDTO.getContent());
             productTxtMapper.updateById(productTxt);
         }
         return responseDTO;
@@ -383,9 +383,9 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page)
+    public ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page)
     {
-        ListDTO<ProductDTO> dto = new ListDTO<>();
+        ListDTO<ProductResDTO> dto = new ListDTO<>();
         int total = productMapper.countBy(keyword, type, custom, status);
         int pages = page.getTotalPage(total);
         dto.setTotal(total);
@@ -393,10 +393,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<Product> dataList = productMapper.getListBy(keyword, type, custom, status);
-            List<ProductDTO> list = new ArrayList<>(dataList.size());
+            List<ProductResDTO> list = new ArrayList<>(dataList.size());
             for(Product o : dataList)
             {
-                ProductDTO pd = new ProductDTO();
+                ProductResDTO pd = new ProductResDTO();
                 pd.setId(o.getId());
                 pd.setCreateTime(o.getCreateTime());
                 pd.setProductCode(o.getCode());
@@ -414,10 +414,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductRechargeInfoDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
+    public ListDTO<ProductRechargeResDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
             Long rechargeType, Date fromDate, Date toDate, Page page)
     {
-        ListDTO<ProductRechargeInfoDTO> dto = new ListDTO<>();
+        ListDTO<ProductRechargeResDTO> dto = new ListDTO<>();
         int total = productRechargeInfoMapper.countBy1(keyword, productId, managerId, rechargeType, fromDate, toDate);
         int pages = page.getTotalPage(total);
         dto.setTotal(total);
@@ -429,10 +429,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy1(keyword, productId, managerId,
                     rechargeType, fromDate, toDate);
-            List<ProductRechargeInfoDTO> list = new ArrayList<>(dataList.size());
+            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
             for(ProductRechargeInfo o : dataList)
             {
-                ProductRechargeInfoDTO pri = new ProductRechargeInfoDTO();
+                ProductRechargeResDTO pri = new ProductRechargeResDTO();
                 pri.setTradeTime(o.getTradeTime());
                 pri.setTradeNo(o.getTradeNo());
                 pri.setCorpName(o.getCorpName());
@@ -457,9 +457,9 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page)
+    public ListDTO<ProductResDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page)
     {
-        ListDTO<ProductDTO> dto = new ListDTO<>();
+        ListDTO<ProductResDTO> dto = new ListDTO<>();
         incOpened = TrueOrFalse.TRUE.equals(incOpened) ? incOpened : null;
         int total = productClientInfoMapper.countBy(clientId, typeList, incOpened);
         int pages = page.getTotalPage(total);
@@ -468,10 +468,10 @@ public class ProductRpcServiceImpl implements ProductRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductClientInfo> dataList = productClientInfoMapper.getListBy(clientId, typeList, incOpened);
-            List<ProductDTO> list = new ArrayList<>(dataList.size());
+            List<ProductResDTO> list = new ArrayList<>(dataList.size());
             for(ProductClientInfo o : dataList)
             {
-                ProductDTO p = new ProductDTO();
+                ProductResDTO p = new ProductResDTO();
                 p.setId(o.getProductId());
                 p.setName(o.getProductName());
                 if(o.getClientProductId() != null)

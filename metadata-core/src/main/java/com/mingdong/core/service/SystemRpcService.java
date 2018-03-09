@@ -1,13 +1,13 @@
 package com.mingdong.core.service;
 
-import com.mingdong.core.model.dto.DictIndustryDTO;
-import com.mingdong.core.model.dto.DictRechargeTypeDTO;
-import com.mingdong.core.model.dto.IndustryDTO;
+import com.mingdong.core.model.dto.response.DictIndustryResDTO;
+import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
+import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.PrivilegeDTO;
-import com.mingdong.core.model.dto.RechargeTypeDTO;
-import com.mingdong.core.model.dto.SysConfigDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.response.PrivilegeResDTO;
+import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
+import com.mingdong.core.model.dto.request.SysConfigReqDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -17,27 +17,27 @@ public interface SystemRpcService
     /**
      * 根据条件获取行业分类信息列表
      */
-    ListDTO<DictIndustryDTO> getIndustryList(Long parentIndustryId, Integer enabled);
+    ListDTO<DictIndustryResDTO> getIndustryList(Long parentIndustryId, Integer enabled);
 
     /**
      * 查询指定父级的子级功能列表
      */
-    ListDTO<PrivilegeDTO> getPrivilegeListByParent(Long parentId);
+    ListDTO<PrivilegeResDTO> getPrivilegeListByParent(Long parentId);
 
     /**
      * 根据菜单功能等级获取功能列表
      */
-    ListDTO<PrivilegeDTO> getPrivilegeByLevel(Integer level);
+    ListDTO<PrivilegeResDTO> getPrivilegeByLevel(Integer level);
 
     /**
      * 根据状态获取充值类型列表
      */
-    ListDTO<DictRechargeTypeDTO> getRechargeTypeList(Integer enabled, Integer deleted);
+    ListDTO<DictRechargeTypeResDTO> getRechargeTypeList(Integer enabled, Integer deleted);
 
     /**
      * 获取行业分类列表
      */
-    ListDTO<DictIndustryDTO> getDictIndustryInfoList();
+    ListDTO<DictIndustryResDTO> getDictIndustryInfoList();
 
     /**
      * 修改模块状态
@@ -49,22 +49,22 @@ public interface SystemRpcService
      */
     Map<String, Object> getSettingData();
 
-    IndustryDTO getIndustryDictOfTarget(Long industryId);
+    IndustryResDTO getIndustryDictOfTarget(Long industryId);
 
     /**
      * 新增行业分类，判断code
      */
-    ResponseDTO addIndustryType(DictIndustryDTO industry);
+    ResponseDTO addIndustryType(DictIndustryResDTO industry);
 
     /**
      * 修改行业分类，判断code
      */
-    ResponseDTO editIndustryInfo(DictIndustryDTO industry);
+    ResponseDTO editIndustryInfo(DictIndustryResDTO industry);
 
     /**
      * 修改权限信息
      */
-    ResponseDTO editPrivilegeInfo(PrivilegeDTO privilege);
+    ResponseDTO editPrivilegeInfo(PrivilegeResDTO privilege);
 
     /**
      * 新增or修改充值类型备注
@@ -74,7 +74,7 @@ public interface SystemRpcService
     /**
      * 新增or修改系统参数
      */
-    ResponseDTO addOrUpdateSetting(List<SysConfigDTO> sysConfigDTOList);
+    ResponseDTO addOrUpdateSetting(List<SysConfigReqDTO> sysConfigReqDTOList);
 
     /**
      * 修改行业分类状态
@@ -84,10 +84,10 @@ public interface SystemRpcService
     /**
      * 查询充值类型列表
      */
-    ListDTO<RechargeTypeDTO> getRechargeList();
+    ListDTO<RechargeTypeResDTO> getRechargeList();
 
     /**
      * 根据ID编辑充值类型
      */
-    ResponseDTO editRechargeType(RechargeTypeDTO rechargeTypeDTO);
+    ResponseDTO editRechargeType(RechargeTypeResDTO rechargeTypeResDTO);
 }

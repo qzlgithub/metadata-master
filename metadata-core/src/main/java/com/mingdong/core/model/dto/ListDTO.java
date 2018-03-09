@@ -1,7 +1,5 @@
 package com.mingdong.core.model.dto;
 
-import com.mingdong.core.model.dto.base.RequestDTO;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

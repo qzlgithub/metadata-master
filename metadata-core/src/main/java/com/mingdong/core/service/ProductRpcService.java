@@ -1,12 +1,12 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.model.dto.AccessResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.ProductClientDetailDTO;
-import com.mingdong.core.model.dto.ProductDTO;
-import com.mingdong.core.model.dto.ProductRechargeInfoDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.response.ProductDetailResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +16,7 @@ public interface ProductRpcService
     /**
      * 根据条件获取客户充值记录
      */
-    ListDTO<ProductRechargeInfoDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page);
 
     /**
@@ -28,17 +28,17 @@ public interface ProductRpcService
     /**
      * 获取指定客户已开通的产品服务信息列表
      */
-    ListDTO<ProductDTO> getOpenedProductList(Long clientId);
+    ListDTO<ProductResDTO> getOpenedProductList(Long clientId);
 
     /**
      * 获取指定客户未开通的产品服务信息列表
      */
-    ListDTO<ProductDTO> getUnopenedProductList(Long clientId);
+    ListDTO<ProductResDTO> getUnopenedProductList(Long clientId);
 
     /**
      * 根据条件获取产品信息
      */
-    ProductDTO getClientProductInfo(Long clientId, Long productId);
+    ProductResDTO getClientProductInfo(Long clientId, Long productId);
 
     /**
      * 根据合同号获取充值记录
@@ -48,27 +48,27 @@ public interface ProductRpcService
     /**
      * 查询产品的详细信息
      */
-    ProductDTO getProductInfoData(Long productId);
+    ProductResDTO getProductInfoData(Long productId);
 
     /**
      * 根据客户id获取客户项目详细
      */
-    List<ProductClientDetailDTO> getProductInfoList(Long clientId);
+    List<ProductDetailResDTO> getProductInfoList(Long clientId);
 
     /**
      * 产品信息编辑
      */
-    ResponseDTO editProduct(ProductDTO productDTO);
+    ResponseDTO editProduct(ProductResDTO productResDTO);
 
     /**
      * 根据产品id修改产品状态
      */
     ResponseDTO changeProductStatus(Long productId, Integer enabled);
 
-    ListDTO<ProductDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
+    ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
 
-    ListDTO<ProductRechargeInfoDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
+    ListDTO<ProductRechargeResDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
             Long rechargeType, Date fromDate, Date toDate, Page page);
 
-    ListDTO<ProductDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
+    ListDTO<ProductResDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
 }

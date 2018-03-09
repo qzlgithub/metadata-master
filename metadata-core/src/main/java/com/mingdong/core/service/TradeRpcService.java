@@ -1,7 +1,7 @@
 package com.mingdong.core.service;
 
-import com.mingdong.core.model.dto.RechargeReqDTO;
-import com.mingdong.core.model.dto.base.ResponseDTO;
+import com.mingdong.core.model.dto.request.RechargeReqDTO;
+import com.mingdong.core.model.dto.ResponseDTO;
 
 public interface TradeRpcService
 {
