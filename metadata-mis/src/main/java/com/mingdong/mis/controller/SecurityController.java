@@ -1,15 +1,26 @@
 package com.mingdong.mis.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.mingdong.common.util.MapUtils;
+import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.model.MetadataRes;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.service.ClientService;
+import com.mingdong.mis.util.SignUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 
 @RestController
 @RequestMapping(value = "security")
@@ -28,5 +39,25 @@ public class SecurityController
         MetadataRes res = RequestThread.getResult();
         clientService.getClientAccessToken(appId, timestamp, accessKey, username, refresh, res);
         return res;
+    }
+
+    @PostMapping(value = "/sign")
+    public String sign(@RequestBody JSONObject jsonReq) throws MetadataCoreException
+    {
+        Map<String,Object> map = new HashMap<>();
+        Set<String> strings = jsonReq.keySet();
+        String key = "";
+        for(String str : strings){
+            if("appKey".equals(str)){
+                key = jsonReq.getString("appKey");
+                continue;
+            }
+            map.put(str,jsonReq.get(str));
+        }
+        SortedMap sm = MapUtils.sortKey(map);
+        String str = JSON.toJSONString(sm);
+        System.out.println("str:"+str);
+        String sign = SignUtils.sign(str, key);
+        return sign;
     }
 }
