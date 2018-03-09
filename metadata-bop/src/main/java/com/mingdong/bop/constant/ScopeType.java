@@ -19,11 +19,14 @@ public enum ScopeType
 
     public static ScopeType getScopeType(String type)
     {
-        for(ScopeType item : ScopeType.values())
+        if(type != null)
         {
-            if(item.type.equals(type))
+            for(ScopeType o : ScopeType.values())
             {
-                return item;
+                if(type.equals(o.type))
+                {
+                    return o;
+                }
             }
         }
         return null;
