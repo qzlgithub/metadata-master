@@ -1,6 +1,5 @@
-package com.test.bop;
+package com.test.mis;
 
-import com.mingdong.bop.service.impl.ClientServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -8,7 +7,7 @@ import org.testng.annotations.Test;
 public class SimpleTest
 {
 
-    private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SimpleTest.class);
 
     @Test
     public void secretConfig(){

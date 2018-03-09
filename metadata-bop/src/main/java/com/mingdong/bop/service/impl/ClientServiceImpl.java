@@ -450,7 +450,7 @@ public class ClientServiceImpl implements ClientService
         dto.setUsername(vo.getUsername());
         dto.setContactList(contactList);
         dto.setEnabled(vo.getEnabled());
-        dto.setManagerId(vo.getManagerId());
+        dto.setManagerId(RequestThread.getOperatorId());
         ResponseDTO res = clientRpcService.addNewClient(dto);
         resp.setError(res.getResult());
     }
