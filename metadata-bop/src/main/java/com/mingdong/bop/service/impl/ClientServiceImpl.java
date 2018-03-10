@@ -631,7 +631,7 @@ public class ClientServiceImpl implements ClientService
     public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(clientId, productId, fromDate, toDate,
                 page);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -721,7 +721,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(7).setCellValue("经手人");
         row.createCell(8).setCellValue("合同编号");
 
-        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(clientId, productId, startTime,
                 endTime, page);
         List<RechargeResDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))

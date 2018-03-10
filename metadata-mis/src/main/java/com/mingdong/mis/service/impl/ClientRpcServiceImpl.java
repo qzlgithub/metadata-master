@@ -1085,7 +1085,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<RechargeResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
+    public ListDTO<RechargeResDTO> getClientRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
             Page page)
     {
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
