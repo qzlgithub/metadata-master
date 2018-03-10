@@ -9,12 +9,12 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
-import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
@@ -120,8 +120,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
             for(ApiReqInfo o : apiReqInfoList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setId(o.getId());
-                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestAt(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());

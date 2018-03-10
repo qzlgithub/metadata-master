@@ -9,8 +9,8 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -151,7 +151,7 @@ public class TradeServiceImpl implements TradeService
             for(AccessResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.REQUEST_AT, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
                 map.put(Field.TRADE_NO, o.getRequestNo());
                 map.put(Field.CORP_NAME, o.getCorpName());
                 map.put(Field.SHORT_NAME, o.getShortName());
@@ -204,7 +204,7 @@ public class TradeServiceImpl implements TradeService
             dataInfo = dataList.get(i);
             dataRow = sheet.createRow(i + 1);
             cell = dataRow.createCell(0);
-            cell.setCellValue(dataInfo.getCreateTime());
+            cell.setCellValue(dataInfo.getRequestAt());
             cell.setCellStyle(timeStyle);
             dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());

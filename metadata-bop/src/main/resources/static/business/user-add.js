@@ -42,10 +42,10 @@ $(".privilege").click(function() {
 });
 
 function resetPrivilege() {
-    var roleId = $("#groupId").val();
+    var groupId = $("#groupId").val();
     $.get(
         "/account/role/privilege",
-        {"roleId": roleId},
+        {"id": groupId},
         function(data) {
             $(".privilege").prop("checked", false);
             var list = data.data.privilegeList;

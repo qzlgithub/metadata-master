@@ -9,10 +9,10 @@ layui.config({
     layer = layui.layer;
     message = layui.message;
     form.on('select(role-dict)', function(obj) {
-        var roleId = obj.value;
+        var groupId = obj.value;
         $.get(
             "/account/role/privilege",
-            {"roleId": roleId},
+            {"id": groupId},
             function(data) {
                 $(".privilege").prop("checked", false);
                 var list = data.data.privilegeList;

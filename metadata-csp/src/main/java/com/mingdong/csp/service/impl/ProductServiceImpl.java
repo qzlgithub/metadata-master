@@ -12,10 +12,10 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -126,8 +126,7 @@ public class ProductServiceImpl implements ProductService
             for(AccessResDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, item.getId());
-                map.put(Field.TRADE_AT, DateUtils.format(item.getCreateTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_AT, DateUtils.format(item.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
                 map.put(Field.TRADE_NO, item.getRequestNo() + "");
                 map.put(Field.PRODUCT_NAME, item.getProductName() == null ? "" : item.getProductName());
                 map.put(Field.BILL_PLAN, BillPlan.getById(item.getBillPlan()).getName());
@@ -173,7 +172,7 @@ public class ProductServiceImpl implements ProductService
                 dataDTO = dataList.get(i);
                 dataRow = sheet.createRow(i + 1);
                 cell = dataRow.createCell(0);
-                cell.setCellValue(dataDTO.getCreateTime());
+                cell.setCellValue(dataDTO.getRequestAt());
                 cell.setCellStyle(timeStyle);
                 dataRow.createCell(1).setCellValue(dataDTO.getRequestNo());
                 dataRow.createCell(2).setCellValue(dataDTO.getProductName());

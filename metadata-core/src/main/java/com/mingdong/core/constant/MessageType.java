@@ -16,15 +16,14 @@ public enum MessageType
 
     public static String getNameById(Integer id)
     {
-        if(id == null)
+        if(id != null)
         {
-            return null;
-        }
-        for(MessageType item : MessageType.values())
-        {
-            if(item.id.equals(id))
+            for(MessageType item : MessageType.values())
             {
-                return item.name;
+                if(item.id.equals(id))
+                {
+                    return item.name;
+                }
             }
         }
         return null;

@@ -7,7 +7,6 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.NewClientReqDTO;
 import com.mingdong.core.model.dto.request.SubUserReqDTO;
-import com.mingdong.core.model.dto.response.Access1ResDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -151,7 +150,7 @@ public interface ClientRpcService
 
     ClientUserDictResDTO getClientAccountDict(Long clientId);
 
-    ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
+    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
 
     String getClientCorpName(Long clientId);
