@@ -11,7 +11,6 @@ public class RechargeResDTO extends ResponseDTO
     private BigDecimal unitAmt;
     private Date startDate;
     private Date endDate;
-    private BigDecimal totalRecharge;
     private Date rechargeAt;
     private String rechargeNo;
     private String productName;
@@ -139,13 +138,4 @@ public class RechargeResDTO extends ResponseDTO
         this.endDate = endDate;
     }
 
-    public BigDecimal getTotalRecharge()
-    {
-        return totalRecharge;
-    }
-
-    public void setTotalRecharge(BigDecimal totalRecharge)
-    {
-        this.totalRecharge = totalRecharge;
-    }
 }
