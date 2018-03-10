@@ -2,12 +2,11 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -19,12 +18,6 @@ public interface ProductRpcService
      */
     ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
             Page page);
-
-    /**
-     * 根据条件获取获取客户消费记录
-     */
-    ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
-            Date endDate, Page page);
 
     /**
      * 获取指定客户已开通的产品服务信息列表

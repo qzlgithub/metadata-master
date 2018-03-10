@@ -12,10 +12,11 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -40,6 +41,8 @@ public class ProductServiceImpl implements ProductService
 {
     @Resource
     private CommonRpcService commonRpcService;
+    @Resource
+    private ClientRpcService clientRpcService;
     @Resource
     private ProductRpcService productRpcService;
 
@@ -117,7 +120,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<AccessResDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -158,7 +161,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ListDTO<AccessResDTO> apiReqInfoListDTO = productRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getProductRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))

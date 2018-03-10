@@ -151,8 +151,13 @@ public interface ClientRpcService
 
     ClientUserDictResDTO getClientAccountDict(Long clientId);
 
+    // TODO （管理）客户消费记录
     ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
             Page page);
+
+    // TODO （客户）客户消费记录
+    ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+            Date endDate, Page page);
 
     String getClientCorpName(Long clientId);
 

@@ -9,17 +9,15 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.request.ProductReqDTO;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
@@ -97,38 +95,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
                 pri.setUsername(o.getUsername());
                 pri.setManagerName(o.getManagerName());
                 list.add(pri);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
-    }
-
-    @Override
-    public ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
-            Date endDate, Page page)
-    {
-        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
-                    endDate);
-            List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
-            for(ApiReqInfo o : apiReqInfoList)
-            {
-                AccessResDTO ari = new AccessResDTO();
-                ari.setId(o.getId());
-                ari.setCreateTime(o.getCreateTime());
-                ari.setRequestNo(o.getRequestNo());
-                ari.setProductName(o.getProductName());
-                ari.setBillPlan(o.getBillPlan());
-                ari.setHit(o.getHit());
-                ari.setFee(o.getFee());
-                ari.setBalance(o.getBalance());
-                list.add(ari);
             }
             listDTO.setList(list);
         }

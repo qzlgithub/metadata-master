@@ -12,28 +12,28 @@ import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
-import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.NewClientReqDTO;
 import com.mingdong.core.model.dto.request.SubUserReqDTO;
 import com.mingdong.core.model.dto.response.Access1ResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
+import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.Recharge1ResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
-import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
@@ -52,6 +52,7 @@ import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
+import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientMapper;
@@ -80,8 +81,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
 {
     @Resource
     private Param param;
-    @Resource
-    private RedisDao redisDao;
     @Resource
     private SistemMapper sistemMapper;
     @Resource
@@ -116,6 +115,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
+    @Resource
+    private ApiReqMapper apiReqMapper;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -1071,6 +1072,38 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 r.setFee(o.getFee());
                 r.setBalance(o.getBalance());
                 list.add(r);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+            Date endDate, Page page)
+    {
+        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
+        int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
+                    endDate);
+            List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
+            for(ApiReqInfo o : apiReqInfoList)
+            {
+                AccessResDTO ari = new AccessResDTO();
+                ari.setId(o.getId());
+                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestNo(o.getRequestNo());
+                ari.setProductName(o.getProductName());
+                ari.setBillPlan(o.getBillPlan());
+                ari.setHit(o.getHit());
+                ari.setFee(o.getFee());
+                ari.setBalance(o.getBalance());
+                list.add(ari);
             }
             listDTO.setList(list);
         }
