@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class AccessResDTO implements Serializable
 {
-    private Long id;
     private Date createTime;
     private Date updateTime;
     private Long primaryUserId;//客户主帐号id
@@ -26,86 +25,6 @@ public class AccessResDTO implements Serializable
     private String billPlanName;
     private Integer requestNumber;//请求次数-统计那边用到
 
-    public Long getPrimaryUserId()
-    {
-        return primaryUserId;
-    }
-
-    public void setPrimaryUserId(Long primaryUserId)
-    {
-        this.primaryUserId = primaryUserId;
-    }
-
-    public Integer getRequestNumber()
-    {
-        return requestNumber;
-    }
-
-    public void setRequestNumber(Integer requestNumber)
-    {
-        this.requestNumber = requestNumber;
-    }
-
-    public String getRequestNo()
-    {
-        return requestNo;
-    }
-
-    public void setRequestNo(String requestNo)
-    {
-        this.requestNo = requestNo;
-    }
-
-    public BigDecimal getFee()
-    {
-        return fee;
-    }
-
-    public void setFee(BigDecimal fee)
-    {
-        this.fee = fee;
-    }
-
-    public String getRequestIp()
-    {
-        return requestIp;
-    }
-
-    public void setRequestIp(String requestIp)
-    {
-        this.requestIp = requestIp;
-    }
-
-    public Long getUserId()
-    {
-        return userId;
-    }
-
-    public void setUserId(Long userId)
-    {
-        this.userId = userId;
-    }
-
-    public String getBillPlanName()
-    {
-        return billPlanName;
-    }
-
-    public void setBillPlanName(String billPlanName)
-    {
-        this.billPlanName = billPlanName;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
     public Date getCreateTime()
     {
         return createTime;
@@ -124,6 +43,26 @@ public class AccessResDTO implements Serializable
     public void setUpdateTime(Date updateTime)
     {
         this.updateTime = updateTime;
+    }
+
+    public Long getPrimaryUserId()
+    {
+        return primaryUserId;
+    }
+
+    public void setPrimaryUserId(Long primaryUserId)
+    {
+        this.primaryUserId = primaryUserId;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
     }
 
     public Long getClientId()
@@ -164,6 +103,36 @@ public class AccessResDTO implements Serializable
     public void setBillPlan(Integer billPlan)
     {
         this.billPlan = billPlan;
+    }
+
+    public String getRequestNo()
+    {
+        return requestNo;
+    }
+
+    public void setRequestNo(String requestNo)
+    {
+        this.requestNo = requestNo;
+    }
+
+    public String getRequestIp()
+    {
+        return requestIp;
+    }
+
+    public void setRequestIp(String requestIp)
+    {
+        this.requestIp = requestIp;
+    }
+
+    public BigDecimal getFee()
+    {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee)
+    {
+        this.fee = fee;
     }
 
     public BigDecimal getBalance()
@@ -214,5 +183,25 @@ public class AccessResDTO implements Serializable
     public void setProductName(String productName)
     {
         this.productName = productName;
+    }
+
+    public String getBillPlanName()
+    {
+        return billPlanName;
+    }
+
+    public void setBillPlanName(String billPlanName)
+    {
+        this.billPlanName = billPlanName;
+    }
+
+    public Integer getRequestNumber()
+    {
+        return requestNumber;
+    }
+
+    public void setRequestNumber(Integer requestNumber)
+    {
+        this.requestNumber = requestNumber;
     }
 }

@@ -1056,17 +1056,18 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
-            Date toDate, Page page)
+    public ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
+            Date endDate, Page page)
     {
         ListDTO<Access1ResDTO> listDTO = new ListDTO<>();
-        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
+        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, fromDate, toDate);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, startDate,
+                    endDate);
             List<Access1ResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
@@ -1087,23 +1088,22 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
+    public ListDTO<AccessResDTO> getApiRequestRecord(Long clientId, Long userId, Long productId, Date startDate,
             Date endDate, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
+        int total = apiReqMapper.countBy(clientId, userId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
+            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, startDate,
                     endDate);
             List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
             for(ApiReqInfo o : apiReqInfoList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setId(o.getId());
                 ari.setCreateTime(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setProductName(o.getProductName());
@@ -1188,10 +1188,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> getRevenueList(Date fromDate, Date toDate,
-            Page page)
+    public ListDTO<AccessResDTO> getRevenueList(Date fromDate, Date toDate, Page page)
     {
-        ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate, null);
         listDTO.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         int total = apiReqInfoMapper.getRevenueListCount(fromDate, toDate);
@@ -1201,11 +1200,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getRevenueList(fromDate, toDate);
-            List<com.mingdong.core.model.dto.response.AccessResDTO> list = new ArrayList<>();
+            List<AccessResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                com.mingdong.core.model.dto.response.AccessResDTO r =
-                        new com.mingdong.core.model.dto.response.AccessResDTO();
+                AccessResDTO r = new AccessResDTO();
                 EntityUtils.copyProperties(o, r);
                 list.add(r);
             }

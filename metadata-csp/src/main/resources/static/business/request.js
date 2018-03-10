@@ -67,8 +67,8 @@ function getRequestList(obj, pageFun) {
             "pageNum": obj['pageNum'],
             "pageSize": obj['pageSize'],
             "productId": obj['productId'],
-            "fromDate": obj['fromDate'] == '' ? '' : obj['fromDate'] + " 00:00:00",
-            "toDate": obj['toDate'] == '' ? '' : obj['toDate'] + " 23:59:59"
+            "fromDate": obj['fromDate'] === '' ? '' : obj['fromDate'] + " 00:00:00",
+            "toDate": obj['toDate'] === '' ? '' : obj['toDate'] + " 23:59:59"
         },
         function(res) {
             if(res.code === '000000') {
