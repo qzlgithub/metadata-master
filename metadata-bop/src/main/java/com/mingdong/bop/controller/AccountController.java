@@ -37,7 +37,7 @@ public class AccountController
      */
     @LoginRequired
     @GetMapping(value = "/account/role/privilege")
-    public RestResp getRolePrivilege(@RequestParam(value = Field.ROLE_ID) Long roleId)
+    public RestResp getRolePrivilege(@RequestParam(value = Field.ID) Long roleId)
     {
         RestResp resp = new RestResp();
         managerService.getRolePrivilege(roleId, resp);

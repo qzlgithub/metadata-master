@@ -176,7 +176,8 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<StatsDateInfoResDTO> getRequestListStats(Date beforeDate, Date currentDay, String name, Long productId)
+    public ListDTO<StatsDateInfoResDTO> getRequestListStats(Date beforeDate, Date currentDay, String name,
+            Long productId)
     {
         List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name, productId);
         ListDTO<StatsDateInfoResDTO> listDTO = new ListDTO<>();

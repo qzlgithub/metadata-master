@@ -31,7 +31,6 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
-import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.constant.Field;
@@ -1177,7 +1176,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
             for(ApiReqInfo o : dataList)
             {
                 AccessResDTO r = new AccessResDTO();
-                EntityUtils.copyProperties(o, r);
+                r.setRequestAt(o.getCreateTime());
+                r.setRequestNo(o.getRequestNo());
+                r.setUsername(o.getUsername());
+                r.setProductName(o.getProductName());
+                r.setBillPlan(o.getBillPlan());
+                r.setHit(o.getHit());
+                r.setFee(o.getFee());
+                r.setBalance(o.getBalance());
                 list.add(r);
             }
             listDTO.setList(list);

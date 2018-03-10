@@ -9,14 +9,45 @@ public class AccessResDTO implements Serializable
     private Date requestAt;
     private String requestNo;
     private String corpName;
-    private String shortName;
-    private String primaryUsername;
     private String username;
     private String productName;
     private Integer billPlan;
     private Integer hit;
     private BigDecimal fee;
     private BigDecimal balance;
+    private String shortName;
+    private String primaryUsername;
+    private Long userId;//消费者帐号id
+
+    public String getPrimaryUsername()
+    {
+        return primaryUsername;
+    }
+
+    public void setPrimaryUsername(String primaryUsername)
+    {
+        this.primaryUsername = primaryUsername;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public String getShortName()
+    {
+        return shortName;
+    }
+
+    public void setShortName(String shortName)
+    {
+        this.shortName = shortName;
+    }
 
     public Date getRequestAt()
     {
@@ -46,26 +77,6 @@ public class AccessResDTO implements Serializable
     public void setCorpName(String corpName)
     {
         this.corpName = corpName;
-    }
-
-    public String getShortName()
-    {
-        return shortName;
-    }
-
-    public void setShortName(String shortName)
-    {
-        this.shortName = shortName;
-    }
-
-    public String getPrimaryUsername()
-    {
-        return primaryUsername;
-    }
-
-    public void setPrimaryUsername(String primaryUsername)
-    {
-        this.primaryUsername = primaryUsername;
     }
 
     public String getUsername()
