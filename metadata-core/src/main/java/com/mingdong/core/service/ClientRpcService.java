@@ -14,8 +14,8 @@ import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
-import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
@@ -154,8 +154,8 @@ public interface ClientRpcService
     String getClientCorpName(Long clientId);
 
     // TODO （管理）客户消费记录
-    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
-            Date endDate, Page page);
+    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate, Date endDate,
+            Page page);
 
     // TODO （客户）客户消费记录
     ListDTO<AccessResDTO> getApiRequestRecord(Long clientId, Long userId, Long productId, Date startDate, Date endDate,
