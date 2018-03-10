@@ -6,7 +6,7 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.request.SysConfigReqDTO;
@@ -17,7 +17,6 @@ import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.SystemRpcService;
-import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
@@ -205,43 +204,51 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addIndustryType(DictIndustryReqDTO reqDTO)
+    public ResponseDTO addIndustryType(IndustryReqDTO reqDTO)
     {
-        ResponseDTO responseDTO = new ResponseDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(reqDTO.getCode());
-        if(byCode != null)
+        ResponseDTO respDTO = new ResponseDTO();
+        DictIndustry industry = dictIndustryMapper.findByCode(reqDTO.getCode());
+        if(industry != null)
         {
-            responseDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
-            return responseDTO;
+            respDTO.setResult(RestResult.INDUSTRY_CODE_EXIST);
+            return respDTO;
         }
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(reqDTO, dictIndustry);
-        dictIndustryMapper.add(dictIndustry);
-        responseDTO.setResult(RestResult.SUCCESS);
-        return responseDTO;
+        Date date = new Date();
+        industry = new DictIndustry();
+        industry.setCreateTime(date);
+        industry.setUpdateTime(date);
+        industry.setCode(reqDTO.getCode());
+        industry.setName(reqDTO.getName());
+        industry.setParentId(reqDTO.getParentId());
+        industry.setSeqNo(1); // TODO 行业序号
+        industry.setEnabled(TrueOrFalse.TRUE);
+        dictIndustryMapper.add(industry);
+        return respDTO;
     }
 
     @Override
     @Transactional
-    public ResponseDTO editIndustryInfo(DictIndustryReqDTO reqDTO)
+    public ResponseDTO editIndustryInfo(IndustryReqDTO reqDTO)
     {
         ResponseDTO res = new ResponseDTO();
-        DictIndustry byCode = dictIndustryMapper.findByCode(reqDTO.getCode());
-        if(byCode != null && !byCode.getId().equals(reqDTO.getId()))
-        {
-            res.setResult(RestResult.INDUSTRY_CODE_EXIST);
-            return res;
-        }
-        DictIndustry byId = dictIndustryMapper.findById(reqDTO.getId());
-        if(byId == null)
+        DictIndustry industry = dictIndustryMapper.findById(reqDTO.getId());
+        if(industry == null)
         {
             res.setResult(RestResult.OBJECT_NOT_FOUND);
             return res;
         }
-        DictIndustry dictIndustry = new DictIndustry();
-        EntityUtils.copyProperties(reqDTO, dictIndustry);
-        dictIndustryMapper.updateSkipNull(dictIndustry);
-        res.setResult(RestResult.SUCCESS);
+        industry = dictIndustryMapper.findByCode(reqDTO.getCode());
+        if(industry != null && !industry.getId().equals(reqDTO.getId()))
+        {
+            res.setResult(RestResult.INDUSTRY_CODE_EXIST);
+            return res;
+        }
+        DictIndustry temp = new DictIndustry();
+        temp.setId(reqDTO.getId());
+        temp.setUpdateTime(new Date());
+        temp.setCode(reqDTO.getCode());
+        temp.setName(reqDTO.getName());
+        dictIndustryMapper.updateSkipNull(temp);
         return res;
     }
 

@@ -6,13 +6,10 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.StatsRpcService;
-import com.mingdong.core.util.EntityUtils;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.domain.entity.ClientInfo;
-import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
@@ -219,17 +216,5 @@ public class StatsRpcServiceImpl implements StatsRpcService
             return;
         }
         logger.info("{}: {}", clientIdList, intervalList);
-    }
-
-    private void findProductRechargeInfoDTO(List<ProductRechargeInfo> productRechargeInfoList,
-            List<ProductRechargeResDTO> dataList)
-    {
-        ProductRechargeResDTO productRechargeResDTO;
-        for(ProductRechargeInfo item : productRechargeInfoList)
-        {
-            productRechargeResDTO = new ProductRechargeResDTO();
-            dataList.add(productRechargeResDTO);
-            EntityUtils.copyProperties(item, productRechargeResDTO);
-        }
     }
 }

@@ -12,7 +12,7 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.request.SysConfigReqDTO;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,29 +49,23 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addIndustryType(Long id, String code, String name, RestResp resp)
     {
-        Date current = new Date();
-        DictIndustryReqDTO industry = new DictIndustryReqDTO();
-        industry.setCreateTime(current);
-        industry.setUpdateTime(current);
-        industry.setCode(code.toUpperCase());
-        industry.setName(name);
-        industry.setSeqNo(1); // TODO 序号
-        industry.setParentId(id != null ? id : 0L);
-        industry.setEnabled(TrueOrFalse.TRUE);
-        ResponseDTO responseDTO = systemRpcService.addIndustryType(industry);
-        resp.setError(responseDTO.getResult());
+        IndustryReqDTO reqDTO = new IndustryReqDTO();
+        reqDTO.setCode(code.toUpperCase());
+        reqDTO.setName(name);
+        reqDTO.setParentId(id != null ? id : 0L);
+        ResponseDTO respDTO = systemRpcService.addIndustryType(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override
     public void editIndustryInfo(Long id, String code, String name, RestResp resp)
     {
-        DictIndustryReqDTO industry = new DictIndustryReqDTO();
-        industry.setId(id);
-        industry.setUpdateTime(new Date());
-        industry.setCode(code);
-        industry.setName(name);
-        ResponseDTO responseDTO = systemRpcService.editIndustryInfo(industry);
-        resp.setError(responseDTO.getResult());
+        IndustryReqDTO reqDTO = new IndustryReqDTO();
+        reqDTO.setId(id);
+        reqDTO.setCode(code);
+        reqDTO.setName(name);
+        ResponseDTO respDTO = systemRpcService.editIndustryInfo(reqDTO);
+        resp.setError(respDTO.getResult());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.mingdong.core.service;
 
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
+import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.request.SysConfigReqDTO;
@@ -57,12 +57,12 @@ public interface SystemRpcService
     /**
      * 新增行业分类，判断code
      */
-    ResponseDTO addIndustryType(DictIndustryReqDTO reqDTO);
+    ResponseDTO addIndustryType(IndustryReqDTO reqDTO);
 
     /**
      * 修改行业分类，判断code
      */
-    ResponseDTO editIndustryInfo(DictIndustryReqDTO reqDTO);
+    ResponseDTO editIndustryInfo(IndustryReqDTO reqDTO);
 
     /**
      * 修改权限信息
