@@ -1,17 +1,104 @@
 package com.mingdong.core.model.dto.response;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class RechargeResDTO extends ResponseDTO
+public class RechargeResDTO implements Serializable
 {
-    private Integer billPlan;
+    private Date rechargeAt;
+    private String rechargeNo;
+    private String productName;
+    private String rechargeTypeName;
     private BigDecimal amount;
     private BigDecimal balance;
-    private BigDecimal unitAmt;
+    private Integer billPlan;
     private Date startDate;
     private Date endDate;
-    private BigDecimal totalRecharge;
+    private BigDecimal unitAmt;
+    private String remark;
+    private String managerName;
+    private String contractNo;
+
+    public Date getStartDate()
+    {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate)
+    {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate()
+    {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate)
+    {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getUnitAmt()
+    {
+        return unitAmt;
+    }
+
+    public void setUnitAmt(BigDecimal unitAmt)
+    {
+        this.unitAmt = unitAmt;
+    }
+
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+
+    public Date getRechargeAt()
+    {
+        return rechargeAt;
+    }
+
+    public void setRechargeAt(Date rechargeAt)
+    {
+        this.rechargeAt = rechargeAt;
+    }
+
+    public String getRechargeNo()
+    {
+        return rechargeNo;
+    }
+
+    public void setRechargeNo(String rechargeNo)
+    {
+        this.rechargeNo = rechargeNo;
+    }
+
+    public String getProductName()
+    {
+        return productName;
+    }
+
+    public void setProductName(String productName)
+    {
+        this.productName = productName;
+    }
+
+    public String getRechargeTypeName()
+    {
+        return rechargeTypeName;
+    }
+
+    public void setRechargeTypeName(String rechargeTypeName)
+    {
+        this.rechargeTypeName = rechargeTypeName;
+    }
 
     public Integer getBillPlan()
     {
@@ -43,43 +130,23 @@ public class RechargeResDTO extends ResponseDTO
         this.balance = balance;
     }
 
-    public BigDecimal getUnitAmt()
+    public String getManagerName()
     {
-        return unitAmt;
+        return managerName;
     }
 
-    public void setUnitAmt(BigDecimal unitAmt)
+    public void setManagerName(String managerName)
     {
-        this.unitAmt = unitAmt;
+        this.managerName = managerName;
     }
 
-    public Date getStartDate()
+    public String getContractNo()
     {
-        return startDate;
+        return contractNo;
     }
 
-    public void setStartDate(Date startDate)
+    public void setContractNo(String contractNo)
     {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate()
-    {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate)
-    {
-        this.endDate = endDate;
-    }
-
-    public BigDecimal getTotalRecharge()
-    {
-        return totalRecharge;
-    }
-
-    public void setTotalRecharge(BigDecimal totalRecharge)
-    {
-        this.totalRecharge = totalRecharge;
+        this.contractNo = contractNo;
     }
 }

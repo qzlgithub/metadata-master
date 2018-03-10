@@ -35,8 +35,8 @@ import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.Recharge1ResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -281,7 +281,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getProductRenewInfo(Long clientId, Long productId, RestResp resp)
     {
-        RechargeResDTO resDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
+        RechargeInfoResDTO resDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
         if(resDTO.getResult() != RestResult.SUCCESS)
         {
             resp.setError(resDTO.getResult());
@@ -631,13 +631,13 @@ public class ClientServiceImpl implements ClientService
     public void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<Recharge1ResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, fromDate, toDate,
                 page);
         res.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
-            for(Recharge1ResDTO o : listDTO.getList())
+            for(RechargeResDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.RECHARGE_AT, DateUtils.format(o.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -721,9 +721,9 @@ public class ClientServiceImpl implements ClientService
         row.createCell(7).setCellValue("经手人");
         row.createCell(8).setCellValue("合同编号");
 
-        ListDTO<Recharge1ResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeList(clientId, productId, startTime,
                 endTime, page);
-        List<Recharge1ResDTO> list = listDTO.getList();
+        List<RechargeResDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {
             CellStyle timeStyle = wb.createCellStyle();
@@ -731,7 +731,7 @@ public class ClientServiceImpl implements ClientService
                     wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
             for(int i = 0; i < list.size(); i++)
             {
-                Recharge1ResDTO pri = list.get(i);
+                RechargeResDTO pri = list.get(i);
                 Row dataRow = sheet.createRow(i + 1);
                 Cell cell = dataRow.createCell(0);
                 cell.setCellValue(pri.getRechargeAt());

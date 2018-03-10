@@ -25,8 +25,8 @@ import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
-import com.mingdong.core.model.dto.response.Recharge1ResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
@@ -1116,10 +1116,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<Recharge1ResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
+    public ListDTO<RechargeResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
             Page page)
     {
-        ListDTO<Recharge1ResDTO> listDTO = new ListDTO<>();
+        ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
         int total = productRechargeInfoMapper.countByClient(clientId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1128,10 +1128,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
                     startDate, endDate);
-            List<Recharge1ResDTO> list = new ArrayList<>();
+            List<RechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)
             {
-                Recharge1ResDTO r = new Recharge1ResDTO();
+                RechargeResDTO r = new RechargeResDTO();
                 r.setRechargeAt(o.getTradeTime());
                 r.setRechargeNo(o.getTradeNo());
                 r.setProductName(o.getProductName());
@@ -1239,9 +1239,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public RechargeResDTO getLatestRechargeInfo(Long clientId, Long productId)
+    public RechargeInfoResDTO getLatestRechargeInfo(Long clientId, Long productId)
     {
-        RechargeResDTO resDTO = new RechargeResDTO();
+        RechargeInfoResDTO resDTO = new RechargeInfoResDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {
