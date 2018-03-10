@@ -844,7 +844,7 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getProductRechargeRecord(null, null, start, end,
+        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getProductRechargeRecord(null, null, start, end,
                 page);
         List<ProductRechargeResDTO> infoDateList = listDTO.getList();
         return getProductRechargeInfoDateList(infoDateList);

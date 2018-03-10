@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getApiRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getProductRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getApiRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
