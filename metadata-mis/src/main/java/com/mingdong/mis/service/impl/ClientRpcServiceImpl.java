@@ -1113,22 +1113,22 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<Recharge1ResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
+    public ListDTO<RechargeResDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
             Page page)
     {
-        ListDTO<Recharge1ResDTO> listDTO = new ListDTO<>();
-        int total = productRechargeInfoMapper.countByClient(clientId, productId, startDate, endDate);
+        ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
+        int total = productRechargeInfoMapper.countByClient(clientId, productId, fromDate, toDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
-                    startDate, endDate);
-            List<Recharge1ResDTO> list = new ArrayList<>();
+                    fromDate, toDate);
+            List<RechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)
             {
-                Recharge1ResDTO r = new Recharge1ResDTO();
+                RechargeResDTO r = new RechargeResDTO();
                 r.setRechargeAt(o.getTradeTime());
                 r.setRechargeNo(o.getTradeNo());
                 r.setProductName(o.getProductName());

@@ -16,28 +16,17 @@ public class AccessResDTO implements Serializable
     private BigDecimal fee;
     private BigDecimal balance;
     private String shortName;
-    private Long primaryUserId;//客户主帐号id
+    private String primaryUsername;
     private Long userId;//消费者帐号id
-    private Integer requestNumber;//请求次数-统计那边用到
 
-    public Integer getRequestNumber()
+    public String getPrimaryUsername()
     {
-        return requestNumber;
+        return primaryUsername;
     }
 
-    public void setRequestNumber(Integer requestNumber)
+    public void setPrimaryUsername(String primaryUsername)
     {
-        this.requestNumber = requestNumber;
-    }
-
-    public Long getPrimaryUserId()
-    {
-        return primaryUserId;
-    }
-
-    public void setPrimaryUserId(Long primaryUserId)
-    {
-        this.primaryUserId = primaryUserId;
+        this.primaryUsername = primaryUsername;
     }
 
     public Long getUserId()

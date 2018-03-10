@@ -6,7 +6,6 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
@@ -16,6 +15,7 @@ import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.EntityUtils;
 import com.mingdong.mis.domain.entity.DictIndustry;
@@ -389,8 +389,7 @@ public class SystemRpcServiceImpl implements SystemRpcService
             objUpd.setName(reqDTO.getName());
             objUpd.setRemark(reqDTO.getRemark());
         }
-        if(TrueOrFalse.TRUE.equals(reqDTO.getEnabled()) || TrueOrFalse.FALSE.equals(
-                reqDTO.getEnabled()))
+        if(TrueOrFalse.TRUE.equals(reqDTO.getEnabled()) || TrueOrFalse.FALSE.equals(reqDTO.getEnabled()))
         {
             objUpd.setEnabled(reqDTO.getEnabled());
         }

@@ -183,7 +183,7 @@ public class StatsServiceImpl implements StatsService
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
-            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
             ClientInfoResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
@@ -304,7 +304,7 @@ public class StatsServiceImpl implements StatsService
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
-            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
             ProductRechargeResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
@@ -493,7 +493,7 @@ public class StatsServiceImpl implements StatsService
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
-            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
             AccessResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {

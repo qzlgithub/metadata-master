@@ -11,7 +11,6 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
@@ -309,7 +308,8 @@ public class ProductRpcServiceImpl implements ProductRpcService
     }
 
     @Override
-    public ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page)
+    public ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status,
+            Page page)
     {
         ListDTO<ProductResDTO> dto = new ListDTO<>();
         int total = productMapper.countBy(keyword, type, custom, status);

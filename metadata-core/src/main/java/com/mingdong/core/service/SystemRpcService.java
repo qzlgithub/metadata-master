@@ -1,7 +1,6 @@
 package com.mingdong.core.service;
 
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.DictIndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
@@ -11,6 +10,7 @@ import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import java.util.List;
 import java.util.Map;

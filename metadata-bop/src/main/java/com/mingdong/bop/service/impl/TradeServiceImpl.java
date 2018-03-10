@@ -101,7 +101,7 @@ public class TradeServiceImpl implements TradeService
         Row dataRow;
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
-        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
         ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
                 rechargeType, fromDate, toDate, page);
         List<ProductRechargeResDTO> dataList = listDTO.getList();
@@ -201,7 +201,7 @@ public class TradeServiceImpl implements TradeService
         Row dataRow;
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
-        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+        timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
                 fromDate, toDate, manager, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();

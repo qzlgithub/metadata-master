@@ -2,13 +2,13 @@ package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.AdminUserReqDTO;
 import com.mingdong.core.model.dto.request.GroupReqDTO;
 import com.mingdong.core.model.dto.request.LoginReqDTO;
 import com.mingdong.core.model.dto.response.AdminSessionResDTO;
 import com.mingdong.core.model.dto.response.GroupResDTO;
 import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
 
 public interface ManagerRpcService
