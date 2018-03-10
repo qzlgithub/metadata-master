@@ -8,6 +8,9 @@ public class RechargeResDTO implements Serializable
 {
     private Date rechargeAt;
     private String rechargeNo;
+    private String corpName;
+    private String shortName;
+    private String username;
     private String productName;
     private String rechargeTypeName;
     private BigDecimal amount;
@@ -17,8 +20,108 @@ public class RechargeResDTO implements Serializable
     private Date endDate;
     private BigDecimal unitAmt;
     private String remark;
-    private String managerName;
     private String contractNo;
+    private String managerName;
+
+    public Date getRechargeAt()
+    {
+        return rechargeAt;
+    }
+
+    public void setRechargeAt(Date rechargeAt)
+    {
+        this.rechargeAt = rechargeAt;
+    }
+
+    public String getRechargeNo()
+    {
+        return rechargeNo;
+    }
+
+    public void setRechargeNo(String rechargeNo)
+    {
+        this.rechargeNo = rechargeNo;
+    }
+
+    public String getCorpName()
+    {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName)
+    {
+        this.corpName = corpName;
+    }
+
+    public String getShortName()
+    {
+        return shortName;
+    }
+
+    public void setShortName(String shortName)
+    {
+        this.shortName = shortName;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+    public String getProductName()
+    {
+        return productName;
+    }
+
+    public void setProductName(String productName)
+    {
+        this.productName = productName;
+    }
+
+    public String getRechargeTypeName()
+    {
+        return rechargeTypeName;
+    }
+
+    public void setRechargeTypeName(String rechargeTypeName)
+    {
+        this.rechargeTypeName = rechargeTypeName;
+    }
+
+    public BigDecimal getAmount()
+    {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount)
+    {
+        this.amount = amount;
+    }
+
+    public BigDecimal getBalance()
+    {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance)
+    {
+        this.balance = balance;
+    }
+
+    public Integer getBillPlan()
+    {
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
+    }
 
     public Date getStartDate()
     {
@@ -58,76 +161,6 @@ public class RechargeResDTO implements Serializable
     public void setRemark(String remark)
     {
         this.remark = remark;
-    }
-
-    public Date getRechargeAt()
-    {
-        return rechargeAt;
-    }
-
-    public void setRechargeAt(Date rechargeAt)
-    {
-        this.rechargeAt = rechargeAt;
-    }
-
-    public String getRechargeNo()
-    {
-        return rechargeNo;
-    }
-
-    public void setRechargeNo(String rechargeNo)
-    {
-        this.rechargeNo = rechargeNo;
-    }
-
-    public String getProductName()
-    {
-        return productName;
-    }
-
-    public void setProductName(String productName)
-    {
-        this.productName = productName;
-    }
-
-    public String getRechargeTypeName()
-    {
-        return rechargeTypeName;
-    }
-
-    public void setRechargeTypeName(String rechargeTypeName)
-    {
-        this.rechargeTypeName = rechargeTypeName;
-    }
-
-    public Integer getBillPlan()
-    {
-        return billPlan;
-    }
-
-    public void setBillPlan(Integer billPlan)
-    {
-        this.billPlan = billPlan;
-    }
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public BigDecimal getBalance()
-    {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance)
-    {
-        this.balance = balance;
     }
 
     public String getManagerName()

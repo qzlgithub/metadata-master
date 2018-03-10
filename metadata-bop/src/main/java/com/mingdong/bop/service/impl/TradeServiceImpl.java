@@ -1,6 +1,7 @@
 package com.mingdong.bop.service.impl;
 
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -38,10 +39,11 @@ public class TradeServiceImpl implements TradeService
     private ClientRpcService clientRpcService;
 
     @Override
-    public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Long rechargeType,
-            Date fromDate, Date toDate, Page page, RestListResp res)
+    public void getProductRechargeInfoList(String keyword, Long productId, Long rechargeType, Date fromDate,
+            Date toDate, Page page, RestListResp res)
     {
-        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+        Long managerId = RequestThread.isManager() ? null : RequestThread.getOperatorId();
+        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(managerId, keyword, productId,
                 rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
@@ -102,7 +104,7 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ProductRechargeResDTO> listDTO = productRpcService.getRechargeInfoList(keyword, productId, managerId,
+        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(managerId, keyword, productId,
                 rechargeType, fromDate, toDate, page);
         List<ProductRechargeResDTO> dataList = listDTO.getList();
         ProductRechargeResDTO dataInfo;
