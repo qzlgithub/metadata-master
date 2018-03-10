@@ -125,28 +125,6 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ProductRechargeResDTO> getProductRechargeInfoListBy(Date date, Date currentDay, Page page)
-    {
-        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
-        int total = statsClientMapper.countClientRechargeByDate(date, currentDay);
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null,
-                    null, null, null, date, currentDay);
-            if(!CollectionUtils.isEmpty(productRechargeInfoList))
-            {
-                List<ProductRechargeResDTO> dataList = new ArrayList<>();
-                findProductRechargeInfoDTO(productRechargeInfoList, dataList);
-                listDTO.setList(dataList);
-            }
-        }
-        return listDTO;
-    }
-
-    @Override
     public ListDTO<ProductRechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
     {
         ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();

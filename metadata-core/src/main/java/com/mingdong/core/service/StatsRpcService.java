@@ -40,11 +40,6 @@ public interface StatsRpcService
      */
     BigDecimal getClientRechargeStatsAll();
 
-    /**
-     * 根据日期获取充值信息列表
-     */
-    ListDTO<ProductRechargeResDTO> getProductRechargeInfoListBy(Date fromDate, Date toDate, Page page);
-
     ListDTO<ProductRechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate);
 
     /**

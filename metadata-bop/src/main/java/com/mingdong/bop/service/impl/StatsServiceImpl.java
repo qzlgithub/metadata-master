@@ -25,7 +25,6 @@ import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.ClientRpcService;
-import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.BusinessUtils;
@@ -65,8 +64,6 @@ public class StatsServiceImpl implements StatsService
     private StatsRpcService statsRpcService;
     @Resource
     private SystemRpcService systemRpcService;
-    @Resource
-    private ProductRpcService productRpcService;
     @Resource
     private ClientRpcService clientRpcService;
 
@@ -297,30 +294,30 @@ public class StatsServiceImpl implements StatsService
         row.createCell(9).setCellValue("经手人");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ProductRechargeResDTO> listDTO = statsRpcService.getProductRechargeInfoListBy(beforeDate, currentDay,
-                page);
-        List<ProductRechargeResDTO> dataList = listDTO.getList();
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(null, null, null, null, null,
+                beforeDate, currentDay, page);
+        List<RechargeResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
             timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
-            ProductRechargeResDTO dataInfo;
+            RechargeResDTO dataInfo;
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataInfo = dataList.get(i);
                 dataRow = sheet.createRow(i + 1);
                 cell = dataRow.createCell(0);
-                cell.setCellValue(dataInfo.getTradeTime());
+                cell.setCellValue(dataInfo.getRechargeAt());
                 cell.setCellStyle(timeStyle);
-                dataRow.createCell(1).setCellValue(dataInfo.getTradeNo());
+                dataRow.createCell(1).setCellValue(dataInfo.getRechargeNo());
                 dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
                 dataRow.createCell(3).setCellValue(dataInfo.getShortName());
                 dataRow.createCell(4).setCellValue(dataInfo.getUsername());
                 dataRow.createCell(5).setCellValue(dataInfo.getProductName());
                 dataRow.createCell(6).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
-                dataRow.createCell(7).setCellValue(dataInfo.getRechargeType());
+                dataRow.createCell(7).setCellValue(dataInfo.getRechargeTypeName());
                 dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
                 dataRow.createCell(9).setCellValue(dataInfo.getManagerName());
             }
