@@ -1084,7 +1084,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             Long managerId, Integer rechargeType, Date startDate, Date endDate, Page page)
     {
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
-        int total = productRechargeInfoMapper.countByClient(keyword, clientId, productId, managerId, rechargeType,
+        int total = productRechargeInfoMapper.countBy(keyword, clientId, productId, managerId, rechargeType,
                 startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1097,7 +1097,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(keyword, clientId, productId,
+            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(keyword, clientId, productId,
                     managerId, rechargeType, startDate, endDate);
             List<RechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)

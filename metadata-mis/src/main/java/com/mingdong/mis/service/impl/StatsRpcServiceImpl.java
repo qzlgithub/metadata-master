@@ -134,8 +134,8 @@ public class StatsRpcServiceImpl implements StatsRpcService
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null, date,
-                    currentDay);
+            List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListBy(null, null,
+                    null, null, null, date, currentDay);
             if(!CollectionUtils.isEmpty(productRechargeInfoList))
             {
                 List<ProductRechargeResDTO> dataList = new ArrayList<>();

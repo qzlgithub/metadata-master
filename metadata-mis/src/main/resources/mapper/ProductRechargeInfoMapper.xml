@@ -22,42 +22,6 @@
     </resultMap>
 
     <!-- @formatter:off -->
-    <select id="getListBy" resultMap="BaseResultMap">
-        select
-            pr.`id`          as id,
-            pr.`create_time` as trade_time,
-            pr.`trade_no`    as trade_no,
-            pr.`bill_plan`   as bill_plan,
-            c.`corp_name`    as corp_name,
-            c.`short_name`   as short_name,
-            cu.`username`    as username,
-            p.`name`         as product_name,
-            rt.`name`        as recharge_type,
-            pr.`amount`      as amount,
-            pr.`balance`     as balance,
-            m.`name`         as manager_name,
-            pr.`contract_no` as contract_no,
-            pr.`remark`      as remark
-        from `recharge` pr
-            left join `client` c
-                on pr.`client_id` = c.`id`
-            left join `client_user` cu
-                on c.`primary_user_id` = cu.`id`
-            left join `product` p
-                on pr.`product_id` = p.`id`
-            left join `user` m
-                on pr.`manager_id` = m.`id`
-            left join `dict_recharge_type` rt
-                on pr.`recharge_type` = rt.`id`
-        <where>
-            <if test="clientId != null">pr.`client_id` = #{clientId}</if>
-            <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
-            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
-        </where>
-        order by pr.`create_time` desc
-    </select>
-
     <select id="getListByTime" resultMap="BaseResultMap">
         select
             pr.`id`          as id,
@@ -108,7 +72,7 @@
     </select>
 
     <!-- @formatter:off -->
-    <select id="countByClient" resultType="int">
+    <select id="countBy" resultType="int">
         select count(*)
         from `recharge` r
             left join `client` c
@@ -123,10 +87,8 @@
             <if test="endTime != null">and r.`create_time` &lt; #{endTime}</if>
         </where>
     </select>
-    <!-- @formatter:on -->
 
-    <!-- @formatter:off -->
-    <select id="getListByClient" resultMap="BaseResultMap">
+    <select id="getListBy" resultMap="BaseResultMap">
         select
             r.`create_time` as trade_time,
             r.`trade_no`    as trade_no,
