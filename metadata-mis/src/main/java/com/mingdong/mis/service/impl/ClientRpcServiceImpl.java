@@ -25,6 +25,7 @@ import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
+import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.Recharge1ResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -980,8 +981,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Long managerId, Page page)
+    public ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> getClientBillListBy(String keyword,
+            Long productId, Integer billPlan, Date fromDate, Date toDate, Long managerId, Page page)
     {
         ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> dto = new ListDTO<>();
         int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate, managerId);
@@ -999,8 +1000,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<com.mingdong.core.model.dto.response.AccessResDTO> list = new ArrayList<>(dataList.size());
             for(ApiReqInfo o : dataList)
             {
-                com.mingdong.core.model.dto.response.AccessResDTO
-                        ari = new com.mingdong.core.model.dto.response.AccessResDTO();
+                com.mingdong.core.model.dto.response.AccessResDTO ari =
+                        new com.mingdong.core.model.dto.response.AccessResDTO();
                 ari.setCreateTime(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setCorpName(o.getCorpName());
@@ -1045,6 +1046,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         res.setUserDict(userDict);
         return res;
+    }
+
+    @Override
+    public String getClientCorpName(Long clientId)
+    {
+        Client client = clientMapper.findById(clientId);
+        return client != null ? client.getCorpName() : null;
     }
 
     @Override
@@ -1111,13 +1119,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public String getClientCorpName(Long clientId)
-    {
-        Client client = clientMapper.findById(clientId);
-        return client != null ? client.getCorpName() : null;
-    }
-
-    @Override
     public ListDTO<Recharge1ResDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
             Page page)
     {
@@ -1151,7 +1152,44 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> getRevenueList(Date fromDate, Date toDate, Page page)
+    public ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
+            Date endDate, Page page)
+    {
+        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
+        int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
+                    endDate);
+            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
+            for(ProductRechargeInfo o : dataList)
+            {
+                ProductRechargeResDTO pri = new ProductRechargeResDTO();
+                pri.setTradeTime(o.getTradeTime());
+                pri.setTradeNo(o.getTradeNo());
+                pri.setRechargeType(o.getRechargeType());
+                pri.setBillPlan(o.getBillPlan());
+                pri.setProductName(o.getProductName());
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                pri.setContractNo(o.getContractNo());
+                pri.setCorpName(o.getCorpName());
+                pri.setShortName(o.getShortName());
+                pri.setUsername(o.getUsername());
+                pri.setManagerName(o.getManagerName());
+                list.add(pri);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> getRevenueList(Date fromDate, Date toDate,
+            Page page)
     {
         ListDTO<com.mingdong.core.model.dto.response.AccessResDTO> listDTO = new ListDTO<>();
         BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate, null);
@@ -1166,8 +1204,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<com.mingdong.core.model.dto.response.AccessResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                com.mingdong.core.model.dto.response.AccessResDTO
-                        r = new com.mingdong.core.model.dto.response.AccessResDTO();
+                com.mingdong.core.model.dto.response.AccessResDTO r =
+                        new com.mingdong.core.model.dto.response.AccessResDTO();
                 EntityUtils.copyProperties(o, r);
                 list.add(r);
             }

@@ -14,12 +14,6 @@ import java.util.List;
 public interface ProductRpcService
 {
     /**
-     * 根据条件获取客户充值记录
-     */
-    ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
-            Page page);
-
-    /**
      * 获取指定客户已开通的产品服务信息列表
      */
     ListDTO<ProductResDTO> getOpenedProductList(Long clientId);
