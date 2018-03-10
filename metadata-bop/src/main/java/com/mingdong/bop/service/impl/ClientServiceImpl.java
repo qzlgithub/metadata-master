@@ -590,7 +590,7 @@ public class ClientServiceImpl implements ClientService
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getApiRequestRecord(clientId, userId, productId, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
@@ -670,7 +670,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(5).setCellValue("是否击中");
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
-        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getApiRequestRecord(clientId, userId, productId, startTime,
                 endTime, page);
         List<AccessResDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))

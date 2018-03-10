@@ -1052,43 +1052,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
-            Date endDate, Page page)
-    {
-        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, startDate,
-                    endDate);
-            List<AccessResDTO> list = new ArrayList<>();
-            for(ApiReqInfo o : dataList)
-            {
-                AccessResDTO r = new AccessResDTO();
-                r.setRequestAt(o.getCreateTime());
-                r.setRequestNo(o.getRequestNo());
-                r.setUsername(o.getUsername());
-                r.setProductName(o.getProductName());
-                r.setBillPlan(o.getBillPlan());
-                r.setHit(o.getHit());
-                r.setFee(o.getFee());
-                r.setBalance(o.getBalance());
-                list.add(r);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
-    }
-
-    @Override
     public ListDTO<AccessResDTO> getApiRequestRecord(Long clientId, Long userId, Long productId, Date startDate,
             Date endDate, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqMapper.countBy(clientId, userId, productId, startDate, endDate);
+        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
@@ -1102,6 +1070,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 AccessResDTO ari = new AccessResDTO();
                 ari.setRequestAt(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
+                ari.setUsername(o.getUsername());
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
                 ari.setHit(o.getHit());
@@ -1172,10 +1141,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 pri.setAmount(o.getAmount());
                 pri.setBalance(o.getBalance());
                 pri.setContractNo(o.getContractNo());
+                pri.setManagerName(o.getManagerName());
                 pri.setCorpName(o.getCorpName());
                 pri.setShortName(o.getShortName());
                 pri.setUsername(o.getUsername());
-                pri.setManagerName(o.getManagerName());
                 list.add(pri);
             }
             listDTO.setList(list);
