@@ -3,7 +3,6 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
-import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
@@ -12,17 +11,14 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
-import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
-import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
 import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
@@ -35,7 +31,6 @@ import com.mingdong.mis.domain.mapper.RechargeMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -333,49 +328,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
                 pd.setRemark(o.getRemark());
                 pd.setEnabled(o.getEnabled());
                 list.add(pd);
-            }
-            dto.setList(list);
-        }
-        return dto;
-    }
-
-    @Override
-    public ListDTO<ProductRechargeResDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
-            Long rechargeType, Date fromDate, Date toDate, Page page)
-    {
-        ListDTO<ProductRechargeResDTO> dto = new ListDTO<>();
-        int total = productRechargeInfoMapper.countBy1(keyword, productId, managerId, rechargeType, fromDate, toDate);
-        int pages = page.getTotalPage(total);
-        dto.setTotal(total);
-        BigDecimal totalAmt = productRechargeInfoMapper.sumRechargeAmountBy(keyword, productId, managerId, rechargeType,
-                fromDate, toDate);
-        dto.addExtra(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy1(keyword, productId, managerId,
-                    rechargeType, fromDate, toDate);
-            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeInfo o : dataList)
-            {
-                ProductRechargeResDTO pri = new ProductRechargeResDTO();
-                pri.setTradeTime(o.getTradeTime());
-                pri.setTradeNo(o.getTradeNo());
-                pri.setCorpName(o.getCorpName());
-                pri.setShortName(o.getShortName());
-                pri.setUsername(o.getUsername());
-                pri.setProductName(o.getProductName());
-                pri.setRechargeType(o.getRechargeType());
-                pri.setAmount(o.getAmount());
-                pri.setBalance(o.getBalance());
-                pri.setManagerName(o.getManagerName());
-                pri.setContractNo(o.getContractNo());
-                pri.setRemark(o.getRemark());
-                pri.setStartDate(o.getStartDate());
-                pri.setEndDate(o.getEndDate());
-                pri.setBillPlan(o.getBillPlan());
-                pri.setUnitAmt(o.getUnitAmt());
-                list.add(pri);
             }
             dto.setList(list);
         }

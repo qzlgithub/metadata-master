@@ -4,11 +4,9 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ProductRpcService
@@ -54,9 +52,6 @@ public interface ProductRpcService
     ResponseDTO changeProductStatus(Long productId, Integer enabled);
 
     ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
-
-    ListDTO<ProductRechargeResDTO> getRechargeInfoList(String keyword, Long productId, Long managerId,
-            Long rechargeType, Date fromDate, Date toDate, Page page);
 
     ListDTO<ProductResDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
 }

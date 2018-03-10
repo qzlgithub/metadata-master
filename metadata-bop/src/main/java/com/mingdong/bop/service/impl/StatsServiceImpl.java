@@ -22,6 +22,7 @@ import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -844,27 +845,27 @@ public class StatsServiceImpl implements StatsService
 
     private List<Map<String, Object>> getProductRechargeInfoList(Page page, Date start, Date end)
     {
-        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getProductRechargeRecord(null, null, start, end,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(null, null, start, end,
                 page);
-        List<ProductRechargeResDTO> infoDateList = listDTO.getList();
+        List<RechargeResDTO> infoDateList = listDTO.getList();
         return getProductRechargeInfoDateList(infoDateList);
     }
 
-    private List<Map<String, Object>> getProductRechargeInfoDateList(List<ProductRechargeResDTO> infoDateList)
+    private List<Map<String, Object>> getProductRechargeInfoDateList(List<RechargeResDTO> infoDateList)
     {
         List<Map<String, Object>> dataList = new ArrayList<>(infoDateList.size());
         Map<String, Object> map;
-        for(ProductRechargeResDTO item : infoDateList)
+        for(RechargeResDTO item : infoDateList)
         {
             map = new HashMap<>();
-            map.put(Field.TRADE_TIME, DateUtils.format(item.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-            map.put(Field.TRADE_NO, item.getTradeNo());
+            map.put(Field.TRADE_TIME, DateUtils.format(item.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            map.put(Field.TRADE_NO, item.getRechargeNo());
             map.put(Field.CORP_NAME, item.getCorpName());
             map.put(Field.SHORT_NAME, item.getShortName());
             map.put(Field.USERNAME, item.getUsername());
             map.put(Field.PRODUCT_NAME, item.getProductName());
             map.put(Field.AMOUNT, NumberUtils.formatAmount(item.getAmount()));
-            map.put(Field.RECHARGE_TYPE, item.getRechargeType());
+            map.put(Field.RECHARGE_TYPE, item.getRechargeTypeName());
             map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
             map.put(Field.MANAGER_NAME, item.getManagerName());
             dataList.add(map);

@@ -93,17 +93,11 @@
     <!-- @formatter:on -->
 
     <select id="countBy1" resultType="int">
-        select
-            count(*)
-        from `recharge` pr
-            left join `client` c
-                on pr.`client_id` = c.`id`
+        select count(*) from `recharge` pr left join `client` c on pr.`client_id` = c.`id`
         <where>
             <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%'
-                or c.`short_name` like '%${keyword}%'
-                or pr.`trade_no` like '%${keyword}%'
-                or pr.`contract_no` like '%${keyword}%')
+                (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%' or pr.`trade_no` like
+                '%${keyword}%' or pr.`contract_no` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
@@ -114,17 +108,11 @@
     </select>
 
     <select id="sumRechargeAmountBy" resultType="BigDecimal">
-        select
-            sum(pr.`amount`)
-        from `recharge` pr
-            left join `client` c
-                on pr.`client_id` = c.`id`
+        select sum(pr.`amount`) from `recharge` pr left join `client` c on pr.`client_id` = c.`id`
         <where>
             <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%'
-                or c.`short_name` like '%${keyword}%'
-                or pr.`trade_no` like '%${keyword}%'
-                or pr.`contract_no` like '%${keyword}%')
+                (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%' or pr.`trade_no` like
+                '%${keyword}%' or pr.`contract_no` like '%${keyword}%')
             </if>
             <if test="productId != null">and pr.`product_id` = #{productId}</if>
             <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
@@ -135,32 +123,13 @@
     </select>
 
     <select id="getListBy1" resultMap="BaseResultMap">
-        select
-            pr.`create_time` as trade_time,
-            pr.`trade_no`    as trade_no,
-            pr.`start_date`  as start_date,
-            pr.`end_date`    as end_date,
-            pr.`unit_amt`    as unit_amt,
-            pr.`bill_plan`   as bill_plan,
-            c.`corp_name`    as corp_name,
-            c.`short_name`   as short_name,
-            c.`username`     as username,
-            p.`name`         as product_name,
-            drt.`name`       as recharge_type,
-            pr.`amount`      as amount,
-            pr.`balance`     as balance,
-            m.`name`         as manager_name,
-            pr.`contract_no` as contract_no,
-            pr.`remark`      as remark
-        from `recharge` pr
-            left join `client` c
-                on pr.`client_id` = c.`id`
-            left join `user` m
-                on pr.`manager_id` = m.`id`
-            left join `product` p
-                on pr.`product_id` = p.`id`
-            left join `dict_recharge_type` drt
-                on pr.`recharge_type` = drt.`id`
+        select pr.`create_time` as trade_time, pr.`trade_no` as trade_no, pr.`start_date` as start_date, pr.`end_date`
+        as end_date, pr.`unit_amt` as unit_amt, pr.`bill_plan` as bill_plan, c.`corp_name` as corp_name, c.`short_name`
+        as short_name, c.`username` as username, p.`name` as product_name, drt.`name` as recharge_type, pr.`amount` as
+        amount, pr.`balance` as balance, m.`name` as manager_name, pr.`contract_no` as contract_no, pr.`remark` as
+        remark from `recharge` pr left join `client` c on pr.`client_id` = c.`id` left join `user` m on pr.`manager_id`
+        = m.`id` left join `product` p on pr.`product_id` = p.`id` left join `dict_recharge_type` drt on
+        pr.`recharge_type` = drt.`id`
         <where>
             <if test="keyword != null">
                 (c.`corp_name` like '%${keyword}%')
@@ -174,16 +143,17 @@
         order by pr.`create_time` desc
     </select>
 
-    <!-- @formatter:off -->
     <select id="countByClient" resultType="int">
-        select count(*)
-        from `recharge`
-        where `client_id` = #{clientId}
-        <if test="productId != null">and `product_id` = #{productId}</if>
-        <if test="startTime != null">and `create_time` >= #{startTime}</if>
-        <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
+        select count(*) from `recharge`
+        <where>
+            <if test="clientId != null">`client_id` = #{clientId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+            <if test="startTime != null">and `create_time` >= #{startTime}</if>
+            <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
+        </where>
     </select>
 
+    <!-- @formatter:off -->
     <select id="getListByClient" resultMap="BaseResultMap">
         select
             pr.`create_time` as trade_time,
@@ -202,10 +172,12 @@
                 on pr.`manager_id` = m.`id`
             left join `dict_recharge_type` drt
                 on pr.`recharge_type` = drt.`id`
-        where pr.`client_id` = #{clientId}
-        <if test="productId != null">and pr.`product_id` = #{productId}</if>
-        <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
-        <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+        <where>
+            <if test="clientId != null">pr.`client_id` = #{clientId}</if>
+            <if test="productId != null">and pr.`product_id` = #{productId}</if>
+            <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+        </where>
     </select>
     <!-- @formatter:on -->
 </mapper>

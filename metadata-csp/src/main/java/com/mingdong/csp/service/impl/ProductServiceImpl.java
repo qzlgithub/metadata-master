@@ -14,8 +14,8 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -50,19 +50,19 @@ public class ProductServiceImpl implements ProductService
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<ProductRechargeResDTO> productRecListDTO = clientRpcService.getProductRechargeRecord(clientId,
+        ListDTO<RechargeResDTO> productRecListDTO = clientRpcService.getClientRechargeRecord(clientId,
                 productId, fromDate, toDate, page);
         resp.addData(Field.TOTAL, productRecListDTO.getTotal());
-        List<ProductRechargeResDTO> dataList = productRecListDTO.getList();
+        List<RechargeResDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
             List<Map<String, Object>> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeResDTO o : dataList)
+            for(RechargeResDTO o : dataList)
             {
                 Map<String, Object> m = new HashMap<>();
-                m.put(Field.TRADE_TIME, DateUtils.format(o.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                m.put(Field.TRADE_NO, o.getTradeNo());
-                m.put(Field.RECHARGE_TYPE, o.getRechargeType());
+                m.put(Field.TRADE_TIME, DateUtils.format(o.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                m.put(Field.TRADE_NO, o.getRechargeNo());
+                m.put(Field.RECHARGE_TYPE, o.getRechargeTypeName());
                 m.put(Field.BILL_PLAN, o.getBillPlan());
                 m.put(Field.PRODUCT_NAME, o.getProductName());
                 m.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
@@ -88,12 +88,12 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("产品余额");
         row.createCell(6).setCellValue("合同编号");
         Page page = new Page(1, 1000);
-        ListDTO<ProductRechargeResDTO> productRecListDTO = clientRpcService.getProductRechargeRecord(clientId,
+        ListDTO<RechargeResDTO> productRecListDTO = clientRpcService.getClientRechargeRecord(clientId,
                 productId, fromDate, toDate, page);
-        List<ProductRechargeResDTO> dataList = productRecListDTO.getList();
+        List<RechargeResDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
-            ProductRechargeResDTO dataDTO;
+            RechargeResDTO dataDTO;
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
@@ -103,11 +103,11 @@ public class ProductServiceImpl implements ProductService
                 dataDTO = dataList.get(i);
                 dataRow = sheet.createRow(i + 1);
                 cell = dataRow.createCell(0);
-                cell.setCellValue(dataDTO.getTradeTime());
+                cell.setCellValue(dataDTO.getRechargeAt());
                 cell.setCellStyle(timeStyle);
-                dataRow.createCell(1).setCellValue(dataDTO.getTradeNo());
+                dataRow.createCell(1).setCellValue(dataDTO.getRechargeNo());
                 dataRow.createCell(2).setCellValue(dataDTO.getProductName());
-                dataRow.createCell(3).setCellValue(dataDTO.getRechargeType());
+                dataRow.createCell(3).setCellValue(dataDTO.getRechargeTypeName());
                 dataRow.createCell(4).setCellValue(NumberUtils.formatAmount(dataDTO.getAmount()));
                 dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataDTO.getBalance()));
                 dataRow.createCell(6).setCellValue(dataDTO.getContractNo());
@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
             RestResp resp)
     {
-        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getApiRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(5).setCellValue("消费(元)");
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
-        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getApiRequestRecord(clientId, null, productId,
+        ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientRequestRecord(clientId, null, productId,
                 fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))

@@ -153,16 +153,20 @@ public interface ClientRpcService
 
     String getClientCorpName(Long clientId);
 
-    ListDTO<AccessResDTO> getApiRequestRecord(Long clientId, Long userId, Long productId, Date startDate, Date endDate,
-            Page page);
+    /**
+     * 客户接口请求记录
+     */
+    ListDTO<AccessResDTO> getClientRequestRecord(Long clientId, Long userId, Long productId, Date startDate,
+            Date endDate, Page page);
 
-    // TODO （管理）客户充值记录
+    /**
+     * 客户产品充值记录
+     */
     ListDTO<RechargeResDTO> getClientRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
             Page page);
 
-    // TODO （客户）客户充值记录
-    ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
-            Page page);
+    ListDTO<ProductRechargeResDTO> getClientRechargeRecord(Long managerId, String keyword, Long productId,
+            Long rechargeType, Date fromDate, Date toDate, Page page);
 
     ListDTO<AccessResDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 

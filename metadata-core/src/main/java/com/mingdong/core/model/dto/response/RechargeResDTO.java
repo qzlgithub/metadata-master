@@ -1,22 +1,27 @@
 package com.mingdong.core.model.dto.response;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class RechargeResDTO extends ResponseDTO
+public class RechargeResDTO implements Serializable
 {
-    private Integer billPlan;
-    private BigDecimal amount;
-    private BigDecimal balance;
-    private BigDecimal unitAmt;
-    private Date startDate;
-    private Date endDate;
     private Date rechargeAt;
     private String rechargeNo;
+    private String corpName;
+    private String shortName;
+    private String username;
     private String productName;
     private String rechargeTypeName;
-    private String managerName;
+    private BigDecimal amount;
+    private BigDecimal balance;
+    private Integer billPlan;
+    private Date startDate;
+    private Date endDate;
+    private BigDecimal unitAmt;
+    private String remark;
     private String contractNo;
+    private String managerName;
 
     public Date getRechargeAt()
     {
@@ -36,6 +41,36 @@ public class RechargeResDTO extends ResponseDTO
     public void setRechargeNo(String rechargeNo)
     {
         this.rechargeNo = rechargeNo;
+    }
+
+    public String getCorpName()
+    {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName)
+    {
+        this.corpName = corpName;
+    }
+
+    public String getShortName()
+    {
+        return shortName;
+    }
+
+    public void setShortName(String shortName)
+    {
+        this.shortName = shortName;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
     }
 
     public String getProductName()
@@ -58,36 +93,6 @@ public class RechargeResDTO extends ResponseDTO
         this.rechargeTypeName = rechargeTypeName;
     }
 
-    public String getManagerName()
-    {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName)
-    {
-        this.managerName = managerName;
-    }
-
-    public String getContractNo()
-    {
-        return contractNo;
-    }
-
-    public void setContractNo(String contractNo)
-    {
-        this.contractNo = contractNo;
-    }
-
-    public Integer getBillPlan()
-    {
-        return billPlan;
-    }
-
-    public void setBillPlan(Integer billPlan)
-    {
-        this.billPlan = billPlan;
-    }
-
     public BigDecimal getAmount()
     {
         return amount;
@@ -108,14 +113,14 @@ public class RechargeResDTO extends ResponseDTO
         this.balance = balance;
     }
 
-    public BigDecimal getUnitAmt()
+    public Integer getBillPlan()
     {
-        return unitAmt;
+        return billPlan;
     }
 
-    public void setUnitAmt(BigDecimal unitAmt)
+    public void setBillPlan(Integer billPlan)
     {
-        this.unitAmt = unitAmt;
+        this.billPlan = billPlan;
     }
 
     public Date getStartDate()
@@ -138,4 +143,43 @@ public class RechargeResDTO extends ResponseDTO
         this.endDate = endDate;
     }
 
+    public BigDecimal getUnitAmt()
+    {
+        return unitAmt;
+    }
+
+    public void setUnitAmt(BigDecimal unitAmt)
+    {
+        this.unitAmt = unitAmt;
+    }
+
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+
+    public String getManagerName()
+    {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName)
+    {
+        this.managerName = managerName;
+    }
+
+    public String getContractNo()
+    {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo)
+    {
+        this.contractNo = contractNo;
+    }
 }
