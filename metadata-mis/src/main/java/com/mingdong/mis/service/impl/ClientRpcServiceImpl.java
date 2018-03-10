@@ -1051,17 +1051,18 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate,
-            Date toDate, Page page)
+    public ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
+            Date endDate, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, fromDate, toDate);
+        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, fromDate, toDate);
+            List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, startDate,
+                    endDate);
             List<AccessResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {

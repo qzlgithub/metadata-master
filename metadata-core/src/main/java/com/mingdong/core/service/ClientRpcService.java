@@ -153,8 +153,8 @@ public interface ClientRpcService
     String getClientCorpName(Long clientId);
 
     // TODO （管理）客户消费记录
-    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
-            Page page);
+    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
+            Date endDate, Page page);
 
     // TODO （客户）客户消费记录
     ListDTO<AccessResDTO> getApiRequestRecord(Long clientId, Long userId, Long productId, Date startDate, Date endDate,
