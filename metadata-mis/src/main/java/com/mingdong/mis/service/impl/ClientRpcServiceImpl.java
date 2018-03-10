@@ -26,6 +26,7 @@ import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
@@ -1114,18 +1115,18 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<RechargeResDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
+    public ListDTO<RechargeResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
             Page page)
     {
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
-        int total = productRechargeInfoMapper.countByClient(clientId, productId, fromDate, toDate);
+        int total = productRechargeInfoMapper.countByClient(clientId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
-                    fromDate, toDate);
+                    startDate, endDate);
             List<RechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)
             {
@@ -1244,9 +1245,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public RechargeResDTO getLatestRechargeInfo(Long clientId, Long productId)
+    public RechargeInfoResDTO getLatestRechargeInfo(Long clientId, Long productId)
     {
-        RechargeResDTO resDTO = new RechargeResDTO();
+        RechargeInfoResDTO resDTO = new RechargeInfoResDTO();
         ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
         if(clientProduct == null || !TrueOrFalse.TRUE.equals(clientProduct.getOpened()))
         {

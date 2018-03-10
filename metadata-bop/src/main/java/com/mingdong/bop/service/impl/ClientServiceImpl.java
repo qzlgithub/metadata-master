@@ -36,6 +36,7 @@ import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -280,7 +281,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getProductRenewInfo(Long clientId, Long productId, RestResp resp)
     {
-        RechargeResDTO resDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
+        RechargeInfoResDTO resDTO = clientRpcService.getLatestRechargeInfo(clientId, productId);
         if(resDTO.getResult() != RestResult.SUCCESS)
         {
             resp.setError(resDTO.getResult());
