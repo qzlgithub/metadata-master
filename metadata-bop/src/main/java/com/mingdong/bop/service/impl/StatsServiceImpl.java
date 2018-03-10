@@ -592,7 +592,7 @@ public class StatsServiceImpl implements StatsService
                 map.put(Field.USERNAME, o.getUsername());
                 map.put(Field.SHORT_NAME, o.getShortName());
                 map.put(Field.PRODUCT, o.getProductName());
-                map.put(Field.REQUEST_NUMBER, o.getRequestNumber());
+                map.put(Field.REQUEST_NUMBER, 1);
                 map.put(Field.FEE, o.getFee());
                 list.add(map);
             }
@@ -628,7 +628,7 @@ public class StatsServiceImpl implements StatsService
                 dataRow.createCell(1).setCellValue(dataInfo.getShortName());
                 dataRow.createCell(2).setCellValue(dataInfo.getUsername());
                 dataRow.createCell(3).setCellValue(dataInfo.getProductName());
-                dataRow.createCell(4).setCellValue(dataInfo.getRequestNumber() + "");
+                dataRow.createCell(4).setCellValue(1);
                 dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
             }
         }

@@ -17,6 +17,7 @@
         <result column="balance" property="balance" jdbcType="DECIMAL" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+        <result column="primary_username" property="primaryUsername" jdbcType="VARCHAR" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
         <result column="request_number" property="requestNumber" jdbcType="INTEGER" />
@@ -86,18 +87,19 @@
     <!-- @formatter:off -->
     <select id="getListBy1" resultMap="BaseResultMap">
         select
-            ar.`create_time` as create_time,
-            ar.`request_no`  as request_no,
-            c.`corp_name`    as corp_name,
-            c.`short_name`   as short_name,
+            ar.`create_time`    as create_time,
+            ar.`request_no`     as request_no,
+            c.`corp_name`       as corp_name,
+            c.`short_name`      as short_name,
             c.`primary_user_id` as primary_user_id,
-            ar.`user_id`     as user_id,
-            cu.`username`    as username,
-            p.`name`         as product_name,
-            ar.`bill_plan`   as bill_plan,
-            ar.`hit`         as hit,
-            ar.`fee`         as fee,
-            ar.`balance`     as balance
+            c.`username`        as primary_username,
+            ar.`user_id`        as user_id,
+            cu.`username`       as username,
+            p.`name`            as product_name,
+            ar.`bill_plan`      as bill_plan,
+            ar.`hit`            as hit,
+            ar.`fee`            as fee,
+            ar.`balance`        as balance
         from `api_req` ar
             left join `client` c
                 on ar.`client_id` = c.`id`

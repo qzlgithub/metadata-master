@@ -9,8 +9,8 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
-import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -155,7 +155,14 @@ public class TradeServiceImpl implements TradeService
                 map.put(Field.TRADE_NO, o.getRequestNo());
                 map.put(Field.CORP_NAME, o.getCorpName());
                 map.put(Field.SHORT_NAME, o.getShortName());
-                map.put(Field.USERNAME, o.getUsername() + (o.getPrimaryUserId().equals(o.getUserId()) ? "" : "（子）"));
+                if(o.getPrimaryUsername().equals(o.getUsername()))
+                {
+                    map.put(Field.USERNAME, o.getUsername());
+                }
+                else
+                {
+                    map.put(Field.USERNAME, o.getUsername() + "(" + o.getPrimaryUsername() + ")");
+                }
                 map.put(Field.PRODUCT, o.getProductName());
                 map.put(Field.BILL_PLAN, BillPlan.getNameById(o.getBillPlan()));
                 if(BillPlan.BY_TIME.getId().equals(o.getBillPlan()))
@@ -208,8 +215,14 @@ public class TradeServiceImpl implements TradeService
             cell.setCellStyle(timeStyle);
             dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
-            dataRow.createCell(3).setCellValue(
-                    dataInfo.getUsername() + (dataInfo.getPrimaryUserId().equals(dataInfo.getUserId()) ? "" : "（子）"));
+            if(dataInfo.getPrimaryUsername().equals(dataInfo.getUsername()))
+            {
+                dataRow.createCell(3).setCellValue(dataInfo.getUsername());
+            }
+            else
+            {
+                dataRow.createCell(3).setCellValue(dataInfo.getUsername() + "(" + dataInfo.getPrimaryUsername() + ")");
+            }
             dataRow.createCell(4).setCellValue(dataInfo.getProductName());
             dataRow.createCell(5).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
             dataRow.createCell(6).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
