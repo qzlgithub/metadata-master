@@ -170,7 +170,7 @@ public class ProductServiceImpl implements ProductService
             Row dataRow;
             Cell cell;
             CellStyle timeStyle = wb.createCellStyle();
-            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
+            timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
             for(int i = 0; i < dataList.size(); i++)
             {
                 dataDTO = dataList.get(i);
