@@ -87,6 +87,9 @@ public class StatsController
         return jsonArray.toJSONString();
     }
 
+    /**
+     * TODO TBD：营收数据列表
+     */
     @LoginRequired
     @GetMapping(value = "/stats/client/revenueList")
     public RestListResp getRevenueList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,

@@ -163,11 +163,11 @@ public interface ClientRpcService
             Page page);
 
     // TODO （管理）客户充值记录
-    ListDTO<Recharge1ResDTO> getClientRechargeList(Long clientId, Long productId, Date fromDate, Date toDate,
+    ListDTO<Recharge1ResDTO> getClientRechargeList(Long clientId, Long productId, Date startDate, Date endDate,
             Page page);
 
     // TODO （客户）客户充值记录
-    ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date endDate,
+    ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
             Page page);
 
     ListDTO<AccessResDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
