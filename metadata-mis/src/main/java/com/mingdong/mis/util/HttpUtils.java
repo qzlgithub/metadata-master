@@ -22,7 +22,7 @@ import java.util.Map;
 public class HttpUtils
 {
     private static final String DEFAULT_CHARSET = "UTF-8";
-    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
     private HttpUtils()
     {

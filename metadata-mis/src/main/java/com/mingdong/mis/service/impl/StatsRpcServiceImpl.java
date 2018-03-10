@@ -17,7 +17,6 @@ import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
 import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
 import org.slf4j.Logger;
@@ -34,13 +33,11 @@ import java.util.List;
 
 public class StatsRpcServiceImpl implements StatsRpcService
 {
-    private static Logger logger = LoggerFactory.getLogger(StatsRpcServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StatsRpcServiceImpl.class);
     @Resource
     private StatsClientMapper statsClientMapper;
     @Resource
     private ClientInfoMapper clientInfoMapper;
-    @Resource
-    private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ApiReqMapper apiReqMapper;
     @Resource
@@ -122,29 +119,6 @@ public class StatsRpcServiceImpl implements StatsRpcService
     public BigDecimal getClientRechargeStatsAll()
     {
         return statsClientMapper.getClientRechargeAll();
-    }
-
-    @Override
-    public ListDTO<ProductRechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
-    {
-        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
-        List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
-        listDTO.setTotal(productRechargeInfoList.size());
-        if(!CollectionUtils.isEmpty(productRechargeInfoList))
-        {
-            List<ProductRechargeResDTO> list = new ArrayList<>();
-            for(ProductRechargeInfo o : productRechargeInfoList)
-            {
-                ProductRechargeResDTO pri = new ProductRechargeResDTO();
-                pri.setRechargeType(o.getRechargeType());
-                pri.setAmount(o.getAmount());
-                pri.setBalance(o.getBalance());
-                pri.setTradeTime(o.getTradeTime());
-                list.add(pri);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
     }
 
     @Override

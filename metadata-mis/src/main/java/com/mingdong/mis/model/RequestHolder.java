@@ -1,6 +1,6 @@
 package com.mingdong.mis.model;
 
-public class RequestHolder
+class RequestHolder
 {
     private Long accountId;
     private Long clientId;

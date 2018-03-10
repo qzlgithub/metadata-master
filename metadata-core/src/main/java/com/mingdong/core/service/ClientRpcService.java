@@ -164,6 +164,8 @@ public interface ClientRpcService
     ListDTO<RechargeResDTO> getClientRechargeRecord(String keyword, Long clientId, Long productId, Long managerId,
             Integer rechargeType, Date startDate, Date endDate, Page page);
 
+    ListDTO<RechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate);
+
     ListDTO<AccessResDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 
     ListDTO<ClientOperateLogResDTO> getClientOperateLog(Long clientId, Page page);

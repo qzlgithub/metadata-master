@@ -45,7 +45,7 @@ public class DSDataAPI
 
     private static final String APP_KEY = "e7e552ec9d83114ee17b81fa04230200";
     private static final String SECURITY_KEY = "cb17fe4f427c8eaf232f37ab3cfa2ab6c204f670";
-    private static Logger logger = LoggerFactory.getLogger(DSDataAPI.class);
+    private static final Logger logger = LoggerFactory.getLogger(DSDataAPI.class);
 
     @Resource
     private RedisDao redisDao;

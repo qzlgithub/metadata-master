@@ -30,7 +30,7 @@ import java.util.Date;
 @Service
 public class DSDataServiceImpl implements DSDataService
 {
-    private static Logger logger = LoggerFactory.getLogger(DSDataServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DSDataServiceImpl.class);
     @Resource
     private Param param;
     @Resource

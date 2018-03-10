@@ -1084,8 +1084,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             Long managerId, Integer rechargeType, Date startDate, Date endDate, Page page)
     {
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
-        int total = productRechargeInfoMapper.countBy(keyword, clientId, productId, managerId, rechargeType,
-                startDate, endDate);
+        int total = productRechargeInfoMapper.countBy(keyword, clientId, productId, managerId, rechargeType, startDate,
+                endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
         if(clientId == null)
@@ -1120,6 +1120,29 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 r.setUnitAmt(o.getUnitAmt());
                 r.setRemark(o.getRemark());
                 list.add(r);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<RechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate)
+    {
+        ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
+        List<ProductRechargeInfo> productRechargeInfoList = productRechargeInfoMapper.getListByTime(fromDate, toDate);
+        listDTO.setTotal(productRechargeInfoList.size());
+        if(!CollectionUtils.isEmpty(productRechargeInfoList))
+        {
+            List<RechargeResDTO> list = new ArrayList<>();
+            for(ProductRechargeInfo o : productRechargeInfoList)
+            {
+                RechargeResDTO pri = new RechargeResDTO();
+                pri.setRechargeTypeName(o.getRechargeType());
+                pri.setAmount(o.getAmount());
+                pri.setBalance(o.getBalance());
+                pri.setRechargeAt(o.getTradeTime());
+                list.add(pri);
             }
             listDTO.setList(list);
         }

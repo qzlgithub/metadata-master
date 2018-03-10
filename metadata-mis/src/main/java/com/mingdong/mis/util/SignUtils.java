@@ -19,7 +19,7 @@ import java.util.SortedMap;
 public class SignUtils
 {
     private static final String HMAC_SHA_256 = "HmacSHA256";
-    private static Logger logger = LoggerFactory.getLogger(SignUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(SignUtils.class);
 
     private SignUtils()
     {

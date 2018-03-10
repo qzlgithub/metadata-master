@@ -4,7 +4,6 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 
 import java.math.BigDecimal;
@@ -39,8 +38,6 @@ public interface StatsRpcService
      * 获取充值总额
      */
     BigDecimal getClientRechargeStatsAll();
-
-    ListDTO<ProductRechargeResDTO> getRechargeInfoListBy(Date fromDate, Date toDate);
 
     /**
      * 根据日期获取客户充值次数

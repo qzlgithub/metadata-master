@@ -21,7 +21,6 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -334,20 +333,20 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArrayTemp;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ProductRechargeResDTO> listDTO = statsRpcService.getRechargeInfoListBy(beforeDate, currentDay);
-        List<ProductRechargeResDTO> dataList = listDTO.getList();
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getRechargeInfoListBy(beforeDate, currentDay);
+        List<RechargeResDTO> dataList = listDTO.getList();
         Map<String, BigDecimal> typeNameBigDecMap = new HashMap<>();
         Set<String> setTemp = new HashSet<>();
         BigDecimal bigDecimalTemp;
-        for(ProductRechargeResDTO item : dataList)
+        for(RechargeResDTO item : dataList)
         {
-            bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeType());
+            bigDecimalTemp = typeNameBigDecMap.get(item.getRechargeTypeName());
             if(bigDecimalTemp == null)
             {
                 bigDecimalTemp = new BigDecimal(0);
             }
-            typeNameBigDecMap.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
-            setTemp.add(item.getRechargeType());
+            typeNameBigDecMap.put(item.getRechargeTypeName(), bigDecimalTemp.add(item.getAmount()));
+            setTemp.add(item.getRechargeTypeName());
         }
         jsonArrayTemp = new JSONArray();
         JSONObject jsonObjectTemp;
@@ -382,16 +381,16 @@ public class StatsServiceImpl implements StatsService
             dateMap.put(sdf.format(c.getTime()), bigMapTemp);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
-        for(ProductRechargeResDTO item : dataList)
+        for(RechargeResDTO item : dataList)
         {
-            String dateStrTemp = sdf.format(item.getTradeTime());
+            String dateStrTemp = sdf.format(item.getRechargeAt());
             bigMapTemp = dateMap.get(dateStrTemp);
-            bigDecimalTemp = bigMapTemp.get(item.getRechargeType());
+            bigDecimalTemp = bigMapTemp.get(item.getRechargeTypeName());
             if(bigDecimalTemp == null)
             {
                 bigDecimalTemp = new BigDecimal(0);
             }
-            bigMapTemp.put(item.getRechargeType(), bigDecimalTemp.add(item.getAmount()));
+            bigMapTemp.put(item.getRechargeTypeName(), bigDecimalTemp.add(item.getAmount()));
         }
         jsonArrayTemp = new JSONArray();
         jsonArrayTemp1 = new JSONArray();

@@ -14,7 +14,7 @@ import java.util.Date;
 public class ClientMessageServiceImpl implements ClientMessageService
 {
     @Resource
-    ClientMessageMapper clientMessageMapper;
+    private ClientMessageMapper clientMessageMapper;
 
     @Override
     @Transactional

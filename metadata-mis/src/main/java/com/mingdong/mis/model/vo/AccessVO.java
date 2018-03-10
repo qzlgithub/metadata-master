@@ -13,7 +13,7 @@ import java.util.SortedMap;
 
 public class AccessVO<T extends AbsRequest>
 {
-    private static Logger logger = LoggerFactory.getLogger(AccessVO.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessVO.class);
     private Long timestamp;
     private String sign;
     private T payload;

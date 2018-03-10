@@ -59,7 +59,6 @@ public class SecurityController
         SortedMap sm = MapUtils.sortKey(map);
         String str = JSON.toJSONString(sm);
         System.out.println("str:" + str);
-        String sign = SignUtils.sign(str, key);
-        return sign;
+        return SignUtils.sign(str, key);
     }
 }
