@@ -13,7 +13,6 @@ import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -162,11 +161,8 @@ public interface ClientRpcService
     /**
      * 客户产品充值记录
      */
-    ListDTO<RechargeResDTO> getClientRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
-            Page page);
-
-    ListDTO<ProductRechargeResDTO> getClientRechargeRecord(Long managerId, String keyword, Long productId,
-            Long rechargeType, Date fromDate, Date toDate, Page page);
+    ListDTO<RechargeResDTO> getClientRechargeRecord(String keyword, Long clientId, Long productId, Long managerId,
+            Integer rechargeType, Date startDate, Date endDate, Page page);
 
     ListDTO<AccessResDTO> getRevenueList(Date beforeDate, Date currentDay, Page page);
 

@@ -24,7 +24,6 @@ import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -1081,18 +1080,25 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<RechargeResDTO> getClientRechargeRecord(Long clientId, Long productId, Date startDate, Date endDate,
-            Page page)
+    public ListDTO<RechargeResDTO> getClientRechargeRecord(String keyword, Long clientId, Long productId,
+            Long managerId, Integer rechargeType, Date startDate, Date endDate, Page page)
     {
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
-        int total = productRechargeInfoMapper.countByClient(clientId, productId, startDate, endDate);
+        int total = productRechargeInfoMapper.countByClient(keyword, clientId, productId, managerId, rechargeType,
+                startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
+        if(clientId == null)
+        {
+            BigDecimal totalAmt = productRechargeInfoMapper.sumRechargeAmountBy(keyword, productId, managerId,
+                    rechargeType, startDate, endDate);
+            listDTO.addExtra(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
+        }
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(clientId, productId,
-                    startDate, endDate);
+            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListByClient(keyword, clientId, productId,
+                    managerId, rechargeType, startDate, endDate);
             List<RechargeResDTO> list = new ArrayList<>();
             for(ProductRechargeInfo o : dataList)
             {
@@ -1109,54 +1115,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 r.setBalance(o.getBalance());
                 r.setContractNo(o.getContractNo());
                 r.setManagerName(o.getManagerName());
+                r.setStartDate(o.getStartDate());
+                r.setEndDate(o.getEndDate());
+                r.setUnitAmt(o.getUnitAmt());
+                r.setRemark(o.getRemark());
                 list.add(r);
             }
             listDTO.setList(list);
         }
         return listDTO;
-    }
-
-    @Override
-    public ListDTO<ProductRechargeResDTO> getClientRechargeRecord(Long managerId, String keyword, Long productId,
-            Long rechargeType, Date fromDate, Date toDate, Page page)
-    {
-        ListDTO<ProductRechargeResDTO> dto = new ListDTO<>();
-        int total = productRechargeInfoMapper.countBy1(keyword, productId, managerId, rechargeType, fromDate, toDate);
-        int pages = page.getTotalPage(total);
-        dto.setTotal(total);
-        BigDecimal totalAmt = productRechargeInfoMapper.sumRechargeAmountBy(keyword, productId, managerId, rechargeType,
-                fromDate, toDate);
-        dto.addExtra(Field.TOTAL_AMT, NumberUtils.formatAmount(totalAmt));
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy1(keyword, productId, managerId,
-                    rechargeType, fromDate, toDate);
-            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeInfo o : dataList)
-            {
-                ProductRechargeResDTO pri = new ProductRechargeResDTO();
-                pri.setTradeTime(o.getTradeTime());
-                pri.setTradeNo(o.getTradeNo());
-                pri.setCorpName(o.getCorpName());
-                pri.setShortName(o.getShortName());
-                pri.setUsername(o.getUsername());
-                pri.setProductName(o.getProductName());
-                pri.setRechargeType(o.getRechargeType());
-                pri.setAmount(o.getAmount());
-                pri.setBalance(o.getBalance());
-                pri.setManagerName(o.getManagerName());
-                pri.setContractNo(o.getContractNo());
-                pri.setRemark(o.getRemark());
-                pri.setStartDate(o.getStartDate());
-                pri.setEndDate(o.getEndDate());
-                pri.setBillPlan(o.getBillPlan());
-                pri.setUnitAmt(o.getUnitAmt());
-                list.add(pri);
-            }
-            dto.setList(list);
-        }
-        return dto;
     }
 
     @Override

@@ -157,7 +157,7 @@ public class ExportController
     @LoginRequired
     @GetMapping(value = "/exp/finance/recharge")
     public void exportRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
-            @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,
+            @RequestParam(value = Field.RECHARGE_TYPE, required = false) Integer rechargeType,
             @RequestParam(value = Field.PRODUCT, required = false) Long product,
             @RequestParam(value = Field.MANAGER, required = false) Long manager,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,

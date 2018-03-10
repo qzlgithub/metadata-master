@@ -24,7 +24,7 @@ public class FinanceController
     @LoginRequired
     @GetMapping(value = "/finance/recharge")
     public RestListResp getRechargeList(@RequestParam(value = Field.KEYWORD, required = false) String keyword,
-            @RequestParam(value = Field.RECHARGE_TYPE, required = false) Long rechargeType,
+            @RequestParam(value = Field.RECHARGE_TYPE, required = false) Integer rechargeType,
             @RequestParam(value = Field.PRODUCT, required = false) Long product,
             @RequestParam(value = Field.MANAGER, required = false) Long manager,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,

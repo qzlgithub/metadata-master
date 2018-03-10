@@ -92,21 +92,6 @@
     </select>
     <!-- @formatter:on -->
 
-    <select id="countBy1" resultType="int">
-        select count(*) from `recharge` pr left join `client` c on pr.`client_id` = c.`id`
-        <where>
-            <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%' or c.`short_name` like '%${keyword}%' or pr.`trade_no` like
-                '%${keyword}%' or pr.`contract_no` like '%${keyword}%')
-            </if>
-            <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
-            <if test="rechargeType != null">and pr.`recharge_type` = #{rechargeType}</if>
-            <if test="fromDate != null">and pr.`create_time` >= #{fromDate}</if>
-            <if test="toDate != null">and pr.`create_time` &lt; #{toDate}</if>
-        </where>
-    </select>
-
     <select id="sumRechargeAmountBy" resultType="BigDecimal">
         select sum(pr.`amount`) from `recharge` pr left join `client` c on pr.`client_id` = c.`id`
         <where>
@@ -122,61 +107,56 @@
         </where>
     </select>
 
-    <select id="getListBy1" resultMap="BaseResultMap">
-        select pr.`create_time` as trade_time, pr.`trade_no` as trade_no, pr.`start_date` as start_date, pr.`end_date`
-        as end_date, pr.`unit_amt` as unit_amt, pr.`bill_plan` as bill_plan, c.`corp_name` as corp_name, c.`short_name`
-        as short_name, c.`username` as username, p.`name` as product_name, drt.`name` as recharge_type, pr.`amount` as
-        amount, pr.`balance` as balance, m.`name` as manager_name, pr.`contract_no` as contract_no, pr.`remark` as
-        remark from `recharge` pr left join `client` c on pr.`client_id` = c.`id` left join `user` m on pr.`manager_id`
-        = m.`id` left join `product` p on pr.`product_id` = p.`id` left join `dict_recharge_type` drt on
-        pr.`recharge_type` = drt.`id`
-        <where>
-            <if test="keyword != null">
-                (c.`corp_name` like '%${keyword}%')
-            </if>
-            <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="managerId != null">and pr.`manager_id` = #{managerId}</if>
-            <if test="rechargeType != null">and pr.`recharge_type` = #{rechargeType}</if>
-            <if test="fromDate != null">and pr.`create_time` >= #{fromDate}</if>
-            <if test="toDate != null">and pr.`create_time` &lt; #{toDate}</if>
-        </where>
-        order by pr.`create_time` desc
-    </select>
-
+    <!-- @formatter:off -->
     <select id="countByClient" resultType="int">
-        select count(*) from `recharge`
+        select count(*)
+        from `recharge` r
+            left join `client` c
+                on r.`client_id` = c.`id`
         <where>
-            <if test="clientId != null">`client_id` = #{clientId}</if>
-            <if test="productId != null">and `product_id` = #{productId}</if>
-            <if test="startTime != null">and `create_time` >= #{startTime}</if>
-            <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
+            <if test="clientId != null">r.`client_id` = #{clientId}</if>
+            <if test="productId != null">and r.`product_id` = #{productId}</if>
+            <if test="managerId != null">and r.`manager_id` = #{managerId}</if>
+            <if test="rechargeType != null">and r.`recharge_type` = #{rechargeType}</if>
+            <if test="keyword != null">and (c.`corp_name` like '%${keyword}%' or c.`username` like '%${keyword}%')</if>
+            <if test="startTime != null">and r.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and r.`create_time` &lt; #{endTime}</if>
         </where>
     </select>
+    <!-- @formatter:on -->
 
     <!-- @formatter:off -->
     <select id="getListByClient" resultMap="BaseResultMap">
         select
-            pr.`create_time` as trade_time,
-            pr.`trade_no`    as trade_no,
-            p.`name`         as product_name,
-            drt.`name`       as recharge_type,
-            pr.`bill_plan`   as bill_plan,
-            pr.`amount`      as amount,
-            pr.`balance`     as balance,
-            m.`name`         as manager_name,
-            pr.`contract_no` as contract_no
-        from `recharge` pr
+            r.`create_time` as trade_time,
+            r.`trade_no`    as trade_no,
+            r.`bill_plan`   as bill_plan,
+            r.`amount`      as amount,
+            r.`balance`     as balance,
+            r.`contract_no` as contract_no,
+            c.`corp_name`   as corp_name,
+            c.`short_name`  as short_name,
+            c.`username`    as username,
+            p.`name`        as product_name,
+            u.`name`        as manager_name,
+            rt.`name`       as recharge_type
+        from `recharge` r
+            left join `client` c
+                on r.`client_id` = c.`id`
             left join `product` p
-                on pr.`product_id` = p.`id`
-            left join `user` m
-                on pr.`manager_id` = m.`id`
-            left join `dict_recharge_type` drt
-                on pr.`recharge_type` = drt.`id`
+                on r.`product_id` = p.`id`
+            left join `user` u
+                on r.`manager_id` = u.`id`
+            left join `dict_recharge_type` rt
+                on r.`recharge_type` = rt.`id`
         <where>
-            <if test="clientId != null">pr.`client_id` = #{clientId}</if>
-            <if test="productId != null">and pr.`product_id` = #{productId}</if>
-            <if test="startTime != null">and pr.`create_time` >= #{startTime}</if>
-            <if test="endTime != null">and pr.`create_time` &lt; #{endTime}</if>
+            <if test="clientId != null">r.`client_id` = #{clientId}</if>
+            <if test="productId != null">and r.`product_id` = #{productId}</if>
+            <if test="managerId != null">and r.`manager_id` = #{managerId}</if>
+            <if test="rechargeType != null">and r.`recharge_type` = #{rechargeType}</if>
+            <if test="keyword != null">and (c.`corp_name` like '%${keyword}%' or c.`username` like '%${keyword}%')</if>
+            <if test="startTime != null">and r.`create_time` >= #{startTime}</if>
+            <if test="endTime != null">and r.`create_time` &lt; #{endTime}</if>
         </where>
     </select>
     <!-- @formatter:on -->

@@ -12,9 +12,8 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
-import com.mingdong.core.model.dto.response.ProductRechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.service.ClientRpcService;
-import com.mingdong.core.service.ProductRpcService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,16 +33,14 @@ import java.util.Map;
 public class TradeServiceImpl implements TradeService
 {
     @Resource
-    private ProductRpcService productRpcService;
-    @Resource
     private ClientRpcService clientRpcService;
 
     @Override
-    public void getProductRechargeInfoList(String keyword, Long productId, Long rechargeType, Date fromDate,
+    public void getProductRechargeInfoList(String keyword, Long productId, Integer rechargeType, Date fromDate,
             Date toDate, Page page, RestListResp res)
     {
         Long managerId = RequestThread.isManager() ? null : RequestThread.getOperatorId();
-        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(managerId, keyword, productId,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(keyword, null, productId, managerId,
                 rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_AMT, listDTO.getExtradata().get(Field.TOTAL_AMT));
@@ -52,16 +49,16 @@ public class TradeServiceImpl implements TradeService
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
             StringBuffer sbf;
-            for(ProductRechargeResDTO o : listDTO.getList())
+            for(RechargeResDTO o : listDTO.getList())
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.RECHARGE_AT, DateUtils.format(o.getTradeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
-                map.put(Field.TRADE_NO, o.getTradeNo());
+                map.put(Field.RECHARGE_AT, DateUtils.format(o.getRechargeAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                map.put(Field.TRADE_NO, o.getRechargeNo());
                 map.put(Field.CORP_NAME, o.getCorpName());
                 map.put(Field.SHORT_NAME, o.getShortName());
                 map.put(Field.USERNAME, o.getUsername());
                 map.put(Field.PRODUCT, o.getProductName());
-                map.put(Field.RECHARGE_TYPE, o.getRechargeType());
+                map.put(Field.RECHARGE_TYPE, o.getRechargeTypeName());
                 map.put(Field.AMOUNT, NumberUtils.formatAmount(o.getAmount()));
                 map.put(Field.BALANCE, NumberUtils.formatAmount(o.getBalance()));
                 map.put(Field.MANAGER, o.getManagerName());
@@ -70,7 +67,7 @@ public class TradeServiceImpl implements TradeService
                 sbf = new StringBuffer();
                 if(BillPlan.BY_TIME.equals(o.getBillPlan()))
                 {
-                    sbf.append(sdf.format(o.getStartDate()) + "-" + sdf.format(o.getEndDate()));
+                    sbf.append(sdf.format(o.getStartDate())).append("-").append(sdf.format(o.getEndDate()));
                 }
                 else
                 {
@@ -85,7 +82,7 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public XSSFWorkbook createProductRechargeInfoListXlsx(String keyword, Long productId, Long managerId,
-            Long rechargeType, Date fromDate, Date toDate, Page page)
+            Integer rechargeType, Date fromDate, Date toDate, Page page)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("充值数据");
@@ -104,10 +101,10 @@ public class TradeServiceImpl implements TradeService
         Cell cell;
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
-        ListDTO<ProductRechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(managerId, keyword, productId,
+        ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(keyword, null, productId, managerId,
                 rechargeType, fromDate, toDate, page);
-        List<ProductRechargeResDTO> dataList = listDTO.getList();
-        ProductRechargeResDTO dataInfo;
+        List<RechargeResDTO> dataList = listDTO.getList();
+        RechargeResDTO dataInfo;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         StringBuffer sbf;
         for(int i = 0; i < dataList.size(); i++)
@@ -115,17 +112,17 @@ public class TradeServiceImpl implements TradeService
             dataInfo = dataList.get(i);
             dataRow = sheet.createRow(i + 1);
             cell = dataRow.createCell(0);
-            cell.setCellValue(dataInfo.getTradeTime());
+            cell.setCellValue(dataInfo.getRechargeAt());
             cell.setCellStyle(timeStyle);
-            dataRow.createCell(1).setCellValue(dataInfo.getTradeNo());
+            dataRow.createCell(1).setCellValue(dataInfo.getRechargeNo());
             dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
             dataRow.createCell(3).setCellValue(dataInfo.getProductName() == null ? "" : dataInfo.getProductName());
-            dataRow.createCell(4).setCellValue(dataInfo.getRechargeType());
+            dataRow.createCell(4).setCellValue(dataInfo.getRechargeTypeName());
             dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
             sbf = new StringBuffer();
             if(BillPlan.BY_TIME.equals(dataInfo.getBillPlan()))
             {
-                sbf.append(sdf.format(dataInfo.getStartDate()) + "-" + sdf.format(dataInfo.getEndDate()));
+                sbf.append(sdf.format(dataInfo.getStartDate())).append("-").append(sdf.format(dataInfo.getEndDate()));
             }
             else
             {
