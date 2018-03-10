@@ -2,41 +2,31 @@ package com.mingdong.core.constant;
 
 public enum MessageType
 {
-    RECHARGE_OPEN(1, "产品开通"),
-    RECHARGE_RENEW(2, "产品续费");
+    NOTICE(1, "通知", ""),
+    NEW_OPEN(2, "产品开通", "恭喜您成功开通%s产品服务，开通金额：%s元！"),
+    RENEW(3, "产品续费", "您已成功对%s产品服务续费，续费金额：%s元！");
 
-    private Integer id;
-    private String name;
+    private final int id;
+    private final String name;
+    private final String content;
 
-    MessageType(Integer id, String name)
+    MessageType(int id, String name, String content)
     {
         this.id = id;
         this.name = name;
+        this.content = content;
     }
 
-    public static String getNameById(Integer id)
+    public static String getNameById(int id)
     {
-        if(id != null)
+        for(MessageType item : MessageType.values())
         {
-            for(MessageType item : MessageType.values())
+            if(id == item.id)
             {
-                if(item.id.equals(id))
-                {
-                    return item.name;
-                }
+                return item.name;
             }
         }
         return null;
-    }
-
-    public Integer getId()
-    {
-        return id;
-    }
-
-    public void setId(Integer id)
-    {
-        this.id = id;
     }
 
     public String getName()
@@ -44,8 +34,13 @@ public enum MessageType
         return name;
     }
 
-    public void setName(String name)
+    public int getId()
     {
-        this.name = name;
+        return id;
+    }
+
+    public String getContent()
+    {
+        return content;
     }
 }
