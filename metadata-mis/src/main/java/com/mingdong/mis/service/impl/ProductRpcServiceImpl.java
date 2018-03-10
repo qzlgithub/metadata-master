@@ -19,7 +19,6 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
@@ -27,8 +26,6 @@ import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.ProductTxt;
 import com.mingdong.mis.domain.entity.Recharge;
-import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
-import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
@@ -53,10 +50,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
-    private ApiReqMapper apiReqMapper;
-    @Resource
-    private ApiReqInfoMapper apiReqInfoMapper;
-    @Resource
     private ClientProductMapper clientProductMapper;
     @Resource
     private ProductMapper productMapper;
@@ -66,73 +59,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
     private ClientUserProductMapper clientUserProductMapper;
     @Resource
     private RedisDao redisDao;
-
-    @Override
-    public ListDTO<ProductRechargeResDTO> getProductRechargeRecord(Long clientId, Long productId, Date fromDate,
-            Date endDate, Page page)
-    {
-        ListDTO<ProductRechargeResDTO> listDTO = new ListDTO<>();
-        int total = rechargeMapper.countBy(clientId, productId, fromDate, endDate);
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ProductRechargeInfo> dataList = productRechargeInfoMapper.getListBy(clientId, productId, fromDate,
-                    endDate);
-            List<ProductRechargeResDTO> list = new ArrayList<>(dataList.size());
-            for(ProductRechargeInfo o : dataList)
-            {
-                ProductRechargeResDTO pri = new ProductRechargeResDTO();
-                pri.setTradeTime(o.getTradeTime());
-                pri.setTradeNo(o.getTradeNo());
-                pri.setRechargeType(o.getRechargeType());
-                pri.setBillPlan(o.getBillPlan());
-                pri.setProductName(o.getProductName());
-                pri.setAmount(o.getAmount());
-                pri.setBalance(o.getBalance());
-                pri.setContractNo(o.getContractNo());
-                pri.setCorpName(o.getCorpName());
-                pri.setShortName(o.getShortName());
-                pri.setUsername(o.getUsername());
-                pri.setManagerName(o.getManagerName());
-                list.add(pri);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
-    }
-
-    @Override
-    public ListDTO<AccessResDTO> getProductRequestRecord(Long clientId, Long userId, Long productId, Date fromDate,
-            Date endDate, Page page)
-    {
-        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqMapper.countBy(clientId, userId, productId, fromDate, endDate);
-        int pages = page.getTotalPage(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, fromDate,
-                    endDate);
-            List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
-            for(ApiReqInfo o : apiReqInfoList)
-            {
-                AccessResDTO ari = new AccessResDTO();
-                ari.setRequestAt(o.getCreateTime());
-                ari.setRequestNo(o.getRequestNo());
-                ari.setProductName(o.getProductName());
-                ari.setBillPlan(o.getBillPlan());
-                ari.setHit(o.getHit());
-                ari.setFee(o.getFee());
-                ari.setBalance(o.getBalance());
-                list.add(ari);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
-    }
 
     @Override
     public ListDTO<ProductResDTO> getOpenedProductList(Long clientId)
