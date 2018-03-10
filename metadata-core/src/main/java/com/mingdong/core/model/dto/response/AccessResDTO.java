@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class AccessResDTO implements Serializable
 {
-    private Date createTime;
+    private Date requestAt;
     private String requestNo;
     private String corpName;
     private String shortName;
@@ -18,14 +18,14 @@ public class AccessResDTO implements Serializable
     private BigDecimal fee;
     private BigDecimal balance;
 
-    public Date getCreateTime()
+    public Date getRequestAt()
     {
-        return createTime;
+        return requestAt;
     }
 
-    public void setCreateTime(Date createTime)
+    public void setRequestAt(Date requestAt)
     {
-        this.createTime = createTime;
+        this.requestAt = requestAt;
     }
 
     public String getRequestNo()

@@ -6,7 +6,6 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.NewClientReqDTO;
 import com.mingdong.core.model.dto.request.SubUserReqDTO;
-import com.mingdong.core.model.dto.response.Access1ResDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -155,7 +154,7 @@ public interface ClientRpcService
     String getClientCorpName(Long clientId);
 
     // TODO （管理）客户消费记录
-    ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
+    ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
             Date endDate, Page page);
 
     // TODO （客户）客户消费记录

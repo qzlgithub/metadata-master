@@ -23,21 +23,21 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
-import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.NewClientReqDTO;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
-import com.mingdong.core.model.dto.response.Access1ResDTO;
+import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
+import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.Recharge1ResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
@@ -590,13 +590,13 @@ public class ClientServiceImpl implements ClientService
     public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
             RestListResp res)
     {
-        ListDTO<Access1ResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, fromDate,
                 toDate, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
-            for(Access1ResDTO o : listDTO.getList())
+            for(AccessResDTO o : listDTO.getList())
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.REQUEST_AT, DateUtils.format(o.getRequestAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
@@ -670,9 +670,9 @@ public class ClientServiceImpl implements ClientService
         row.createCell(5).setCellValue("是否击中");
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
-        ListDTO<Access1ResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
+        ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestList(clientId, userId, productId, startTime,
                 endTime, page);
-        List<Access1ResDTO> list = listDTO.getList();
+        List<AccessResDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {
             CellStyle timeStyle = wb.createCellStyle();
@@ -680,7 +680,7 @@ public class ClientServiceImpl implements ClientService
                     wb.getCreationHelper().createDataFormat().getFormat(DateFormat.YYYY_MM_DD_HH_MM_SS));
             for(int i = 0; i < list.size(); i++)
             {
-                Access1ResDTO dataInfo = list.get(i);
+                AccessResDTO dataInfo = list.get(i);
                 Row dataRow = sheet.createRow(i + 1);
                 Cell cell = dataRow.createCell(0);
                 cell.setCellValue(dataInfo.getRequestAt());

@@ -16,7 +16,6 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.NewClientReqDTO;
 import com.mingdong.core.model.dto.request.SubUserReqDTO;
-import com.mingdong.core.model.dto.response.Access1ResDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -1001,7 +1000,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             for(ApiReqInfo o : dataList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestAt(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setCorpName(o.getCorpName());
                 ari.setShortName(o.getShortName());
@@ -1054,10 +1053,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<Access1ResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
+    public ListDTO<AccessResDTO> getClientRequestList(Long clientId, Long userId, Long productId, Date startDate,
             Date endDate, Page page)
     {
-        ListDTO<Access1ResDTO> listDTO = new ListDTO<>();
+        ListDTO<AccessResDTO> listDTO = new ListDTO<>();
         int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
         int pages = page.getTotalPage(total);
         listDTO.setTotal(total);
@@ -1066,10 +1065,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<ApiReqInfo> dataList = apiReqInfoMapper.getListByClient(clientId, userId, productId, startDate,
                     endDate);
-            List<Access1ResDTO> list = new ArrayList<>();
+            List<AccessResDTO> list = new ArrayList<>();
             for(ApiReqInfo o : dataList)
             {
-                Access1ResDTO r = new Access1ResDTO();
+                AccessResDTO r = new AccessResDTO();
                 r.setRequestAt(o.getCreateTime());
                 r.setRequestNo(o.getRequestNo());
                 r.setUsername(o.getUsername());
@@ -1102,7 +1101,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             for(ApiReqInfo o : apiReqInfoList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setCreateTime(o.getCreateTime());
+                ari.setRequestAt(o.getCreateTime());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
