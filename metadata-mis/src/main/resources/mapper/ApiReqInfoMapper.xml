@@ -66,17 +66,19 @@
     </select>
 
     <select id="countByClient" resultType="int">
-        select count(*) from `api_req` where `client_id` = #{clientId}
-        <if test="userId != null">and `user_id` = #{userId}</if>
-        <if test="productId != null">and `product_id` = #{productId}</if>
-        <if test="fromDate != null">and `create_time` >= #{fromDate}</if>
-        <if test="toDate != null">and `create_time` &lt; #{toDate}</if>
+        select count(*) from `api_req`
+        <where>
+            <if test="clientId != null">`client_id` = #{clientId}</if>
+            <if test="userId != null">and `user_id` = #{userId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+            <if test="fromDate != null">and `create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and `create_time` &lt; #{toDate}</if>
+        </where>
     </select>
 
     <select id="getRevenueListCount" resultType="Integer">
-        select count(t.counts) from (select count(1) as counts from `api_req` ar left join `client` c on
-        ar.`client_id` = c.`id` left join
-        `client_user` cu on ar.`user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
+        select count(t.counts) from (select count(1) as counts from `api_req` ar left join `client` c on ar.`client_id`
+        = c.`id` left join `client_user` cu on ar.`user_id` = cu.`id` left join `product` p on ar.`product_id` = p.`id`
         <where>
             <if test="fromDate != null">ar.`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and ar.`create_time` &lt;= #{toDate}</if>
