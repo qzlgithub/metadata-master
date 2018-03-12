@@ -3,7 +3,7 @@ package com.mingdong.core.model.dto.request;
 import java.io.Serializable;
 import java.util.List;
 
-public class NewClientReqDTO implements Serializable
+public class ClientReqDTO implements Serializable
 {
     private Long clientId;
     private String corpName;

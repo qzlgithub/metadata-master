@@ -152,4 +152,5 @@ public interface Field
     String O = "o";
     String P = "p";
     String U = "u";
+    String CLIENT_USER_MAX = "clientUserMax";
 }

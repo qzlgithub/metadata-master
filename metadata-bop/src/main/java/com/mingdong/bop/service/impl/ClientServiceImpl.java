@@ -25,7 +25,7 @@ import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
-import com.mingdong.core.model.dto.request.NewClientReqDTO;
+import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
@@ -402,7 +402,7 @@ public class ClientServiceImpl implements ClientService
             reqDTO.setGeneral(o.getGeneral());
             contactList.add(reqDTO);
         }
-        NewClientReqDTO dto = new NewClientReqDTO();
+        ClientReqDTO dto = new ClientReqDTO();
         dto.setCorpName(vo.getCorpName());
         dto.setShortName(vo.getShortName());
         dto.setIndustryId(vo.getIndustryId());
@@ -411,7 +411,7 @@ public class ClientServiceImpl implements ClientService
         dto.setContactList(contactList);
         dto.setEnabled(vo.getEnabled());
         dto.setManagerId(RequestThread.getOperatorId());
-        ResponseDTO res = clientRpcService.addNewClient(dto);
+        ResponseDTO res = clientRpcService.addClient(dto);
         resp.setError(res.getResult());
     }
 
@@ -425,7 +425,7 @@ public class ClientServiceImpl implements ClientService
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
-        NewClientReqDTO client = new NewClientReqDTO();
+        ClientReqDTO client = new ClientReqDTO();
         client.setClientId(vo.getClientId());
         client.setCorpName(vo.getCorpName());
         client.setShortName(vo.getShortName());

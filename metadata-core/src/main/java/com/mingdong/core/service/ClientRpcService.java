@@ -4,8 +4,8 @@ import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
-import com.mingdong.core.model.dto.request.NewClientReqDTO;
-import com.mingdong.core.model.dto.request.SubUserReqDTO;
+import com.mingdong.core.model.dto.request.ClientReqDTO;
+import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -78,7 +78,7 @@ public interface ClientRpcService
     /**
      * 修改客户子帐号信息
      */
-    ResponseDTO editSubUser(SubUserReqDTO reqDTO);
+    ResponseDTO editSubUser(ClientUserReqDTO reqDTO);
 
     /**
      * 获取帐号token
@@ -122,7 +122,12 @@ public interface ClientRpcService
     /**
      * 新增客户
      */
-    ResponseDTO addNewClient(NewClientReqDTO reqDTO);
+    ResponseDTO addClient(ClientReqDTO reqDTO);
+
+    /**
+     * 编辑客户
+     */
+    ResponseDTO editClient(ClientReqDTO clientDTO, List<ClientContactReqDTO> contacts, List<Long> delIds);
 
     /**
      * 获取客户信息和帐号信息
@@ -138,8 +143,6 @@ public interface ClientRpcService
      * 获取客户信息
      */
     ClientDetailResDTO getClientInfoForEdit(Long clientId);
-
-    ResponseDTO editClient(NewClientReqDTO clientDTO, List<ClientContactReqDTO> contacts, List<Long> delIds);
 
     ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds);
 

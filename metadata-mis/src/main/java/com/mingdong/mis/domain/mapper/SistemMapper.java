@@ -1,18 +1,16 @@
 package com.mingdong.mis.domain.mapper;
 
-import com.mingdong.mis.domain.entity.Sistem;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import java.util.Date;
 
 public interface SistemMapper
 {
-    void add(Sistem o);
+    void updateClientUserMax(@Param("clientUserMax") String clientUserMax, @Param("date") Date date);
 
-    void updateById(Sistem o);
+    void updateServiceQQ(@Param("serviceQQ") String serviceQQ, @Param("date") Date date);
 
-    Sistem findByName(String name);
+    String getClientUserMax();
 
-    List<Sistem> getAll();
-
-    String getSubAccountMaximum();
+    String getServiceQQ();
 }

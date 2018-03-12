@@ -58,7 +58,7 @@ public class SettingPageController
     public ModelAndView otherSettingPage()
     {
         ModelAndView view = new ModelAndView("setting/other");
-        view.addAllObjects(systemService.getSettings());
+        view.addAllObjects(systemService.getGlobalSetting());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

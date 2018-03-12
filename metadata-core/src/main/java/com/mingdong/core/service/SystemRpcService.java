@@ -1,10 +1,10 @@
 package com.mingdong.core.service;
 
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
@@ -13,7 +13,6 @@ import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SystemRpcService
 {
@@ -47,11 +46,6 @@ public interface SystemRpcService
      */
     void setModuleStatus(Integer status, List<Long> moduleIdList);
 
-    /**
-     * 获取系统参数信息 key为name
-     */
-    Map<String, Object> getSettingData();
-
     IndustryResDTO getIndustryDictOfTarget(Long industryId);
 
     /**
@@ -75,11 +69,6 @@ public interface SystemRpcService
     ResponseDTO addRechargeType(String name, String remark);
 
     /**
-     * 新增or修改系统参数
-     */
-    ResponseDTO addOrUpdateSetting(List<SysConfigReqDTO> sysConfigReqDTOList);
-
-    /**
      * 修改行业分类状态
      */
     ResponseDTO changeIndustryStatus(Long industryTypeId, Integer enabled);
@@ -93,4 +82,14 @@ public interface SystemRpcService
      * 根据ID编辑充值类型
      */
     ResponseDTO editRechargeType(RechargeTypeReqDTO reqDTO);
+
+    /**
+     * 获取系统参数
+     */
+    SistemDTO getSystemSetting();
+
+    /**
+     * 编辑系统参数
+     */
+    void editSystemSetting(SistemDTO sistemDTO);
 }

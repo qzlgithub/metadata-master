@@ -13,7 +13,7 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
-import com.mingdong.core.model.dto.request.SubUserReqDTO;
+import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
@@ -120,7 +120,7 @@ public class ClientServiceImpl implements ClientService
     public void editSubUser(Long clientUserId, String username, String password, String name, String phone,
             Integer enabled, RestResp resp)
     {
-        SubUserReqDTO reqDTO = new SubUserReqDTO();
+        ClientUserReqDTO reqDTO = new ClientUserReqDTO();
         reqDTO.setClientId(RequestThread.getClientId());
         reqDTO.setUserId(clientUserId);
         reqDTO.setUsername(username);

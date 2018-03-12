@@ -1,9 +1,9 @@
 package com.mingdong.bop.service;
 
+import com.mingdong.bop.model.SistemVO;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -81,9 +81,14 @@ public interface SystemService
     Map<String, String> cacheSystemModule();
 
     /**
-     * 修改系统参数
+     * 获取系统配置
      */
-    void setGlobalSetting(List<SysConfigReqDTO> sysConfigReqDTOList, RestResp resp);
+    Map<String, Object> getGlobalSetting();
+
+    /**
+     * 编辑系统配置
+     */
+    void setGlobalSetting(SistemVO sistemVO);
 
     /**
      * 根据行业分类id更改状态
@@ -94,11 +99,6 @@ public interface SystemService
      * 根据权限id更改状态
      */
     void setModuleStatus(List<Long> moduleIdList, Integer status);
-
-    /**
-     * 获取系统参数
-     */
-    Map<String, Object> getSettings();
 
     /**
      * 获取系统配置-充值类型字典列表

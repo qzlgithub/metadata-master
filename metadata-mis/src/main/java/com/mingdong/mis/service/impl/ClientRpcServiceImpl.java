@@ -8,14 +8,13 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
+import com.mingdong.core.model.dto.request.ClientReqDTO;
+import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
-import com.mingdong.core.model.dto.request.NewClientReqDTO;
-import com.mingdong.core.model.dto.request.SubUserReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -47,7 +46,6 @@ import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Recharge;
-import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
@@ -246,7 +244,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     {
         ListDTO<SubUserResDTO> res = new ListDTO<>();
         // 查询子账号个数限制
-        String max = sistemMapper.getSubAccountMaximum();
+        String max = sistemMapper.getClientUserMax();
         res.addExtra(Field.SUB_ACCOUNT_MAX, max);
 
         Client client = clientMapper.findById(clientId);
@@ -328,7 +326,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             responseDTO.setResult(RestResult.USERNAME_EXIST);
             return responseDTO;
         }
-        Sistem config = sistemMapper.findByName(SysParam.CLIENT_SUB_USER_QTY);
+        String config = sistemMapper.getClientUserMax();
         List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
         int subAccountCount = 0;
         for(ClientUser cu : userList)
@@ -338,7 +336,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 subAccountCount++;
             }
         }
-        int canSubAccountCount = config == null ? 5 : Integer.parseInt(config.getValue());
+        int canSubAccountCount = Integer.parseInt(config);
         if(subAccountCount >= canSubAccountCount)
         {
             responseDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
@@ -403,7 +401,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO editSubUser(SubUserReqDTO reqDTO)
+    public ResponseDTO editSubUser(ClientUserReqDTO reqDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         ClientUser clientUser = clientUserMapper.findById(reqDTO.getUserId());
@@ -618,7 +616,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addNewClient(NewClientReqDTO reqDTO)
+    public ResponseDTO addClient(ClientReqDTO reqDTO)
     {
         ResponseDTO res = new ResponseDTO();
         ClientUser user = clientUserMapper.findByUsername(reqDTO.getUsername());
@@ -688,6 +686,78 @@ public class ClientRpcServiceImpl implements ClientRpcService
         clientContactMapper.addList(contactList);
         clientUserMapper.add(user);
         clientMapper.add(client);
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO editClient(ClientReqDTO dto, List<ClientContactReqDTO> contacts, List<Long> delIds)
+    {
+        ResponseDTO res = new ResponseDTO();
+        Client client = clientMapper.findById(dto.getClientId());
+        if(client == null)
+        {
+            res.setResult(RestResult.OBJECT_NOT_FOUND);
+            return res;
+        }
+        Date current = new Date();
+        Client clientUpd = new Client();
+        clientUpd.setId(dto.getClientId());
+        clientUpd.setUpdateTime(current);
+        clientUpd.setCorpName(dto.getCorpName());
+        clientUpd.setShortName(dto.getShortName());
+        clientUpd.setLicense(dto.getLicense());
+        clientUpd.setIndustryId(dto.getIndustryId());
+        clientUpd.setManagerId(dto.getManagerId());
+        clientMapper.updateSkipNull(clientUpd);
+        ClientUser userUpd = new ClientUser();
+        userUpd.setId(client.getPrimaryUserId());
+        userUpd.setUpdateTime(current);
+        userUpd.setEnabled(dto.getEnabled());
+        clientUserMapper.updateSkipNull(userUpd);
+        if(!CollectionUtils.isEmpty(delIds))
+        {
+            clientContactMapper.deleteByIds(delIds);
+        }
+        if(!CollectionUtils.isEmpty(contacts))
+        {
+            List<ClientContact> addList = new ArrayList<>();
+            for(ClientContactReqDTO o : contacts)
+            {
+                if(o.getId() == null)
+                {
+                    ClientContact cc = new ClientContact();
+                    cc.setCreateTime(current);
+                    cc.setUpdateTime(current);
+                    cc.setClientId(dto.getClientId());
+                    cc.setName(o.getName());
+                    cc.setPosition(o.getPosition());
+                    cc.setPhone(o.getPhone());
+                    cc.setEmail(o.getEmail());
+                    cc.setGeneral(o.getGeneral());
+                    addList.add(cc);
+                }
+                else
+                {
+                    ClientContact cc = clientContactMapper.findById(o.getId());
+                    if(cc != null)
+                    {
+                        cc.setUpdateTime(current);
+                        cc.setClientId(dto.getClientId());
+                        cc.setName(o.getName());
+                        cc.setPosition(o.getPosition());
+                        cc.setPhone(o.getPhone());
+                        cc.setEmail(o.getEmail());
+                        cc.setGeneral(o.getGeneral());
+                        clientContactMapper.updateById(cc);
+                    }
+                }
+            }
+            if(addList.size() > 0)
+            {
+                clientContactMapper.addList(addList);
+            }
+        }
         return res;
     }
 
@@ -818,78 +888,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
             contacts.add(reqDTO);
         }
         res.setContacts(contacts);
-        return res;
-    }
-
-    @Override
-    @Transactional
-    public ResponseDTO editClient(NewClientReqDTO dto, List<ClientContactReqDTO> contacts, List<Long> delIds)
-    {
-        ResponseDTO res = new ResponseDTO();
-        Client client = clientMapper.findById(dto.getClientId());
-        if(client == null)
-        {
-            res.setResult(RestResult.OBJECT_NOT_FOUND);
-            return res;
-        }
-        Date current = new Date();
-        Client clientUpd = new Client();
-        clientUpd.setId(dto.getClientId());
-        clientUpd.setUpdateTime(current);
-        clientUpd.setCorpName(dto.getCorpName());
-        clientUpd.setShortName(dto.getShortName());
-        clientUpd.setLicense(dto.getLicense());
-        clientUpd.setIndustryId(dto.getIndustryId());
-        clientUpd.setManagerId(dto.getManagerId());
-        clientMapper.updateSkipNull(clientUpd);
-        ClientUser userUpd = new ClientUser();
-        userUpd.setId(client.getPrimaryUserId());
-        userUpd.setUpdateTime(current);
-        userUpd.setEnabled(dto.getEnabled());
-        clientUserMapper.updateSkipNull(userUpd);
-        if(!CollectionUtils.isEmpty(delIds))
-        {
-            clientContactMapper.deleteByIds(delIds);
-        }
-        if(!CollectionUtils.isEmpty(contacts))
-        {
-            List<ClientContact> addList = new ArrayList<>();
-            for(ClientContactReqDTO o : contacts)
-            {
-                if(o.getId() == null)
-                {
-                    ClientContact cc = new ClientContact();
-                    cc.setCreateTime(current);
-                    cc.setUpdateTime(current);
-                    cc.setClientId(dto.getClientId());
-                    cc.setName(o.getName());
-                    cc.setPosition(o.getPosition());
-                    cc.setPhone(o.getPhone());
-                    cc.setEmail(o.getEmail());
-                    cc.setGeneral(o.getGeneral());
-                    addList.add(cc);
-                }
-                else
-                {
-                    ClientContact cc = clientContactMapper.findById(o.getId());
-                    if(cc != null)
-                    {
-                        cc.setUpdateTime(current);
-                        cc.setClientId(dto.getClientId());
-                        cc.setName(o.getName());
-                        cc.setPosition(o.getPosition());
-                        cc.setPhone(o.getPhone());
-                        cc.setEmail(o.getEmail());
-                        cc.setGeneral(o.getGeneral());
-                        clientContactMapper.updateById(cc);
-                    }
-                }
-            }
-            if(addList.size() > 0)
-            {
-                clientContactMapper.addList(addList);
-            }
-        }
         return res;
     }
 

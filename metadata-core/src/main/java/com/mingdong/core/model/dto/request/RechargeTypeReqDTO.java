@@ -1,7 +1,6 @@
 package com.mingdong.core.model.dto.request;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class RechargeTypeReqDTO implements Serializable
 {
@@ -9,7 +8,6 @@ public class RechargeTypeReqDTO implements Serializable
     private String name;
     private String remark;
     private Integer enabled;
-    private Date addAt;
 
     public Integer getId()
     {
@@ -49,15 +47,5 @@ public class RechargeTypeReqDTO implements Serializable
     public void setEnabled(Integer enabled)
     {
         this.enabled = enabled;
-    }
-
-    public Date getAddAt()
-    {
-        return addAt;
-    }
-
-    public void setAddAt(Date addAt)
-    {
-        this.addAt = addAt;
     }
 }

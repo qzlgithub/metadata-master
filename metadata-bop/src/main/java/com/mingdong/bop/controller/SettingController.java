@@ -3,16 +3,15 @@ package com.mingdong.bop.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.SistemVO;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
-import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -221,26 +219,16 @@ public class SettingController
      */
     @LoginRequired
     @PostMapping(value = "/setting/configuration")
-    public RestResp setGlobalSetting(@RequestBody JSONObject jsonReq)
+    public RestResp setGlobalSetting(@RequestBody SistemVO sistemVO)
     {
         RestResp resp = new RestResp();
-        Integer subUserQty = jsonReq.getInteger(Field.SUB_USER_QTY);
-        String serviceQQ = jsonReq.getString(Field.SERVICE_QQ);
-        if(subUserQty == null || StringUtils.isNullBlank(serviceQQ))
+        if(sistemVO.getClientUserMax() == null || sistemVO.getClientUserMax() <= 0 || StringUtils.isNullBlank(
+                sistemVO.getServiceQQ()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        List<SysConfigReqDTO> sysConfigReqDTOList = new ArrayList<>();
-        SysConfigReqDTO sysConfigReqDTO = new SysConfigReqDTO();
-        sysConfigReqDTO.setName(SysParam.CLIENT_SUB_USER_QTY);
-        sysConfigReqDTO.setValue(subUserQty + "");
-        sysConfigReqDTOList.add(sysConfigReqDTO);
-        sysConfigReqDTO = new SysConfigReqDTO();
-        sysConfigReqDTO.setName(SysParam.SERVICE_QQ);
-        sysConfigReqDTO.setValue(serviceQQ + "");
-        sysConfigReqDTOList.add(sysConfigReqDTO);
-        systemService.setGlobalSetting(sysConfigReqDTOList, resp);
+        systemService.setGlobalSetting(sistemVO);
         return resp;
     }
 }

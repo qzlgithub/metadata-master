@@ -6,10 +6,10 @@ import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
@@ -20,7 +20,6 @@ import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
-import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
@@ -30,9 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SystemRpcServiceImpl implements SystemRpcService
 {
@@ -160,18 +157,6 @@ public class SystemRpcServiceImpl implements SystemRpcService
     public void setModuleStatus(Integer status, List<Long> moduleIdList)
     {
         functionMapper.updateModuleStatusByIds(status, new Date(), moduleIdList);
-    }
-
-    @Override
-    public Map<String, Object> getSettingData()
-    {
-        List<Sistem> list = sistemMapper.getAll();
-        Map<String, Object> map = new HashMap<>();
-        for(Sistem o : list)
-        {
-            map.put(o.getName(), o.getValue());
-        }
-        return map;
     }
 
     @Override
@@ -307,36 +292,6 @@ public class SystemRpcServiceImpl implements SystemRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addOrUpdateSetting(List<SysConfigReqDTO> sysConfigReqDTOList)
-    {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Date current = new Date();
-        Sistem sistem;
-        for(SysConfigReqDTO item : sysConfigReqDTOList)
-        {
-            sistem = sistemMapper.findByName(item.getName());
-            if(sistem == null)
-            {
-                sistem = new Sistem();
-                sistem.setCreateTime(current);
-                sistem.setUpdateTime(current);
-                sistem.setName(item.getName());
-                sistem.setValue(item.getValue());
-                sistemMapper.add(sistem);
-            }
-            else if(!sistem.getValue().equals(item.getValue()))
-            {
-                sistem.setUpdateTime(current);
-                sistem.setValue(item.getValue());
-                sistemMapper.updateById(sistem);
-            }
-        }
-        responseDTO.setResult(RestResult.SUCCESS);
-        return responseDTO;
-    }
-
-    @Override
-    @Transactional
     public ResponseDTO changeIndustryStatus(Long industryTypeId, Integer enabled)
     {
         ResponseDTO responseDTO = new ResponseDTO();
@@ -403,5 +358,25 @@ public class SystemRpcServiceImpl implements SystemRpcService
         objUpd.setUpdateTime(new Date());
         dictRechargeTypeMapper.updateById(objUpd);
         return res;
+    }
+
+    @Override
+    public SistemDTO getSystemSetting()
+    {
+        SistemDTO sistemDTO = new SistemDTO();
+        String clientUserMax = sistemMapper.getClientUserMax();
+        String serviceQQ = sistemMapper.getServiceQQ();
+        sistemDTO.setClientUserMax(Integer.valueOf(clientUserMax));
+        sistemDTO.setServiceQQ(serviceQQ);
+        return sistemDTO;
+    }
+
+    @Override
+    @Transactional
+    public void editSystemSetting(SistemDTO sistemDTO)
+    {
+        Date date = new Date();
+        sistemMapper.updateClientUserMax(sistemDTO.getClientUserMax() + "", date);
+        sistemMapper.updateServiceQQ(sistemDTO.getServiceQQ(), date);
     }
 }

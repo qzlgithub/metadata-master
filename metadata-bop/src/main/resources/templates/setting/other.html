@@ -31,7 +31,7 @@
                     <label class="layui-form-label">客户子账号数：</label>
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
-                               id="sub-user-qty" th:value="${CLIENT_SUB_USER_QTY}"
+                               id="sub-user-qty" th:value="${clientUserMax}"
                                onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="3"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
@@ -40,7 +40,7 @@
                     <label class="layui-form-label">官网客服QQ：</label>
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
-                               id="service-qq" th:value="${SERVICE_QQ}"
+                               id="service-qq" th:value="${serviceQQ}"
                                onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
@@ -93,7 +93,7 @@
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify({
-                "subUserQty": subUserQty,
+                "clientUserMax": subUserQty,
                 "serviceQQ": serviceQQ
             }),
             success: function(res) {

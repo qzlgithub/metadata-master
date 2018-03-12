@@ -2,6 +2,7 @@ package com.mingdong.bop.service.impl;
 
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.SistemVO;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.CollectionUtils;
@@ -12,10 +13,10 @@ import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
-import com.mingdong.core.model.dto.request.SysConfigReqDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
@@ -270,10 +271,22 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void setGlobalSetting(List<SysConfigReqDTO> sysConfigReqDTOList, RestResp resp)
+    public Map<String, Object> getGlobalSetting()
     {
-        ResponseDTO responseDTO = systemRpcService.addOrUpdateSetting(sysConfigReqDTOList);
-        resp.setError(responseDTO.getResult());
+        Map<String, Object> map = new HashMap<>();
+        SistemDTO sistemDTO = systemRpcService.getSystemSetting();
+        map.put(Field.CLIENT_USER_MAX, sistemDTO.getClientUserMax());
+        map.put(Field.SERVICE_QQ, sistemDTO.getServiceQQ());
+        return map;
+    }
+
+    @Override
+    public void setGlobalSetting(SistemVO sistemVO)
+    {
+        SistemDTO sistemDTO = new SistemDTO();
+        sistemDTO.setClientUserMax(sistemVO.getClientUserMax());
+        sistemDTO.setServiceQQ(sistemVO.getServiceQQ());
+        systemRpcService.editSystemSetting(sistemDTO);
     }
 
     @Override
@@ -287,12 +300,6 @@ public class SystemServiceImpl implements SystemService
     public void setModuleStatus(List<Long> moduleIdList, Integer status)
     {
         systemRpcService.setModuleStatus(status, moduleIdList);
-    }
-
-    @Override
-    public Map<String, Object> getSettings()
-    {
-        return systemRpcService.getSettingData();
     }
 
     @Override

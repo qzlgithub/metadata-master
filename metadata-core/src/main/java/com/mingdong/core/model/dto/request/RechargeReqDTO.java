@@ -8,13 +8,9 @@ public class RechargeReqDTO implements Serializable
 {
     private Long clientId;
     private Long productId;
-    private Long clientProductId;
     private Integer renew;
-    private Date rechargeAt;
-    private String rechargeNo;
     private String productName;
     private Integer rechargeType;
-    private String rechargeTypeName;
     private BigDecimal amount;
     private BigDecimal balance;
     private Integer billPlan;
@@ -96,36 +92,6 @@ public class RechargeReqDTO implements Serializable
         this.productId = productId;
     }
 
-    public Long getClientProductId()
-    {
-        return clientProductId;
-    }
-
-    public void setClientProductId(Long clientProductId)
-    {
-        this.clientProductId = clientProductId;
-    }
-
-    public Date getRechargeAt()
-    {
-        return rechargeAt;
-    }
-
-    public void setRechargeAt(Date rechargeAt)
-    {
-        this.rechargeAt = rechargeAt;
-    }
-
-    public String getRechargeNo()
-    {
-        return rechargeNo;
-    }
-
-    public void setRechargeNo(String rechargeNo)
-    {
-        this.rechargeNo = rechargeNo;
-    }
-
     public String getProductName()
     {
         return productName;
@@ -144,16 +110,6 @@ public class RechargeReqDTO implements Serializable
     public void setRechargeType(Integer rechargeType)
     {
         this.rechargeType = rechargeType;
-    }
-
-    public String getRechargeTypeName()
-    {
-        return rechargeTypeName;
-    }
-
-    public void setRechargeTypeName(String rechargeTypeName)
-    {
-        this.rechargeTypeName = rechargeTypeName;
     }
 
     public Integer getBillPlan()

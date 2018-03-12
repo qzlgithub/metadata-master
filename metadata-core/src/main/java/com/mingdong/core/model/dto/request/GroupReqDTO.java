@@ -9,7 +9,6 @@ public class GroupReqDTO implements Serializable
     private String name;
     private Integer enabled;
     private List<Long> privilegeIdList;
-    private List<String> moduleNameList;
 
     public Long getId()
     {
@@ -49,15 +48,5 @@ public class GroupReqDTO implements Serializable
     public void setPrivilegeIdList(List<Long> privilegeIdList)
     {
         this.privilegeIdList = privilegeIdList;
-    }
-
-    public List<String> getModuleNameList()
-    {
-        return moduleNameList;
-    }
-
-    public void setModuleNameList(List<String> moduleNameList)
-    {
-        this.moduleNameList = moduleNameList;
     }
 }

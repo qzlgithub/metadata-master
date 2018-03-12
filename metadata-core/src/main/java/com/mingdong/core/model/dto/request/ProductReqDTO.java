@@ -15,10 +15,8 @@ public class ProductReqDTO implements Serializable
     private Integer status;
     private BigDecimal costAmt;
     private BigDecimal balance;
-    private Date arrearTime;
     private Date fromDate;
     private Date toDate;
-    private String productCode;
     private Integer type;
     private Integer opened;
     private Integer enabled;
@@ -34,16 +32,6 @@ public class ProductReqDTO implements Serializable
     public void setCustom(Integer custom)
     {
         this.custom = custom;
-    }
-
-    public String getProductCode()
-    {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode)
-    {
-        this.productCode = productCode;
     }
 
     public Long getId()
@@ -134,16 +122,6 @@ public class ProductReqDTO implements Serializable
     public void setBalance(BigDecimal balance)
     {
         this.balance = balance;
-    }
-
-    public Date getArrearTime()
-    {
-        return arrearTime;
-    }
-
-    public void setArrearTime(Date arrearTime)
-    {
-        this.arrearTime = arrearTime;
     }
 
     public Date getFromDate()
