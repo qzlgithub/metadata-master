@@ -3,9 +3,9 @@ package com.mingdong.core.service;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
-import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
+import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -46,7 +46,8 @@ public interface ClientRpcService
 
     /**
      * 查询客户子账号列表，不包括已删除的账号
-     *  @param clientId 客户ID
+     *
+     * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
      * @param page
      */
@@ -54,7 +55,8 @@ public interface ClientRpcService
 
     /**
      * 查询客户子账号列表
-     * @param clientId       客户ID
+     *
+     * @param clientId 客户ID
      * @param page
      */
     ListDTO<SubUserResDTO> getSubUserList(Long clientId, Page page);
