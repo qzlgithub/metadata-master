@@ -43,7 +43,7 @@
                                 <em class="js-accordionTrigger w5"></em>
                                 <a class="w20 tl important menu-name-class" th:text="${parent.name}"></a>
                                 <a class="w20" th:text="${parent.id}" style="display: none;"></a>
-                                <a class="w10"  style="display: none;">
+                                <a class="w10" style="display: none;">
                                     <div class="file">
                                         <img src="/static/images/add-img.png"/>
                                         <input type="file" name=""/>
@@ -56,7 +56,7 @@
                                                th:attrappend="class=${parent.id}" th:attr="data-self=${parent.id}"/>
                                     </div>
                                 </a>
-                                <a class="w20">
+                                <a class="w20" th:if="${#lists.contains(i_privilege,'12103')}">
                                     <span class="mr20 edit cp edit-manage" th:attr="data-id=${parent.id}">编辑</span>
                                 </a>
                                 <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
@@ -78,7 +78,7 @@
                                                        th:attr="data-parent=${parent.id},data-self=${child.id}"/>
                                             </div>
                                         </a>
-                                        <a class="w20">
+                                        <a class="w20" th:if="${#lists.contains(i_privilege,'12103')}">
                                             <span class="mr20 edit cp edit-manage"
                                                   th:attr="data-id=${child.id}">编辑</span>
                                         </a>
@@ -89,7 +89,8 @@
                                         <block th:each="tChild: ${child.thrList}">
                                             <li class="clearfix pb20 pl45 important" th:id="'menu-id-'+${tChild.id}">
                                                 <em class="js-accordionTrigger w5"></em>
-                                                <a class="w20 tl important menu-name-class" th:text="${tChild.name}"></a>
+                                                <a class="w20 tl important menu-name-class"
+                                                   th:text="${tChild.name}"></a>
                                                 <a class="w20" style="display: none;" th:text="${tChild.id}"></a>
                                                 <a class="w10" style="display: none;">&nbsp;</a>
                                                 <a class="w10 pt0 important" style="display: none;">
@@ -100,9 +101,9 @@
                                                                th:attrappend="class='switch-'+ ${tChild.id} + ' switch-subs-'+ ${child.id}"/>
                                                     </div>
                                                 </a>
-                                                <a class="w20">
-                                            <span class="mr20 edit cp edit-manage"
-                                                  th:attr="data-id=${tChild.id}">编辑</span>
+                                                <a class="w20" th:if="${#lists.contains(i_privilege,'12103')}">
+                                                    <span class="mr20 edit cp edit-manage"
+                                                          th:attr="data-id=${tChild.id}">编辑</span>
                                                 </a>
                                                 <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                                             </li>

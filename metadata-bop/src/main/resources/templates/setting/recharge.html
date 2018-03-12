@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12201')}">
             <div class="layui-input-block">
                 <button class="layui-btn" onclick="add_recharge_type()">添加</button>
             </div>
@@ -99,13 +99,15 @@
 
 <script type="text/html" id="statusTpl">
     {{# if(d.status === 1){ }}
-    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}" checked=""/>
+    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}" checked=""
+           th:if="${#lists.contains(i_privilege,'12202')}"/>
     {{# } else { }}
-    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}"/>
+    <input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="ON|OFF" value="{{d.id}}"
+           th:if="${#lists.contains(i_privilege,'12202')}"/>
     {{# } }}
 </script>
 <script type="text/html" id="operationBar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" th:if="${#lists.contains(i_privilege,'12203')}">编辑</a>
 </script>
 </body>
 </html>

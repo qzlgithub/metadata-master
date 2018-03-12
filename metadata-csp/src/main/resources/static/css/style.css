@@ -149,7 +149,7 @@ body{color: #484848; background: #eeefef;}
 .appid-btn{border:solid 1px #627fc9; color: #627fc9; border-radius: 3px; padding: 5px 25px;}
 .serve-list dt{border-left: solid 4px #627fc9; color: #262627; padding-left: 10px; font-size: 16px;}
 .serve-list dd ul{margin-top: 20px; margin-bottom: 20px;}
-.serve-list dd ul li{border:solid 1px #596f9a; padding: 0px; margin: 10px; float: left; width: 22.77777%; position: relative;}
+.serve-list dd ul li{border:solid 1px #596f9a; padding: 0px; margin: 10px; float: left; width: 22.77777%; position: relative; height: 200px; overflow: hidden;}
 .serve-list dd ul li:hover{-moz-box-shadow: 0px 0px 20px #888888; /* 老的 Firefox */box-shadow: 0px 0px 20px #888888;}
 .serve-list dd ul li .serve-list-title{background: url(../images/serve-title.png) repeat-x; height: 46px; line-height: 46px; color: #fff; padding: 0px 10px;}
 .serve-list dd ul li a{color: #2f2727!important}

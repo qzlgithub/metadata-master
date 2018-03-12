@@ -104,13 +104,14 @@ function checkName() {
             {"name": name},
             function(data) {
                 if(data.exist === 1) {
-                    tip.text("该分组名已被存在！");
+                    tip.text("该分组名已存在！");
                     tip.show();
                     return false;
                 }
                 else {
-                    tip.text("该分组名可用！");
-                    tip.show();
+                    //tip.text("该分组名可用！");
+                    //tip.show();
+                    tip.hide();
                 }
             }
         );

@@ -25,7 +25,8 @@
             <a><cite>行业分类</cite></a>
         </div>
         <div class="p20">
-            <div class="clearfix mt20"><span class="layui-btn fr layui-btn-normal" id="addindustry">添加一级行业</span></div>
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'12301')}"><span
+                    class="layui-btn fr layui-btn-normal" id="addindustry">添加一级行业</span></div>
             <dl class="jurisdiction-list mt10">
                 <dt class="clearfix">
                     <span class="w5">&nbsp;</span>
@@ -39,9 +40,10 @@
                     <div class="clearfix jurisdiction-list-div" th:id="'industry-id-'+${parent.id}">
                         <a href="#accordion1" class="accordion-title accordionTitle js-accordionTrigger w5"></a>
                         <a
-                                class="w20 tl important"><i class="pl20 industry-name-class" th:text="${parent.name}"></i></a>
+                                class="w20 tl important"><i class="pl20 industry-name-class"
+                                                            th:text="${parent.name}"></i></a>
                         <a class="w20 industry-code-class" th:text="${parent.code}"></a>
-                        <a class="w10 pt0 important">
+                        <a class="w10 pt0 important" th:if="${#lists.contains(i_privilege,'12302')}">
                             <div class="layui-form" th:attr="obj-id=${parent.id}">
                                 <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
                                        class="parent-industry" th:checked="${parent.enabled == 1}"
@@ -49,8 +51,8 @@
                             </div>
                         </a>
                         <a class="w30">
-                            <span class="edit cp mr30 add-child" th:attr="data-id=${parent.id}">新增子行业</span>
-                            <span class="mr30 edit cp edit-industry" th:attr="data-id=${parent.id}">编辑</span>
+                            <span class="edit cp mr30 add-child" th:attr="data-id=${parent.id}" th:if="${#lists.contains(i_privilege,'12305')}">新增子行业</span>
+                            <span class="mr30 edit cp edit-industry" th:attr="data-id=${parent.id}" th:if="${#lists.contains(i_privilege,'12303')}">编辑</span>
                         </a>
                         <a class="w15" style="display: none;"><i class="icon sort-icon"></i></a>
                     </div>
@@ -58,9 +60,10 @@
                         aria-hidden="true">
                         <li class="clearfix" th:each="child: ${parent.subList}" th:id="'industry-id-'+${child.id}">
                             <em class="w5">&nbsp;</em>
-                            <em class="w20 tl important"><i class="pl35 industry-name-class" th:text="${child.name}"></i></em>
+                            <em class="w20 tl important"><i class="pl35 industry-name-class"
+                                                            th:text="${child.name}"></i></em>
                             <em class="w20 industry-code-class" th:text="${child.code}"></em>
-                            <em class="w10 pt0 important">
+                            <em class="w10 pt0 important" th:if="${#lists.contains(i_privilege,'12302')}">
                                 <div class="layui-form" th:attr="obj-id=${child.id}">
                                     <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF"
                                            class="child-industry" th:attrappend="class=' switch-'+ ${child.parentId}"

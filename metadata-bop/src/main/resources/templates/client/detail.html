@@ -122,7 +122,7 @@
                                 <a th:href="'/client/consumption.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}"
                                    class="tc">消费记录</a>
                                 <a class="cp">
-                                    <span class="renew" th:attr="data-product=${cp.productId}">续签</span>
+                                    <span class="renew" th:attr="data-product=${cp.productId}" th:if="${#lists.contains(i_privilege,'31109')}">续签</span>
                                 </a>
                             </p>
                         </li>
@@ -132,10 +132,11 @@
                             <p class="tc mt5" th:text="${prod.productName}"></p>
                             <p class="mt40 tr">
                                 <a class="cp">
-                                    <span th:if="${prod.isSelected == 0}" class="cp open-product"
-                                          th:attr="data-product-id = ${prod.productId}">开通</span>
-                                    <span th:if="${prod.isSelected == 1}" class="renew is-selected-class"
-                                          th:attr="client-product-id=${prod.clientProductId}">开通</span>
+                                    <span th:if="${prod.isSelected == 0 and #lists.contains(i_privilege,'31108')}"
+                                          class="cp open-product"
+                                          th:attr="data-product-id = ${prod.productId}" >开通</span>
+                                    <span th:if="${prod.isSelected == 1 and #lists.contains(i_privilege,'31108')}" class="renew is-selected-class"
+                                          th:attr="client-product-id=${prod.clientProductId}" >开通</span>
                                 </a>
                             </p>
                         </li>
