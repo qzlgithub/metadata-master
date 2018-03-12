@@ -96,7 +96,12 @@ public interface ClientService
 
     void editClient(NewClientVO vo, RestResp resp);
 
-    void findClientDetail(Long clientId, RestResp resp);
+    /**
+     * 获取客户的详细资料
+     *
+     * @param clientId 客户ID
+     */
+    Map<String, Object> getClientDetailData(Long clientId);
 
     void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp);
 

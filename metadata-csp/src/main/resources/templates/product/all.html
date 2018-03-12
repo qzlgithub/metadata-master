@@ -33,7 +33,7 @@
                 <ul class="clearfix checkbox-list mt15 pl10 col-md-10">
                     <em class="fl mt5">服务分类：</em>
                     <li class="active" id="all-type">不限</li>
-                    <li th:each="o : ${productTypeList}" class="c-product-type" th:attr="data-id=${o.key}">
+                    <li th:each="o : ${productTypeDict}" class="c-product-type" th:attr="data-id=${o.key}">
                         <span th:text="${o.value}"></span>
                     </li>
                 </ul>

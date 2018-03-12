@@ -5,22 +5,22 @@ import com.mingdong.core.model.Dict;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum ProdType
+public enum ProductType
 {
     INTERNET_FINANCE(1, "互联网金融");
 
     private final int id;
     private final String name;
 
-    ProdType(int id, String name)
+    ProductType(int id, String name)
     {
         this.id = id;
         this.name = name;
     }
 
-    public static ProdType getById(int id)
+    public static ProductType getById(int id)
     {
-        for(ProdType item : ProdType.values())
+        for(ProductType item : ProductType.values())
         {
             if(id == item.id)
             {
@@ -32,7 +32,7 @@ public enum ProdType
 
     public static String getNameById(int id)
     {
-        for(ProdType o : ProdType.values())
+        for(ProductType o : ProductType.values())
         {
             if(id == o.id)
             {
@@ -42,10 +42,10 @@ public enum ProdType
         return null;
     }
 
-    public static List<Dict> getProdTypeDict()
+    public static List<Dict> getProductTypeDict()
     {
         List<Dict> list = new ArrayList<>();
-        for(ProdType o : ProdType.values())
+        for(ProductType o : ProductType.values())
         {
             list.add(new Dict(o.getId() + "", o.getName()));
         }

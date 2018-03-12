@@ -50,14 +50,14 @@ public enum BillPlan
         return null;
     }
 
-    public static List<Dict> getAllList()
+    public static List<Dict> getBillPlanDict()
     {
-        List<Dict> dictDTOList = new ArrayList<>();
-        for(BillPlan billPlan : BillPlan.values())
+        List<Dict> dict = new ArrayList<>();
+        for(BillPlan o : BillPlan.values())
         {
-            dictDTOList.add(new Dict(billPlan.id + "", billPlan.name));
+            dict.add(new Dict(o.getId() + "", o.getName()));
         }
-        return dictDTOList;
+        return dict;
     }
 
     public Integer getId()

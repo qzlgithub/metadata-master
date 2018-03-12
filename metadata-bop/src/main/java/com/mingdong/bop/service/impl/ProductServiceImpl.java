@@ -8,7 +8,7 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.Custom;
-import com.mingdong.core.constant.ProdType;
+import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService
         if(productResDTO != null)
         {
             map.put(Field.CUSTOM, Custom.getById(productResDTO.getCustom()).getName());
-            map.put(Field.TYPE, ProdType.getNameById(productResDTO.getType()));
+            map.put(Field.TYPE, ProductType.getNameById(productResDTO.getType()));
             map.put(Field.CODE, productResDTO.getProductCode());
             map.put(Field.NAME, productResDTO.getName());
             map.put(Field.COST_AMT, NumberUtils.formatAmount(productResDTO.getCostAmt()));
@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.ADD_DATE, DateUtils.format(o.getCreateTime(), DateFormat.YYYY_MM_DD));
                 map.put(Field.CODE, o.getProductCode());
                 map.put(Field.NAME, o.getName());
-                map.put(Field.TYPE, ProdType.getNameById(o.getType()));
+                map.put(Field.TYPE, ProductType.getNameById(o.getType()));
                 map.put(Field.CUSTOM, o.getCustom());
                 map.put(Field.COST_AMT, NumberUtils.formatAmount(o.getCostAmt()));
                 map.put(Field.REMARK, o.getRemark());
