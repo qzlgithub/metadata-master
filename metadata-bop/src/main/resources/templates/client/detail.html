@@ -246,7 +246,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <select name="modules" id="renew-bill-plan" onchange="change()" class="select-list">
-                        <option th:each="o : ${billPlanList}" th:value="${o.key}" th:text="${o.value}"></option>
+                        <option th:each="o : ${billPlanDict}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                     <i class="col3 pl10" id="selectBillTip" style="display: none"></i>
                 </div>
@@ -323,7 +323,7 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>选择计费模式：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <select id="open-charge" class="select-list">
-                        <option th:each="o : ${billPlanList}" th:value="${o.key}" th:text="${o.value}"></option>
+                        <option th:each="o : ${billPlanDict}" th:value="${o.key}" th:text="${o.value}"></option>
                     </select>
                 </div>
             </div>

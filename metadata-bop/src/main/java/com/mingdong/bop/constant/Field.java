@@ -138,7 +138,9 @@ public interface Field
     String IS_MANAGER = "isManager";
     String GROUP_NAME = "groupName";
     String ROLE_TYPE = "roleType";
+    String CLIENT_USER_MAX = "clientUserMax";
     // 系统字典参数名
+    String BILL_PLAN_DICT = "billPlanDict";
     String ACCOUNT_DICT = "accountDict";
     String ADMIN_USER_DICT = "adminUserDict";
     String ROLE_DICT = "roleDict";
@@ -152,5 +154,4 @@ public interface Field
     String O = "o";
     String P = "p";
     String U = "u";
-    String CLIENT_USER_MAX = "clientUserMax";
 }

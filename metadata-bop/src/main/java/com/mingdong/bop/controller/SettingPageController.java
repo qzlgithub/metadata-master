@@ -6,7 +6,7 @@ import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.constant.ProdType;
+import com.mingdong.core.constant.ProductType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -126,7 +126,7 @@ public class SettingPageController
     public ModelAndView productIndex()
     {
         ModelAndView view = new ModelAndView("product/list");
-        view.addObject(Field.PRODUCT_TYPE_DICT, ProdType.getProdTypeDict());
+        view.addObject(Field.PRODUCT_TYPE_DICT, ProductType.getProductTypeDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

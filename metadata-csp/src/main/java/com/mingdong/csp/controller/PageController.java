@@ -4,7 +4,7 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.constant.ProdType;
+import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.ImageCode;
@@ -84,7 +84,7 @@ public class PageController
     {
         ModelAndView view = new ModelAndView("product/all");
         view.addAllObjects(RequestThread.getPageData());
-        view.addObject(Field.PRODUCT_TYPE_LIST, ProdType.getProdTypeDict());
+        view.addObject(Field.PRODUCT_TYPE_DICT, ProductType.getProductTypeDict());
         return view;
     }
 

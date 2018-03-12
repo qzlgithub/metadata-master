@@ -68,4 +68,5 @@ public interface Field
     String SUB_ACCOUNT_MAX = "subAccountMax";
     String PRODUCT_DICT = "productDict";
     String COUNT = "count";
+    String PRODUCT_TYPE_DICT = "productTypeDict";
 }

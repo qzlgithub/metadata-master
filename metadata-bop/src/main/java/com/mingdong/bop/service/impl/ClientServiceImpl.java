@@ -16,7 +16,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
-import com.mingdong.core.constant.ProdType;
+import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
@@ -24,8 +24,8 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
-import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
+import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
@@ -426,14 +426,14 @@ public class ClientServiceImpl implements ClientService
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
         }
-        ClientReqDTO client = new ClientReqDTO();
-        client.setClientId(vo.getClientId());
-        client.setCorpName(vo.getCorpName());
-        client.setShortName(vo.getShortName());
-        client.setLicense(vo.getLicense());
-        client.setIndustryId(vo.getIndustryId());
-        client.setEnabled(vo.getEnabled());
-        client.setManagerId(vo.getManagerId());
+        ClientReqDTO reqDTO = new ClientReqDTO();
+        reqDTO.setClientId(vo.getClientId());
+        reqDTO.setCorpName(vo.getCorpName());
+        reqDTO.setShortName(vo.getShortName());
+        reqDTO.setLicense(vo.getLicense());
+        reqDTO.setIndustryId(vo.getIndustryId());
+        reqDTO.setEnabled(vo.getEnabled());
+        reqDTO.setManagerId(vo.getManagerId());
         List<ClientContactReqDTO> contactList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(vo.getContacts()))
         {
@@ -446,38 +446,38 @@ public class ClientServiceImpl implements ClientService
                     resp.setError(RestResult.KEY_FIELD_MISSING);
                     return;
                 }
-                ClientContactReqDTO reqDTO = new ClientContactReqDTO();
-                reqDTO.setId(c.getId());
-                reqDTO.setName(c.getName());
-                reqDTO.setPosition(c.getPosition());
-                reqDTO.setPhone(c.getPhone());
-                reqDTO.setEmail(c.getEmail());
-                reqDTO.setGeneral(c.getGeneral());
-                contactList.add(reqDTO);
+                ClientContactReqDTO dto = new ClientContactReqDTO();
+                dto.setId(c.getId());
+                dto.setName(c.getName());
+                dto.setPosition(c.getPosition());
+                dto.setPhone(c.getPhone());
+                dto.setEmail(c.getEmail());
+                dto.setGeneral(c.getGeneral());
+                contactList.add(dto);
             }
         }
-        ResponseDTO dto = clientRpcService.editClient(client, contactList, vo.getContactDel());
+        ResponseDTO dto = clientRpcService.editClient(reqDTO, contactList, vo.getContactDel());
         resp.setError(dto.getResult());
     }
 
     @Override
-    public void findClientDetail(Long clientId, RestResp resp)
+    public Map<String, Object> getClientDetailData(Long clientId) // TODO zhujun
     {
+        Map<String, Object> map = new HashMap<>();
         ClientDetailResDTO dto = clientRpcService.getClientDetail(clientId);
         if(RestResult.SUCCESS != dto.getResult())
         {
-            resp.setError(dto.getResult());
-            return;
+            return map;
         }
-        resp.addData(Field.CLIENT_ID, clientId + "");
-        resp.addData(Field.CORP_NAME, dto.getCorpName());
-        resp.addData(Field.SHORT_NAME, dto.getShortName());
-        resp.addData(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(dto.getIndustryId()));
-        resp.addData(Field.LICENSE, dto.getLicense());
-        resp.addData(Field.USERNAME, dto.getUsername());
-        resp.addData(Field.USER_ENABLED, dto.getUserStatus());
-        resp.addData(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
-        resp.addData(Field.MANAGER_NAME, dto.getManagerName());
+        map.put(Field.CLIENT_ID, clientId + "");
+        map.put(Field.CORP_NAME, dto.getCorpName());
+        map.put(Field.SHORT_NAME, dto.getShortName());
+        map.put(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(dto.getIndustryId()));
+        map.put(Field.LICENSE, dto.getLicense());
+        map.put(Field.USERNAME, dto.getUsername());
+        map.put(Field.USER_ENABLED, dto.getUserStatus());
+        map.put(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
+        map.put(Field.MANAGER_NAME, dto.getManagerName());
         List<Map<String, Object>> userList = new ArrayList<>();
         for(ClientUserResDTO o : dto.getUsers())
         {
@@ -488,7 +488,7 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.PHONE, o.getPhone());
             userList.add(m);
         }
-        resp.addData(Field.USER_LIST, userList);
+        map.put(Field.USER_LIST, userList);
         List<Map<String, Object>> contactList = new ArrayList<>();
         for(ClientContactReqDTO o : dto.getContacts())
         {
@@ -500,7 +500,7 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.IS_GENERAL, o.getGeneral());
             contactList.add(m);
         }
-        resp.addData(Field.CONTACT_LIST, contactList);
+        map.put(Field.CONTACT_LIST, contactList);
         List<ProductDetailResDTO> productDTOList = productRpcService.getProductInfoList(clientId);
         List<Map<String, Object>> opened = new ArrayList<>();
         List<Map<String, Object>> toOpen = new ArrayList<>();
@@ -511,9 +511,7 @@ public class ClientServiceImpl implements ClientService
             m.put(Field.PRODUCT_ID, d.getProductId() + "");
             m.put(Field.PRODUCT_NAME, d.getName());
             m.put(Field.CUSTOM, d.getCustom());
-            m.put(Field.TYPE_NAME,
-                    ProdType.getById(d.getProductType()) != null ? ProdType.getById(d.getProductType()).getName() :
-                            null);
+            m.put(Field.TYPE_NAME, ProductType.getNameById(d.getProductType()));
             m.put(Field.CODE, d.getCode());
             m.put(Field.REMARK, d.getRemark());
             if(d.getClientProductId() != null && TrueOrFalse.TRUE.equals(d.getIsOpened()))
@@ -558,9 +556,10 @@ public class ClientServiceImpl implements ClientService
                 custom.add(m);
             }
         }
-        resp.addData(Field.OPENED, opened);
-        resp.addData(Field.TO_OPEN, toOpen);
-        resp.addData(Field.PRODUCT_CUSTOM_LIST, custom);
+        map.put(Field.OPENED, opened);
+        map.put(Field.TO_OPEN, toOpen);
+        map.put(Field.PRODUCT_CUSTOM_LIST, custom);
+        return map;
     }
 
     @Override

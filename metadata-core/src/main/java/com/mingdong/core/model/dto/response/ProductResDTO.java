@@ -23,7 +23,6 @@ public class ProductResDTO extends ResponseDTO
     private Integer enabled;
     private Integer custom;
     private Date createTime;
-    private Date updateTime;
 
     public Integer getCustom()
     {
@@ -203,15 +202,5 @@ public class ProductResDTO extends ResponseDTO
     public void setCreateTime(Date createTime)
     {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
     }
 }

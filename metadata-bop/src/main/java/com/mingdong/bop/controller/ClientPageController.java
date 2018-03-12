@@ -86,12 +86,10 @@ public class ClientPageController
     @RequestMapping(value = "/client/detail.html")
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
-        RestResp resp = new RestResp();
-        clientService.findClientDetail(clientId, resp);
         ModelAndView view = new ModelAndView("client/detail");
-        view.addAllObjects(resp.getData());
+        view.addAllObjects(clientService.getClientDetailData(clientId));
         view.addObject(Field.RECHARGE_TYPE_DICT, systemService.getRechargeDict());
-        view.addObject(Field.BILL_PLAN_LIST, BillPlan.getAllList());
+        view.addObject(Field.BILL_PLAN_DICT, BillPlan.getBillPlanDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
