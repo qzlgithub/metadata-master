@@ -219,10 +219,11 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public List<Map<String, Object>> getClientSubUserList(Long clientId)
+    public void getClientSubUserList(Long clientId, Page page, RestListResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ListDTO<SubUserResDTO> listDTO = clientRpcService.getSubUserList(clientId, false);
+        ListDTO<SubUserResDTO> listDTO = clientRpcService.getSubUserList(clientId, page);
+        resp.setTotal(listDTO.getTotal());
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             for(SubUserResDTO o : listDTO.getList())
@@ -236,7 +237,7 @@ public class ClientServiceImpl implements ClientService
                 list.add(map);
             }
         }
-        return list;
+        resp.setList(list);
     }
 
     @Override

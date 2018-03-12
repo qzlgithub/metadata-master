@@ -10,14 +10,13 @@ import com.mingdong.core.model.dto.request.RechargeReqDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.TradeRpcService;
 import com.mingdong.mis.component.RedisDao;
-import com.mingdong.mis.domain.entity.ClientMessage;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.Recharge;
-import com.mingdong.mis.domain.mapper.ClientMessageMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
+import com.mingdong.mis.service.ClientMessageService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -33,9 +32,9 @@ public class TradeRpcServiceImpl implements TradeRpcService
     @Resource
     private RechargeMapper rechargeMapper;
     @Resource
-    private ClientMessageMapper clientMessageMapper;
-    @Resource
     private ClientProductMapper clientProductMapper;
+    @Resource
+    private ClientMessageService clientMessageService;
 
     @Override
     @Transactional
@@ -169,14 +168,9 @@ public class TradeRpcServiceImpl implements TradeRpcService
                 clientProductMapper.updateSkipNull(temp);
             }
             // 保存客户充值消息
-            ClientMessage clientMessage = new ClientMessage();
-            clientMessage.setCreateTime(date);
-            clientMessage.setUpdateTime(date);
-            clientMessage.setClientId(reqDTO.getClientId());
-            clientMessage.setType(messageType.getId());
-            clientMessage.setContent(String.format(messageType.getContent(), product.getName(),
-                    NumberUtils.formatAmount(reqDTO.getAmount())));
-            clientMessageMapper.add(clientMessage);
+            clientMessageService.sendMessage(messageType.getId(), reqDTO.getClientId(),
+                    String.format(messageType.getContent(), product.getName(),
+                            NumberUtils.formatAmount(reqDTO.getAmount())), false, null);
         }
         finally
         {

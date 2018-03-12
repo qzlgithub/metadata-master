@@ -1,6 +1,5 @@
 package com.mingdong.mis.service.impl;
 
-import com.mingdong.core.constant.MessageType;
 import com.mingdong.mis.domain.entity.ClientMessage;
 import com.mingdong.mis.domain.mapper.ClientMessageMapper;
 import com.mingdong.mis.service.ClientMessageService;
@@ -18,16 +17,19 @@ public class ClientMessageServiceImpl implements ClientMessageService
 
     @Override
     @Transactional
-    public void sendMessage(MessageType messageTypeEnum, Long clientId, String content, boolean isSendSMS,
-            String SMSContent)
+    public void sendMessage(int typeId, Long clientId, String content, boolean isSendSMS, String SMSContent)
     {
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setClientId(clientId);
         clientMessage.setContent(content);
-        clientMessage.setType(1);
+        clientMessage.setType(typeId);
         Date date = new Date();
         clientMessage.setCreateTime(date);
         clientMessage.setUpdateTime(date);
         clientMessageMapper.add(clientMessage);
+        if(isSendSMS){
+            //TODO 预留短信发送
+
+        }
     }
 }

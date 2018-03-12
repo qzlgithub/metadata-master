@@ -240,7 +240,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId)
+    public ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId, Page page)
     {
         ListDTO<SubUserResDTO> res = new ListDTO<>();
         // 查询子账号个数限制
@@ -252,11 +252,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             return res;
         }
-        List<ClientUser> userList = clientUserMapper.getAvailableListByClient(clientId);
-        List<SubUserResDTO> list = new ArrayList<>();
-        for(ClientUser o : userList)
+        if(page == null)
         {
-            if(!client.getPrimaryUserId().equals(o.getId()))
+            List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
+            List<SubUserResDTO> list = new ArrayList<>();
+            for(ClientUser o : userList)
             {
                 SubUserResDTO su = new SubUserResDTO();
                 su.setUserId(o.getId());
@@ -266,14 +266,37 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 su.setEnabled(o.getEnabled());
                 list.add(su);
             }
+            res.setTotal(userList.size());
+            res.setList(list);
         }
-        res.setTotal(userList.size());
-        res.setList(list);
+        else
+        {
+            int total = clientUserMapper.countSubUserListByClient(clientId);
+            int pages = page.getTotalPage(total);
+            res.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
+            {
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
+                List<SubUserResDTO> list = new ArrayList<>();
+                for(ClientUser o : userList)
+                {
+                    SubUserResDTO su = new SubUserResDTO();
+                    su.setUserId(o.getId());
+                    su.setUsername(o.getUsername());
+                    su.setName(o.getName());
+                    su.setPhone(o.getPhone());
+                    su.setEnabled(o.getEnabled());
+                    list.add(su);
+                }
+                res.setList(list);
+            }
+        }
         return res;
     }
 
     @Override
-    public ListDTO<SubUserResDTO> getSubUserList(Long clientId, boolean includeDeleted)
+    public ListDTO<SubUserResDTO> getSubUserList(Long clientId, Page page)
     {
         ListDTO<SubUserResDTO> res = new ListDTO<>();
         Client client = clientMapper.findById(clientId);
@@ -281,31 +304,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             return res;
         }
-        List<ClientUser> userList;
-        if(includeDeleted)
+        int total = clientUserMapper.countSubUserListByClient(clientId);
+        int pages = page.getTotalPage(total);
+        res.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
         {
-            userList = clientUserMapper.getListByClient(clientId);
-        }
-        else
-        {
-            userList = clientUserMapper.getAvailableListByClient(clientId);
-        }
-        List<SubUserResDTO> list = new ArrayList<>();
-        for(ClientUser o : userList)
-        {
-            if(!client.getPrimaryUserId().equals(o.getId()))
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
+            List<SubUserResDTO> list = new ArrayList<>();
+            for(ClientUser o : userList)
             {
                 SubUserResDTO su = new SubUserResDTO();
                 su.setUserId(o.getId());
                 su.setUsername(o.getUsername());
                 su.setName(o.getName());
                 su.setPhone(o.getPhone());
+                su.setEnabled(o.getEnabled());
                 su.setDeleted(o.getDeleted());
                 list.add(su);
             }
+            res.setList(list);
         }
-        res.setTotal(userList.size());
-        res.setList(list);
         return res;
     }
 

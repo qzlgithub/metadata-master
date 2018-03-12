@@ -33,4 +33,8 @@ public interface ClientUserMapper
     List<ClientUser> getListByClient(Long clientId);
 
     List<ClientUser> getAvailableListByClient(Long clientId);
+
+    List<ClientUser> getSubUserListByClient(Long clientId);
+
+    int countSubUserListByClient(Long clientId);
 }
