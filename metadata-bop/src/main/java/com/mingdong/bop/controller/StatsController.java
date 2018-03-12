@@ -21,7 +21,7 @@ public class StatsController
     private StatsService statsService;
 
     @LoginRequired
-    @GetMapping(value = "/stats/client/clientList")
+    @GetMapping(value = "/stats/client/list")
     public RestListResp getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)

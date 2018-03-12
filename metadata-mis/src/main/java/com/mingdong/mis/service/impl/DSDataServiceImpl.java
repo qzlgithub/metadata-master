@@ -88,12 +88,7 @@ public class DSDataServiceImpl implements DSDataService
             }
             res.addAll(data.response());
         }
-        catch(MetadataAPIException e)
-        {
-            logger.error("Failed to revoke data api: {}", e.getMessage());
-            res.setResult(MetadataResult.RC_11);
-        }
-        catch(MetadataCoreException e)
+        catch(MetadataAPIException | MetadataCoreException e)
         {
             logger.error("Failed to revoke data api: {}", e.getMessage());
             res.setResult(MetadataResult.RC_11);

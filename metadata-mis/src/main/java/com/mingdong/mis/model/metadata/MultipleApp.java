@@ -572,6 +572,6 @@ public class MultipleApp implements IMetadata
     @Override
     public boolean isSaveLog()
     {
-        return -1 != hit.intValue();
+        return -1 != hit;
     }
 }

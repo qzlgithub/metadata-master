@@ -12,7 +12,7 @@ layui.config({
         page: true,
         limit: 10,
         limits: [10, 15, 30, 50],
-        url: '/stats/client/clientList',
+        url: '/stats/client/list',
         where: {
             scopeType: $("#scopeType").val()
         },

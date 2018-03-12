@@ -13,13 +13,6 @@ public interface ProductClientInfoMapper
 
     List<ProductClientInfo> getClientDictList(Long clientId);
 
-    // TODO deleted
-    List<ProductClientInfo> getInfoListBy(@Param("clientId") Long clientId, @Param("isOpen") Integer isOpen,
-            @Param("selectedType") Integer[] selectedType);
-
-    int countInfoListBy(@Param("clientId") Long clientId, @Param("isOpen") Integer isOpen,
-            @Param("selectedType") Integer[] selectedType);
-
     List<ProductClientInfo> getClientProductCustomBy(Long clientId);
 
     int countBy(@Param("clientId") Long clientId, @Param("typeIdList") List<Integer> typeIdList,

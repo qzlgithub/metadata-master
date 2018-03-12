@@ -111,55 +111,6 @@
         where p.`custom` = 1 and p.`enabled` = 1 and cp.`client_id` = #{clientId}
     </select>
 
-    <select id="countInfoListBy" resultType="Integer">
-        select count(p.`id`) from `product` p
-        <if test="isOpen == null">left join `client_product` cp</if>
-        <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
-        <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
-        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `recharge` pr on
-        cp.`latest_recharge_id` = pr.`id` where p.`enabled` = 1 and (p.`custom` = 0 or (p.`custom` = 1 and
-        (cp.opened = 1 or cp.opened = 0)))
-        <if test="selectedType != null">
-            and p.`type`
-            <foreach collection="selectedType" item="typeId" open="in (" close=")" separator=",">
-                #{typeId}
-            </foreach>
-        </if>
-    </select>
-
-    <select id="getInfoListBy" resultMap="BaseResultMap">
-        select
-            p.`id`           as product_id,
-            p.`name`         as product_name,
-            p.`code`         as code,
-            p.`custom`       as custom,
-            p.`type`         as type,
-            cp.`app_id`      as app_id,
-            cp.`id`          as client_product_id,
-            cp.`bill_plan`   as bill_plan,
-            cp.`opened`      as opened,
-            pr.`start_date`  as start_date,
-            pr.`end_date`    as end_date,
-            pr.`amount`      as amount,
-            pr.`balance`     as balance,
-            pr.`unit_amt`    as unit_amt,
-            pr.`update_time` as arrear_time,
-            p.`remark`       as remark
-        from `product` p
-        <if test="isOpen == null">left join `client_product` cp</if>
-        <if test="isOpen != null and isOpen == 0">left join `client_product` cp</if>
-        <if test="isOpen != null and isOpen == 1">inner join `client_product` cp</if>
-        on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `recharge` pr on
-        cp.`latest_recharge_id` = pr.`id` where p.`enabled` = 1 and (p.`custom` = 0 or (p.`custom` = 1 and
-        (cp.opened = 1 or cp.opened = 0)))
-        <if test="selectedType != null">
-            and p.`type`
-            <foreach collection="selectedType" item="typeId" open="in (" close=")" separator=",">
-                #{typeId}
-            </foreach>
-        </if>
-    </select>
-
     <select id="getClientProductInfo" parameterType="Long" resultMap="BaseResultMap">
         select
             p.`id`          as product_id,
