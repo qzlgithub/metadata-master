@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/css/base.css" media="all"/>
     <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+    <link rel="stylesheet" href="/static/plugins/paging/css/paging.css" media="all"/>
 </head>
 
 <body>
@@ -98,6 +99,8 @@
                 <tbody id="child-account-body">
                 </tbody>
             </table>
+            <br/>
+            <div class="box" id="pagination"></div>
         </div>
         <div class="layui-form-item tc">
             <button class="layui-btn" onclick="layer.closeAll()">关闭</button>
@@ -138,6 +141,7 @@
 <script type="text/javascript" src="/static/js/logout.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
 <script type="text/javascript" src="/static/business/client-list.js"></script>
 <script type="text/html" id="operation-bar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" href="/client/detail.html?id={{d.id}}"

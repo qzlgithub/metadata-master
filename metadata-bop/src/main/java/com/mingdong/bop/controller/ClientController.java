@@ -125,9 +125,13 @@ public class ClientController
 
     @LoginRequired
     @GetMapping(value = "/client/sub-user/list")
-    public List<Map<String, Object>> getClientSubUserList(@RequestParam(value = Field.ID) Long clientId)
+    public RestListResp getClientSubUserList(@RequestParam(value = Field.ID) Long clientId,
+            @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        return clientService.getClientSubUserList(clientId);
+        RestListResp resp = new RestListResp();
+        clientService.getClientSubUserList(clientId, new Page(pageNum,pageSize), resp);
+        return resp;
     }
 
     @LoginRequired

@@ -144,10 +144,11 @@ public class ClientController
      */
     @LoginRequired
     @GetMapping(value = "/client/sub-account/list")
-    public RestListResp getClientSubAccountList()
+    public RestListResp getClientSubAccountList(@RequestParam(value = Field.PAGE_NUM, required = false) int pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) int pageSize)
     {
         RestListResp res = new RestListResp();
-        clientService.getClientSubAccountList(res);
+        clientService.getClientSubAccountList(new Page(pageNum, pageSize), res);
         return res;
     }
 

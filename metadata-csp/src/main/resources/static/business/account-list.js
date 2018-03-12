@@ -1,9 +1,25 @@
 var form;
+layui.use('form', function() {
+    form = layui.form;
+});
 $(function() {
-    layui.use('form', function() {
-        form = layui.form;
+    var obj = {
+        pageNum: 1,
+        pageSize: 10
+    };
+    getAccountList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getAccountList(pageObj);
+            }
+        })
     });
-    getAccountList();
 });
 var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username}</td><td>#{name}</td><td>#{phone}</td>' +
     '<td><span class="mr30"><a class="edit cp" onclick="editAccount(\'#{id}\')">编辑</a></span>' +
@@ -11,11 +27,13 @@ var rowStr = '<tr id="accountTrId#{id}"><td id="accountUserName#{id}">#{username
     '<span class="mr30"><a class="del cp" onclick="delAccount(\'#{id}\')">删除</a></span>' +
     '</td></tr>';
 
-function getAccountList() {
+function getAccountList(obj, pageFun) {
     $.get(
         "/client/sub-account/list",
-        {},
+        {"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(data) {
+            var total = data.total;
+            var pages = Math.floor((total - 1) / obj['pageSize']) + 1;
             var list = data.list;
             $("#dataBody").empty();
             for(var d in list) {
@@ -36,6 +54,9 @@ function getAccountList() {
             $("#canAddNumber").text(count < 0 ? 0 : count);
             if(count > 0) {
                 $("#addaccount").show();
+            }
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
             }
         }
     );
@@ -101,7 +122,7 @@ function delAccount(id) {
                             time: 1000
                         }, function() {
                             layer.closeAll();
-                            getAccountList();
+                            window.location.reload();
                         });
                     }
                     else {
@@ -208,7 +229,7 @@ function addSubmitAccount() {
                 }, function() {
                     isSubmit = false;
                     layer.closeAll();
-                    getAccountList();
+                    window.location.reload();
                 });
             }
             else {
@@ -257,7 +278,7 @@ function editSubmitAccount() {
                 }, function() {
                     isSubmit = false;
                     layer.closeAll();
-                    getAccountList();
+                    window.location.reload();
                 });
             }
             else {

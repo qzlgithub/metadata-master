@@ -86,13 +86,14 @@
                     <label class="layui-form-label">备注：</label>
                     <div class="layui-input-block w40">
                         <textarea id="product-remark" th:text="${remark}" placeholder="请输入内容"
-                                  class="layui-textarea"></textarea>
+                                  class="layui-textarea" maxlength="200"></textarea>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
-                    <button class="layui-btn" onclick="editProduct()">保存</button>
+                    <a href="javascript:" class="layui-btn" onclick="editProduct()">保存</a>
+                    <a href="/setting/product.html" class="layui-btn" >返回</a>
                 </div>
             </div>
         </div>

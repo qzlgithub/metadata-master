@@ -242,27 +242,58 @@ function reset_password() {
  * 显示指定客户的子账号列表
  */
 function show_sub_user(id) {
+    var obj = {
+        clientId: id,
+        pageNum: 1,
+        pageSize: 5
+    };
+    getSubUserList(obj, function(pageObj, pages, total) {
+        $('#pagination').paging({
+            initPageNo: pageObj['pageNum'],
+            totalPages: pages,
+            totalCount: '合计' + total + '条数据',
+            slideSpeed: 600,
+            jump: false,
+            callback: function(currentPage) {
+                pageObj['pageNum'] = currentPage;
+                getSubUserList(pageObj);
+            }
+        })
+    }, function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#child-account'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+}
+
+function getSubUserList(obj, pageFun, openLayerFun){
     $.get(
         "/client/sub-user/list",
-        {"id": id},
+        {"id": obj['clientId'],"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(data) {
-            var obj = $("#child-account-body");
+            var htmlobj = $("#child-account-body");
+            htmlobj.empty();
             var sub_acct_tr =
                 '<tr><td>#{username}</td><td>#{name}</td><td>#{phone}</td>' +
-                '<td><a href="/client/consumption.html?c=' + id + '&u=#{id}" class="edit">查看消费</a></td></tr>';
-            obj.empty();
-            for(var d in data) {
-                var tr = sub_acct_tr.replace(/#{id}/g, data[d].id).replace(/#{username}/g, data[d].username)
-                .replace(/#{name}/g, data[d].name).replace(/#{phone}/g, data[d].phone);
-                obj.append(tr);
+                '<td><a href="/client/consumption.html?c=' + obj['clientId'] + '&u=#{id}" class="edit">查看消费</a></td></tr>';
+            var total = data.total;
+            var pages = Math.floor((total - 1) / parseInt(obj['pageSize'])) + 1;
+            var list = data.list;
+            for(var d in list) {
+                var tr = sub_acct_tr.replace(/#{id}/g, list[d].id).replace(/#{username}/g, list[d].username)
+                .replace(/#{name}/g, list[d].name).replace(/#{phone}/g, list[d].phone);
+                htmlobj.append(tr);
             }
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#child-account'),
-                area: ['700px'],
-                shadeClose: true
-            });
+            if(typeof pageFun === 'function') {
+                pageFun(obj, pages, total);
+            }
+            if(typeof openLayerFun === 'function') {
+                openLayerFun();
+            }
         }
     );
 }

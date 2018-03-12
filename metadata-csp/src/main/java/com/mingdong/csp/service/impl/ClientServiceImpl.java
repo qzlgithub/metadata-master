@@ -85,10 +85,10 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientSubAccountList(RestListResp res)
+    public void getClientSubAccountList(Page page, RestListResp res)
     {
         ListDTO<SubUserResDTO> listDTO = clientRpcService.getSubUserList(RequestThread.getClientId(),
-                RequestThread.getUserId());
+                RequestThread.getUserId(), page);
         res.addData(Field.ALLOWED_QTY, listDTO.getExtradata().get(Field.SUB_ACCOUNT_MAX));
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -138,7 +138,7 @@ public class ClientServiceImpl implements ClientService
         if(TrueOrFalse.TRUE.equals(RequestThread.getPrimary()))
         {
             ListDTO<SubUserResDTO> subUserList = clientRpcService.getSubUserList(RequestThread.getClientId(),
-                    RequestThread.getUserId());
+                    RequestThread.getUserId(), null);
             List<Map<String, Object>> list = new ArrayList<>();
             for(SubUserResDTO u : subUserList.getList())
             {

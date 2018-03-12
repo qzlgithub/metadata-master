@@ -46,19 +46,18 @@ public interface ClientRpcService
 
     /**
      * 查询客户子账号列表，不包括已删除的账号
-     *
-     * @param clientId 客户ID
+     *  @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
+     * @param page
      */
-    ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId);
+    ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId, Page page);
 
     /**
      * 查询客户子账号列表
-     *
      * @param clientId       客户ID
-     * @param includeDeleted 是否包含已删除账号
+     * @param page
      */
-    ListDTO<SubUserResDTO> getSubUserList(Long clientId, boolean includeDeleted);
+    ListDTO<SubUserResDTO> getSubUserList(Long clientId, Page page);
 
     /**
      * 新增客户子帐号
