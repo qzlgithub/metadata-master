@@ -49,7 +49,7 @@
                     <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
-            <div class="clearfix mt20">
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'31111')}">
                 <span class="fr">
                     <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
                     <a class="layui-btn" lay-submit="" lay-filter="export">导出</a>

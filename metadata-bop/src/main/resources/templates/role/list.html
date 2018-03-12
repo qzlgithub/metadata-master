@@ -26,7 +26,7 @@
             <a><cite>权限分组</cite></a>
         </div>
         <div class="p20 layui-form">
-            <div class="clearfix mt20">
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'11201')}">
                 <a href="/setting/role/add.html" class="layui-btn fr layui-btn-normal">添加分组</a>
             </div>
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
@@ -44,11 +44,14 @@
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/role-list.js"></script>
 <script type="text/html" id="operationBar">
-    <a class="layui-btn layui-btn-xs" href="/setting/role/edit.html?o={{d.id}}">编辑</a>
+    <a class="layui-btn layui-btn-xs" href="/setting/role/edit.html?o={{d.id}}"
+       th:if="${#lists.contains(i_privilege,'11202')}">编辑</a>
     {{# if(d.enabled === 1) { }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable"
+       th:if="${#lists.contains(i_privilege,'11203')}">禁用</a>
     {{# } else { }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable"
+       th:if="${#lists.contains(i_privilege,'11203')}">启用</a>
     {{# } }}
 </script>
 </body>

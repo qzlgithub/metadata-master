@@ -51,7 +51,8 @@
                     <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
-            <div class="clearfix mt20"><a href="/setting/user/add.html" class="layui-btn fr layui-btn-normal">添加账号</a>
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'11101')}"><a href="/setting/user/add.html"
+                                                                                          class="layui-btn fr layui-btn-normal">添加账号</a>
             </div>
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
         </div>
@@ -67,11 +68,14 @@
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/user-list.js"></script>
 <script type="text/html" id="operation-bar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/user/edit.html?o={{d.id}}">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/user/edit.html?o={{d.id}}"
+       th:if="${#lists.contains(i_privilege,'11102')}">编辑</a>
     {{# if(d.enabled === 1) { }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable"
+       th:if="${#lists.contains(i_privilege,'11103')}">禁用</a>
     {{# } else { }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable"
+       th:if="${#lists.contains(i_privilege,'11103')}">启用</a>
     {{# } }}
 </script>
 <script type="text/html" id="status-tpl">

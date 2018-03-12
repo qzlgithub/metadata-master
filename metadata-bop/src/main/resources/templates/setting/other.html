@@ -27,7 +27,7 @@
         </div>
         <div class="p20">
             <div class="w60 m30">
-                <div class="layui-form-item">
+                <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12402')}">
                     <label class="layui-form-label">客户子账号数：</label>
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
@@ -36,7 +36,7 @@
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12401')}">
                     <label class="layui-form-label">官网客服QQ：</label>
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"

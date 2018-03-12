@@ -80,11 +80,14 @@
 <script type="text/javascript" src="/static/js/password.js"></script>
 <script type="text/javascript" src="/static/business/product-list.js"></script>
 <script type="text/html" id="operationBar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/product/edit.html?id={{d.id}}">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/product/edit.html?id={{d.id}}"
+       th:if="${#lists.contains(i_privilege,'21202')}">编辑</a>
     {{# if(d.status === 1) { }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable">禁用</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="disable"
+       th:if="${#lists.contains(i_privilege,'21203')}">禁用</a>
     {{# } else { }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable">启用</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable"
+       th:if="${#lists.contains(i_privilege,'21203')}">启用</a>
     {{# } }}
 </script>
 <script type="text/html" id="customTpl">
