@@ -3,7 +3,7 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ContactVO;
-import com.mingdong.bop.model.NewClientVO;
+import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -19,7 +19,6 @@ import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
@@ -136,62 +135,6 @@ public class ClientServiceImpl implements ClientService
             }
         }
         res.setList(list);
-    }
-
-    @Override
-    public void getClientInfoForEdit(Long clientId, RestResp resp)
-    {
-        ClientDetailResDTO dto = clientRpcService.getClientInfoForEdit(clientId);
-        if(RestResult.SUCCESS != dto.getResult())
-        {
-            resp.setError(dto.getResult());
-            return;
-        }
-        resp.addData(Field.CLIENT_ID, clientId + "");
-        resp.addData(Field.USERNAME, dto.getUsername());
-        resp.addData(Field.CORP_NAME, dto.getCorpName());
-        resp.addData(Field.SHORT_NAME, dto.getShortName());
-        resp.addData(Field.LICENSE, dto.getLicense());
-        resp.addData(Field.INDUSTRY_ID, dto.getIndustryId() + "");
-        resp.addData(Field.USER_STATUS, dto.getUserStatus());
-        resp.addData(Field.MANAGER_ID, dto.getManagerId());
-        List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
-        for(ClientContactReqDTO o : dto.getContacts())
-        {
-            Map<String, Object> m = new HashMap<>();
-            m.put(Field.ID, o.getId() + "");
-            m.put(Field.NAME, o.getName());
-            m.put(Field.POSITION, o.getPosition());
-            m.put(Field.PHONE, o.getPhone());
-            m.put(Field.EMAIL, o.getEmail());
-            m.put(Field.IS_GENERAL, o.getGeneral());
-            contacts.add(m);
-        }
-        resp.addData(Field.CONTACTS, contacts);
-
-        IndustryResDTO industry = systemRpcService.getIndustryDictOfTarget(dto.getIndustryId());
-        if(RestResult.SUCCESS == industry.getResult())
-        {
-            resp.addData(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
-            List<Map<String, Object>> industryParentDict = new ArrayList<>();
-            for(Dict d : industry.getParents())
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.KEY, d.getKey());
-                map.put(Field.VALUE, d.getValue());
-                industryParentDict.add(map);
-            }
-            resp.addData(Field.INDUSTRY_PARENT_DICT, industryParentDict);
-            List<Map<String, Object>> industryDict = new ArrayList<>();
-            for(Dict d : industry.getPeers())
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.KEY, d.getKey());
-                map.put(Field.VALUE, d.getValue());
-                industryDict.add(map);
-            }
-            resp.addData(Field.INDUSTRY_DICT, industryDict);
-        }
     }
 
     @Override
@@ -369,7 +312,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void addClient(NewClientVO vo, RestResp resp)
+    public void addClient(ClientVO vo, RestResp resp)
     {
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
@@ -416,7 +359,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void editClient(NewClientVO vo, RestResp resp)
+    public void editClient(ClientVO vo, RestResp resp)
     {
         if(vo.getClientId() == null || StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(
                 vo.getShortName()) || StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
@@ -460,7 +403,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public Map<String, Object> getClientDetailData(Long clientId) // TODO zhujun
+    public Map<String, Object> getClientInfoAndProduct(Long clientId) // TODO 客户详情
     {
         Map<String, Object> map = new HashMap<>();
         ClientDetailResDTO dto = clientRpcService.getClientDetail(clientId);
@@ -474,7 +417,7 @@ public class ClientServiceImpl implements ClientService
         map.put(Field.INDUSTRY_NAME, redisDao.getIndustryInfo(dto.getIndustryId()));
         map.put(Field.LICENSE, dto.getLicense());
         map.put(Field.USERNAME, dto.getUsername());
-        map.put(Field.USER_ENABLED, dto.getUserStatus());
+        map.put(Field.USER_ENABLED, dto.getEnabled());
         map.put(Field.REGISTER_DATE, DateUtils.format(dto.getAddTime(), DateFormat.YYYY_MM_DD));
         map.put(Field.MANAGER_NAME, dto.getManagerName());
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -559,6 +502,47 @@ public class ClientServiceImpl implements ClientService
         map.put(Field.TO_OPEN, toOpen);
         map.put(Field.PRODUCT_CUSTOM_LIST, custom);
         return map;
+    }
+
+    @Override
+    public Map<String, Object> getClientInfo(Long clientId)
+    {
+        Map<String, Object> data = new HashMap<>();
+        ClientDetailResDTO dto = clientRpcService.getClientInfo(clientId);
+        if(RestResult.SUCCESS != dto.getResult())
+        {
+            return data;
+        }
+        data.put(Field.CLIENT_ID, clientId + "");
+        data.put(Field.USERNAME, dto.getUsername());
+        data.put(Field.CORP_NAME, dto.getCorpName());
+        data.put(Field.SHORT_NAME, dto.getShortName());
+        data.put(Field.LICENSE, dto.getLicense());
+        data.put(Field.INDUSTRY_ID, dto.getIndustryId() + "");
+        data.put(Field.USER_STATUS, dto.getEnabled());
+        data.put(Field.MANAGER_ID, dto.getManagerId());
+        List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
+        for(ClientContactReqDTO o : dto.getContacts())
+        {
+            Map<String, Object> m = new HashMap<>();
+            m.put(Field.ID, o.getId() + "");
+            m.put(Field.NAME, o.getName());
+            m.put(Field.POSITION, o.getPosition());
+            m.put(Field.PHONE, o.getPhone());
+            m.put(Field.EMAIL, o.getEmail());
+            m.put(Field.IS_GENERAL, o.getGeneral());
+            contacts.add(m);
+        }
+        data.put(Field.CONTACTS, contacts);
+
+        IndustryResDTO industry = systemRpcService.getIndustryDictOfTarget(dto.getIndustryId());
+        if(RestResult.SUCCESS == industry.getResult())
+        {
+            data.put(Field.PARENT_INDUSTRY_ID, industry.getParentId() + "");
+            data.put(Field.INDUSTRY_PARENT_DICT, industry.getParents());
+            data.put(Field.INDUSTRY_DICT, industry.getPeers());
+        }
+        return data;
     }
 
     @Override

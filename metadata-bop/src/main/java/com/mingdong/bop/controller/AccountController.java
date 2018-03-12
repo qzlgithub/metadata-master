@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.AdminUserVO;
-import com.mingdong.bop.model.NewManagerVO;
+import com.mingdong.bop.model.ManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -143,7 +143,7 @@ public class AccountController
      */
     @LoginRequired
     @PostMapping(value = "/account/addition")
-    public RestResp addAdminUser(@RequestBody NewManagerVO vo)
+    public RestResp addAdminUser(@RequestBody ManagerVO vo)
     {
         RestResp resp = new RestResp();
         // 校验各个字段值

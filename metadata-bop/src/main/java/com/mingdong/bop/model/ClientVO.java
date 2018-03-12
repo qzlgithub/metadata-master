@@ -1,17 +1,30 @@
 package com.mingdong.bop.model;
 
+import java.util.List;
+
 public class ClientVO
 {
     private Long clientId;
     private String corpName;
     private String shortName;
     private String license;
-    private String name;
-    private String phone;
-    private String email;
     private Long industryId;
-    private Integer userEnabled;
-    private Integer accountEnabled;
+    private String username;
+    private String password;
+    private Integer enabled;
+    private Long managerId;
+    private List<ContactVO> contacts;
+    private List<Long> contactDel;
+
+    public Long getManagerId()
+    {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId)
+    {
+        this.managerId = managerId;
+    }
 
     public Long getClientId()
     {
@@ -53,36 +66,6 @@ public class ClientVO
         this.license = license;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
     public Long getIndustryId()
     {
         return industryId;
@@ -93,23 +76,53 @@ public class ClientVO
         this.industryId = industryId;
     }
 
-    public Integer getUserEnabled()
+    public String getUsername()
     {
-        return userEnabled;
+        return username;
     }
 
-    public void setUserEnabled(Integer userEnabled)
+    public void setUsername(String username)
     {
-        this.userEnabled = userEnabled;
+        this.username = username;
     }
 
-    public Integer getAccountEnabled()
+    public String getPassword()
     {
-        return accountEnabled;
+        return password;
     }
 
-    public void setAccountEnabled(Integer accountEnabled)
+    public void setPassword(String password)
     {
-        this.accountEnabled = accountEnabled;
+        this.password = password;
+    }
+
+    public Integer getEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(Integer enabled)
+    {
+        this.enabled = enabled;
+    }
+
+    public List<ContactVO> getContacts()
+    {
+        return contacts;
+    }
+
+    public void setContacts(List<ContactVO> contacts)
+    {
+        this.contacts = contacts;
+    }
+
+    public List<Long> getContactDel()
+    {
+        return contactDel;
+    }
+
+    public void setContactDel(List<Long> contactDel)
+    {
+        this.contactDel = contactDel;
     }
 }

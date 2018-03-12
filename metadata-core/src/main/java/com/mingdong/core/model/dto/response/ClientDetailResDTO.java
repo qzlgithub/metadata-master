@@ -8,27 +8,17 @@ import java.util.List;
 public class ClientDetailResDTO extends ResponseDTO
 {
     private Long clientId;
+    private String username;
     private String corpName;
     private String shortName;
     private String license;
     private Long industryId;
-    private String username;
-    private Integer userStatus;
+    private Integer enabled;
     private List<ClientContactReqDTO> contacts;
     private List<ClientUserResDTO> users;
     private Date addTime;
     private Long managerId;
     private String managerName;
-
-    public Long getManagerId()
-    {
-        return managerId;
-    }
-
-    public void setManagerId(Long managerId)
-    {
-        this.managerId = managerId;
-    }
 
     public Long getClientId()
     {
@@ -38,6 +28,16 @@ public class ClientDetailResDTO extends ResponseDTO
     public void setClientId(Long clientId)
     {
         this.clientId = clientId;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
     }
 
     public String getCorpName()
@@ -80,24 +80,14 @@ public class ClientDetailResDTO extends ResponseDTO
         this.industryId = industryId;
     }
 
-    public String getUsername()
+    public Integer getEnabled()
     {
-        return username;
+        return enabled;
     }
 
-    public void setUsername(String username)
+    public void setEnabled(Integer enabled)
     {
-        this.username = username;
-    }
-
-    public Integer getUserStatus()
-    {
-        return userStatus;
-    }
-
-    public void setUserStatus(Integer userStatus)
-    {
-        this.userStatus = userStatus;
+        this.enabled = enabled;
     }
 
     public List<ClientContactReqDTO> getContacts()
@@ -128,6 +118,16 @@ public class ClientDetailResDTO extends ResponseDTO
     public void setAddTime(Date addTime)
     {
         this.addTime = addTime;
+    }
+
+    public Long getManagerId()
+    {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId)
+    {
+        this.managerId = managerId;
     }
 
     public String getManagerName()

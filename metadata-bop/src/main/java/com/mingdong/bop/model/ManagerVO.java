@@ -2,7 +2,7 @@ package com.mingdong.bop.model;
 
 import java.util.List;
 
-public class NewManagerVO
+public class ManagerVO
 {
     private String username;
     private String password;

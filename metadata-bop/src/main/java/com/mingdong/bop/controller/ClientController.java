@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.NewClientVO;
+import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.RechargeVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
@@ -132,7 +132,7 @@ public class ClientController
 
     @LoginRequired
     @PutMapping(value = "/client/addition")
-    public RestResp addNewClient(@RequestBody NewClientVO vo)
+    public RestResp addNewClient(@RequestBody ClientVO vo)
     {
         RestResp resp = new RestResp();
         clientService.addClient(vo, resp);
@@ -141,7 +141,7 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/modification")
-    public RestResp editClient(@RequestBody NewClientVO vo)
+    public RestResp editClient(@RequestBody ClientVO vo)
     {
         RestResp resp = new RestResp();
         clientService.editClient(vo, resp);

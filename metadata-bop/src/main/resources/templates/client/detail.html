@@ -89,7 +89,8 @@
                         <tr th:each="o : ${contactList}">
                             <td>
                                 <span th:text="${o.name}"></span>
-                                <i class="chang-icon" th:if="${o.isGeneral == 1}"></i></td>
+                                <i class="chang-icon" th:if="${o.isGeneral == 1}"></i>
+                            </td>
                             <td th:text="${o.position}"></td>
                             <td th:text="${o.phone}"></td>
                             <td th:text="${o.email}"></td>
@@ -122,7 +123,8 @@
                                 <a th:href="'/client/consumption.html?c=' + ${clientId} + '&amp;p=' + ${cp.productId}"
                                    class="tc">消费记录</a>
                                 <a class="cp">
-                                    <span class="renew" th:attr="data-product=${cp.productId}" th:if="${#lists.contains(i_privilege,'31109')}">续签</span>
+                                    <span class="renew" th:attr="data-product=${cp.productId}"
+                                          th:if="${#lists.contains(i_privilege,'31109')}">续签</span>
                                 </a>
                             </p>
                         </li>
@@ -134,9 +136,10 @@
                                 <a class="cp">
                                     <span th:if="${prod.isSelected == 0 and #lists.contains(i_privilege,'31108')}"
                                           class="cp open-product"
-                                          th:attr="data-product-id = ${prod.productId}" >开通</span>
-                                    <span th:if="${prod.isSelected == 1 and #lists.contains(i_privilege,'31108')}" class="renew is-selected-class"
-                                          th:attr="client-product-id=${prod.clientProductId}" >开通</span>
+                                          th:attr="data-product-id = ${prod.productId}">开通</span>
+                                    <span th:if="${prod.isSelected == 1 and #lists.contains(i_privilege,'31108')}"
+                                          class="renew is-selected-class"
+                                          th:attr="client-product-id=${prod.clientProductId}">开通</span>
                                 </a>
                             </p>
                         </li>
@@ -160,8 +163,7 @@
                             <td th:text="${pro.typeName}"></td>
                             <td th:text="${pro.productName}"></td>
                             <td th:text="${pro.remark}"></td>
-                            <td><a href="javascript:" class="edit remove-class" th:value="${pro.clientProductId}">移除
-                            </a></td>
+                            <td><a class="edit remove-class" th:value="${pro.clientProductId}">移除</a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -269,7 +271,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>单价：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-unit" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display: inline;" onblur="checkUnitPrice()" maxlength="4"/> 元/次
+                           class="layui-input" style="width:70%; display: inline;" onblur="checkUnitPrice()"
+                           maxlength="4"/> 元/次
                     <i class="col3 pl10" id="unitPriceTip" style="display: none"></i>
                 </div>
             </div>
@@ -277,7 +280,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-amt" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge()" maxlength="8"/> 元
+                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge()"
+                           maxlength="8"/> 元
                     <i class="col3 pl10" id="rechargeTip" style="display: none"></i>
                 </div>
             </div>

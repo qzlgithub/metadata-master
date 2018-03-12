@@ -5,24 +5,11 @@ import java.math.BigDecimal;
 public class ProductVO
 {
     private Long id;
-    private Integer productType;
-    private String code;
     private String name;
     private BigDecimal costAmt;
     private Integer enabled;
     private String remark;
     private String content;
-    private Integer custom;
-
-    public Integer getCustom()
-    {
-        return custom;
-    }
-
-    public void setCustom(Integer custom)
-    {
-        this.custom = custom;
-    }
 
     public Long getId()
     {
@@ -32,26 +19,6 @@ public class ProductVO
     public void setId(Long id)
     {
         this.id = id;
-    }
-
-    public Integer getProductType()
-    {
-        return productType;
-    }
-
-    public void setProductType(Integer productType)
-    {
-        this.productType = productType;
-    }
-
-    public String getCode()
-    {
-        return code;
-    }
-
-    public void setCode(String code)
-    {
-        this.code = code;
     }
 
     public String getName()

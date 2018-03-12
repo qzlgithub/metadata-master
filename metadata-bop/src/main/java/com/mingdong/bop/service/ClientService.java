@@ -1,6 +1,6 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.NewClientVO;
+import com.mingdong.bop.model.ClientVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
@@ -28,8 +28,6 @@ public interface ClientService
      */
     void getClientList(String keyword, Long parentIndustryId, Long industryId, Integer enabled, Long managerId,
             Page page, RestListResp res);
-
-    void getClientInfoForEdit(Long clientId, RestResp resp);
 
     /**
      * 更改客户状态同时修改帐号并新增客户帐号操作记录
@@ -92,16 +90,18 @@ public interface ClientService
      */
     void checkIfContractExist(String contractNo, RestResp resp);
 
-    void addClient(NewClientVO vo, RestResp resp);
+    void addClient(ClientVO vo, RestResp resp);
 
-    void editClient(NewClientVO vo, RestResp resp);
+    void editClient(ClientVO vo, RestResp resp);
 
     /**
      * 获取客户的详细资料
      *
      * @param clientId 客户ID
      */
-    Map<String, Object> getClientDetailData(Long clientId);
+    Map<String, Object> getClientInfoAndProduct(Long clientId);
+
+    Map<String, Object> getClientInfo(Long clientId);
 
     void selectCustomProduct(Long clientId, List<Long> productIds, RestResp resp);
 
