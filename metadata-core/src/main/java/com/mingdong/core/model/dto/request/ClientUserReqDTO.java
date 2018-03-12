@@ -12,6 +12,17 @@ public class ClientUserReqDTO implements Serializable
     private String phone;
     private Integer enabled;
     private Integer deleted;
+    private String appKey;
+
+    public String getAppKey()
+    {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey)
+    {
+        this.appKey = appKey;
+    }
 
     public Long getClientId()
     {

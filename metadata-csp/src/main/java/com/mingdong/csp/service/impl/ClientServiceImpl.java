@@ -246,14 +246,47 @@ public class ClientServiceImpl implements ClientService
             return;
         }
         resp.addData(Field.APP_ID, dto.getAppId());
-        resp.addData(Field.APP_KEY, dto.getAppKey() != null ? dto.getAppKey() : "");
         resp.addData(Field.REQ_HOST, dto.getReqHost() != null ? dto.getReqHost() : "");
     }
 
     @Override
-    public void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, RestResp resp)
+    public void saveUserProductCredential(Long userId, Long productId, String reqHost, RestResp resp)
     {
-        ResponseDTO dto = clientRpcService.saveUserCredential(userId, productId, appKey, reqHost);
+        ResponseDTO dto = clientRpcService.saveUserProductCredential(userId, productId, reqHost);
+        resp.setError(dto.getResult());
+    }
+
+    @Override
+    public boolean validatePassWord(Long userId, String password)
+    {
+        CredentialResDTO userCredential = clientRpcService.getUserCredential(userId, password, null);
+        return !RestResult.INVALID_PASSCODE.equals(userCredential.getResponseDTO().getResult());
+    }
+
+    @Override
+    public String getAppKeyByUserId(Long userId)
+    {
+        UserResDTO accountByUserId = clientRpcService.getAccountByUserId(userId);
+        if(accountByUserId != null)
+        {
+            return accountByUserId.getAppKey();
+        }
+        return null;
+    }
+
+    @Override
+    public void saveUserCredential(Long userId, String appKey, RestResp resp)
+    {
+        UserResDTO accountByUserId = clientRpcService.getAccountByUserId(userId);
+        if(accountByUserId == null)
+        {
+            resp.setError(RestResult.OBJECT_NOT_FOUND);
+            return;
+        }
+        ClientUserReqDTO clientUserReqDTO = new ClientUserReqDTO();
+        clientUserReqDTO.setUserId(accountByUserId.getUserId());
+        clientUserReqDTO.setAppKey(appKey);
+        ResponseDTO dto = clientRpcService.saveUserCredential(clientUserReqDTO);
         resp.setError(dto.getResult());
     }
 }

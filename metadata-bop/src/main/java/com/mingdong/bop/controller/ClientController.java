@@ -130,7 +130,7 @@ public class ClientController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestListResp resp = new RestListResp();
-        clientService.getClientSubUserList(clientId, new Page(pageNum,pageSize), resp);
+        clientService.getClientSubUserList(clientId, new Page(pageNum, pageSize), resp);
         return resp;
     }
 

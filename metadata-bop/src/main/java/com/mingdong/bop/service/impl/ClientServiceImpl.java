@@ -2,8 +2,8 @@ package com.mingdong.bop.service.impl;
 
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.ClientVO;
+import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;

@@ -78,7 +78,7 @@
                             <a th:href="'/product/recharge.html?productId=' + ${productId}" class="mr20">历史充值</a>
                             | <a th:href="'/product/request.html?productId=' + ${productId}" class="ml20">消费明细</a>
                         </p>
-                        <p class="ml40"><span class="appid-btn cp" id="appkid">获取AppId</span></p>
+                        <p class="ml40"><span class="appid-btn cp" id="appkid"></span></p>
                     </div>
                 </dd>
             </dl>
@@ -140,14 +140,6 @@
                     <div class="layui-input-block">
                         <em class="mt5" id="app-id"></em>
                         <span class="add-button ml10 cp" id="cp-app-id">复制</span>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">AppKey：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="app-key" readonly="readonly" placeholder="未设置" class="layui-input w60"
-                               style="display: inline-block;"/>
-                        <span class="add-button ml10 cp" id="ref-app-key">生成</span>
                     </div>
                 </div>
                 <div class="layui-form-item">

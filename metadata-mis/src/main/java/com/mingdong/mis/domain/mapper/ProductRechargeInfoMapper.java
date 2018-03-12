@@ -15,10 +15,9 @@ public interface ProductRechargeInfoMapper
 
     List<ProductRechargeInfo> getListByTime(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
-    int countBy(@Param("keyword") String keyword, @Param("clientId") Long clientId,
-            @Param("productId") Long productId, @Param("managerId") Long managerId,
-            @Param("rechargeType") Integer rechargeType, @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime);
+    int countBy(@Param("keyword") String keyword, @Param("clientId") Long clientId, @Param("productId") Long productId,
+            @Param("managerId") Long managerId, @Param("rechargeType") Integer rechargeType,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     List<ProductRechargeInfo> getListBy(@Param("keyword") String keyword, @Param("clientId") Long clientId,
             @Param("productId") Long productId, @Param("managerId") Long managerId,

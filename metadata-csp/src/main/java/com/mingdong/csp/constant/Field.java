@@ -2,6 +2,7 @@ package com.mingdong.csp.constant;
 
 public interface Field
 {
+    String P = "p";
     String CODE = "code";
     String USERNAME = "username";
     String PASSWORD = "password";

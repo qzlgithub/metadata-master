@@ -102,18 +102,35 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "/client/user/credential")
-    public RestResp saveUserCredential(@RequestBody JSONObject jsonReq)
+    public RestResp saveUserProductCredential(@RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
         Long productId = jsonReq.getLong(Field.PRODUCT_ID);
-        String appKey = jsonReq.getString(Field.APP_KEY);
         String reqHost = jsonReq.getString(Field.REQ_HOST);
-        if(productId == null || StringUtils.isNullBlank(appKey) || StringUtils.isNullBlank(reqHost))
+        if(productId == null || StringUtils.isNullBlank(reqHost))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.saveUserCredential(RequestThread.getUserId(), productId, appKey, reqHost, resp);
+        clientService.saveUserProductCredential(RequestThread.getUserId(), productId, reqHost, resp);
+        return resp;
+    }
+
+    /**
+     * 更新用户凭证信息
+     */
+    @LoginRequired
+    @PostMapping(value = "/client/user/proof")
+    public RestResp saveUserCredential(@RequestBody JSONObject jsonReq)
+    {
+        RestResp resp = new RestResp();
+        String appKey = jsonReq.getString(Field.APP_KEY);
+        if(StringUtils.isNullBlank(appKey))
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
+        clientService.saveUserCredential(RequestThread.getUserId(), appKey, resp);
         return resp;
     }
 

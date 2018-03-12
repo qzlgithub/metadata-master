@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>客户中心 - 元数据</title>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/site.min.css"/>
+    <link rel="stylesheet" href="/static/css/animate.min.css"/>
+    <link rel="stylesheet" href="/static/css/base.css"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <link rel="stylesheet" href="/static/css/common.css"/>
+    <link rel="stylesheet" href="/static/plugins/paging/css/paging.css"/>
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy">
+<div th:include="common :: top"></div>
+<div class="masthead pb0"></div>
+<div class="container mt45 mb20">
+    位置：<a href="/home.html"> 主页</a> > <span class="col2">设置中心</span>
+</div>
+<div class="container mt20 mb20 bg-white">
+    <div class="row development">
+        <div th:include="system-common :: left"></div>
+        <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
+            <div class="mt30 pl10 pr10 pb30">
+                <div class="border-title">安全设置</div>
+            </div>
+            <div class="mb30">
+                <div class="margin-auto">
+                    <div class="clearfix tc mt20" style="margin-left: 167px;">
+                        <span class="step fl w30"><i class="icon-01 icon mr10"></i><br/>密码验证</span>
+                        <span class="fl w30"><i class="icon-02-1 icon mr10"></i><br/>获取AppId</span>
+                    </div>
+                </div>
+                <div class="m30">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号：</label>
+                        <div class="layui-input-block" th:text="${username}"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i class="col1">*</i>密码：</label>
+                        <div class="layui-input-block">
+                            <input type="password" id="password" placeholder="请输入" class="layui-input w80"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item tc">
+                    <a href="javascript:" class="layui-btn" id="next-step" >下一步</a>
+                    <a href="/system/security-setting.html" class="layui-btn" >返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="common :: footer"></div>
+<div th:include="common :: right"></div>
+<div id="change-password" style="display: none" th:include="common :: password"></div>
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.unveil.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.scrollUp.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.matchHeight-min.js"></script>
+<script type="text/javascript" src="/static/js/site.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-touch-slider.js"></script>
+<script type="text/javascript" src="/static/js/lanrenzhijia.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
+<script type="text/javascript" src="/static/js/public.js"></script>
+<script type="text/javascript" src="/static/js/toc.min.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script >
+    $(function() {
+        $("#next-step").click(function(){
+            var pwd = $("#password").val();
+            pwd = MD5(pwd);
+            window.location.href="/system/edit-appKey.html?p="+pwd;
+        });
+    });
+</script>
+<script th:inline="javascript" th:if="${p == 1}">
+    $(function() {
+        console.log($("#password").parent());
+        $("#password").parent().append('<span style="color: red;">帐号密码不匹配！</span>');
+    })
+</script>
+</body>
+</html>

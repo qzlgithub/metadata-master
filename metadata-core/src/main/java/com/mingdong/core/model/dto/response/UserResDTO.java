@@ -11,6 +11,17 @@ public class UserResDTO extends ResponseDTO
     private Integer enabled;
     private String managerQq;
     private Integer firstLogin;
+    private String appKey;
+
+    public String getAppKey()
+    {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey)
+    {
+        this.appKey = appKey;
+    }
 
     public Long getClientId()
     {

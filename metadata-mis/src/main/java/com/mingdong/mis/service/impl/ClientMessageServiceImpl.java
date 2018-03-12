@@ -27,7 +27,8 @@ public class ClientMessageServiceImpl implements ClientMessageService
         clientMessage.setCreateTime(date);
         clientMessage.setUpdateTime(date);
         clientMessageMapper.add(clientMessage);
-        if(isSendSMS){
+        if(isSendSMS)
+        {
             //TODO 预留短信发送
 
         }

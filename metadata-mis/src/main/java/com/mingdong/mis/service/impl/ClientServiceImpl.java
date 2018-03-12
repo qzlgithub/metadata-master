@@ -90,13 +90,13 @@ public class ClientServiceImpl implements ClientService
         // 查询用户账号对于产品的安全配置信息
         ClientUserProduct clientUserProduct = clientUserProductMapper.findByUserAndProduct(user.getId(),
                 product.getId());
-        if(clientUserProduct == null)
+        if(StringUtils.isNullBlank(user.getAppSecret()) || clientUserProduct == null)
         {
             res.setResult(MetadataResult.RC_6);
             return;
         }
         // 验证请求密钥
-        if(!checkAccessKey(clientUserProduct.getAppSecret(), timestamp, accessKey))
+        if(!checkAccessKey(user.getAppSecret(), timestamp, accessKey))
         {
             res.setResult(MetadataResult.RC_7);
             return;

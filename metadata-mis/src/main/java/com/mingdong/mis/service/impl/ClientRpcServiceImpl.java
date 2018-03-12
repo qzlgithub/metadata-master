@@ -415,6 +415,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userResDTO.setPhone(clientUser.getPhone());
         userResDTO.setUsername(clientUser.getUsername());
         userResDTO.setEnabled(clientUser.getEnabled());
+        userResDTO.setAppKey(clientUser.getAppSecret());
         return userResDTO;
     }
 
@@ -457,6 +458,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
             dto.getResponseDTO().setResult(RestResult.INVALID_PASSCODE);
             return dto;
         }
+        if(productId == null)
+        {
+            return dto;
+        }
         ClientProduct cp = clientProductMapper.findByClientAndProduct(user.getClientId(), productId);
         if(cp == null)
         {
@@ -467,7 +472,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         ClientUserProduct up = clientUserProductMapper.findByUserAndProduct(userId, productId);
         if(up != null)
         {
-            dto.setAppKey(up.getAppSecret());
             dto.setReqHost(up.getReqHost());
         }
         return dto;
@@ -475,7 +479,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost)
+    public ResponseDTO saveUserProductCredential(Long userId, Long productId, String reqHost)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         ClientUser user = clientUserMapper.findById(userId);
@@ -499,7 +503,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
             up.setUpdateTime(current);
             up.setUserId(userId);
             up.setProductId(productId);
-            up.setAppSecret(appKey);
             up.setReqHost(reqHost);
             clientUserProductMapper.add(up);
         }
@@ -508,7 +511,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
             ClientUserProduct upUpd = new ClientUserProduct();
             upUpd.setId(up.getId());
             upUpd.setUpdateTime(current);
-            upUpd.setAppSecret(appKey);
             upUpd.setReqHost(reqHost);
             clientUserProductMapper.updateSkipNull(upUpd);
         }
@@ -1249,6 +1251,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
         BigDecimal totalRecharge = rechargeMapper.sumRechargeAmount(clientId, productId);
         resDTO.setTotalRecharge(totalRecharge);
         return resDTO;
+    }
+
+    @Override
+    public ResponseDTO saveUserCredential(ClientUserReqDTO clientUserReqDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        ClientUser clientUser = new ClientUser();
+        clientUser.setId(clientUserReqDTO.getUserId());
+        clientUser.setAppSecret(clientUserReqDTO.getAppKey());
+        clientUserMapper.updateSkipNull(clientUser);
+        return responseDTO;
     }
 
     /**
