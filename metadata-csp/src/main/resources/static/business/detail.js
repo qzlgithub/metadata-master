@@ -24,11 +24,6 @@ layui.config({
     });
     $("#cp-app-id").on('click', function() {
     });
-    $("#ref-app-key").click(function() {
-        var uuid = Math.uuidFast();
-        var uuid = uuid.toLocaleLowerCase();
-        $("#app-key").val(uuid.replace(/-/g, ''));
-    });
     $('#next-step').on('click', function() {
         var password = $("#password").val();
         if(password === '') {
@@ -43,7 +38,6 @@ layui.config({
                 if(res.code === '000000') {
                     var data = res.data;
                     $("#app-id").text(data.appId);
-                    $("#app-key").val(data.appKey);
                     $("#req-host").val(data.reqHost);
                     $("#mode_app_id_1").hide();
                     $("#mode_app_id_2").show();
@@ -56,12 +50,7 @@ layui.config({
     });
 });
 $("#save-credential").click(function() {
-    var appKey = $("#app-key").val();
     var reqHost = $("#req-host").val();
-    if(appKey === '') {
-        layer.msg("请先生成产品密钥（AppKey）");
-        return;
-    }
     if(reqHost === '') {
         layer.msg("请配置允许请求接口的IP地址");
         return;
@@ -72,7 +61,7 @@ $("#save-credential").click(function() {
         url: "/client/user/credential",
         dataType: "json",
         contentType: "application/json",
-        data: JSON.stringify({"productId": productId, "appKey": appKey, "reqHost": reqHost}),
+        data: JSON.stringify({"productId": productId, "reqHost": reqHost}),
         success: function(res) {
             if(res.code === '000000') {
                 layer.msg("添加成功", {time: 2000}, function() {

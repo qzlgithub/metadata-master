@@ -75,4 +75,9 @@ public enum RestResult
     {
         return message;
     }
+
+    public boolean equals(RestResult restResult)
+    {
+        return this.code.equals(restResult.getCode());
+    }
 }

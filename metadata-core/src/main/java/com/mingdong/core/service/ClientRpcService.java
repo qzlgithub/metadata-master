@@ -89,7 +89,7 @@ public interface ClientRpcService
     /**
      * 新增帐号token
      */
-    ResponseDTO saveUserCredential(Long userId, Long productId, String appKey, String reqHost);
+    ResponseDTO saveUserProductCredential(Long userId, Long productId, String reqHost);
 
     /**
      * 查看名称相似的客户信息列表
@@ -178,4 +178,6 @@ public interface ClientRpcService
      * 查询客户最近的充值记录信息
      */
     RechargeInfoResDTO getLatestRechargeInfo(Long clientId, Long productId);
+
+    ResponseDTO saveUserCredential(ClientUserReqDTO clientUserReqDTO);
 }

@@ -187,4 +187,43 @@ public class PageController
         return view;
     }
 
+    @LoginRequired
+    @GetMapping(value = {"/system/security-setting.html"})
+    public ModelAndView securitySetting()
+    {
+        ModelAndView view = new ModelAndView("system/security-setting");
+        view.addAllObjects(RequestThread.getPageData());
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = {"/system/edit-validation.html"})
+    public ModelAndView systemValidation(@RequestParam(value = Field.P, required = false) Integer p)
+    {
+        ModelAndView view = new ModelAndView("system/edit-validation");
+        view.addAllObjects(RequestThread.getPageData());
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
+        view.addObject(Field.USERNAME, RequestThread.getUsername());
+        view.addObject(Field.P, p);
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = {"/system/edit-appKey.html"})
+    public ModelAndView systemAppKey(@RequestParam(value = Field.P) String pwd)
+    {
+        boolean isValidate = clientService.validatePassWord(RequestThread.getUserId(), pwd);
+        if(!isValidate)
+        {
+            return new ModelAndView("redirect:/system/edit-validation.html?p=1");
+        }
+        String appKey = clientService.getAppKeyByUserId(RequestThread.getUserId());
+        ModelAndView view = new ModelAndView("system/edit-appKey");
+        view.addAllObjects(RequestThread.getPageData());
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
+        view.addObject(Field.APP_KEY, appKey);
+        return view;
+    }
+
 }

@@ -70,5 +70,12 @@ public interface ClientService
     /**
      * 获取token信息
      */
-    void saveUserCredential(Long userId, Long productId, String appKey, String reqHost, RestResp resp);
+    void saveUserProductCredential(Long userId, Long productId, String reqHost, RestResp resp);
+
+    boolean validatePassWord(Long userId, String password);
+
+    String getAppKeyByUserId(Long userId);
+
+    void saveUserCredential(Long userId, String appKey, RestResp resp);
+
 }
