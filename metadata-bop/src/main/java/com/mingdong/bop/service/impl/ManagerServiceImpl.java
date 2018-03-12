@@ -4,7 +4,7 @@ import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.AdminUserVO;
 import com.mingdong.bop.model.ManagerSession;
-import com.mingdong.bop.model.NewManagerVO;
+import com.mingdong.bop.model.ManagerVO;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -192,18 +192,18 @@ public class ManagerServiceImpl implements ManagerService
     }
 
     @Override
-    public void addAdminUser(NewManagerVO newManagerVO, RestResp resp)
+    public void addAdminUser(ManagerVO managerVO, RestResp resp)
     {
         AdminUserReqDTO userDTO = new AdminUserReqDTO();
-        userDTO.setRoleType(newManagerVO.getRoleType());
-        userDTO.setGroupId(newManagerVO.getGroupId());
-        userDTO.setUsername(newManagerVO.getUsername());
-        userDTO.setPassword(Md5Utils.encrypt(newManagerVO.getPassword()));
-        userDTO.setName(newManagerVO.getName());
-        userDTO.setPhone(newManagerVO.getPhone());
-        userDTO.setQq(newManagerVO.getQq());
-        userDTO.setEnabled(newManagerVO.getEnabled());
-        userDTO.setPrivilegeIdList(newManagerVO.getPrivilege());
+        userDTO.setRoleType(managerVO.getRoleType());
+        userDTO.setGroupId(managerVO.getGroupId());
+        userDTO.setUsername(managerVO.getUsername());
+        userDTO.setPassword(Md5Utils.encrypt(managerVO.getPassword()));
+        userDTO.setName(managerVO.getName());
+        userDTO.setPhone(managerVO.getPhone());
+        userDTO.setQq(managerVO.getQq());
+        userDTO.setEnabled(managerVO.getEnabled());
+        userDTO.setPrivilegeIdList(managerVO.getPrivilege());
         ResponseDTO responseDTO = managerRpcService.addAdminUser(userDTO);
         resp.setError(responseDTO.getResult());
     }

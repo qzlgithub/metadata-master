@@ -143,7 +143,7 @@ public interface ClientRpcService
     /**
      * 获取客户信息
      */
-    ClientDetailResDTO getClientInfoForEdit(Long clientId);
+    ClientDetailResDTO getClientInfo(Long clientId);
 
     ResponseDTO selectCustomProduct(Long clientId, List<Long> productIds);
 

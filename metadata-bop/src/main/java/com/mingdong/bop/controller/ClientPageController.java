@@ -10,8 +10,6 @@ import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.Dict;
-import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,12 +67,9 @@ public class ClientPageController
     @RequestMapping(value = "/client/edit.html")
     public ModelAndView gotoClientEdit(@RequestParam(value = Field.ID) Long clientId)
     {
-        RestResp resp = new RestResp();
-        clientService.getClientInfoForEdit(clientId, resp);
         ModelAndView view = new ModelAndView("client/edit");
-        List<Dict> adminUserDict = managerService.getAdminUserDict();
-        view.addObject(Field.ADMIN_USER_DICT, adminUserDict);
-        view.addAllObjects(resp.getData());
+        view.addAllObjects(clientService.getClientInfo(clientId));
+        view.addObject(Field.ADMIN_USER_DICT, managerService.getAdminUserDict());
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -87,7 +82,7 @@ public class ClientPageController
     public ModelAndView gotoClientDetail(@RequestParam(value = Field.ID) Long clientId)
     {
         ModelAndView view = new ModelAndView("client/detail");
-        view.addAllObjects(clientService.getClientDetailData(clientId));
+        view.addAllObjects(clientService.getClientInfoAndProduct(clientId));
         view.addObject(Field.RECHARGE_TYPE_DICT, systemService.getRechargeDict());
         view.addObject(Field.BILL_PLAN_DICT, BillPlan.getBillPlanDict());
         view.addAllObjects(RequestThread.getMap());

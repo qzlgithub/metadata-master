@@ -818,7 +818,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             if(client.getPrimaryUserId().equals(user.getId()))
             {
                 res.setUsername(user.getUsername());
-                res.setUserStatus(user.getEnabled());
+                res.setEnabled(user.getEnabled());
             }
             else
             {
@@ -875,7 +875,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ClientDetailResDTO getClientInfoForEdit(Long clientId)
+    public ClientDetailResDTO getClientInfo(Long clientId)
     {
         ClientDetailResDTO res = new ClientDetailResDTO();
         Client client = clientMapper.findById(clientId);
@@ -890,9 +890,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setShortName(client.getShortName());
         res.setLicense(client.getLicense());
         res.setIndustryId(client.getIndustryId());
-        ClientUser clientUser = clientUserMapper.findById(client.getPrimaryUserId());
-        res.setUsername(clientUser.getUsername());
-        res.setUserStatus(clientUser.getEnabled());
+        res.setUsername(client.getUsername());
+        res.setEnabled(client.getEnabled());
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
         List<ClientContactReqDTO> contacts = new ArrayList<>();
         for(ClientContact o : clientContactList)
