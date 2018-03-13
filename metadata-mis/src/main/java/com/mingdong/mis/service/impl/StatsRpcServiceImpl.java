@@ -170,11 +170,16 @@ public class StatsRpcServiceImpl implements StatsRpcService
         SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if(hour == 0)
+        {
+            hour = 24;
+        }
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
                 calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
-        Date hourBefore = calendar.getTime();
-        calendar.add(Calendar.HOUR_OF_DAY, -1);
         Date hourAfter = calendar.getTime();
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        Date hourBefore = calendar.getTime();
         Date dayDate;
         try
         {
@@ -186,10 +191,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
             return;
         }
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int week = calendar.get(Calendar.WEEK_OF_YEAR);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
