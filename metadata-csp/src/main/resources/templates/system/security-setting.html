@@ -29,6 +29,7 @@
                 <div class="border-title">安全设置</div>
             </div>
             <div class="layui-input-block">
+                <a href="/system/edit-pwd.html" class="layui-btn">修改密码</a>
                 <a href="/system/edit-validation.html" class="layui-btn">AppKey</a>
             </div>
         </div>
@@ -37,7 +38,7 @@
 
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
-<div id="change-password" style="display: none" th:include="common :: password"></div>
+
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
@@ -53,5 +54,11 @@
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
+<script>
+    var form;
+    layui.use('form', function() {
+        form = layui.form;
+    });
+</script>
 </body>
 </html>

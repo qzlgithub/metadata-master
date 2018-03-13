@@ -12,7 +12,18 @@ public class UserInfoResDTO implements Serializable
     private Long groupId;
     private Integer roleType;
     private Integer enabled;
+    private String sessionId;
     private List<Long> privilegeIdList;
+
+    public String getSessionId()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
 
     public Integer getRoleType()
     {

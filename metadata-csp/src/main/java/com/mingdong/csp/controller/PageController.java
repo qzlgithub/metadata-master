@@ -198,6 +198,16 @@ public class PageController
     }
 
     @LoginRequired
+    @GetMapping(value = {"/system/edit-pwd.html"})
+    public ModelAndView systemPwd()
+    {
+        ModelAndView view = new ModelAndView("system/edit-pwd");
+        view.addAllObjects(RequestThread.getPageData());
+        view.addObject(Field.IS_PRIMARY, RequestThread.getPrimary() == 1);
+        return view;
+    }
+
+    @LoginRequired
     @GetMapping(value = {"/system/edit-validation.html"})
     public ModelAndView systemValidation(@RequestParam(value = Field.P, required = false) Integer p)
     {

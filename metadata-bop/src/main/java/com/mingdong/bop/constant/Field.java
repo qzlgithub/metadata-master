@@ -149,6 +149,7 @@ public interface Field
     String RECHARGE_TYPE_DICT = "rechargeTypeDict";
     String INDUSTRY_PARENT_DICT = "industryParentDict";
     String INDUSTRY_DICT = "industryDict";
+    String SESSION_ID = "sessionId";
     // GET url 参数
     String C = "c";
     String O = "o";

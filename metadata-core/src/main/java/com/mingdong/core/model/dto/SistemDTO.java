@@ -1,6 +1,8 @@
 package com.mingdong.core.model.dto;
 
-public class SistemDTO
+import java.io.Serializable;
+
+public class SistemDTO implements Serializable
 {
     private Integer clientUserMax;
     private String serviceQQ;

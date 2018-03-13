@@ -4,10 +4,13 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResponseDTO implements Serializable
 {
     private String code;
+    private Map<String, String> extradata;
 
     public ResponseDTO()
     {
@@ -32,5 +35,25 @@ public class ResponseDTO implements Serializable
     public void setResult(RestResult result)
     {
         code = result != null ? result.getCode() : null;
+    }
+
+    public Map<String, String> getExtradata()
+    {
+        return extradata;
+    }
+
+    @SuppressWarnings("unused")
+    public void setExtradata(Map<String, String> extradata)
+    {
+        this.extradata = extradata;
+    }
+
+    public void addExtra(String k, String v)
+    {
+        if(extradata == null)
+        {
+            extradata = new HashMap<>();
+        }
+        extradata.put(k, v);
     }
 }

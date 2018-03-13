@@ -96,7 +96,7 @@
 
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
-<div id="change-password" style="display: none" th:include="common :: password"></div>
+
 
 <div id="appkid-modal" style="display: none">
     <div id="mode_app_id_1">
@@ -173,7 +173,7 @@
 <script type="text/javascript" src="/static/js/uuid.js"></script>
 <script type="text/javascript" src="/static/business/detail.js"></script>
 <script th:inline="javascript">
-    $(function (){
+    $(function() {
         var content = [[${content}]];
         $("#content").html(content);
     });

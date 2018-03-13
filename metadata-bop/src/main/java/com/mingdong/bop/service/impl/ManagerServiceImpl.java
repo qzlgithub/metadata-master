@@ -221,6 +221,12 @@ public class ManagerServiceImpl implements ManagerService
         userDTO.setRoleType(adminUserVO.getRoleType());
         userDTO.setPrivilegeIdList(adminUserVO.getPrivilege());
         ResponseDTO responseDTO = managerRpcService.editAdminUser(userDTO);
+        if(RestResult.SUCCESS.equals(responseDTO.getResult())){
+            String sessionId = responseDTO.getExtradata().get(Field.SESSION_ID);
+            if(!StringUtils.isNullBlank(sessionId)){
+                redisDao.dropManagerSession(sessionId);
+            }
+        }
         resp.setError(responseDTO.getResult());
     }
 

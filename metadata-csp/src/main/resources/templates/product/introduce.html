@@ -45,7 +45,7 @@
 <div class="container mt20 mb20 bg-white">
     <div class="fz-16 bd-bottom pb15 pt15 fb pl5"><span th:text="${name}"></span></div>
     <div class="row development">
-        <div class="col-lg-10 col-sm-10 col-md-10" >
+        <div class="col-lg-10 col-sm-10 col-md-10">
             <div class="tab-pane fade in active tab-content" id="content">
             </div>
         </div>
@@ -59,7 +59,7 @@
 </div>
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
-<div id="change-password" style="display: none" th:include="common :: password"></div>
+
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
@@ -79,7 +79,7 @@
     layui.use('form', function() {
         form = layui.form;
     });
-    $(function (){
+    $(function() {
         var content = [[${content}]];
         $("#content").html(content);
     });

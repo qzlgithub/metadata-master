@@ -17,6 +17,7 @@ import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
 import com.mingdong.core.service.ManagerRpcService;
+import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.Function;
 import com.mingdong.mis.domain.entity.Group;
 import com.mingdong.mis.domain.entity.GroupFunction;
@@ -116,6 +117,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             userInfoResDTO.setGroupId(user.getGroupId());
             userInfoResDTO.setEnabled(user.getEnabled());
             userInfoResDTO.setRoleType(user.getRoleType());
+            userInfoResDTO.setSessionId(user.getSessionId());
             // 用户权限信息
             List<UserFunction> userFunctionList = userFunctionMapper.getListByUser(userId);
             if(!CollectionUtils.isEmpty(userFunctionList))
@@ -170,6 +172,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             list.add(mp);
         }
         userFunctionMapper.addList(list);
+        responseDTO.addExtra(Field.SESSION_ID,user.getSessionId());
         return responseDTO;
     }
 
