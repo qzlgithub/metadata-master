@@ -423,10 +423,10 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <th>选择</th>
-                        <th>所属类别</th>
-                        <th>产品名称</th>
-                        <th>备注</th>
+                        <th width="7%">选择</th>
+                        <th width="25%">所属类别</th>
+                        <th width="25%">产品名称</th>
+                        <th width="43%">备注</th>
                     </tr>
                     </thead>
                 </table>
@@ -439,11 +439,11 @@
                     </colgroup>
                     <tbody>
                     <tr th:each="pro : ${productCustomList}" th:value="${pro.productId}">
-                        <td><input type="checkbox" class="product-checkbox-class" th:id="'checkbox-'+${pro.productId}"
+                        <td width="7%"><input type="checkbox" class="product-checkbox-class" th:id="'checkbox-'+${pro.productId}"
                                    th:checked="${pro.isSelected == 1}" th:value="${pro.productId}"/></td>
-                        <td th:text="${pro.typeName}"></td>
-                        <td th:text="${pro.productName}" th:id="'productName-'+${pro.productId}"></td>
-                        <td th:text="${pro.remark}"></td>
+                        <td  width="25%" th:text="${pro.typeName}"></td>
+                        <td  width="25%" th:text="${pro.productName}" th:id="'productName-'+${pro.productId}"></td>
+                        <td  width="43%" th:text="${pro.remark}"></td>
                     </tr>
                     </tbody>
                 </table>

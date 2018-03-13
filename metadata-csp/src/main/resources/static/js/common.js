@@ -1,6 +1,11 @@
 $(function() {
     $("#greeting").text(getGreeting());
+    settingQq();
 });
+function settingQq(){
+    var managerQq = sessionStorage.getItem("manager_qq");
+    $(".setting-qq-class").attr("href","http://wpa.qq.com/msgrd?v=3&amp;uin="+managerQq+"&amp;site=qq&amp;menu=yes");
+}
 $("#exit").click(function() {
     $.ajax({
         type: "post",

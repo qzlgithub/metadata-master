@@ -175,34 +175,45 @@ public class StatsRpcServiceImpl implements StatsRpcService
         Date hourBefore = calendar.getTime();
         calendar.add(Calendar.HOUR_OF_DAY, -1);
         Date hourAfter = calendar.getTime();
-        Date day;
+        Date dayDate;
         try
         {
-            day = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
+            dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
         }
         catch(Exception e)
         {
             logger.error(e.getMessage());
             return;
         }
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int week = calendar.get(Calendar.WEEK_OF_YEAR);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        List<Stats> statsList = statsMapper.findStatsBy(day, hour);
+        List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
             logger.error("......");
             return;
         }
-        Integer clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
+        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
         int requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
+        if(clientCount == 0 && requestCount == 0 && (rechargeSum != null && rechargeSum.equals(BigDecimal.ZERO))){
+            return;
+        }
         Stats stats = new Stats();
         stats.setId(IDUtils.getStatsId(1));
         Date nowDate = new Date();
         stats.setCreateTime(nowDate);
         stats.setUpdateTime(nowDate);
-//        stats.setStatsDay(day);
+        stats.setStatsYear(year);
+        stats.setStatsMonth(month);
+        stats.setStatsWeek(week);
+        stats.setStatsDay(day);
         stats.setStatsHour(hour);
-        stats.setClientIncrement(clientCount != null ? clientCount : 0);
+        stats.setStatsDate(dayDate);
+        stats.setClientIncrement(clientCount);
         stats.setClientRequest(Long.valueOf(requestCount + ""));
         stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
         statsMapper.add(stats);

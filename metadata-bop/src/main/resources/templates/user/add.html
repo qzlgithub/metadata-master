@@ -77,10 +77,11 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">QQ：</label>
+                    <label class="layui-form-label"><i class="col3">*</i>QQ：</label>
                     <div class="layui-input-block">
                         <input type="tel" id="qq" placeholder="请输入" autocomplete="off"
-                               class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                               class="layui-input" notnull="true" datames="QQ"
+                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
                                maxlength="20"/>
                     </div>
                 </div>

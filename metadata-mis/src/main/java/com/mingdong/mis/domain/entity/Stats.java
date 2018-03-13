@@ -13,9 +13,20 @@ public class Stats
     private Integer statsWeek;
     private Integer statsDay;
     private Integer statsHour;
+    private Date statsDate;
     private Integer clientIncrement;
     private Long clientRequest;
     private BigDecimal clientRecharge;
+
+    public Date getStatsDate()
+    {
+        return statsDate;
+    }
+
+    public void setStatsDate(Date statsDate)
+    {
+        this.statsDate = statsDate;
+    }
 
     public Integer getStatsYear()
     {
