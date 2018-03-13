@@ -9,7 +9,6 @@ public class ClientUserProduct
     private Date updateTime;
     private Long userId;
     private Long productId;
-    private String appSecret;
     private String reqHost;
     private String accessToken;
     private Date validTime;
@@ -62,16 +61,6 @@ public class ClientUserProduct
     public void setProductId(Long productId)
     {
         this.productId = productId;
-    }
-
-    public String getAppSecret()
-    {
-        return appSecret;
-    }
-
-    public void setAppSecret(String appSecret)
-    {
-        this.appSecret = appSecret;
     }
 
     public String getReqHost()

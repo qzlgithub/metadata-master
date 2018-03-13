@@ -7,7 +7,6 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <result column="user_id" property="userId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
-        <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
         <result column="req_host" property="reqHost" jdbcType="VARCHAR" />
         <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
         <result column="valid_time" property="validTime" jdbcType="TIMESTAMP" />
@@ -15,7 +14,7 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `user_id`, `product_id`, `app_secret`, `req_host`, `access_token`,
+            `id`, `create_time`, `update_time`, `user_id`, `product_id`, `req_host`, `access_token`,
             `valid_time`
         from `client_user_product`
     </sql>
@@ -28,7 +27,6 @@
             <if test="updateTime != null">`update_time`,</if>
             <if test="userId != null">`user_id`,</if>
             <if test="productId != null">`product_id`,</if>
-            <if test="appSecret != null">`app_secret`,</if>
             <if test="reqHost != null">`req_host`,</if>
             <if test="accessToken != null">`access_token`,</if>
             <if test="validTime != null">`valid_time`,</if>
@@ -39,7 +37,6 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="userId != null">#{userId},</if>
             <if test="productId != null">#{productId},</if>
-            <if test="appSecret != null">#{appSecret},</if>
             <if test="reqHost != null">#{reqHost},</if>
             <if test="accessToken != null">#{accessToken},</if>
             <if test="validTime != null">#{validTime},</if>
@@ -53,7 +50,6 @@
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
             <if test="userId != null">`user_id` = #{userId},</if>
             <if test="productId != null">`product_id` = #{productId},</if>
-            <if test="appSecret != null">`app_secret` = #{appSecret},</if>
             <if test="reqHost != null">`req_host` = #{reqHost},</if>
             <if test="accessToken != null">`access_token` = #{accessToken},</if>
             <if test="validTime != null">`valid_time` = #{validTime},</if>
