@@ -172,7 +172,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             list.add(mp);
         }
         userFunctionMapper.addList(list);
-        responseDTO.addExtra(Field.SESSION_ID,user.getSessionId());
+        responseDTO.addExtra(Field.SESSION_ID, user.getSessionId());
         return responseDTO;
     }
 

@@ -193,13 +193,14 @@ public class StatsRpcServiceImpl implements StatsRpcService
         List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
-            logger.error("......");
+            logger.error(shortSdf.format(calendar.getTime()) + "统计已存在！");
             return;
         }
         int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
         int requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
-        if(clientCount == 0 && requestCount == 0 && (rechargeSum != null && rechargeSum.equals(BigDecimal.ZERO))){
+        if(clientCount == 0 && requestCount == 0 && (rechargeSum != null && rechargeSum.equals(BigDecimal.ZERO)))
+        {
             return;
         }
         Stats stats = new Stats();
