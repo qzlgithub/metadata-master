@@ -8,11 +8,54 @@ public class Stats
     private Long id;
     private Date createTime;
     private Date updateTime;
-    private Date statsDay;
+    private Integer statsYear;
+    private Integer statsMonth;
+    private Integer statsWeek;
+    private Integer statsDay;
     private Integer statsHour;
     private Integer clientIncrement;
     private Long clientRequest;
     private BigDecimal clientRecharge;
+
+    public Integer getStatsYear()
+    {
+        return statsYear;
+    }
+
+    public void setStatsYear(Integer statsYear)
+    {
+        this.statsYear = statsYear;
+    }
+
+    public Integer getStatsMonth()
+    {
+        return statsMonth;
+    }
+
+    public void setStatsMonth(Integer statsMonth)
+    {
+        this.statsMonth = statsMonth;
+    }
+
+    public Integer getStatsWeek()
+    {
+        return statsWeek;
+    }
+
+    public void setStatsWeek(Integer statsWeek)
+    {
+        this.statsWeek = statsWeek;
+    }
+
+    public Integer getStatsDay()
+    {
+        return statsDay;
+    }
+
+    public void setStatsDay(Integer statsDay)
+    {
+        this.statsDay = statsDay;
+    }
 
     public Long getId()
     {
@@ -42,16 +85,6 @@ public class Stats
     public void setUpdateTime(Date updateTime)
     {
         this.updateTime = updateTime;
-    }
-
-    public Date getStatsDay()
-    {
-        return statsDay;
-    }
-
-    public void setStatsDay(Date statsDay)
-    {
-        this.statsDay = statsDay;
     }
 
     public Integer getStatsHour()

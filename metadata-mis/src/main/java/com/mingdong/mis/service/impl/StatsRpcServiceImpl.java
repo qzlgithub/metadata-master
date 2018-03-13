@@ -200,7 +200,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
         Date nowDate = new Date();
         stats.setCreateTime(nowDate);
         stats.setUpdateTime(nowDate);
-        stats.setStatsDay(day);
+//        stats.setStatsDay(day);
         stats.setStatsHour(hour);
         stats.setClientIncrement(clientCount != null ? clientCount : 0);
         stats.setClientRequest(Long.valueOf(requestCount + ""));

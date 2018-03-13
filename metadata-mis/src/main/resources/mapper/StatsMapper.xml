@@ -5,7 +5,10 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
         <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="statsDay" property="statsDay" jdbcType="TIMESTAMP" />
+        <result column="statsYear" property="statsYear" jdbcType="INTEGER" />
+        <result column="statsMonth" property="statsMonth" jdbcType="INTEGER" />
+        <result column="statsWeek" property="statsWeek" jdbcType="INTEGER" />
+        <result column="statsDay" property="statsDay" jdbcType="INTEGER" />
         <result column="statsHour" property="statsHour" jdbcType="TINYINT" />
         <result column="clientIncrement" property="clientIncrement" jdbcType="INTEGER" />
         <result column="clientRequest" property="clientRequest" jdbcType="BIGINT" />
@@ -13,9 +16,8 @@
     </resultMap>
 
     <select id="findStatsBy" resultMap="BaseResultMap">
-        select
-        `id`,`create_time`,`update_time`,`stats_day`,`stats_hour`,`client_increment`,`client_request`,`client_recharge`
-        from `stats`
+        select `id`,`create_time`,`update_time`,`stats_year`,`stats_month`,`stats_week`,`stats_day`,`stats_hour`,
+        `client_increment`, `client_request`, `client_recharge` from `stats`
         <where>
             <if test="day != null">`stats_day` = #{day}</if>
             <if test="hour != null">and `stats_hour` = #{hour}</if>
@@ -28,6 +30,9 @@
             <if test="id != null">`id`,</if>
             <if test="createTime != null">`create_time`,</if>
             <if test="updateTime != null">`update_time`,</if>
+            <if test="statsYear != null">`stats_year`,</if>
+            <if test="statsMonth != null">`stats_month`,</if>
+            <if test="statsWeek != null">`stats_week`,</if>
             <if test="statsDay != null">`stats_day`,</if>
             <if test="statsHour != null">`stats_hour`,</if>
             <if test="clientIncrement != null">`client_increment`,</if>
@@ -38,6 +43,9 @@
             <if test="id != null">#{id},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="statsYear != null">#{statsYear},</if>
+            <if test="statsMonth != null">#{statsMonth},</if>
+            <if test="statsWeek != null">#{statsWeek},</if>
             <if test="statsDay != null">#{statsDay},</if>
             <if test="statsHour != null">#{statsHour},</if>
             <if test="clientIncrement != null">#{clientIncrement},</if>
