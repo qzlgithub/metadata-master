@@ -3,6 +3,7 @@ package com.mingdong.mis.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -197,14 +198,15 @@ public class StatsRpcServiceImpl implements StatsRpcService
         List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
-            logger.error(shortSdf.format(calendar.getTime()) + "统计已存在！");
+            logger.info("定时统计---" + shortSdf.format(calendar.getTime()) + "统计已存在！");
             return;
         }
         int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
         int requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
-        if(clientCount == 0 && requestCount == 0 && (rechargeSum != null && rechargeSum.equals(BigDecimal.ZERO)))
+        if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
         {
+            logger.info("定时统计---" + shortSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }
         Stats stats = new Stats();
