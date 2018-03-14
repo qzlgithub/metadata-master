@@ -13,6 +13,34 @@ layui.config({
     app.set({
         type: 'iframe'
     }).init();
+    laydate.render({
+        elem: '#open-dates'
+        ,range: true,
+        done: function(value, date){
+            if(value != ""){
+                var dates = value.split(" - ");
+                $("#open-start").val(dates[0]);
+                $("#open-end").val(dates[1]);
+            }else{
+                $("#open-start").val("");
+                $("#open-end").val("");
+            }
+        }
+    });
+    laydate.render({
+        elem: '#renew-dates'
+        ,range: true,
+        done: function(value, date){
+            if(value != ""){
+                var dates = value.split(" - ");
+                $("#renew-start").val(dates[0]);
+                $("#renew-end").val(dates[1]);
+            }else{
+                $("#renew-start").val("");
+                $("#renew-end").val("");
+            }
+        }
+    });
     $('#pay').on('click', function() {
         layer.open({
             title: false,
@@ -171,9 +199,25 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
 }
 
 function openProduct() {
+    var chargeType = $("#open-charge").val();
+    if(chargeType == 1){
+        if($("#open-dates").val() === ""){
+            $("#openTimeTip").text("服务时间不能为空！").show();
+            return;
+        }
+    }else{
+        if(!checkUnitPrice('open-unit','openUnitTip')){
+            return;
+        }
+    }
+    if(!checkRecharge('open-amt','openAmtTip')){
+        return;
+    }
+    if(!checkOpenContract()){
+        return;
+    }
     var clientId = $("#client-id").val();
     var productId = $("#open-product-id").val();
-    var chargeType = $("#open-charge").val();
     var start = $("#open-start").val();
     var end = $("#open-end").val();
     var unit = $("#open-unit").val();
@@ -216,9 +260,25 @@ function openProduct() {
 }
 
 function renewProduct() {
+    var billPlan = $("#renew-bill-plan").val();
+    if(billPlan == 1){
+        if($("#renew-dates").val() === ""){
+            $("#renewTimeTip").text("服务时间不能为空！").show();
+            return;
+        }
+    }else{
+        if(!checkUnitPrice('renew-unit','unitPriceTip')){
+            return;
+        }
+    }
+    if(!checkRecharge('renew-amt','rechargeTip')){
+        return;
+    }
+    if(!checkContNumber()){
+        return;
+    }
     var clientId = $("#client-id").val();
     var productId = $("#renewProduct").val();
-    var billPlan = $("#renew-bill-plan").val();
     var startDate = $("#renew-start").val();
     var endDate = $("#renew-end").val();
     var unit = $("#renew-unit").val();
@@ -301,56 +361,6 @@ $(document).ready(function() {
     });
 });
 
-function checkStartTime() {
-    var startTime = $("#renew-start").val();
-    var reg = new RegExp(
-        "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(startTime !== "") {
-        if(reg.test(startTime)) {
-            $("#startTimeTip").text("");
-            $("#startTimeTip").hide();
-        }
-        else {
-            $("#startTimeTip").text("时间格式错误！");
-            $("#startTimeTip").show();
-        }
-    }
-    else {
-        $("#startTimeTip").text("请选择服务开始时间！");
-        $("#startTimeTip").show();
-        $("#renew-start").focus();
-    }
-}
-
-function checkEndTime() {
-    var startTime = $("#renew-start").val();
-    var endTime = $("#renew-end").val();
-    var reg =
-        new
-        RegExp("^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(endTime) {
-        if(reg.test(endTime)) {
-            if(getDate(startTime) - getDate(endTime) > 0) {
-                $("#endTimeTip").text("结束时间不能小于开始时间");
-                $("#endTimeTip").show();
-            }
-            else {
-                $("#endTimeTip").text("");
-                $("#endTimeTip").hide();
-            }
-        }
-        else {
-            $("#endTimeTip").text("时间格式错误");
-            $("#endTimeTip").show();
-        }
-    }
-    else {
-        $("#endTimeTip").text("请选择服务结束时间！");
-        $("#endTimeTip").show();
-        $("#renew-end").focus();
-    }
-}
-
 function getDate(date) {
     var dates = date.split("-");
     var dateReturn = '';
@@ -360,167 +370,69 @@ function getDate(date) {
     return dateReturn;
 }
 
-function checkUnitPrice() {
-    var unitPrice = $("#renew-unit").val();
+function checkUnitPrice(unitId,unitPriceTipId) {
+    var unitPrice = $("#"+unitId).val();
     var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 匹配价格(保留小数点后两位)
+    $("#"+unitPriceTipId).text("").hide();
     if(unitPrice !== "") {
-        if(reg.test(unitPrice)) {
-            $("#unitPriceTip").text("");
-            $("#unitPriceTip").hide();
-        }
-        else {
-            $("#unitPriceTip").text("单价格式错误！");
-            $("#unitPriceTip").show();
+        if(!reg.test(unitPrice)) {
+            $("#"+unitPriceTipId).text("单价格式错误！").show();
+            return false;
         }
     }
     else {
-        $("#unitPriceTip").text("请填写单价！");
-        $("#unitPriceTip").show();
+        $("#"+unitPriceTipId).text("请填写单价！").show();
+        return false;
     }
+    return true;
 }
 
-function checkRecharge() {
-    var recharge = $("#renew-amt").val();
+function checkRecharge(amtId,amtTipId) {
+    var recharge = $("#"+amtId).val();
     var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 充值金额价格(保留小数点后两位)
+    $("#"+amtTipId).text("").hide();
     if(recharge !== "") {
-        if(reg.test(recharge)) {
-            $("#rechargeTip").text("");
-            $("#rechargeTip").hide();
-        }
-        else {
-            $("#rechargeTip").text("充值金额格式错误");
-            $("#rechargeTip").show();
+        if(!reg.test(recharge)) {
+            $("#"+amtTipId).text("充值金额格式错误").show();
+            return false;
         }
     }
     else {
-        $("#rechargeTip").text("请填写充值金额！");
-        $("#rechargeTip").show();
+        $("#"+amtTipId).text("请填写充值金额！").show();
+        return false;
     }
+    return true;
 }
 
 function checkContNumber() {
     var contNumber = $("#renew-contract").val();
-    if(contNumber !== "") {
-        $("#contNumberTip").text("");
-        $("#contNumberTip").hide();
+    $("#contNumberTip").text("").hide();
+    if(contNumber === "") {
+        $("#contNumberTip").text("请填写合同编号！").show();
+        return false;
     }
-    else {
-        $("#contNumberTip").text("请填写合同编号！");
-        $("#contNumberTip").show();
-    }
-}
-
-//开通服务js
-function checkOpenStart() {
-    var startTime = $("#open-start").val();
-    var reg = new RegExp(
-        "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(startTime !== "") {
-        if(reg.test(startTime)) {
-            $("#openStartTip").text("");
-            $("#openStartTip").hide();
-        }
-        else {
-            $("#openStartTip").text("时间格式错误！");
-            $("#openStartTip").show();
-        }
-    }
-    else {
-        $("#openStartTip").text("请选择服务开始时间！");
-        $("#openStartTip").show();
-        $("#open-start").focus();
-    }
-}
-
-function checkOpenEnd() {
-    var startTime = $("#open-start").val();
-    var endTime = $("#open-end").val();
-    var reg =
-        new
-        RegExp("^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))$");
-    if(endTime !== "") {
-        if(reg.test(endTime)) {
-            if(getDate(startTime) - getDate(endTime) > 0) {
-                $("#openEndTip").text("结束时间不能小于开始时间");
-                $("#openEndTip").show();
-            }
-            else {
-                $("#openEndTip").text("");
-                $("#openEndTip").hide();
-            }
-        }
-        else {
-            $("#openEndTip").text("时间格式错误");
-            $("#openEndTip").show();
-        }
-    }
-    else {
-        $("#openEndTip").text("请选择服务结束时间！");
-        $("#openEndTip").show();
-        $("#open-end").focus();
-    }
-}
-
-function checkOpenUnit() {
-    var unitPrice = $("#open-unit").val();
-    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 匹配价格(保留小数点后两位)
-    if(unitPrice !== "") {
-        if(reg.test(unitPrice)) {
-            $("#openUnitTip").text("");
-            $("#openUnitTip").hide();
-        }
-        else {
-            $("#openUnitTip").text("单价格式错误！");
-            $("#openUnitTip").show();
-        }
-    }
-    else {
-        $("#openUnitTip").text("请填写单价！");
-        $("#openUnitTip").show();
-    }
-}
-
-function checkOpenAmt() {
-    var recharge = $("#open-amt").val();
-    var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 充值金额价格(保留小数点后两位)
-    if(recharge !== "") {
-        if(reg.test(recharge)) {
-            $("#openAmtTip").text("");
-            $("#openAmtTip").hide();
-        }
-        else {
-            $("#openAmtTip").text("充值金额格式错误");
-            $("#openAmtTip").show();
-        }
-    }
-    else {
-        $("#openAmtTip").text("请填写充值金额！");
-        $("#openAmtTip").show();
-    }
+    return true;
 }
 
 function checkOpenContract() {
     var conNumber = $("#open-contract").val();
+    $("#openContractTip").text("").hide();
     if(conNumber !== "") {
         $.get(
             "/client/checkContract",
             {"contractNo": conNumber},
             function(data) {
                 if(data.exist === 1) {
-                    $("#openContractTip").text("该合同编号已存在！");
-                    $("#openContractTip").show();
-                }
-                else {
-                    $("#openContractTip").text("");
-                    $("#openContractTip").hide();
+                    $("#openContractTip").text("该合同编号已存在！").show();
                 }
             }
         );
     }
     else {
-        $("#openContractTip").text("请填写合同编号！");
-        $("#openContractTip").show();
+        $("#openContractTip").text("请填写合同编号！").show();
+        return false;
     }
+    return true;
 }
 
 $("#all-product").on("change", ".product-checkbox-class", function() {

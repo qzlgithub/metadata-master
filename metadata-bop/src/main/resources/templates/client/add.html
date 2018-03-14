@@ -218,45 +218,5 @@
 <script type="text/javascript" src="/static/js/uuid.js"></script>
 <script type="text/javascript" src="/static/js/validate.js"></script>
 <script type="text/javascript" src="/static/business/client-add.js"></script>
-<script>
-    var message, form;
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app', 'message', 'form'], function() {
-        var app = layui.app,
-            $ = layui.jquery,
-            layer = layui.layer;
-        form = layui.form;
-        //将message设置为全局以便子页面调用
-        message = layui.message;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-        $('#checkcompany').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#check-company'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-        $('#addcontacts').on('click', function() {
-            $("#add-name").val("");
-            $("#add-position").val("");
-            $("#add-phone").val("");
-            $("#add-email").val("");
-            $("#add-chief").prop("checked", false);
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#addcontacts-modal'),
-                area: ['700px'],
-                shadeClose: true
-            });
-        });
-    });
-</script>
 </body>
 </html>

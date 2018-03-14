@@ -1,3 +1,41 @@
+var message, form;
+layui.config({
+    base: '../../static/build/js/'
+}).use(['app', 'message', 'form'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        layer = layui.layer;
+    form = layui.form;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+    $('#checkcompany').on('click', function() {
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#check-company'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+    $('#addcontacts').on('click', function() {
+        $("#add-name").val("");
+        $("#add-position").val("");
+        $("#add-phone").val("");
+        $("#add-email").val("");
+        $("#add-chief").prop("checked", false);
+        layer.open({
+            title: false,
+            type: 1,
+            content: $('#addcontacts-modal'),
+            area: ['700px'],
+            shadeClose: true
+        });
+    });
+});
 var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{license}</td>" +
     "<td>#{managerName}</td>" +
@@ -12,15 +50,6 @@ var contact_base_tr = "<tr id=\"#{id}\">" +
 var contacts = [];
 $("#add_contact").click(function() {
     if(!checkDataValid("#addcontacts-modal")) {
-        return;
-    }
-    var name = $("#add-name").val();
-    var position = $("#add-position").val();
-    var phone = $("#add-phone").val();
-    if(name === '' || position === '' || phone === '') {
-        layer.msg("关键字段不能为空！", {
-            time: 2000
-        });
         return;
     }
     var contact = {};
@@ -194,14 +223,10 @@ function checkUsername() {
                     $("#usernameTip").show();
                 }
                 else {
-                    $("#usernameTip").text("恭喜，该用户名可用！");//长度未限定
+                    $("#usernameTip").text("恭喜，该用户名可用！");
                     $("#usernameTip").show();
                 }
             }
         );
-    }
-    else {
-        $("#usernameTip").text("用户名不能为空");
-        $("#usernameTip").show();
     }
 }
