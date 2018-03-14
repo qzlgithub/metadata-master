@@ -198,7 +198,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
         List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
         if(!CollectionUtils.isEmpty(statsList))
         {
-            logger.info("定时统计---" + shortSdf.format(calendar.getTime()) + "统计已存在！");
+            logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "统计已存在！");
             return;
         }
         int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
@@ -206,14 +206,14 @@ public class StatsRpcServiceImpl implements StatsRpcService
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
         if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
         {
-            logger.info("定时统计---" + shortSdf.format(calendar.getTime()) + "没有数据可记录！");
+            logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }
-        logger.info("定时统计---" + shortSdf.format(calendar.getTime()));
+        logger.info("定时统计---" + longSdf.format(calendar.getTime()));
         Stats stats = new Stats();
         stats.setId(IDUtils.getStatsId(1));
         Date nowDate = new Date();
-        logger.info("定时统计nowDate===" + shortSdf.format(nowDate));
+        logger.info("定时统计nowDate===" + longSdf.format(nowDate));
         stats.setCreateTime(nowDate);
         stats.setUpdateTime(nowDate);
         stats.setStatsYear(year);
