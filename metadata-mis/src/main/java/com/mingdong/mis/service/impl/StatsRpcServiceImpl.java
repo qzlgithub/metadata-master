@@ -209,9 +209,11 @@ public class StatsRpcServiceImpl implements StatsRpcService
             logger.info("定时统计---" + shortSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }
+        logger.info("定时统计---" + shortSdf.format(calendar.getTime()));
         Stats stats = new Stats();
         stats.setId(IDUtils.getStatsId(1));
         Date nowDate = new Date();
+        logger.info("定时统计nowDate===" + shortSdf.format(nowDate));
         stats.setCreateTime(nowDate);
         stats.setUpdateTime(nowDate);
         stats.setStatsYear(year);
