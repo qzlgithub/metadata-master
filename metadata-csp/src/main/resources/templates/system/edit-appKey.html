@@ -24,18 +24,19 @@
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
         <div th:include="system-common :: left"></div>
-        <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
+        <div class="col-lg-10 col-sm-10 col-md-10 bd-left" style="height: 600px;">
             <div class="mt30 pl10 pr10 pb30">
                 <div class="border-title">安全设置</div>
             </div>
             <div class="mb30">
                 <div class="margin-auto">
-                    <div class="clearfix tc mt20" style="margin-left: 167px;">
-                        <span class="step fl w30"><i class="icon-01 icon mr10"></i><br/>密码验证</span>
+                    <div class="clearfix tc mt20" style="margin-left: 190px;">
+                        <span class="set-center-step fl w30"><i class="icon-01 icon mr10"></i><br/>密码验证</span>
                         <span class="fl w30"><i class="icon-02 icon mr10"></i><br/>获取AppId</span>
                     </div>
                 </div>
-                <div class="m30">
+
+                <div class="m30 w70 pt40" style="margin:auto!important;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">AppKey：</label>
                         <div class="layui-input-block">
@@ -46,9 +47,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-form-item tc">
-                    <a href="javascript:" class="layui-btn" id="save-credential">保存</a>
-                    <a href="/system/edit-validation.html" class="layui-btn">返回</a>
+                <div class="layui-form-item tc mt30">
+                    <a href="javascript:" class="layui-btn" id="save-credential" style="width: 12%;">保存</a>
+                    <a href="/system/edit-validation.html" class="layui-btn">返回上一步</a>
                 </div>
             </div>
         </div>

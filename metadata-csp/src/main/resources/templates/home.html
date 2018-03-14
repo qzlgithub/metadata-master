@@ -38,7 +38,7 @@
                     <li th:each="o : ${subUserList}">
                         <p><img src="/images/account-img.png" alt=""/></p>
                         <p th:text="${o.username}"></p>
-                        <p th:text="'（'+${o.name}+'）'"></p>
+                        <p class="fz-12 col2 important" th:text="''+${o.name}+''"></p>
                     </li>
                 </ul>
             </div>

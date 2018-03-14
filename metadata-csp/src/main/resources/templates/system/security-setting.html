@@ -24,14 +24,35 @@
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
         <div th:include="system-common :: left"></div>
-        <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
+        <div class="col-lg-10 col-sm-10 col-md-10 bd-left" style="height: 600px;">
             <div class="mt30 pl10 pr10 pb30">
                 <div class="border-title">安全设置</div>
             </div>
-            <div class="layui-input-block">
+            <ul class="set-center">
+                <li class="clearfix">
+                    <i class="icon-set icon-1"></i>
+                    <span>登录密码</span>
+                    <span class="pl20">当前为初始密码，为确保安全，请修改</span>
+                    <span class="fr important pr20"><a href="/system/edit-pwd.html">修改>></a></span>
+                </li>
+                <li class="clearfix">
+                    <i class="icon-set icon-2"></i>
+                    <span>登录密码</span>
+                    <span class="pl20">当前密码很安全；  安全提示：定期更换密码账号更安全</span>
+                    <span class="fr important pr20"><a href="/system/edit-pwd.html">修改>></a></span>
+                </li>
+                <li class="clearfix">
+                    <i class="icon-set icon-3"></i>
+                    <span>AppKey</span>
+                    <span class="pl20">接入服务用，请妥善保存</span>
+                    <span class="fr important pr20"><a href="/system/edit-validation.html">查看>></a></span>
+                </li>
+            </ul>
+
+            <!--<div class="layui-input-block">
                 <a href="/system/edit-pwd.html" class="layui-btn">修改密码</a>
                 <a href="/system/edit-validation.html" class="layui-btn">AppKey</a>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

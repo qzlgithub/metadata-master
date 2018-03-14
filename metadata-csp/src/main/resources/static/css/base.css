@@ -22,6 +22,8 @@
 /*Float*/
 .fl {float: left;}
 .fr {float: right;}
+.fl.important {float: left!important;}
+.fr.important {float: right!important;}
 .tr {text-align: right;}
 .tl {text-align: left;}
 .tc {text-align: center;}
@@ -350,9 +352,11 @@
 
 .w25{width: 25%}
 .w30{width: 30%}
+.w50{width: 50%}
 .w60{width: 60%}
 .w65{width: 65%}
 .w10{width: 10%}
+.w70{width: 70%}
 .w80{width: 80%}
 .w100{width: 100%;}
 .h100{height: 100%;}
