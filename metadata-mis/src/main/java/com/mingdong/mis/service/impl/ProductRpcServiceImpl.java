@@ -152,8 +152,8 @@ public class ProductRpcServiceImpl implements ProductRpcService
     @Override
     public Integer checkIfContractExist(String contractNo)
     {
-        Recharge pro = rechargeMapper.findByContractNo(contractNo);
-        return pro != null ? TrueOrFalse.TRUE : TrueOrFalse.FALSE;
+        List<Recharge> pro = rechargeMapper.findByContractNo(contractNo);
+        return CollectionUtils.isEmpty(pro)?0:1;
     }
 
     @Override

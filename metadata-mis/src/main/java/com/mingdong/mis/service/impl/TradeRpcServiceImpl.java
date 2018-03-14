@@ -1,5 +1,6 @@
 package com.mingdong.mis.service.impl;
 
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class TradeRpcServiceImpl implements TradeRpcService
 {
@@ -76,8 +78,8 @@ public class TradeRpcServiceImpl implements TradeRpcService
                 respDTO.setResult(RestResult.FORBID_TO_OPEN);
                 return respDTO;
             }
-            Recharge recharge = rechargeMapper.findByContractNo(reqDTO.getContractNo());
-            if(recharge != null)
+            List<Recharge> recharge = rechargeMapper.findByContractNo(reqDTO.getContractNo());
+            if(!CollectionUtils.isEmpty(recharge))
             {
                 respDTO.setResult(RestResult.DUPLICATE_CONTRACT_CODE);
                 return respDTO;

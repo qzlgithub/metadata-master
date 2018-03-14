@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public interface RechargeMapper
 {
@@ -17,7 +18,7 @@ public interface RechargeMapper
     int countBy(@Param("clientId") Long clientId, @Param("productId") Long productId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
-    Recharge findByContractNo(String contractNo);
+    List<Recharge> findByContractNo(String contractNo);
 
     BigDecimal sumRechargeAmount(@Param("clientId") Long clientId, @Param("productId") Long productId);
 }
