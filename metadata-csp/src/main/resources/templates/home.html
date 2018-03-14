@@ -38,7 +38,7 @@
                     <li th:each="o : ${subUserList}">
                         <p><img src="/images/account-img.png" alt=""/></p>
                         <p th:text="${o.username}"></p>
-                        <p class="fz-12 col2 important" th:text="''+${o.name}+''"></p>
+                        <p class="fz-12 col2 important" th:text="${o.name}"></p>
                     </li>
                 </ul>
             </div>
@@ -86,7 +86,8 @@
                         <div class="serve-list-title">
                             <span th:text="${o.name}"></span>
                             <span class="fr">未开通</span></div>
-                        <p class="col2 tl fz-14 p10 important" th:text="${o.remark}" style="height: 89px;overflow: hidden;"></p>
+                        <p class="col2 tl fz-14 p10 important" th:text="${o.remark}"
+                           style="height: 89px;overflow: hidden;"></p>
                         <p class="tc mb15 mt10">
                             <a target="_blank" class="setting-qq-class" href="javascript:"><i
                                     class="icon kefu mr5"></i>开通</a>
@@ -110,23 +111,42 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>旧密码：</label>
                 <div class="layui-input-block" id="init-org-enc-pwd">
-                    <input type="password" id="init-org-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <input type="password" id="init-org-enc-password" placeholder="当前账号密码"
+                           class="layui-input position-r"/>
                     <i class="close-eye icon" id="init-org-show"></i>
                 </div>
                 <div class="layui-input-block" id="init-org-dec-pwd" style="display: none">
-                    <input type="text" id="init-org-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <input type="text" id="init-org-dec-password" placeholder="当前账号密码"
+                           onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input position-r"/>
                     <i class="open-eye icon" id="init-org-hide"></i>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col1">*</i>新密码：</label>
                 <div class="layui-input-block" id="init-new-enc-pwd">
-                    <input type="password" id="init-new-enc-password" placeholder="请输入" class="layui-input position-r"/>
+                    <input type="password" id="init-new-enc-password" placeholder="密码由6-20位字母数字组成"
+                           class="layui-input position-r"/>
                     <i class="close-eye icon" id="init-new-show"></i>
                 </div>
                 <div class="layui-input-block" id="init-new-dec-pwd" style="display: none">
-                    <input type="text" id="init-new-dec-password" placeholder="请输入" class="layui-input position-r"/>
+                    <input type="text" id="init-new-dec-password" placeholder="密码由6-20位字母数字组成"
+                           onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                           class="layui-input position-r"/>
                     <i class="open-eye icon" id="init-new-hide"></i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><i class="col1">*</i>重复新密码：</label>
+                <div class="layui-input-block" id="init-repeat-enc-pwd">
+                    <input type="password" id="init-repeat-enc-password" placeholder="重复新密码"
+                           class="layui-input position-r"/>
+                    <i class="close-eye icon" id="init-repeat-show"></i>
+                </div>
+                <div class="layui-input-block" id="init-repeat-dec-pwd" style="display: none">
+                    <input type="text" id="init-repeat-dec-password" placeholder="重复新密码"
+                           onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                           class="layui-input position-r"/>
+                    <i class="open-eye icon" id="init-repeat-hide"></i>
                 </div>
             </div>
         </div>
@@ -151,7 +171,7 @@
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
-<script type="text/javascript" src="/business/home.js"></script>
+<script type="text/javascript" src="/static/business/home.js"></script>
 </body>
 </html>
   

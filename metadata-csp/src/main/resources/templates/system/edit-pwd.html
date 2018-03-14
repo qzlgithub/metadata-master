@@ -37,7 +37,8 @@
                         <i class="close-eye icon" id="org-show"></i>
                     </div>
                     <div class="layui-input-block" id="org-dec-pwd" style="display: none">
-                        <input type="text" id="org-dec-password" placeholder="当前账号密码" class="layui-input position-r"/>
+                        <input type="text" id="org-dec-password" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                               placeholder="当前账号密码" class="layui-input position-r"/>
                         <i class="open-eye icon" id="org-hide"></i>
                     </div>
                 </div>
@@ -49,22 +50,24 @@
                         <i class="close-eye icon" id="new-show"></i>
                     </div>
                     <div class="layui-input-block" id="new-dec-pwd" style="display: none">
-                        <input type="text" id="new-dec-password" placeholder="密码由6-20位字母数字组成"
+                        <input type="text" id="new-dec-password" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                               placeholder="密码由6-20位字母数字组成"
                                class="layui-input position-r"/>
                         <i class="open-eye icon" id="new-hide"></i>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col1">*</i>再次输入：</label>
-                    <div class="layui-input-block" id="new-enc-pwd">
-                        <input type="password" id="new-enc-password" placeholder="再次输入密码"
+                    <label class="layui-form-label"><i class="col1">*</i>重复新密码：</label>
+                    <div class="layui-input-block" id="repeat-enc-pwd">
+                        <input type="password" id="repeat-enc-password" placeholder="重复新密码"
                                class="layui-input position-r"/>
-                        <i class="close-eye icon" id="new-show"></i>
+                        <i class="close-eye icon" id="repeat-show"></i>
                     </div>
-                    <div class="layui-input-block" id="new-dec-pwd" style="display: none">
-                        <input type="text" id="new-dec-password" placeholder="再次输入密码"
+                    <div class="layui-input-block" id="repeat-dec-pwd" style="display: none">
+                        <input type="text" id="repeat-dec-password" placeholder="重复新密码"
+                               onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
                                class="layui-input position-r"/>
-                        <i class="open-eye icon" id="new-hide"></i>
+                        <i class="open-eye icon" id="repeat-hide"></i>
                     </div>
                 </div>
                 <div class="layui-form-item tc">
@@ -93,6 +96,6 @@
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
-<script type="text/javascript" src="/business/edit-pwd.js"></script>
+<script type="text/javascript" src="/static/business/edit-pwd.js"></script>
 </body>
 </html>

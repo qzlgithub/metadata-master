@@ -75,12 +75,13 @@ public class ClientController
         RestResp resp = new RestResp();
         String oldPwd = jsonReq.getString(Field.ORG_PASSWORD);
         String newPwd = jsonReq.getString(Field.NEW_PASSWORD);
-        if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd))
+        String repeatPwd = jsonReq.getString(Field.REPEAT_PASSWORD);
+        if(StringUtils.isNullBlank(oldPwd) || StringUtils.isNullBlank(newPwd) || StringUtils.isNullBlank(repeatPwd))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, resp);
+        clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, repeatPwd, resp);
         return resp;
     }
 

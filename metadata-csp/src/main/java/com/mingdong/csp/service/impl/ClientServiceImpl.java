@@ -70,9 +70,9 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changePassword(Long userId, String oldPwd, String newPwd, RestResp resp)
+    public void changePassword(Long userId, String oldPwd, String newPwd, String repeatPwd, RestResp resp)
     {
-        ResponseDTO dto = clientRpcService.changeUserPassword(userId, oldPwd, newPwd);
+        ResponseDTO dto = clientRpcService.changeUserPassword(userId, oldPwd, newPwd, repeatPwd);
         resp.setError(dto.getResult());
     }
 

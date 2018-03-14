@@ -79,6 +79,7 @@
         form = layui.form;
     });
     $(function() {
+        $("#li-security-id").addClass("active");
         $("#next-step").click(function() {
             var pwd = $("#password").val();
             pwd = MD5(pwd);

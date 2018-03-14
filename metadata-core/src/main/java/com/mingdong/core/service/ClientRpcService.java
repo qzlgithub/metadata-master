@@ -32,7 +32,7 @@ public interface ClientRpcService
     /**
      * 更改客户帐号的密码
      */
-    ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
+    ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword, String repeatPassword);
 
     /**
      * 根据客户id获取客户消息列表
@@ -49,7 +49,6 @@ public interface ClientRpcService
      *
      * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
-     * @param page
      */
     ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId, Page page);
 
@@ -57,7 +56,6 @@ public interface ClientRpcService
      * 查询客户子账号列表
      *
      * @param clientId 客户ID
-     * @param page
      */
     ListDTO<SubUserResDTO> getSubUserList(Long clientId, Page page);
 

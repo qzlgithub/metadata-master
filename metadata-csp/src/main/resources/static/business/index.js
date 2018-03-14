@@ -1,4 +1,4 @@
-var message,app,layer;
+var message, app, layer;
 layui.config({
     base: '/static/build/js/'
 }).use(['app', 'message'], function() {

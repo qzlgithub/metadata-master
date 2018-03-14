@@ -33,6 +33,12 @@ $("#init-new-enc-password").keyup(function() {
 $("#init-new-dec-password").keyup(function() {
     $("#init-new-enc-password").val($("#init-new-dec-password").val());
 });
+$("#init-repeat-enc-password").keyup(function() {
+    $("#init-repeat-dec-password").val($("#init-repeat-enc-password").val());
+});
+$("#init-repeat-dec-password").keyup(function() {
+    $("#init-repeat-enc-password").val($("#init-repeat-dec-password").val());
+});
 $("#init-org-show").click(function() {
     $("#init-org-enc-pwd").hide();
     $("#init-org-dec-pwd").show();
@@ -49,9 +55,18 @@ $("#init-new-hide").click(function() {
     $("#init-new-enc-pwd").show();
     $("#init-new-dec-pwd").hide();
 });
+$("#init-repeat-show").click(function() {
+    $("#init-repeat-enc-pwd").hide();
+    $("#init-repeat-dec-pwd").show();
+});
+$("#init-repeat-hide").click(function() {
+    $("#init-repeat-enc-pwd").show();
+    $("#init-repeat-dec-pwd").hide();
+});
 $("#chg-init-pwd").click(function() {
     var orgPwd = $("#init-org-enc-password").val();
     var newPwd = $("#init-new-enc-password").val();
+    var repeatPwd = $("#init-repeat-enc-password").val();
     if(orgPwd === '') {
         layer.msg("旧密码不能为空！");
         return;
@@ -60,10 +75,14 @@ $("#chg-init-pwd").click(function() {
         layer.msg("新密码不能为空！");
         return;
     }
-    changePwd(orgPwd, newPwd);
+    if(newPwd !== repeatPwd) {
+        layer.msg("新密码与重复新密码不一致！");
+        return;
+    }
+    changePwd(orgPwd, newPwd, repeatPwd);
 });
 
-function changePwd(orgPwd, newPwd) {
+function changePwd(orgPwd, newPwd, repeatPwd) {
     var reg = /^[A-Za-z0-9]{6,20}$/;
     if(!reg.test(newPwd)) {
         layer.msg("密码格式不匹配，必须6-20位字母数字！", {
@@ -78,7 +97,8 @@ function changePwd(orgPwd, newPwd) {
         contentType: "application/json",
         data: JSON.stringify({
             "orgPassword": MD5(orgPwd),
-            "newPassword": MD5(newPwd)
+            "newPassword": MD5(newPwd),
+            "repeatPassword": MD5(repeatPwd)
         }),
         success: function(res) {
             if(res.code !== '000000') {

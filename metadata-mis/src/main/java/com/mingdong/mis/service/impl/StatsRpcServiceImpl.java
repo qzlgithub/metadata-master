@@ -9,7 +9,6 @@ import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.service.StatsRpcService;
-import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.domain.entity.ClientInfo;
 import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
@@ -211,7 +210,6 @@ public class StatsRpcServiceImpl implements StatsRpcService
         }
         logger.info("定时统计---" + longSdf.format(calendar.getTime()));
         Stats stats = new Stats();
-        stats.setId(IDUtils.getStatsId(1));
         Date nowDate = new Date();
         logger.info("定时统计nowDate===" + longSdf.format(nowDate));
         stats.setCreateTime(nowDate);

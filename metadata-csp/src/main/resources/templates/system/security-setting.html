@@ -29,13 +29,13 @@
                 <div class="border-title">安全设置</div>
             </div>
             <ul class="set-center">
-                <li class="clearfix">
+                <li class="clearfix" style="display:none" id="li1-id">
                     <i class="icon-set icon-1"></i>
                     <span>登录密码</span>
-                    <span class="pl20">当前为初始密码，为确保安全，请修改</span>
+                    <span class="pl20" style="color:red">当前为初始密码，为确保安全，请修改</span>
                     <span class="fr important pr20"><a href="/system/edit-pwd.html">修改>></a></span>
                 </li>
-                <li class="clearfix">
+                <li class="clearfix" style="display:none" id="li2-id">
                     <i class="icon-set icon-2"></i>
                     <span>登录密码</span>
                     <span class="pl20">当前密码很安全；  安全提示：定期更换密码账号更安全</span>
@@ -48,11 +48,6 @@
                     <span class="fr important pr20"><a href="/system/edit-validation.html">查看>></a></span>
                 </li>
             </ul>
-
-            <!--<div class="layui-input-block">
-                <a href="/system/edit-pwd.html" class="layui-btn">修改密码</a>
-                <a href="/system/edit-validation.html" class="layui-btn">AppKey</a>
-            </div>-->
         </div>
     </div>
 </div>
@@ -80,6 +75,13 @@
     layui.use('form', function() {
         form = layui.form;
     });
+    $("#li-security-id").addClass("active");
+    var first = sessionStorage.getItem("first_login");
+    if(first === "1") {
+        $("#li1-id").show();
+    }else{
+        $("#li2-id").show();
+    }
 </script>
 </body>
 </html>

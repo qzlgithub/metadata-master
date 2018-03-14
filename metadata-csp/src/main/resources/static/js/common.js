@@ -1,6 +1,10 @@
 $(function() {
     $("#greeting").text(getGreeting());
     settingQq();
+    var haveMessage = sessionStorage.getItem("have_message");
+    if(haveMessage === "1"){
+        $("#message-right-id").append('<em class="email-icon"></em>');
+    }
 });
 function settingQq(){
     var managerQq = sessionStorage.getItem("manager_qq");
