@@ -58,11 +58,11 @@ $("#change-pwd").click(function() {
         return;
     }
     if(repeatPwd === '') {
-        layer.msg("重复新密码不能为空！");
+        layer.msg("重复密码不能为空！");
         return;
     }
     if(newPwd !== repeatPwd) {
-        layer.msg("新密码与重复新密码不一致！");
+        layer.msg("新密码与重复密码不一致！");
         return;
     }
     changePwd(orgPwd, newPwd, repeatPwd);
