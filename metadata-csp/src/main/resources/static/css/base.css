@@ -40,6 +40,7 @@
 .col4{color: #484848}
 .col5{color: #205401;}
 .col6{color:#fff;}
+.col7{color:#032d82;}
 
 .col1.important{color: #fe0000!important}
 .col2.important{color: #999!important}
@@ -350,6 +351,8 @@
 .col-95 {-webkit-box-flex: 0; -webkit-flex: 0 0 95%; -moz-box-flex: 0; -moz-flex: 0 0 95%; -ms-flex: 0 0 95%; flex: 0 0 95%; max-width: 95%;}
 .col-100 {-webkit-box-flex: 0; -webkit-flex: 0 0 100%; -moz-box-flex: 0; -moz-flex: 0 0 100%; -ms-flex: 0 0 100%; flex: 0 0 100%; max-width: 100%;}
 
+
+.w15{width: 15%}
 .w25{width: 25%}
 .w30{width: 30%}
 .w50{width: 50%}

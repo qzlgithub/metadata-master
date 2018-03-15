@@ -7,7 +7,6 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ProductStatus;
-import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
@@ -202,7 +201,7 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.PRODUCT_NAME, dto.getName());
         resp.addData(Field.BILL_PLAN, dto.getBillPlan());
         resp.addData(Field.CONTENT, dto.getContent());
-        resp.addData(Field.TYPE_NAME, ProductType.getNameById(dto.getType()));
+//        resp.addData(Field.TYPE_NAME, ProductType.getNameById(dto.getType()));
         if(BillPlan.BY_TIME.getId().equals(dto.getBillPlan()))
         {
             resp.addData(Field.STATUS, ProductStatus.getStatusByDate(dto.getFromDate(), dto.getToDate()));
