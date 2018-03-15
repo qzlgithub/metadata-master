@@ -87,6 +87,9 @@ sup {
 a {
     color: #000;
 }
+a {
+    text-decoration: none!important;
+}
 
 html {
     font-size: 62.5%;
@@ -566,7 +569,7 @@ body {
 .st_tree ul li {
     font-size: 13px;
     color: #222;
-    line-height: 18px;
+    line-height: 30px;
     cursor: pointer;
     list-style: none;
     background-repeat: no-repeat;
@@ -588,7 +591,7 @@ body {
     background: url(../images/st_folder.gif);
     background-repeat: no-repeat;
     padding: 0 0 0 20px;
-    background-position: 39px 8px;
+    background-position: 39px 16px;
 }
 
 /* 展开的父节点 */
@@ -596,7 +599,7 @@ body {
     background: url(../images/st_folder_open.gif);
     background-repeat: no-repeat;
     padding: 0 0 0 20px;
-    background-position: 39px 8px;
+    background-position: 39px 16px;
 }
 
 .layui-layer-content {
@@ -666,3 +669,7 @@ body {
 .scroll-table td{line-height: 38px;font-size: 14px; border-bottom: 1px solid #e2e2e2; text-align: center}
 .scroll-table thead tr{background-color: #f2f2f2;}
 /*.layui-btn{background-color: #1E9FFF;}*/
+
+.layui-btn{background-color: #1E9FFF; color:#fff;}
+.layui-btn-danger{background-color: #ff0000;}
+.layui-btn-normal{background-color: #0a7501;}

@@ -64,7 +64,7 @@
                             <!--二级-->
                             <ul class="jurisdiction-list-div jurisdiction-list-li  colum-list-li p0 ml20 important">
                                 <block th:each="child: ${parent.subList}">
-                                    <li class="clearfix pb20 pl30 important" th:id="'menu-id-'+${child.id}">
+                                    <li class="clearfix pl30 important" th:id="'menu-id-'+${child.id}">
                                         <em class="js-accordionTrigger w5"></em>
                                         <a class="w20 tl important menu-name-class" th:text="${child.name}"></a>
                                         <a class="w20" style="display: none;" th:text="${child.id}"></a>
@@ -87,7 +87,7 @@
                                     <!--三级-->
                                     <ul class="jurisdiction-list-div jurisdiction-list-li colum-list-li">
                                         <block th:each="tChild: ${child.thrList}">
-                                            <li class="clearfix pb20 pl45 important" th:id="'menu-id-'+${tChild.id}">
+                                            <li class="clearfix pl45 important" th:id="'menu-id-'+${tChild.id}">
                                                 <em class="js-accordionTrigger w5"></em>
                                                 <a class="w20 tl important menu-name-class"
                                                    th:text="${tChild.name}"></a>
