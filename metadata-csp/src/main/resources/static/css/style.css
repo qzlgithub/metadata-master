@@ -280,3 +280,7 @@ body{color: #484848; background: #eeefef;}
 .icon-1{background: url(../images/icon-1.png) no-repeat; background-size: 100%; }
 .icon-2{background: url(../images/icon-2.png) no-repeat; background-size: 100%;}
 .icon-3{background: url(../images/icon-3.png) no-repeat; background-size: 100%;}
+
+
+
+.return-button{width: 8%; border: solid 1px #627fc9; border-radius: 4px; text-align: center; padding: 5px 0px; cursor: pointer; color: #627fc9;}
