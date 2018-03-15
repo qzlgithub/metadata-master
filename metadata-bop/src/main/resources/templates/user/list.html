@@ -28,7 +28,7 @@
         <div class="p20 layui-form">
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
-                    <label class="layui-form-label">角色：</label>
+                    角色：
                     <div class="layui-inline" style="width: 180px">
                         <select id="roleType" name="roleType" lay-search="">
                             <option value="">全部</option>
@@ -38,7 +38,7 @@
                     </div>
                 </li>
                 <li>
-                    <label class="layui-form-label">状态：</label>
+                    状态：
                     <div class="layui-inline" style="width: 120px">
                         <select id="enabled" name="enabled" lay-search="">
                             <option value="">全部</option>
@@ -52,7 +52,7 @@
                 </li>
             </ul>
             <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'11101')}"><a href="/setting/user/add.html"
-                                                                                          class="layui-btn fr layui-btn-normal">添加账号</a>
+                                                                                          class="layui-btn fr">添加账号</a>
             </div>
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
         </div>

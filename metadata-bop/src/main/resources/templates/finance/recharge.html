@@ -33,7 +33,7 @@
                            class="layui-input" style="width: 240px"/>
                 </li>
                 <li>
-                    <label class="layui-form-label">产品服务：</label>
+                    产品服务：
                     <div class="layui-inline" style="width: 160px">
                         <select name="product" id="product" title="产品" lay-search="">
                             <option value="">全部</option>
@@ -42,7 +42,7 @@
                     </div>
                 </li>
                 <li>
-                    <label class="layui-form-label">充值类型：</label>
+                    充值类型：
                     <div class="layui-inline" style="width: 120px">
                         <select name="recharge-type" id="rechargeType" title="充值类型" lay-search="">
                             <option value="">全部</option>
@@ -51,7 +51,7 @@
                     </div>
                 </li>
                 <li>
-                    <label class="layui-form-label">充值时间：</label>
+                    充值时间：
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="dates" />
                         <input type="hidden" id="fromDate" name="fromDate"/>
@@ -59,7 +59,7 @@
                     </div>
                 </li>
                 <li th:if="${isManager}">
-                    <label class="layui-form-label">经手人：</label>
+                    经手人：
                     <div class="layui-input-inline" style="width: 120px">
                         <select name="manager" id="manager" title="经手人" lay-search="">
                             <option value="">全部</option>
@@ -72,7 +72,7 @@
                 </li>
             </ul>
             <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'51102')}">
-                <em id="summary"></em>
+                <em id="summary" class="fz-14"></em>
                 <span class="fr">
                     <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
                     <a href="javascript:;" class="add-button" onclick="exportXlsx()">导出</a>

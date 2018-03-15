@@ -29,11 +29,11 @@
         <div class="p20 layui-form">
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
-                    <input type="text" name="keyword" placeholder="请输入：公司名称/公司简称/用户名" class="layui-input"
+                    <input type="text" name="keyword" placeholder="请输入公司名称/公司简称/用户名" class="layui-input"
                            style="width: 240px"/>
                 </li>
                 <li>
-                    <label class="layui-form-label">行业：</label>
+                    行业：
                     <div class="layui-inline" style="width: 180px">
                         <select name="parent-industry" lay-filter="parent-industry" lay-search="">
                             <option value="">全部</option>
@@ -47,7 +47,7 @@
                     </div>
                 </li>
                 <li>
-                    <label class="layui-form-label">状态：</label>
+                    状态：
                     <div class="layui-inline" style="width: 120px">
                         <select id="enabled" name="enabled" lay-search="">
                             <option value="" selected="selected">全部</option>
@@ -61,15 +61,15 @@
                 </li>
             </ul>
             <div class="clearfix mt20">
-                <a href="javascript:;" class="layui-btn layui-btn-normal" onclick="change_status(1)"
+                <a href="javascript:;" class="layui-btn" onclick="change_status(1)"
                    th:if="${#lists.contains(i_privilege, '31105')}">解冻账号</a>
-                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="change_status(0)"
+                <a href="javascript:;" class="layui-btn " onclick="change_status(0)"
                    th:if="${#lists.contains(i_privilege, '31104')}">冻结账号</a>
-                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="del_client()"
+                <a href="javascript:;" class="layui-btn" onclick="del_client()"
                    th:if="${#lists.contains(i_privilege, '31106')}" style="display: none">停用账号</a>
-                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="reset_password()"
+                <a href="javascript:;" class="layui-btn" onclick="reset_password()"
                    th:if="${#lists.contains(i_privilege, '31107')}">重置密码</a>
-                <a href="/client/add.html" class="layui-btn fr layui-btn-normal"
+                <a href="/client/add.html" class="layui-btn fr"
                    th:if="${#lists.contains(i_privilege, '31102')}" >添加客户</a>
             </div>
             <div class="layui-form">
