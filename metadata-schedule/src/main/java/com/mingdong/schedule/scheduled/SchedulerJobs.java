@@ -20,8 +20,8 @@ public class SchedulerJobs
     private void statsJob()
     {
         JobDetail jobDetail = JobBuilder.newJob(StatsJob.class).withIdentity("statsJob", "jobGroup").build();
-                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0/10 * * * * ?");//每十秒
-//        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 3 0-23 * * ?");//每小时的第3分钟开始执行
+        //        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0/10 * * * * ?");//每十秒
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 3 0-23 * * ?");//每小时的第3分钟开始执行
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("statsJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
         SchedulerManage.addJob(jobDetail, cronTrigger);
