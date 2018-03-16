@@ -48,7 +48,9 @@ public interface StatsRpcService
 
     ListDTO<StatsDateInfoResDTO> getRevenueListStats(Date fromDate, Date toDate);
 
-    void statsDataForHour(Date date);
+    void statsByData(Date date);
 
     void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList);
+
+    void statsRechargeByData(Date date);
 }

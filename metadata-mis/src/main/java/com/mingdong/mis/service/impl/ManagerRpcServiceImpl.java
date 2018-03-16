@@ -118,6 +118,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
             userInfoResDTO.setEnabled(user.getEnabled());
             userInfoResDTO.setRoleType(user.getRoleType());
             userInfoResDTO.setSessionId(user.getSessionId());
+            userInfoResDTO.setSend(user.getSend());
             // 用户权限信息
             List<UserFunction> userFunctionList = userFunctionMapper.getListByUser(userId);
             if(!CollectionUtils.isEmpty(userFunctionList))
@@ -157,6 +158,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         tempUser.setPhone(reqDTO.getPhone());
         tempUser.setQq(reqDTO.getQq());
         tempUser.setEnabled(reqDTO.getEnabled());
+        tempUser.setSend(reqDTO.getSend());
         userMapper.updateSkipNull(tempUser);
         // 修改管理账号的权限信息
         userFunctionMapper.deleteByManager(reqDTO.getUserId());
@@ -277,6 +279,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         user.setPhone(reqDTO.getPhone());
         user.setQq(reqDTO.getQq());
         user.setEnabled(reqDTO.getEnabled());
+        user.setSend(reqDTO.getSend());
         userMapper.add(user);
         // 保存管理账号的权限配置
         Set<Long> allPrivilegeIdList = getRelatedPrivilegeId(reqDTO.getPrivilegeIdList());

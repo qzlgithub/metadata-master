@@ -82,24 +82,18 @@ public interface Field
     String CLIENT_RECHARGE_BY_ALL = "clientRechargeByAll";
     String CLIENT_COUNT_BY_WEEK = "clientCountByWeek";
     String CLIENT_COUNT_BY_MONTH_FRIST = "clientCountByMonthFrist";
-    String SUB_USER_QTY = "subUserQty";
     String SERVICE_QQ = "serviceQQ";
-    String RECHARGE_TYPE_LIST = "rechargeTypeList";
-    String PRODUCT_INFO_LIST = "productInfoList";
-    String MANAGER_LIST = "managerList";
     String MODULE = "module";
     String STATUS = "status";
     String CONTACT_LIST = "contactList";
     String POSITION = "position";
     String IS_GENERAL = "isGeneral";
-    String KEY = "key";
-    String VALUE = "value";
     String CONTACTS = "contacts";
     String CUSTOM = "custom";
-    String BILL_PLAN_LIST = "billPlanList";
     String USER_ID = "userId";
     String PRODUCT_CUSTOM_LIST = "productCustomList";
     String IS_SELECTED = "isSelected";
+    String SEND = "send";
 
     String ADD_DATE = "addDate";
     String KEYWORD = "keyword";

@@ -4,5 +4,7 @@ import java.util.Date;
 
 public interface StatsService
 {
-    void statsDataForHour(Date date);
+    void statsByData(Date date);
+
+    void statsRechargeByData(Date date);
 }

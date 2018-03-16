@@ -76,15 +76,28 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><i class="col3">*</i>发送报警短信：</label>
+                    <div class="layui-input-block layui-form">
+                        <input type="radio" name="send" value="1" title="是" th:checked="${send} == 1"/>
+                        <div class="layui-unselect layui-form-radio layui-form-radioed">
+                            <i class="layui-anim layui-icon" ></i><span>是</span>
+                        </div>
+                        <input type="radio" name="send" value="0" title="否" th:checked="${send} == 0"/>
+                        <div class="layui-unselect layui-form-radio">
+                            <i class="layui-anim layui-icon" ></i><span>否</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label"><i class="col3">*</i>账号状态：</label>
                     <div class="layui-input-block layui-form">
                         <input type="radio" name="enabled" value="1" title="正常" th:checked="${enabled} == 1"/>
                         <div class="layui-unselect layui-form-radio layui-form-radioed">
-                            <i class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>正常</span>
+                            <i class="layui-anim layui-icon" ></i><span>正常</span>
                         </div>
                         <input type="radio" name="enabled" value="0" title="禁用" th:checked="${enabled} == 0"/>
                         <div class="layui-unselect layui-form-radio">
-                            <i class="layui-anim layui-icon"></i><span>禁用</span>
+                            <i class="layui-anim layui-icon" ></i><span>禁用</span>
                         </div>
                     </div>
                 </div>

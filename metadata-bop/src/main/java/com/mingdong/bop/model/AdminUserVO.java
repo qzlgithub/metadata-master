@@ -12,6 +12,17 @@ public class AdminUserVO
     private String qq;
     private List<Long> privilege;
     private Integer enabled;
+    private Integer send;
+
+    public Integer getSend()
+    {
+        return send;
+    }
+
+    public void setSend(Integer send)
+    {
+        this.send = send;
+    }
 
     public Long getManagerId()
     {

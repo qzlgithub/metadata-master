@@ -16,6 +16,17 @@ public class User
     private Long groupId;
     private Integer enabled;
     private String sessionId;
+    private Integer send;
+
+    public Integer getSend()
+    {
+        return send;
+    }
+
+    public void setSend(Integer send)
+    {
+        this.send = send;
+    }
 
     public Long getId()
     {

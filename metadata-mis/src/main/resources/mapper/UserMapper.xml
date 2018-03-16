@@ -14,12 +14,13 @@
         <result column="group_id" property="groupId" jdbcType="BIGINT" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="session_id" property="sessionId" jdbcType="TINYINT" />
+        <result column="send" property="send" jdbcType="TINYINT" />
     </resultMap>
 
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `role_type`, `username`, `password`, `name`, `phone`, `qq`, `group_id`,
-            `enabled`, `session_id`
+            `enabled`, `session_id`,`send`
         from `user`
     </sql>
 
@@ -38,6 +39,7 @@
             <if test="enabled != null">`enabled`,</if>
             <if test="sessionId != null">`session_id`,</if>
             <if test="roleType != null">`role_type`,</if>
+            <if test="send != null">`send`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -52,6 +54,7 @@
             <if test="enabled != null">#{enabled},</if>
             <if test="sessionId != null">#{sessionId},</if>
             <if test="roleType != null">#{roleType},</if>
+            <if test="send != null">#{send},</if>
         </trim>
     </insert>
 
@@ -69,6 +72,7 @@
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="sessionId != null">`session_id` = #{sessionId},</if>
             <if test="roleType != null">`role_type` = #{roleType},</if>
+            <if test="send != null">`send` = #{send},</if>
         </set>
         where `id` = #{id}
     </update>

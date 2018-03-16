@@ -12,7 +12,18 @@ public class ManagerVO
     private Long groupId;
     private Integer roleType;
     private Integer enabled;
+    private Integer send;
     private List<Long> privilege;
+
+    public Integer getSend()
+    {
+        return send;
+    }
+
+    public void setSend(Integer send)
+    {
+        this.send = send;
+    }
 
     public Integer getRoleType()
     {
