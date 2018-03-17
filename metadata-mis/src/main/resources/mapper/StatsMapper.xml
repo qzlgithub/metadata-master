@@ -3,22 +3,28 @@
 <mapper namespace="com.mingdong.mis.domain.mapper.StatsMapper">
     <resultMap id="BaseResultMap" type="Stats">
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="statsYear" property="statsYear" jdbcType="INTEGER" />
-        <result column="statsMonth" property="statsMonth" jdbcType="INTEGER" />
-        <result column="statsWeek" property="statsWeek" jdbcType="INTEGER" />
-        <result column="statsDay" property="statsDay" jdbcType="INTEGER" />
-        <result column="statsHour" property="statsHour" jdbcType="TINYINT" />
-        <result column="statsDate" property="statsDate" jdbcType="TIMESTAMP" />
-        <result column="clientIncrement" property="clientIncrement" jdbcType="INTEGER" />
-        <result column="clientRequest" property="clientRequest" jdbcType="BIGINT" />
-        <result column="clientRecharge" property="clientRecharge" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="stats_year" property="statsYear" jdbcType="INTEGER" />
+        <result column="stats_month" property="statsMonth" jdbcType="INTEGER" />
+        <result column="stats_week" property="statsWeek" jdbcType="INTEGER" />
+        <result column="stats_day" property="statsDay" jdbcType="INTEGER" />
+        <result column="stats_hour" property="statsHour" jdbcType="TINYINT" />
+        <result column="stats_date" property="statsDate" jdbcType="TIMESTAMP" />
+        <result column="client_increment" property="clientIncrement" jdbcType="INTEGER" />
+        <result column="client_request" property="clientRequest" jdbcType="BIGINT" />
+        <result column="client_recharge" property="clientRecharge" jdbcType="DECIMAL" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
+            `stats_date`, `client_increment`, `client_request`, `client_recharge`
+        from `stats`
+    </sql>
+
     <select id="findStatsBy" resultMap="BaseResultMap">
-        select `id`,`create_time`,`update_time`,`stats_year`,`stats_month`,`stats_week`,`stats_day`,`stats_hour`,
-        `stats_date`, `client_increment`, `client_request`, `client_recharge` from `stats`
+        <include refid="select_all" />
         <where>
             <if test="day != null">`stats_date` = #{day}</if>
             <if test="hour != null">and `stats_hour` = #{hour}</if>
@@ -56,4 +62,54 @@
             <if test="clientRecharge != null">#{clientRecharge},</if>
         </trim>
     </insert>
+
+    <select id="getListGroupByHour" resultMap="BaseResultMap">
+        select
+            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+            <if test="type == 2">sum(`client_request`) as client_request,</if>
+            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+            `stats_hour` as stats_hour
+        from `stats`
+        where `stats_date` >= #{startTime}
+          and `stats_date` &lt;= #{endTime}
+        group by `stats_hour`
+    </select>
+
+    <select id="getListGroupByDay" resultMap="BaseResultMap">
+        select
+            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+            <if test="type == 2">sum(`client_request`) as client_request,</if>
+            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+            `stats_date` as stats_date
+        from `stats`
+        where `stats_date` >= #{startTime}
+          and `stats_date` &lt;= #{endTime}
+        group by `stats_date`
+    </select>
+
+    <select id="getListGroupByWeek" resultMap="BaseResultMap">
+        select
+            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+            <if test="type == 2">sum(`client_request`) as client_request,</if>
+            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+            `stats_year` as stats_year,
+            `stats_week` as stats_week
+        from `stats`
+        where `stats_date` >= #{startTime}
+          and `stats_date` &lt;= #{endTime}
+        group by `stats_year`, `stats_week`
+    </select>
+
+    <select id="getListGroupByMonth" resultMap="BaseResultMap">
+        select
+            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+            <if test="type == 2">sum(`client_request`) as client_request,</if>
+            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+            `stats_year` as stats_year,
+            `stats_month` as stats_month
+        from `stats`
+        where `stats_date` >= #{startTime}
+          and `stats_date` &lt;= #{endTime}
+        group by `stats_year`, `stats_month`
+    </select>
 </mapper>

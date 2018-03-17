@@ -29,4 +29,6 @@ public interface ClientMapper
 
     void updateStatusByIds(@Param("enabled") Integer enabled, @Param("date") Date date,
             @Param("idList") List<Long> idList);
+
+    int countByStartTime(Date date);
 }

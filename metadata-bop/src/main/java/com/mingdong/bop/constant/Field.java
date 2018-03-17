@@ -155,4 +155,9 @@ public interface Field
     String O = "o";
     String P = "p";
     String U = "u";
+    String WEEK_INCREMENT = "weekIncrement";
+    String MONTH_INCREMENT = "monthIncrement";
+    String TOTAL = "total";
+    String DATA = "data";
+    String X_DATA = "xData";
 }

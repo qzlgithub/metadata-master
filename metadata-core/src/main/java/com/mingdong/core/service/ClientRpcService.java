@@ -1,6 +1,8 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
+import com.mingdong.core.constant.RangeUnit;
+import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
@@ -21,6 +23,7 @@ import com.mingdong.core.model.dto.response.UserResDTO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ClientRpcService
 {
@@ -49,7 +52,6 @@ public interface ClientRpcService
      *
      * @param clientId 客户ID
      * @param userId   客户账户ID，非客户主账号返回空列表
-     * @param page
      */
     ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId, Page page);
 
@@ -57,7 +59,6 @@ public interface ClientRpcService
      * 查询客户子账号列表
      *
      * @param clientId 客户ID
-     * @param page
      */
     ListDTO<SubUserResDTO> getSubUserList(Long clientId, Page page);
 
@@ -180,4 +181,8 @@ public interface ClientRpcService
     RechargeInfoResDTO getLatestRechargeInfo(Long clientId, Long productId);
 
     ResponseDTO saveUserCredential(ClientUserReqDTO clientUserReqDTO);
+
+    int getClientIncrementFrom(Date date);
+
+    Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit);
 }

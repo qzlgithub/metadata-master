@@ -2,6 +2,8 @@ package com.mingdong.bop.service;
 
 import com.mingdong.bop.model.ClientVO;
 import com.mingdong.common.model.Page;
+import com.mingdong.core.constant.RangeUnit;
+import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -120,4 +122,16 @@ public interface ClientService
             Page page);
 
     XSSFWorkbook createClientRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime, Page page);
+
+    /**
+     * 查询从指定日期起的新增客户数
+     *
+     * @param date 查询开始日期，为空则查询当前客户总数
+     * @return 新增的客户数
+     */
+    int getClientIncrementFrom(Date date);
+
+    void getClientIncreaseTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
+
+    void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
 }

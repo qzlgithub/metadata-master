@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-body">
+        <div class="p20 layui-form">
+            <dl class="public-data">
+                <dt class="mt0 important">客户数据</dt>
+                <dd>
+                    <ul class="layui-row">
+                        <li class="layui-col-md3">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">7日新增（个）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${weekIncrement}"></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3 ml30 mr30">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">当月新增（个）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${monthIncrement}"></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">当前总量（个）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${total}"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="public-data">
+                <dt>客户数据统计</dt>
+                <dd class="layui-row">
+                    <input type="text" value="1" id="days"/>
+                    <input type="text" id="start1"/>
+                    <input type="text" id="end1"/>
+                    <input type="text" id="start2"/>
+                    <input type="text" value="1" id="unit"/>
+                    <input type="button" value="确定" onclick="get_date()"/>
+                    <div class="tc mt20 mb20" id="clientChart"
+                         style="height:500px; text-align:left; display:block;"></div>
+                </dd>
+            </dl>
+        </div>
+        <div class="p20 layui-form">
+            <dl class="public-data">
+                <dt class="mt0 important">充值数据</dt>
+                <dd>
+                    <ul class="layui-row">
+                        <li class="layui-col-md3">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">今日充值（元）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${todayRecharge}"></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3 ml30 mr30">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">近7天充值（元）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${latest7DaysRecharge}"></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">当月充值（元）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${thisMonthRecharge}"></p>
+                            </div>
+                        </li>
+                        <li class="layui-col-md3">
+                            <div class="fz-14">
+                                <p class="fz-16 mt10 tc">充值总量（元）</p>
+                                <p class="col4 mt20 tc fz-24" th:text="${totalRecharge}"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="public-data">
+                <dt>充值数据统计</dt>
+                <dd class="layui-row">
+                    <input type="text" value="1" id="rdays"/>
+                    <input type="text" id="rstart1"/>
+                    <input type="text" id="rend1"/>
+                    <input type="text" id="rstart2"/>
+                    <input type="text" value="1" id="runit"/>
+                    <input type="button" value="确定" onclick="get_recharge_date()"/>
+                    <div class="tc mt20 mb20" id="rChart" style="height:500px;text-align: left; display:block;"></div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
+<script type="text/javascript" src="/static/business/stats-client1.js"></script>
+</body>
+</html>

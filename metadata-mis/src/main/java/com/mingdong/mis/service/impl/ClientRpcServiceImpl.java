@@ -1,14 +1,18 @@
 package com.mingdong.mis.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.Constant;
+import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
@@ -46,6 +50,7 @@ import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Recharge;
+import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
@@ -63,6 +68,7 @@ import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
+import com.mingdong.mis.domain.mapper.StatsMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,10 +76,15 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClientRpcServiceImpl implements ClientRpcService
 {
+    private static final Integer INC_STAT = 1;
+    private static final Integer REQ_STAT = 2;
+    private static final Integer RCG_STAT = 3;
     @Resource
     private Param param;
     @Resource
@@ -82,6 +93,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private DictIndustryMapper dictIndustryMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private StatsMapper statsMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -1262,6 +1275,61 @@ public class ClientRpcServiceImpl implements ClientRpcService
         clientUser.setAppSecret(clientUserReqDTO.getAppKey());
         clientUserMapper.updateSkipNull(clientUser);
         return responseDTO;
+    }
+
+    @Override
+    public int getClientIncrementFrom(Date date)
+    {
+        return clientMapper.countByStartTime(date);
+    }
+
+    @Override
+    public Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit)
+    {
+        Map<String, Integer> map = new HashMap<>();
+        if(rangeUnit == RangeUnit.HOUR)
+        {
+            List<Stats> statsList = statsMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd(), INC_STAT);
+            for(Stats o : statsList)
+            {
+                if(o.getClientIncrement() != 0)
+                {
+                    map.put(o.getStatsHour() + "", o.getClientIncrement());
+                }
+            }
+        }
+        else if(rangeUnit == RangeUnit.DAY || rangeUnit == RangeUnit.WEEK || rangeUnit == RangeUnit.MONTH)
+        {
+            if(rangeUnit == RangeUnit.DAY)
+            {
+                List<Stats> statsList1 = statsMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd(),
+                        INC_STAT);
+                for(Stats o : statsList1)
+                {
+                    map.put(DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2), o.getClientIncrement());
+                }
+            }
+            else if(rangeUnit == RangeUnit.WEEK)
+            {
+                List<Stats> statsList2 = statsMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd(),
+                        INC_STAT);
+                for(Stats o : statsList2)
+                {
+                    map.put(o.getStatsYear() + String.format("%02d", o.getStatsWeek()), o.getClientIncrement());
+                }
+            }
+            else
+            {
+                List<Stats> statsList3 = statsMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd(),
+                        INC_STAT);
+                for(Stats o : statsList3)
+                {
+                    map.put(o.getStatsYear() + "/" + String.format("%02d", o.getStatsMonth()), o.getClientIncrement());
+                }
+            }
+
+        }
+        return map;
     }
 
     /**

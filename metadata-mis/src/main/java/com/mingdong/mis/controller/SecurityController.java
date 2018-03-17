@@ -12,7 +12,6 @@ import com.mingdong.mis.util.SignUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,13 +22,12 @@ import java.util.Set;
 import java.util.SortedMap;
 
 @RestController
-@RequestMapping(value = "security")
 public class SecurityController
 {
     @Resource
     private ClientService clientService;
 
-    @GetMapping(value = "access-token", headers = {"accept-version=1.0"})
+    @GetMapping(value = "/security/access-token", headers = {"accept-version=1.0"})
     public MetadataRes getAccessToken(@RequestParam(value = Field.APP_ID) String appId,
             @RequestParam(value = Field.TIMESTAMP) String timestamp,
             @RequestParam(value = Field.ACCESS_KEY) String accessKey,
@@ -41,7 +39,7 @@ public class SecurityController
         return res;
     }
 
-    @PostMapping(value = "/sign")
+    @PostMapping(value = "/security/sign")
     public String sign(@RequestBody JSONObject jsonReq) throws MetadataCoreException
     {
         Map<String, Object> map = new HashMap<>();

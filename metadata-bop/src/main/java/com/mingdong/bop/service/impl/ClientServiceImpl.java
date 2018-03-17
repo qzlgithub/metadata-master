@@ -17,8 +17,10 @@ import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProductType;
+import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
@@ -43,6 +45,7 @@ import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.service.TradeRpcService;
+import com.mingdong.core.util.DateRangeUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -731,5 +734,122 @@ public class ClientServiceImpl implements ClientService
             }
         }
         return wb;
+    }
+
+    @Override
+    public int getClientIncrementFrom(Date date)
+    {
+        return clientRpcService.getClientIncrementFrom(date);
+    }
+
+    @Override
+    public void getClientIncreaseTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        ChartData cd = getClientIncreaseTrendOfRange(range, unit);
+        List<String> xData = cd.getxData();
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put(Field.NAME, cd.getName());
+        map1.put(Field.DATA, cd.getData());
+        list.add(map1);
+        if(compareFrom != null)
+        {
+            long diff = range.getEnd().getTime() - range.getStart().getTime();
+            Date compareTo = new Date(compareFrom.getTime() + diff);
+            DateRange compareRange = new DateRange(compareFrom, compareTo);
+            ChartData chartData2 = getClientIncreaseTrendOfRange(compareRange, unit);
+            Map<String, Object> map2 = new HashMap<>();
+            map2.put(Field.NAME, chartData2.getName());
+            map2.put(Field.DATA, chartData2.getData());
+            list.add(map2);
+            if(RangeUnit.HOUR != unit)
+            {
+                List<String> xData1 = chartData2.getxData();
+                List<String> tempList = new ArrayList<>(xData.size());
+
+                for(int i = 0; i < xData.size(); i++)
+                {
+                    tempList.add(xData.get(i) + "&" + xData1.get(i));
+                }
+                xData = tempList;
+            }
+        }
+        resp.addData(Field.X_DATA, xData);
+        resp.addData(Field.LIST, list);
+    }
+
+    @Override
+    public void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        ChartData xData = getClientRechargeTrendOfRange(range, unit);
+        resp.addData(Field.LIST, list);
+    }
+
+    private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)
+    {
+        List<String> xData = DateRangeUtils.getRangeSpilt(range, unit); // x轴坐标名
+        String name = DateUtils.format(range.getStart(), DateFormat.YYYY_MM_DD_2) + " - " + DateUtils.format(
+                range.getEnd(), DateFormat.YYYY_MM_DD_2); // 走势图名称
+        List<Integer> data = new ArrayList<>(xData.size()); // 走势图数值
+        Map<String, Integer> m = clientRpcService.getClientIncreaseTrend(range, unit);
+        for(String n : xData)
+        {
+            data.add(m.get(n) == null ? 0 : m.get(n));
+        }
+        return new ChartData(name, xData, data);
+    }
+
+    private ChartData getClientRechargeTrendOfRange(DateRange range, RangeUnit unit)
+    {
+        List<String> xData = DateRangeUtils.getRangeSpilt(range,unit);
+        String name = DateUtils.format(range.getStart(), DateFormat.YYYY_MM_DD_2) + " - " + DateUtils.format(
+                range.getEnd(), DateFormat.YYYY_MM_DD_2);
+
+        return null;
+    }
+
+    class ChartData
+    {
+        private String name;
+        private List<String> xData;
+        private List<Integer> data;
+
+        ChartData(String name, List<String> xData, List<Integer> data)
+        {
+            this.name = name;
+            this.xData = xData;
+            this.data = data;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName(String name)
+        {
+            this.name = name;
+        }
+
+        public List<String> getxData()
+        {
+            return xData;
+        }
+
+        public void setxData(List<String> xData)
+        {
+            this.xData = xData;
+        }
+
+        public List<Integer> getData()
+        {
+            return data;
+        }
+
+        public void setData(List<Integer> data)
+        {
+            this.data = data;
+        }
     }
 }
