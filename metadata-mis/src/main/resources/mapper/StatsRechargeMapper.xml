@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.StatsRechargeMapper">
+    <resultMap id="BaseResultMap" type="StatsRecharge">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="stats_year" property="statsYear" jdbcType="INTEGER" />
+        <result column="stats_month" property="statsMonth" jdbcType="INTEGER" />
+        <result column="stats_week" property="statsWeek" jdbcType="INTEGER" />
+        <result column="stats_day" property="statsDay" jdbcType="INTEGER" />
+        <result column="stats_hour" property="statsHour" jdbcType="TINYINT" />
+        <result column="stats_date" property="statsDate" jdbcType="TIMESTAMP" />
+        <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
+        <result column="amount" property="amount" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <select id="findStatsRechargeBy" resultMap="BaseResultMap">
+        select `id`,`create_time`,`update_time`,`stats_year`,`stats_month`,`stats_week`,`stats_day`,`stats_hour`,
+        `stats_date`, `recharge_type`, `amount` from `stats_recharge`
+        <where>
+            <if test="day != null">`stats_date` = #{day}</if>
+            <if test="hour != null">and `stats_hour` = #{hour}</if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="StatsRecharge" useGeneratedKeys="true" keyProperty="id">
+        insert into `stats_recharge`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="statsYear != null">`stats_year`,</if>
+            <if test="statsMonth != null">`stats_month`,</if>
+            <if test="statsWeek != null">`stats_week`,</if>
+            <if test="statsDay != null">`stats_day`,</if>
+            <if test="statsHour != null">`stats_hour`,</if>
+            <if test="statsDate != null">`stats_date`,</if>
+            <if test="rechargeType != null">`recharge_type`,</if>
+            <if test="amount != null">`amount`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="statsYear != null">#{statsYear},</if>
+            <if test="statsMonth != null">#{statsMonth},</if>
+            <if test="statsWeek != null">#{statsWeek},</if>
+            <if test="statsDay != null">#{statsDay},</if>
+            <if test="statsHour != null">#{statsHour},</if>
+            <if test="statsDate != null">#{statsDate},</if>
+            <if test="rechargeType != null">#{rechargeType},</if>
+            <if test="amount != null">#{amount},</if>
+        </trim>
+    </insert>
+
+    <insert id="addAll" parameterType="List">
+        insert into
+        `stats_recharge`
+        (`create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
+        `stats_date`, `recharge_type`,`amount`)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.createTime}, #{item.updateTime}, #{item.statsYear}, #{item.statsMonth}, #{item.statsWeek},
+            #{item.statsDay}, #{item.statsHour}, #{item.statsDate}, #{item.rechargeType}, #{item.amount})
+        </foreach>
+    </insert>
+</mapper>

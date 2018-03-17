@@ -136,6 +136,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
         dto.setName(info.getProductName());
         dto.setContent(info.getContent());
         dto.setBillPlan(info.getBillPlan());
+        dto.setType(info.getType());
         if(BillPlan.BY_TIME.getId().equals(info.getBillPlan()))
         {
             dto.setFromDate(info.getStartDate());

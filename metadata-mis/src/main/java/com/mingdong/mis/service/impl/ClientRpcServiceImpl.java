@@ -169,13 +169,18 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword)
+    public ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword, String repeatPassword)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         ClientUser user = clientUserMapper.findById(userId);
         if(user == null)
         {
             responseDTO.setResult(RestResult.ACCOUNT_NOT_EXIST);
+            return responseDTO;
+        }
+        if(!newPassword.equals(repeatPassword))
+        {
+            responseDTO.setResult(RestResult.OLD_AND_REPEAT_PASSCODE);
             return responseDTO;
         }
         if(!user.getPassword().equals(Md5Utils.encrypt(orgPassword)))

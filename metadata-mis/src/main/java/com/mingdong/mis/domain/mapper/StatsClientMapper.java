@@ -1,6 +1,7 @@
 package com.mingdong.mis.domain.mapper;
 
 import com.mingdong.mis.domain.entity.StatsDateInfo;
+import com.mingdong.mis.domain.entity.StatsRechargeInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -23,4 +24,6 @@ public interface StatsClientMapper
             @Param("keyword") String keyword, @Param("productId") Long productId);
 
     List<StatsDateInfo> getRevenueListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    List<StatsRechargeInfo> statsRechargeByData(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

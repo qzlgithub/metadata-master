@@ -16,7 +16,9 @@ public class StatsJob implements Job
         try
         {
             StatsService statsService = ApplicationContextProvider.getBean(StatsService.class);
-            statsService.statsDataForHour(new Date());
+            Date date = new Date();
+            statsService.statsByData(date);
+            statsService.statsRechargeByData(date);
         }
         catch(Exception e)
         {

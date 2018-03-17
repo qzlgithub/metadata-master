@@ -50,6 +50,7 @@ function requestListInit() {
         })
     });
 }
+
 var template_tr = '<tr>' +
     '<td>#{tradeAt}</td>' +
     '<td>#{tradeNo}</td>' +

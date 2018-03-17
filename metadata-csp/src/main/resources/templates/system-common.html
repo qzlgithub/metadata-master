@@ -5,9 +5,9 @@
 <div th:fragment="left">
     <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important">
         <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked">
-            <li><a href="/system/message.html">消息通知</a></li>
-            <li th:if="${isPrimary}"><a href="/system/account-list.html">多账号管理</a></li>
-            <li><a href="/system/security-setting.html">安全设置</a></li>
+            <li id="li-message-id"><a href="/system/message.html">消息通知</a></li>
+            <li id="li-account-id" th:if="${isPrimary}"><a href="/system/account-list.html">多账号管理</a></li>
+            <li id="li-security-id"><a href="/system/security-setting.html">安全设置</a></li>
         </ul>
     </div>
 </div>

@@ -35,7 +35,7 @@ public interface ClientRpcService
     /**
      * 更改客户帐号的密码
      */
-    ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword);
+    ResponseDTO changeUserPassword(Long userId, String orgPassword, String newPassword, String repeatPassword);
 
     /**
      * 根据客户id获取客户消息列表

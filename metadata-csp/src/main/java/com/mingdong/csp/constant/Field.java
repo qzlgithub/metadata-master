@@ -9,6 +9,7 @@ public interface Field
 
     String ORG_PASSWORD = "orgPassword";
     String NEW_PASSWORD = "newPassword";
+    String REPEAT_PASSWORD = "repeatPassword";
     String NAME = "name";
     String PHONE = "phone";
     String CLIENT_USER_ID = "clientUserId";

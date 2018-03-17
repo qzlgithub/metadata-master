@@ -15,6 +15,17 @@ public class AdminUserReqDTO implements Serializable
     private String qq;
     private List<Long> privilegeIdList;
     private Integer enabled;
+    private Integer send;
+
+    public Integer getSend()
+    {
+        return send;
+    }
+
+    public void setSend(Integer send)
+    {
+        this.send = send;
+    }
 
     public Long getUserId()
     {

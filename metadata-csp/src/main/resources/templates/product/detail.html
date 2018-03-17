@@ -77,7 +77,8 @@
                             <a th:href="'/product/recharge.html?productId=' + ${productId}" class="mr20">历史充值</a>
                             | <a th:href="'/product/request.html?productId=' + ${productId}" class="ml20">消费明细</a>
                         </p>
-                        <p class="ml40"><span class="appid-btn cp" id="appkid"></span></p>
+
+                        <p class="ml40"><span class="appid-btn cp" id="appkid">获取AppId</span></p>
                     </div>
                 </dd>
             </dl>
@@ -88,6 +89,11 @@
                 </ul>
                 <div class="tab-content" id="content">
                 </div>
+                <div id="none-content-id" style="margin-top: 130px; margin-bottom: 130px;display: none;">
+                    <img src="/images/article-null-img.png" class="w15 margin-auto"/>
+                    <p class="tc col2 mt20 fz-14">暂无内容介绍</p>
+                </div>
+                <p class="p30"><span class="fr return-button" onclick="history.back(-1);">返回</span></p>
             </div>
         </div>
     </div>
@@ -97,13 +103,16 @@
 <div th:include="common :: right"></div>
 
 
+
 <div id="appkid-modal" style="display: none">
     <div id="mode_app_id_1">
         <div class="layui-layer-title">获取AppKey</div>
         <div class="mb30">
             <div class="margin-auto">
                 <div class="clearfix tc mt20" style="margin-left: 167px;">
-                    <span class="step fl w30"><i class="icon-01 icon mr10"></i><br/>密码验证</span>
+                    <span class="step fl w30"><i
+
+                            class="icon-01 icon mr10"></i><br/>密码验证</span>
                     <span class="fl w30"><i class="icon-02-1 icon mr10"></i><br/>获取AppKey</span>
                 </div>
             </div>
@@ -174,7 +183,11 @@
 <script th:inline="javascript">
     $(function() {
         var content = [[${content}]];
-        $("#content").html(content);
+        if(content === "" || content === null){
+            $("#none-content-id").show();
+        }else{
+            $("#content").html(content);
+        }
     });
 </script>
 </body>

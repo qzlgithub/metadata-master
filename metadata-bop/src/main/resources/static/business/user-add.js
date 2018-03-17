@@ -78,6 +78,7 @@ function saveManager() {
     var phone = $("#phone").val();
     var qq = $("#qq").val();
     var enabled = $("input[name='enabled']:checked").val();
+    var send = $("input[name='send']:checked").val();
     var privilege = build_privilege();
     if(!checkDataValid("#userInfoDivId")) {
         return;
@@ -102,7 +103,8 @@ function saveManager() {
             "phone": phone,
             "qq": qq,
             "enabled": enabled,
-            "privilege": privilege
+            "privilege": privilege,
+            "send":send
         }),
         success: function(res) {
             if(res.code !== "000000") {

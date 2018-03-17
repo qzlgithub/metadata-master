@@ -32,6 +32,7 @@ public enum RestResult
     CLIENT_PRODUCT_NO_DELETE("100027", "服务已被开通无法移除"),
     STATS_EXIST("100028", "统计时间已经存在"),
     OLD_PASSCODE("100029", "旧密码不正确"),
+    OLD_AND_REPEAT_PASSCODE("100030", "新密码和重复密码不匹配"),
 
     SYSTEM_ERROR("999997", "发生错误，请联系管理员"),
     ACCESS_LIMITED("999998", "访问受限（缺少访问凭证）"),

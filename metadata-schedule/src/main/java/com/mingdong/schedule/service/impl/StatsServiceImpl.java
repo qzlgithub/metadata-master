@@ -14,8 +14,14 @@ public class StatsServiceImpl implements StatsService
     private StatsRpcService statsRpcService;
 
     @Override
-    public void statsDataForHour(Date date)
+    public void statsByData(Date date)
     {
-        statsRpcService.statsDataForHour(date);
+        statsRpcService.statsByData(date);
+    }
+
+    @Override
+    public void statsRechargeByData(Date date)
+    {
+        statsRpcService.statsRechargeByData(date);
     }
 }

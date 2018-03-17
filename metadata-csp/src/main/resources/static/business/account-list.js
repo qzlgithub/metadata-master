@@ -3,6 +3,7 @@ layui.use('form', function() {
     form = layui.form;
 });
 $(function() {
+    $("#li-account-id").addClass("active");
     var obj = {
         pageNum: 1,
         pageSize: 10

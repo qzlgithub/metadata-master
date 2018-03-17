@@ -50,6 +50,7 @@ function rechargeListInit() {
         })
     });
 }
+
 var template_tr = '<tr>' +
     '<td>#{tradeTime}</td>' +
     '<td>#{tradeNo}</td>' +
