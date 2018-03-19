@@ -29,6 +29,7 @@ import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
@@ -51,6 +52,7 @@ import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.Stats;
+import com.mingdong.mis.domain.entity.StatsRecharge;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
@@ -69,6 +71,7 @@ import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
+import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +98,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private UserMapper userMapper;
     @Resource
     private StatsMapper statsMapper;
+    @Resource
+    private StatsRechargeMapper statsRechargeMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -1329,10 +1334,64 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         INC_STAT);
                 for(Stats o : statsList3)
                 {
-                    map.put(o.getStatsYear() + "/" + String.format("%02d", o.getStatsMonth()), o.getClientIncrement());
+                    map.put(o.getStatsYear() + String.format("/%02d", o.getStatsMonth()), o.getClientIncrement());
                 }
             }
 
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, List<RechargeStatsDTO>> getClientRechargeTrend(DateRange dateRange, RangeUnit rangeUnit)
+    {
+        Map<String, List<RechargeStatsDTO>> map = new HashMap<>();
+        List<StatsRecharge> dataList;
+        if(rangeUnit == RangeUnit.DAY)
+        {
+            dataList = statsRechargeMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd());
+        }
+        else if(rangeUnit == RangeUnit.WEEK)
+        {
+            dataList = statsRechargeMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd());
+        }
+        else if(rangeUnit == RangeUnit.MONTH)
+        {
+            dataList = statsRechargeMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd());
+        }
+        else
+        {
+            dataList = statsRechargeMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd());
+        }
+        for(StatsRecharge o : dataList)
+        {
+            String name;
+            if(rangeUnit == RangeUnit.DAY)
+            {
+                name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
+            }
+            else if(rangeUnit == RangeUnit.WEEK)
+            {
+                name = o.getStatsYear() + String.format("%02d", o.getStatsWeek());
+            }
+            else if(rangeUnit == RangeUnit.MONTH)
+            {
+                name = o.getStatsYear() + String.format("/%02d", o.getStatsMonth());
+            }
+            else
+            {
+                name = o.getStatsHour() + "";
+            }
+            List<RechargeStatsDTO> list = map.get(name);
+            if(CollectionUtils.isEmpty(list))
+            {
+                list = new ArrayList<>();
+            }
+            RechargeStatsDTO dto = new RechargeStatsDTO();
+            dto.setRechargeTypeName(o.getRechargeTypeName());
+            dto.setAmount(o.getAmount());
+            list.add(dto);
+            map.put(name, list);
         }
         return map;
     }

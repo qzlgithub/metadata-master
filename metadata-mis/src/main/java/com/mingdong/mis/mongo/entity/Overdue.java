@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 public class Overdue
 {
@@ -25,7 +24,6 @@ public class Overdue
     private Integer overduePlatform30Days;
     private Integer overduePlatform60Days;
     private Integer overduePlatform90Days;
-    private List<OverduePlatForm> overduePlatform;
 
     public String getId()
     {
@@ -185,15 +183,5 @@ public class Overdue
     public void setOverduePlatform90Days(Integer overduePlatform90Days)
     {
         this.overduePlatform90Days = overduePlatform90Days;
-    }
-
-    public List<OverduePlatForm> getOverduePlatform()
-    {
-        return overduePlatform;
-    }
-
-    public void setOverduePlatform(List<OverduePlatForm> overduePlatform)
-    {
-        this.overduePlatform = overduePlatform;
     }
 }

@@ -58,6 +58,7 @@ function get_date() {
         }
     })
 }
+
 function get_recharge_date() {
     $.ajax({
         type: "post",
@@ -74,39 +75,29 @@ function get_recharge_date() {
             if(res.code !== '000000') {
                 return;
             }
-            myChart.hideLoading();
+            rChart.hideLoading();
             var obj = res.data;
             var list = obj.list;
             var legendData = [];
             var seriesData = [];
             for(var o in list) {
                 legendData.push(list[o].name);
-                var s = {type: 'line', areaStyle: {}};
+                var s = {type: 'bar'};
                 s.name = list[o].name;
+                s.stack = list[o].stack;
                 s.data = list[o].data;
                 seriesData.push(s);
             }
-            myChart.setOption({
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: obj.xData
-                },
-                legend: {
-                    orient: 'vertical',
-                    data: legendData
-                },
+            rChart.setOption({
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
+                    axisPointer: {type: 'shadow'}
                 },
-                yAxis: {
-                    type: 'value'
+                legend: {data: legendData},
+                yAxis: {type: 'value'},
+                xAxis: {
+                    type: 'category',
+                    data: obj.xData
                 },
                 series: seriesData
             }, true);

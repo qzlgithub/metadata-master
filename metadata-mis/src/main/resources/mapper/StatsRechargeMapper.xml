@@ -5,19 +5,26 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
+        <result column="recharge_type_name" property="rechargeTypeName" jdbcType="VARCHAR" />
         <result column="stats_year" property="statsYear" jdbcType="INTEGER" />
         <result column="stats_month" property="statsMonth" jdbcType="INTEGER" />
         <result column="stats_week" property="statsWeek" jdbcType="INTEGER" />
         <result column="stats_day" property="statsDay" jdbcType="INTEGER" />
         <result column="stats_hour" property="statsHour" jdbcType="TINYINT" />
         <result column="stats_date" property="statsDate" jdbcType="TIMESTAMP" />
-        <result column="recharge_type" property="rechargeType" jdbcType="INTEGER" />
         <result column="amount" property="amount" jdbcType="DECIMAL" />
     </resultMap>
 
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `recharge_type`, `stats_year`, `stats_month`, `stats_week`, `stats_day`
+            , `stats_hour`, `stats_date`, `amount`
+        from `stats_recharge`
+    </sql>
+
     <select id="findStatsRechargeBy" resultMap="BaseResultMap">
-        select `id`,`create_time`,`update_time`,`stats_year`,`stats_month`,`stats_week`,`stats_day`,`stats_hour`,
-        `stats_date`, `recharge_type`, `amount` from `stats_recharge`
+        <include refid="select_all" />
         <where>
             <if test="day != null">`stats_date` = #{day}</if>
             <if test="hour != null">and `stats_hour` = #{hour}</if>
@@ -54,15 +61,71 @@
         </trim>
     </insert>
 
+    <!-- @formatter:off -->
     <insert id="addAll" parameterType="List">
         insert into
-        `stats_recharge`
-        (`create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
-        `stats_date`, `recharge_type`,`amount`)
+            `stats_recharge`
+            (`create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
+             `stats_date`, `recharge_type`, `amount`)
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.createTime}, #{item.updateTime}, #{item.statsYear}, #{item.statsMonth}, #{item.statsWeek},
-            #{item.statsDay}, #{item.statsHour}, #{item.statsDate}, #{item.rechargeType}, #{item.amount})
+             #{item.statsDay}, #{item.statsHour}, #{item.statsDate}, #{item.rechargeType}, #{item.amount})
         </foreach>
     </insert>
+    <!-- @formatter:on -->
+
+    <select id="getListGroupByHour" resultMap="BaseResultMap">
+        select
+            sr.`recharge_type` as recharge_type,
+            sr.`stats_hour`    as stats_hour,
+            rt.`name`          as recharge_type_name,
+            sum(sr.`amount`)   as amount
+        from `stats_recharge` sr
+            left join `dict_recharge_type` rt
+                on sr.`recharge_type` = rt.`id`
+        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        group by sr.`recharge_type`, sr.`stats_hour`
+    </select>
+
+    <select id="getListGroupByDay" resultMap="BaseResultMap">
+        select
+            sr.`recharge_type` as recharge_type,
+            sr.`stats_date`    as stats_date,
+            rt.`name`          as recharge_type_name,
+            sum(sr.`amount`)   as amount
+        from `stats_recharge` sr
+            left join `dict_recharge_type` rt
+                on sr.`recharge_type` = rt.`id`
+        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        group by sr.`recharge_type`, sr.`stats_date`
+    </select>
+
+    <select id="getListGroupByWeek" resultMap="BaseResultMap">
+        select
+            sr.`recharge_type` as recharge_type,
+            sr.`stats_year`    as stats_year,
+            sr.`stats_week`    as stats_week,
+            rt.`name`          as recharge_type_name,
+            sum(sr.`amount`)   as amount
+        from `stats_recharge` sr
+            left join `dict_recharge_type` rt
+                on sr.`recharge_type` = rt.`id`
+        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        group by sr.`recharge_type`, sr.`stats_year`, sr.`stats_week`
+    </select>
+
+    <select id="getListGroupByMonth" resultMap="BaseResultMap">
+        select
+            sr.`recharge_type` as recharge_type,
+            sr.`stats_year`    as stats_year,
+            sr.`stats_month`   as stats_month,
+            rt.`name`          as recharge_type_name,
+            sum(sr.`amount`)   as amount
+        from `stats_recharge` sr
+            left join `dict_recharge_type` rt
+                on sr.`recharge_type` = rt.`id`
+        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        group by sr.`recharge_type`, sr.`stats_year`, sr.`stats_month`;
+    </select>
 </mapper>

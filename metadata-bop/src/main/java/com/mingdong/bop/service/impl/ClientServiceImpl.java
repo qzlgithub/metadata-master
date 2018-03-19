@@ -1,9 +1,12 @@
 package com.mingdong.bop.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.ContactVO;
+import com.mingdong.bop.model.EChart;
+import com.mingdong.bop.model.ESerie;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -38,6 +41,7 @@ import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -56,6 +60,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -782,8 +787,44 @@ public class ClientServiceImpl implements ClientService
     public void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
-        ChartData xData = getClientRechargeTrendOfRange(range, unit);
+        EChart eChart = getClientRechargeTrendOfRange(range, unit);
+        List<String> xAxis = eChart.getxAxis();
+        for(ESerie o : eChart.getSeries())
+        {
+            Map<String, Object> serie = new HashMap<>();
+            serie.put(Field.NAME, o.getName());
+            serie.put(Field.STACK, eChart.getName());
+            serie.put(Field.DATA, o.getData());
+            list.add(serie);
+        }
+        if(compareFrom != null)
+        {
+            long diff = range.getEnd().getTime() - range.getStart().getTime();
+            Date compareTo = new Date(compareFrom.getTime() + diff);
+            DateRange compareRange = new DateRange(compareFrom, compareTo);
+            EChart eChart1 = getClientRechargeTrendOfRange(compareRange, unit);
+            if(RangeUnit.HOUR != unit)
+            {
+                List<String> xData1 = eChart1.getxAxis();
+                List<String> tempList = new ArrayList<>(xAxis.size());
+                for(int i = 0; i < xAxis.size(); i++)
+                {
+                    tempList.add(xAxis.get(i) + "&" + xData1.get(i));
+                }
+                xAxis = tempList;
+            }
+            for(ESerie o : eChart1.getSeries())
+            {
+                Map<String, Object> serie = new HashMap<>();
+                serie.put(Field.NAME, o.getName());
+                serie.put(Field.STACK, eChart1.getName());
+                serie.put(Field.DATA, o.getData());
+                list.add(serie);
+            }
+        }
+        resp.addData(Field.X_DATA, xAxis);
         resp.addData(Field.LIST, list);
+        System.out.println(JSON.toJSONString(resp));
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)
@@ -800,13 +841,40 @@ public class ClientServiceImpl implements ClientService
         return new ChartData(name, xData, data);
     }
 
-    private ChartData getClientRechargeTrendOfRange(DateRange range, RangeUnit unit)
+    private EChart getClientRechargeTrendOfRange(DateRange range, RangeUnit unit)
     {
-        List<String> xData = DateRangeUtils.getRangeSpilt(range,unit);
-        String name = DateUtils.format(range.getStart(), DateFormat.YYYY_MM_DD_2) + " - " + DateUtils.format(
+        EChart eChart = new EChart();
+        List<String> xData = DateRangeUtils.getRangeSpilt(range, unit);
+        eChart.setxAxis(xData);
+        String stack = DateUtils.format(range.getStart(), DateFormat.YYYY_MM_DD_2) + " - " + DateUtils.format(
                 range.getEnd(), DateFormat.YYYY_MM_DD_2);
-
-        return null;
+        eChart.setName(stack);
+        List<ESerie> series = new ArrayList<>();
+        Map<String, List<RechargeStatsDTO>> m = clientRpcService.getClientRechargeTrend(range, unit);
+        Map<String, String[]> typeMap = new HashMap<>();
+        for(int i = 0; i < xData.size(); i++)
+        {
+            String datestr = xData.get(i);
+            List<RechargeStatsDTO> dtoList = m.get(datestr); // 指定时间点的充值类型/充值金额
+            if(!CollectionUtils.isEmpty(dtoList))
+            {
+                for(RechargeStatsDTO o : dtoList)
+                {
+                    String[] datas = typeMap.getOrDefault(o.getRechargeTypeName(), new String[xData.size()]);
+                    datas[i] = NumberUtils.formatAmount(o.getAmount());
+                    typeMap.put(o.getRechargeTypeName(), datas);
+                }
+            }
+        }
+        for(Map.Entry<String, String[]> entry : typeMap.entrySet())
+        {
+            ESerie es = new ESerie();
+            es.setName(entry.getKey());
+            es.setData(Arrays.asList(entry.getValue()));
+            series.add(es);
+        }
+        eChart.setSeries(series);
+        return eChart;
     }
 
     class ChartData

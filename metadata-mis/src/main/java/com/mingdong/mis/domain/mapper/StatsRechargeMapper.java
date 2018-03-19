@@ -13,4 +13,12 @@ public interface StatsRechargeMapper
     void add(StatsRecharge stats);
 
     void addAll(@Param("list") List<StatsRecharge> statsRecharges);
+
+    List<StatsRecharge> getListGroupByHour(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<StatsRecharge> getListGroupByDay(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<StatsRecharge> getListGroupByWeek(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<StatsRecharge> getListGroupByMonth(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

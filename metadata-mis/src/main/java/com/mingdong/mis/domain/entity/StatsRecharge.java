@@ -9,6 +9,7 @@ public class StatsRecharge
     private Date createTime;
     private Date updateTime;
     private Integer rechargeType;
+    private String rechargeTypeName;
     private Integer statsYear;
     private Integer statsMonth;
     private Integer statsWeek;
@@ -16,16 +17,6 @@ public class StatsRecharge
     private Integer statsHour;
     private Date statsDate;
     private BigDecimal amount;
-
-    public Date getStatsDate()
-    {
-        return statsDate;
-    }
-
-    public void setStatsDate(Date statsDate)
-    {
-        this.statsDate = statsDate;
-    }
 
     public Long getId()
     {
@@ -65,6 +56,16 @@ public class StatsRecharge
     public void setRechargeType(Integer rechargeType)
     {
         this.rechargeType = rechargeType;
+    }
+
+    public String getRechargeTypeName()
+    {
+        return rechargeTypeName;
+    }
+
+    public void setRechargeTypeName(String rechargeTypeName)
+    {
+        this.rechargeTypeName = rechargeTypeName;
     }
 
     public Integer getStatsYear()
@@ -115,6 +116,16 @@ public class StatsRecharge
     public void setStatsHour(Integer statsHour)
     {
         this.statsHour = statsHour;
+    }
+
+    public Date getStatsDate()
+    {
+        return statsDate;
+    }
+
+    public void setStatsDate(Date statsDate)
+    {
+        this.statsDate = statsDate;
     }
 
     public BigDecimal getAmount()

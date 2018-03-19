@@ -154,4 +154,5 @@ public interface Field
     String TOTAL = "total";
     String DATA = "data";
     String X_DATA = "xData";
+    String STACK = "stack";
 }
