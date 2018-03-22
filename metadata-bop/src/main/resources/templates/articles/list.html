@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="setting :: left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="/setting/user.html">系统管理</a>
+            <a href="/setting/articles.html">新闻动态</a>
+            <a><cite>文章列表</cite></a>
+        </div>
+        <div class="p20 layui-form">
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'61101')}">
+                <a href="/setting/articles/add.html" class="layui-btn fr">添加文章</a>
+            </div>
+            <table class="layui-table" id="data-table" lay-filter="main"></table>
+        </div>
+    </div>
+
+
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="common :: point"></div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/business/articles-list.js"></script>
+<script type="text/html" id="operationBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/setting/articles/edit.html?id={{d.id}}"
+       th:if="${#lists.contains(i_privilege,'61102')}">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" href="javascript:;"
+       th:if="${#lists.contains(i_privilege,'61103')}" onclick="deleteArticles('{{d.id}}')">删除</a>
+</script>
+<script type="text/html" id="typeName">
+    {{# if(d.type === 1){ }}
+    <div>行业新闻</div>
+    {{# } else if(d.type === 2) { }}
+    <div>公司动态</div>
+    {{# } }}
+</script>
+<script type="text/html" id="statusTpl">
+    {{# if(d.status === 1){ }}
+    <div>已发布</div>
+    {{# } else { }}
+    <div>未发布</div>
+    {{# } }}
+</script>
+</body>
+</html>

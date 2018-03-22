@@ -26,8 +26,8 @@
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/">首页</a>
-            <a href="/setting/product.html">产品列表</a>
+            <a href="/setting/user.html">系统管理</a>
+            <a href="/setting/product.html">产品管理</a>
             <a><cite>产品编辑</cite></a>
         </div>
         <div class="p20">
@@ -58,7 +58,7 @@
                     <div class="layui-input-block w40">
                         <input type="text" id="product-cost" th:value="${costAmt}" placeholder="请输入" autocomplete="off"
                                class="layui-input" datatype="double2" datames="成本价格" notnull="true" maxlength="8"
-                               style="width: 80%; display: inline-block;"/>
+                               style="display: inline-block;"/>
                         <i class="col3 pl10" id="costAmtTip" style="display: none"></i>
                     </div>
                 </div>
@@ -67,7 +67,8 @@
                     <div class="layui-input-block layui-form">
                         <input type="radio" name="product-enabled" value="1" title="开启" th:checked="${enabled} == 1"/>
                         <div class="layui-unselect layui-form-radio layui-form-radioed">
-                            <i class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>开启</span></div>
+                            <i class="layui-anim layui-icon layui-anim-scaleSpring"></i><span>开启</span>
+                        </div>
                         <input type="radio" name="product-enabled" value="0" title="关闭" th:checked="${enabled} == 0"/>
                         <div class="layui-unselect layui-form-radio">
                             <i class="layui-anim layui-icon"></i><span>关闭</span>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ArticlesMapper">
+    <resultMap id="BaseResultMap" type="Articles">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="synopsis" property="synopsis" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="published" property="published" jdbcType="TINYINT" />
+        <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    </resultMap>
+
+    <insert id="add" parameterType="Articles" useGeneratedKeys="true" keyProperty="id">
+        insert into `articles`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="imagePath != null">`image_path`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="title != null">`title`,</if>
+            <if test="synopsis != null">`synopsis`,</if>
+            <if test="author != null">`author`,</if>
+            <if test="content != null">`content`,</if>
+            <if test="orderId != null">`order_id`,</if>
+            <if test="publishTime != null">`publish_time`,</if>
+            <if test="published != null">`published`,</if>
+            <if test="deleted != null">`deleted`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="type != null">#{type},</if>
+            <if test="imagePath != null">#{imagePath},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="title != null">#{title},</if>
+            <if test="synopsis != null">#{synopsis},</if>
+            <if test="author != null">#{author},</if>
+            <if test="content != null">#{content},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="published != null">#{published},</if>
+            <if test="deleted != null">#{deleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSkipNull" parameterType="Articles">
+        update `articles`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="imagePath != null">`image_path` = #{imagePath},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="title != null">`title` = #{title},</if>
+            <if test="synopsis != null">`synopsis` = #{synopsis},</if>
+            <if test="author != null">`author` = #{author},</if>
+            <if test="content != null">`content` = #{content},</if>
+            <if test="orderId != null">`order_id` = #{orderId},</if>
+            <if test="publishTime != null">`publish_time` = #{publishTime},</if>
+            <if test="published != null">`published` = #{published},</if>
+            <if test="deleted != null">`deleted` = #{deleted},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `type`, `image_path`, `user_id`, `title`, `synopsis`, `author`,
+            `content`, `order_id`,`publish_time`, `published`, `deleted`
+        from articles
+    </sql>
+
+    <select id="findListAll" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `deleted` = 0
+        order by `order_id` desc
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap" parameterType="Long">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
+
+    <select id="countAll" resultType="Integer">
+        select count(`id`)
+        from articles
+        where `deleted` = 0
+    </select>
+
+    <select id="findListByType" resultMap="BaseResultMap" parameterType="Integer">
+        <include refid="select_all" />
+        where `deleted` = 0 and `published` = 1 and `type` = #{type}
+        order by `order_id` desc
+    </select>
+
+    <select id="countByType" resultType="Integer" parameterType="Integer">
+        select count(`id`)
+        from articles
+        where `deleted` = 0 and `published` = 1 and `type` = #{type}
+    </select>
+
+
+</mapper>

@@ -72,7 +72,7 @@
                     <label class="layui-form-label"><i class="col3">*</i>联系电话：</label>
                     <div class="layui-input-block">
                         <input type="tel" id="phone" name="phone" placeholder="请输入" autocomplete="off"
-                               class="layui-input" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                               class="layui-input" onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
                                maxlength="20" notnull="true" datatype="phoneOrMobile" datames="联系电话"/>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     <div class="layui-input-block">
                         <input type="tel" id="qq" placeholder="请输入" autocomplete="off"
                                class="layui-input" notnull="true" datames="QQ"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
                                maxlength="20"/>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     </thead>
                     <tbody id="dataBody">
                     <tr>
-                        <td rowspan="7">系统管理</td>
+                        <td rowspan="8">系统管理</td>
                         <td rowspan="2">账户管理</td>
                         <td>后台账号管理</td>
                         <td class="tl important">
@@ -155,6 +155,16 @@
                             <input type="checkbox" class="privilege p21200" id="21201" p-id="p21200" checked=""/>添加
                             <input type="checkbox" class="privilege p21200" id="21202" p-id="p21200" checked=""/>编辑
                             <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""/>禁用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>新闻动态</td>
+                        <td>文章列表</td>
+                        <td class="tl important">
+                            <input type="checkbox" class="parent-privilege" id="p61100"/>全选
+                            <input type="checkbox" class="privilege p61100" id="61101" p-id="p61100" checked=""/>添加
+                            <input type="checkbox" class="privilege p61100" id="61102" p-id="p61100" checked=""/>编辑
+                            <input type="checkbox" class="privilege p61100" id="61103" p-id="p61100" checked=""/>删除
                         </td>
                     </tr>
                     <tr>
@@ -234,7 +244,7 @@
                             <input type="checkbox" class="privilege p51200" id="51202" p-id="p51200" checked=""/>导出
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td rowspan="5">运营数据管理</td>
                         <td rowspan="5">运营数据管理</td>
                         <td>运营数据汇总</td>
@@ -274,7 +284,7 @@
                             <input type="checkbox" class="privilege p41500" id="41501" p-id="p41500" checked=""/>查看
                             <input type="checkbox" class="privilege p41500" id="41502" p-id="p41500" checked=""/>导出
                         </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                 </table>
                 <!--table end-->

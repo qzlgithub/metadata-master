@@ -25,17 +25,17 @@ function refresh_code() {
 
 function login() {
     var username = $.trim($("#username").val());
-    if(username == ""){
+    if(username == "") {
         layer.msg("用户名不能为空！");
         return;
     }
     var password = $("#password").val();
-    if(password == ""){
+    if(password == "") {
         layer.msg("密码不能为空！");
         return;
     }
     var imageCode = $.trim($("#code").val());
-    if(imageCode == ""){
+    if(imageCode == "") {
         layer.msg("验证码不能为空！");
         return;
     }

@@ -51,8 +51,8 @@
                     <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
-            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'11101')}"><a href="/setting/user/add.html"
-                                                                                          class="layui-btn fr">添加账号</a>
+            <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'11101')}">
+                <a href="/setting/user/add.html" class="layui-btn fr">添加账号</a>
             </div>
             <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
         </div>

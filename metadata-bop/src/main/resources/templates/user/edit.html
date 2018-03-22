@@ -62,7 +62,7 @@
                     <div class="layui-input-block">
                         <input type="tel" id="phone" name="phone" th:value="${phone}" placeholder="请输入"
                                autocomplete="off" class="layui-input"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="20"
                                notnull="true" datatype="phoneOrMobile" datames="联系电话"/>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div class="layui-input-block">
                         <input type="tel" id="qq" name="qq" th:value="${qq}" placeholder="请输入" autocomplete="off"
                                class="layui-input" notnull="true" datames="QQ"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
                                maxlength="20"/>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     </thead>
                     <tbody id="dataBody">
                     <tr>
-                        <td rowspan="7">系统管理</td>
+                        <td rowspan="8">系统管理</td>
                         <td rowspan="2">账户管理</td>
                         <td>后台账号管理</td>
                         <td class="tl important">
@@ -153,6 +153,19 @@
                                    th:checked="${#lists.contains(privilege,'21202')}"/>编辑
                             <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""
                                    th:checked="${#lists.contains(privilege,'21203')}"/>禁用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>新闻动态</td>
+                        <td>文章列表</td>
+                        <td class="tl important">
+                            <input type="checkbox" class="parent-privilege" id="p61100"/>全选
+                            <input type="checkbox" class="privilege p61100" id="61101" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilege,'61101')}"/>添加
+                            <input type="checkbox" class="privilege p61100" id="61102" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilege,'61102')}"/>编辑
+                            <input type="checkbox" class="privilege p61100" id="61103" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilege,'61103')}"/>删除
                         </td>
                     </tr>
                     <tr>
@@ -256,7 +269,7 @@
                                    th:checked="${#lists.contains(privilege,'51202')}"/>导出
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td rowspan="5">运营数据管理</td>
                         <td rowspan="5">运营数据管理</td>
                         <td>运营数据汇总</td>
@@ -305,7 +318,7 @@
                             <input type="checkbox" class="privilege p41500" id="41502" p-id="p41500" checked=""
                                    th:checked="${#lists.contains(privilege,'41502')}"/>导出
                         </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                 </table>
             </div>

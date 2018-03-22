@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <title>沃动科技</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content="index,follow"/>
+    <meta name="application-name" content="bootcss.com"/>
+    <meta property="qc:admins" content="1603466166416277433363757477167"/>
+
+    <!-- Site CSS -->
+    <link href="/static/website/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/static/website/css/base.css" rel="stylesheet"/>
+    <link href="/static/website/css/style.css" rel="stylesheet"/>
+    <link href="/static/website/css/common.css" rel="stylesheet"/>
+    <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" href="/static/website/images/icon/apple-touch-icon-precomposed.png"/>
+    <link rel="shortcut icon" href="/static/website/images/icon/favicon.png"/>
+</head>
+
+<body>
+<div class="navbar navbar-inverse mb0 header1">
+    <div class="container header-mt10">
+        <div class="navbar-header">
+            <a class="navbar-brand hidden-sm navbar-logo pt0 important" href="index.html"><i
+                    class="header-logo"></i></a>
+        </div>
+        <div class="navbar-collapse collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
+                <li class="active"><a href="product.html">热门产品</a></li>
+                <li><a href="#">解决方案</a></li>
+                <li><a href="news.html">新闻动态</a></li>
+                <li><a href="about.html">关于元数据</a></li>
+            </ul>
+            <ul class="fr mt15">
+                <a href="login.html" class="login-btn">登录</a>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="pb0 sbg_top">
+    <div class="product-banner">
+        <div class="container product-banner-img">
+            <p class="product-banner-font1">热门产品</p>
+            <p class="product-banner-font2">适用于 Java c# PHP .NET JSP 等开发的系统</p>
+            <p class="product-banner-font3">元数据基于大数据分析出行业增长与行业问题，团队基于行业痛点，<br/>
+                有目的的推出API服务。精准、快速、有效的解决行业问题，为客户创造价值！</p>
+        </div>
+    </div>
+</div>
+<div class="bg1 pt40">
+    <div class="container">
+        <div class="product-list-name">产品优势</div>
+        <div class="wrap m15 mt25">
+            <div class="blist-name clearfix">
+                <span>产品类型：</span>
+                <ul class="blist clearfix blist-height" id="blistCity">
+
+                </ul>
+                <em class="more cp" style="display: none;">更多
+                    <i class="glyphicon glyphicon-chevron-down col3 fz-12 ml5"></i>
+                </em>
+            </div>
+            <ul class="blsit-list mt20">
+                <li class="product-list clearfix" id="productList">
+
+                </li>
+            </ul>
+        </div>
+        <div class="box pt30" id="pagination"></div>
+    </div>
+</div>
+
+<footer class="footer-icp mt20">
+    <div class="container tc clearfix position-r">
+        <a>联系我们</a>|<a>使用协议</a>|<a>隐私协议</a>|<a>法律申明</a>|<a>关于元数据</a>|<a>关于明动</a>
+        <div class="footer-ewm"><img src="/static/website/images/ewm.png"/></div>
+    </div>
+
+</footer>
+<footer class="footer">
+    <div class="container ">
+        <p class="tc">
+            <span class="fz-16 mr30"><i class="icon tel-icon mr5"></i>0571-1545451245</span>
+            <span class="fz-16"><i class="icon email-icon mr5"></i>mingdonglet@mail.com</span>
+        </p>
+        <p class="tc mt25"><span class="footer-inf">元数据 · 源于数据的发现</span></p>
+        <p class="tc mt25">©明动科技 | 浙ICP备123321号</p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="/static/website/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
+<script type="text/javascript" src="/static/business/website-product.js"></script>
+<script>
+    /*$(function() {
+        $(".blist").on("click", "li", function() {
+            // 设index为当前点击
+            var index = $(this).index();
+            // 点击添加样式利用siblings清除其他兄弟节点样式
+            $(this).addClass("active").siblings().removeClass("active");
+            // 同理显示与隐藏
+            $(this).parents(".wrap").find(".blsit-list li").eq(index).show().siblings().hide();
+        })
+    })*/
+    //更多
+    /*$(document).ready(function(){
+        $(".more").click(function(){
+            $('#blistCity').hasClass('blist-height')?$('#blistCity').removeClass('blist-height'):$('#blistCity').addClass('blist-height');
+            if($('#blistCity').hasClass('blist-height')){
+
+                $(".more i").removeClass("glyphicon-chevron-up");
+                $(".more i").addClass("glyphicon-chevron-down");
+            }else{
+                $(".more i").removeClass("glyphicon-chevron-down");
+                $(".more i").addClass("glyphicon-chevron-up");
+            };
+
+        });
+    });*/
+</script>
+</body>
+</html>

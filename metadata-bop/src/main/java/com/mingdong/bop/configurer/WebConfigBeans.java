@@ -1,6 +1,9 @@
 package com.mingdong.bop.configurer;
 
+import com.mingdong.bop.component.Param;
 import com.mingdong.core.component.StringToDateConverter;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
@@ -9,6 +12,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.servlet.MultipartConfigElement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +21,9 @@ public class WebConfigBeans
 {
     @Resource
     private RequestMappingHandlerAdapter handlerAdapter;
+
+    @Resource
+    private Param param;
 
     /**
      * 增加字符串转日期的功能
@@ -48,5 +55,13 @@ public class WebConfigBeans
             //            vars.put("var2", "var2");
             viewResolver.setStaticVariables(vars);
         }
+    }
+
+    @Bean
+    MultipartConfigElement multipartConfigElement()
+    {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation(param.getTempFilePath());
+        return factory.createMultipartConfig();
     }
 }

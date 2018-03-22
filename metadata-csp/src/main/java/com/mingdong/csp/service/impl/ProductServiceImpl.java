@@ -343,4 +343,26 @@ public class ProductServiceImpl implements ProductService
         resp.addData(Field.NAME, productInfoData.getName());
         resp.addData(Field.CONTENT, productInfoData.getContent());
     }
+
+    @Override
+    public void getProductListAll(List<Integer> productTypeList, Page page, RestListResp res)
+    {
+        ListDTO<ProductResDTO> listDTO = productRpcService.getProductList(productTypeList, TrueOrFalse.FALSE, page);
+        res.setTotal(listDTO.getTotal());
+        res.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
+        {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(ProductResDTO o : listDTO.getList())
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, o.getId() + "");
+                map.put(Field.NAME, o.getName());
+                map.put(Field.TYPE, ProductType.getNameById(o.getType()));
+                map.put(Field.REMARK, o.getRemark());
+                list.add(map);
+            }
+            res.setList(list);
+        }
+    }
 }

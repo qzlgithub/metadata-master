@@ -133,6 +133,12 @@ public interface Field
     String GROUP_NAME = "groupName";
     String ROLE_TYPE = "roleType";
     String CLIENT_USER_MAX = "clientUserMax";
+    String ORDER_ID = "orderId";
+    String AUTHOR = "author";
+    String IMAGE_PATH = "imagePath";
+    String SYNOPSIS = "synopsis";
+    String PUBLISHED = "published";
+    String PUBLISH_TIME = "publishTime";
     // 系统字典参数名
     String BILL_PLAN_DICT = "billPlanDict";
     String ACCOUNT_DICT = "accountDict";

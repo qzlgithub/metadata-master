@@ -7,6 +7,7 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProductType;
+import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -138,6 +139,35 @@ public class SettingPageController
         ModelAndView view = new ModelAndView("product/edit");
         view.addAllObjects(productService.getProductInfoData(id));
         view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/setting/articles.html")
+    public ModelAndView articlesList()
+    {
+        ModelAndView view = new ModelAndView("articles/list");
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/setting/articles/add.html")
+    public ModelAndView articlesAdd()
+    {
+        ModelAndView view = new ModelAndView("articles/add");
+        view.addAllObjects(RequestThread.getMap());
+        view.addObject(Field.ID, IDUtils.getArticlesId(1));
+        return view;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/setting/articles/edit.html")
+    public ModelAndView articlesEdit(@RequestParam(Field.ID) Long id)
+    {
+        ModelAndView view = new ModelAndView("articles/edit");
+        view.addAllObjects(RequestThread.getMap());
+        view.addAllObjects(systemService.getArticlesInfo(id));
         return view;
     }
 }

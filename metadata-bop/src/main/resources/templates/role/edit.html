@@ -49,7 +49,7 @@
                     </thead>
                     <tbody id="dataBody">
                     <tr>
-                        <td rowspan="7">系统管理</td>
+                        <td rowspan="8">系统管理</td>
                         <td rowspan="2">账户管理</td>
                         <td>后台账号管理</td>
                         <td class="tl important">
@@ -87,6 +87,19 @@
                                    th:checked="${#lists.contains(privilegeList,'21202')}"/>编辑
                             <input type="checkbox" class="privilege p21200" id="21203" p-id="p21200" checked=""
                                    th:checked="${#lists.contains(privilegeList,'21203')}"/>禁用
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>新闻动态</td>
+                        <td>文章列表</td>
+                        <td class="tl important">
+                            <input type="checkbox" class="parent-privilege" id="p61100"/>全选
+                            <input type="checkbox" class="privilege p61100" id="61101" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilegeList,'61101')}"/>添加
+                            <input type="checkbox" class="privilege p61100" id="61102" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilegeList,'61102')}"/>编辑
+                            <input type="checkbox" class="privilege p61100" id="61103" p-id="p61100" checked=""
+                                   th:checked="${#lists.contains(privilegeList,'61103')}"/>删除
                         </td>
                     </tr>
                     <tr>
@@ -192,7 +205,7 @@
                                    th:checked="${#lists.contains(privilegeList,'51202')}"/>导出
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td rowspan="5">运营数据管理</td>
                         <td rowspan="5">运营数据管理</td>
                         <td>运营数据汇总</td>
@@ -241,7 +254,7 @@
                             <input type="checkbox" class="privilege p41500" id="41502" p-id="p41500" checked=""
                                    th:checked="${#lists.contains(privilegeList,'41502')}"/>导出
                         </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                 </table>
             </div>

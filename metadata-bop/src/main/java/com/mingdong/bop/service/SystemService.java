@@ -1,9 +1,12 @@
 package com.mingdong.bop.service;
 
+import com.mingdong.bop.model.ArticlesVo;
 import com.mingdong.bop.model.SistemVO;
+import com.mingdong.common.model.Page;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -106,4 +109,14 @@ public interface SystemService
     void getRechargeTypeList(RestListResp res);
 
     List<Dict> getAccountRoleDict();
+
+    void getArticlesList(Page page, RestListResp res);
+
+    void addArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp);
+
+    void updateArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp);
+
+    Map<String, Object> getArticlesInfo(Long id);
+
+    void deleteArticlesById(Long id, RestResp resp);
 }

@@ -46,4 +46,6 @@ public interface ProductService
     void getProductListBy(Long clientId, List<Integer> productTypeList, Integer incOpened, Page page, RestListResp res);
 
     void getProductInfo(Long productId, RestResp resp);
+
+    void getProductListAll(List<Integer> productTypeList, Page page, RestListResp resp);
 }

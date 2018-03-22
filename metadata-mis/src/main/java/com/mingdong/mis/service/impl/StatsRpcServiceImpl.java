@@ -279,13 +279,15 @@ public class StatsRpcServiceImpl implements StatsRpcService
             return;
         }
         List<StatsRechargeInfo> statsRechargeInfos = statsClientMapper.statsRechargeByData(hourBefore, hourAfter);
-        if(!CollectionUtils.isEmpty(statsRechargeInfos)){
+        if(!CollectionUtils.isEmpty(statsRechargeInfos))
+        {
             logger.info("充值定时统计---" + longSdf.format(calendar.getTime()));
             Date nowDate = new Date();
             logger.info("充值定时统计nowDate===" + longSdf.format(nowDate));
             List<StatsRecharge> statsRecharges = new ArrayList<>();
             StatsRecharge statsRecharge;
-            for(StatsRechargeInfo item : statsRechargeInfos){
+            for(StatsRechargeInfo item : statsRechargeInfos)
+            {
                 statsRecharge = new StatsRecharge();
                 statsRecharge.setRechargeType(item.getRechargeType());
                 statsRecharge.setAmount(item.getAmount());
@@ -300,7 +302,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
                 statsRecharges.add(statsRecharge);
             }
             statsRechargeMapper.addAll(statsRecharges);
-        }else{
+        }
+        else
+        {
             logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }

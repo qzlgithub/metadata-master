@@ -13,4 +13,6 @@ public interface SistemMapper
     String getClientUserMax();
 
     String getServiceQQ();
+
+    String getFilePth();
 }

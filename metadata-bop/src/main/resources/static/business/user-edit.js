@@ -75,7 +75,7 @@ function saveManager() {
     if(!checkDataValid("#userInfoDivId")) {
         return;
     }
-    if(privilege.length == 0){
+    if(privilege.length == 0) {
         layer.msg("请至少选择一个权限！", {
             time: 2000
         });
@@ -96,7 +96,7 @@ function saveManager() {
             "qq": qq,
             "enabled": enabled,
             "privilege": privilege,
-            "send":send
+            "send": send
         }),
         success: function(res) {
             if(res.code !== "000000") {

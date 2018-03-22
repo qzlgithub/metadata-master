@@ -24,4 +24,5 @@ public interface ProductClientInfoMapper
     int countByClientOpened(@Param("clientId") Long clientId, @Param("opened") Integer opened);
 
     List<ProductClientInfo> getListByClientOpened(@Param("clientId") Long clientId, @Param("opened") Integer opened);
+
 }

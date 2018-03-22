@@ -1,5 +1,7 @@
 package com.mingdong.mis.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
@@ -7,9 +9,12 @@ import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
+import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
+import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
@@ -17,9 +22,11 @@ import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.SystemRpcService;
+import com.mingdong.mis.domain.entity.Articles;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
+import com.mingdong.mis.domain.mapper.ArticlesMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
@@ -41,6 +48,8 @@ public class SystemRpcServiceImpl implements SystemRpcService
     private DictRechargeTypeMapper dictRechargeTypeMapper;
     @Resource
     private SistemMapper sistemMapper;
+    @Resource
+    private ArticlesMapper articlesMapper;
 
     @Override
     public ListDTO<DictIndustryResDTO> getIndustryList(Long parentIndustryId, Integer enabled)
@@ -378,5 +387,138 @@ public class SystemRpcServiceImpl implements SystemRpcService
         Date date = new Date();
         sistemMapper.updateClientUserMax(sistemDTO.getClientUserMax() + "", date);
         sistemMapper.updateServiceQQ(sistemDTO.getServiceQQ(), date);
+    }
+
+    @Override
+    public ListDTO<ArticlesResDTO> getArticlesList(Page page)
+    {
+        ListDTO<ArticlesResDTO> listDTO = new ListDTO<>();
+        int total = articlesMapper.countAll();
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<Articles> dataList = articlesMapper.findListAll();
+            List<ArticlesResDTO> list = new ArrayList<>(dataList.size());
+            for(Articles o : dataList)
+            {
+                ArticlesResDTO pd = new ArticlesResDTO();
+                pd.setId(o.getId());
+                pd.setPublishTime(o.getPublishTime());
+                pd.setPublished(o.getPublished());
+                pd.setOrderId(o.getOrderId());
+                pd.setTitle(o.getTitle());
+                pd.setType(o.getType());
+                list.add(pd);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO addArticles(ArticlesReqDTO articlesReqDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Articles articles = new Articles();
+        articles.setId(articlesReqDTO.getId());
+        articles.setAuthor(articlesReqDTO.getAuthor());
+        articles.setContent(articlesReqDTO.getContent());
+        articles.setCreateTime(new Date());
+        articles.setUpdateTime(new Date());
+        articles.setDeleted(articlesReqDTO.getDeleted());
+        articles.setPublished(articlesReqDTO.getPublished());
+        articles.setImagePath(articlesReqDTO.getImagePath());
+        articles.setOrderId(articlesReqDTO.getOrderId());
+        articles.setSynopsis(articlesReqDTO.getSynopsis());
+        articles.setTitle(articlesReqDTO.getTitle());
+        articles.setType(articlesReqDTO.getType());
+        articles.setUserId(articlesReqDTO.getUserId());
+        articles.setPublishTime(articlesReqDTO.getPublishTime());
+        articlesMapper.add(articles);
+        return responseDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO updateArticles(ArticlesReqDTO articlesReqDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Articles articles = new Articles();
+        articles.setId(articlesReqDTO.getId());
+        articles.setAuthor(articlesReqDTO.getAuthor());
+        articles.setContent(articlesReqDTO.getContent());
+        articles.setUpdateTime(new Date());
+        articles.setDeleted(articlesReqDTO.getDeleted());
+        articles.setPublished(articlesReqDTO.getPublished());
+        articles.setImagePath(articlesReqDTO.getImagePath());
+        articles.setOrderId(articlesReqDTO.getOrderId());
+        articles.setSynopsis(articlesReqDTO.getSynopsis());
+        articles.setTitle(articlesReqDTO.getTitle());
+        articles.setType(articlesReqDTO.getType());
+        articles.setUserId(articlesReqDTO.getUserId());
+        articles.setPublishTime(articlesReqDTO.getPublishTime());
+        articlesMapper.updateSkipNull(articles);
+        return responseDTO;
+    }
+
+    @Override
+    public ArticlesDetailResDTO getArticlesInfo(Long id)
+    {
+        ArticlesDetailResDTO articlesResDTO = new ArticlesDetailResDTO();
+        Articles articles = articlesMapper.findById(id);
+        articlesResDTO.setId(articles.getId());
+        articlesResDTO.setUserId(articles.getUserId());
+        articlesResDTO.setType(articles.getType());
+        articlesResDTO.setTitle(articles.getTitle());
+        articlesResDTO.setSynopsis(articles.getSynopsis());
+        articlesResDTO.setOrderId(articles.getOrderId());
+        articlesResDTO.setImagePath(articles.getImagePath());
+        articlesResDTO.setPublished(articles.getPublished());
+        articlesResDTO.setDeleted(articles.getDeleted());
+        articlesResDTO.setContent(articles.getContent());
+        articlesResDTO.setAuthor(articles.getAuthor());
+        articlesResDTO.setPublishTime(articles.getPublishTime());
+        return articlesResDTO;
+    }
+
+    @Override
+    public ResponseDTO deleteArticlesById(Long id)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Articles articles = new Articles();
+        articles.setId(id);
+        articles.setDeleted(TrueOrFalse.TRUE);
+        articlesMapper.updateSkipNull(articles);
+        return responseDTO;
+    }
+
+    @Override
+    public ListDTO<ArticlesResDTO> getArticlesList(Integer type, Page page)
+    {
+        ListDTO<ArticlesResDTO> listDTO = new ListDTO<>();
+        int total = articlesMapper.countByType(type);
+        int pages = page.getTotalPage(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<Articles> dataList = articlesMapper.findListByType(type);
+            List<ArticlesResDTO> list = new ArrayList<>(dataList.size());
+            for(Articles o : dataList)
+            {
+                ArticlesResDTO pd = new ArticlesResDTO();
+                pd.setId(o.getId());
+                pd.setPublishTime(o.getPublishTime());
+                pd.setTitle(o.getTitle());
+                pd.setSynopsis(o.getSynopsis());
+                pd.setImagePath(o.getImagePath());
+                list.add(pd);
+            }
+            listDTO.setList(list);
+        }
+        return listDTO;
     }
 }

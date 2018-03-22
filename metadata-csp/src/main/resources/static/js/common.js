@@ -17,7 +17,7 @@ $("#exit").click(function() {
         dataType: "json",
         contentType: "application/json",
         success: function() {
-            window.location.href = "/index.html";
+            window.location.href = "/login.html";
         }
     });
 });

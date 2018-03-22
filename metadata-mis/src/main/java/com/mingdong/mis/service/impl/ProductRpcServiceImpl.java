@@ -387,4 +387,30 @@ public class ProductRpcServiceImpl implements ProductRpcService
         }
         return dto;
     }
+
+    @Override
+    public ListDTO<ProductResDTO> getProductList(List<Integer> productTypeList, Integer custom, Page page)
+    {
+        ListDTO<ProductResDTO> dto = new ListDTO<>();
+        int total = productMapper.countByType(productTypeList, custom);
+        int pages = page.getTotalPage(total);
+        dto.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<Product> dataList = productMapper.getListByType(productTypeList, custom);
+            List<ProductResDTO> list = new ArrayList<>(dataList.size());
+            for(Product o : dataList)
+            {
+                ProductResDTO p = new ProductResDTO();
+                p.setId(o.getId());
+                p.setName(o.getName());
+                p.setType(o.getType());
+                p.setRemark(o.getRemark());
+                list.add(p);
+            }
+            dto.setList(list);
+        }
+        return dto;
+    }
 }

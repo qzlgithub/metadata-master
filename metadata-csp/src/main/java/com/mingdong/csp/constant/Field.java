@@ -71,4 +71,9 @@ public interface Field
     String PRODUCT_DICT = "productDict";
     String COUNT = "count";
     String PRODUCT_TYPE_DICT = "productTypeDict";
+    String TITLE = "title";
+    String IMAGE_PATH = "imagePath";
+    String SYNOPSIS = "synopsis";
+    String AUTHOR = "author";
+    String PUBLISH_TIME = "publishTime";
 }

@@ -8,7 +8,7 @@ KindEditor.ready(function(K) {
             'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'lineheight', '|',
             'formatblock', 'fontname', 'fontsize', '|',
             'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', '|',
-            'image', 'table', 'hr', 'emoticons', 'link'],
+            'table', 'hr', 'emoticons', 'link'],
         uploadJson: '../jsp/upload_json.jsp',
         fileManagerJson: '../jsp/file_manager_json.jsp',
         allowFileManager: true,
@@ -39,15 +39,6 @@ layui.config({
     app.set({
         type: 'iframe'
     }).init();
-    $('#pay').on('click', function() {
-        layer.open({
-            title: false,
-            type: 1,
-            content: '<img src="/static/build/images/pay.png" />',
-            area: ['500px', '250px'],
-            shadeClose: true
-        });
-    });
 });
 var isSubmit = false;
 
@@ -77,6 +68,7 @@ function editProduct() {
         success: function(res) {
             if(res.code !== '000000') {
                 layer.msg(res.message, {time: 2000});
+                isSubmit = false;
             }
             else {
                 layer.msg("修改成功", {
@@ -85,7 +77,6 @@ function editProduct() {
                     window.location.href = "/setting/product.html";
                 });
             }
-            isSubmit = false;
         }
     });
 }

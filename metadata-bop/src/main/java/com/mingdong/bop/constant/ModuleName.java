@@ -17,6 +17,8 @@ public interface ModuleName
     String STATS_CONSUMPTION = "stats-consumption";
     // 产品
     String SETTING_PRODUCT = "setting-product";
+    // 新闻动态
+    String STRING_ARTICLES = "setting-articles";
     // 客户
     String CLIENT_INDEX = "client-index";
     // 财务

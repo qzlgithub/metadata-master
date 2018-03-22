@@ -8,11 +8,9 @@ public class IDUtils
     private static AtomicLong client = new AtomicLong(0);
     private static AtomicLong clientUser = new AtomicLong(0);
     private static AtomicLong manager = new AtomicLong(0);
-    private static AtomicLong role = new AtomicLong(0);
     private static AtomicLong clientProduct = new AtomicLong(0);
-    private static AtomicLong productRecharge = new AtomicLong(0);
     private static AtomicLong apiReq = new AtomicLong(0);
-    private static AtomicLong stats = new AtomicLong(0);
+    private static AtomicLong articles = new AtomicLong(0);
 
     private static long createID(AtomicLong atomicLong, int nodeId)
     {
@@ -45,19 +43,9 @@ public class IDUtils
         return createID(manager, nodeId);
     }
 
-    public static Long getRoleId(int nodeId)
-    {
-        return createID(role, nodeId);
-    }
-
     public static Long getClientProductId(int nodeId)
     {
         return createID(clientProduct, nodeId);
-    }
-
-    public static Long getProductRechargeId(int nodeId)
-    {
-        return createID(productRecharge, nodeId);
     }
 
     public static Long getApiReqId(int nodeId)
@@ -65,8 +53,8 @@ public class IDUtils
         return createID(apiReq, nodeId);
     }
 
-    public static Long getStatsId(int nodeId)
+    public static Long getArticlesId(int nodeId)
     {
-        return createID(stats, nodeId);
+        return createID(articles, nodeId);
     }
 }

@@ -32,7 +32,7 @@
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
                                id="sub-user-qty" th:value="${clientUserMax}"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="3"/>
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="3"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
                                id="service-qq" th:value="${serviceQQ}"
-                               onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="20"/>
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="20"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>

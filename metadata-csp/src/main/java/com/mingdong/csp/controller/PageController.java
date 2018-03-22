@@ -42,8 +42,8 @@ public class PageController
     /**
      * 登陆页
      */
-    @GetMapping(value = {"/", "index.html"})
-    public ModelAndView indexPage(HttpServletRequest request) throws IOException
+    @GetMapping(value = {"login.html"})
+    public ModelAndView loginPage(HttpServletRequest request) throws IOException
     {
         HttpSession session = request.getSession();
         String sessionId = session.getId();
@@ -55,7 +55,7 @@ public class PageController
                 return new ModelAndView("redirect:/home.html");
             }
         }
-        ModelAndView view = new ModelAndView("index");
+        ModelAndView view = new ModelAndView("login");
         ImageCode imageCode = CaptchaUtils.buildImageCode();
         session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + imageCode.getBase64Code());

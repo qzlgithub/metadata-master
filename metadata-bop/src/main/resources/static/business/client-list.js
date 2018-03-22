@@ -270,10 +270,10 @@ function show_sub_user(id) {
     });
 }
 
-function getSubUserList(obj, pageFun, openLayerFun){
+function getSubUserList(obj, pageFun, openLayerFun) {
     $.get(
         "/client/sub-user/list",
-        {"id": obj['clientId'],"pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
+        {"id": obj['clientId'], "pageNum": obj['pageNum'], "pageSize": obj['pageSize']},
         function(data) {
             var htmlobj = $("#child-account-body");
             htmlobj.empty();

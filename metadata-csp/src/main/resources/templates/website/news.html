@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <title>沃动科技</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content="index,follow"/>
+    <meta name="application-name" content="bootcss.com"/>
+    <meta property="qc:admins" content="1603466166416277433363757477167"/>
+
+    <!-- Site CSS -->
+    <link href="/static/website/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/static/website/css/base.css" rel="stylesheet"/>
+    <link href="/static/website/css/style.css" rel="stylesheet"/>
+    <link href="/static/website/css/common.css" rel="stylesheet"/>
+    <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" href="/static/website/images/icon/apple-touch-icon-precomposed.png"/>
+    <link rel="shortcut icon" href="/static/website/images/icon/favicon.png"/>
+</head>
+
+<body>
+<div class="navbar navbar-inverse mb0 header1">
+    <div class="container header-mt10">
+        <div class="navbar-header">
+            <a class="navbar-brand hidden-sm navbar-logo pt0 important" href="index.html"><i
+                    class="header-logo"></i></a>
+        </div>
+        <div class="navbar-collapse collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
+                <li><a href="product.html">热门产品</a></li>
+                <li><a href="#">解决方案</a></li>
+                <li class="active"><a href="news.html">新闻动态</a></li>
+                <li><a href="about.html">关于元数据</a></li>
+            </ul>
+            <ul class="fr mt15">
+                <a href="login.html" class="login-btn">登录</a>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="bg1 pt40 pb40">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-md-2 new-list-left">
+                <p>新闻动态</p>
+                <ul id="firstLeft">
+                    <li class="new-list-child active" data-id="1"><a href="javascript:">行业新闻</a></li>
+                    <li class="new-list-child" data-id="2"><a href="javascript:">公司动态</a></li>
+                </ul>
+                <p class="mt10">其他文档</p>
+                <ul id="secondLeft">
+                    <li class="new-list-child" data-id="101"><a href="javascript:">使用协议</a></li>
+                    <li class="new-list-child" data-id="102"><a href="javascript:">隐私协议</a></li>
+                    <li class="new-list-child" data-id="103"><a href="javascript:">法律申明</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divList">
+                <div class="bg2 p10"><h1 class="head-title">行业新闻</h1></div>
+                <ul class="mt20" id="newsList">
+
+                </ul>
+                <div class="box pt30" id="pagination"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divDetail" style="display:none">
+                <div class="bg2 p10"><h1 class="head-title">行业新闻</h1></div>
+                <h2 class="mt20 important pl10" id="newsTitle"></h2>
+                <p class="col2 fz-16  pl10" id="newsDate"></p>
+                <div class="new-inf pl10" id="newsContent">
+                </div>
+                <div class="tr">
+                    <a href="javascript:" class="return-button w30 cp news-back"><i
+                            class="glyphicon glyphicon-arrow-left mr5"></i>返回</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<footer class="footer-icp">
+    <div class="container tc clearfix position-r">
+        <a>联系我们</a>|<a>使用协议</a>|<a>隐私协议</a>|<a>法律申明</a>|<a>关于元数据</a>|<a>关于明动</a>
+        <div class="footer-ewm"><img src="/static/website/images/ewm.png"/></div>
+    </div>
+
+</footer>
+<footer class="footer">
+    <div class="container ">
+        <p class="tc">
+            <span class="fz-16 mr30"><i class="icon tel-icon mr5"></i>0571-1545451245</span>
+            <span class="fz-16"><i class="icon email-icon mr5"></i>mingdonglet@mail.com</span>
+        </p>
+        <p class="tc mt25"><span class="footer-inf">元数据 · 源于数据的发现</span></p>
+        <p class="tc mt25">©明动科技 | 浙ICP备123321号</p>
+    </div>
+</footer>
+
+<script src="/static/website/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
+<script type="text/javascript" src="/static/business/website-news.js"></script>
+<script>
+    /*
+    //更多
+    $(document).ready(function() {
+        $(".more").click(function() {
+            $('#blistCity').hasClass('blist-height') ? $('#blistCity').removeClass('blist-height') : $('#blistCity').addClass('blist-height');
+        });
+    });*/
+</script>
+</body>
+</html>

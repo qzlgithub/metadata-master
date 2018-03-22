@@ -1,22 +1,30 @@
 package com.mingdong.bop.service.impl;
 
+import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.ArticlesVo;
+import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.model.SistemVO;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
+import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
+import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
@@ -24,18 +32,23 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class SystemServiceImpl implements SystemService
 {
     @Resource
     private RedisDao redisDao;
+    @Resource
+    private Param param;
     @Resource
     private CommonRpcService commonRpcService;
     @Resource
@@ -311,7 +324,7 @@ public class SystemServiceImpl implements SystemService
         for(RechargeTypeResDTO o : dto.getList())
         {
             Map<String, Object> m = new HashMap<>();
-            m.put(Field.ID, o.getId());
+            m.put(Field.ID, o.getId() + "");
             m.put(Field.NAME, o.getName());
             m.put(Field.REMARK, o.getRemark());
             m.put(Field.STATUS, o.getEnabled());
@@ -330,6 +343,174 @@ public class SystemServiceImpl implements SystemService
             return listDTO.getList();
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public void getArticlesList(Page page, RestListResp res)
+    {
+        ListDTO<ArticlesResDTO> listDTO = systemRpcService.getArticlesList(page);
+        res.setTotal(listDTO.getTotal());
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
+        {
+            for(ArticlesResDTO o : listDTO.getList())
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.ID, o.getId() + "");
+                m.put(Field.PUBLISH_TIME, DateUtils.format(o.getPublishTime(), DateFormat.YYYY_MM_DD));
+                m.put(Field.TYPE, o.getType());
+                m.put(Field.STATUS, o.getPublished());
+                m.put(Field.TITLE, o.getTitle());
+                m.put(Field.ORDER_ID, o.getOrderId());
+                list.add(m);
+            }
+        }
+        res.setList(list);
+    }
+
+    @Override
+    public void addArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp)
+    {
+        String fileName = upfile.getOriginalFilename();
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        String otherFileName = "min_" + UUID.randomUUID() + suffixName;
+        String filePath = param.getSaveFilePath() + articlesVo.getId().toString();
+        File dir = new File(filePath);
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
+        String otherPath = articlesVo.getId().toString() + File.separator + otherFileName;
+        File dest = new File(param.getSaveFilePath() + otherPath);
+        try
+        {
+            upfile.transferTo(dest);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            otherPath = null;
+        }
+        ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
+        articlesReqDTO.setId(articlesVo.getId());
+        articlesReqDTO.setAuthor(articlesVo.getAuthor());
+        articlesReqDTO.setContent(articlesVo.getContent());
+        articlesReqDTO.setDeleted(TrueOrFalse.FALSE);
+        articlesReqDTO.setPublished(articlesVo.getPublished());
+        articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
+        articlesReqDTO.setOrderId(articlesVo.getOrderId());
+        articlesReqDTO.setSynopsis(articlesVo.getSynopsis());
+        articlesReqDTO.setTitle(articlesVo.getTitle());
+        articlesReqDTO.setType(articlesVo.getType());
+        articlesReqDTO.setPublishTime(articlesVo.getPublishTime());
+        articlesReqDTO.setUserId(RequestThread.getOperatorId());
+        try
+        {
+            ResponseDTO responseDTO = systemRpcService.addArticles(articlesReqDTO);
+            if(responseDTO.getResult() != RestResult.SUCCESS)
+            {
+                resp.setError(responseDTO.getResult());
+                return;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            if(dest.exists())
+            {
+                dest.delete();
+            }
+            resp.setError(RestResult.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public void updateArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp)
+    {
+        String otherFileName = null;
+        String otherPath = null;
+        File dest = null;
+        if(upfile != null)
+        {
+            String fileName = upfile.getOriginalFilename();
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));
+            otherFileName = "min_" + UUID.randomUUID() + suffixName;
+            String filePath = param.getSaveFilePath() + articlesVo.getId().toString();
+            File dir = new File(filePath);
+            if(!dir.exists())
+            {
+                dir.mkdirs();
+            }
+            otherPath = articlesVo.getId().toString() + File.separator + otherFileName;
+            dest = new File(param.getSaveFilePath() + otherPath);
+            try
+            {
+                upfile.transferTo(dest);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                otherPath = null;
+            }
+        }
+        ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
+        articlesReqDTO.setId(articlesVo.getId());
+        articlesReqDTO.setAuthor(articlesVo.getAuthor());
+        articlesReqDTO.setContent(articlesVo.getContent());
+        articlesReqDTO.setPublished(articlesVo.getPublished());
+        articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
+        articlesReqDTO.setOrderId(articlesVo.getOrderId());
+        articlesReqDTO.setSynopsis(articlesVo.getSynopsis());
+        articlesReqDTO.setTitle(articlesVo.getTitle());
+        articlesReqDTO.setType(articlesVo.getType());
+        articlesReqDTO.setPublishTime(articlesVo.getPublishTime());
+        try
+        {
+            ResponseDTO responseDTO = systemRpcService.updateArticles(articlesReqDTO);
+            if(responseDTO.getResult() != RestResult.SUCCESS)
+            {
+                resp.setError(responseDTO.getResult());
+                return;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            if(dest != null && dest.exists())
+            {
+                dest.delete();
+            }
+            resp.setError(RestResult.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public Map<String, Object> getArticlesInfo(Long id)
+    {
+        Map<String, Object> map = new HashMap<>();
+        ArticlesDetailResDTO articlesDetailResDTO = systemRpcService.getArticlesInfo(id);
+        map.put(Field.ID, articlesDetailResDTO.getId() + "");
+        map.put(Field.TITLE, articlesDetailResDTO.getTitle());
+        map.put(Field.TYPE, articlesDetailResDTO.getType());
+        map.put(Field.AUTHOR, articlesDetailResDTO.getAuthor());
+        map.put(Field.CONTENT, articlesDetailResDTO.getContent());
+        map.put(Field.IMAGE_PATH, articlesDetailResDTO.getImagePath());
+        map.put(Field.PUBLISHED, articlesDetailResDTO.getPublished());
+        map.put(Field.PUBLISH_TIME, DateUtils.format(articlesDetailResDTO.getPublishTime(), DateFormat.YYYY_MM_DD));
+        map.put(Field.ORDER_ID, articlesDetailResDTO.getOrderId());
+        map.put(Field.SYNOPSIS, articlesDetailResDTO.getSynopsis());
+        return map;
+    }
+
+    @Override
+    public void deleteArticlesById(Long id, RestResp resp)
+    {
+        ResponseDTO responseDTO = systemRpcService.deleteArticlesById(id);
+        if(responseDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.setError(responseDTO.getResult());
+            return;
+        }
     }
 
     private void cacheAllIndustryData()

@@ -15,13 +15,14 @@ layui.config({
     }).init();
     laydate.render({
         elem: '#open-dates'
-        ,range: true,
-        done: function(value, date){
-            if(value != ""){
+        , range: true,
+        done: function(value, date) {
+            if(value != "") {
                 var dates = value.split(" - ");
                 $("#open-start").val(dates[0]);
                 $("#open-end").val(dates[1]);
-            }else{
+            }
+            else {
                 $("#open-start").val("");
                 $("#open-end").val("");
             }
@@ -29,13 +30,14 @@ layui.config({
     });
     laydate.render({
         elem: '#renew-dates'
-        ,range: true,
-        done: function(value, date){
-            if(value != ""){
+        , range: true,
+        done: function(value, date) {
+            if(value != "") {
                 var dates = value.split(" - ");
                 $("#renew-start").val(dates[0]);
                 $("#renew-end").val(dates[1]);
-            }else{
+            }
+            else {
                 $("#renew-start").val("");
                 $("#renew-end").val("");
             }
@@ -200,20 +202,21 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
 
 function openProduct() {
     var chargeType = $("#open-charge").val();
-    if(chargeType == 1){
-        if($("#open-dates").val() === ""){
+    if(chargeType == 1) {
+        if($("#open-dates").val() === "") {
             $("#openTimeTip").text("服务时间不能为空！").show();
             return;
         }
-    }else{
-        if(!checkUnitPrice('open-unit','openUnitTip')){
+    }
+    else {
+        if(!checkUnitPrice('open-unit', 'openUnitTip')) {
             return;
         }
     }
-    if(!checkRecharge('open-amt','openAmtTip')){
+    if(!checkRecharge('open-amt', 'openAmtTip')) {
         return;
     }
-    if(!checkOpenContract()){
+    if(!checkOpenContract()) {
         return;
     }
     var clientId = $("#client-id").val();
@@ -261,20 +264,21 @@ function openProduct() {
 
 function renewProduct() {
     var billPlan = $("#renew-bill-plan").val();
-    if(billPlan == 1){
-        if($("#renew-dates").val() === ""){
+    if(billPlan == 1) {
+        if($("#renew-dates").val() === "") {
             $("#renewTimeTip").text("服务时间不能为空！").show();
             return;
         }
-    }else{
-        if(!checkUnitPrice('renew-unit','unitPriceTip')){
+    }
+    else {
+        if(!checkUnitPrice('renew-unit', 'unitPriceTip')) {
             return;
         }
     }
-    if(!checkRecharge('renew-amt','rechargeTip')){
+    if(!checkRecharge('renew-amt', 'rechargeTip')) {
         return;
     }
-    if(!checkContNumber()){
+    if(!checkContNumber()) {
         return;
     }
     var clientId = $("#client-id").val();
@@ -370,35 +374,35 @@ function getDate(date) {
     return dateReturn;
 }
 
-function checkUnitPrice(unitId,unitPriceTipId) {
-    var unitPrice = $("#"+unitId).val();
+function checkUnitPrice(unitId, unitPriceTipId) {
+    var unitPrice = $("#" + unitId).val();
     var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 匹配价格(保留小数点后两位)
-    $("#"+unitPriceTipId).text("").hide();
+    $("#" + unitPriceTipId).text("").hide();
     if(unitPrice !== "") {
         if(!reg.test(unitPrice)) {
-            $("#"+unitPriceTipId).text("单价格式错误！").show();
+            $("#" + unitPriceTipId).text("单价格式错误！").show();
             return false;
         }
     }
     else {
-        $("#"+unitPriceTipId).text("请填写单价！").show();
+        $("#" + unitPriceTipId).text("请填写单价！").show();
         return false;
     }
     return true;
 }
 
-function checkRecharge(amtId,amtTipId) {
-    var recharge = $("#"+amtId).val();
+function checkRecharge(amtId, amtTipId) {
+    var recharge = $("#" + amtId).val();
     var reg = new RegExp("^(0|[1-9][0-9]{0,9})(\\.[0-9]{1,2})?$"); // 充值金额价格(保留小数点后两位)
-    $("#"+amtTipId).text("").hide();
+    $("#" + amtTipId).text("").hide();
     if(recharge !== "") {
         if(!reg.test(recharge)) {
-            $("#"+amtTipId).text("充值金额格式错误").show();
+            $("#" + amtTipId).text("充值金额格式错误").show();
             return false;
         }
     }
     else {
-        $("#"+amtTipId).text("请填写充值金额！").show();
+        $("#" + amtTipId).text("请填写充值金额！").show();
         return false;
     }
     return true;

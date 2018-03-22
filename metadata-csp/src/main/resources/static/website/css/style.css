@@ -1,0 +1,112 @@
+
+@charset "utf-8";
+/**
+* Description: Base style
+* Developers: chenjiwei
+**/
+/*reset */
+body,*{ "Arial Unicode MS",'Arial', 'Helvetica', 'sans-serif','Microsoft YaHei' !important;text-shadow:none;}
+body, dl, dd, h1, h2, h3, h4, h5, h6, p, form,ul,li{margin:0;}
+ul{padding:0;}
+ol,li{margin:0; padding:0;}
+table{border-collapse: collapse; border-spacing: 0;}
+fieldset, img{border: 0;}
+address, caption, cite, code, dfn, em, strong, th, var,i{font-style: normal; font-weight: normal;}
+ol, ul {list-style: none;}
+del, ins{text-decoration: none;}
+caption, th{text-align: left;}
+h1, h2, h3, h4, h5, h6{font-size: 100%; font-weight: normal;}
+input, button, textarea, select{font-size: 100%;}
+select {background: #fff;}
+q:before, q:after{content: '';}
+acronym{border: 0; font-variant: normal;}
+sub, sup{font-size: 75%; line-height: 0; position: relative;}
+sub{top: -0.5em;}
+sup{bottom: -0.25em;}
+a {color: #000;}
+a:hover,a:link{text-decoration: none;}
+
+html{font-size: 62.5%; }
+body{color: #484848}
+input{outline:none;}
+
+
+/*index*/
+.index-body{background: #f2f2f2;}
+.jumbotron{box-shadow:none;-webkit-box-shadow:none; background: #063a76}
+@media screen and (min-width: 768px)
+{
+	.masthead {margin-bottom: 0; color: #fff;padding: 55px 0 110px}
+}
+
+.masthead {padding: 55px 0 0px; margin-bottom: 0; color: #fff;}
+
+/**轮播**/
+.slide-text {position: initial!important;}
+.indicators-line > .carousel-indicators{width: 100%!important; right: initial!important; padding: 0px; margin:auto; text-align: center!important;}
+
+
+.login-btn{border-radius: 3px; background:#4aa0f5; color: #fff; padding: 8px 15px;}
+ a.login-btn:hover{color: #fff; text-decoration: none;}
+
+
+/*****产品中心******/
+.sbg_top{width: 100%; min-width: 1000px;  height: 400px;}
+.product-banner{ background:#1e2a44; background-size: 100%; height: 400px;overflow: hidden; position: relative;}
+.product-banner-img{background: url(../images/product-banner.png) no-repeat center; min-width: 1188px; height: 100%;}
+.product-banner-font1{font-size: 44px; color: #fff; margin-top: 80px;}
+.product-banner-font2{font-size: 28px; color: #fff; margin-top: 20px;}
+.product-banner-font3{font-size: 20px; color: #fff; margin-top: 20px;}
+.product-list-name{border-left: solid 2px #49a0f5; color: #3a3a3a; font-size: 20px; padding-left: 20px; font-weight: bold;}
+.blist-name span{color: #333; font-size: 18px; width: 10%; float: left; margin-top: 5px;}
+.blist-name em{float: right;width: 10%;  margin-top: 5px; font-size: 16px; color: #333}
+.blist{width: 80%; float: left;}
+.blist-height{max-height: 42px; overflow: hidden;}
+.blist li{padding:0 10px; display:inline-block; padding: 5px 20px; font-size: 16px; margin: 0px 7px; margin-bottom: 10px;}
+.blist li.active,.blist li:hover{text-decoration: none;background:#49a0f5; border-radius: 20px;color: #fff; padding: 5px 20px; }
+.blsit-list li:first-child{display: block;}
+.blsit-list li{display: none;}
+.product-list dl{float: left; width: 23%; margin: 1%}
+.product-list dt{border-left: solid 2px #49a0f5; font-size: 16px; font-weight: normal; padding: 20px; background: #fff;}
+.product-style{color: #747474;}
+.product-list dd{background: #eeeeee; padding: 20px; font-size: 14px; color: #747474;}
+.product-list dd .more{color: #49a0f5; border-radius: 20px; border:solid 1px #49a0f5; text-align: center; width: 40%; margin: auto; margin-top: 15px; padding: 5px 0px;}
+.product-list dd .more a{color:#49a0f5; }
+.product-list dd .more a:hover{color:#49a0f5; text-decoration: none;}
+/*****page****/
+.pagination>li>a, .pagination>li>span{color:#777;}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{color: #777; background-color: #fff; border-color: #ddd; border-top:solid 3px #49a0f5; padding-bottom: 4px;}
+
+
+/******新闻*******/
+.new-list-left{background: #2fa8e6; padding: 20px; font-size: 16px; }
+.new-list-left p{background: #fff; color: #2fa8e6; padding: 5px 20px;}
+.new-list-left ul{margin-top: 5px;}
+.new-list-left ul li{color: #fff; padding: 10px 30px 5px; cursor: pointer; position: relative;}
+.new-list-left ul li a{color: #fff;}
+.new-list-left ul li a:hover{text-decoration: none;}
+.new-list-left ul li.active:after,.new-list-left ul li:hover:after{ position: absolute; right: -35px; background: url(../images/icon/jt-icon.png) no-repeat; width: 15px; height: 15px; content: ""; text-decoration: none;}
+.new-list-right h1{border-left: solid 6px #2fa8e6; padding-left: 15px; font-size: 18px; font-weight: 500;}
+.new-list-right ul li{margin-bottom: 30px; margin-left: 8px; padding-top: 10px;}
+.new-list-right ul li .title{color: #252525; font-size: 18px; font-weight: 500;}
+.new-list-right ul li .time{color: #909090; font-size: 16px;}
+.new-list-right{font-size: 16px; color: #504f4f; line-height: 28px;}
+.new-list-right a{color: #2fa8e6}
+.new-list-right h2{ font-size: 18px; margin-top: 10px;  font-weight: 600; color: #3e3e3e}
+.new-inf{line-height: 30px; font-size: 16px; color: #3e3e3e; margin-top: 15px; padding-bottom: 30px;}
+.new-inf p{text-indent: 4%;}
+a.return-button{border-radius: 20px; border:solid 1px #8a8a8a; color: #8a8a8a!important; font-size: 14px; padding: 7px 13px;}
+
+/***关于我们****/
+.about-banner{background: url(../images/map.png) no-repeat center; background-size: 100%; height: 400px;overflow: hidden; position: relative;}
+.about-banner-img{ min-width: 1188px; height: 100%;}
+.about-form{background: #58a2eb; color: #fff; padding: 20px;}
+.about-form-list{background: #fff; padding: 20px;}
+.about-form-list input{border-radius: 20px; background: #e0e0e0; color: #afafaf; border:0px; padding: 8px 15px; width: 100%; font-size: 14px;}
+.about-form-list button{position: absolute; right: 0px; border: 0px; background: #49a0f5; padding: 8px 20px; border-radius: 0px 20px 20px 0px;}
+.about-title{font-size: 32px;}
+.about-title:after{border-bottom: solid 5px #49a0f5; content: ""; display: block; width: 10%; margin: auto; padding-top: 15px;}
+.about-team-bg{background: url(../images/about-team.png) no-repeat center; background-size: 100%; height: 800px;overflow: hidden; position: relative;}
+.team-title{font-size: 28px; text-align: center;}
+.team-list li{float: left; width: 31.3333%; margin: 1%; margin-top: 40px;}
+.team-list li p{text-align: center; font-size: 16px; color: #000; margin-top: 2px;}

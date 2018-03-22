@@ -1,10 +1,14 @@
 package com.mingdong.core.service;
 
+import com.mingdong.common.model.Page;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
+import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
+import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
@@ -92,4 +96,16 @@ public interface SystemRpcService
      * 编辑系统参数
      */
     void editSystemSetting(SistemDTO sistemDTO);
+
+    ListDTO<ArticlesResDTO> getArticlesList(Page page);
+
+    ResponseDTO addArticles(ArticlesReqDTO articlesReqDTO);
+
+    ResponseDTO updateArticles(ArticlesReqDTO articlesReqDTO);
+
+    ArticlesDetailResDTO getArticlesInfo(Long id);
+
+    ResponseDTO deleteArticlesById(Long id);
+
+    ListDTO<ArticlesResDTO> getArticlesList(Integer type, Page page);
 }

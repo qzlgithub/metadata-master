@@ -54,4 +54,6 @@ public interface ProductRpcService
     ListDTO<ProductResDTO> getProductList(String keyword, Integer type, Integer custom, Integer status, Page page);
 
     ListDTO<ProductResDTO> getProductList(Long clientId, List<Integer> typeList, Integer incOpened, Page page);
+
+    ListDTO<ProductResDTO> getProductList(List<Integer> productTypeList, Integer custom, Page page);
 }

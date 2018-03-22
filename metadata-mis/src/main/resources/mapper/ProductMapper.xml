@@ -114,4 +114,31 @@
         </where>
         order by `create_time` asc
     </select>
+
+    <select id="countByType" resultType="int">
+        select
+        count(*)
+        from `product`
+        where `enabled` = 1
+        <if test="custom != null">and `custom` = #{custom}</if>
+        <if test="typeIdList != null and typeIdList.size() > 0">
+            and `type` in
+            <foreach collection="typeIdList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getListByType" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `enabled` = 1
+        <if test="custom != null">and `custom` = #{custom}</if>
+        <if test="typeIdList != null and typeIdList.size() > 0">
+            and `type` in
+            <foreach collection="typeIdList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
 </mapper>

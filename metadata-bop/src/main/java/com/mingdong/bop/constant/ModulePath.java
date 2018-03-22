@@ -23,6 +23,10 @@ public enum ModulePath
     // 产品
     SETTING_PRODUCT("/setting/product.html", ModuleName.SETTING_PRODUCT),
     SETTING_PRODUCT_EDIT("/setting/product/edit.html", ModuleName.SETTING_PRODUCT),
+    //新闻动态
+    STRING_ARTICLES("/setting/articles.html", ModuleName.STRING_ARTICLES),
+    STRING_ARTICLES_ADD("/setting/articles/add.html", ModuleName.STRING_ARTICLES),
+    STRING_ARTICLES_EDIT("/setting/articles/edit.html", ModuleName.STRING_ARTICLES),
     // 客户
     CLIENT_INDEX("/client/index.html", ModuleName.CLIENT_INDEX),
     CLIENT_ADD("/client/add.html", ModuleName.CLIENT_INDEX),

@@ -6,13 +6,14 @@ layui.config({
     var form = layui.form, laydate = layui.laydate;
     laydate.render({
         elem: '#dates'
-        ,range: true,
-        done: function(value, date){
-            if(value != ""){
+        , range: true,
+        done: function(value, date) {
+            if(value != "") {
                 var dates = value.split(" - ");
                 $("#fromDate").val(dates[0]);
                 $("#toDate").val(dates[1]);
-            }else{
+            }
+            else {
                 $("#fromDate").val("");
                 $("#toDate").val("");
             }

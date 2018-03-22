@@ -6,6 +6,17 @@ public class SistemDTO implements Serializable
 {
     private Integer clientUserMax;
     private String serviceQQ;
+    private String filePath;
+
+    public String getFilePath()
+    {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath)
+    {
+        this.filePath = filePath;
+    }
 
     public Integer getClientUserMax()
     {
