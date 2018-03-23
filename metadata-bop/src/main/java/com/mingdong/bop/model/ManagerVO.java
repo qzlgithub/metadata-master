@@ -12,17 +12,28 @@ public class ManagerVO
     private Long groupId;
     private Integer roleType;
     private Integer enabled;
-    private Integer send;
+    private Integer alarm;
+    private Integer pacify;
     private List<Long> privilege;
 
-    public Integer getSend()
+    public Integer getAlarm()
     {
-        return send;
+        return alarm;
     }
 
-    public void setSend(Integer send)
+    public void setAlarm(Integer alarm)
     {
-        this.send = send;
+        this.alarm = alarm;
+    }
+
+    public Integer getPacify()
+    {
+        return pacify;
+    }
+
+    public void setPacify(Integer pacify)
+    {
+        this.pacify = pacify;
     }
 
     public Integer getRoleType()

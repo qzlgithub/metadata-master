@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "fin_overdue_platform")
-public class OverduePlatform
+public class OverduePlatForm
 {
     @Id
     private String id;

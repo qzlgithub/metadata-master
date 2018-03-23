@@ -119,4 +119,6 @@ public interface SystemService
     Map<String, Object> getArticlesInfo(Long id);
 
     void deleteArticlesById(Long id, RestResp resp);
+
+    Map<String, Object> getHomeData();
 }

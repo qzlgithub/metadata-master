@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientRemindProductMapper">
+    <resultMap id="BaseResultMap" type="ClientRemindProduct">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="remind_id" property="remindId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="recharge_id" property="rechargeId" jdbcType="BIGINT" />
+    </resultMap>
+
+    <insert id="addList" parameterType="List">
+        insert into `client_remind_product` (`create_time`, `update_time`, `remind_id`, `product_id`,`recharge_id`)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.createTime}, #{item.updateTime}, #{item.remindId}, #{item.productId}, #{item.rechargeId})
+        </foreach>
+    </insert>
+
+
+</mapper>

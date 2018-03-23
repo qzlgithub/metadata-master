@@ -134,4 +134,8 @@ public interface ClientService
     void getClientIncreaseTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
 
     void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
+
+    void getClientRemindForDate(Date date, Page page, RestListResp resp);
+
+    void getClientRemindForTimes(Date date, Page page, RestListResp resp);
 }

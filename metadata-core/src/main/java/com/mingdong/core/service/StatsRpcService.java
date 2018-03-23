@@ -53,4 +53,11 @@ public interface StatsRpcService
     void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList);
 
     void statsRechargeByData(Date date);
+
+    BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate, Long managerId);
+
+    Integer getAllClientCount(Long managerId);
+
+    Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
+
 }

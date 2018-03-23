@@ -12,6 +12,7 @@ import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
+import com.mingdong.core.model.dto.response.ClientRemindResInfoDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
@@ -188,4 +189,7 @@ public interface ClientRpcService
     Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit);
 
     Map<String, List<RechargeStatsDTO>> getClientRechargeTrend(DateRange dateRange, RangeUnit rangeUnit);
+
+    ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
+            Page page);
 }

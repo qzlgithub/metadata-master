@@ -393,7 +393,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
     {
         ListDTO<ProductResDTO> dto = new ListDTO<>();
         int total = productMapper.countByType(productTypeList, custom);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {

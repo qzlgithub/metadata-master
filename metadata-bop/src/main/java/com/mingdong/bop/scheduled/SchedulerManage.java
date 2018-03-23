@@ -1,4 +1,4 @@
-package com.mingdong.schedule.scheduled;
+package com.mingdong.bop.scheduled;
 
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;

@@ -21,8 +21,8 @@
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/setting/user.html">系统管理</a>
-            <a href="/setting/user.html">账户管理</a>
+            <a href="javascript:">系统管理</a>
+            <a href="javascript:">账户管理</a>
             <a><cite>编辑账号</cite></a>
         </div>
         <div class="p20">
@@ -43,6 +43,7 @@
                         <select name="role-type" id="roleType">
                             <option value="1" th:selected="${roleType} == 1">管理员</option>
                             <option value="2" th:selected="${roleType} == 2">业务员</option>
+                            <option value="3" th:selected="${roleType} == 3">运营人员</option>
                         </select>
                     </div>
                 </div>
@@ -76,16 +77,10 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><i class="col3">*</i>发送报警短信：</label>
+                    <label class="layui-form-label">短信通知：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="radio" name="send" value="1" title="是" th:checked="${send} == 1"/>
-                        <div class="layui-unselect layui-form-radio layui-form-radioed">
-                            <i class="layui-anim layui-icon" ></i><span>是</span>
-                        </div>
-                        <input type="radio" name="send" value="0" title="否" th:checked="${send} == 0"/>
-                        <div class="layui-unselect layui-form-radio">
-                            <i class="layui-anim layui-icon" ></i><span>否</span>
-                        </div>
+                        <input type="checkbox" id="alarm" th:checked="${alarm == 1}"/>接收系统警报
+                        <input type="checkbox" id="pacify" th:checked="${pacify == 1}"/>接收安抚名单
                     </div>
                 </div>
                 <div class="layui-form-item">

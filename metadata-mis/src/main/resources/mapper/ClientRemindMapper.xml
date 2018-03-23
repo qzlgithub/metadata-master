@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientRemindMapper">
+    <resultMap id="BaseResultMap" type="ClientRemind">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="remind_date" property="remindDate" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="link_name" property="linkName" jdbcType="VARCHAR" />
+        <result column="link_phone" property="linkPhone" jdbcType="VARCHAR" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="day" property="day" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="dispose" property="dispose" jdbcType="TINYINT" />
+    </resultMap>
+
+    <insert id="addList" parameterType="List">
+        insert into `client_remind` (`id`,`create_time`, `update_time`, `remind_date`,
+        `type`,`client_id`,`link_name`,`link_phone`,`product_id`, `count`,`day`,`user_id`,`remark`,`dispose`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id},#{item.createTime}, #{item.updateTime}, #{item.remindDate}, #{item.type}, #{item.clientId},
+            #{item.linkName},#{item.linkPhone},#{item.productId},#{item.count},#{item.day},#{item.userId},#{item.remark},#{item.dispose})
+        </foreach>
+    </insert>
+
+    <update id="updateSkipNull" parameterType="ClientRemind">
+        update `client_remind`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="remindDate != null">`remind_date` = #{remindDate},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
+            <if test="linkName != null">`link_name` = #{linkName},</if>
+            <if test="linkPhone != null">`link_phone` = #{linkPhone},</if>
+            <if test="productId != null">`product_id` = #{productId},</if>
+            <if test="count != null">`count` = #{count},</if>
+            <if test="day != null">`day` = #{day},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="dispose != null">`deleted` = #{dispose},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+
+</mapper>

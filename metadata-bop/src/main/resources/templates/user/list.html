@@ -21,8 +21,8 @@
 
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
-            <a href="/setting/user.html">系统管理</a>
-            <a href="/setting/user.html">账户管理</a>
+            <a href="javascript:">系统管理</a>
+            <a href="javascript:">账户管理</a>
             <a><cite>账户管理</cite></a>
         </div>
         <div class="p20 layui-form">
@@ -34,6 +34,7 @@
                             <option value="">全部</option>
                             <option value="1">管理员</option>
                             <option value="2">业务员</option>
+                            <option value="3">运营人员</option>
                         </select>
                     </div>
                 </li>
@@ -90,6 +91,8 @@
     <div>管理员</div>
     {{# } else if(d.roleType === 2) { }}
     <div>业务员</div>
+    {{# } else if(d.roleType === 3) { }}
+    <div>运营人员</div>
     {{# } }}
 </script>
 </body>

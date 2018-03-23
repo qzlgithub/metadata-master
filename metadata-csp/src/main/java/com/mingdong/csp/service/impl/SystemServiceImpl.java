@@ -32,7 +32,7 @@ public class SystemServiceImpl implements SystemService
     {
         ListDTO<ArticlesResDTO> listDTO = systemRpcService.getArticlesList(type, page);
         resp.setTotal(listDTO.getTotal());
-        resp.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
+        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {

@@ -349,7 +349,7 @@ public class ProductServiceImpl implements ProductService
     {
         ListDTO<ProductResDTO> listDTO = productRpcService.getProductList(productTypeList, TrueOrFalse.FALSE, page);
         res.setTotal(listDTO.getTotal());
-        res.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
+        res.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>();

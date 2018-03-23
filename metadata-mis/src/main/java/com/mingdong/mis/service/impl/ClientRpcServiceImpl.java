@@ -23,6 +23,7 @@ import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
+import com.mingdong.core.model.dto.response.ClientRemindResInfoDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
@@ -44,6 +45,7 @@ import com.mingdong.mis.domain.entity.ClientMessage;
 import com.mingdong.mis.domain.entity.ClientOperateInfo;
 import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientRemindInfo;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.DictIndustry;
@@ -60,6 +62,7 @@ import com.mingdong.mis.domain.mapper.ClientMessageMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
+import com.mingdong.mis.domain.mapper.ClientRemindInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
@@ -128,6 +131,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
     private RequestLogDao requestLogDao;
+    @Resource
+    private ClientRemindInfoMapper clientRemindInfoMapper;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -635,7 +640,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        int total = statsClientMapper.getClientCountByDate(startTime, endTime);
+        int total = statsClientMapper.getClientCountByDate(startTime, endTime, null);
         long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
@@ -1392,6 +1397,44 @@ public class ClientRpcServiceImpl implements ClientRpcService
             map.put(name, list);
         }
         return map;
+    }
+
+    @Override
+    public ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
+            Page page)
+    {
+        ListDTO<ClientRemindResInfoDTO> listDTO = new ListDTO<>();
+        int total = clientRemindInfoMapper.countBy(managerId, type, date, dispose);
+        long pages = page.getPages(total);
+        listDTO.setTotal(total);
+        if(total > 0 && page.getPageNum() <= pages)
+        {
+            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getClientRemindListBy(managerId, type, date,
+                    dispose);
+            if(!CollectionUtils.isEmpty(dataList))
+            {
+                List<ClientRemindResInfoDTO> list = new ArrayList<>(dataList.size());
+                for(ClientRemindInfo o : dataList)
+                {
+                    ClientRemindResInfoDTO col = new ClientRemindResInfoDTO();
+                    col.setCorpName(o.getCorpName());
+                    col.setCount(o.getCount());
+                    col.setDay(o.getDay());
+                    col.setDispose(o.getDispose());
+                    col.setId(o.getId());
+                    col.setLinkName(o.getLinkName());
+                    col.setLinkPhone(o.getLinkPhone());
+                    col.setProductName(o.getProductName());
+                    col.setRemark(o.getRemark());
+                    col.setRemindDate(o.getRemindDate());
+                    col.setType(o.getType());
+                    list.add(col);
+                }
+                listDTO.setList(list);
+            }
+        }
+        return listDTO;
     }
 
     /**

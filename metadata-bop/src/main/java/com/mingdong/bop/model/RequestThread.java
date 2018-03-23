@@ -41,17 +41,40 @@ public class RequestThread
         m.put("i_privilege", get().getiPrivilege());
         m.put("i_module", get().getiModule());
         m.put("i_system", get().getiSystem());
+        m.put("i_enter", isManager());
         return m;
     }
 
+    /**
+     * 登录人员id
+     */
     public static Long getOperatorId()
     {
         return get().getiId();
     }
 
+    /**
+     * 是否管理员
+     */
     public static boolean isManager()
     {
         return RoleType.ADMIN.getId().equals(get().getRoleType());
+    }
+
+    /**
+     * 是否业务员
+     */
+    public static boolean isSalesman()
+    {
+        return RoleType.SALESMAN.getId().equals(get().getRoleType());
+    }
+
+    /**
+     * 是否运营人员
+     */
+    public static boolean isOperation()
+    {
+        return RoleType.OPERATION.getId().equals(get().getRoleType());
     }
 
     public static void cleanup()

@@ -150,6 +150,8 @@ public interface Field
     String INDUSTRY_PARENT_DICT = "industryParentDict";
     String INDUSTRY_DICT = "industryDict";
     String SESSION_ID = "sessionId";
+    String ALARM = "alarm";
+    String PACIFY = "pacify";
     // GET url 参数
     String C = "c";
     String O = "o";
@@ -161,4 +163,9 @@ public interface Field
     String DATA = "data";
     String X_DATA = "xData";
     String STACK = "stack";
+    String LINK_NAME = "linkName";
+    String LINK_PHONE = "linkPhone";
+    String DAY = "day";
+    String PAGES = "pages";
+    String CLIENT_COUNT_ALL = "clientCountAll";
 }

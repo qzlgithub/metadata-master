@@ -1,7 +1,7 @@
-package com.mingdong.schedule.scheduled;
+package com.mingdong.bop.scheduled;
 
-import com.mingdong.schedule.configurer.ApplicationContextProvider;
-import com.mingdong.schedule.service.StatsService;
+import com.mingdong.bop.configurer.ApplicationContextProvider;
+import com.mingdong.bop.service.QuartzService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
@@ -15,10 +15,10 @@ public class StatsJob implements Job
     {
         try
         {
-            StatsService statsService = ApplicationContextProvider.getBean(StatsService.class);
+            QuartzService quartzService = ApplicationContextProvider.getBean(QuartzService.class);
             Date date = new Date();
-            statsService.statsByData(date);
-            statsService.statsRechargeByData(date);
+            quartzService.statsByData(date);
+            quartzService.statsRechargeByData(date);
         }
         catch(Exception e)
         {

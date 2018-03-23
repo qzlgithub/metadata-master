@@ -17,6 +17,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
+import com.mingdong.core.constant.ClientRemindType;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.Custom;
 import com.mingdong.core.constant.ProductType;
@@ -35,6 +36,7 @@ import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
+import com.mingdong.core.model.dto.response.ClientRemindResInfoDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.IndustryResDTO;
@@ -59,6 +61,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -825,6 +828,79 @@ public class ClientServiceImpl implements ClientService
         resp.addData(Field.X_DATA, xAxis);
         resp.addData(Field.LIST, list);
         System.out.println(JSON.toJSONString(resp));
+    }
+
+    @Override
+    public void getClientRemindForDate(Date date, Page page, RestListResp resp)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try
+        {
+            date = sdf.parse(sdf.format(date));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
+                RequestThread.isManager() ? 0 : RequestThread.getOperatorId(), ClientRemindType.DATE.getId(), date,
+                TrueOrFalse.FALSE, page);
+        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
+        resp.setTotal(listDTO.getTotal());
+        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(ClientRemindResInfoDTO item : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, item.getId());
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.LINK_NAME, item.getLinkName());
+                map.put(Field.LINK_PHONE, item.getLinkPhone());
+                map.put(Field.PRODUCT_NAME, item.getProductName() + "（" + item.getCount() + "）");
+                map.put(Field.DAY, item.getDay());
+                map.put(Field.STATUS, item.getDispose());
+                list.add(map);
+            }
+            resp.setList(list);
+        }
+    }
+
+    @Override
+    public void getClientRemindForTimes(Date date, Page page, RestListResp resp)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try
+        {
+            date = sdf.parse(sdf.format(date));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
+                RequestThread.isManager() ? 0 : RequestThread.getOperatorId(), ClientRemindType.TIMES.getId(), date,
+                TrueOrFalse.FALSE, page);
+        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
+        resp.setTotal(listDTO.getTotal());
+        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(ClientRemindResInfoDTO item : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, item.getId());
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.LINK_NAME, item.getLinkName());
+                map.put(Field.LINK_PHONE, item.getLinkPhone());
+                map.put(Field.PRODUCT_NAME, item.getProductName() + "（" + item.getCount() + "）");
+                map.put(Field.STATUS, item.getDispose());
+                list.add(map);
+            }
+            resp.setList(list);
+        }
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

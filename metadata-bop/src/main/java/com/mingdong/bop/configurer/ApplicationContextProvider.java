@@ -1,4 +1,4 @@
-package com.mingdong.schedule.configurer;
+package com.mingdong.bop.configurer;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

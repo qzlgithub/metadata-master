@@ -175,7 +175,8 @@ public class ManagerServiceImpl implements ManagerService
         data.put(Field.ROLE_ID, userInfoResDTO.getGroupId());
         data.put(Field.ROLE_TYPE, userInfoResDTO.getRoleType());
         data.put(Field.ENABLED, userInfoResDTO.getEnabled());
-        data.put(Field.SEND, userInfoResDTO.getSend());
+        data.put(Field.ALARM, userInfoResDTO.getAlarm());
+        data.put(Field.PACIFY, userInfoResDTO.getPacify());
         List<String> privilege = new ArrayList<>();
         if(!CollectionUtils.isEmpty(userInfoResDTO.getPrivilegeIdList()))
         {
@@ -205,7 +206,8 @@ public class ManagerServiceImpl implements ManagerService
         userDTO.setQq(managerVO.getQq());
         userDTO.setEnabled(managerVO.getEnabled());
         userDTO.setPrivilegeIdList(managerVO.getPrivilege());
-        userDTO.setSend(managerVO.getSend());
+        userDTO.setAlarm(managerVO.getAlarm());
+        userDTO.setPacify(managerVO.getPacify());
         ResponseDTO responseDTO = managerRpcService.addAdminUser(userDTO);
         resp.setError(responseDTO.getResult());
     }
@@ -222,7 +224,8 @@ public class ManagerServiceImpl implements ManagerService
         userDTO.setEnabled(adminUserVO.getEnabled());
         userDTO.setRoleType(adminUserVO.getRoleType());
         userDTO.setPrivilegeIdList(adminUserVO.getPrivilege());
-        userDTO.setSend(adminUserVO.getSend());
+        userDTO.setAlarm(adminUserVO.getAlarm());
+        userDTO.setPacify(adminUserVO.getPacify());
         ResponseDTO responseDTO = managerRpcService.editAdminUser(userDTO);
         if(RestResult.SUCCESS.equals(responseDTO.getResult()))
         {

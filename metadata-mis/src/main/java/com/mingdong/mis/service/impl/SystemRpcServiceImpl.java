@@ -394,7 +394,7 @@ public class SystemRpcServiceImpl implements SystemRpcService
     {
         ListDTO<ArticlesResDTO> listDTO = new ListDTO<>();
         int total = articlesMapper.countAll();
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -500,7 +500,7 @@ public class SystemRpcServiceImpl implements SystemRpcService
     {
         ListDTO<ArticlesResDTO> listDTO = new ListDTO<>();
         int total = articlesMapper.countByType(type);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {

@@ -48,20 +48,20 @@ public class StatsRpcServiceImpl implements StatsRpcService
     @Override
     public Integer getAllClientCount()
     {
-        return statsClientMapper.getAllClientCount();
+        return statsClientMapper.getAllClientCount(null);
     }
 
     @Override
     public Integer getClientCountByDate(Date monthDay, Date currentDay)
     {
-        return statsClientMapper.getClientCountByDate(monthDay, currentDay);
+        return statsClientMapper.getClientCountByDate(monthDay, currentDay, null);
     }
 
     @Override
     public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        int total = statsClientMapper.getClientCountByDate(date, currentDay);
+        int total = statsClientMapper.getClientCountByDate(date, currentDay, null);
         long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
@@ -114,7 +114,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
     @Override
     public BigDecimal getClientRechargeStatsByDate(Date nowDay, Date currentDay)
     {
-        return statsClientMapper.getClientRechargeByDate(nowDay, currentDay);
+        return statsClientMapper.getClientRechargeByDate(nowDay, currentDay, null);
     }
 
     @Override
@@ -130,10 +130,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<StatsDateInfoResDTO> getRequestListStats(Date beforeDate, Date currentDay, String name,
-            Long productId)
+    public ListDTO<StatsDateInfoResDTO> getRequestListStats(Date fromDate, Date toDate, String name, Long productId)
     {
-        List<StatsDateInfo> list = statsClientMapper.getRequestListStats(beforeDate, currentDay, name, productId);
+        List<StatsDateInfo> list = statsClientMapper.getRequestListStats(fromDate, toDate, name, productId);
         ListDTO<StatsDateInfoResDTO> listDTO = new ListDTO<>();
         List<StatsDateInfoResDTO> listData = new ArrayList<>();
         StatsDateInfoResDTO statsDateDTO;
@@ -205,9 +204,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
             logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "统计已存在！");
             return;
         }
-        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
+        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter,null);
         long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
-        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
+        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter,null);
         if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
         {
             logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
@@ -308,5 +307,23 @@ public class StatsRpcServiceImpl implements StatsRpcService
             logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }
+    }
+
+    @Override
+    public BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate, Long managerId)
+    {
+        return statsClientMapper.getClientRechargeByDate(fromDate, toDate, managerId);
+    }
+
+    @Override
+    public Integer getAllClientCount(Long managerId)
+    {
+        return statsClientMapper.getAllClientCount(managerId);
+    }
+
+    @Override
+    public Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId)
+    {
+        return statsClientMapper.getClientCountByDate(fromDate, toDate, managerId);
     }
 }

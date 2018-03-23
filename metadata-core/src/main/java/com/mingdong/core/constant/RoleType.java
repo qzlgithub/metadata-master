@@ -3,7 +3,8 @@ package com.mingdong.core.constant;
 public enum RoleType
 {
     ADMIN(1, "管理员"),
-    SALESMAN(2, "业务员");
+    SALESMAN(2, "业务员"),
+    OPERATION(3, "运营人员");
 
     private final Integer id;
     private final String name;

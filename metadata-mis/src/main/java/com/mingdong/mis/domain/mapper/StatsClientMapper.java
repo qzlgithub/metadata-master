@@ -10,15 +10,14 @@ import java.util.List;
 
 public interface StatsClientMapper
 {
-    int getAllClientCount();
+    int getAllClientCount(@Param("managerId") Long managerId);
 
-    int getClientCountByDate(@Param("start") Date start, @Param("end") Date end);
-
-    BigDecimal getClientRechargeByDate(@Param("start") Date start, @Param("end") Date end);
+    int getClientCountByDate(@Param("fromDate") Date start, @Param("toDate") Date end,
+            @Param("managerId") Long managerId);
 
     BigDecimal getClientRechargeAll();
 
-    int countClientRechargeByDate(@Param("start") Date start, @Param("end") Date end);
+    int countClientRechargeByDate(@Param("fromDate") Date start, @Param("toDate") Date end);
 
     List<StatsDateInfo> getRequestListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
             @Param("keyword") String keyword, @Param("productId") Long productId);
@@ -26,4 +25,7 @@ public interface StatsClientMapper
     List<StatsDateInfo> getRevenueListStats(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 
     List<StatsRechargeInfo> statsRechargeByData(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+    BigDecimal getClientRechargeByDate(@Param("fromDate") Date monthFirst, @Param("toDate") Date currentDay,
+            @Param("managerId") Long managerId);
 }

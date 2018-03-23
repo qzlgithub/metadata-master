@@ -14,10 +14,7 @@
     </resultMap>
 
     <select id="statsRechargeByData" resultMap="StatsRechargeInfoMap">
-        select
-            `recharge_type` as recharge_type,
-            sum(`amount`)   as amount
-        from recharge
+        select `recharge_type` as recharge_type, sum(`amount`) as amount from recharge
         <where>
             <if test="fromDate != null">`create_time` >= #{fromDate}</if>
             <if test="toDate != null">and `create_time` &lt;= #{toDate}</if>
@@ -26,27 +23,35 @@
     </select>
 
     <select id="getAllClientCount" resultType="Integer">
-        select count(*)
-        from `client`
+        select count(*) from `client`
+        <where>
+            <if test="managerId != null">`manager_id` = #{managerId}</if>
+        </where>
     </select>
 
     <select id="getClientCountByDate" resultType="Integer">
         select count(*) from `client` where 1=1
-        <if test="start != null">
-            and `create_time` &gt;= #{start}
+        <if test="fromDate != null">
+            and `create_time` &gt;= #{fromDate}
         </if>
-        <if test="end != null">
-            and `create_time` &lt;= #{end}
+        <if test="toDate != null">
+            and `create_time` &lt;= #{toDate}
+        </if>
+        <if test="managerId != null">
+            and `manager_id` = #{managerId}
         </if>
     </select>
 
     <select id="getClientRechargeByDate" resultType="BigDecimal">
         select sum(`amount`) from `recharge` where 1=1
-        <if test="start != null">
-            and `create_time` &gt;= #{start}
+        <if test="fromDate != null">
+            and `create_time` &gt;= #{fromDate}
         </if>
-        <if test="end != null">
-            and `create_time` &lt;= #{end}
+        <if test="toDate != null">
+            and `create_time` &lt;= #{toDate}
+        </if>
+        <if test="managerId != null">
+            and `manager_id` = #{managerId}
         </if>
     </select>
 
@@ -57,11 +62,11 @@
 
     <select id="countClientRechargeByDate" resultType="Integer">
         select count(`id`) from `recharge` where 1=1
-        <if test="start != null">
-            and `create_time` &gt;= #{start}
+        <if test="fromDate != null">
+            and `create_time` &gt;= #{fromDate}
         </if>
-        <if test="end != null">
-            and `create_time` &lt;= #{end}
+        <if test="toDate != null">
+            and `create_time` &lt;= #{toDate}
         </if>
     </select>
 

@@ -7,7 +7,6 @@ import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.ProductType;
-import com.mingdong.core.util.IDUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,7 +156,6 @@ public class SettingPageController
     {
         ModelAndView view = new ModelAndView("articles/add");
         view.addAllObjects(RequestThread.getMap());
-        view.addObject(Field.ID, IDUtils.getArticlesId(1));
         return view;
     }
 

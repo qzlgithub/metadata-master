@@ -60,6 +60,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
         <!-- poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>

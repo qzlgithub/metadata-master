@@ -11,6 +11,7 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -30,13 +31,17 @@ import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
+import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.service.SystemRpcService;
+import com.mingdong.core.util.DateCalculateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +58,8 @@ public class SystemServiceImpl implements SystemService
     private CommonRpcService commonRpcService;
     @Resource
     private SystemRpcService systemRpcService;
+    @Resource
+    private StatsRpcService statsRpcService;
 
     @Override
     public void checkIfIndustryExist(String code, RestResp resp)
@@ -374,13 +381,13 @@ public class SystemServiceImpl implements SystemService
         String fileName = upfile.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         String otherFileName = "min_" + UUID.randomUUID() + suffixName;
-        String filePath = param.getSaveFilePath() + articlesVo.getId().toString();
+        String filePath = param.getSaveFilePath();
         File dir = new File(filePath);
         if(!dir.exists())
         {
             dir.mkdirs();
         }
-        String otherPath = articlesVo.getId().toString() + File.separator + otherFileName;
+        String otherPath = otherFileName;
         File dest = new File(param.getSaveFilePath() + otherPath);
         try
         {
@@ -435,13 +442,13 @@ public class SystemServiceImpl implements SystemService
             String fileName = upfile.getOriginalFilename();
             String suffixName = fileName.substring(fileName.lastIndexOf("."));
             otherFileName = "min_" + UUID.randomUUID() + suffixName;
-            String filePath = param.getSaveFilePath() + articlesVo.getId().toString();
+            String filePath = param.getSaveFilePath();
             File dir = new File(filePath);
             if(!dir.exists())
             {
                 dir.mkdirs();
             }
-            otherPath = articlesVo.getId().toString() + File.separator + otherFileName;
+            otherPath = otherFileName;
             dest = new File(param.getSaveFilePath() + otherPath);
             try
             {
@@ -511,6 +518,25 @@ public class SystemServiceImpl implements SystemService
             resp.setError(responseDTO.getResult());
             return;
         }
+    }
+
+    @Override
+    public Map<String, Object> getHomeData()
+    {
+        Map<String, Object> map = new HashMap<>();
+        Date currentDay = new Date();
+        Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
+        BigDecimal amount = statsRpcService.getClientRechargeStatsByDate(monthFirst, currentDay,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId());
+        Integer clientCountByDate = statsRpcService.getClientCountByDate(monthFirst, currentDay,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId());
+        Integer allClientCount = statsRpcService.getAllClientCount(
+                RequestThread.isManager() ? null : RequestThread.getOperatorId());
+        map.put(Field.AMOUNT, NumberUtils.formatAmount(amount));
+        map.put(Field.CLIENT_COUNT_BY_DATE, clientCountByDate);
+        map.put(Field.CLIENT_COUNT_ALL, allClientCount);
+
+        return map;
     }
 
     private void cacheAllIndustryData()
