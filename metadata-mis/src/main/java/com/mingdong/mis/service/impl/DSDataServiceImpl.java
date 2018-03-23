@@ -4,7 +4,6 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.exception.MetadataAPIException;
 import com.mingdong.core.exception.MetadataCoreException;
-import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
@@ -81,10 +80,9 @@ public class DSDataServiceImpl implements DSDataService
             if(data.isSaveLog())
             {
                 // 保存本次请求记录，并更新产品账余额
-                Long reqId = IDUtils.getApiReqId(param.getNodeId());
-                chargeService.chargeAndLog(reqId, account, userId, recharge, billPlan, ip, data.getThirdNo(),
-                        data.isHit(), res.getTimestamp());
-                res.add(Field.REQUEST_NO, "RQ" + reqId);
+                String requestNo = chargeService.chargeAndLog(account, userId, recharge, billPlan, ip,
+                        data.getThirdNo(), data.isHit(), res.getTimestamp());
+                res.add(Field.REQUEST_NO, requestNo);
             }
             res.addAll(data.response());
         }

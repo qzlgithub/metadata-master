@@ -12,8 +12,8 @@ public interface ChargeService
     /**
      * 计费并保存客户请求记录
      */
-    void chargeAndLog(Long requestId, ClientProduct account, Long userId, Recharge recharge, BillPlan billPlan,
-            String ip, String thirdNo, boolean hit, Date date);
+    String chargeAndLog(ClientProduct account, Long userId, Recharge recharge, BillPlan billPlan, String ip,
+            String thirdNo, boolean hit, Date date);
 
     void renewClientProduct(Recharge pr, ClientProduct cp);
 

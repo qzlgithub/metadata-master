@@ -47,8 +47,8 @@ public class ChargeServiceImpl implements ChargeService
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void chargeAndLog(Long requestId, ClientProduct account, Long userId, Recharge recharge, BillPlan billPlan,
-            String ip, String thirdNo, boolean hit, Date date)
+    public String chargeAndLog(ClientProduct account, Long userId, Recharge recharge, BillPlan billPlan, String ip,
+            String thirdNo, boolean hit, Date date)
     {
         if(BillPlan.PER_USE == billPlan || (BillPlan.PER_HIT == billPlan && hit))
         {
@@ -88,6 +88,7 @@ public class ChargeServiceImpl implements ChargeService
         Product product = productMapper.findById(account.getProductId());
         requestLog.setProductName(product.getName());
         requestLogDao.insert(requestLog);
+        return requestNo;
     }
 
     @Override
