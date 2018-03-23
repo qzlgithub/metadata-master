@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<suite name="somke">
-    <test verbose="1" name="smoke" >
-        <classes>
-            <class name="com.test.mis.SimpleTest"/>
-        </classes>
-    </test>
-</suite>

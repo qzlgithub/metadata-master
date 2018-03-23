@@ -138,10 +138,10 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public void getClientBillList(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate,
-            Long managerId, Page page, RestListResp res)
+            Page page, RestListResp res)
     {
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan, fromDate,
-                toDate, managerId, page);
+                toDate, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
         if(listDTO.getList() != null)
@@ -183,7 +183,7 @@ public class TradeServiceImpl implements TradeService
 
     @Override
     public XSSFWorkbook createClientBillListXlsx(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Long manager, Page page)
+            Date toDate, Page page)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("消费数据");
@@ -202,7 +202,7 @@ public class TradeServiceImpl implements TradeService
         CellStyle timeStyle = wb.createCellStyle();
         timeStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat("yyyy-MM-dd hh:mm:ss"));
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
-                fromDate, toDate, manager, page);
+                fromDate, toDate, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         AccessResDTO dataInfo;
         for(int i = 0; i < dataList.size(); i++)

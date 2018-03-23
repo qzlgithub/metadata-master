@@ -1,6 +1,6 @@
 package com.mingdong.mis.model.vo;
 
-public class MultipleAppVO extends AbsRequest
+public class MultipleAppVO extends AbsPayload
 {
     private String idNo;
     private String name;

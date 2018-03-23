@@ -8,8 +8,8 @@ import com.mingdong.core.annotation.AuthRequired;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.constant.MetadataResult;
-import com.mingdong.mis.model.MetadataRes;
+import com.mingdong.mis.constant.MDResult;
+import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.UserAuth;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
-        MetadataRes res = MetadataRes.create();
+        MDResp resp = MDResp.create();
         String uri = request.getRequestURI();
         RequestThread.init();
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
@@ -40,39 +40,44 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                 String token = request.getHeader(Field.HEADER_ACCESS_TOKEN);
                 if(StringUtils.isNullBlank(token))
                 {
-                    res.setResult(MetadataResult.RC_1);
-                    response.getOutputStream().write(JSON.toJSONString(res).getBytes(Charset.UTF_8));
+                    resp.setResult(MDResult.ACCESS_DENIED);
+                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
                 UserAuth auth = redisDao.findAuth(token);
-                if(auth == null || !auth.auth())
+                if(auth == null)
                 {
-                    res.setResult(MetadataResult.RC_2);
-                    response.getOutputStream().write(JSON.toJSONString(res).getBytes(Charset.UTF_8));
+                    resp.setResult(MDResult.INVALID_ACCESS_TOKEN);
+                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
-                APIProduct product = APIProduct.valueOf(auth.getProduct());
-                if(!product.getUri().equals(uri))
+                APIProduct product = APIProduct.targetOf(auth.getProduct());
+                if(product == null || !uri.equals(product.getUri()))
                 {
-                    res.setResult(MetadataResult.RC_13);
-                    response.getOutputStream().write(JSON.toJSONString(res).getBytes(Charset.UTF_8));
+                    resp.setResult(MDResult.ACCESS_RESTRICTED);
+                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
                 String ip = WebUtils.getIp(request);
-                if(!auth.getValidIP().equals(ip))
+                if(!auth.getHost().equals(ip))
                 {
-                    res.setResult(MetadataResult.RC_3);
-                    response.getOutputStream().write(JSON.toJSONString(res).getBytes(Charset.UTF_8));
+                    resp.setResult(MDResult.INVALID_CLIENT_IP);
+                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
-                RequestThread.setIp(ip);
-                RequestThread.setAccountId(auth.getAccountId());
                 RequestThread.setClientId(auth.getClientId());
                 RequestThread.setUserId(auth.getUserId());
-                RequestThread.setAppSecret(auth.getAppSecret());
+                RequestThread.setProductId(auth.getProductId());
+                RequestThread.setClientProductId(auth.getClientProductId());
+                RequestThread.setProduct(product);
+                RequestThread.setBillPlan(auth.getBillPlan());
+                RequestThread.setStart(auth.getStart());
+                RequestThread.setEnd(auth.getEnd());
+                RequestThread.setHost(ip);
+                RequestThread.setAppSecret(auth.getSecretKey());
             }
         }
-        RequestThread.setResult(res);
+        RequestThread.setResp(resp);
         return true;
     }
 

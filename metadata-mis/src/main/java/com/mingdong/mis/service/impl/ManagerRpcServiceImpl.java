@@ -183,7 +183,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
     {
         ListDTO<ManagerInfoResDTO> listDTO = new ListDTO<>();
         int total = userMapper.countBy(roleType, enabled);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -448,7 +448,7 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         else
         {
             int total = groupMapper.countAll();
-            int pages = page.getTotalPage(total);
+            long pages = page.getPages(total);
             listDTO.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {

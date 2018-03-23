@@ -37,7 +37,6 @@ import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.domain.entity.ApiReqInfo;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientContact;
 import com.mingdong.mis.domain.entity.ClientInfo;
@@ -54,7 +53,6 @@ import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsRecharge;
 import com.mingdong.mis.domain.entity.User;
-import com.mingdong.mis.domain.mapper.ApiReqInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientMapper;
@@ -73,6 +71,8 @@ import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
 import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
+import com.mingdong.mis.mongo.dao.RequestLogDao;
+import com.mingdong.mis.mongo.entity.RequestLog;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -121,13 +121,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Resource
     private StatsClientMapper statsClientMapper;
     @Resource
-    private ApiReqInfoMapper apiReqInfoMapper;
-    @Resource
     private RechargeMapper rechargeMapper;
     @Resource
     private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
+    @Resource
+    private RequestLogDao requestLogDao;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -207,7 +207,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     {
         ListDTO<MessageResDTO> listDTO = new ListDTO<>();
         int total = clientMessageMapper.countByClient(clientId);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         List<MessageResDTO> list = new ArrayList<>();
         if(total > 0 && page.getPageNum() <= pages)
@@ -295,7 +295,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         else
         {
             int total = clientUserMapper.countSubUserListByClient(clientId);
-            int pages = page.getTotalPage(total);
+            long pages = page.getPages(total);
             res.setTotal(total);
             if(total > 0 && page.getPageNum() <= pages)
             {
@@ -328,7 +328,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return res;
         }
         int total = clientUserMapper.countSubUserListByClient(clientId);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         res.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -589,7 +589,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         ListDTO<ClientInfoResDTO> dto = new ListDTO<>();
         int total = clientMapper.countBy(keyword, industryIdList, enabled, managerId);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -636,7 +636,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.getClientCountByDate(startTime, endTime);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -1017,36 +1017,35 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     public ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Long managerId, Page page)
+            Date toDate, Page page)
     {
         ListDTO<AccessResDTO> dto = new ListDTO<>();
-        int total = apiReqInfoMapper.countBy1(keyword, productId, billPlan, fromDate, toDate, managerId);
-        int pages = page.getTotalPage(total);
-        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(keyword, productId, billPlan, fromDate, toDate, managerId);
-        int missCount = apiReqInfoMapper.countMiss(keyword, productId, billPlan, fromDate, toDate, managerId);
+        long total = requestLogDao.countByParam(keyword, productId, billPlan, null, fromDate, toDate);
+        long pages = page.getPages(total);
+        BigDecimal totalFee = requestLogDao.sumFeeByParam(keyword, productId, billPlan, fromDate, toDate);
+        long missCount = requestLogDao.countByParam(keyword, productId, billPlan, TrueOrFalse.FALSE, fromDate, toDate);
         dto.setTotal(total);
         dto.addExtra(Field.MISS_COUNT, missCount + "");
         dto.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
         if(total > 0 && page.getPageNum() <= pages)
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getListBy1(keyword, productId, billPlan, fromDate, toDate,
-                    managerId);
+            List<RequestLog> dataList = requestLogDao.findByParam(keyword, null, null, productId, billPlan, fromDate,
+                    toDate, page);
             List<AccessResDTO> list = new ArrayList<>(dataList.size());
-            for(ApiReqInfo o : dataList)
+            for(RequestLog o : dataList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setRequestAt(o.getCreateTime());
+                ari.setRequestAt(o.getTimestamp());
                 ari.setRequestNo(o.getRequestNo());
                 ari.setCorpName(o.getCorpName());
-                ari.setShortName(o.getShortName());
+                ari.setShortName(null);
                 ari.setPrimaryUsername(o.getPrimaryUsername());
-                ari.setUsername(o.getUsername());
+                ari.setUsername(o.getRequestUsername());
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
                 ari.setHit(o.getHit());
-                ari.setFee(o.getFee());
-                ari.setBalance(o.getBalance());
+                ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
                 list.add(ari);
             }
             dto.setList(list);
@@ -1093,26 +1092,25 @@ public class ClientRpcServiceImpl implements ClientRpcService
             Date endDate, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        int total = apiReqInfoMapper.countByClient(clientId, userId, productId, startDate, endDate);
-        int pages = page.getTotalPage(total);
+        long total = requestLogDao.countByParam(clientId, userId, productId, startDate, endDate);
         listDTO.setTotal(total);
+        long pages = page.getPages(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> apiReqInfoList = apiReqInfoMapper.getListBy(clientId, userId, productId, startDate,
-                    endDate);
-            List<AccessResDTO> list = new ArrayList<>(apiReqInfoList.size());
-            for(ApiReqInfo o : apiReqInfoList)
+            List<RequestLog> requestLogList = requestLogDao.findByParam(null, clientId, userId, productId, null,
+                    startDate, endDate, page);
+            List<AccessResDTO> list = new ArrayList<>(requestLogList.size());
+            for(RequestLog o : requestLogList)
             {
                 AccessResDTO ari = new AccessResDTO();
-                ari.setRequestAt(o.getCreateTime());
+                ari.setRequestAt(o.getTimestamp());
                 ari.setRequestNo(o.getRequestNo());
-                ari.setUsername(o.getUsername());
+                ari.setUsername(o.getRequestUsername());
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
                 ari.setHit(o.getHit());
-                ari.setFee(o.getFee());
-                ari.setBalance(o.getBalance());
+                ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
                 list.add(ari);
             }
             listDTO.setList(list);
@@ -1127,7 +1125,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         ListDTO<RechargeResDTO> listDTO = new ListDTO<>();
         int total = productRechargeInfoMapper.countBy(keyword, clientId, productId, managerId, rechargeType, startDate,
                 endDate);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(clientId == null)
         {
@@ -1194,27 +1192,27 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public ListDTO<AccessResDTO> getRevenueList(Date fromDate, Date toDate, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        BigDecimal totalFee = apiReqInfoMapper.sumFeeBy(null, null, null, fromDate, toDate, null);
+        BigDecimal totalFee = requestLogDao.sumFeeByParam(null, null, null, fromDate, toDate);
         listDTO.addExtra(Field.TOTAL_FEE, NumberUtils.formatAmount(totalFee));
-        int total = apiReqInfoMapper.getRevenueListCount(fromDate, toDate);
-        int pages = page.getTotalPage(total);
+        long total = requestLogDao.countByRequestTime(fromDate, toDate);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ApiReqInfo> dataList = apiReqInfoMapper.getRevenueList(fromDate, toDate);
+            List<RequestLog> dataList = requestLogDao.findByParam(null, null, null, null, null, fromDate, toDate, page);
             List<AccessResDTO> list = new ArrayList<>();
-            for(ApiReqInfo o : dataList)
+            for(RequestLog o : dataList)
             {
                 AccessResDTO r = new AccessResDTO();
-                r.setRequestAt(o.getCreateTime());
+                r.setRequestAt(o.getTimestamp());
                 r.setRequestNo(o.getRequestNo());
-                r.setUsername(o.getUsername());
+                r.setUsername(o.getRequestUsername());
                 r.setProductName(o.getProductName());
                 r.setBillPlan(o.getBillPlan());
                 r.setHit(o.getHit());
-                r.setFee(o.getFee());
-                r.setBalance(o.getBalance());
+                r.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                r.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
                 list.add(r);
             }
             listDTO.setList(list);
@@ -1227,7 +1225,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     {
         ListDTO<ClientOperateLogResDTO> listDTO = new ListDTO<>();
         int total = clientOperateInfoMapper.countByClient(clientId);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {

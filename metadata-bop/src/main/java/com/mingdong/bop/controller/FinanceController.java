@@ -1,7 +1,6 @@
 package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
@@ -71,8 +70,7 @@ public class FinanceController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        tradeService.getClientBillList(keyword, productId, billPlan, from, to,
-                RequestThread.isManager() ? null : RequestThread.getOperatorId(), new Page(pageNum, pageSize), res);
+        tradeService.getClientBillList(keyword, productId, billPlan, from, to, new Page(pageNum, pageSize), res);
         return res;
     }
 }

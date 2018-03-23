@@ -1,11 +1,11 @@
 package com.mingdong.mis.mongo.dao;
 
-import com.mingdong.mis.mongo.entity.OverduePlatForm;
+import com.mingdong.mis.mongo.entity.OverduePlatform;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface OverduePlatFormRepository extends MongoRepository<OverduePlatForm, String>
+public interface OverduePlatformRepository extends MongoRepository<OverduePlatform, String>
 {
-    List<OverduePlatForm> findByPhone(String phone);
+    List<OverduePlatform> findByPhone(String phone);
 }

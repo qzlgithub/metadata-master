@@ -2,12 +2,21 @@ package com.mingdong.mis.service.impl;
 
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.mis.domain.entity.ApiReq;
+import com.mingdong.mis.component.RedisDao;
+import com.mingdong.mis.constant.MDResult;
+import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientUser;
+import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.Recharge;
-import com.mingdong.mis.domain.mapper.ApiReqMapper;
+import com.mingdong.mis.domain.mapper.ClientMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserMapper;
+import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
+import com.mingdong.mis.model.CheckResult;
+import com.mingdong.mis.mongo.dao.RequestLogDao;
+import com.mingdong.mis.mongo.entity.RequestLog;
 import com.mingdong.mis.service.ChargeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,7 +30,15 @@ import java.util.Date;
 public class ChargeServiceImpl implements ChargeService
 {
     @Resource
-    private ApiReqMapper apiReqMapper;
+    private RedisDao redisDao;
+    @Resource
+    private RequestLogDao requestLogDao;
+    @Resource
+    private ClientMapper clientMapper;
+    @Resource
+    private ClientUserMapper clientUserMapper;
+    @Resource
+    private ProductMapper productMapper;
     @Resource
     private RechargeMapper rechargeMapper;
     @Resource
@@ -40,29 +57,39 @@ public class ChargeServiceImpl implements ChargeService
             rechargeUpd.setBalance(recharge.getBalance().subtract(recharge.getUnitAmt()));
             rechargeMapper.updateSkipNull(rechargeUpd);
         }
-        ApiReq apiReq = new ApiReq();
-        apiReq.setId(requestId);
-        apiReq.setCreateTime(date);
-        apiReq.setUpdateTime(date);
-        apiReq.setRequestNo("RQ" + requestId);
-        apiReq.setThirdNo(thirdNo);
-        apiReq.setProductId(account.getProductId());
-        apiReq.setClientId(account.getClientId());
-        apiReq.setUserId(userId);
-        apiReq.setRequestIp(ip);
-        apiReq.setHit(hit ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
-        apiReq.setBillPlan(billPlan.getId());
-        if(BillPlan.PER_USE == billPlan || BillPlan.PER_HIT == billPlan)
+        String requestNo = redisDao.getAPIRequestNo(date);
+        RequestLog requestLog = new RequestLog();
+        requestLog.setRequestNo(requestNo);
+        requestLog.setTimestamp(date);
+        requestLog.setClientId(account.getClientId());
+        requestLog.setClientUserId(userId);
+        requestLog.setProductId(account.getProductId());
+        requestLog.setHost(ip);
+        requestLog.setRequestParams(null);
+        requestLog.setHit(hit ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        requestLog.setBillPlan(billPlan.getId());
+        if(billPlan == BillPlan.PER_USE)
         {
-            BigDecimal fee = new BigDecimal(0);
-            if(BillPlan.PER_USE == billPlan || hit)
-            {
-                fee = recharge.getUnitAmt();
-            }
-            apiReq.setFee(fee);
-            apiReq.setBalance(recharge.getBalance().subtract(fee));
+            requestLog.setFee(recharge.getUnitAmt().multiply(new BigDecimal("100")).longValue());
+            requestLog.setBalance(account.getBalance()
+                    .subtract(recharge.getUnitAmt())
+                    .multiply(new BigDecimal("100"))
+                    .longValue());
         }
-        apiReqMapper.add(apiReq);
+        else if(billPlan == BillPlan.PER_HIT)
+        {
+            BigDecimal fee = hit ? recharge.getUnitAmt() : new BigDecimal("0");
+            requestLog.setFee(fee.multiply(new BigDecimal("100")).longValue());
+            requestLog.setBalance(account.getBalance().subtract(fee).multiply(new BigDecimal("100")).longValue());
+        }
+        Client client = clientMapper.findById(account.getClientId());
+        requestLog.setCorpName(client.getCorpName());
+        requestLog.setPrimaryUsername(client.getUsername());
+        ClientUser requestUser = clientUserMapper.findById(userId);
+        requestLog.setRequestUsername(requestUser.getUsername());
+        Product product = productMapper.findById(account.getProductId());
+        requestLog.setProductName(product.getName());
+        requestLogDao.insert(requestLog);
     }
 
     @Override
@@ -71,5 +98,29 @@ public class ChargeServiceImpl implements ChargeService
     {
         rechargeMapper.add(pr);
         clientProductMapper.updateSkipNull(cp);
+    }
+
+    @Override
+    public CheckResult checkAccountAndBillPlan(Long clientId, Long productId, Integer billPlan)
+    {
+        CheckResult result = new CheckResult();
+        ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
+        if(!billPlan.equals(clientProduct.getBillPlan()))
+        {
+            // 计费方式改变
+            result.setResult(MDResult.SYSTEM_BUSY);
+            return result;
+        }
+        Recharge recharge = rechargeMapper.findById(clientProduct.getLatestRechargeId());
+        if(clientProduct.getBalance().compareTo(recharge.getUnitAmt()) < 0)
+        {
+            // 余额不足
+            result.setResult(MDResult.INSUFFICIENT_BALANCE);
+            return result;
+        }
+        result.setClientProductId(clientProduct.getId());
+        result.setBalance(clientProduct.getBalance());
+        result.setUnitAmt(recharge.getUnitAmt());
+        return result;
     }
 }

@@ -3,17 +3,19 @@ package com.mingdong.mis.model.vo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.MapUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.constant.Field;
+import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.util.SignUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.SortedMap;
 
-public class AccessVO<T extends AbsRequest>
+public class RequestVO<T extends AbsPayload>
 {
-    private static final Logger logger = LoggerFactory.getLogger(AccessVO.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestVO.class);
     private Long timestamp;
     private String sign;
     private T payload;
@@ -48,7 +50,7 @@ public class AccessVO<T extends AbsRequest>
         this.payload = payload;
     }
 
-    public boolean checkSign(String appSecret)
+    private boolean checkSign(String appSecret)
     {
         JSONObject json = (JSONObject) JSON.toJSON(payload);
         json.put(Field.TIMESTAMP, timestamp);
@@ -64,5 +66,18 @@ public class AccessVO<T extends AbsRequest>
             logger.error("Error occurred while check digital signature, data: {}, key: {}", str, appSecret);
             return false;
         }
+    }
+
+    public MDResult checkParamAndSign(String appSecret)
+    {
+        if(timestamp == null || Math.abs(System.currentTimeMillis() - timestamp) > 300000)
+        {
+            return MDResult.INVALID_TIMESTAMP;
+        }
+        else if(StringUtils.isNullBlank(sign) || !checkSign(appSecret))
+        {
+            return MDResult.INVALID_SIGN;
+        }
+        return MDResult.OK;
     }
 }

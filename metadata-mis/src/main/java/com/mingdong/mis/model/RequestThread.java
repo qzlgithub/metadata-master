@@ -1,5 +1,9 @@
 package com.mingdong.mis.model;
 
+import com.mingdong.mis.constant.APIProduct;
+
+import java.util.Date;
+
 public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
@@ -13,16 +17,6 @@ public class RequestThread
     private static RequestHolder get()
     {
         return threadHolder.get();
-    }
-
-    public static Long getAccountId()
-    {
-        return get().getAccountId();
-    }
-
-    public static void setAccountId(Long accountId)
-    {
-        get().setAccountId(accountId);
     }
 
     public static Long getClientId()
@@ -45,6 +39,56 @@ public class RequestThread
         get().setUserId(userId);
     }
 
+    public static Long getProductId()
+    {
+        return get().getProductId();
+    }
+
+    public static void setProductId(Long productId)
+    {
+        get().setProductId(productId);
+    }
+
+    public static Long getClientProductId()
+    {
+        return get().getClientProductId();
+    }
+
+    public static void setClientProductId(Long accountId)
+    {
+        get().setClientProductId(accountId);
+    }
+
+    public static APIProduct getProduct()
+    {
+        return get().getProduct();
+    }
+
+    public static void setProduct(APIProduct product)
+    {
+        get().setProduct(product);
+    }
+
+    public static Integer getBillPlan()
+    {
+        return get().getBillPlan();
+    }
+
+    public static void setBillPlan(Integer billPlan)
+    {
+        get().setBillPlan(billPlan);
+    }
+
+    public static void setStart(Long start)
+    {
+        get().setStart(start);
+    }
+
+    public static void setEnd(Long end)
+    {
+        get().setEnd(end);
+    }
+
     public static String getAppSecret()
     {
         return get().getAppSecret();
@@ -55,24 +99,29 @@ public class RequestThread
         get().setAppSecret(appSecret);
     }
 
-    public static String getIp()
+    public static String getHost()
     {
-        return get().getIp();
+        return get().getHost();
     }
 
-    public static void setIp(String ip)
+    public static void setHost(String ip)
     {
-        get().setIp(ip);
+        get().setHost(ip);
     }
 
-    public static MetadataRes getResult()
+    public static MDResp getResp()
     {
-        return get().getRes();
+        return get().getResp();
     }
 
-    public static void setResult(MetadataRes result)
+    public static void setResp(MDResp resp)
     {
-        get().setRes(result);
+        get().setResp(resp);
+    }
+
+    public static boolean checkTimeValid(Date date)
+    {
+        return date != null && date.getTime() >= get().getStart() && date.getTime() < get().getEnd();
     }
 
     public static void cleanup()

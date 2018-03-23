@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class RestListResp extends RestResp
 {
-    private int total;
+    private long total;
     private List<Map<String, Object>> list;
 
-    public int getTotal()
+    public long getTotal()
     {
         return total;
     }
 
-    public void setTotal(int total)
+    public void setTotal(long total)
     {
         this.total = total;
     }

@@ -152,7 +152,7 @@ public interface ClientRpcService
     ResponseDTO removeCustomClientProduct(Long clientProductId);
 
     ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Long managerId, Page page);
+            Date toDate, Page page);
 
     ClientUserDictResDTO getClientAccountDict(Long clientId);
 

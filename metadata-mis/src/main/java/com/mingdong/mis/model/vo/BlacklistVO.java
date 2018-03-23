@@ -1,6 +1,6 @@
 package com.mingdong.mis.model.vo;
 
-public class BlacklistVO extends AbsRequest
+public class BlacklistVO extends AbsPayload
 {
     private String idNo;
     private String name;

@@ -1,44 +1,11 @@
-package com.mingdong.mis.mongo.entity;
+package com.mingdong.mis.model.metadata;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-@Document(collection = "fin_overdue_platform")
-public class OverduePlatform
+public class OverduePlatformBO
 {
-    @Id
-    private String id;
-    @Field("phone")
-    private String phone;
-    @Field("platform_code")
     private String platformCode;
-    @Field("platform_type")
     private String platformType;
-    @Field("overdue_earliest_time")
     private String overdueEarliestTime;
-    @Field("overdue_latest_time")
     private String overdueLatestTime;
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
 
     public String getPlatformCode()
     {

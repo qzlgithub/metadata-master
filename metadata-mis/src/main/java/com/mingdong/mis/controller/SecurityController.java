@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.model.MetadataRes;
+import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.service.ClientService;
 import com.mingdong.mis.util.SignUtils;
@@ -28,13 +28,13 @@ public class SecurityController
     private ClientService clientService;
 
     @GetMapping(value = "/security/access-token", headers = {"accept-version=1.0"})
-    public MetadataRes getAccessToken(@RequestParam(value = Field.APP_ID) String appId,
+    public MDResp getAccessToken(@RequestParam(value = Field.APP_ID) String appId,
             @RequestParam(value = Field.TIMESTAMP) String timestamp,
             @RequestParam(value = Field.ACCESS_KEY) String accessKey,
             @RequestParam(value = Field.USERNAME, required = false) String username,
             @RequestParam(value = Field.REFRESH, required = false) Integer refresh)
     {
-        MetadataRes res = RequestThread.getResult();
+        MDResp res = RequestThread.getResp();
         clientService.getClientAccessToken(appId, timestamp, accessKey, username, refresh, res);
         return res;
     }

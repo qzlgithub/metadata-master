@@ -60,15 +60,15 @@ public class SignUtils
 
     public static void main(String[] args) throws MetadataCoreException
     {
+        long ts = System.currentTimeMillis();
+        System.out.println("timestamp: "+ts);
         Map<String, Object> m = new HashMap<>();
-        m.put("idNo", "330721198910115417");
-        m.put("name", "祝俊");
-        m.put("phone", "18868429798");
-        m.put("timestamp", 1234567890);
+        m.put("phone", "15881821749");
+        m.put("timestamp", ts);
         SortedMap sm = MapUtils.sortKey(m);
         String str = JSON.toJSONString(sm);
         System.out.println("str: " + str);
-        String[] keys = {"8c8c0eaf81a84a809d8f3acce71905b1"};
+        String[] keys = {"c8a3b60a412c44fc96daf10c56c72f93"};
         for(String key : keys)
         {
             String sign = sign(str, key);

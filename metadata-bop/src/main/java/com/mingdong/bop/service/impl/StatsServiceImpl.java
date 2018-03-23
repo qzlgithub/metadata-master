@@ -430,7 +430,7 @@ public class StatsServiceImpl implements StatsService
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
-                currentDay, null, page);
+                currentDay, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
         res.addData(Field.TITLE,
@@ -483,7 +483,7 @@ public class StatsServiceImpl implements StatsService
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
-                currentDay, null, page);
+                currentDay, page);
         List<AccessResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -829,7 +829,7 @@ public class StatsServiceImpl implements StatsService
         String dateStr = sdf.format(date);
         String currentDayStr = sdf.format(currentDay);
         res.addData(Field.TITLE, dateStr + "-" + currentDayStr + " 共充值" + NumberUtils.formatAmount(sumRec) + "元");
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         res.setTotal(total);
         List<Map<String, Object>> list = new ArrayList<>();
         if(total > 0 && page.getPageNum() <= pages)

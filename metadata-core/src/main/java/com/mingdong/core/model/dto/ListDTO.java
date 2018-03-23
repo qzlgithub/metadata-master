@@ -7,16 +7,16 @@ import java.util.Map;
 
 public class ListDTO<T> implements Serializable
 {
-    private int total;
+    private long total;
     private List<T> list;
     private Map<String, String> extradata;
 
-    public int getTotal()
+    public long getTotal()
     {
         return total;
     }
 
-    public void setTotal(int total)
+    public void setTotal(long total)
     {
         this.total = total;
     }

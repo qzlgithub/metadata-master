@@ -77,6 +77,17 @@ public class RedisDao extends RedisBaseDao
         return "RO" + dateStr + String.format("%06d", num);
     }
 
+    public String getAPIRequestNo(Date date)
+    {
+        String datestr = DateUtils.format(date, DateFormat.YYYYMMDD);
+        Long num = incr(DB.SYSTEM, "REQUEST-ORDER-" + datestr);
+        if(num == 1)
+        {
+            expire(DB.SYSTEM, "REQUEST-ORDER-" + datestr, 86500L);
+        }
+        return "RQ" + datestr + String.format("%06d", num);
+    }
+
     interface DB
     {
         int SYSTEM = 0;
@@ -88,5 +99,11 @@ public class RedisDao extends RedisBaseDao
     interface Key
     {
         String DS_API_TOKEN = "ds_api_token";
+    }
+
+    public static void main(String[] args)
+    {
+        String datestr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
+        System.out.println(datestr);
     }
 }

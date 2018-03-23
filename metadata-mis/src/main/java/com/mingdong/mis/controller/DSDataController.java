@@ -2,13 +2,13 @@ package com.mingdong.mis.controller;
 
 import com.mingdong.core.annotation.AuthRequired;
 import com.mingdong.mis.constant.APIProduct;
-import com.mingdong.mis.constant.MetadataResult;
-import com.mingdong.mis.model.MetadataRes;
+import com.mingdong.mis.constant.MDResult;
+import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
-import com.mingdong.mis.model.vo.AbsRequest;
-import com.mingdong.mis.model.vo.AccessVO;
+import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.model.vo.BlacklistVO;
 import com.mingdong.mis.model.vo.MultipleAppVO;
+import com.mingdong.mis.model.vo.RequestVO;
 import com.mingdong.mis.service.DSDataService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,29 +26,29 @@ public class DSDataController
 
     @AuthRequired
     @PostMapping(value = "blacklist", headers = {"accept-version=1.0"})
-    public MetadataRes callBlacklistService(@RequestBody AccessVO<BlacklistVO> accessVO)
+    public MDResp callBlacklistService(@RequestBody RequestVO<BlacklistVO> requestVO)
     {
-        return getData(APIProduct.DS_DATA_BLACKLIST, accessVO);
+        return getData(APIProduct.DS_DATA_BLACKLIST, requestVO);
     }
 
     @AuthRequired
     @PostMapping(value = "multi-app", headers = {"accept-version=1.0"})
-    public MetadataRes callMultipleAppService(@RequestBody AccessVO<MultipleAppVO> accessVO)
+    public MDResp callMultipleAppService(@RequestBody RequestVO<MultipleAppVO> requestVO)
     {
-        return getData(APIProduct.DS_DATA_MULTI_APP, accessVO);
+        return getData(APIProduct.DS_DATA_MULTI_APP, requestVO);
     }
 
-    private <T extends AbsRequest> MetadataRes getData(APIProduct product, AccessVO<T> accessVO)
+    private <T extends AbsPayload> MDResp getData(APIProduct product, RequestVO<T> requestVO)
     {
-        MetadataRes res = RequestThread.getResult();
-        // 数据验签
-        if(!accessVO.checkSign(RequestThread.getAppSecret()))
+        MDResp res = RequestThread.getResp();
+        MDResult result = requestVO.checkParamAndSign(RequestThread.getAppSecret());
+        if(result != MDResult.OK)
         {
-            res.setResult(MetadataResult.RC_9);
+            res.setResult(result);
             return res;
         }
-        dsDataService.getData(product, RequestThread.getAccountId(), RequestThread.getClientId(),
-                RequestThread.getUserId(), RequestThread.getIp(), accessVO.getPayload(), res);
+        dsDataService.getData(product, RequestThread.getClientProductId(), RequestThread.getClientId(),
+                RequestThread.getUserId(), RequestThread.getHost(), requestVO.getPayload(), res);
         return res;
     }
 }

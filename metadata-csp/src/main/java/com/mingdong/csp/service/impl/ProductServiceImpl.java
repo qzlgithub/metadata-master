@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService
             resp.addData(Field.LIST, list);
         }
         resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, page.getTotalPage(apiReqInfoListDTO.getTotal()));
+        resp.addData(Field.PAGES, page.getPages(apiReqInfoListDTO.getTotal()));
         resp.addData(Field.PAGE_NUM, page.getPageNum());
         resp.addData(Field.PAGE_SIZE, page.getPageSize());
     }
@@ -298,7 +298,7 @@ public class ProductServiceImpl implements ProductService
     {
         ListDTO<ProductResDTO> listDTO = productRpcService.getProductList(clientId, productTypeList, incOpened, page);
         res.setTotal(listDTO.getTotal());
-        res.addData(Field.PAGES, page.getTotalPage(listDTO.getTotal()));
+        res.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
         if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
             List<Map<String, Object>> list = new ArrayList<>();

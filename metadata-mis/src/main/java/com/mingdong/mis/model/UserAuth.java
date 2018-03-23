@@ -1,25 +1,17 @@
 package com.mingdong.mis.model;
 
-import com.mingdong.common.util.StringUtils;
-
 public class UserAuth
 {
-    private String product;
     private Long clientId;
-    private Long accountId;
     private Long userId;
-    private String appSecret;
-    private String validIP;
-
-    public String getProduct()
-    {
-        return product;
-    }
-
-    public void setProduct(String product)
-    {
-        this.product = product;
-    }
+    private Long productId;
+    private Long clientProductId;
+    private Integer billPlan;
+    private Long start;
+    private Long end;
+    private String product;
+    private String secretKey;
+    private String host;
 
     public Long getClientId()
     {
@@ -29,16 +21,6 @@ public class UserAuth
     public void setClientId(Long clientId)
     {
         this.clientId = clientId;
-    }
-
-    public Long getAccountId()
-    {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId)
-    {
-        this.accountId = accountId;
     }
 
     public Long getUserId()
@@ -51,29 +33,83 @@ public class UserAuth
         this.userId = userId;
     }
 
-    public String getAppSecret()
+    public Long getProductId()
     {
-        return appSecret;
+        return productId;
     }
 
-    public void setAppSecret(String appSecret)
+    public void setProductId(Long productId)
     {
-        this.appSecret = appSecret;
+        this.productId = productId;
     }
 
-    public String getValidIP()
+    public Long getClientProductId()
     {
-        return validIP;
+        return clientProductId;
     }
 
-    public void setValidIP(String validIP)
+    public void setClientProductId(Long clientProductId)
     {
-        this.validIP = validIP;
+        this.clientProductId = clientProductId;
     }
 
-    public boolean auth()
+    public Integer getBillPlan()
     {
-        return !StringUtils.isNullBlank(validIP) && !StringUtils.isNullBlank(product) && clientId != null &&
-                accountId != null && userId != null;
+        return billPlan;
+    }
+
+    public void setBillPlan(Integer billPlan)
+    {
+        this.billPlan = billPlan;
+    }
+
+    public Long getStart()
+    {
+        return start;
+    }
+
+    public void setStart(Long start)
+    {
+        this.start = start;
+    }
+
+    public Long getEnd()
+    {
+        return end;
+    }
+
+    public void setEnd(Long end)
+    {
+        this.end = end;
+    }
+
+    public String getProduct()
+    {
+        return product;
+    }
+
+    public void setProduct(String product)
+    {
+        this.product = product;
+    }
+
+    public String getSecretKey()
+    {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey)
+    {
+        this.secretKey = secretKey;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
     }
 }

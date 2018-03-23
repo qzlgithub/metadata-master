@@ -309,7 +309,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
     {
         ListDTO<ProductResDTO> dto = new ListDTO<>();
         int total = productMapper.countBy(keyword, type, custom, status);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -341,7 +341,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
         ListDTO<ProductResDTO> dto = new ListDTO<>();
         incOpened = TrueOrFalse.TRUE.equals(incOpened) ? incOpened : null;
         int total = productClientInfoMapper.countBy(clientId, typeList, incOpened);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         dto.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {

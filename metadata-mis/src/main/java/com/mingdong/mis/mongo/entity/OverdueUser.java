@@ -1,28 +1,41 @@
 package com.mingdong.mis.mongo.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class Overdue
+@Document(collection = "fin_overdue_user")
+public class OverdueUser
 {
     @Id
     private String id;
+    @Field("phone")
     private String phone;
-    private String name;
-    private String idNo;
+    @Field("overdue_amount_max")
     private BigDecimal overdueAmountMax;
+    @Field("overdue_days_max")
     private Integer overdueDaysMax;
-    private Date overdueEarliestTime;
-    private Date overdueLatestTime;
+    @Field("overdue_earliest_time")
+    private String overdueEarliestTime;
+    @Field("overdue_latest_time")
+    private String overdueLatestTime;
+    @Field("overdue_platform_total")
     private Integer overduePlatformTotal;
+    @Field("overdue_platform_today")
     private Integer overduePlatformToday;
+    @Field("overdue_platform_3_days")
     private Integer overduePlatform3Days;
+    @Field("overdue_platform_7_days")
     private Integer overduePlatform7Days;
+    @Field("overdue_platform_15_days")
     private Integer overduePlatform15Days;
+    @Field("overdue_platform_30_days")
     private Integer overduePlatform30Days;
+    @Field("overdue_platform_60_days")
     private Integer overduePlatform60Days;
+    @Field("overdue_platform_90_days")
     private Integer overduePlatform90Days;
 
     public String getId()
@@ -45,26 +58,6 @@ public class Overdue
         this.phone = phone;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getIdNo()
-    {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo)
-    {
-        this.idNo = idNo;
-    }
-
     public BigDecimal getOverdueAmountMax()
     {
         return overdueAmountMax;
@@ -85,22 +78,22 @@ public class Overdue
         this.overdueDaysMax = overdueDaysMax;
     }
 
-    public Date getOverdueEarliestTime()
+    public String getOverdueEarliestTime()
     {
         return overdueEarliestTime;
     }
 
-    public void setOverdueEarliestTime(Date overdueEarliestTime)
+    public void setOverdueEarliestTime(String overdueEarliestTime)
     {
         this.overdueEarliestTime = overdueEarliestTime;
     }
 
-    public Date getOverdueLatestTime()
+    public String getOverdueLatestTime()
     {
         return overdueLatestTime;
     }
 
-    public void setOverdueLatestTime(Date overdueLatestTime)
+    public void setOverdueLatestTime(String overdueLatestTime)
     {
         this.overdueLatestTime = overdueLatestTime;
     }

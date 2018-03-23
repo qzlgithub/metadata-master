@@ -5,7 +5,7 @@ import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.data.service.DSDataAPI;
 import com.mingdong.mis.model.IMetadata;
-import com.mingdong.mis.model.vo.AbsRequest;
+import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.model.vo.BlacklistVO;
 import com.mingdong.mis.model.vo.MultipleAppVO;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class DataAPIProcessor
     @Resource
     private DSDataAPI dsDataAPI;
 
-    public IMetadata revokeDataAPI(APIProduct product, AbsRequest bean)
+    public IMetadata revokeDataAPI(APIProduct product, AbsPayload bean)
             throws MetadataAPIException, MetadataCoreException
     {
         switch(product)

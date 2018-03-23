@@ -9,15 +9,15 @@ import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
-import com.mingdong.mis.constant.MetadataResult;
+import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.data.DataAPIProcessor;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.model.IMetadata;
-import com.mingdong.mis.model.MetadataRes;
-import com.mingdong.mis.model.vo.AbsRequest;
+import com.mingdong.mis.model.MDResp;
+import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.service.ChargeService;
 import com.mingdong.mis.service.DSDataService;
 import org.slf4j.Logger;
@@ -45,8 +45,8 @@ public class DSDataServiceImpl implements DSDataService
     private RechargeMapper rechargeMapper;
 
     @Override
-    public <T extends AbsRequest> void getData(APIProduct product, Long accountId, Long clientId, Long userId,
-            String ip, T req, MetadataRes res)
+    public <T extends AbsPayload> void getData(APIProduct product, Long accountId, Long clientId, Long userId,
+            String ip, T req, MDResp res)
     {
         String lockAccount = product.name() + "-C" + clientId;
         String lockUUID = StringUtils.getUuid();
@@ -58,7 +58,7 @@ public class DSDataServiceImpl implements DSDataService
             if(!locked)
             {
                 logger.warn("Failed to lock product account, client: {}, product: {}", clientId, product.name());
-                res.setResult(MetadataResult.RC_11);
+                res.setResult(MDResult.SYSTEM_BUSY);
                 return;
             }
             // 查询计费方式，如果按时间计费则即时释放账户锁
@@ -73,7 +73,7 @@ public class DSDataServiceImpl implements DSDataService
             Recharge recharge = rechargeMapper.findById(account.getLatestRechargeId());
             if(!checkAccountIsAvailable(recharge, res.getTimestamp()))
             {
-                res.setResult(MetadataResult.RC_10);
+                res.setResult(MDResult.INSUFFICIENT_BALANCE);
                 return;
             }
             // 调取数据API
@@ -91,7 +91,7 @@ public class DSDataServiceImpl implements DSDataService
         catch(MetadataAPIException | MetadataCoreException e)
         {
             logger.error("Failed to revoke data api: {}", e.getMessage());
-            res.setResult(MetadataResult.RC_11);
+            res.setResult(MDResult.SYSTEM_BUSY);
         }
         finally
         {

@@ -14,11 +14,11 @@ import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
 import com.mingdong.mis.domain.entity.StatsRecharge;
 import com.mingdong.mis.domain.entity.StatsRechargeInfo;
-import com.mingdong.mis.domain.mapper.ApiReqMapper;
 import com.mingdong.mis.domain.mapper.ClientInfoMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
 import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
+import com.mingdong.mis.mongo.dao.RequestLogDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,11 +39,11 @@ public class StatsRpcServiceImpl implements StatsRpcService
     @Resource
     private ClientInfoMapper clientInfoMapper;
     @Resource
-    private ApiReqMapper apiReqMapper;
-    @Resource
     private StatsMapper statsMapper;
     @Resource
     private StatsRechargeMapper statsRechargeMapper;
+    @Resource
+    private RequestLogDao requestLogDao;
 
     @Override
     public Integer getAllClientCount()
@@ -62,7 +62,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.getClientCountByDate(date, currentDay);
-        int pages = page.getTotalPage(total);
+        long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
@@ -206,7 +206,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
             return;
         }
         int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter);
-        int requestCount = apiReqMapper.countBy(null, null, null, hourBefore, hourAfter);
+        long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
         BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter);
         if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
         {

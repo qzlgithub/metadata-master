@@ -1,23 +1,20 @@
 package com.mingdong.mis.model;
 
+import com.mingdong.mis.constant.APIProduct;
+
 class RequestHolder
 {
-    private Long accountId;
     private Long clientId;
     private Long userId;
+    private Long productId;
+    private Long clientProductId;
+    private APIProduct product;
     private String appSecret;
-    private String ip;
-    private MetadataRes res;
-
-    public Long getAccountId()
-    {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId)
-    {
-        this.accountId = accountId;
-    }
+    private Integer billPlan;
+    private Long start;
+    private Long end;
+    private String host;
+    private MDResp resp;
 
     public Long getClientId()
     {
@@ -39,6 +36,36 @@ class RequestHolder
         this.userId = userId;
     }
 
+    public Long getProductId()
+    {
+        return productId;
+    }
+
+    public void setProductId(Long productId)
+    {
+        this.productId = productId;
+    }
+
+    public Long getClientProductId()
+    {
+        return clientProductId;
+    }
+
+    public void setClientProductId(Long clientProductId)
+    {
+        this.clientProductId = clientProductId;
+    }
+
+    public APIProduct getProduct()
+    {
+        return product;
+    }
+
+    public void setProduct(APIProduct product)
+    {
+        this.product = product;
+    }
+
     public String getAppSecret()
     {
         return appSecret;
@@ -49,23 +76,53 @@ class RequestHolder
         this.appSecret = appSecret;
     }
 
-    public String getIp()
+    public Integer getBillPlan()
     {
-        return ip;
+        return billPlan;
     }
 
-    public void setIp(String ip)
+    public void setBillPlan(Integer billPlan)
     {
-        this.ip = ip;
+        this.billPlan = billPlan;
     }
 
-    public MetadataRes getRes()
+    public Long getStart()
     {
-        return res;
+        return start;
     }
 
-    public void setRes(MetadataRes res)
+    public void setStart(Long start)
     {
-        this.res = res;
+        this.start = start;
+    }
+
+    public Long getEnd()
+    {
+        return end;
+    }
+
+    public void setEnd(Long end)
+    {
+        this.end = end;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
+
+    public MDResp getResp()
+    {
+        return resp;
+    }
+
+    public void setResp(MDResp resp)
+    {
+        this.resp = resp;
     }
 }

@@ -1,30 +1,27 @@
 package com.mingdong.mis.constant;
 
-import com.mingdong.common.util.StringUtils;
-
 public enum APIProduct
 {
-    DS_DATA_BLACKLIST("/ds-data/blacklist", "DS_DATA_BLACKLIST"),
-    DS_DATA_MULTI_APP("/ds-data/multi-app", "DS_DATA_MULTI_APP");
+    CDK("/credit/overdue"),
+    DS_DATA_BLACKLIST("/ds-data/blacklist"),
+    DS_DATA_MULTI_APP("/ds-data/multi-app");
 
     private final String uri;
-    private final String code;
 
-    APIProduct(String uri, String code)
+    APIProduct(String uri)
     {
         this.uri = uri;
-        this.code = code;
     }
 
-    public static APIProduct getByCode(String code)
+    public static APIProduct targetOf(String name)
     {
-        if(!StringUtils.isNullBlank(code))
+        if(name != null)
         {
-            for(APIProduct item : APIProduct.values())
+            for(APIProduct o : APIProduct.values())
             {
-                if(code.equals(item.code))
+                if(name.equals(o.name()))
                 {
-                    return item;
+                    return o;
                 }
             }
         }
@@ -34,10 +31,5 @@ public enum APIProduct
     public String getUri()
     {
         return uri;
-    }
-
-    public String getCode()
-    {
-        return code;
     }
 }
