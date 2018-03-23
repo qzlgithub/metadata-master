@@ -23,7 +23,7 @@
         from `client_user`
     </sql>
 
-    <insert id="add" parameterType="ClientUser">
+    <insert id="add" parameterType="ClientUser" useGeneratedKeys="true" keyProperty="id">
         insert into `client_user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

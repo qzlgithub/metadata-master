@@ -1,12 +1,8 @@
 package com.mingdong.mis.mongo.dao;
 
-import com.mingdong.common.model.Page;
-import com.mingdong.mis.mongo.entity.OverdueUser;
-
-import java.util.Date;
-import java.util.List;
+import com.mingdong.mis.mongo.entity.FinOverdueUser;
 
 public interface FinOverdueUserDao
 {
-    List<OverdueUser> findByParam(Long clientId, Long clientUserId, Date startTime, Date endTime, Page page);
+    FinOverdueUser findByPhone(String phone);
 }

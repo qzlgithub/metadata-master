@@ -35,7 +35,6 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
-import com.mingdong.core.util.IDUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.Client;
@@ -367,8 +366,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             responseDTO.setResult(RestResult.ONLY_PRIMARY_USER);
             return responseDTO;
         }
-        ClientUser account = clientUserMapper.findByUsername(username);
-        if(account != null)
+        ClientUser user = clientUserMapper.findByUsername(username);
+        if(user != null)
         {
             responseDTO.setResult(RestResult.USERNAME_EXIST);
             return responseDTO;
@@ -391,18 +390,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
 
         Date current = new Date();
-        account = new ClientUser();
-        account.setId(IDUtils.createUserId(param.getNodeId()));
-        account.setCreateTime(current);
-        account.setUpdateTime(current);
-        account.setClientId(client.getId());
-        account.setName(name);
-        account.setPhone(phone);
-        account.setUsername(username);
-        account.setPassword(Md5Utils.encrypt(password));
-        account.setEnabled(TrueOrFalse.TRUE);
-        account.setDeleted(TrueOrFalse.FALSE);
-        clientUserMapper.add(account);
+        user = new ClientUser();
+        user.setCreateTime(current);
+        user.setUpdateTime(current);
+        user.setClientId(client.getId());
+        user.setName(name);
+        user.setPhone(phone);
+        user.setUsername(username);
+        user.setPassword(Md5Utils.encrypt(password));
+        user.setEnabled(TrueOrFalse.TRUE);
+        user.setDeleted(TrueOrFalse.FALSE);
+        clientUserMapper.add(user);
         updateClientAccountQty(client.getId());
         responseDTO.setResult(RestResult.SUCCESS);
         return responseDTO;
@@ -674,41 +672,38 @@ public class ClientRpcServiceImpl implements ClientRpcService
             res.setResult(RestResult.USERNAME_EXIST);
             return res;
         }
-        Client ct = clientMapper.findByCorpNameOrCorpLicense(reqDTO.getCorpName(), reqDTO.getLicense());
-        if(ct != null && ct.getCorpName().equals(reqDTO.getCorpName()))
+        Client client = clientMapper.findByCorpNameOrCorpLicense(reqDTO.getCorpName(), reqDTO.getLicense());
+        if(client != null && client.getCorpName().equals(reqDTO.getCorpName()))
         {
             res.setResult(RestResult.CLIENT_NAME_EXIST);
             return res;
         }
-        if(ct != null && ct.getLicense().equals(reqDTO.getLicense()))
+        if(client != null && client.getLicense().equals(reqDTO.getLicense()))
         {
             res.setResult(RestResult.CLIENT_LICENSE_EXIST);
             return res;
         }
-        Date current = new Date();
-        Long clientId = IDUtils.getClientId(param.getNodeId());
-        Long userId = IDUtils.createUserId(param.getNodeId());
-        // build corporation contact data list
-        List<ClientContact> contactList = new ArrayList<>();
-        for(ClientContactReqDTO o : reqDTO.getContactList())
-        {
-            ClientContact cc = new ClientContact();
-            cc.setCreateTime(current);
-            cc.setUpdateTime(current);
-            cc.setClientId(clientId);
-            cc.setName(o.getName());
-            cc.setPosition(o.getPosition());
-            cc.setPhone(o.getPhone());
-            cc.setEmail(o.getEmail());
-            cc.setGeneral(o.getGeneral());
-            contactList.add(cc);
-        }
-        // build client primary user
+        Date date = new Date();
+        // build & save client
+        client = new Client();
+        client.setCreateTime(date);
+        client.setUpdateTime(date);
+        client.setCorpName(reqDTO.getCorpName());
+        client.setShortName(reqDTO.getShortName());
+        client.setLicense(reqDTO.getLicense());
+        client.setIndustryId(reqDTO.getIndustryId());
+        client.setPrimaryUserId(0L);
+        client.setUsername(reqDTO.getUsername());
+        client.setManagerId(reqDTO.getManagerId());
+        client.setAccountQty(0);
+        client.setEnabled(TrueOrFalse.TRUE);
+        client.setDeleted(TrueOrFalse.FALSE);
+        clientMapper.add(client);
+        // build & save client primary user
         user = new ClientUser();
-        user.setId(userId);
-        user.setCreateTime(current);
-        user.setUpdateTime(current);
-        user.setClientId(clientId);
+        user.setCreateTime(date);
+        user.setUpdateTime(date);
+        user.setClientId(client.getId());
         user.setName(reqDTO.getCorpName());
         user.setPhone("");
         user.setEmail("");
@@ -716,25 +711,29 @@ public class ClientRpcServiceImpl implements ClientRpcService
         user.setPassword(Constant.DEFAULT_ENC_PWD);
         user.setEnabled(reqDTO.getEnabled());
         user.setDeleted(TrueOrFalse.FALSE);
-        // build client
-        Client client = new Client();
-        client.setId(clientId);
-        client.setCreateTime(current);
-        client.setUpdateTime(current);
-        client.setCorpName(reqDTO.getCorpName());
-        client.setShortName(reqDTO.getShortName());
-        client.setLicense(reqDTO.getLicense());
-        client.setIndustryId(reqDTO.getIndustryId());
-        client.setPrimaryUserId(userId);
-        client.setUsername(reqDTO.getUsername());
-        client.setManagerId(reqDTO.getManagerId());
-        client.setAccountQty(0);
-        client.setEnabled(TrueOrFalse.TRUE);
-        client.setDeleted(TrueOrFalse.FALSE);
-        // save data
-        clientContactMapper.addList(contactList);
         clientUserMapper.add(user);
-        clientMapper.add(client);
+        // update client set primary user id
+        Client tempClient = new Client();
+        tempClient.setId(client.getId());
+        tempClient.setUpdateTime(date);
+        tempClient.setPrimaryUserId(user.getId());
+        clientMapper.updateSkipNull(tempClient);
+        // build & save corporation contact data list
+        List<ClientContact> contactList = new ArrayList<>();
+        for(ClientContactReqDTO o : reqDTO.getContactList())
+        {
+            ClientContact cc = new ClientContact();
+            cc.setCreateTime(date);
+            cc.setUpdateTime(date);
+            cc.setClientId(client.getId());
+            cc.setName(o.getName());
+            cc.setPosition(o.getPosition());
+            cc.setPhone(o.getPhone());
+            cc.setEmail(o.getEmail());
+            cc.setGeneral(o.getGeneral());
+            contactList.add(cc);
+        }
+        clientContactMapper.addList(contactList);
         return res;
     }
 
@@ -981,7 +980,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 for(Long productId : productIds)
                 {
                     clientProduct = new ClientProduct();
-                    clientProduct.setId(IDUtils.getClientProductId(1));
                     clientProduct.setClientId(clientId);
                     clientProduct.setProductId(productId);
                     clientProduct.setOpened(TrueOrFalse.FALSE);

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.math.BigDecimal;
 
 @Document(collection = "fin_overdue_user")
-public class OverdueUser
+public class FinOverdueUser
 {
     @Id
     private String id;

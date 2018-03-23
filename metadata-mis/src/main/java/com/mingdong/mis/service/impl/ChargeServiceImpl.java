@@ -1,5 +1,6 @@
 package com.mingdong.mis.service.impl;
 
+import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.mis.component.RedisDao;
@@ -70,17 +71,14 @@ public class ChargeServiceImpl implements ChargeService
         requestLog.setBillPlan(billPlan.getId());
         if(billPlan == BillPlan.PER_USE)
         {
-            requestLog.setFee(recharge.getUnitAmt().multiply(new BigDecimal("100")).longValue());
-            requestLog.setBalance(account.getBalance()
-                    .subtract(recharge.getUnitAmt())
-                    .multiply(new BigDecimal("100"))
-                    .longValue());
+            requestLog.setFee(NumberUtils.yuanToCent(recharge.getUnitAmt()));
+            requestLog.setBalance(NumberUtils.yuanToCent(account.getBalance().subtract(recharge.getUnitAmt())));
         }
         else if(billPlan == BillPlan.PER_HIT)
         {
             BigDecimal fee = hit ? recharge.getUnitAmt() : new BigDecimal("0");
-            requestLog.setFee(fee.multiply(new BigDecimal("100")).longValue());
-            requestLog.setBalance(account.getBalance().subtract(fee).multiply(new BigDecimal("100")).longValue());
+            requestLog.setFee(NumberUtils.yuanToCent(fee));
+            requestLog.setBalance(NumberUtils.yuanToCent(account.getBalance().subtract(fee)));
         }
         Client client = clientMapper.findById(account.getClientId());
         requestLog.setCorpName(client.getCorpName());

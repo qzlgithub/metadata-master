@@ -24,7 +24,7 @@
         from `client`
     </sql>
 
-    <insert id="add" parameterType="Client">
+    <insert id="add" parameterType="Client" useGeneratedKeys="true" keyProperty="id">
         insert into `client`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

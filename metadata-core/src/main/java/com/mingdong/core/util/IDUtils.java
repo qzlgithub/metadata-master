@@ -22,11 +22,6 @@ public class IDUtils
         return id;
     }
 
-    public static Long getProductId(int nodeId)
-    {
-        return createID(product, nodeId);
-    }
-
     public static Long getClientId(int nodeId)
     {
         return createID(client, nodeId);

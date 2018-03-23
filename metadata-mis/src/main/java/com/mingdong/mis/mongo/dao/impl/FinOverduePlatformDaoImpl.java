@@ -1,23 +1,24 @@
 package com.mingdong.mis.mongo.dao.impl;
 
-import com.mingdong.mis.mongo.dao.FinOverdueUserDao;
-import com.mingdong.mis.mongo.entity.FinOverdueUser;
+import com.mingdong.mis.mongo.dao.FinOverduePlatformDao;
+import com.mingdong.mis.mongo.entity.FinOverduePlatform;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Component
-public class FinOverdueUserDaoImpl implements FinOverdueUserDao
+public class FinOverduePlatformDaoImpl implements FinOverduePlatformDao
 {
     @Resource
     private MongoTemplate mongoTemplate;
 
     @Override
-    public FinOverdueUser findByPhone(String phone)
+    public List<FinOverduePlatform> findByPhone(String phone)
     {
-        return mongoTemplate.findOne(Query.query(Criteria.where("phone").is(phone)), FinOverdueUser.class);
+        return mongoTemplate.find(Query.query(Criteria.where("phone").is(phone)), FinOverduePlatform.class);
     }
 }
