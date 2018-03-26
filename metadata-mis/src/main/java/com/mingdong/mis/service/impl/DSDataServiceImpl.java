@@ -4,7 +4,6 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.exception.MetadataAPIException;
 import com.mingdong.core.exception.MetadataCoreException;
-import com.mingdong.mis.component.Param;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
@@ -30,8 +29,6 @@ import java.util.Date;
 public class DSDataServiceImpl implements DSDataService
 {
     private static final Logger logger = LoggerFactory.getLogger(DSDataServiceImpl.class);
-    @Resource
-    private Param param;
     @Resource
     private RedisDao redisDao;
     @Resource
