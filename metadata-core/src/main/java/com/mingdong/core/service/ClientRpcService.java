@@ -194,4 +194,6 @@ public interface ClientRpcService
             Page page);
 
     void quartzClientRemind(Date date);
+
+    ResponseDTO updateClientRemind(Long remindId, String remark);
 }

@@ -342,4 +342,14 @@ public class ClientController
         clientService.getClientOperateLog(clientId, new Page(pageNum, pageSize), resp);
         return resp;
     }
+
+    @LoginRequired
+    @GetMapping(value = "/client/remind")
+    public RestListResp clientRemind(@RequestParam(value = Field.ID) Long remindId,
+            @RequestParam(value = Field.REMARK) String remark)
+    {
+        RestListResp resp = new RestListResp();
+        clientService.updateClientRemind(remindId, remark, resp);
+        return resp;
+    }
 }

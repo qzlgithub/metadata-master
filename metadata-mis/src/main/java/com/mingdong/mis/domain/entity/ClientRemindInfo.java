@@ -5,6 +5,7 @@ import java.util.Date;
 public class ClientRemindInfo
 {
     private Long id;
+    private Long clientId;
     private Date remindDate;
     private Integer type;
     private String linkName;
@@ -15,6 +16,16 @@ public class ClientRemindInfo
     private Integer dispose;
     private String corpName;
     private String productName;
+
+    public Long getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId)
+    {
+        this.clientId = clientId;
+    }
 
     public Long getId()
     {

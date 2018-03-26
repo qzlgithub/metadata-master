@@ -80,7 +80,9 @@
 
 <script type="text/html" id="operation-bar">
     <a class="layui-btn layui-btn-xs" lay-event="edit" href="javascript:">通知</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="javascript:">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" href="/client/detail.html?id={{d.clientId}}"
+       th:if="${#lists.contains(i_privilege,'31101')}">查看
+    </a>
 </script>
 
 <script type="text/html" id="status-tpl">

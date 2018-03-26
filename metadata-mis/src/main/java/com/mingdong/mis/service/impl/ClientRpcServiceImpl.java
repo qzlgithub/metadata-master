@@ -1448,6 +1448,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                     col.setRemark(o.getRemark());
                     col.setRemindDate(o.getRemindDate());
                     col.setType(o.getType());
+                    col.setClientId(o.getClientId());
                     list.add(col);
                 }
                 listDTO.setList(list);
@@ -1639,6 +1640,25 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
         }
         System.out.println("======================客户服务提醒统计完成");
+    }
+
+    @Override
+    public ResponseDTO updateClientRemind(Long remindId, String remark)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        ClientRemind cr = clientRemindMapper.getClientRemindById(remindId);
+        if(cr == null)
+        {
+            responseDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return responseDTO;
+        }
+        ClientRemind clientRemind = new ClientRemind();
+        clientRemind.setId(remindId);
+        clientRemind.setDispose(TrueOrFalse.TRUE);
+        clientRemind.setRemark(remark);
+        clientRemindMapper.updateSkipNull(clientRemind);
+        clientRemindProductMapper.disposeByClientRemindId(remindId);
+        return responseDTO;
     }
 
     /**

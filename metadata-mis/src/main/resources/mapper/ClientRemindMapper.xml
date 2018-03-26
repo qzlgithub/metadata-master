@@ -86,6 +86,11 @@
         where `dispose` = #{dispose}
     </select>
 
+    <select id="getClientRemindById" resultMap="BaseResultMap" parameterType="Long">
+        <include refid="select_all"/>
+        where `id` = #{id}
+    </select>
+
     <delete id="deleteByIds">
         delete from `client_remind` where `id`
         <foreach collection="ids" item="itemId" open="in (" close=")" separator=",">

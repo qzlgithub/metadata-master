@@ -13,6 +13,7 @@
         <result column="dispose" property="dispose" jdbcType="TINYINT" />
         <result column="corp_name" property="corpName" jdbcType="VARCHAR" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
     </resultMap>
     <!-- @formatter:off -->
     <select id="countBy" resultType="Integer">
@@ -42,6 +43,7 @@
         cr.`day` as day,
         cr.`remark` as remark,
         cr.`dispose` as dispose,
+        cr.`client_id` as client_id,
         c.`corp_name` as corp_name,
         p.`name` as product_name
         from `client_remind` cr
