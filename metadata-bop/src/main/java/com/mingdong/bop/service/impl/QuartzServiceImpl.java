@@ -31,6 +31,6 @@ public class QuartzServiceImpl implements QuartzService
     @Override
     public void quartzClientRemind(Date date)
     {
-
+        clientRpcService.quartzClientRemind(date);
     }
 }

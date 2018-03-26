@@ -843,7 +843,7 @@ public class ClientServiceImpl implements ClientService
             e.printStackTrace();
         }
         ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
-                RequestThread.isManager() ? 0 : RequestThread.getOperatorId(), ClientRemindType.DATE.getId(), date,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), ClientRemindType.DATE.getId(), date,
                 TrueOrFalse.FALSE, page);
         List<ClientRemindResInfoDTO> dataList = listDTO.getList();
         resp.setTotal(listDTO.getTotal());
@@ -858,7 +858,8 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.LINK_NAME, item.getLinkName());
                 map.put(Field.LINK_PHONE, item.getLinkPhone());
-                map.put(Field.PRODUCT_NAME, item.getProductName() + "（" + item.getCount() + "）");
+                map.put(Field.PRODUCT_NAME,
+                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
                 map.put(Field.DAY, item.getDay());
                 map.put(Field.STATUS, item.getDispose());
                 list.add(map);
@@ -880,7 +881,7 @@ public class ClientServiceImpl implements ClientService
             e.printStackTrace();
         }
         ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
-                RequestThread.isManager() ? 0 : RequestThread.getOperatorId(), ClientRemindType.TIMES.getId(), date,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), ClientRemindType.TIMES.getId(), date,
                 TrueOrFalse.FALSE, page);
         List<ClientRemindResInfoDTO> dataList = listDTO.getList();
         resp.setTotal(listDTO.getTotal());
@@ -895,7 +896,8 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.LINK_NAME, item.getLinkName());
                 map.put(Field.LINK_PHONE, item.getLinkPhone());
-                map.put(Field.PRODUCT_NAME, item.getProductName() + "（" + item.getCount() + "）");
+                map.put(Field.PRODUCT_NAME,
+                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
                 map.put(Field.STATUS, item.getDispose());
                 list.add(map);
             }

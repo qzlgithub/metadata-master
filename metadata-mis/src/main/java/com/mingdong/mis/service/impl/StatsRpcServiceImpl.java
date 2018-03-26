@@ -204,9 +204,9 @@ public class StatsRpcServiceImpl implements StatsRpcService
             logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "统计已存在！");
             return;
         }
-        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter,null);
+        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter, null);
         long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
-        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter,null);
+        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
         if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
         {
             logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");

@@ -36,7 +36,8 @@ public class SchedulerJobs
         JobDetail jobDetail = JobBuilder.newJob(ClientRemindJob.class)
                 .withIdentity("clientRemindJob", "jobGroup")
                 .build();
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 1 * * ?");//每天凌晨1点执行执行
+//        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/1 * * * ?");//每1分钟
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 0 * * ?");//每天凌晨0点执行
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("clientRemindJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
         SchedulerManage.addJob(jobDetail, cronTrigger);

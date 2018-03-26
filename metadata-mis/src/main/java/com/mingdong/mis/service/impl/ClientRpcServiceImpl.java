@@ -8,6 +8,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.ClientRemindType;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
@@ -35,6 +36,7 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.util.DateCalculateUtils;
 import com.mingdong.mis.component.Param;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.Client;
@@ -44,7 +46,10 @@ import com.mingdong.mis.domain.entity.ClientMessage;
 import com.mingdong.mis.domain.entity.ClientOperateInfo;
 import com.mingdong.mis.domain.entity.ClientOperateLog;
 import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientProductInfo;
+import com.mingdong.mis.domain.entity.ClientRemind;
 import com.mingdong.mis.domain.entity.ClientRemindInfo;
+import com.mingdong.mis.domain.entity.ClientRemindProduct;
 import com.mingdong.mis.domain.entity.ClientUser;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.DictIndustry;
@@ -60,8 +65,11 @@ import com.mingdong.mis.domain.mapper.ClientMapper;
 import com.mingdong.mis.domain.mapper.ClientMessageMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientOperateLogMapper;
+import com.mingdong.mis.domain.mapper.ClientProductInfoMapper;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientRemindInfoMapper;
+import com.mingdong.mis.domain.mapper.ClientRemindMapper;
+import com.mingdong.mis.domain.mapper.ClientRemindProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
@@ -75,18 +83,25 @@ import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
 import com.mingdong.mis.mongo.entity.RequestLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ClientRpcServiceImpl implements ClientRpcService
 {
+    private static final Logger logger = LoggerFactory.getLogger(ClientRpcServiceImpl.class);
     private static final Integer INC_STAT = 1;
     private static final Integer REQ_STAT = 2;
     private static final Integer RCG_STAT = 3;
@@ -132,6 +147,12 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private RequestLogDao requestLogDao;
     @Resource
     private ClientRemindInfoMapper clientRemindInfoMapper;
+    @Resource
+    private ClientProductInfoMapper clientProductInfoMapper;
+    @Resource
+    private ClientRemindMapper clientRemindMapper;
+    @Resource
+    private ClientRemindProductMapper clientRemindProductMapper;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -1433,6 +1454,191 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
         }
         return listDTO;
+    }
+
+    @Override
+    @Transactional
+    public void quartzClientRemind(Date date)
+    {
+        //先删除未处理的记录
+        List<ClientRemind> clientReminds = clientRemindMapper.getListByDispose(TrueOrFalse.FALSE);
+        if(!CollectionUtils.isEmpty(clientReminds))
+        {
+            List<Long> crIds = new ArrayList<>();
+            for(ClientRemind item : clientReminds)
+            {
+                crIds.add(item.getId());
+            }
+            clientRemindProductMapper.deleteByRemindIds(crIds);
+            clientRemindMapper.deleteByIds(crIds);
+        }
+        //找出需要提醒的客户服务
+        SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        Date before;
+        Date after = calendar.getTime();
+        try
+        {
+            before = shortSdf.parse(shortSdf.format(date));
+            after = shortSdf.parse(shortSdf.format(after));
+        }
+        catch(Exception e)
+        {
+            logger.error(e.getMessage());
+            return;
+        }
+        Set<Long> clientIdSet = new HashSet<>();
+        List<ClientProductInfo> willOverByDate = clientProductInfoMapper.getWillOverByDate(before, after);
+        for(ClientProductInfo item : willOverByDate)
+        {
+            clientIdSet.add(item.getClientId());
+        }
+        List<ClientProductInfo> willOverByTimes = clientProductInfoMapper.getWillOverByTimes(new BigDecimal(500));
+        for(ClientProductInfo item : willOverByTimes)
+        {
+            clientIdSet.add(item.getClientId());
+        }
+        if(!CollectionUtils.isEmpty(clientIdSet))
+        {
+            List<ClientContact> listByClients = clientContactMapper.getListByClients(new ArrayList<>(clientIdSet));
+            Map<Long, List<ClientContact>> clientIdContactListMap = new HashMap<>();
+            List<ClientContact> clientContactsTemp;
+            for(ClientContact item : listByClients)
+            {
+                clientContactsTemp = clientIdContactListMap.get(item.getClientId());
+                if(clientContactsTemp == null)
+                {
+                    clientContactsTemp = new ArrayList<>();
+                    clientIdContactListMap.put(item.getClientId(), clientContactsTemp);
+                }
+                clientContactsTemp.add(item);
+            }
+            Map<Long, Map<Long, List<ClientProductInfo>>> managerIdInfoListByDateMap = new HashMap<>();
+            Map<Long, Map<Long, List<ClientProductInfo>>> managerIdInfoListByTimesMap = new HashMap<>();
+            Map<Long, List<ClientProductInfo>> clientProductInfosMapTemp;
+            List<ClientProductInfo> clientProductInfosTemp;
+            for(ClientProductInfo item : willOverByDate)
+            {
+                clientProductInfosMapTemp = managerIdInfoListByDateMap.get(item.getManagerId());
+                if(clientProductInfosMapTemp == null)
+                {
+                    clientProductInfosMapTemp = new HashMap<>();
+                    managerIdInfoListByDateMap.put(item.getManagerId(), clientProductInfosMapTemp);
+                }
+                clientProductInfosTemp = clientProductInfosMapTemp.get(item.getClientId());
+                if(clientProductInfosTemp == null)
+                {
+                    clientProductInfosTemp = new ArrayList<>();
+                    clientProductInfosMapTemp.put(item.getClientId(), clientProductInfosTemp);
+                }
+                clientProductInfosTemp.add(item);
+            }
+            for(ClientProductInfo item : willOverByTimes)
+            {
+                clientProductInfosMapTemp = managerIdInfoListByTimesMap.get(item.getManagerId());
+                if(clientProductInfosMapTemp == null)
+                {
+                    clientProductInfosMapTemp = new HashMap<>();
+                    managerIdInfoListByTimesMap.put(item.getManagerId(), clientProductInfosMapTemp);
+                }
+                clientProductInfosTemp = clientProductInfosMapTemp.get(item.getClientId());
+                if(clientProductInfosTemp == null)
+                {
+                    clientProductInfosTemp = new ArrayList<>();
+                    clientProductInfosMapTemp.put(item.getClientId(), clientProductInfosTemp);
+                }
+                clientProductInfosTemp.add(item);
+            }
+            ClientRemind clientRemind = null;
+            ClientRemindProduct clientRemindProduct = null;
+            List<ClientRemindProduct> clientRemindProductsTemp = null;
+            Date currDate = new Date();
+            //时间
+            for(Map.Entry<Long, Map<Long, List<ClientProductInfo>>> entry : managerIdInfoListByDateMap.entrySet())
+            {
+                clientProductInfosMapTemp = entry.getValue();
+                for(Map.Entry<Long, List<ClientProductInfo>> entry2 : clientProductInfosMapTemp.entrySet())
+                {
+                    clientProductInfosTemp = entry2.getValue();
+                    clientRemind = new ClientRemind();
+                    clientRemind.setCreateTime(currDate);
+                    clientRemind.setUpdateTime(currDate);
+                    clientRemind.setUserId(entry.getKey());
+                    clientRemind.setRemindDate(before);
+                    clientRemind.setType(ClientRemindType.DATE.getId());
+                    clientRemind.setClientId(entry2.getKey());
+                    clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                    if(clientContactsTemp != null)
+                    {
+                        clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                        clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
+                    }
+                    clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                    clientRemind.setCount(clientProductInfosTemp.size());
+                    clientRemind.setDay(1 +
+                            DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
+                    clientRemind.setDispose(TrueOrFalse.FALSE);
+                    clientRemindMapper.add(clientRemind);
+                    clientRemindProductsTemp = new ArrayList<>();
+                    for(ClientProductInfo item : clientProductInfosTemp)
+                    {
+                        clientRemindProduct = new ClientRemindProduct();
+                        clientRemindProductsTemp.add(clientRemindProduct);
+                        clientRemindProduct.setCreateTime(currDate);
+                        clientRemindProduct.setUpdateTime(currDate);
+                        clientRemindProduct.setRemindId(clientRemind.getId());
+                        clientRemindProduct.setProductId(item.getProductId());
+                        clientRemindProduct.setRechargeId(item.getRechargeId());
+                        clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                        clientRemindProductsTemp.add(clientRemindProduct);
+                    }
+                    clientRemindProductMapper.addList(clientRemindProductsTemp);
+                }
+            }
+            //计次
+            for(Map.Entry<Long, Map<Long, List<ClientProductInfo>>> entry : managerIdInfoListByTimesMap.entrySet())
+            {
+                clientProductInfosMapTemp = entry.getValue();
+                for(Map.Entry<Long, List<ClientProductInfo>> entry2 : clientProductInfosMapTemp.entrySet())
+                {
+                    clientProductInfosTemp = entry2.getValue();
+                    clientRemind = new ClientRemind();
+                    clientRemind.setCreateTime(currDate);
+                    clientRemind.setUpdateTime(currDate);
+                    clientRemind.setUserId(entry.getKey());
+                    clientRemind.setRemindDate(before);
+                    clientRemind.setType(ClientRemindType.TIMES.getId());
+                    clientRemind.setClientId(entry2.getKey());
+                    clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                    if(clientContactsTemp != null)
+                    {
+                        clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                        clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
+                    }
+                    clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                    clientRemind.setCount(clientProductInfosTemp.size());
+                    clientRemind.setDispose(TrueOrFalse.FALSE);
+                    clientRemindMapper.add(clientRemind);
+                    clientRemindProductsTemp = new ArrayList<>();
+                    for(ClientProductInfo item : clientProductInfosTemp)
+                    {
+                        clientRemindProduct = new ClientRemindProduct();
+                        clientRemindProductsTemp.add(clientRemindProduct);
+                        clientRemindProduct.setCreateTime(currDate);
+                        clientRemindProduct.setUpdateTime(currDate);
+                        clientRemindProduct.setRemindId(clientRemind.getId());
+                        clientRemindProduct.setProductId(item.getProductId());
+                        clientRemindProduct.setRechargeId(item.getRechargeId());
+                        clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                        clientRemindProductsTemp.add(clientRemindProduct);
+                    }
+                    clientRemindProductMapper.addList(clientRemindProductsTemp);
+                }
+            }
+        }
+        System.out.println("======================客户服务提醒统计完成");
     }
 
     /**

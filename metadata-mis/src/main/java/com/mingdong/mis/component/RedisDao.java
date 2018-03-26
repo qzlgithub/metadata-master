@@ -13,6 +13,12 @@ import java.util.Date;
 @Repository
 public class RedisDao extends RedisBaseDao
 {
+    public static void main(String[] args)
+    {
+        String datestr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
+        System.out.println(datestr);
+    }
+
     public boolean lockProductAccount(String account, String lockName)
     {
         setExNx(DB.LOCK_CLIENT_PRODUCT, account, lockName, 60);
@@ -99,11 +105,5 @@ public class RedisDao extends RedisBaseDao
     interface Key
     {
         String DS_API_TOKEN = "ds_api_token";
-    }
-
-    public static void main(String[] args)
-    {
-        String datestr = DateUtils.format(new Date(), DateFormat.YYYYMMDD);
-        System.out.println(datestr);
     }
 }

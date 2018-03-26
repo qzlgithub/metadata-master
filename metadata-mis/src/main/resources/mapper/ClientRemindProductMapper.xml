@@ -8,15 +8,22 @@
         <result column="remind_id" property="remindId" jdbcType="BIGINT" />
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="recharge_id" property="rechargeId" jdbcType="BIGINT" />
+        <result column="remind" property="remindId" jdbcType="TINYINT" />
     </resultMap>
 
     <insert id="addList" parameterType="List">
-        insert into `client_remind_product` (`create_time`, `update_time`, `remind_id`, `product_id`,`recharge_id`)
-        values
+        insert into `client_remind_product` (`create_time`, `update_time`, `remind_id`, `product_id`,`recharge_id`,
+        `remind`) values
         <foreach collection="list" item="item" separator=",">
-            (#{item.createTime}, #{item.updateTime}, #{item.remindId}, #{item.productId}, #{item.rechargeId})
+            (#{item.createTime}, #{item.updateTime}, #{item.remindId}, #{item.productId},
+            #{item.rechargeId},#{item.remind})
         </foreach>
     </insert>
 
-
+    <delete id="deleteByRemindIds">
+        delete from `client_remind_product` where `remind_id`
+        <foreach collection="remindIds" item="itemId" open="in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </delete>
 </mapper>

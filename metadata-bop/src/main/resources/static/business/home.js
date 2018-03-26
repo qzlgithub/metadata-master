@@ -10,12 +10,10 @@ layui.config({
     getDateList();
 });
 
-function getDateList(){
+function getDateList() {
     main_table = table.render({
         elem: '#dataTable',
         page: false,
-        limit: 10,
-        limits: [10, 15, 30, 50],
         url: '/home/list/date',
         cols: [[
             {field: 'corpName', title: '公司名称', width: '20%'},
@@ -32,16 +30,20 @@ function getDateList(){
             msgName: 'message',
             countName: 'total',
             dataName: 'list'
+        },
+        done: function(res, curr, count) {
+            var total = res.total;
+            if(total - 5 > 0) {
+                $("#more-remind").html("还有" + (total - 5) + "个未查看，去查看>>");
+            }
         }
     });
 }
 
-function getTimeList(){
+function getTimeList() {
     main_table = table.render({
         elem: '#dataTable',
         page: false,
-        limit: 10,
-        limits: [10, 15, 30, 50],
         url: '/home/list/time',
         cols: [[
             {field: 'corpName', title: '公司名称', width: '20%'},
@@ -57,6 +59,12 @@ function getTimeList(){
             msgName: 'message',
             countName: 'total',
             dataName: 'list'
+        },
+        done: function(res, curr, count) {
+            var total = res.total;
+            if(total - 5 > 0) {
+                $("#more-remind").html("还有" + (total - 5) + "个未通知，去查看>>");
+            }
         }
     });
 }

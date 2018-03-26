@@ -16,4 +16,6 @@ public interface ClientContactMapper
     ClientContact findById(Long id);
 
     List<ClientContact> getListByClient(@Param("clientId") Long clientId);
+
+    List<ClientContact> getListByClients(@Param("clientIds") List<Long> clientIds);
 }

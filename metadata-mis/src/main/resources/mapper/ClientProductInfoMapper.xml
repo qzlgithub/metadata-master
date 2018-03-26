@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.mis.domain.mapper.ClientProductInfoMapper">
+    <resultMap id="BaseResultMap" type="ClientProductInfo">
+        <result column="manager_id" property="managerId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="recharge_id" property="rechargeId" jdbcType="BIGINT" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="getWillOverByDate" resultMap="BaseResultMap">
+        select
+            c.`manager_id`          as manager_id,
+            cp.`client_id`          as client_id,
+            cp.`product_id`         as product_id,
+            cp.`latest_recharge_id` as recharge_id,
+            r.`end_date`            as end_date
+        from `client_product` cp
+            inner join `recharge` r
+                on cp.`latest_recharge_id` = r.`id`
+            left join `client` c
+                on cp.`client_id` = c.`id`
+            left join `client_remind_product` crp
+                on r.`id` = crp.`recharge_id`
+        where crp.`remind` is null and r.`bill_plan` = 1 and r.`end_date` >= #{before} and r.`end_date` &lt; #{after}
+    </select>
+
+    <select id="getWillOverByTimes" resultMap="BaseResultMap">
+        select
+            c.`manager_id`          as manager_id,
+            cp.`client_id`          as client_id,
+            cp.`product_id`         as product_id,
+            cp.`latest_recharge_id` as recharge_id
+        from `client_product` cp
+            inner join `recharge` r
+                on cp.`latest_recharge_id` = r.`id`
+            left join `client` c
+                on cp.`client_id` = c.`id`
+            left join `client_remind_product` crp
+                on r.`id` = crp.`recharge_id`
+        where crp.`remind` is null and r.`bill_plan` != 1 and cp.`balance` &lt;= #{amount}
+    </select>
+
+</mapper>

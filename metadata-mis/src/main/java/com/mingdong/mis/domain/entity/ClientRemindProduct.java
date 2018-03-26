@@ -10,6 +10,17 @@ public class ClientRemindProduct
     private Long remindId;
     private Long productId;
     private Long rechargeId;
+    private Integer remind;
+
+    public Integer getRemind()
+    {
+        return remind;
+    }
+
+    public void setRemind(Integer remind)
+    {
+        this.remind = remind;
+    }
 
     public Long getId()
     {

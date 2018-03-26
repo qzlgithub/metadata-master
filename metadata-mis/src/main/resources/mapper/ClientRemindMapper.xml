@@ -18,13 +18,47 @@
         <result column="dispose" property="dispose" jdbcType="TINYINT" />
     </resultMap>
 
-    <insert id="addList" parameterType="List">
-        insert into `client_remind` (`id`,`create_time`, `update_time`, `remind_date`,
-        `type`,`client_id`,`link_name`,`link_phone`,`product_id`, `count`,`day`,`user_id`,`remark`,`dispose`) values
-        <foreach collection="list" item="item" separator=",">
-            (#{item.id},#{item.createTime}, #{item.updateTime}, #{item.remindDate}, #{item.type}, #{item.clientId},
-            #{item.linkName},#{item.linkPhone},#{item.productId},#{item.count},#{item.day},#{item.userId},#{item.remark},#{item.dispose})
-        </foreach>
+    <sql id="select_all">
+        select
+        `id`, `create_time`, `update_time`, `remind_date`, `type`, `client_id`, `link_name`, `link_phone`,
+        `product_id`, `count`, `day`, `user_id`, `remark`,`dispose`
+        from `client_remind`
+    </sql>
+
+    <insert id="add" parameterType="ClientRemind" useGeneratedKeys="true" keyProperty="id">
+        insert into `client_remind`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="remindDate != null">`remind_date`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="linkName != null">`link_name`,</if>
+            <if test="linkPhone != null">`link_phone`,</if>
+            <if test="productId != null">`product_id`,</if>
+            <if test="count != null">`count`,</if>
+            <if test="day != null">`day`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="dispose != null">`dispose`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remindDate != null">#{remindDate},</if>
+            <if test="type != null">#{type},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="linkName != null">#{linkName},</if>
+            <if test="linkPhone != null">#{linkPhone},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="count != null">#{count},</if>
+            <if test="day != null">#{day},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="dispose != null">#{dispose},</if>
+        </trim>
     </insert>
 
     <update id="updateSkipNull" parameterType="ClientRemind">
@@ -47,5 +81,17 @@
         where `id` = #{id}
     </update>
 
+    <select id="getListByDispose" resultMap="BaseResultMap" parameterType="Integer">
+        <include refid="select_all"/>
+        where `dispose` = #{dispose}
+    </select>
+
+    <delete id="deleteByIds">
+        delete from `client_remind` where `id`
+        <foreach collection="ids" item="itemId" open="in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+
+    </delete>
 
 </mapper>

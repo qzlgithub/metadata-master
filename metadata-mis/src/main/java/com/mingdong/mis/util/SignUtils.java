@@ -61,7 +61,7 @@ public class SignUtils
     public static void main(String[] args) throws MetadataCoreException
     {
         long ts = System.currentTimeMillis();
-        System.out.println("timestamp: "+ts);
+        System.out.println("timestamp: " + ts);
         Map<String, Object> m = new HashMap<>();
         m.put("phone", "15881821749");
         m.put("timestamp", ts);

@@ -192,4 +192,6 @@ public interface ClientRpcService
 
     ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
             Page page);
+
+    void quartzClientRemind(Date date);
 }

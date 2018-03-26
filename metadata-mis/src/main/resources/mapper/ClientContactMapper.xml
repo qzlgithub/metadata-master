@@ -61,4 +61,13 @@
         <include refid="select_all" />
         where `client_id` = #{clientId}
     </select>
+
+    <select id="getListByClients" parameterType="List" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `client_id` in
+        <foreach collection="clientIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by `general` desc
+    </select>
 </mapper>
