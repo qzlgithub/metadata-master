@@ -1,7 +1,7 @@
 package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ArticlesVo;
+import com.mingdong.bop.model.ArticlesVO;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.annotation.LoginRequired;
@@ -40,10 +40,10 @@ public class ArticlesController
      */
     @LoginRequired
     @PostMapping(value = "/articles/addition")
-    public RestResp addition(@RequestParam(value = "upfile") MultipartFile upfile, ArticlesVo articlesVo)
+    public RestResp addition(@RequestParam(value = "upfile") MultipartFile upfile, ArticlesVO articlesVO)
     {
         RestResp resp = new RestResp();
-        systemService.addArticles(upfile, articlesVo, resp);
+        systemService.addArticles(upfile, articlesVO, resp);
         return resp;
     }
 
@@ -51,11 +51,11 @@ public class ArticlesController
      * 文章 - 编辑
      */
     @LoginRequired
-    @PostMapping(value = "/articles")
-    public RestResp edit(@RequestParam(value = "upfile", required = false) MultipartFile upfile, ArticlesVo articlesVo)
+    @PostMapping(value = "/articles/modification")
+    public RestResp edit(@RequestParam(value = "upfile", required = false) MultipartFile upfile, ArticlesVO articlesVO)
     {
         RestResp resp = new RestResp();
-        systemService.updateArticles(upfile, articlesVo, resp);
+        systemService.updateArticles(upfile, articlesVO, resp);
         return resp;
     }
 

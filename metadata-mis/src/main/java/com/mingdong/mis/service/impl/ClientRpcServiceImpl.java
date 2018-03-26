@@ -1516,39 +1516,26 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 }
                 clientContactsTemp.add(item);
             }
-            Map<Long, Map<Long, List<ClientProductInfo>>> managerIdInfoListByDateMap = new HashMap<>();
-            Map<Long, Map<Long, List<ClientProductInfo>>> managerIdInfoListByTimesMap = new HashMap<>();
-            Map<Long, List<ClientProductInfo>> clientProductInfosMapTemp;
+            Map<Long, List<ClientProductInfo>> infoListByDateMap = new HashMap<>();
+            Map<Long, List<ClientProductInfo>> infoListByTimesMap = new HashMap<>();
             List<ClientProductInfo> clientProductInfosTemp;
             for(ClientProductInfo item : willOverByDate)
             {
-                clientProductInfosMapTemp = managerIdInfoListByDateMap.get(item.getManagerId());
-                if(clientProductInfosMapTemp == null)
-                {
-                    clientProductInfosMapTemp = new HashMap<>();
-                    managerIdInfoListByDateMap.put(item.getManagerId(), clientProductInfosMapTemp);
-                }
-                clientProductInfosTemp = clientProductInfosMapTemp.get(item.getClientId());
+                clientProductInfosTemp = infoListByDateMap.get(item.getClientId());
                 if(clientProductInfosTemp == null)
                 {
                     clientProductInfosTemp = new ArrayList<>();
-                    clientProductInfosMapTemp.put(item.getClientId(), clientProductInfosTemp);
+                    infoListByDateMap.put(item.getClientId(), clientProductInfosTemp);
                 }
                 clientProductInfosTemp.add(item);
             }
             for(ClientProductInfo item : willOverByTimes)
             {
-                clientProductInfosMapTemp = managerIdInfoListByTimesMap.get(item.getManagerId());
-                if(clientProductInfosMapTemp == null)
-                {
-                    clientProductInfosMapTemp = new HashMap<>();
-                    managerIdInfoListByTimesMap.put(item.getManagerId(), clientProductInfosMapTemp);
-                }
-                clientProductInfosTemp = clientProductInfosMapTemp.get(item.getClientId());
+                clientProductInfosTemp = infoListByTimesMap.get(item.getClientId());
                 if(clientProductInfosTemp == null)
                 {
                     clientProductInfosTemp = new ArrayList<>();
-                    clientProductInfosMapTemp.put(item.getClientId(), clientProductInfosTemp);
+                    infoListByTimesMap.put(item.getClientId(), clientProductInfosTemp);
                 }
                 clientProductInfosTemp.add(item);
             }
@@ -1557,92 +1544,83 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<ClientRemindProduct> clientRemindProductsTemp = null;
             Date currDate = new Date();
             //时间
-            for(Map.Entry<Long, Map<Long, List<ClientProductInfo>>> entry : managerIdInfoListByDateMap.entrySet())
+            for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByDateMap.entrySet())
             {
-                clientProductInfosMapTemp = entry.getValue();
-                for(Map.Entry<Long, List<ClientProductInfo>> entry2 : clientProductInfosMapTemp.entrySet())
+                clientProductInfosTemp = entry2.getValue();
+                clientRemind = new ClientRemind();
+                clientRemind.setCreateTime(currDate);
+                clientRemind.setUpdateTime(currDate);
+                clientRemind.setRemindDate(before);
+                clientRemind.setType(ClientRemindType.DATE.getId());
+                clientRemind.setClientId(entry2.getKey());
+                clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                if(clientContactsTemp != null)
                 {
-                    clientProductInfosTemp = entry2.getValue();
-                    clientRemind = new ClientRemind();
-                    clientRemind.setCreateTime(currDate);
-                    clientRemind.setUpdateTime(currDate);
-                    clientRemind.setUserId(entry.getKey());
-                    clientRemind.setRemindDate(before);
-                    clientRemind.setType(ClientRemindType.DATE.getId());
-                    clientRemind.setClientId(entry2.getKey());
-                    clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
-                    if(clientContactsTemp != null)
-                    {
-                        clientRemind.setLinkName(clientContactsTemp.get(0).getName());
-                        clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
-                    }
-                    clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
-                    clientRemind.setCount(clientProductInfosTemp.size());
-                    clientRemind.setDay(1 +
-                            DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
-                    clientRemind.setDispose(TrueOrFalse.FALSE);
-                    clientRemindMapper.add(clientRemind);
-                    clientRemindProductsTemp = new ArrayList<>();
-                    for(ClientProductInfo item : clientProductInfosTemp)
-                    {
-                        clientRemindProduct = new ClientRemindProduct();
-                        clientRemindProductsTemp.add(clientRemindProduct);
-                        clientRemindProduct.setCreateTime(currDate);
-                        clientRemindProduct.setUpdateTime(currDate);
-                        clientRemindProduct.setRemindId(clientRemind.getId());
-                        clientRemindProduct.setProductId(item.getProductId());
-                        clientRemindProduct.setRechargeId(item.getRechargeId());
-                        clientRemindProduct.setRemind(TrueOrFalse.FALSE);
-                        clientRemindProductsTemp.add(clientRemindProduct);
-                    }
-                    clientRemindProductMapper.addList(clientRemindProductsTemp);
+                    clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                    clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
                 }
+                clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                clientRemind.setCount(clientProductInfosTemp.size());
+                clientRemind.setDay(1 +
+                        DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
+                clientRemind.setDispose(TrueOrFalse.FALSE);
+                clientRemindMapper.add(clientRemind);
+                clientRemindProductsTemp = new ArrayList<>();
+                for(ClientProductInfo item : clientProductInfosTemp)
+                {
+                    clientRemindProduct = new ClientRemindProduct();
+                    clientRemindProductsTemp.add(clientRemindProduct);
+                    clientRemindProduct.setUpdateTime(currDate);
+                    clientRemindProduct.setCreateTime(currDate);
+                    clientRemindProduct.setRemindId(clientRemind.getId());
+                    clientRemindProduct.setProductId(item.getProductId());
+                    clientRemindProduct.setRechargeId(item.getRechargeId());
+                    clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                    clientRemindProductsTemp.add(clientRemindProduct);
+                }
+                clientRemindProductMapper.addList(clientRemindProductsTemp);
             }
             //计次
-            for(Map.Entry<Long, Map<Long, List<ClientProductInfo>>> entry : managerIdInfoListByTimesMap.entrySet())
+            for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByTimesMap.entrySet())
             {
-                clientProductInfosMapTemp = entry.getValue();
-                for(Map.Entry<Long, List<ClientProductInfo>> entry2 : clientProductInfosMapTemp.entrySet())
+                clientProductInfosTemp = entry2.getValue();
+                clientRemind = new ClientRemind();
+                clientRemind.setCreateTime(currDate);
+                clientRemind.setUpdateTime(currDate);
+                clientRemind.setRemindDate(before);
+                clientRemind.setType(ClientRemindType.TIMES.getId());
+                clientRemind.setClientId(entry2.getKey());
+                clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                if(clientContactsTemp != null)
                 {
-                    clientProductInfosTemp = entry2.getValue();
-                    clientRemind = new ClientRemind();
-                    clientRemind.setCreateTime(currDate);
-                    clientRemind.setUpdateTime(currDate);
-                    clientRemind.setUserId(entry.getKey());
-                    clientRemind.setRemindDate(before);
-                    clientRemind.setType(ClientRemindType.TIMES.getId());
-                    clientRemind.setClientId(entry2.getKey());
-                    clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
-                    if(clientContactsTemp != null)
-                    {
-                        clientRemind.setLinkName(clientContactsTemp.get(0).getName());
-                        clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
-                    }
-                    clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
-                    clientRemind.setCount(clientProductInfosTemp.size());
-                    clientRemind.setDispose(TrueOrFalse.FALSE);
-                    clientRemindMapper.add(clientRemind);
-                    clientRemindProductsTemp = new ArrayList<>();
-                    for(ClientProductInfo item : clientProductInfosTemp)
-                    {
-                        clientRemindProduct = new ClientRemindProduct();
-                        clientRemindProductsTemp.add(clientRemindProduct);
-                        clientRemindProduct.setCreateTime(currDate);
-                        clientRemindProduct.setUpdateTime(currDate);
-                        clientRemindProduct.setRemindId(clientRemind.getId());
-                        clientRemindProduct.setProductId(item.getProductId());
-                        clientRemindProduct.setRechargeId(item.getRechargeId());
-                        clientRemindProduct.setRemind(TrueOrFalse.FALSE);
-                        clientRemindProductsTemp.add(clientRemindProduct);
-                    }
-                    clientRemindProductMapper.addList(clientRemindProductsTemp);
+                    clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                    clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
                 }
+                clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                clientRemind.setCount(clientProductInfosTemp.size());
+                clientRemind.setDispose(TrueOrFalse.FALSE);
+                clientRemindMapper.add(clientRemind);
+                clientRemindProductsTemp = new ArrayList<>();
+                for(ClientProductInfo item : clientProductInfosTemp)
+                {
+                    clientRemindProduct = new ClientRemindProduct();
+                    clientRemindProductsTemp.add(clientRemindProduct);
+                    clientRemindProduct.setCreateTime(currDate);
+                    clientRemindProduct.setUpdateTime(currDate);
+                    clientRemindProduct.setRemindId(clientRemind.getId());
+                    clientRemindProduct.setProductId(item.getProductId());
+                    clientRemindProduct.setRechargeId(item.getRechargeId());
+                    clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                    clientRemindProductsTemp.add(clientRemindProduct);
+                }
+                clientRemindProductMapper.addList(clientRemindProductsTemp);
             }
         }
         System.out.println("======================客户服务提醒统计完成");
     }
 
     @Override
+    @Transactional
     public ResponseDTO updateClientRemind(Long remindId, String remark)
     {
         ResponseDTO responseDTO = new ResponseDTO();

@@ -1,7 +1,8 @@
 package com.mingdong.bop.service;
 
-import com.mingdong.bop.model.ArticlesVo;
+import com.mingdong.bop.model.ArticlesVO;
 import com.mingdong.bop.model.SistemVO;
+import com.mingdong.bop.model.WarningSettingVO;
 import com.mingdong.common.model.Page;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
@@ -112,13 +113,21 @@ public interface SystemService
 
     void getArticlesList(Page page, RestListResp res);
 
-    void addArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp);
+    void addArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp);
 
-    void updateArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp);
+    void updateArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp);
 
     Map<String, Object> getArticlesInfo(Long id);
 
     void deleteArticlesById(Long id, RestResp resp);
 
     Map<String, Object> getHomeData();
+
+    void getWarningSettingList(RestResp res);
+
+    Map<String, Object> getWarningSetting(Long id);
+
+    void updateWarningSetting(MultipartFile upfile, WarningSettingVO warningSettingVO, RestResp resp);
+
+    void changeWarningSettingStatus(Long id, Integer status, RestResp resp);
 }

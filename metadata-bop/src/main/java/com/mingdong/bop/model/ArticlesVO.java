@@ -2,7 +2,7 @@ package com.mingdong.bop.model;
 
 import java.util.Date;
 
-public class ArticlesVo
+public class ArticlesVO
 {
     private Long id;
     private Integer type;

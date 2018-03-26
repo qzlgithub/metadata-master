@@ -3,9 +3,10 @@ package com.mingdong.bop.service.impl;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.model.ArticlesVo;
+import com.mingdong.bop.model.ArticlesVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.model.SistemVO;
+import com.mingdong.bop.model.WarningSettingVO;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -15,6 +16,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.constant.WarningType;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
@@ -24,12 +26,14 @@ import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.WarningSettingResDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.service.SystemRpcService;
@@ -376,7 +380,7 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void addArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp)
+    public void addArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
         String fileName = upfile.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
@@ -399,17 +403,17 @@ public class SystemServiceImpl implements SystemService
             otherPath = null;
         }
         ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
-        articlesReqDTO.setId(articlesVo.getId());
-        articlesReqDTO.setAuthor(articlesVo.getAuthor());
-        articlesReqDTO.setContent(articlesVo.getContent());
+        articlesReqDTO.setId(articlesVO.getId());
+        articlesReqDTO.setAuthor(articlesVO.getAuthor());
+        articlesReqDTO.setContent(articlesVO.getContent());
         articlesReqDTO.setDeleted(TrueOrFalse.FALSE);
-        articlesReqDTO.setPublished(articlesVo.getPublished());
+        articlesReqDTO.setPublished(articlesVO.getPublished());
         articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
-        articlesReqDTO.setOrderId(articlesVo.getOrderId());
-        articlesReqDTO.setSynopsis(articlesVo.getSynopsis());
-        articlesReqDTO.setTitle(articlesVo.getTitle());
-        articlesReqDTO.setType(articlesVo.getType());
-        articlesReqDTO.setPublishTime(articlesVo.getPublishTime());
+        articlesReqDTO.setOrderId(articlesVO.getOrderId());
+        articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
+        articlesReqDTO.setTitle(articlesVO.getTitle());
+        articlesReqDTO.setType(articlesVO.getType());
+        articlesReqDTO.setPublishTime(articlesVO.getPublishTime());
         articlesReqDTO.setUserId(RequestThread.getOperatorId());
         try
         {
@@ -432,9 +436,9 @@ public class SystemServiceImpl implements SystemService
     }
 
     @Override
-    public void updateArticles(MultipartFile upfile, ArticlesVo articlesVo, RestResp resp)
+    public void updateArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
-        String otherFileName = null;
+        String otherFileName;
         String otherPath = null;
         File dest = null;
         if(upfile != null)
@@ -461,16 +465,16 @@ public class SystemServiceImpl implements SystemService
             }
         }
         ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
-        articlesReqDTO.setId(articlesVo.getId());
-        articlesReqDTO.setAuthor(articlesVo.getAuthor());
-        articlesReqDTO.setContent(articlesVo.getContent());
-        articlesReqDTO.setPublished(articlesVo.getPublished());
+        articlesReqDTO.setId(articlesVO.getId());
+        articlesReqDTO.setAuthor(articlesVO.getAuthor());
+        articlesReqDTO.setContent(articlesVO.getContent());
+        articlesReqDTO.setPublished(articlesVO.getPublished());
         articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
-        articlesReqDTO.setOrderId(articlesVo.getOrderId());
-        articlesReqDTO.setSynopsis(articlesVo.getSynopsis());
-        articlesReqDTO.setTitle(articlesVo.getTitle());
-        articlesReqDTO.setType(articlesVo.getType());
-        articlesReqDTO.setPublishTime(articlesVo.getPublishTime());
+        articlesReqDTO.setOrderId(articlesVO.getOrderId());
+        articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
+        articlesReqDTO.setTitle(articlesVO.getTitle());
+        articlesReqDTO.setType(articlesVO.getType());
+        articlesReqDTO.setPublishTime(articlesVO.getPublishTime());
         try
         {
             ResponseDTO responseDTO = systemRpcService.updateArticles(articlesReqDTO);
@@ -537,6 +541,125 @@ public class SystemServiceImpl implements SystemService
         map.put(Field.CLIENT_COUNT_ALL, allClientCount);
 
         return map;
+    }
+
+    @Override
+    public void getWarningSettingList(RestResp res)
+    {
+        ListDTO<WarningSettingResDTO> listDTO = systemRpcService.getWarningSettingList();
+        List<WarningSettingResDTO> dataList = listDTO.getList();
+        List<Map<String, Object>> product = new ArrayList<>();
+        List<Map<String, Object>> client = new ArrayList<>();
+        List<Map<String, Object>> other = new ArrayList<>();
+        Map<String, Object> mapTemp;
+        for(WarningSettingResDTO item : dataList)
+        {
+            mapTemp = new HashMap<>();
+            mapTemp.put(Field.ID, item.getId());
+            mapTemp.put(Field.CONTENT, item.getContent());
+            mapTemp.put(Field.SEND, item.getSend());
+            mapTemp.put(Field.PLAY, item.getPlay());
+            mapTemp.put(Field.GENERAL_LIMIT, item.getGeneralLimit());
+            mapTemp.put(Field.SEVERITY_LIMIT, item.getSeverityLimit());
+            mapTemp.put(Field.WARNING_LIMIT, item.getWarningLimit());
+            mapTemp.put(Field.ENABLED, item.getEnabled());
+            if(WarningType.PRODUCT.equals(item.getType()))
+            {
+                product.add(mapTemp);
+            }
+            else if(WarningType.CLIENT.equals(item.getType()))
+            {
+                client.add(mapTemp);
+            }
+            else if(WarningType.OTHER.equals(item.getType()))
+            {
+                other.add(mapTemp);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, Object> getWarningSetting(Long id)
+    {
+        Map<String, Object> map = new HashMap<>();
+        WarningSettingResDTO warningSettingResDTO = systemRpcService.getWarningSetting(id);
+        if(warningSettingResDTO != null)
+        {
+            map.put(Field.ID, warningSettingResDTO.getId());
+            map.put(Field.SEND, warningSettingResDTO.getSend());
+            map.put(Field.PLAY, warningSettingResDTO.getPlay());
+            map.put(Field.FILE_NAME, warningSettingResDTO.getFileName());
+            map.put(Field.GENERAL_LIMIT, warningSettingResDTO.getGeneralLimit());
+            map.put(Field.SEVERITY_LIMIT, warningSettingResDTO.getSeverityLimit());
+            map.put(Field.WARNING_LIMIT, warningSettingResDTO.getWarningLimit());
+        }
+        return map;
+    }
+
+    @Override
+    public void updateWarningSetting(MultipartFile upfile, WarningSettingVO warningSettingVO, RestResp resp)
+    {
+        String otherFileName;
+        String fileName = null;
+        String otherPath = null;
+        File dest = null;
+        if(upfile != null)
+        {
+            fileName = upfile.getOriginalFilename();
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));
+            otherFileName = "play_" + UUID.randomUUID() + suffixName;
+            String filePath = param.getSaveFilePath();
+            File dir = new File(filePath);
+            if(!dir.exists())
+            {
+                dir.mkdirs();
+            }
+            otherPath = otherFileName;
+            dest = new File(param.getSaveFilePath() + otherPath);
+            try
+            {
+                upfile.transferTo(dest);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                otherPath = null;
+            }
+        }
+        WarningSettingReqDTO warningSettingReqDTO = new WarningSettingReqDTO();
+        warningSettingReqDTO.setId(warningSettingVO.getId());
+        warningSettingReqDTO.setFileName(fileName);
+        warningSettingReqDTO.setFilePath(otherPath);
+        warningSettingReqDTO.setSend(warningSettingReqDTO.getSend());
+        warningSettingReqDTO.setPlay(warningSettingReqDTO.getPlay());
+        warningSettingReqDTO.setGeneralLimit(warningSettingReqDTO.getGeneralLimit());
+        warningSettingReqDTO.setSeverityLimit(warningSettingReqDTO.getSeverityLimit());
+        warningSettingReqDTO.setWarningLimit(warningSettingReqDTO.getWarningLimit());
+        try
+        {
+            ResponseDTO responseDTO = systemRpcService.updateWarningSetting(warningSettingReqDTO);
+            if(responseDTO.getResult() != RestResult.SUCCESS)
+            {
+                resp.setError(responseDTO.getResult());
+                return;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            if(dest != null && dest.exists())
+            {
+                dest.delete();
+            }
+            resp.setError(RestResult.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public void changeWarningSettingStatus(Long id, Integer status, RestResp resp)
+    {
+        ResponseDTO responseDTO = systemRpcService.changeWarningSettingStatus(id, status);
+        resp.setError(responseDTO.getResult());
     }
 
     private void cacheAllIndustryData()

@@ -33,7 +33,7 @@ function saveData() {
         return;
     }
     var options = {
-        url: '/articles',
+        url: '/articles/modification',
         success: showReply,
         clearForm: false,
         resetForm: false,

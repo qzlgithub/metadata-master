@@ -13,15 +13,14 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="day" property="day" jdbcType="INTEGER" />
-        <result column="user_id" property="userId" jdbcType="BIGINT" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
         <result column="dispose" property="dispose" jdbcType="TINYINT" />
     </resultMap>
 
     <sql id="select_all">
         select
-        `id`, `create_time`, `update_time`, `remind_date`, `type`, `client_id`, `link_name`, `link_phone`,
-        `product_id`, `count`, `day`, `user_id`, `remark`,`dispose`
+            `id`, `create_time`, `update_time`, `remind_date`, `type`, `client_id`, `link_name`, `link_phone`,
+            `product_id`, `count`, `day`, `remark`, `dispose`
         from `client_remind`
     </sql>
 
@@ -39,7 +38,6 @@
             <if test="productId != null">`product_id`,</if>
             <if test="count != null">`count`,</if>
             <if test="day != null">`day`,</if>
-            <if test="userId != null">`user_id`,</if>
             <if test="remark != null">`remark`,</if>
             <if test="dispose != null">`dispose`,</if>
         </trim>
@@ -55,7 +53,6 @@
             <if test="productId != null">#{productId},</if>
             <if test="count != null">#{count},</if>
             <if test="day != null">#{day},</if>
-            <if test="userId != null">#{userId},</if>
             <if test="remark != null">#{remark},</if>
             <if test="dispose != null">#{dispose},</if>
         </trim>
@@ -74,7 +71,6 @@
             <if test="productId != null">`product_id` = #{productId},</if>
             <if test="count != null">`count` = #{count},</if>
             <if test="day != null">`day` = #{day},</if>
-            <if test="userId != null">`user_id` = #{userId},</if>
             <if test="remark != null">`remark` = #{remark},</if>
             <if test="dispose != null">`deleted` = #{dispose},</if>
         </set>
@@ -82,12 +78,12 @@
     </update>
 
     <select id="getListByDispose" resultMap="BaseResultMap" parameterType="Integer">
-        <include refid="select_all"/>
+        <include refid="select_all" />
         where `dispose` = #{dispose}
     </select>
 
     <select id="getClientRemindById" resultMap="BaseResultMap" parameterType="Long">
-        <include refid="select_all"/>
+        <include refid="select_all" />
         where `id` = #{id}
     </select>
 

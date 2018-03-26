@@ -168,4 +168,9 @@ public interface Field
     String DAY = "day";
     String PAGES = "pages";
     String CLIENT_COUNT_ALL = "clientCountAll";
+    String PLAY = "play";
+    String GENERAL_LIMIT = "generalLimit";
+    String SEVERITY_LIMIT = "severityLimit";
+    String WARNING_LIMIT = "warningLimit";
+    String FILE_NAME = "fileName";
 }

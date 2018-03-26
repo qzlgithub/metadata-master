@@ -15,7 +15,6 @@ public class ClientRemind
     private Long productId;
     private Integer count;
     private Integer day;
-    private Long userId;
     private String remark;
     private Integer dispose;
 
@@ -127,16 +126,6 @@ public class ClientRemind
     public void setDay(Integer day)
     {
         this.day = day;
-    }
-
-    public Long getUserId()
-    {
-        return userId;
-    }
-
-    public void setUserId(Long userId)
-    {
-        this.userId = userId;
     }
 
     public String getRemark()

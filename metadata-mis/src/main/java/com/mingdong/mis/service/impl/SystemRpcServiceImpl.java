@@ -13,6 +13,7 @@ import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
@@ -21,16 +22,19 @@ import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.WarningSettingResDTO;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.mis.domain.entity.Articles;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
+import com.mingdong.mis.domain.entity.WarningSetting;
 import com.mingdong.mis.domain.mapper.ArticlesMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
+import com.mingdong.mis.domain.mapper.WarningSettingMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -50,6 +54,8 @@ public class SystemRpcServiceImpl implements SystemRpcService
     private SistemMapper sistemMapper;
     @Resource
     private ArticlesMapper articlesMapper;
+    @Resource
+    private WarningSettingMapper warningSettingMapper;
 
     @Override
     public ListDTO<DictIndustryResDTO> getIndustryList(Long parentIndustryId, Integer enabled)
@@ -520,5 +526,87 @@ public class SystemRpcServiceImpl implements SystemRpcService
             listDTO.setList(list);
         }
         return listDTO;
+    }
+
+    @Override
+    public ListDTO<WarningSettingResDTO> getWarningSettingList()
+    {
+        ListDTO<WarningSettingResDTO> listDTO = new ListDTO<>();
+        List<WarningSetting> listAll = warningSettingMapper.getListAll();
+        List<WarningSettingResDTO> dataList = new ArrayList<>();
+        WarningSettingResDTO warningSettingResDTO;
+        for(WarningSetting item : listAll)
+        {
+            warningSettingResDTO = new WarningSettingResDTO();
+            warningSettingResDTO.setId(item.getId());
+            warningSettingResDTO.setContent(item.getContent());
+            warningSettingResDTO.setEnabled(item.getEnabled());
+            warningSettingResDTO.setFileName(item.getFileName());
+            warningSettingResDTO.setFilePath(item.getFilePath());
+            warningSettingResDTO.setPlay(item.getPlay());
+            warningSettingResDTO.setSend(item.getSend());
+            warningSettingResDTO.setType(item.getType());
+            warningSettingResDTO.setGeneralLimit(item.getGeneralLimit());
+            warningSettingResDTO.setSeverityLimit(item.getSeverityLimit());
+            warningSettingResDTO.setWarningLimit(item.getWarningLimit());
+            dataList.add(warningSettingResDTO);
+        }
+        listDTO.setList(dataList);
+        return listDTO;
+    }
+
+    @Override
+    public WarningSettingResDTO getWarningSetting(Long id)
+    {
+        WarningSetting warningSetting = warningSettingMapper.findById(id);
+        if(warningSetting == null)
+        {
+            return null;
+        }
+        WarningSettingResDTO warningSettingResDTO = new WarningSettingResDTO();
+        warningSettingResDTO.setId(warningSetting.getId());
+        warningSettingResDTO.setFileName(warningSetting.getFileName());
+        warningSettingResDTO.setWarningLimit(warningSetting.getWarningLimit());
+        warningSettingResDTO.setType(warningSetting.getType());
+        warningSettingResDTO.setSeverityLimit(warningSetting.getSeverityLimit());
+        warningSettingResDTO.setSend(warningSetting.getSend());
+        warningSettingResDTO.setPlay(warningSetting.getPlay());
+        warningSettingResDTO.setGeneralLimit(warningSetting.getGeneralLimit());
+        warningSettingResDTO.setFilePath(warningSetting.getFilePath());
+        warningSettingResDTO.setEnabled(warningSetting.getEnabled());
+        warningSettingResDTO.setContent(warningSetting.getContent());
+        return warningSettingResDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO updateWarningSetting(WarningSettingReqDTO warningSettingResDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        WarningSetting warningSetting = new WarningSetting();
+        warningSetting.setId(warningSettingResDTO.getId());
+        warningSetting.setUpdateTime(new Date());
+        warningSetting.setFileName(warningSettingResDTO.getFileName());
+        warningSetting.setFilePath(warningSettingResDTO.getFilePath());
+        warningSetting.setSend(warningSettingResDTO.getSend());
+        warningSetting.setPlay(warningSettingResDTO.getPlay());
+        warningSetting.setGeneralLimit(warningSettingResDTO.getGeneralLimit());
+        warningSetting.setSeverityLimit(warningSettingResDTO.getSeverityLimit());
+        warningSetting.setWarningLimit(warningSettingResDTO.getWarningLimit());
+        warningSettingMapper.updateSkipNull(warningSetting);
+        return responseDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO changeWarningSettingStatus(Long id, Integer status)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        WarningSetting warningSetting = new WarningSetting();
+        warningSetting.setId(id);
+        warningSetting.setUpdateTime(new Date());
+        warningSetting.setEnabled(status);
+        warningSettingMapper.updateSkipNull(warningSetting);
+        return responseDTO;
     }
 }
