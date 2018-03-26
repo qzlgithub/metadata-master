@@ -25,7 +25,6 @@ sub{top: -0.5em;}
 sup{bottom: -0.25em;}
 a {color: #000;}
 a:hover,a:link{text-decoration: none;}
-
 html{font-size: 62.5%; }
 body{color: #484848}
 input{outline:none;}
@@ -46,9 +45,40 @@ input{outline:none;}
 .indicators-line > .carousel-indicators{width: 100%!important; right: initial!important; padding: 0px; margin:auto; text-align: center!important;}
 
 
-.login-btn{border-radius: 3px; background:#4aa0f5; color: #fff; padding: 8px 15px;}
- a.login-btn:hover{color: #fff; text-decoration: none;}
+/*****index********/
+.slide{width: 100%; min-width: 1000px;  height: 484px;}
+.slide-banner1{ background:#0f0e1e; background-size: 100%; height: 484px;overflow: hidden; position: relative;}
+.slide-banner-img1{background: url(../images/banner1.png) no-repeat center; min-width: 1188px; height: 100%; padding-left: 80px;}
+.slide-banner-font1{font-size: 46px; color: #fff; margin-top: 80px;}
+.slide-banner-font2{font-size: 30px; color: #fff; margin-top: 20px;}
+.slide-banner-font3{font-size: 24px; color: #fff; margin-top: 20px;}
+.slide-banner-font4 span{font-size: 20px; color: #fff; border:solid 1px #fff; border-radius: 15px; padding: 14px 57px;}
 
+
+.lj-product-bg{background: url(../images/produt-bg.png) no-repeat; background-size: 100%;}
+.lj-product li{float: left; width: 33.3333%;display: flex; color: #fff; margin: 50px 0px;}
+.lj-product li i{ width: 28%;}
+.lj-product li div{padding-left: 20px;}
+.lj-product li h1{ font-size: 20px; margin-top: 14px;}
+.lj-product li p{font-size: 16px; margin-top: 7px;}
+
+.login-btn{border-radius: 3px; background:#4aa0f5; color: #fff; padding: 8px 15px;}
+a.login-btn:hover{color: #fff; text-decoration: none;}
+.indextab-name{margin-top: 60px;}
+.indextab-name span{color: #333; font-size: 18px; width: 10%; float: left; margin-top: 5px;}
+.indextab-name em{float: right;width: 10%;  margin-top: 5px; font-size: 16px; color: #333}
+.indextab li{padding:0 10px; display:inline-block;  cursor: pointer;  width: 25%; float: left; text-align: center;}
+.indextab li span{background: #979797;border-radius:50%; width: 120px; height: 120px; padding-top: 21px; margin-left: 25%;}
+.indextab li img{width: 65%; margin:auto;}
+.indextab li.active span,.indextab li span:hover{text-decoration: none;background: #49a0f5;border-radius:50%; width: 120px; height: 120px; }
+.indextab-list li:first-child{display: block;}
+.indextab-list li{display: none;}
+.indextab-nav{margin: 20px 80px;}
+.indextab-nav h1{color: #565f70; font-size: 40px; margin-top: 50px;}
+.indextab-nav p{color: #5b5b5b; font-size: 18px; margin-top: 25px;}
+.index-new-bg{background: url(../images/new-bg.png) no-repeat; background-size: 100%;}
+.index-new li{float: left; width: 31.333%; margin: 1%;}
+.index-button a{color: #fff; border-radius: 20px; padding: 12px 60px; border:solid 1px #fff; font-size: 16px;}
 
 /*****产品中心******/
 .sbg_top{width: 100%; min-width: 1000px;  height: 400px;}
@@ -93,9 +123,9 @@ input{outline:none;}
 .new-list-right{font-size: 16px; color: #504f4f; line-height: 28px;}
 .new-list-right a{color: #2fa8e6}
 .new-list-right h2{ font-size: 18px; margin-top: 10px;  font-weight: 600; color: #3e3e3e}
-.new-inf{line-height: 30px; font-size: 16px; color: #3e3e3e; margin-top: 15px; padding-bottom: 30px;}
+.new-inf{line-height: 30px; font-size: 16px; color: #3e3e3e; margin-top: 15px; padding-bottom: 50px;}
 .new-inf p{text-indent: 4%;}
-a.return-button{border-radius: 20px; border:solid 1px #8a8a8a; color: #8a8a8a!important; font-size: 14px; padding: 7px 13px;}
+
 
 /***关于我们****/
 .about-banner{background: url(../images/map.png) no-repeat center; background-size: 100%; height: 400px;overflow: hidden; position: relative;}
@@ -105,8 +135,33 @@ a.return-button{border-radius: 20px; border:solid 1px #8a8a8a; color: #8a8a8a!im
 .about-form-list input{border-radius: 20px; background: #e0e0e0; color: #afafaf; border:0px; padding: 8px 15px; width: 100%; font-size: 14px;}
 .about-form-list button{position: absolute; right: 0px; border: 0px; background: #49a0f5; padding: 8px 20px; border-radius: 0px 20px 20px 0px;}
 .about-title{font-size: 32px;}
-.about-title:after{border-bottom: solid 5px #49a0f5; content: ""; display: block; width: 10%; margin: auto; padding-top: 15px;}
+.about-title:after{border-bottom: solid 5px #49a0f5; content: ""; display: block; width:9%; margin: auto; padding-top: 15px;}
 .about-team-bg{background: url(../images/about-team.png) no-repeat center; background-size: 100%; height: 800px;overflow: hidden; position: relative;}
 .team-title{font-size: 28px; text-align: center;}
 .team-list li{float: left; width: 31.3333%; margin: 1%; margin-top: 40px;}
 .team-list li p{text-align: center; font-size: 16px; color: #000; margin-top: 2px;}
+
+
+
+/*******解决方案******/
+
+.programme-notice{background: #e8e8e8;}
+.programme-list{margin-top: 60px;}
+.programme-list li{float: left; width: 25%; text-align: center;}
+.programme-list li img{width: 30%; margin: auto;}
+.programme-list li h1{color: #343944; font-size: 18px; margin-top: 40px;}
+.programme-list li p{color: #838383; margin-top: 10px;}
+.programme-bg{background: url(../images/programme-bg1.png) no-repeat; background-size: 100%;}
+.programme-bg2{background: url(../images/programme-bg2.png) no-repeat; background-size: 100%;}
+.programme-help{margin: 60px 0px;}
+.programme-help li{float: left; width:23%; margin: 1%; text-align: center;}
+.programme-help li .img-title{background: #fff; padding: 25px 20px;}
+.programme-help li .img-title img{width: 35%; margin: auto; margin-top: 20px;}
+.programme-help li .img-inf{background: #efefef; padding: 25px 20px;}
+.programme-help li .img-inf a{color: #459bf0; border-radius: 20px; padding: 8px 20px; border:solid 1px #459bf0; font-size: 14px;}
+
+
+/*****public****/
+.public-title{border-left: solid 5px #fff; padding-left: 20px; font-size: 30px; color: #fff;}
+.public-title2{border-left: solid 5px #459bf0; padding-left: 20px; font-size: 30px; color: #459bf0;}
+.public-button a{color: #459bf0; border-radius: 20px; padding: 12px 60px; border:solid 1px #459bf0; font-size: 16px;}

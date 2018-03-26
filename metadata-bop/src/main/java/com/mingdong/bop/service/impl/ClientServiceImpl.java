@@ -854,7 +854,8 @@ public class ClientServiceImpl implements ClientService
             for(ClientRemindResInfoDTO item : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, item.getId());
+                map.put(Field.ID, item.getId() + "");
+                map.put(Field.CLIENT_ID, item.getClientId() + "");
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.LINK_NAME, item.getLinkName());
                 map.put(Field.LINK_PHONE, item.getLinkPhone());
@@ -903,6 +904,13 @@ public class ClientServiceImpl implements ClientService
             }
             resp.setList(list);
         }
+    }
+
+    @Override
+    public void updateClientRemind(Long remindId, String remark, RestResp resp)
+    {
+        ResponseDTO responseDTO = clientRpcService.updateClientRemind(remindId, remark);
+        resp.setError(responseDTO.getResult());
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

@@ -37,10 +37,12 @@
 .col1{color: #238efa}
 .col2{color: #999}
 .col3{color: #49a0f5}
+.col4{color: #fff}
 
 .col1.important{color: #238efa!important}
 .col2.important{color: #999!important}
 .col3.important{color: #49a0f5!important}
+.col4.important{color: #fff!important}
 
 
 /*padding*/
@@ -293,6 +295,8 @@
 .fz-24 {font-size: 24px;}
 .fz-26 {font-size: 26px;}
 .fz-28 {font-size: 28px;}
+.fz-30 {font-size: 30px;}
+.fz-36 {font-size: 36px;}
 
 
 .fz-10.important {font-size: 10px !important;}
@@ -307,6 +311,8 @@
 .fz-24.important {font-size: 24px !important;}
 .fz-26.important {font-size: 26px !important;}
 .fz-28.important {font-size: 28px !important;}
+.fz-30.important {font-size: 30px !important;}
+.fz-36.important {font-size: 36px !important;}
 
 .fw-3.important {font-weight: 300 !important;}
 .fw-4.important {font-weight: 400 !important;}
@@ -341,7 +347,9 @@
 
 
 .w30{width: 30%;}
+.w40{width: 40%;}
 .w50{width: 50%;}
+.w55{width: 55%;}
 .w100{width: 100%;}
 .h100{height: 100%;}
 .lh18{line-height:18px;}

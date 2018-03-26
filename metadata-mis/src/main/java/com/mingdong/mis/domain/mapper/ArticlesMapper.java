@@ -1,6 +1,7 @@
 package com.mingdong.mis.domain.mapper;
 
 import com.mingdong.mis.domain.entity.Articles;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,8 +18,8 @@ public interface ArticlesMapper
 
     Articles findById(Long id);
 
-    int countByType(Integer type);
+    int countByType(@Param("type") Integer type);
 
-    List<Articles> findListByType(Integer type);
+    List<Articles> findListByType(@Param("type") Integer type);
 
 }

@@ -100,14 +100,16 @@
 
     <select id="findListByType" resultMap="BaseResultMap" parameterType="Integer">
         <include refid="select_all" />
-        where `deleted` = 0 and `published` = 1 and `type` = #{type}
+        where `deleted` = 0 and `published` = 1
+        <if test="type != null">and `type` = #{type}</if>
         order by `order_id` desc
     </select>
 
     <select id="countByType" resultType="Integer" parameterType="Integer">
         select count(`id`)
         from articles
-        where `deleted` = 0 and `published` = 1 and `type` = #{type}
+        where `deleted` = 0 and `published` = 1
+        <if test="type != null">and `type` = #{type}</if>
     </select>
 
 

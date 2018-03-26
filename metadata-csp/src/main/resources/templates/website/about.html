@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
 
@@ -31,27 +31,9 @@
 </head>
 
 <body>
-<div class="navbar navbar-inverse mb0 header1"><!--navbar-fixed-top -->
-    <div class="container header-mt10">
-        <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo pt0 important" href="index.html"><i
-                    class="header-logo"></i></a>
-        </div>
-        <div class="navbar-collapse collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li><a href="index.html">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
-                <li><a href="product.html">热门产品</a></li>
-                <li><a href="#">解决方案</a></li>
-                <li><a href="news.html">新闻动态</a></li>
-                <li class="active"><a href="about.html">关于元数据</a></li>
-            </ul>
-            <ul class="fr mt15">
-                <a href="login.html" class="login-btn">登录</a>
-            </ul>
-        </div>
-    </div>
-</div>
-<!--advimg-->
+
+<div th:include="website/common :: top"></div>
+
 <div class="pb0 sbg_top about-banner">
     <div class="container p20">
         <div class="about-form w30 fr">
@@ -61,19 +43,9 @@
                 <p>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：Matedata@mingdong.com</p>
                 <p>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址： 杭州市拱墅区祥园路108号</p>
             </div>
-            <!--<div class="about-form-list mt15">
-                <p class="col3 fz-16">让客服联系您</p>
-                <p class="mt15"><input type="text" name="" placeholder="请输入姓名"/></p>
-                <p class="mt15 position-r"><input type="text" name="" placeholder="请输入手机号"/>
-                    <button>提交</button>
-                </p>
-                <p class="col2 fz-14 mt10 tc">提交后会有专属客服为您服务</p>
-            </div>-->
         </div>
     </div>
 </div>
-<!--advimg end-->
-<!--内容-->
 <div class="container mt40">
     <div class="about-title tc">关于元数据</div>
     <div class="new-inf fz-18 lh35 mt40 important">
@@ -89,9 +61,6 @@
         <p class="tr mt40">元数据隶属于杭州明动科技有限公司</p>
     </div>
 </div>
-<!--内容 end-->
-
-<!--team-->
 <div class="pb0 sbg_top about-team-bg">
     <div class="container p20">
         <div class="tc team-title mt20">团队风采</div>
@@ -130,47 +99,13 @@
         </ul>
     </div>
 </div>
-<!--team end-->
 
-<footer class="footer-icp mt20">
-    <div class="container tc clearfix position-r">
-        <a>联系我们</a>|<a>使用协议</a>|<a>隐私协议</a>|<a>法律申明</a>|<a>关于元数据</a>|<a>关于明动</a>
-        <div class="footer-ewm"><img src="/static/website/images/ewm.png"/></div>
-    </div>
+<div th:include="website/common :: footer"></div>
 
-</footer>
-<!--footer-->
-<footer class="footer">
-    <div class="container ">
-        <p class="tc">
-            <span class="fz-16 mr30"><i class="icon tel-icon mr5"></i>0571-1545451245</span>
-            <span class="fz-16"><i class="icon email-icon mr5"></i>mingdonglet@mail.com</span>
-        </p>
-        <p class="tc mt25"><span class="footer-inf">元数据 · 源于数据的发现</span></p>
-        <p class="tc mt25">©明动科技 | 浙ICP备123321号</p>
-    </div>
-</footer>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="/static/website/js/jquery.min.js"></script>
 <script>
     $(function() {
-        $(".blist").on("click", "li", function() {
-            // 设index为当前点击
-            var index = $(this).index();
-            // 点击添加样式利用siblings清除其他兄弟节点样式
-            $(this).addClass("active").siblings().removeClass("active");
-            // 同理显示与隐藏
-            $(this).parents(".wrap").find(".blsit-list li").eq(index).show().siblings().hide();
-        })
-    })
-    //更多
-    $(document).ready(function() {
-        $(".more").click(function() {
-            $('#blistCity').hasClass('blist-height') ? $('#blistCity').removeClass('blist-height') : $('#blistCity').addClass('blist-height');
-        });
+        $("#page-about").addClass("active");
     });
 </script>
 </body>

@@ -10,4 +10,6 @@ public interface ClientRemindProductMapper
     void addList(List<ClientRemindProduct> list);
 
     void deleteByRemindIds(@Param("remindIds") List<Long> remindIds);
+
+    void disposeByClientRemindId(Long remindId);
 }

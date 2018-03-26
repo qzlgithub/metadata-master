@@ -12,4 +12,8 @@ public interface ClientRemindMapper
     List<ClientRemind> getListByDispose(Integer dispose);
 
     void deleteByIds(@Param("ids") List<Long> ids);
+
+    void updateSkipNull(ClientRemind clientRemind);
+
+    ClientRemind getClientRemindById(Long id);
 }

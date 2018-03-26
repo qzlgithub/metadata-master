@@ -21,10 +21,45 @@ public class WebsitePageController
         return view;
     }
 
-    @GetMapping(value = {"/news.html"})
-    public ModelAndView newsPage()
+    @GetMapping(value = {"/programme.html"})
+    public ModelAndView programmePage()
     {
-        ModelAndView view = new ModelAndView("website/news");
+        ModelAndView view = new ModelAndView("website/programme");
+        return view;
+    }
+
+    @GetMapping(value = {"/news.html"})
+    public ModelAndView newsBusinessPage()
+    {
+        ModelAndView view = new ModelAndView("website/news-business");
+        return view;
+    }
+
+    @GetMapping(value = {"/news-company.html"})
+    public ModelAndView newsCompanyPage()
+    {
+        ModelAndView view = new ModelAndView("website/news-company");
+        return view;
+    }
+
+    @GetMapping(value = {"/news-use.html"})
+    public ModelAndView newsUsePage()
+    {
+        ModelAndView view = new ModelAndView("website/news-use");
+        return view;
+    }
+
+    @GetMapping(value = {"/news-privacy.html"})
+    public ModelAndView newsPrivacyPage()
+    {
+        ModelAndView view = new ModelAndView("website/news-privacy");
+        return view;
+    }
+
+    @GetMapping(value = {"/news-law.html"})
+    public ModelAndView newsLawPage()
+    {
+        ModelAndView view = new ModelAndView("website/news-law");
         return view;
     }
 

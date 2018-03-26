@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <title>沃动科技</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content="index,follow"/>
+    <meta name="application-name" content="bootcss.com"/>
+    <meta property="qc:admins" content="1603466166416277433363757477167"/>
+
+    <!-- Site CSS -->
+    <link href="/static/website/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/static/website/css/base.css" rel="stylesheet"/>
+    <link href="/static/website/css/style.css" rel="stylesheet"/>
+    <link href="/static/website/css/common.css" rel="stylesheet"/>
+    <link href="/static/plugins/paging/css/paging.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" href="/static/website/images/icon/apple-touch-icon-precomposed.png"/>
+    <link rel="shortcut icon" href="/static/website/images/icon/favicon.png"/>
+</head>
+
+<body>
+
+<div th:include="website/common :: top"></div>
+
+<div class="bg1 pt40 pb40">
+    <div class="container">
+        <div class="row">
+
+            <div th:include="website/news-common :: left"></div>
+
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divList">
+                <div class="bg2 p10"><h1 class="head-title">公司动态</h1></div>
+                <ul class="mt20" id="newsList">
+
+                </ul>
+                <div class="box pt30" id="pagination"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divDetail" style="display:none">
+                <div class="bg2 p10"><h1 class="head-title">公司动态</h1></div>
+                <h2 class="mt20 important pl10" id="newsTitle"></h2>
+                <p class="col2 fz-16  pl10" id="newsDate"></p>
+                <div class="new-inf pl10" id="newsContent">
+                </div>
+                <div class="tr">
+                    <a href="javascript:" class="return-button w30 cp news-back"><i
+                            class="glyphicon glyphicon-arrow-left mr5"></i>返回</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:include="website/common :: footer"></div>
+
+<script src="/static/website/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
+<script type="text/javascript" src="/static/business/website-news-company.js"></script>
+<script>
+    $(function() {
+        $("#page-news-company").addClass("active");
+        $("#page-news").addClass("active");
+    });
+</script>
+</body>
+</html>

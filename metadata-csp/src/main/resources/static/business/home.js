@@ -1,7 +1,8 @@
 var message;
 layui.config({
     base: '../build/js/'
-}).use(['app', 'message'], function() {
+}).use(['form', 'app', 'message'], function() {
+    var form = layui.form;
     var app = layui.app,
         $ = layui.jquery,
         layer = layui.layer;
@@ -116,4 +117,7 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
             }
         }
     })
+}
+
+function inform(id) {
 }
