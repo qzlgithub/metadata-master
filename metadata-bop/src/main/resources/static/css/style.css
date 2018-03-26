@@ -673,3 +673,12 @@ body {
 .layui-btn{background-color: #1E9FFF; color:#fff;}
 .layui-btn-danger{background-color: #ff0000;}
 .layui-btn-normal{background-color: #0a7501;}
+
+.container {padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; width: 1170px;}
+
+/******选择系统*****/
+.public-title{ font-size: 18px; padding: 25px 15px 15px 15px;}
+.choose li{ border:solid 1px #92d0fa; border-radius: 5px;  padding: 40px 0px; text-align: center; background: #def2ff; margin: 1%;
+    float: left; width: 21.3333%;}
+.choose li img{ width: 30%; margin: auto;}
+.choose li p{ font-size: 16px; color: #333; padding-top: 20px;}

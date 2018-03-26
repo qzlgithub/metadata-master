@@ -35,47 +35,45 @@
 
 <div th:include="website/common :: top"></div>
 
-<div class="pb0 sbg_top">
-    <div class="product-banner">
-        <div class="container product-banner-img">
-            <p class="product-banner-font1">热门产品</p>
-            <p class="product-banner-font2">适用于 Java c# PHP .NET JSP 等开发的系统</p>
-            <p class="product-banner-font3">元数据基于大数据分析出行业增长与行业问题，团队基于行业痛点，<br/>
-                有目的的推出API服务。精准、快速、有效的解决行业问题，为客户创造价值！</p>
-        </div>
-    </div>
-</div>
-<div class="bg1 pt40">
+<div class="bg1 pt40 pb40">
     <div class="container">
-        <div class="product-list-name">产品优势</div>
-        <div class="wrap m15 mt25">
-            <div class="blist-name clearfix">
-                <span>产品类型：</span>
-                <ul class="blist clearfix blist-height" id="blistCity">
+        <div class="row">
+
+            <div th:include="website/news-common :: left"></div>
+
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divList">
+                <div class="bg2 p10"><h1 class="head-title">公司动态</h1></div>
+                <ul class="mt20" id="newsList">
 
                 </ul>
-                <em class="more cp" style="display: none;">更多
-                    <i class="glyphicon glyphicon-chevron-down col3 fz-12 ml5"></i>
-                </em>
+                <div class="box pt30" id="pagination"></div>
             </div>
-            <ul class="blsit-list mt20">
-                <li class="product-list clearfix" id="productList">
-
-                </li>
-            </ul>
+            <div class="col-xs-12 col-sm-6 col-md-10 pl40 pr40 new-list-right" id="divDetail" style="display:none">
+                <div class="bg2 p10"><h1 class="head-title">公司动态</h1></div>
+                <h2 class="mt20 important pl10" id="newsTitle"></h2>
+                <p class="col2 fz-16  pl10" id="newsDate"></p>
+                <div class="new-inf pl10" id="newsContent">
+                </div>
+                <div class="tr">
+                    <a href="javascript:" class="return-button w30 cp news-back"><i
+                            class="glyphicon glyphicon-arrow-left mr5"></i>返回</a>
+                </div>
+            </div>
         </div>
-        <div class="box pt30" id="pagination"></div>
+
     </div>
 </div>
+
 
 <div th:include="website/common :: footer"></div>
 
-<script type="text/javascript" src="/static/website/js/jquery.min.js"></script>
+<script src="/static/website/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
-<script type="text/javascript" src="/static/business/website-product.js"></script>
+<script type="text/javascript" src="/static/business/website-news-company.js"></script>
 <script>
     $(function() {
-        $("#page-product").addClass("active");
+        $("#page-news-company").addClass("active");
+        $("#page-news").addClass("active");
     });
 </script>
 </body>

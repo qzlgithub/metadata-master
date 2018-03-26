@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
 
@@ -33,26 +33,9 @@
 </head>
 
 <body class="index-body">
-<div class="navbar navbar-inverse mb0 header1"><!--navbar-fixed-top -->
-    <div class="container header-mt10">
-        <div class="navbar-header">
-            <a class="navbar-brand hidden-sm navbar-logo" href="index.html"><i class="header-logo"></i></a>
-        </div>
-        <div class="navbar-collapse collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="index.html">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
-                <li><a href="product.html">热门产品</a></li>
-                <li><a href="#">解决方案</a></li>
-                <li><a href="news.html">新闻动态</a></li>
-                <li><a href="about.html">关于元数据</a></li>
-            </ul>
-            <ul class="fr mt15">
-                <a href="login.html" class="login-btn">登录</a>
-            </ul>
-        </div>
-    </div>
-</div>
-<!--轮播-->
+
+<div th:include="website/common :: top"></div>
+
 <div class="pb0">
     <div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel"
          data-pause="hover" data-interval="3000">
@@ -63,166 +46,158 @@
             <li data-target="#bootstrap-touch-slider" data-slide-to="2"></li>
             <li data-target="#bootstrap-touch-slider" data-slide-to="3"></li>
         </ol>
-
-        <!-- Wrapper For Slides -->
-        <!-- Wrapper For Slides -->
         <div class="carousel-inner" role="listbox">
-            <!-- Second Slide -->
             <div class="item active">
-                <img src="/static/website/images/banner1.png" alt="Bootstrap Touch Slider" class="slide-image"/>
-                <div class="bs-slider-overlay"></div>
+                <div class="pb0 slide" alt="Bootstrap Touch Slider">
+                    <div class="slide-banner1">
+                        <div class="container slide-banner-img1">
+                            <p class="slide-banner-font1">金融大数据诚信API</p>
+                            <p class="slide-banner-font2">大数据的终极解决方案</p>
+                            <p class="slide-banner-font3">分布式大数据分析</p>
+                            <p class="slide-banner-font4 mt40"><span>立即查看</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- End of Slide -->
-
-            <!-- Third Slide -->
             <div class="item">
                 <img src="/static/website/images/banner2.png" alt="Bootstrap Touch Slider" class="slide-image"/>
-                <div class="bs-slider-overlay"></div>
             </div>
-            <!-- End of Slide -->
-
-            <!-- Third Slide -->
             <div class="item">
                 <img src="/static/website/images/banner1.png" alt="Bootstrap Touch Slider" class="slide-image"/>
-                <div class="bs-slider-overlay"></div>
             </div>
-            <!-- End of Slide -->
-            <!-- Third Slide -->
-            <!-- <div class="item">
-              <img src="images/banner4.png" alt="Bootstrap Touch Slider"  class="slide-image"/>
-              <div class="bs-slider-overlay"></div>
-            </div> -->
-            <!-- End of Slide -->
-
-        </div><!-- End of Wrapper For Slides -->
+        </div>
     </div>
 </div>
-<!--轮播 end-->
-
-<!--接口下载-->
-<div class="api-bg">
-    <div class="container pt40 pb30">
-        <h3 class="title">API<span>接口下载</span></h3>
-        <ul class="row index-api">
-            <li class="col-lg-3 col-sm-3 col-md-3 col-xs-6">
-                <img src="/static/website/images/msg-api.png"/>
-                <p>短信API</p>
-                <div class="download">
-                    <a href="api-4/短信接口API3.3.rar">
-                        <img src="/static/website/images/download.png"/>
-                        <p>点击下载</p>
-                    </a>
+<div class="bg1">
+    <div class="container" style="padding: 60px;">
+        <div class="about-title tc">产品优势</div>
+        <p class="mt20"><img src="/static/website/images/produt.png"/></p>
+    </div>
+</div>
+<div class="lj-product-bg">
+    <div class="container" style="padding: 90px;">
+        <div class="about-title tc col4 important">了解我们的产品</div>
+        <ul class="clearfix lj-product">
+            <li>
+                <i><img src="/static/website/images/icon/icon-1.png"/></i>
+                <div>
+                    <h1>多头客识别</h1>
+                    <p>速贷、高效识别在别<br/>的平台借贷用户</p>
                 </div>
             </li>
-            <li class="col-lg-3 col-sm-3 col-md-3 col-xs-6">
-                <img src="/static/website/images/mms-api.png"/>
-                <p>彩信API</p>
-                <div class="download">
-                    <a href="api-4/彩信接口API3.1.zip">
-                        <img src="/static/website/images/download.png"/>
-                        <p>点击下载</p>
-                    </a>
+            <li>
+                <i><img src="/static/website/images/icon/icon-2.png"/></i>
+                <div>
+                    <h1>多方向API</h1>
+                    <p>多平台用户数据综合大数据<br/>分析API接口</p>
                 </div>
             </li>
-            <li class="col-lg-3 col-sm-3 col-md-3 col-xs-6">
-                <img src="/static/website/images/voice-api.png"/>
-                <p>语音</p>
-                <div class="download">
-                    <a href="api-4/语音接口API3.1 .zip">
-                        <img src="/static/website/images/download.png"/>
-                        <p>点击下载</p>
-                    </a>
+            <li>
+                <i><img src="/static/website/images/icon/icon-3.png"/></i>
+                <div>
+                    <h1>数据综合集成</h1>
+                    <p>用户数据综合分析统计，<br/>集成数据分析</p>
                 </div>
             </li>
-            <li class="col-lg-3 col-sm-3 col-md-3 col-xs-6">
-                <img src="/static/website/images/international-api.png"/>
-                <p>国际短信</p>
-                <div class="download">
-                    <img src="/static/website/images/download.png"/>
-                    <p>点击下载</p>
+            <li>
+                <i><img src="/static/website/images/icon/icon-4.png"/></i>
+                <div>
+                    <h1>分析辅助工具</h1>
+                    <p>速贷、高效识别在别<br/>的平台借贷用户</p>
+                </div>
+            </li>
+            <li>
+                <i><img src="/static/website/images/icon/icon-5.png"/></i>
+                <div>
+                    <h1>数据云计算</h1>
+                    <p>多平台用户数据综合大数据<br/>分析API接口</p>
+                </div>
+            </li>
+            <li>
+                <i><img src="/static/website/images/icon/icon-6.png"/></i>
+                <div>
+                    <h1>多平台分析集成</h1>
+                    <p>多平台用户数据综合大数据<br/>分析API接口</p>
                 </div>
             </li>
         </ul>
     </div>
 </div>
-<!--接口下载 end-->
-
-<!--footer-->
-<footer class="footer">
-    <div class="container ">
-        <div class="row">
-            <div class="f-links col-lg-2 col-sm-2 col-md-2">
-                <p>友情连接</p>
-                <ul class="mt15">
-                    <li><a href="http://www.renrunkeji.com/?fromwdkj" target="_blank">仁润金融系统开发</a></li>
-                    <li><a href="http://www.dsdatas.com" target="_blank">大圣数据</a></li>
-                    <li><a href="http://www.pptv.com/" target="_blank">PPTV聚力</a></li>
-                    <li><a href="http://www.shitouke.cn/" target="_blank">石头客</a></li>
-                    <li><a href="http://www.mcsilk.com/" target="_blank">美绸科技</a></li>
+<div class="bg1 pt40">
+    <div class="container" style="padding: 70px;">
+        <div class="about-title tc">技术优势</div>
+        <div class="wrap m15 mt25">
+            <ul class="indextab-list mt20">
+                <li class="clearfix indextab-nav">
+                    <span class="fl w40"><img src="/static/website/images/img1.png"/></span>
+                    <div class="fr w55">
+                        <h1>专业大数据挖掘团队</h1>
+                        <p>灵活扩展分析能力，开放平台接口，实时访问数据，
+                            无缝对接三方系统，实现企业端到端的深度分析需求。</p>
+                    </div>
+                </li>
+                <li class="clearfix indextab-nav">
+                    <span class="fl w40"><img src="/static/website/images/img2.png"/></span>
+                    <div class="fr w55">
+                        <h1>经验丰富架构师</h1>
+                        <p>服务器负载均衡提供稳定保障</p>
+                    </div>
+                </li>
+                <li class="clearfix indextab-nav">
+                    <span class="fl w40"><img src="/static/website/images/img3.png"/></span>
+                    <div class="fr w55">
+                        <h1>一群强壮的攻城狮</h1>
+                        <p>能攻克一切难题</p>
+                    </div>
+                </li>
+                <li class="clearfix indextab-nav">
+                    <span class="fl w40"><img src="/static/website/images/img4.png"/></span>
+                    <div class="fr w55">
+                        <h1>7*24h技术反馈机制</h1>
+                        <p>发现问题及时处理</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="indextab-name clearfix">
+                <ul class="indextab clearfix">
+                    <li class="active"><span><img src="/static/website/images/icon/icon-7.png"/></span></li>
+                    <li><span><img src="/static/website/images/icon/icon-8.png"/></span></li>
+                    <li><span><img src="/static/website/images/icon/icon-9.png"/></span></li>
+                    <li><span><img src="/static/website/images/icon/icon-10.png"/></span></li>
                 </ul>
-            </div>
-            <div class="f-links col-lg-4 col-sm-4 col-md-4">
-                <p>联系方式</p>
-                <ul class="mt15">
-                    <li>地址：杭州市拱墅区中国. 智慧信息产业园G座5层</li>
-                    <li>E-mail：movek@movek.net</li>
-                    <li>http://www.movek.net</li>
-                    <li>售前支持：0571-87955351</li>
-                    <li>售后支持：0571-86875051</li>
-                    <li>邮编：310015</li>
-                </ul>
-            </div>
-            <div class="f-links col-lg-3 col-sm-3 col-md-3 mt25">
-                <p class="fw-3 fz-20 important pb20 tc">公司总机：0571-87955351</p>
-                <p><img src="/static/website/images/tel.png"/></p>
-            </div>
-            <div class="f-links col-lg-2 col-sm-2 col-md-2">
-                <p class="tc">添加沃动公众号</p>
-                <p class="mt10"><img src="/static/website/images/ewm.png"/></p>
             </div>
         </div>
     </div>
-</footer>
-<footer class="footer-icp">
-    <div class="container tc">
-        COPYRIGHT 2009 杭州沃动科技有限公司 全网SP证B2-20150887浙ICP备11009817号 版权所有，未经许可，任何个人或者公司都不得翻版镜像复制，违者必究
-    </div>
-</footer>
-<!--在线客服-->
-<!--   <div class="fixedBox">
-    <ul class="fixedBoxList">
-      <li class="fixeBoxLi Service">
-      <i></i>
-        <div class="ServiceBox">
-          <em></em>
-          <div class="bjfff"></div>
-            <P class="p2"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885540004&site=qq&menu=yes"><img border="0" src="images/icon/qq-sq.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
-            <P class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885540001&site=qq&menu=yes"><img border="0" src="images/icon/qq-sh.png" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></P>
-            <p class="p2 mt5"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2885539934&site=qq&menu=yes"><img border="0" src="images/icon/qq-js.png" alt="点击这里给我发消息" title="点击这里给我发消息" /></a></p>
-            <p><img border="0" src="images/icon/400.png"/></p>
-        </div>
-      </li>
-      <li class="fixeBoxLi Service">
-        <i class="weixin-icon"><img src="images/icon/weixin.png"></i>
-        <div class="ServiceBox weixin-icon-nav">
-          <div class="bjfff"></div>
-            <P class="p2"><img src="images/ewm.png" style="width: 121px;"></P>
-            <p class="tc weixin-title">微信公众号</p>
-        </div>
-      </li>
-      <li class="fixeBoxLi Service">
-        <i class="sina-icon"><a href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=真实的appkey',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&source=',e(r),'&sourceUrl=',e(l),'&content=',c||'gb2312','&pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','图片链接|默认为空','标题|默认当前页标题','内容链接|默认当前页location','页面编码gb2312|utf-8默认gb2312'));" target="_blank"><img src="images/icon/sina.png"></a></i>
-      </li>
-    </ul>
-  </div> -->
-<!--在线客服 end-->
-<div style="position:absolute;top:-1000px;left:-1000px;"><a href="http://www.365webcall.com/">在线客服 客服软件</a></div>
-<div style="position:absolute;top:-1100px;left:-1100px;"><a href="http://www.365webcall.com/">在线客服系统</a></div>
+</div>
+<div class="index-new-bg">
+    <div class="container" style="padding: 60px 0px;">
+        <div class="about-title tc col4 important">新闻动态</div>
+        <ul class="clearfix index-new mt40" id="newsList">
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+        </ul>
+        <p class="index-button tc mt40"><a href="news.html">更多新闻</a></p>
+    </div>
+</div>
+
+<div th:include="website/common :: footer"></div>
+
 <script src="/static/website/js/jquery.min.js"></script>
+<script src="/static/website/js/jquery.unveil.min.js"></script>
+<script src="/static/website/js/toc.min.js"></script>
 <script src="/static/website/js/bootstrap.min.js"></script>
+<script src="/static/business/website-index.js"></script>
+<script>
+    $(function() {
+        $("#page-index").addClass("active");
+        $(".indextab").on("mouseover","li",function(){
+            // 设index为当前点击
+            var index = $(this).index();
+            // 点击添加样式利用siblings清除其他兄弟节点样式
+            $(this).addClass("active").siblings().removeClass("active");
+            // 同理显示与隐藏
+            $(this).parents(".wrap").find(".indextab-list li").eq(index).show().siblings().hide();
+        });
+    });
+</script>
 </body>
 </html>
