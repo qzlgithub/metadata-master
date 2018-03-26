@@ -37,7 +37,6 @@ import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.DateCalculateUtils;
-import com.mingdong.mis.component.Param;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientContact;
@@ -105,8 +104,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private static final Integer INC_STAT = 1;
     private static final Integer REQ_STAT = 2;
     private static final Integer RCG_STAT = 3;
-    @Resource
-    private Param param;
     @Resource
     private SistemMapper sistemMapper;
     @Resource
