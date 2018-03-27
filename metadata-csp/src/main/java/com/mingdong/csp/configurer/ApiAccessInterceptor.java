@@ -15,7 +15,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 @Configuration
@@ -37,12 +36,19 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             logger.info("HandlerMethod {}",
                     handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
+            String sessionId = request.getSession().getId();
+            UserSession us = redisDao.getUserSession(sessionId);
+            if(us == null)
+            {
+                RequestThread.setIsLogin(false);
+            }
+            else
+            {
+                RequestThread.setIsLogin(true);
+            }
             LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
             if(annotation != null)
             {
-                HttpSession session = request.getSession();
-                String sessionId = session.getId();
-                UserSession us = redisDao.getUserSession(sessionId);
                 if(us == null)
                 {
                     String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
@@ -68,6 +74,6 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
         Double second = dif / 1000.0;
         RequestThread.removeLong();
         logger.info("Time consuming {}", second + "s");
-        System.out.println("");
+        RequestThread.removeBoolean();
     }
 }

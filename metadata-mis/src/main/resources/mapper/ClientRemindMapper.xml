@@ -72,7 +72,7 @@
             <if test="count != null">`count` = #{count},</if>
             <if test="day != null">`day` = #{day},</if>
             <if test="remark != null">`remark` = #{remark},</if>
-            <if test="dispose != null">`deleted` = #{dispose},</if>
+            <if test="dispose != null">`dispose` = #{dispose},</if>
         </set>
         where `id` = #{id}
     </update>
@@ -92,7 +92,6 @@
         <foreach collection="ids" item="itemId" open="in (" close=")" separator=",">
             #{itemId}
         </foreach>
-
     </delete>
 
 </mapper>

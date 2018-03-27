@@ -15,22 +15,7 @@
 </head>
 <body id="login" style="background-color:#2273c6">
 <div id="login-wrapper" class="png_bg">
-    <div class="navbar navbar-inverse navbar-fixed-top mb0 header1" style="background: none;border-bottom-width:0px;">
-        <div class="container header-mt10">
-            <div class="navbar-header">
-                <a class="navbar-brand hidden-sm navbar-logo" href="/"><i class="header-logo"></i></a>
-            </div>
-            <div class="navbar-collapse collapse" role="navigation">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">首页</a></li>
-                    <li><a href="javascript:;">全部产品</a></li>
-                    <li><a href="javascript:;">解决方案</a></li>
-                    <li><a href="javascript:;">关于元数据</a></li>
-                    <li class="active"><a href="/index.html">客户中心</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <div th:include="website/common :: top"></div>
     <div id="login-top"></div>
     <div id="login-content" class="pt35 important">
         <div class="tc fz-24 mb15">登录</div>
@@ -65,5 +50,8 @@
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
 <script type="text/javascript" src="/static/business/index.js"></script>
+<script type="text/javascript">
+    $("#head-login").hide();
+</script>
 </body>
 </html>

@@ -1426,7 +1426,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getClientRemindListBy(managerId, type, date,
+            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getListBy(managerId, type, date,
                     dispose);
             if(!CollectionUtils.isEmpty(dataList))
             {
@@ -1558,15 +1558,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 }
                 clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
                 clientRemind.setCount(clientProductInfosTemp.size());
-                clientRemind.setDay(1 +
-                        DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
+                clientRemind.setDay(
+                        1 + DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
                 clientRemind.setDispose(TrueOrFalse.FALSE);
                 clientRemindMapper.add(clientRemind);
                 clientRemindProductsTemp = new ArrayList<>();
                 for(ClientProductInfo item : clientProductInfosTemp)
                 {
                     clientRemindProduct = new ClientRemindProduct();
-                    clientRemindProductsTemp.add(clientRemindProduct);
                     clientRemindProduct.setUpdateTime(currDate);
                     clientRemindProduct.setCreateTime(currDate);
                     clientRemindProduct.setRemindId(clientRemind.getId());
@@ -1601,7 +1600,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 for(ClientProductInfo item : clientProductInfosTemp)
                 {
                     clientRemindProduct = new ClientRemindProduct();
-                    clientRemindProductsTemp.add(clientRemindProduct);
                     clientRemindProduct.setCreateTime(currDate);
                     clientRemindProduct.setUpdateTime(currDate);
                     clientRemindProduct.setRemindId(clientRemind.getId());

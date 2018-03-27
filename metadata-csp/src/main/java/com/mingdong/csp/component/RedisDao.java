@@ -9,10 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RedisDao extends RedisBaseDao
 {
+    public long SESSION_SECONDS = 1800L;
+
     public void saveUserSession(String sessionId, UserSession session)
     {
         String str = JSON.toJSONString(session);
-        setEx(DB.USER_SECURE, sessionId, str, 1800L);
+        setEx(DB.USER_SECURE, sessionId, str, SESSION_SECONDS);
     }
 
     public UserSession getUserSession(String sessionId)
@@ -20,6 +22,7 @@ public class RedisDao extends RedisBaseDao
         String str = get(DB.USER_SECURE, sessionId);
         if(!StringUtils.isNullBlank(str))
         {
+            expire(DB.USER_SECURE, sessionId, SESSION_SECONDS);
             return JSON.parseObject(str, UserSession.class);
         }
         return null;

@@ -9,6 +9,63 @@ layui.config({
     table = layui.table;
     getDateList();
 });
+$(function() {
+    $(".item").click(function() {
+        $(".item").removeClass("active");
+        $(this).addClass("active");
+    });
+});
+var isSubmit = false;
+
+function saveNotice() {
+    if(isSubmit) {
+        return;
+    }
+    isSubmit = true;
+    var remark = $.trim($("#remark").val());
+    if(remark == '') {
+        layer.msg("备注不能为空！", {
+            time: 2000
+        });
+        return;
+    }
+    var remindId = $("#remind-id").val();
+    $.ajax({
+        type: "POST",
+        url: "/client/remind",
+        data: {"id": remindId, "remark": remark},
+        success: function(res) {
+            if(res.code === '000000') {
+                layer.msg("保存成功", {
+                    time: 1000
+                }, function() {
+                    layer.closeAll();
+                    window.location.reload();
+                });
+            }
+            else {
+                layer.msg("保存失败", {
+                    time: 2000
+                }, function() {
+                    layer.closeAll();
+                });
+                isSubmit = false;
+            }
+        }
+    });
+}
+
+function showNotice(id) {
+    $("#remind-id").val(id);
+    $("#remark").val("");
+    layer.open({
+        title: false,
+        type: 1,
+        content: $('#notice-warp'),
+        area: ['500px'],
+        shadeClose: true
+    });
+}
 
 function getDateList() {
     main_table = table.render({

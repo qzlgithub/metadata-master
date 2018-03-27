@@ -62,7 +62,6 @@ public interface Field
     String REMIND_LIST = "remindList";
     String TRASH_LIST = "trashList";
     String NORMAL_LIST = "normalList";
-    String PRODUCT_TYPE_LIST = "productTypeList";
 
     String PRODUCT_TYPE = "productType";
     String INC_OPENED = "incOpened";
@@ -76,4 +75,5 @@ public interface Field
     String SYNOPSIS = "synopsis";
     String AUTHOR = "author";
     String PUBLISH_TIME = "publishTime";
+    String LOGIN = "login";
 }

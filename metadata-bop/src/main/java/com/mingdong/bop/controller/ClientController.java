@@ -344,7 +344,7 @@ public class ClientController
     }
 
     @LoginRequired
-    @GetMapping(value = "/client/remind")
+    @PostMapping(value = "/client/remind")
     public RestListResp clientRemind(@RequestParam(value = Field.ID) Long remindId,
             @RequestParam(value = Field.REMARK) String remark)
     {

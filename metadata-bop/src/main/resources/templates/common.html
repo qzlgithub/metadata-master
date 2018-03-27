@@ -3,8 +3,11 @@
 <body>
 <div th:fragment="top">
     <div class="layui-header">
-        <div class="layui-logo">元数据管理平台<a href="/enter.html" th:if="${i_enter}">&nbsp;&nbsp;跳转</a></div>
-        <div class="layui-logo kit-logo-mobile">元数据管理平台</div>
+        <div class="layui-logo mt25 pl30" style="width: 330px;">
+            <img src="/static/images/logo.png" />
+            <a href="/enter.html" th:if="${i_enter}" class="tz-btn">&nbsp;&nbsp;选择系统</a>
+        </div>
+        <div class="layui-logo kit-logo-mobile"></div>
         <ul class="layui-nav layui-layout-left kit-nav layui-menu">
             <li class="layui-nav-item" >
                 <a href="/home.html">

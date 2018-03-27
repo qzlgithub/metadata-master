@@ -25,14 +25,14 @@
         left join `product` p on
         cr.`product_id` = p.`id`
         <where>
-            <if test="managerId != null">cr.`user_id` = #{managerId}</if>
+            <if test="managerId != null">c.`manager_id` = #{managerId}</if>
             <if test="type != null">and cr.`type` = #{type}</if>
             <if test="date != null">and cr.`remind_date` = #{date}</if>
             <if test="dispose != null">and cr.`dispose` = #{dispose}</if>
         </where>
     </select>
 
-    <select id="getClientRemindListBy" resultMap="BaseResultMap">
+    <select id="getListBy" resultMap="BaseResultMap">
         select
         cr.`id` as id,
         cr.`remind_date` as remind_date,

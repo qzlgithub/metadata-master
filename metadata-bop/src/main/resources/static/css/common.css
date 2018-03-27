@@ -9,7 +9,7 @@ body {
 
 /**header**/
 .kit-layout-admin .layui-header {
-    height: 118px;
+    height: 109px;
 }
 
 .layui-layout-left {
@@ -38,7 +38,7 @@ body {
 }
 
 .kit-nav .layui-nav-item {
-    height: 118px;
+    height: 109px;
 }
 
 .layui-menu li {
@@ -349,3 +349,4 @@ input:-webkit-autofill {
     color: #fff!important;
 }
 .ui-datepicker td span, .ui-datepicker td a{text-align: center!important;}
+.layui-btn-primary{border:0px;}

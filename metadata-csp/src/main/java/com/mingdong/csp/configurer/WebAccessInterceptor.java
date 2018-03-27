@@ -35,11 +35,19 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             logger.info("HandlerMethod {}",
                     handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
+            String sessionId = request.getSession().getId();
+            UserSession us = redisDao.getUserSession(sessionId);
+            if(us == null)
+            {
+                RequestThread.setIsLogin(false);
+            }
+            else
+            {
+                RequestThread.setIsLogin(true);
+            }
             LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
             if(annotation != null)
             {
-                String sessionId = request.getSession().getId();
-                UserSession us = redisDao.getUserSession(sessionId);
                 if(us == null)
                 {
                     response.sendRedirect("/login.html");
@@ -64,6 +72,6 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
         Double second = dif / 1000.0;
         RequestThread.removeLong();
         logger.info("Time consuming {}", second + "s");
-        System.out.println("");
+        RequestThread.removeBoolean();
     }
 }

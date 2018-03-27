@@ -1,5 +1,7 @@
 package com.mingdong.csp.controller;
 
+import com.mingdong.csp.constant.Field;
+import com.mingdong.csp.model.RequestThread;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +13,7 @@ public class WebsitePageController
     public ModelAndView indexPage()
     {
         ModelAndView view = new ModelAndView("website/index");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -18,6 +21,7 @@ public class WebsitePageController
     public ModelAndView productPage()
     {
         ModelAndView view = new ModelAndView("website/product");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -25,6 +29,7 @@ public class WebsitePageController
     public ModelAndView programmePage()
     {
         ModelAndView view = new ModelAndView("website/programme");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -32,6 +37,7 @@ public class WebsitePageController
     public ModelAndView newsBusinessPage()
     {
         ModelAndView view = new ModelAndView("website/news-business");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -39,6 +45,7 @@ public class WebsitePageController
     public ModelAndView newsCompanyPage()
     {
         ModelAndView view = new ModelAndView("website/news-company");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -46,6 +53,7 @@ public class WebsitePageController
     public ModelAndView newsUsePage()
     {
         ModelAndView view = new ModelAndView("website/news-use");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -53,6 +61,7 @@ public class WebsitePageController
     public ModelAndView newsPrivacyPage()
     {
         ModelAndView view = new ModelAndView("website/news-privacy");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -60,6 +69,7 @@ public class WebsitePageController
     public ModelAndView newsLawPage()
     {
         ModelAndView view = new ModelAndView("website/news-law");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
@@ -67,6 +77,7 @@ public class WebsitePageController
     public ModelAndView aboutPage()
     {
         ModelAndView view = new ModelAndView("website/about");
+        view.addObject(Field.LOGIN, RequestThread.getIsLogin());
         return view;
     }
 
