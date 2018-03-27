@@ -134,7 +134,7 @@ public class CaptchaUtils
      */
     private static void shearY(Graphics2D g, int width, int height, Color color)
     {
-        int period = random.nextInt(40) + 10; // 周期
+        int period = random.nextInt(10) + 10; // 周期
         int frames = 20; // 帧
         int phase = 7; // 相位
         for(int i = 0; i < width; i++)

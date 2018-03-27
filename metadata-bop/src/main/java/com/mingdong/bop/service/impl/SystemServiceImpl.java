@@ -223,12 +223,14 @@ public class SystemServiceImpl implements SystemService
         ListDTO<DictIndustryResDTO> listDTO = systemRpcService.getIndustryList(parentId, enabled);
         List<DictIndustryResDTO> dataList = listDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for(DictIndustryResDTO parent : dataList)
-        {
-            Map<String, Object> map = new HashMap<>();
-            map.put(Field.ID, parent.getId() + "");
-            map.put(Field.NAME, parent.getName());
-            list.add(map);
+        if(!CollectionUtils.isEmpty(dataList)){
+            for(DictIndustryResDTO parent : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, parent.getId() + "");
+                map.put(Field.NAME, parent.getName());
+                list.add(map);
+            }
         }
         return list;
     }

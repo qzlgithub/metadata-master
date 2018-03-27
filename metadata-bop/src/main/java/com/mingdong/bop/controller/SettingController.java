@@ -222,7 +222,7 @@ public class SettingController
     public RestResp setGlobalSetting(@RequestBody SistemVO sistemVO)
     {
         RestResp resp = new RestResp();
-        if(sistemVO.getClientUserMax() == null || sistemVO.getClientUserMax() <= 0 || StringUtils.isNullBlank(
+        if(sistemVO.getClientUserMax() == null || sistemVO.getClientUserMax() < 0 || StringUtils.isNullBlank(
                 sistemVO.getServiceQQ()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
