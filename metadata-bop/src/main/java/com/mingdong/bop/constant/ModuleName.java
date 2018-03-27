@@ -9,12 +9,6 @@ public interface ModuleName
     String SETTING_RECHARGE = "setting-recharge";
     String SETTING_INDUSTRY = "setting-industry";
     String SETTING_OTHER = "setting-other";
-    // 运营
-    String STATS_INDEX = "stats-index";
-    String STATS_CLIENT = "stats-client";
-    String STATS_RECHARGE = "stats-recharge";
-    String STATS_REVENUE = "stats-revenue";
-    String STATS_CONSUMPTION = "stats-consumption";
     // 产品
     String SETTING_PRODUCT = "setting-product";
     // 新闻动态

@@ -68,6 +68,7 @@ function showNotice(id) {
 }
 
 function getDateList() {
+    $("#tip").hide();
     main_table = table.render({
         elem: '#dataTable',
         page: false,
@@ -98,6 +99,7 @@ function getDateList() {
 }
 
 function getTimeList() {
+    $("#tip").show();
     main_table = table.render({
         elem: '#dataTable',
         page: false,

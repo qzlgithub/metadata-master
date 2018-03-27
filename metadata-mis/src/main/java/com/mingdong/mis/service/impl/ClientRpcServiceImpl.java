@@ -1488,11 +1488,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return;
         }
         Set<Long> clientIdSet = new HashSet<>();
+        //即将过期的7天
         List<ClientProductInfo> willOverByDate = clientProductInfoMapper.getWillOverByDate(before, after);
         for(ClientProductInfo item : willOverByDate)
         {
             clientIdSet.add(item.getClientId());
         }
+        //余额不足<=500
         List<ClientProductInfo> willOverByTimes = clientProductInfoMapper.getWillOverByTimes(new BigDecimal(500));
         for(ClientProductInfo item : willOverByTimes)
         {

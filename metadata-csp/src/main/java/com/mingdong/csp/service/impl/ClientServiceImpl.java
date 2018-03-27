@@ -179,7 +179,7 @@ public class ClientServiceImpl implements ClientService
         }
         ListDTO<ProductResDTO> unopenedList = productRpcService.getUnopenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> unopened = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(openedList.getList()))
+        if(!CollectionUtils.isEmpty(unopenedList.getList()))
         {
             for(ProductResDTO d : unopenedList.getList())
             {
