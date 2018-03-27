@@ -10,17 +10,17 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Component
+@Repository
 public class RequestLogDaoImpl implements RequestLogDao
 {
-    @Resource
+    @Resource(name = "transactionMongoTemplate")
     private MongoTemplate mongoTemplate;
 
     @Override

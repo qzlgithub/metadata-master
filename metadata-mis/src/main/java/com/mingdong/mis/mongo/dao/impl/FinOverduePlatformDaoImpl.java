@@ -5,15 +5,15 @@ import com.mingdong.mis.mongo.entity.FinOverduePlatform;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@Component
+@Repository
 public class FinOverduePlatformDaoImpl implements FinOverduePlatformDao
 {
-    @Resource
+    @Resource(name = "analysisMongoTemplate")
     private MongoTemplate mongoTemplate;
 
     @Override
