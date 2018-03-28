@@ -41,6 +41,7 @@
         <dubbo.version>2.5.4</dubbo.version>
         <poi.version>3.17</poi.version>
         <httpclient.version>4.5.5</httpclient.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
         <spring-test.version>4.3.13.RELEASE</spring-test.version>
         <junit.version>4.12</junit.version>
     </properties>
@@ -161,6 +162,11 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.11</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>

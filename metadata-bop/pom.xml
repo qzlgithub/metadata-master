@@ -70,7 +70,10 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.baidu</groupId>
             <artifactId>ueditor</artifactId>
