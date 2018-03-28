@@ -34,7 +34,6 @@
             p.`name`         as product_name,
             rt.`name`        as recharge_type,
             pr.`amount`      as amount,
-            pr.`balance`     as balance,
             m.`name`         as manager_name,
             pr.`contract_no` as contract_no,
             pr.`remark`      as remark
@@ -94,7 +93,6 @@
             r.`trade_no`    as trade_no,
             r.`bill_plan`   as bill_plan,
             r.`amount`      as amount,
-            r.`balance`     as balance,
             r.`contract_no` as contract_no,
             r.`start_date`  as start_date,
             r.`end_date`    as end_date,

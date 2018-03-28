@@ -16,19 +16,19 @@
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'30000')}">
-                <a href="/client/index.html">
+                <a th:href="${i_client_index}">
                     <img src="/static/images/icon/menu-icon3.png"/>
                     <p th:text="${i_system.m30000}">客户管理</p>
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'50000')}">
-                <a href="/finance/recharge.html">
+                <a th:href="${i_finance_index}">
                     <img src="/static/images/icon/menu-icon5.png"/>
                     <p th:text="${i_system.m50000}">财务管理</p>
                 </a>
             </li>
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'10000')}">
-                <a href="/setting/user.html">
+                <a th:href="${i_system_index}">
                     <img src="/static/images/icon/menu-icon1.png"/>
                     <p th:text="${i_system.m10000}">系统管理</p>
                 </a>

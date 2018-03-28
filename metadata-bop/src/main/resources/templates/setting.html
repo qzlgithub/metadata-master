@@ -43,14 +43,14 @@
             <li class="layui-nav-item" th:if="${#lists.contains(i_privilege,'61000')}">
                 <a>
                     <i class="icon icon2" aria-hidden="false"></i>
-                    <em th:text="${i_system.m61000}">产品管理</em>
+                    <em th:text="${i_system.m61000}">新闻动态</em>
                 </a>
                 <dl class="layui-nav-child">
                     <dd th:class="${i_module eq 'setting-articles'} ? 'layui-this':''"
                         th:if="${#lists.contains(i_privilege,'61100')}">
                         <a href="/setting/articles.html">
                             <i class="layui-icon">&#xe602;</i>
-                            <span th:text="${i_system.m61100}">产品管理</span></a>
+                            <span th:text="${i_system.m61100}">文章列表</span></a>
                     </dd>
                 </dl>
             </li>

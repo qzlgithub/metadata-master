@@ -51,7 +51,7 @@
             pr.`start_date` as start_date,
             pr.`end_date`   as end_date,
             pr.`unit_amt`   as unit_amt,
-            pr.`balance`    as balance
+            cp.`balance`    as balance
         from `product` p
             left join `client_product` cp
                 on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
@@ -81,7 +81,7 @@
             pr.`start_date`  as start_date,
             pr.`end_date`    as end_date,
             pr.`amount`      as amount,
-            pr.`balance`     as balance,
+            cp.`balance`     as balance,
             pr.`unit_amt`    as unit_amt,
             pr.`update_time` as arrear_time,
             p.`remark`       as remark
@@ -125,7 +125,7 @@
             pr.`start_date` as start_date,
             pr.`end_date`   as end_date,
             pr.`amount`     as amount,
-            pr.`balance`    as balance,
+            cp.`balance`    as balance,
             pr.`unit_amt`   as unit_amt,
             p.`remark`      as remark,
             pt.`content`    as content
@@ -178,7 +178,7 @@
             pr.`start_date`  as start_date,
             pr.`end_date`    as end_date,
             pr.`amount`      as amount,
-            pr.`balance`     as balance,
+            cp.`balance`     as balance,
             pr.`unit_amt`    as unit_amt,
             pr.`update_time` as arrear_time,
             p.`remark`       as remark
