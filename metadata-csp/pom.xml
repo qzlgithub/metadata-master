@@ -65,6 +65,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
         <!-- test -->
         <dependency>
             <groupId>junit</groupId>
