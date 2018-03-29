@@ -1,5 +1,5 @@
 server:
-  port: 10000
+  port: 9900
 
 spring:
   redis:
@@ -26,6 +26,6 @@ mongodb:
 
 dubbo:
   protocol:
-    port: 33002
+    port: 9000
   registry:
     address: s4.mingdong.com:2181

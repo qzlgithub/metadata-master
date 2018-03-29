@@ -223,7 +223,8 @@ public class SystemServiceImpl implements SystemService
         ListDTO<DictIndustryResDTO> listDTO = systemRpcService.getIndustryList(parentId, enabled);
         List<DictIndustryResDTO> dataList = listDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(dataList)){
+        if(!CollectionUtils.isEmpty(dataList))
+        {
             for(DictIndustryResDTO parent : dataList)
             {
                 Map<String, Object> map = new HashMap<>();
@@ -243,15 +244,15 @@ public class SystemServiceImpl implements SystemService
         List<Map<String, Object>> industryList = new ArrayList<>();
         ListDTO<DictIndustryResDTO> listDTO = systemRpcService.getIndustryList(0L, TrueOrFalse.TRUE);
         List<DictIndustryResDTO> parentList = listDTO.getList();
-        for(DictIndustryResDTO industry : parentList)
-        {
-            Map<String, Object> pm = new HashMap<>();
-            parentIndustryList.add(pm);
-            pm.put(Field.ID, industry.getId() + "");
-            pm.put(Field.NAME, industry.getName());
-        }
         if(!CollectionUtils.isEmpty(parentList))
         {
+            for(DictIndustryResDTO industry : parentList)
+            {
+                Map<String, Object> pm = new HashMap<>();
+                parentIndustryList.add(pm);
+                pm.put(Field.ID, industry.getId() + "");
+                pm.put(Field.NAME, industry.getName());
+            }
             ListDTO<DictIndustryResDTO> listDTO2 = systemRpcService.getIndustryList(parentList.get(0).getId(),
                     TrueOrFalse.TRUE);
             List<DictIndustryResDTO> childList = listDTO2.getList();
