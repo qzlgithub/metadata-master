@@ -1,3 +1,11 @@
+-- sistem data
+insert into
+  `sistem`
+  (create_time, update_time, name, value)
+values
+  (now(), now(), 'CLIENT_SUB_USER_QTY', '5'),
+  (now(), now(), 'SERVICE_QQ', '123456');
+
 -- function data
 insert into
   `function`
