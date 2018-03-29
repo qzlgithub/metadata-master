@@ -1,6 +1,7 @@
 package com.mingdong.bop.model;
 
 import com.mingdong.bop.constant.ModulePath;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.core.constant.RoleType;
 
 import java.util.ArrayList;
@@ -75,30 +76,48 @@ public class RequestThread
 
     public static String getClientLink()
     {
-        if(clientLinkPath == null){
+        if(clientLinkPath == null)
+        {
             List<String> tempList = new ArrayList<>(get().getiPrivilege());
             tempList.retainAll(clientLinks);
-            clientLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            if(!CollectionUtils.isEmpty(tempList))
+            {
+                clientLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            }else{
+                clientLinkPath = "";
+            }
         }
         return clientLinkPath;
     }
 
     public static String getFinanceLink()
     {
-        if(financeLinkPath == null){
+        if(financeLinkPath == null)
+        {
             List<String> tempList = new ArrayList<>(get().getiPrivilege());
             tempList.retainAll(financeLinks);
-            financeLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            if(!CollectionUtils.isEmpty(tempList))
+            {
+                financeLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            }else{
+                financeLinkPath = "";
+            }
         }
         return financeLinkPath;
     }
 
     public static String getSystemLink()
     {
-        if(systemLinkPath == null){
+        if(systemLinkPath == null)
+        {
             List<String> tempList = new ArrayList<>(get().getiPrivilege());
             tempList.retainAll(systemLinks);
-            systemLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            if(!CollectionUtils.isEmpty(tempList))
+            {
+                systemLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+            }else{
+                systemLinkPath = "";
+            }
         }
         return systemLinkPath;
     }
