@@ -18,4 +18,4 @@ spring:
 
 dubbo:
   registry:
-    address: 192.168.2.232:2181
+    address: 192.168.2.222:2181
