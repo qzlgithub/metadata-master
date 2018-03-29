@@ -18,6 +18,6 @@ public class FinOverdueUserDaoImpl implements FinOverdueUserDao
     @Override
     public FinOverdueUser findByPhone(String phone)
     {
-        return mongoTemplate.findOne(Query.query(Criteria.where("phone").is(phone)), FinOverdueUser.class);
+        return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(phone)), FinOverdueUser.class);
     }
 }

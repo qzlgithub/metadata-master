@@ -11,8 +11,6 @@ public class FinOverdueUser
 {
     @Id
     private String id;
-    @Field("phone")
-    private String phone;
     @Field("overdue_amount_max")
     private BigDecimal overdueAmountMax;
     @Field("overdue_days_max")
@@ -46,16 +44,6 @@ public class FinOverdueUser
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
     }
 
     public BigDecimal getOverdueAmountMax()
