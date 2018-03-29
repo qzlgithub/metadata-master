@@ -3,9 +3,9 @@ server:
 
 spring:
   redis:
-    host: 10.31.0.107
+    host: s2.mingdong.com
     port: 6379
-    password: 123456
+    password: Zd4^GarJSA*PUDD0
   thymeleaf:
     enabled: true
     cache: false
@@ -18,4 +18,4 @@ spring:
 
 dubbo:
   registry:
-    address: 10.31.0.105:2181
+    address: s4.mingdong.com:2181

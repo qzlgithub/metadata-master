@@ -3,15 +3,15 @@ server:
 
 spring:
   redis:
-    host: 10.31.0.105
+    host: s4.mingdong.com
     port: 6379
-    password: 123456
+    password: UPKxSxCJBte&Mb@t
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://rm-uf6573l2hb9rck347.mysql.rds.aliyuncs.com:3306/mis?useUnicode=true&useSSL=false&characterEncoding=utf-8
-    username: mis
-    password: mis123456
+    url: jdbc:mysql://rm-uf6573l2hb9rck347.mysql.rds.aliyuncs.com:3306/metadata?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    username: metadata
+    password: metadata123
 
 mybatis:
   config-location: classpath:config/mybatis-config.xml
@@ -20,12 +20,12 @@ mybatis:
 
 mongodb:
   analysis:
-    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941848-pub.mongodb.rds.aliyuncs.com:3717/metadata
+    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/metadata?replicaSet=mgset-5409523
   transaction:
-    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941848-pub.mongodb.rds.aliyuncs.com:3717/metadata_access
+    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/metadata_access?replicaSet=mgset-5409523
 
 dubbo:
   protocol:
     port: 33002
   registry:
-    address: 10.31.0.105:2181
+    address: s4.mingdong.com:2181
