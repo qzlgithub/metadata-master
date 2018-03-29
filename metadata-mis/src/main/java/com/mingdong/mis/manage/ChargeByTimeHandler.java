@@ -3,6 +3,7 @@ package com.mingdong.mis.manage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.Metadata;
@@ -22,6 +23,8 @@ public class ChargeByTimeHandler implements IChargeHandler
 {
     private static Logger logger = LoggerFactory.getLogger(ChargeByTimeHandler.class);
     @Resource
+    private RedisDao redisDao;
+    @Resource
     private DataService dataService;
     @Resource
     private OverdueProcessor overdueProcessor;
@@ -29,6 +32,7 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
+        redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
         if(!RequestThread.checkTimeValid(resp.getTimestamp()))
         {
             resp.setResult(MDResult.PRODUCT_EXPIRED);

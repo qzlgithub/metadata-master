@@ -94,12 +94,22 @@ public class RedisDao extends RedisBaseDao
         return "RQ" + datestr + String.format("%06d", num);
     }
 
+    /**
+     * 产品访问量监控
+     */
+    public void incProductTraffic(Date date, Long productId)
+    {
+        long l = date.getTime() - date.getTime() % 300000;
+        hIncrBy(DB.PRODUCT_TRAFFIC, String.valueOf(l), String.valueOf(productId), 1);
+    }
+
     interface DB
     {
         int SYSTEM = 0;
         int LOCK_CLIENT_PRODUCT = 1;
         int USER_AUTH = 2;
         int THIRD_INFO = 3;
+        int PRODUCT_TRAFFIC = 4;
     }
 
     interface Key

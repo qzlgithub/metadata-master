@@ -37,6 +37,7 @@ public class ChargeByUseHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
+        redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
         String lockId = RequestThread.getProduct().name() + "-C" + RequestThread.getClientId();
         String lockVal = StringUtils.getUuid();
         boolean locked = false;
