@@ -10,15 +10,19 @@ public class MDResp
 {
     private Integer code; // 请求状态：0-成功，其他-失败
     private Integer status; // 查询状态：0-正常命中，1-未命中
-    private Date timestamp;
+    private long timestamp;
     private String requestNo;
     private Map<String, Object> data;
+
+    private MDResp()
+    {
+    }
 
     public static MDResp create()
     {
         MDResp o = new MDResp();
         o.setCode(MDResult.OK.getCode());
-        o.setTimestamp(new Date());
+        o.setTimestamp(System.currentTimeMillis() / 1000);
         return o;
     }
 
@@ -42,12 +46,12 @@ public class MDResp
         this.status = status;
     }
 
-    public Date getTimestamp()
+    public long getTimestamp()
     {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp)
+    public void setTimestamp(long timestamp)
     {
         this.timestamp = timestamp;
     }
@@ -96,5 +100,10 @@ public class MDResp
         {
             data.putAll(map);
         }
+    }
+
+    public Date requestAt()
+    {
+        return new Date(timestamp * 1000);
     }
 }

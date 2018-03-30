@@ -67,7 +67,7 @@ public class DSDataServiceImpl implements DSDataService
             }
             // 查询当前有效的充值记录，并验证账户有效性
             Recharge recharge = rechargeMapper.findById(account.getLatestRechargeId());
-            if(!checkAccountIsAvailable(recharge, res.getTimestamp()))
+            if(!checkAccountIsAvailable(recharge, res.requestAt()))
             {
                 res.setResult(MDResult.INSUFFICIENT_BALANCE);
                 return;
@@ -78,7 +78,7 @@ public class DSDataServiceImpl implements DSDataService
             {
                 // 保存本次请求记录，并更新产品账余额
                 String requestNo = chargeService.chargeAndLog(account, userId, recharge, billPlan, ip,
-                        data.getThirdNo(), data.isHit(), res.getTimestamp());
+                        data.getThirdNo(), data.isHit(), res.requestAt());
                 res.add(Field.REQUEST_NO, requestNo);
             }
             res.addAll(data.response());

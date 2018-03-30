@@ -114,7 +114,7 @@ public class ClientServiceImpl implements ClientService
         String accessToken;
         Date validTime;
         if(!TrueOrFalse.TRUE.equals(refresh) && clientUserProduct.getAccessToken() != null &&
-                clientUserProduct.getValidTime() != null && res.getTimestamp().before(clientUserProduct.getValidTime()))
+                clientUserProduct.getValidTime() != null && res.requestAt().before(clientUserProduct.getValidTime()))
         {
             accessToken = clientUserProduct.getAccessToken();
             validTime = clientUserProduct.getValidTime();
@@ -122,7 +122,7 @@ public class ClientServiceImpl implements ClientService
         else
         {
             accessToken = BusinessUtils.createAccessToken();
-            validTime = BusinessUtils.getTokenValidTime(res.getTimestamp());
+            validTime = BusinessUtils.getTokenValidTime(res.requestAt());
             // 清除历史凭证
             if(clientUserProduct.getAccessToken() != null)
             {
@@ -131,13 +131,13 @@ public class ClientServiceImpl implements ClientService
             // 更新数据库中存储的access token
             ClientUserProduct upUpd = new ClientUserProduct();
             upUpd.setId(clientUserProduct.getId());
-            upUpd.setUpdateTime(res.getTimestamp());
+            upUpd.setUpdateTime(res.requestAt());
             upUpd.setAccessToken(accessToken);
             upUpd.setValidTime(validTime);
             clientUserProductMapper.updateSkipNull(upUpd);
         }
         // 计算token剩余有效时间（秒）
-        long seconds = validTime.getTime() - res.getTimestamp().getTime() + 60;
+        long seconds = validTime.getTime() / 1000 - res.getTimestamp() + 60;
         // 缓存用户接入凭证
         UserAuth auth = new UserAuth();
         auth.setClientId(clientProduct.getClientId());
@@ -156,7 +156,7 @@ public class ClientServiceImpl implements ClientService
         auth.setHost(clientUserProduct.getReqHost());
         redisDao.saveUserAuth(accessToken, auth, seconds);
         res.add(Field.ACCESS_TOKEN, accessToken);
-        res.add(Field.EXPIRATION, validTime);
+        res.add(Field.EXPIRATION, validTime.getTime() / 1000);
     }
 
     /**

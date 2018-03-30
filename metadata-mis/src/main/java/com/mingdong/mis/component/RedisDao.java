@@ -97,9 +97,9 @@ public class RedisDao extends RedisBaseDao
     /**
      * 产品访问量监控
      */
-    public void incProductTraffic(Date date, Long productId)
+    public void incProductTraffic(long timestamp, Long productId)
     {
-        long l = date.getTime() - date.getTime() % 300000;
+        long l = timestamp - timestamp % 300;
         hIncrBy(DB.PRODUCT_TRAFFIC, String.valueOf(l), String.valueOf(productId), 1);
     }
 

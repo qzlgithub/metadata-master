@@ -71,7 +71,7 @@ public class ChargeByUseHandler implements IChargeHandler
             String requestNo = dataService.chargeAndSaveRequestLog(RequestThread.getClientId(),
                     RequestThread.getUserId(), RequestThread.getProductId(), checkResult.getClientProductId(),
                     checkResult.getUnitAmt(), checkResult.getBalance(), RequestThread.getHost(), payload,
-                    metadata.isHit(), resp.getTimestamp());
+                    metadata.isHit(), resp.requestAt());
             resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             resp.setRequestNo(requestNo);
             resp.setData((JSONObject) JSON.toJSON(metadata.getData()));

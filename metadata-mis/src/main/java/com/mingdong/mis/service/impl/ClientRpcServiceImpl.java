@@ -8,6 +8,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ClientRemindType;
 import com.mingdong.core.constant.Constant;
 import com.mingdong.core.constant.RangeUnit;
@@ -1130,8 +1131,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
                 ari.setHit(o.getHit());
-                ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
-                ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                    ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                }
                 list.add(ari);
             }
             listDTO.setList(list);
@@ -1220,7 +1224,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
             List<RequestLog> dataList = requestLogDao.findByParam(null, null, null, null, null, fromDate, toDate, page);
             List<AccessResDTO> list = new ArrayList<>();
             for(RequestLog o : dataList)
@@ -1232,8 +1235,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 r.setProductName(o.getProductName());
                 r.setBillPlan(o.getBillPlan());
                 r.setHit(o.getHit());
-                r.setFee(NumberUtils.centAmtToYuan(o.getFee()));
-                r.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    r.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                    r.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                }
                 list.add(r);
             }
             listDTO.setList(list);
@@ -1426,8 +1432,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getListBy(managerId, type, date,
-                    dispose);
+            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getListBy(managerId, type, date, dispose);
             if(!CollectionUtils.isEmpty(dataList))
             {
                 List<ClientRemindResInfoDTO> list = new ArrayList<>(dataList.size());
@@ -1507,12 +1512,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<ClientContact> clientContactsTemp;
             for(ClientContact item : listByClients)
             {
-                clientContactsTemp = clientIdContactListMap.get(item.getClientId());
-                if(clientContactsTemp == null)
-                {
-                    clientContactsTemp = new ArrayList<>();
-                    clientIdContactListMap.put(item.getClientId(), clientContactsTemp);
-                }
+                clientContactsTemp = clientIdContactListMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
                 clientContactsTemp.add(item);
             }
             Map<Long, List<ClientProductInfo>> infoListByDateMap = new HashMap<>();
@@ -1520,22 +1520,12 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<ClientProductInfo> clientProductInfosTemp;
             for(ClientProductInfo item : willOverByDate)
             {
-                clientProductInfosTemp = infoListByDateMap.get(item.getClientId());
-                if(clientProductInfosTemp == null)
-                {
-                    clientProductInfosTemp = new ArrayList<>();
-                    infoListByDateMap.put(item.getClientId(), clientProductInfosTemp);
-                }
+                clientProductInfosTemp = infoListByDateMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
                 clientProductInfosTemp.add(item);
             }
             for(ClientProductInfo item : willOverByTimes)
             {
-                clientProductInfosTemp = infoListByTimesMap.get(item.getClientId());
-                if(clientProductInfosTemp == null)
-                {
-                    clientProductInfosTemp = new ArrayList<>();
-                    infoListByTimesMap.put(item.getClientId(), clientProductInfosTemp);
-                }
+                clientProductInfosTemp = infoListByTimesMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
                 clientProductInfosTemp.add(item);
             }
             ClientRemind clientRemind = null;

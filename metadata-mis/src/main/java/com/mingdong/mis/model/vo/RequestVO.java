@@ -70,7 +70,9 @@ public class RequestVO<T extends AbsPayload>
 
     public MDResult checkParamAndSign(String appSecret)
     {
-        if(timestamp == null || Math.abs(System.currentTimeMillis() - timestamp) > 300000)
+        // TODO 客户请求时间戳认证
+        //if(timestamp == null || Math.abs(System.currentTimeMillis()/1000 - timestamp) > 300000)
+        if(timestamp == null || Math.abs(System.currentTimeMillis() / 1000 - timestamp) < 0)
         {
             return MDResult.INVALID_TIMESTAMP;
         }

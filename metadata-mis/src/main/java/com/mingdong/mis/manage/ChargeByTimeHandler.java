@@ -33,7 +33,7 @@ public class ChargeByTimeHandler implements IChargeHandler
     public void work(AbsPayload payload, MDResp resp)
     {
         redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
-        if(!RequestThread.checkTimeValid(resp.getTimestamp()))
+        if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.setResult(MDResult.PRODUCT_EXPIRED);
             return;
@@ -50,9 +50,19 @@ public class ChargeByTimeHandler implements IChargeHandler
         }
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(RequestThread.getClientId(), RequestThread.getUserId(),
-                RequestThread.getProductId(), RequestThread.getHost(), payload, metadata.isHit(), resp.getTimestamp());
+                RequestThread.getProductId(), RequestThread.getHost(), payload, metadata.isHit(), resp.requestAt());
         resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
         resp.setRequestNo(requestNo);
         resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
+    }
+
+    /**
+     * 检查请求时间是否有效
+     *
+     * @param timestamp 请求时间的Unix时间戳
+     */
+    private boolean checkTimeValid(long timestamp)
+    {
+        return timestamp * 1000 >= RequestThread.getStart() && timestamp * 1000 < RequestThread.getEnd();
     }
 }
