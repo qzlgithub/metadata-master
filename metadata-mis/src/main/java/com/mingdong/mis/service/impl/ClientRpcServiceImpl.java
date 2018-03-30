@@ -304,19 +304,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         if(page == null)
         {
-            List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
-            List<SubUserResDTO> list = new ArrayList<>();
-            for(ClientUser o : userList)
-            {
-                SubUserResDTO su = new SubUserResDTO();
-                su.setUserId(o.getId());
-                su.setUsername(o.getUsername());
-                su.setName(o.getName());
-                su.setPhone(o.getPhone());
-                su.setEnabled(o.getEnabled());
-                list.add(su);
-            }
-            res.setTotal(userList.size());
+            List<SubUserResDTO> list = querySubUserOfClient(clientId);
+            res.setTotal(list.size());
             res.setList(list);
         }
         else
@@ -327,18 +316,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             if(total > 0 && page.getPageNum() <= pages)
             {
                 PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-                List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
-                List<SubUserResDTO> list = new ArrayList<>();
-                for(ClientUser o : userList)
-                {
-                    SubUserResDTO su = new SubUserResDTO();
-                    su.setUserId(o.getId());
-                    su.setUsername(o.getUsername());
-                    su.setName(o.getName());
-                    su.setPhone(o.getPhone());
-                    su.setEnabled(o.getEnabled());
-                    list.add(su);
-                }
+                List<SubUserResDTO> list = querySubUserOfClient(clientId);
                 res.setList(list);
             }
         }
@@ -671,13 +649,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
             for(ClientInfo item : dataList)
             {
-                ClientInfoResDTO clientInfoReqDTO = new ClientInfoResDTO();
-                clientInfoReqDTO.setRegisterTime(item.getRegisterTime());
-                clientInfoReqDTO.setCorpName(item.getCorpName());
-                clientInfoReqDTO.setShortName(item.getShortName());
-                clientInfoReqDTO.setUsername(item.getUsername());
-                clientInfoReqDTO.setManagerName(item.getManagerName());
-                list.add(clientInfoReqDTO);
+                ClientInfoResDTO dto = new ClientInfoResDTO();
+                dto.setRegisterTime(item.getRegisterTime());
+                dto.setCorpName(item.getCorpName());
+                dto.setShortName(item.getShortName());
+                dto.setUsername(item.getUsername());
+                dto.setManagerName(item.getManagerName());
+                list.add(dto);
             }
             listDTO.setList(list);
         }
@@ -1649,13 +1627,13 @@ public class ClientRpcServiceImpl implements ClientRpcService
             List<ClientInfoResDTO> list = new ArrayList<>();
             for(ClientInfo o : dataList)
             {
-                ClientInfoResDTO ci = new ClientInfoResDTO();
-                ci.setRegisterTime(o.getRegisterTime());
-                ci.setCorpName(o.getCorpName());
-                ci.setShortName(o.getShortName());
-                ci.setUsername(o.getUsername());
-                ci.setManagerName(o.getManagerName());
-                list.add(ci);
+                ClientInfoResDTO dto = new ClientInfoResDTO();
+                dto.setRegisterTime(o.getRegisterTime());
+                dto.setCorpName(o.getCorpName());
+                dto.setShortName(o.getShortName());
+                dto.setUsername(o.getUsername());
+                dto.setManagerName(o.getManagerName());
+                list.add(dto);
             }
             listDTO.setList(list);
         }
@@ -1856,7 +1834,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         else
         {
             logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
-            return;
         }
     }
 
@@ -1876,6 +1853,23 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId)
     {
         return statsClientMapper.getClientCountByDate(fromDate, toDate, managerId);
+    }
+
+    private List<SubUserResDTO> querySubUserOfClient(Long clientId)
+    {
+        List<SubUserResDTO> list = new ArrayList<>();
+        List<ClientUser> userList = clientUserMapper.getSubUserListByClient(clientId);
+        for(ClientUser o : userList)
+        {
+            SubUserResDTO dto = new SubUserResDTO();
+            dto.setUserId(o.getId());
+            dto.setUsername(o.getUsername());
+            dto.setName(o.getName());
+            dto.setPhone(o.getPhone());
+            dto.setEnabled(o.getEnabled());
+            list.add(dto);
+        }
+        return list;
     }
 
     private List<AccessResDTO> queryRequestLogData(String keyword, Long clientId, Long clientUserId, Long productId,
