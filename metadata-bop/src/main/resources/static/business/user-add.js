@@ -17,7 +17,7 @@ layui.config({
     })
 });
 $(function() {
-    checkSubPrivAllChecked();
+    resetPrivilege();
 });
 $(".parent-privilege").click(function() {
     var pid = $(this).attr("id");

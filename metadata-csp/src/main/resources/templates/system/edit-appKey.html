@@ -48,8 +48,9 @@
                     </div>
                 </div>
                 <div class="layui-form-item tc mt30">
-                    <a href="javascript:" class="layui-btn" id="save-credential" style="width: 12%;">保存</a>
-                    <a href="/system/edit-validation.html" class="layui-btn">返回上一步</a>
+                    <button class="layui-btn" id="save-credential" style="width: 12%;">保存</button>
+                    <button onclick="window.location.href='/system/edit-validation.html'" class="layui-btn">返回上一步
+                    </button>
                 </div>
             </div>
         </div>
@@ -100,7 +101,9 @@
             data: JSON.stringify({"appKey": appKey}),
             success: function(res) {
                 if(res.code === '000000') {
-                    layer.msg("保存成功", {time: 2000});
+                    layer.msg("保存成功", {time: 1000},function(){
+                        window.location.href="/system/edit-validation.html";
+                    });
                 }
                 else {
                     layer.msg("保存失败：" + res.message);
