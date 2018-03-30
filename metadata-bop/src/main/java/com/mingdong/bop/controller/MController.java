@@ -7,12 +7,12 @@ import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -66,8 +66,7 @@ public class MController
         BufferedImage image = kaptchaBuilder.createImage(txt);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", outputStream);
-        BASE64Encoder encoder = new BASE64Encoder();
-        String pic64 = encoder.encode(outputStream.toByteArray());
+        String pic64 = Base64.encodeBase64String(outputStream.toByteArray());
         map.put(Field.IMAGE, "data:image/png;base64," + pic64);
         return map;
     }

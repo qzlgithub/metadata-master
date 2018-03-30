@@ -2,8 +2,6 @@ package com.mingdong.mis.model;
 
 import com.mingdong.mis.constant.APIProduct;
 
-import java.util.Date;
-
 public class RequestThread
 {
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
@@ -79,9 +77,19 @@ public class RequestThread
         get().setBillPlan(billPlan);
     }
 
+    public static Long getStart()
+    {
+        return get().getStart();
+    }
+
     public static void setStart(Long start)
     {
         get().setStart(start);
+    }
+
+    public static Long getEnd()
+    {
+        return get().getEnd();
     }
 
     public static void setEnd(Long end)
@@ -117,11 +125,6 @@ public class RequestThread
     public static void setResp(MDResp resp)
     {
         get().setResp(resp);
-    }
-
-    public static boolean checkTimeValid(Date date)
-    {
-        return date != null && date.getTime() >= get().getStart() && date.getTime() < get().getEnd();
     }
 
     public static void cleanup()

@@ -15,11 +15,11 @@ import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
 import com.mingdong.csp.service.ClientService;
 import com.mingdong.csp.service.ProductService;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -69,8 +69,7 @@ public class PageController
         BufferedImage image = kaptchaBuilder.createImage(txt);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", outputStream);
-        BASE64Encoder encoder = new BASE64Encoder();
-        String pic64 = encoder.encode(outputStream.toByteArray());
+        String pic64 = Base64.encodeBase64String(outputStream.toByteArray());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + pic64);
         return view;
     }
