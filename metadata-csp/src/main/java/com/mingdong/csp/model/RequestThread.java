@@ -10,29 +10,9 @@ public class RequestThread
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
 
     /**
-     * 请求耗时
-     */
-    private static final ThreadLocal<Long> threadHolderLong = new ThreadLocal<>();
-
-    /**
      * 是否已登录
      */
     private static final ThreadLocal<Boolean> threadHolderBoolean = new ThreadLocal<>();
-
-    public static Long getTimeLong()
-    {
-        return threadHolderLong.get();
-    }
-
-    public static void setTimeLong(Long time)
-    {
-        threadHolderLong.set(time);
-    }
-
-    public static void removeLong()
-    {
-        threadHolderLong.remove();
-    }
 
     public static Boolean getIsLogin()
     {
