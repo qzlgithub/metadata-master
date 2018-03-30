@@ -54,6 +54,14 @@ public class DataServiceImpl implements DataService
             BillPlan billPlan, BigDecimal fee, BigDecimal balance, String host, AbsPayload payload, boolean hit,
             Date timestamp)
     {
+        if(BillPlan.PER_USE != billPlan && BillPlan.PER_HIT != billPlan)
+        {
+            return null;
+        }
+        if(BillPlan.PER_HIT == billPlan && !hit)
+        {
+            fee = new BigDecimal("0");
+        }
         // 更新产品账户余额
         ClientProduct clientProduct = new ClientProduct();
         clientProduct.setId(clientProductId);
@@ -79,14 +87,8 @@ public class DataServiceImpl implements DataService
         requestLog.setRequestParams(payload);
         requestLog.setHit(hit ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
         requestLog.setBillPlan(billPlan.getId());
-        if(billPlan == BillPlan.PER_USE)
+        if(billPlan != BillPlan.BY_TIME)
         {
-            requestLog.setFee(NumberUtils.yuanToCent(fee));
-            requestLog.setBalance(NumberUtils.yuanToCent(balance.subtract(fee)));
-        }
-        else if(billPlan == BillPlan.PER_HIT)
-        {
-            fee = hit ? fee : new BigDecimal("0");
             requestLog.setFee(NumberUtils.yuanToCent(fee));
             requestLog.setBalance(NumberUtils.yuanToCent(balance.subtract(fee)));
         }
