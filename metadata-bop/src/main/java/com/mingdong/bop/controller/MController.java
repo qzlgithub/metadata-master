@@ -45,7 +45,7 @@ public class MController
             ManagerSession ms = redisDao.getManagerSession(sessionId);
             if(ms != null)
             {
-                return new ModelAndView("redirect:/stats/index.html");
+                return new ModelAndView("redirect:/enter.html");
             }
         }
         /*ImageCode imageCode = CaptchaUtils.buildImageCode(); // 获取图片验证码

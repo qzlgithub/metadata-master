@@ -30,7 +30,8 @@ layui.config({
             product: $("#product").val(),
             billPlan: $("#billPlan").val(),
             fromDate: $("#fromDate").val(),
-            toDate: $("#toDate").val()
+            toDate: $("#toDate").val(),
+            hit: $("#hit").val()
         },
         cols: [[
             {field: 'requestAt', title: '消费时间'},
@@ -65,7 +66,8 @@ layui.config({
                 product: params['product'],
                 billPlan: params['bill-plan'],
                 fromDate: params['fromDate'],
-                toDate: params['toDate']
+                toDate: params['toDate'],
+                hit: params['hit']
             },
             page: {
                 curr: 1
@@ -76,7 +78,7 @@ layui.config({
 
 function exportXlsx() {
     var uri_param = '';
-    var params = ['keyword', 'product', 'billPlan', 'fromDate', 'toDate'];
+    var params = ['keyword', 'product', 'billPlan', 'fromDate', 'toDate', 'hit'];
     var field, val;
     for(var o in params) {
         field = params[o];

@@ -38,18 +38,11 @@ public class RestInterceptor extends HandlerInterceptorAdapter
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
-            if(annotation != null)
+            HttpSession session = request.getSession();
+            String sessionId = session.getId();
+            ManagerSession ms = redisDao.getManagerSession(sessionId);
+            if(ms != null)
             {
-                HttpSession session = request.getSession();
-                String sessionId = session.getId();
-                ManagerSession ms = redisDao.getManagerSession(sessionId);
-                if(ms == null)
-                {
-                    String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
-                    response.getOutputStream().write(resp.getBytes(Charset.UTF_8));
-                    return false;
-                }
                 RequestThread.set(ms.getManagerId(), ms.getName(), ms.getRoleType(), ms.getPrivileges());
                 String module = ModulePath.getByPath(path);
                 RequestThread.setModule(module != null ? module : "");
@@ -59,6 +52,13 @@ public class RestInterceptor extends HandlerInterceptorAdapter
                     system = systemService.cacheSystemModule();
                 }
                 RequestThread.setSystem(system);
+            }
+            LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
+            if(annotation != null && ms == null)
+            {
+                String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
+                response.getOutputStream().write(resp.getBytes(Charset.UTF_8));
+                return false;
             }
         }
         return true;

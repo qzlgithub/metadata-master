@@ -33,17 +33,16 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             String sessionId = request.getSession().getId();
             UserSession us = redisDao.getUserSession(sessionId);
-            RequestThread.setIsLogin(us != null);
-            LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
-            if(annotation != null)
+            if(us != null)
             {
-                if(us == null)
-                {
-                    String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
-                    response.getOutputStream().write(resp.getBytes(Charset.UTF_8));
-                    return false;
-                }
                 RequestThread.set(us.getClientId(), us.getUserId(), us.getUsername(), us.getPrimary());
+            }
+            LoginRequired annotation = handlerMethod.getMethod().getAnnotation(LoginRequired.class);
+            if(annotation != null && us == null)
+            {
+                String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
+                response.getOutputStream().write(resp.getBytes(Charset.UTF_8));
+                return false;
             }
         }
 
@@ -54,7 +53,6 @@ public class ApiAccessInterceptor extends HandlerInterceptorAdapter
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception
     {
-        RequestThread.removeBoolean();
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
     }

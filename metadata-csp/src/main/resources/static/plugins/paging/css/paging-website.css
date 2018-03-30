@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.fl {
+    float: left;
+}
+
+.box {
+    height: 40px;
+    line-height: 40px;
+    /*position: absolute;*/
+    transform: translate(0%, -50%);
+    text-align: center;
+    width: 230px;
+    margin: auto;
+}
+
+.box button {
+    padding: 0 10px;
+    height: 34px;
+    float: left;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    background-color: #ffffff;
+    border-right: 0px;
+    line-height: 34px;
+}
+
+.box .first-page,
+.box .last-page {
+    /*margin: 0;*/
+}
+
+.box .pageWrap {
+    height: 34px;
+    float: left;
+    overflow: hidden;
+}
+
+.box .pageWrap ul {
+    width: 100000px;
+    height: 40px;
+    float: left;
+}
+
+.box .pageWrap ul li {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #ebebeb;
+    line-height: 34px;
+    box-sizing: border-box;
+    cursor: pointer;
+    float: left;
+    padding-top: 0px;
+    margin-left: 0px;
+    background: #fff;
+    border-right: 0px;
+}
+
+.box .pageWrap ul .sel-page {
+    color: #fff;
+    border-top: solid 3px #4aa0f5;
+    color: #333;
+}
+
+.box .jump-text {
+    width: 60px;
+    height: 40px;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 0 5px;
+    float: left;
+}
+
+.box .jump-button {
+    margin: 0;
+    float: left;
+}
+
+.box .total-pages,
+.box .total-count {
+    margin-left: 10px;
+    float: left;
+    font-size: 14px;
+}

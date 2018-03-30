@@ -55,6 +55,7 @@ public class FinanceController
             @RequestParam(value = Field.BILL_PLAN, required = false) Integer billPlan,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.HIT, required = false) Integer hit,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
@@ -70,7 +71,7 @@ public class FinanceController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        tradeService.getClientBillList(keyword, productId, billPlan, from, to, new Page(pageNum, pageSize), res);
+        tradeService.getClientBillList(keyword, productId, billPlan, from, to, hit, new Page(pageNum, pageSize), res);
         return res;
     }
 }

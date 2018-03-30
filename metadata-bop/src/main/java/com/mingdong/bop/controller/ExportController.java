@@ -40,12 +40,13 @@ public class ExportController
             @RequestParam(value = Field.USER_ID, required = false) Long userId,
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.HIT, required = false) Integer hit, HttpServletResponse response)
             throws IOException
     {
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
-        XSSFWorkbook wb = clientService.createClientRequestXlsx(clientId, userId, productId, fromDate, toDate,
+        XSSFWorkbook wb = clientService.createClientRequestXlsx(clientId, userId, productId, fromDate, toDate, hit,
                 new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
@@ -193,7 +194,8 @@ public class ExportController
             @RequestParam(value = Field.PRODUCT, required = false) Long productId,
             @RequestParam(value = Field.BILL_PLAN, required = false) Integer billPlan,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.HIT, required = false) Integer hit, HttpServletResponse response)
             throws IOException
     {
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
@@ -207,7 +209,7 @@ public class ExportController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        XSSFWorkbook wb = tradeService.createClientBillListXlsx(keyword, productId, billPlan, from, to,
+        XSSFWorkbook wb = tradeService.createClientBillListXlsx(keyword, productId, billPlan, from, to, hit,
                 new Page(1, 1000));
         String filename = new String("消费记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");

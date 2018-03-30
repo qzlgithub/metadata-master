@@ -111,15 +111,15 @@ public interface ClientService
 
     Map<String, Object> getClientAccountDict(Long clientId);
 
-    void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
-            RestListResp res);
+    void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Integer hit,
+            Page page, RestListResp res);
 
     String getClientCorpName(Long clientId);
 
     void getProductRechargeList(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestListResp res);
 
     XSSFWorkbook createClientRequestXlsx(Long clientId, Long userId, Long productId, Date startTime, Date endTime,
-            Page page);
+            Integer hit, Page page);
 
     XSSFWorkbook createClientRechargeXlsx(Long clientId, Long productId, Date startTime, Date endTime, Page page);
 

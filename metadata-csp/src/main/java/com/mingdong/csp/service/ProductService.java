@@ -24,12 +24,13 @@ public interface ProductService
     /**
      * 客户请求记录
      */
-    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestResp resp);
+    void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit, Page page,
+            RestResp resp);
 
     /**
      * 导出客户请求记录
      */
-    XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate);
+    XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit);
 
     /**
      * 查询客户产品的详请页信息

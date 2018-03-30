@@ -582,11 +582,11 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate, Page page,
-            RestListResp res)
+    public void getClientRequestList(Long clientId, Long userId, Long productId, Date fromDate, Date toDate,
+            Integer hit, Page page, RestListResp res)
     {
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestRecord(clientId, userId, productId, fromDate,
-                toDate, page);
+                toDate, hit, page);
         res.setTotal(listDTO.getTotal());
         List<Map<String, Object>> list = new ArrayList<>();
         if(!CollectionUtils.isEmpty(listDTO.getList()))
@@ -652,7 +652,7 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public XSSFWorkbook createClientRequestXlsx(Long clientId, Long userId, Long productId, Date startTime,
-            Date endTime, Page page)
+            Date endTime, Integer hit, Page page)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("消费数据");
@@ -666,7 +666,7 @@ public class ClientServiceImpl implements ClientService
         row.createCell(6).setCellValue("费用(元)");
         row.createCell(7).setCellValue("余额(元)");
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientRequestRecord(clientId, userId, productId, startTime,
-                endTime, page);
+                endTime, hit, page);
         List<AccessResDTO> list = listDTO.getList();
         if(!CollectionUtils.isEmpty(list))
         {

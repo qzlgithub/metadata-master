@@ -86,13 +86,13 @@ a.login-btn:hover{color: #fff; text-decoration: none;}
 .product-banner-img{background: url(../images/product-banner.png) no-repeat center; min-width: 1188px; height: 100%;}
 .product-banner-font1{font-size: 44px; color: #fff; margin-top: 80px;}
 .product-banner-font2{font-size: 28px; color: #fff; margin-top: 20px;}
-.product-banner-font3{font-size: 20px; color: #fff; margin-top: 20px;}
+.product-banner-font3{font-size: 18px; color: #fff; margin-top: 20px;}
 .product-list-name{border-left: solid 2px #49a0f5; color: #3a3a3a; font-size: 20px; padding-left: 20px; font-weight: bold;}
 .blist-name span{color: #333; font-size: 18px; width: 10%; float: left; margin-top: 5px;}
 .blist-name em{float: right;width: 10%;  margin-top: 5px; font-size: 16px; color: #333}
 .blist{width: 80%; float: left;}
 .blist-height{max-height: 42px; overflow: hidden;}
-.blist li{padding:0 10px; display:inline-block; padding: 5px 20px; font-size: 16px; margin: 0px 7px; margin-bottom: 10px;}
+.blist li{padding:0 10px; display:inline-block; padding: 5px 20px; font-size: 16px; margin: 0px 7px; margin-bottom: 10px; cursor: pointer;}
 .blist li.active,.blist li:hover{text-decoration: none;background:#49a0f5; border-radius: 20px;color: #fff; padding: 5px 20px; }
 .blsit-list li:first-child{display: block;}
 .blsit-list li{display: none;}
@@ -165,3 +165,5 @@ a.login-btn:hover{color: #fff; text-decoration: none;}
 .public-title{border-left: solid 5px #fff; padding-left: 20px; font-size: 30px; color: #fff;}
 .public-title2{border-left: solid 5px #459bf0; padding-left: 20px; font-size: 30px; color: #459bf0;}
 .public-button a{color: #459bf0; border-radius: 20px; padding: 12px 60px; border:solid 1px #459bf0; font-size: 16px;}
+
+a.return-button{width: 8%; border: solid 1px #999; border-radius: 20px; text-align: center; padding: 8px 12px; cursor: pointer; color: #999;}

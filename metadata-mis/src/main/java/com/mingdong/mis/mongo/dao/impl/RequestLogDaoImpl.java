@@ -39,7 +39,8 @@ public class RequestLogDaoImpl implements RequestLogDao
     }
 
     @Override
-    public long countByParam(Long clientId, Long clientUserId, Long productId, Date startTime, Date endTime)
+    public long countByParam(Long clientId, Long clientUserId, Long productId, Date startTime, Date endTime,
+            Integer hit)
     {
         Query query = new Query();
         if(clientId != null)
@@ -53,6 +54,10 @@ public class RequestLogDaoImpl implements RequestLogDao
         if(productId != null)
         {
             query.addCriteria(Criteria.where("product_id").is(productId));
+        }
+        if(hit != null)
+        {
+            query.addCriteria(Criteria.where("hit").is(hit));
         }
         setTimeRange(query, startTime, endTime);
         return mongoTemplate.count(query, RequestLog.class);
@@ -101,7 +106,7 @@ public class RequestLogDaoImpl implements RequestLogDao
 
     @Override
     public List<RequestLog> findByParam(String keyword, Long clientId, Long clientUserId, Long productId,
-            Integer billPlan, Date startTime, Date endTime, Page page)
+            Integer billPlan, Date startTime, Date endTime, Integer hit, Page page)
     {
         Query query = new Query();
         if(!StringUtils.isNullBlank(keyword))
@@ -125,6 +130,10 @@ public class RequestLogDaoImpl implements RequestLogDao
         if(billPlan != null)
         {
             query.addCriteria(Criteria.where("bill_plan").is(billPlan));
+        }
+        if(hit != null)
+        {
+            query.addCriteria(Criteria.where("hit").is(hit));
         }
         setTimeRange(query, startTime, endTime);
         query.skip((page.getPageNum() - 1) * page.getPageSize()).limit(page.getPageSize());

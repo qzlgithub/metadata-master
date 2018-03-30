@@ -29,7 +29,8 @@ layui.config({
             userId: $("#userId").val(),
             productId: $("#productId").val(),
             startTime: $("#fromDate").val(),
-            endTime: $("#toDate").val()
+            endTime: $("#toDate").val(),
+            hit: $("#hit").val()
         },
         cols: [[
             {field: 'requestAt', title: '请求时间'},
@@ -60,7 +61,8 @@ layui.config({
                 userId: params['user-id'],
                 productId: params['product-id'],
                 startTime: params['fromDate'],
-                endTime: params['toDate']
+                endTime: params['toDate'],
+                hit: params['hit']
             },
             page: {
                 curr: 1
@@ -69,7 +71,7 @@ layui.config({
     });
     form.on('submit(export)', function(data) {
         var params = data.field;
-        var uri = "/exp/client/request?clientId=" + params["client-id"] + "&userId=" + params['user-id']
+        var uri = "/exp/client/request?clientId=" + params["client-id"] + "&userId=" + params['user-id'] + "&hit=" + params['hit']
             + "&productId=" + params['product-id'] + "&fromDate=" + params['from-date'] + "&toDate=" + params['to-date'];
         location.href = encodeURI(uri);
     });

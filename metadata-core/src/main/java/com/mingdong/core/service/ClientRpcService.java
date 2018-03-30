@@ -151,7 +151,7 @@ public interface ClientRpcService
     ResponseDTO removeCustomClientProduct(Long clientProductId);
 
     ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Page page);
+            Date toDate, Integer hit, Page page);
 
     ClientUserDictResDTO getClientAccountDict(Long clientId);
 
@@ -161,7 +161,7 @@ public interface ClientRpcService
      * 客户接口请求记录
      */
     ListDTO<AccessResDTO> getClientRequestRecord(Long clientId, Long userId, Long productId, Date startDate,
-            Date endDate, Page page);
+            Date endDate, Integer hit, Page page);
 
     /**
      * 客户产品充值记录

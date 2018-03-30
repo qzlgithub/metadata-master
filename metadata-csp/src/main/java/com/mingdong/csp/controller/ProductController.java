@@ -78,13 +78,14 @@ public class ProductController
     public RestResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.HIT, required = false) Integer hit,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestResp resp = new RestResp();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
-        productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate,
+        productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate, hit,
                 new Page(pageNum, pageSize), resp);
         return resp;
     }
@@ -96,13 +97,14 @@ public class ProductController
     @GetMapping(value = "/product/request/export")
     public void exportProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
-            @RequestParam(value = Field.TO_DATE, required = false) Date toDate, HttpServletResponse response)
+            @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
+            @RequestParam(value = Field.HIT, required = false) Integer hit, HttpServletResponse response)
             throws IOException
     {
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         XSSFWorkbook wb = productService.createProductRequestXlsx(RequestThread.getClientId(), productId, fromDate,
-                toDate);
+                toDate, hit);
         String filename = new String("产品服务请求记录".getBytes(), "ISO8859-1");
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment;filename=" + filename + ".xlsx");

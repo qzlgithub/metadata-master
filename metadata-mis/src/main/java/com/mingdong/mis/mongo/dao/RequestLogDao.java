@@ -13,12 +13,12 @@ public interface RequestLogDao
 
     long countByRequestTime(Date startTime, Date endTime);
 
-    long countByParam(Long clientId, Long clientUserId, Long productId, Date startTime, Date endTime);
+    long countByParam(Long clientId, Long clientUserId, Long productId, Date startTime, Date endTime, Integer hit);
 
     long countByParam(String keyword, Long productId, Integer billPlan, Integer hit, Date startTime, Date endTime);
 
     BigDecimal sumFeeByParam(String keyword, Long productId, Integer billPlan, Date fromDate, Date toDate);
 
     List<RequestLog> findByParam(String keyword, Long clientId, Long clientUserId, Long productId, Integer billPlan,
-            Date startTime, Date endTime, Page page);
+            Date startTime, Date endTime, Integer hit, Page page);
 }

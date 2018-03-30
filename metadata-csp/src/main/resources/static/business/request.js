@@ -32,9 +32,10 @@ function requestListInit() {
     var obj = {
         pageNum: 1,
         pageSize: 10,
-        productId: $("#product-sel").val().trim(),
-        fromDate: $("#from-date").val().trim(),
-        toDate: $("#to-date").val().trim()
+        productId: $("#product-sel").val(),
+        fromDate: $("#from-date").val(),
+        toDate: $("#to-date").val(),
+        hit: $("#hit").val()
     };
     getRequestList(obj, function(pageObj, pages, total) {
         $('#pagination').paging({
@@ -68,6 +69,7 @@ function getRequestList(obj, pageFun) {
             "pageNum": obj['pageNum'],
             "pageSize": obj['pageSize'],
             "productId": obj['productId'],
+            "hit": obj['hit'],
             "fromDate": obj['fromDate'] === '' ? '' : obj['fromDate'] + " 00:00:00",
             "toDate": obj['toDate'] === '' ? '' : obj['toDate'] + " 23:59:59"
         },
@@ -105,7 +107,8 @@ function requestExport() {
     var productId = $("#product-sel").val();
     var fromDate = $("#from-date").val();
     var toDate = $("#to-date").val();
-    var url = '/product/request/export?productId=' + productId
+    var hit = $("#hit").val();
+    var url = '/product/request/export?productId=' + productId + "&hit=" + hit
         + "&fromDate=" + (fromDate == '' ? '' : fromDate + " 00:00:00")
         + "&toDate=" + (toDate == '' ? '' : toDate + " 23:59:59");
     location.href = encodeURI(url);

@@ -118,11 +118,11 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
-            RestResp resp)
+    public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit,
+            Page page, RestResp resp)
     {
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientRequestRecord(clientId, null, productId,
-                fromDate, toDate, page);
+                fromDate, toDate, hit, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -148,7 +148,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate)
+    public XSSFWorkbook createProductRequestXlsx(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("历史消费记录");
@@ -162,7 +162,7 @@ public class ProductServiceImpl implements ProductService
         row.createCell(6).setCellValue("余额(元)");
         Page page = new Page(1, 1000);
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientRequestRecord(clientId, null, productId,
-                fromDate, toDate, page);
+                fromDate, toDate, hit, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {

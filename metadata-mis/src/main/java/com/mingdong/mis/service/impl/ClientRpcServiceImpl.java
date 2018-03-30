@@ -994,10 +994,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     public ListDTO<AccessResDTO> getClientBillListBy(String keyword, Long productId, Integer billPlan, Date fromDate,
-            Date toDate, Page page)
+            Date toDate, Integer hit, Page page)
     {
         ListDTO<AccessResDTO> dto = new ListDTO<>();
-        long total = requestLogDao.countByParam(keyword, productId, billPlan, null, fromDate, toDate);
+        long total = requestLogDao.countByParam(keyword, productId, billPlan, hit, fromDate, toDate);
         long pages = page.getPages(total);
         BigDecimal totalFee = requestLogDao.sumFeeByParam(keyword, productId, billPlan, fromDate, toDate);
         long missCount = requestLogDao.countByParam(keyword, productId, billPlan, TrueOrFalse.FALSE, fromDate, toDate);
@@ -1007,7 +1007,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(total > 0 && page.getPageNum() <= pages)
         {
             List<RequestLog> dataList = requestLogDao.findByParam(keyword, null, null, productId, billPlan, fromDate,
-                    toDate, page);
+                    toDate, hit, page);
             List<AccessResDTO> list = new ArrayList<>(dataList.size());
             for(RequestLog o : dataList)
             {
@@ -1066,16 +1066,16 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     public ListDTO<AccessResDTO> getClientRequestRecord(Long clientId, Long userId, Long productId, Date startDate,
-            Date endDate, Page page)
+            Date endDate, Integer hit, Page page)
     {
         ListDTO<AccessResDTO> listDTO = new ListDTO<>();
-        long total = requestLogDao.countByParam(clientId, userId, productId, startDate, endDate);
+        long total = requestLogDao.countByParam(clientId, userId, productId, startDate, endDate, hit);
         listDTO.setTotal(total);
         long pages = page.getPages(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             List<AccessResDTO> list = queryRequestLogData(null, clientId, userId, productId, null, startDate, endDate,
-                    page);
+                    hit, page);
             listDTO.setList(list);
         }
         return listDTO;
@@ -1162,7 +1162,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
-            List<AccessResDTO> list = queryRequestLogData(null, null, null, null, null, fromDate, toDate, page);
+            List<AccessResDTO> list = queryRequestLogData(null, null, null, null, null, fromDate, toDate, null, page);
             listDTO.setList(list);
         }
         return listDTO;
@@ -1843,11 +1843,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     private List<AccessResDTO> queryRequestLogData(String keyword, Long clientId, Long clientUserId, Long productId,
-            Integer billPlan, Date startDate, Date endDate, Page page)
+            Integer billPlan, Date startDate, Date endDate, Integer hit, Page page)
     {
         List<AccessResDTO> list = new ArrayList<>();
         List<RequestLog> dataList = requestLogDao.findByParam(keyword, clientId, clientUserId, productId, billPlan,
-                startDate, endDate, page);
+                startDate, endDate, hit, page);
         for(RequestLog o : dataList)
         {
             AccessResDTO dto = new AccessResDTO();

@@ -427,7 +427,7 @@ public class StatsServiceImpl implements StatsService
         String dateStr = sdf.format(beforeDate);
         String currentDayStr = sdf.format(currentDay);
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
-                currentDay, page);
+                currentDay, null, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.MISS_COUNT, listDTO.getExtradata().get(Field.MISS_COUNT));
         res.addData(Field.TITLE,
@@ -480,7 +480,7 @@ public class StatsServiceImpl implements StatsService
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(name, productId, null, beforeDate,
-                currentDay, page);
+                currentDay, null, page);
         List<AccessResDTO> dataList = listDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {

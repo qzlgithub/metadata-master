@@ -111,14 +111,15 @@ public class ClientController
             @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.START_TIME, required = false) Date startTime,
             @RequestParam(value = Field.END_TIME, required = false) Date endTime,
+            @RequestParam(value = Field.HIT, required = false) Integer hit,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestListResp res = new RestListResp();
         startTime = startTime == null ? null : BusinessUtils.getDayStartTime(startTime);
         endTime = endTime == null ? null : BusinessUtils.getLastDayStartTime(endTime);
-        clientService.getClientRequestList(clientId, userId, productId, startTime, endTime, new Page(pageNum, pageSize),
-                res);
+        clientService.getClientRequestList(clientId, userId, productId, startTime, endTime, hit,
+                new Page(pageNum, pageSize), res);
         return res;
 
     }

@@ -175,4 +175,5 @@ public interface Field
     String FILE_NAME = "fileName";
     String FILE_OTHER_PATH = "fileOtherPath";
     String FILE_REALITY_PATH = "fileRealityPath";
+    String HIT = "hit";
 }
