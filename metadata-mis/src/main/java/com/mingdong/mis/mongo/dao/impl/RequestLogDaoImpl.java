@@ -5,6 +5,7 @@ import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
 import com.mingdong.mis.mongo.entity.RequestLog;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -127,6 +128,7 @@ public class RequestLogDaoImpl implements RequestLogDao
         }
         setTimeRange(query, startTime, endTime);
         query.skip((page.getPageNum() - 1) * page.getPageSize()).limit(page.getPageSize());
+        query.with(new Sort(Sort.Direction.DESC, "timestamp")); // 按时间倒序
         return mongoTemplate.find(query, RequestLog.class);
     }
 
