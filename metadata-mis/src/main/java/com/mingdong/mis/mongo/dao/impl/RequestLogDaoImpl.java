@@ -128,7 +128,7 @@ public class RequestLogDaoImpl implements RequestLogDao
         }
         setTimeRange(query, startTime, endTime);
         query.skip((page.getPageNum() - 1) * page.getPageSize()).limit(page.getPageSize());
-        query.with(new Sort(Sort.Direction.DESC, "timestamp")); // 按时间倒序
+        query.with(new Sort(Sort.Direction.DESC, "_id")); // 按请求序号倒序
         return mongoTemplate.find(query, RequestLog.class);
     }
 
