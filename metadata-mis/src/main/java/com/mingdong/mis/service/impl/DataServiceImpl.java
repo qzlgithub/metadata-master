@@ -51,7 +51,8 @@ public class DataServiceImpl implements DataService
     @Override
     @Transactional
     public String chargeAndSaveRequestLog(Long clientId, Long clientUserId, Long productId, Long clientProductId,
-            BigDecimal fee, BigDecimal balance, String host, AbsPayload payload, boolean hit, Date timestamp)
+            BillPlan billPlan, BigDecimal fee, BigDecimal balance, String host, AbsPayload payload, boolean hit,
+            Date timestamp)
     {
         // 更新产品账户余额
         ClientProduct clientProduct = new ClientProduct();
@@ -60,7 +61,7 @@ public class DataServiceImpl implements DataService
         clientProduct.setBalance(balance.subtract(fee));
         clientProductMapper.updateSkipNull(clientProduct);
         // 保存请求记录并返回请求单号
-        return insertRequestLog(clientId, clientUserId, productId, host, payload, hit, BillPlan.PER_USE, fee, balance,
+        return insertRequestLog(clientId, clientUserId, productId, host, payload, hit, billPlan, fee, balance,
                 timestamp);
     }
 

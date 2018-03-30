@@ -1,5 +1,6 @@
 package com.mingdong.mis.service;
 
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.mis.model.vo.AbsPayload;
 
 import java.math.BigDecimal;
@@ -11,5 +12,6 @@ public interface DataService
             boolean hit, Date timestamp);
 
     String chargeAndSaveRequestLog(Long clientId, Long clientUserId, Long productId, Long clientProductId,
-            BigDecimal fee, BigDecimal balance, String host, AbsPayload payload, boolean hit, Date timestamp);
+            BillPlan billPlan, BigDecimal fee, BigDecimal balance, String host, AbsPayload payload, boolean hit,
+            Date timestamp);
 }

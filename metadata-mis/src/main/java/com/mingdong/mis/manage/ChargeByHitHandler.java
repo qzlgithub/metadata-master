@@ -3,6 +3,7 @@ package com.mingdong.mis.manage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MDResult;
@@ -71,8 +72,8 @@ public class ChargeByHitHandler implements IChargeHandler
             //
             String requestNo = dataService.chargeAndSaveRequestLog(RequestThread.getClientId(),
                     RequestThread.getUserId(), RequestThread.getProductId(), checkResult.getClientProductId(),
-                    checkResult.getUnitAmt(), checkResult.getBalance(), RequestThread.getHost(), payload,
-                    metadata.isHit(), resp.requestAt());
+                    BillPlan.PER_HIT, checkResult.getUnitAmt(), checkResult.getBalance(), RequestThread.getHost(),
+                    payload, metadata.isHit(), resp.requestAt());
             resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             resp.setRequestNo(requestNo);
             resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
