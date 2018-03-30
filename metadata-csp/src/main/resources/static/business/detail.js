@@ -22,8 +22,6 @@ layui.config({
             shadeClose: true
         });
     });
-    $("#cp-app-id").on('click', function() {
-    });
     $('#next-step').on('click', function() {
         var password = $("#password").val();
         if(password === '') {

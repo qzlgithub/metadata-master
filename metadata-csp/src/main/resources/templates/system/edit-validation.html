@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item tc mt30">
-                    <a href="javascript:" class="ml20 layui-btn" id="next-step" style="width: 15%;">下一步</a>
+                    <button class="ml20 layui-btn" id="next-step" style="width: 15%;">下一步</button>
                 </div>
             </div>
         </div>
@@ -82,6 +82,10 @@
         $("#li-security-id").addClass("active");
         $("#next-step").click(function() {
             var pwd = $("#password").val();
+            if(pwd == ""){
+                layer.msg("密码不能为空！");
+                return;
+            }
             pwd = MD5(pwd);
             window.location.href = "/system/edit-appKey.html?p=" + pwd;
         });

@@ -689,5 +689,5 @@ body {
 a.tz-btn{color: #fff; text-decoration: none;}
 .home-list li{margin: 0.5%; float: left; width: 20.33333%; background: #fff;}
 .home-table-tab{border-bottom: solid 1px #1E9FFF;}
-.home-table-tab li{background: #fff; padding: 10px 20px; color: #333;float: left; margin-right: 5px; border-radius: 5px 5px 0px 0px}
+.home-table-tab li{background: #fff; padding: 10px 20px; color: #333;float: left; margin-right: 5px; border-radius: 5px 5px 0px 0px; cursor: pointer}
 .home-table-tab li.active{background:#1E9FFF; color: #fff; border-radius: 5px 5px 0px 0px}
