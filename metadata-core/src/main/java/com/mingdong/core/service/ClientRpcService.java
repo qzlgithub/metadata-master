@@ -8,6 +8,7 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
+import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -20,9 +21,11 @@ import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -196,4 +199,52 @@ public interface ClientRpcService
     void quartzClientRemind(Date date);
 
     ResponseDTO updateClientRemind(Long remindId, String remark);
+
+    /**
+     * 获取总客户数量
+     */
+    Integer getAllClientCount();
+
+    /**
+     * 根据日期获取客户数量
+     */
+    Integer getClientCountByDate(Date fromDate, Date toDate);
+
+    /**
+     * 根据日期获取客户信息列表
+     */
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate, Page page);
+
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate);
+
+    /**
+     * 根据日期获取充值总额
+     */
+    BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate);
+
+    /**
+     * 获取充值总额
+     */
+    BigDecimal getClientRechargeStatsAll();
+
+    /**
+     * 根据日期获取客户充值次数
+     */
+    Integer getClientRechargeCountByDate(Date fromDate, Date toDate);
+
+    ListDTO<StatsDateInfoResDTO> getRequestListStats(Date fromDate, Date toDate, String name, Long productId);
+
+    ListDTO<StatsDateInfoResDTO> getRevenueListStats(Date fromDate, Date toDate);
+
+    void statsByData(Date date);
+
+    void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList);
+
+    void statsRechargeByData(Date date);
+
+    BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate, Long managerId);
+
+    Integer getAllClientCount(Long managerId);
+
+    Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
 }

@@ -21,8 +21,6 @@
                      interface="com.mingdong.core.service.ClientRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="managerRpcService"
                      interface="com.mingdong.core.service.ManagerRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="statsRpcService"
-                     interface="com.mingdong.core.service.StatsRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="systemRpcService"
                      interface="com.mingdong.core.service.SystemRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService"

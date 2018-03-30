@@ -58,7 +58,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date date, Date currentDay, Page page)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         int total = statsClientMapper.getClientCountByDate(date, currentDay, null);
@@ -88,7 +88,7 @@ public class StatsRpcServiceImpl implements StatsRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date fromDate, Date toDate)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
         List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(fromDate, toDate);

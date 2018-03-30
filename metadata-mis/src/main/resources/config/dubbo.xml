@@ -22,7 +22,6 @@
     <dubbo:service interface="com.mingdong.core.service.ProductRpcService" ref="productRpcService" />
     <dubbo:service interface="com.mingdong.core.service.ClientRpcService" ref="clientRpcService" />
     <dubbo:service interface="com.mingdong.core.service.ManagerRpcService" ref="managerRpcService" />
-    <dubbo:service interface="com.mingdong.core.service.StatsRpcService" ref="statsRpcService" />
     <dubbo:service interface="com.mingdong.core.service.SystemRpcService" ref="systemRpcService" />
     <dubbo:service interface="com.mingdong.core.service.TradeRpcService" ref="tradeRpcService" />
 
@@ -31,7 +30,6 @@
     <bean id="productRpcService" class="com.mingdong.mis.service.impl.ProductRpcServiceImpl" />
     <bean id="clientRpcService" class="com.mingdong.mis.service.impl.ClientRpcServiceImpl" />
     <bean id="managerRpcService" class="com.mingdong.mis.service.impl.ManagerRpcServiceImpl" />
-    <bean id="statsRpcService" class="com.mingdong.mis.service.impl.StatsRpcServiceImpl" />
     <bean id="systemRpcService" class="com.mingdong.mis.service.impl.SystemRpcServiceImpl" />
     <bean id="tradeRpcService" class="com.mingdong.mis.service.impl.TradeRpcServiceImpl" />
 </beans>

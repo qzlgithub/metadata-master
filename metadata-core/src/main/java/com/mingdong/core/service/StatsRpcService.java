@@ -25,9 +25,9 @@ public interface StatsRpcService
     /**
      * 根据日期获取客户信息列表
      */
-    ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date fromDate, Date toDate, Page page);
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate, Page page);
 
-    ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date fromDate, Date toDate);
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate);
 
     /**
      * 根据日期获取充值总额

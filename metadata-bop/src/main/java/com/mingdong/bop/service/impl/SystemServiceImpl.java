@@ -35,8 +35,8 @@ import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.WarningSettingResDTO;
+import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
-import com.mingdong.core.service.StatsRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.util.DateCalculateUtils;
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class SystemServiceImpl implements SystemService
     @Resource
     private SystemRpcService systemRpcService;
     @Resource
-    private StatsRpcService statsRpcService;
+    private ClientRpcService clientRpcService;
 
     @Override
     public void checkIfIndustryExist(String code, RestResp resp)
@@ -499,11 +499,11 @@ public class SystemServiceImpl implements SystemService
         Map<String, Object> map = new HashMap<>();
         Date currentDay = new Date();
         Date monthFirst = DateCalculateUtils.getCurrentMonthFirst(currentDay, true);
-        BigDecimal amount = statsRpcService.getClientRechargeStatsByDate(monthFirst, currentDay,
+        BigDecimal amount = clientRpcService.getClientRechargeStatsByDate(monthFirst, currentDay,
                 RequestThread.isManager() ? null : RequestThread.getOperatorId());
-        Integer clientCountByDate = statsRpcService.getClientCountByDate(monthFirst, currentDay,
+        Integer clientCountByDate = clientRpcService.getClientCountByDate(monthFirst, currentDay,
                 RequestThread.isManager() ? null : RequestThread.getOperatorId());
-        Integer allClientCount = statsRpcService.getAllClientCount(
+        Integer allClientCount = clientRpcService.getAllClientCount(
                 RequestThread.isManager() ? null : RequestThread.getOperatorId());
         map.put(Field.AMOUNT, NumberUtils.formatAmount(amount));
         map.put(Field.CLIENT_COUNT_BY_DATE, clientCountByDate);

@@ -21,8 +21,6 @@
                      interface="com.mingdong.core.service.ClientRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="managerRpcService" url="dubbo://192.168.2.231:33002/"
                      interface="com.mingdong.core.service.ManagerRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="statsRpcService" url="dubbo://192.168.2.231:33002/"
-                     interface="com.mingdong.core.service.StatsRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="systemRpcService" url="dubbo://192.168.2.231:33002/"
                      interface="com.mingdong.core.service.SystemRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService" url="dubbo://192.168.2.231:33002/"
