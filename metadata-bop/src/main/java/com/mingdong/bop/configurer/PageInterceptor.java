@@ -19,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class PageInterceptor extends HandlerInterceptorAdapter
 {
-    private static Logger logger = LoggerFactory.getLogger(PageInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
     @Resource
@@ -29,7 +29,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
         String path = request.getRequestURI(); // same with request.getServletPath()
-        logger.info("Page request [{}]: {}", request.getMethod(), path);
+        logger.info("web page request [{}]: {}", request.getMethod(), path);
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         ManagerSession ms = redisDao.getManagerSession(sessionId);

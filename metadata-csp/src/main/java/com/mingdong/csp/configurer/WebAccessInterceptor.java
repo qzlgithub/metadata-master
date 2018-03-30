@@ -14,27 +14,22 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 @Configuration
 public class WebAccessInterceptor extends HandlerInterceptorAdapter
 {
-    private static Logger logger = LoggerFactory.getLogger(WebAccessInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
-        RequestThread.setTimeLong(new Date().getTime());
         String path = request.getRequestURI(); // same with request.getServletPath()
-        logger.info("Request to {}", path);
-        logger.info("Request method {}", request.getMethod());
+        logger.info("web page request [{}]: {}", request.getMethod(), path);
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            logger.info("HandlerMethod {}",
-                    handlerMethod.getBeanType().getName() + ";method:" + handlerMethod.getMethod().getName());
             String sessionId = request.getSession().getId();
             UserSession us = redisDao.getUserSession(sessionId);
             if(us == null)
@@ -64,14 +59,8 @@ public class WebAccessInterceptor extends HandlerInterceptorAdapter
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception
     {
+        RequestThread.removeBoolean();
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
-        Long timeLong = RequestThread.getTimeLong();
-        long time = new Date().getTime();
-        Long dif = time - timeLong;
-        Double second = dif / 1000.0;
-        RequestThread.removeLong();
-        logger.info("Time consuming {}", second + "s");
-        RequestThread.removeBoolean();
     }
 }

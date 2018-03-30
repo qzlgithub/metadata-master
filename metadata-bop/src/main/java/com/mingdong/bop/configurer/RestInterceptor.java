@@ -5,6 +5,7 @@ import com.mingdong.bop.constant.ModulePath;
 import com.mingdong.bop.model.ManagerSession;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.common.constant.Charset;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.RestResp;
@@ -23,7 +24,7 @@ import java.util.Map;
 @Configuration
 public class RestInterceptor extends HandlerInterceptorAdapter
 {
-    private static Logger logger = LoggerFactory.getLogger(RestInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
     @Resource
@@ -33,7 +34,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
         String path = request.getRequestURI(); // same with request.getServletPath()
-        logger.info("Rest request [{}]: {}", request.getMethod(), path);
+        logger.info("rest api request [{}]: {}", request.getMethod(), path);
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -46,7 +47,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter
                 if(ms == null)
                 {
                     String resp = RestResp.getErrorResp(RestResult.ACCESS_LIMITED);
-                    response.getOutputStream().write(resp.getBytes("UTF-8"));
+                    response.getOutputStream().write(resp.getBytes(Charset.UTF_8));
                     return false;
                 }
                 RequestThread.set(ms.getManagerId(), ms.getName(), ms.getRoleType(), ms.getPrivileges());
