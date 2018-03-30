@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.mingdong.bop.component.FileUpload;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
@@ -42,14 +43,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class SystemServiceImpl implements SystemService
@@ -385,25 +384,14 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
-        String fileName = upfile.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        String otherFileName = "min_" + UUID.randomUUID() + suffixName;
-        String filePath = param.getSaveFilePath();
-        File dir = new File(filePath);
-        if(!dir.exists())
-        {
-            dir.mkdirs();
-        }
-        String otherPath = otherFileName;
-        File dest = new File(param.getSaveFilePath() + otherPath);
+        Map<String, String> map = null;
         try
         {
-            upfile.transferTo(dest);
+            map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            otherPath = null;
         }
         ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
         articlesReqDTO.setId(articlesVO.getId());
@@ -411,7 +399,7 @@ public class SystemServiceImpl implements SystemService
         articlesReqDTO.setContent(articlesVO.getContent());
         articlesReqDTO.setDeleted(TrueOrFalse.FALSE);
         articlesReqDTO.setPublished(articlesVO.getPublished());
-        articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
+        articlesReqDTO.setImagePath(map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
         articlesReqDTO.setOrderId(articlesVO.getOrderId());
         articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
         articlesReqDTO.setTitle(articlesVO.getTitle());
@@ -430,10 +418,6 @@ public class SystemServiceImpl implements SystemService
         catch(Exception e)
         {
             e.printStackTrace();
-            if(dest.exists())
-            {
-                dest.delete();
-            }
             resp.setError(RestResult.SYSTEM_ERROR);
         }
     }
@@ -441,30 +425,16 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void updateArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
-        String otherFileName;
-        String otherPath = null;
-        File dest = null;
+        Map<String, String> map = null;
         if(upfile != null)
         {
-            String fileName = upfile.getOriginalFilename();
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));
-            otherFileName = "min_" + UUID.randomUUID() + suffixName;
-            String filePath = param.getSaveFilePath();
-            File dir = new File(filePath);
-            if(!dir.exists())
-            {
-                dir.mkdirs();
-            }
-            otherPath = otherFileName;
-            dest = new File(param.getSaveFilePath() + otherPath);
             try
             {
-                upfile.transferTo(dest);
+                map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
             }
             catch(Exception e)
             {
                 e.printStackTrace();
-                otherPath = null;
             }
         }
         ArticlesReqDTO articlesReqDTO = new ArticlesReqDTO();
@@ -472,7 +442,7 @@ public class SystemServiceImpl implements SystemService
         articlesReqDTO.setAuthor(articlesVO.getAuthor());
         articlesReqDTO.setContent(articlesVO.getContent());
         articlesReqDTO.setPublished(articlesVO.getPublished());
-        articlesReqDTO.setImagePath(StringUtils.isNullBlank(otherPath) ? null : (param.getFileNginxUrl() + otherPath));
+        articlesReqDTO.setImagePath(map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
         articlesReqDTO.setOrderId(articlesVO.getOrderId());
         articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
         articlesReqDTO.setTitle(articlesVO.getTitle());
@@ -490,10 +460,6 @@ public class SystemServiceImpl implements SystemService
         catch(Exception e)
         {
             e.printStackTrace();
-            if(dest != null && dest.exists())
-            {
-                dest.delete();
-            }
             resp.setError(RestResult.SYSTEM_ERROR);
         }
     }
@@ -602,37 +568,23 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void updateWarningSetting(MultipartFile upfile, WarningSettingVO warningSettingVO, RestResp resp)
     {
-        String otherFileName;
-        String fileName = null;
-        String otherPath = null;
-        File dest = null;
+        Map<String, String> map = null;
         if(upfile != null)
         {
-            fileName = upfile.getOriginalFilename();
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));
-            otherFileName = "play_" + UUID.randomUUID() + suffixName;
-            String filePath = param.getSaveFilePath();
-            File dir = new File(filePath);
-            if(!dir.exists())
-            {
-                dir.mkdirs();
-            }
-            otherPath = otherFileName;
-            dest = new File(param.getSaveFilePath() + otherPath);
             try
             {
-                upfile.transferTo(dest);
+                map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
             }
             catch(Exception e)
             {
                 e.printStackTrace();
-                otherPath = null;
             }
         }
         WarningSettingReqDTO warningSettingReqDTO = new WarningSettingReqDTO();
         warningSettingReqDTO.setId(warningSettingVO.getId());
-        warningSettingReqDTO.setFileName(fileName);
-        warningSettingReqDTO.setFilePath(otherPath);
+        warningSettingReqDTO.setFileName(map == null ? null : map.get(Field.FILE_NAME));
+        warningSettingReqDTO.setFilePath(
+                map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
         warningSettingReqDTO.setSend(warningSettingReqDTO.getSend());
         warningSettingReqDTO.setPlay(warningSettingReqDTO.getPlay());
         warningSettingReqDTO.setGeneralLimit(warningSettingReqDTO.getGeneralLimit());
@@ -650,10 +602,6 @@ public class SystemServiceImpl implements SystemService
         catch(Exception e)
         {
             e.printStackTrace();
-            if(dest != null && dest.exists())
-            {
-                dest.delete();
-            }
             resp.setError(RestResult.SYSTEM_ERROR);
         }
     }

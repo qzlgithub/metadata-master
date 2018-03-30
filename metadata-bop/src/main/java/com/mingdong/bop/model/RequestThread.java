@@ -11,7 +11,28 @@ import java.util.Map;
 
 public class RequestThread
 {
+    public static final List<String> clientLinks = new ArrayList<>();
+    public static final List<String> financeLinks = new ArrayList<>();
+    public static final List<String> systemLinks = new ArrayList<>();
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
+    public static String clientLinkPath;
+    public static String financeLinkPath;
+    public static String systemLinkPath;
+
+    static
+    {
+        clientLinks.add(ModulePath.CLIENT_INDEX.getModuleId());
+        financeLinks.add(ModulePath.FINANCE_RECHARGE.getModuleId());
+        financeLinks.add(ModulePath.FINANCE_CONSUMPTION.getModuleId());
+        systemLinks.add(ModulePath.SETTING_USER.getModuleId());
+        systemLinks.add(ModulePath.SETTING_ROLE.getModuleId());
+        systemLinks.add(ModulePath.SETTING_PRODUCT.getModuleId());
+        systemLinks.add(ModulePath.STRING_ARTICLES.getModuleId());
+        systemLinks.add(ModulePath.SETTING_MENU.getModuleId());
+        systemLinks.add(ModulePath.SETTING_RECHARGE.getModuleId());
+        systemLinks.add(ModulePath.SETTING_INDUSTRY.getModuleId());
+        systemLinks.add(ModulePath.SETTING_OTHER.getModuleId());
+    }
 
     public static void set(Long managerId, String managerName, Integer roleType, List<String> privilege)
     {
@@ -38,29 +59,6 @@ public class RequestThread
         get().setiSystem(iSystem);
     }
 
-    public static final List<String> clientLinks = new ArrayList<>();
-    public static final List<String> financeLinks = new ArrayList<>();
-    public static final List<String> systemLinks = new ArrayList<>();
-
-    static
-    {
-        clientLinks.add(ModulePath.CLIENT_INDEX.getModuleId());
-        financeLinks.add(ModulePath.FINANCE_RECHARGE.getModuleId());
-        financeLinks.add(ModulePath.FINANCE_CONSUMPTION.getModuleId());
-        systemLinks.add(ModulePath.SETTING_USER.getModuleId());
-        systemLinks.add(ModulePath.SETTING_ROLE.getModuleId());
-        systemLinks.add(ModulePath.SETTING_PRODUCT.getModuleId());
-        systemLinks.add(ModulePath.STRING_ARTICLES.getModuleId());
-        systemLinks.add(ModulePath.SETTING_MENU.getModuleId());
-        systemLinks.add(ModulePath.SETTING_RECHARGE.getModuleId());
-        systemLinks.add(ModulePath.SETTING_INDUSTRY.getModuleId());
-        systemLinks.add(ModulePath.SETTING_OTHER.getModuleId());
-    }
-
-    public static String clientLinkPath;
-    public static String financeLinkPath;
-    public static String systemLinkPath;
-
     public static Map<String, Object> getMap()
     {
         Map<String, Object> m = new HashMap<>();
@@ -83,7 +81,9 @@ public class RequestThread
             if(!CollectionUtils.isEmpty(tempList))
             {
                 clientLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }else{
+            }
+            else
+            {
                 clientLinkPath = "";
             }
         }
@@ -99,7 +99,9 @@ public class RequestThread
             if(!CollectionUtils.isEmpty(tempList))
             {
                 financeLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }else{
+            }
+            else
+            {
                 financeLinkPath = "";
             }
         }
@@ -115,7 +117,9 @@ public class RequestThread
             if(!CollectionUtils.isEmpty(tempList))
             {
                 systemLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }else{
+            }
+            else
+            {
                 systemLinkPath = "";
             }
         }

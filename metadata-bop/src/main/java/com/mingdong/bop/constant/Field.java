@@ -173,4 +173,6 @@ public interface Field
     String SEVERITY_LIMIT = "severityLimit";
     String WARNING_LIMIT = "warningLimit";
     String FILE_NAME = "fileName";
+    String FILE_OTHER_PATH = "fileOtherPath";
+    String FILE_REALITY_PATH = "fileRealityPath";
 }
