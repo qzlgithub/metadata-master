@@ -636,33 +636,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page)
-    {
-        ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        int total = statsClientMapper.getClientCountByDate(startTime, endTime, null);
-        long pages = page.getPages(total);
-        listDTO.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
-        {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(startTime, endTime);
-            List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
-            for(ClientInfo item : dataList)
-            {
-                ClientInfoResDTO dto = new ClientInfoResDTO();
-                dto.setRegisterTime(item.getRegisterTime());
-                dto.setCorpName(item.getCorpName());
-                dto.setShortName(item.getShortName());
-                dto.setUsername(item.getUsername());
-                dto.setManagerName(item.getManagerName());
-                list.add(dto);
-            }
-            listDTO.setList(list);
-        }
-        return listDTO;
-    }
-
-    @Override
     @Transactional
     public ResponseDTO addClient(ClientReqDTO reqDTO)
     {
@@ -1587,40 +1560,37 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date date, Date currentDay, Page page)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        int total = statsClientMapper.getClientCountByDate(date, currentDay, null);
+        int total = statsClientMapper.getClientCountByDate(startTime, endTime, null);
         long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(date, currentDay);
-            if(!CollectionUtils.isEmpty(dataList))
+            List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(startTime, endTime);
+            List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
+            for(ClientInfo item : dataList)
             {
-                List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
-                for(ClientInfo o : dataList)
-                {
-                    ClientInfoResDTO ci = new ClientInfoResDTO();
-                    ci.setRegisterTime(o.getRegisterTime());
-                    ci.setCorpName(o.getCorpName());
-                    ci.setShortName(o.getShortName());
-                    ci.setUsername(o.getUsername());
-                    ci.setManagerName(o.getManagerName());
-                    list.add(ci);
-                }
-                listDTO.setList(list);
+                ClientInfoResDTO dto = new ClientInfoResDTO();
+                dto.setRegisterTime(item.getRegisterTime());
+                dto.setCorpName(item.getCorpName());
+                dto.setShortName(item.getShortName());
+                dto.setUsername(item.getUsername());
+                dto.setManagerName(item.getManagerName());
+                list.add(dto);
             }
+            listDTO.setList(list);
         }
         return listDTO;
     }
 
     @Override
-    public ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate)
+    public ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime)
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(fromDate, toDate);
+        List<ClientInfo> dataList = clientInfoMapper.getClientInfoListByDate(startTime, endTime);
         listDTO.setTotal(dataList.size());
         if(!CollectionUtils.isEmpty(dataList))
         {

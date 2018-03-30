@@ -122,11 +122,6 @@ public interface ClientRpcService
     void setClientPassword(List<Long> idList, String password);
 
     /**
-     * 根据条件获取客户信息列表
-     */
-    ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
-
-    /**
      * 新增客户
      */
     ResponseDTO addClient(ClientReqDTO reqDTO);
@@ -211,11 +206,11 @@ public interface ClientRpcService
     Integer getClientCountByDate(Date fromDate, Date toDate);
 
     /**
-     * 根据日期获取客户信息列表
+     * 根据条件获取客户信息列表
      */
-    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate, Page page);
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime, Page page);
 
-    ListDTO<ClientInfoResDTO> getClientInfoListByDate1(Date fromDate, Date toDate);
+    ListDTO<ClientInfoResDTO> getClientInfoListByDate(Date startTime, Date endTime);
 
     /**
      * 根据日期获取充值总额

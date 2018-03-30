@@ -169,7 +169,7 @@ public class StatsServiceImpl implements StatsService
         row.createCell(4).setCellValue("商务经理");
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListByDate1(beforeDate, currentDay, page);
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay, page);
         List<ClientInfoResDTO> dataList = listDTO.getList();
 
         if(!CollectionUtils.isEmpty(dataList))
@@ -202,7 +202,7 @@ public class StatsServiceImpl implements StatsService
         JSONArray jsonArraySec;
         Date currentDay = new Date();
         Date beforeDate = findDateByScopeType(scopeTypeEnum, currentDay);
-        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListByDate1(beforeDate, currentDay);
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListByDate(beforeDate, currentDay);
         List<ClientInfoResDTO> dataList = listDTO.getList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Integer> dateMap = new LinkedHashMap<>();
