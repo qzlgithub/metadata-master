@@ -2,7 +2,9 @@ package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.ueditor.ActionEnter;
+import com.mingdong.bop.component.FileUpload;
 import com.mingdong.bop.component.Param;
+import com.mingdong.bop.constant.Field;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.UUID;
+import java.util.Map;
 
 @Controller
 public class UEditorController
@@ -45,51 +46,22 @@ public class UEditorController
 
     @PostMapping(value = "/ueditor/file")
     @ResponseBody
-    public String image(@RequestParam(value = "upfile") MultipartFile upfile,
-            @RequestParam(value = "id", required = false) Long id)
+    public String image(@RequestParam(value = "upfile") MultipartFile upfile)
     {
-        String fileName = upfile.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        String otherFileName = UUID.randomUUID() + suffixName;
-        String filePath = null;
-        File dest = null;
-        String otherPath = null;
-        if(id != null)
-        {
-            filePath = param.getSaveFilePath() + id.toString();
-            File dir = new File(filePath);
-            if(!dir.exists())
-            {
-                dir.mkdirs();
-            }
-            otherPath = id.toString() + File.separator + otherFileName;
-            dest = new File(param.getSaveFilePath() + otherPath);
-        }
-        else
-        {
-            filePath = param.getSaveFilePath();
-            File dir = new File(filePath);
-            if(!dir.exists())
-            {
-                dir.mkdirs();
-            }
-            otherPath = otherFileName;
-            dest = new File(filePath + otherPath);
-        }
-
+        JSONObject jsonObject = new JSONObject();
         try
         {
-            upfile.transferTo(dest);
+            Map<String, String> map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
+            jsonObject.put("state", "SUCCESS");
+            jsonObject.put("url", param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH));
+            jsonObject.put("title", map.get(Field.FILE_NAME));
+            jsonObject.put("original", map.get(Field.FILE_NAME));
         }
         catch(Exception e)
         {
             e.printStackTrace();
+            jsonObject.put("state", "ERROR");
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("state", "SUCCESS");
-        jsonObject.put("url", param.getFileNginxUrl() + otherPath);
-        jsonObject.put("title", otherFileName);
-        jsonObject.put("original", otherFileName);
         return jsonObject.toJSONString();
     }
 }
