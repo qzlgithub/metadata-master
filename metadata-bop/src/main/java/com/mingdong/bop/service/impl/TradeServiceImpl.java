@@ -141,7 +141,7 @@ public class TradeServiceImpl implements TradeService
             Integer hit, Page page, RestListResp res)
     {
         ListDTO<AccessResDTO> listDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan, fromDate,
-                toDate, null, page);
+                toDate, hit, page);
         res.setTotal(listDTO.getTotal());
         res.addData(Field.TOTAL_FEE, listDTO.getExtradata().get(Field.TOTAL_FEE));
         if(listDTO.getList() != null)
