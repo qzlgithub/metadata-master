@@ -114,7 +114,7 @@ public class TradeRpcServiceImpl implements TradeRpcService
             recharge.setUpdateTime(date);
             recharge.setClientId(reqDTO.getClientId());
             recharge.setProductId(reqDTO.getProductId());
-            recharge.setTradeNo(redisDao.getRechargeOrderNo());
+            recharge.setTradeNo(redisDao.getRechargeNo());
             recharge.setContractNo(reqDTO.getContractNo());
             recharge.setBillPlan(reqDTO.getBillPlan());
             recharge.setRechargeType(reqDTO.getRechargeType());

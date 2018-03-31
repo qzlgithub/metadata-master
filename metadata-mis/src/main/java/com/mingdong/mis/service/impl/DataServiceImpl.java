@@ -76,7 +76,7 @@ public class DataServiceImpl implements DataService
     private String insertRequestLog(Long clientId, Long clientUserId, Long productId, String host, AbsPayload payload,
             boolean hit, BillPlan billPlan, BigDecimal fee, BigDecimal balance, Date timestamp)
     {
-        String requestNo = redisDao.getAPIRequestNo(timestamp);
+        String requestNo = redisDao.getRequestNo(timestamp);
         RequestLog requestLog = new RequestLog();
         requestLog.setRequestNo(requestNo);
         requestLog.setTimestamp(timestamp);

@@ -58,7 +58,7 @@ public class ChargeServiceImpl implements ChargeService
             rechargeUpd.setBalance(recharge.getBalance().subtract(recharge.getUnitAmt()));
             rechargeMapper.updateSkipNull(rechargeUpd);
         }
-        String requestNo = redisDao.getAPIRequestNo(date);
+        String requestNo = redisDao.getRequestNo(date);
         RequestLog requestLog = new RequestLog();
         requestLog.setRequestNo(requestNo);
         requestLog.setTimestamp(date);

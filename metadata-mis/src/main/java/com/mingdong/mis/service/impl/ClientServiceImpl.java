@@ -141,8 +141,12 @@ public class ClientServiceImpl implements ClientService
         // 缓存用户接入凭证
         UserAuth auth = new UserAuth();
         auth.setClientId(clientProduct.getClientId());
+        auth.setCorpName(client.getCorpName());
+        auth.setPrimaryUsername(client.getUsername());
         auth.setUserId(user.getId());
+        auth.setUsername(user.getUsername());
         auth.setProductId(product.getId());
+        auth.setProductName(product.getName());
         auth.setClientProductId(clientProduct.getId());
         auth.setBillPlan(clientProduct.getBillPlan());
         if(BillPlan.BY_TIME.equals(clientProduct.getBillPlan()))
