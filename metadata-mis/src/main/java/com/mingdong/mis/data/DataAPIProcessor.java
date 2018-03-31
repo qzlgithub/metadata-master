@@ -6,8 +6,6 @@ import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.data.service.DSDataAPI;
 import com.mingdong.mis.model.IMetadata;
 import com.mingdong.mis.model.vo.AbsPayload;
-import com.mingdong.mis.model.vo.BlacklistVO;
-import com.mingdong.mis.model.vo.MultipleAppVO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,7 +19,7 @@ public class DataAPIProcessor
     public IMetadata revokeDataAPI(APIProduct product, AbsPayload bean)
             throws MetadataAPIException, MetadataCoreException
     {
-        switch(product)
+        /*switch(product)
         {
             case DS_DATA_BLACKLIST:
                 BlacklistVO blacklistVO = (BlacklistVO) bean;
@@ -29,7 +27,7 @@ public class DataAPIProcessor
             case DS_DATA_MULTI_APP:
                 MultipleAppVO multipleAppVO = (MultipleAppVO) bean;
                 return dsDataAPI.callMultipleApp(multipleAppVO);
-        }
+        }*/
         throw new MetadataAPIException("Invalid product: " + product);
     }
 }

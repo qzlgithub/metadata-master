@@ -1,4 +1,4 @@
-package com.mingdong.mis.manage;
+package com.mingdong.mis.handler;
 
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.vo.AbsPayload;

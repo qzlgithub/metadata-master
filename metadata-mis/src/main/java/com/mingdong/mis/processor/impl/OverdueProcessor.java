@@ -1,4 +1,4 @@
-package com.mingdong.mis.processor;
+package com.mingdong.mis.processor.impl;
 
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.mis.model.Metadata;
@@ -9,6 +9,7 @@ import com.mingdong.mis.mongo.dao.FinOverduePlatformDao;
 import com.mingdong.mis.mongo.dao.FinOverdueUserDao;
 import com.mingdong.mis.mongo.entity.FinOverduePlatform;
 import com.mingdong.mis.mongo.entity.FinOverdueUser;
+import com.mingdong.mis.processor.IProcessor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

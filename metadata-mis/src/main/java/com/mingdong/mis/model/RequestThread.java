@@ -17,44 +17,15 @@ public class RequestThread
         return threadHolder.get();
     }
 
-    public static Long getClientId()
+    public static void cleanup()
     {
-        return get().getClientId();
+        threadHolder.remove();
     }
 
-    public static void setClientId(Long clientId)
+    public static void setAccessInfo(UserAuth userAuth)
     {
-        get().setClientId(clientId);
-    }
-
-    public static Long getUserId()
-    {
-        return get().getUserId();
-    }
-
-    public static void setUserId(Long userId)
-    {
-        get().setUserId(userId);
-    }
-
-    public static Long getProductId()
-    {
-        return get().getProductId();
-    }
-
-    public static void setProductId(Long productId)
-    {
-        get().setProductId(productId);
-    }
-
-    public static Long getClientProductId()
-    {
-        return get().getClientProductId();
-    }
-
-    public static void setClientProductId(Long accountId)
-    {
-        get().setClientProductId(accountId);
+        get().setUserAuth(userAuth);
+        get().setProduct(APIProduct.getByCode(userAuth.getProduct()));
     }
 
     public static APIProduct getProduct()
@@ -62,59 +33,69 @@ public class RequestThread
         return get().getProduct();
     }
 
-    public static void setProduct(APIProduct product)
+    public static Long getClientId()
     {
-        get().setProduct(product);
+        return get().getUserAuth().getClientId();
+    }
+
+    public static String getCorpName()
+    {
+        return get().getUserAuth().getCorpName();
+    }
+
+    public static String getPrimaryUsername()
+    {
+        return get().getUserAuth().getPrimaryUsername();
+    }
+
+    public static Long getUserId()
+    {
+        return get().getUserAuth().getUserId();
+    }
+
+    public static String getUsername()
+    {
+        return get().getUserAuth().getUsername();
+    }
+
+    public static Long getProductId()
+    {
+        return get().getUserAuth().getProductId();
+    }
+
+    public static String getProductName()
+    {
+        return get().getUserAuth().getProductName();
+    }
+
+    public static Long getClientProductId()
+    {
+        return get().getUserAuth().getClientProductId();
     }
 
     public static Integer getBillPlan()
     {
-        return get().getBillPlan();
-    }
-
-    public static void setBillPlan(Integer billPlan)
-    {
-        get().setBillPlan(billPlan);
+        return get().getUserAuth().getBillPlan();
     }
 
     public static Long getStart()
     {
-        return get().getStart();
-    }
-
-    public static void setStart(Long start)
-    {
-        get().setStart(start);
+        return get().getUserAuth().getStart();
     }
 
     public static Long getEnd()
     {
-        return get().getEnd();
+        return get().getUserAuth().getEnd();
     }
 
-    public static void setEnd(Long end)
+    public static String getSecretKey()
     {
-        get().setEnd(end);
-    }
-
-    public static String getAppSecret()
-    {
-        return get().getAppSecret();
-    }
-
-    public static void setAppSecret(String appSecret)
-    {
-        get().setAppSecret(appSecret);
+        return get().getUserAuth().getSecretKey();
     }
 
     public static String getHost()
     {
-        return get().getHost();
-    }
-
-    public static void setHost(String ip)
-    {
-        get().setHost(ip);
+        return get().getUserAuth().getHost();
     }
 
     public static MDResp getResp()
@@ -125,10 +106,5 @@ public class RequestThread
     public static void setResp(MDResp resp)
     {
         get().setResp(resp);
-    }
-
-    public static void cleanup()
-    {
-        threadHolder.remove();
     }
 }

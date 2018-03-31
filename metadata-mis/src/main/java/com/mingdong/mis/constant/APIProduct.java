@@ -2,15 +2,30 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    CDK("/credit/overdue"),
-    DS_DATA_BLACKLIST("/ds-data/blacklist"),
-    DS_DATA_MULTI_APP("/ds-data/multi-app");
+    FIN_CDK("CDK", "/credit/overdue");
 
+    private final String code;
     private final String uri;
 
-    APIProduct(String uri)
+    APIProduct(String code, String uri)
     {
+        this.code = code;
         this.uri = uri;
+    }
+
+    public static APIProduct getByCode(String code)
+    {
+        if(code != null)
+        {
+            for(APIProduct o : APIProduct.values())
+            {
+                if(code.equals(o.code))
+                {
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 
     public static APIProduct targetOf(String name)

@@ -3,9 +3,8 @@ package com.mingdong.mis.controller;
 import com.mingdong.core.annotation.AuthRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.mis.constant.MDResult;
-import com.mingdong.mis.manage.ChargeByHitHandler;
-import com.mingdong.mis.manage.ChargeByTimeHandler;
-import com.mingdong.mis.manage.ChargeByUseHandler;
+import com.mingdong.mis.handler.impl.ChargeByTimeHandler;
+import com.mingdong.mis.handler.impl.ChargeByUseHandler;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.vo.PhoneVO;
@@ -23,15 +22,13 @@ public class CreditController
     private ChargeByTimeHandler chargeByTimeService;
     @Resource
     private ChargeByUseHandler chargeByUseService;
-    @Resource
-    private ChargeByHitHandler chargeByHitService;
 
     @AuthRequired
     @RequestMapping(value = "/credit/overdue")
     public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PhoneVO> requestVO)
     {
         MDResp resp = RequestThread.getResp();
-        MDResult result = requestVO.checkParamAndSign(RequestThread.getAppSecret());
+        MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
         if(result != MDResult.OK)
         {
             resp.setResult(result);
@@ -40,14 +37,12 @@ public class CreditController
         BillPlan billPlan = BillPlan.getById(RequestThread.getBillPlan());
         switch(billPlan)
         {
-            case PER_USE:
-                chargeByUseService.work(requestVO.getPayload(), resp);
-                break;
-            case PER_HIT:
-                chargeByHitService.work(requestVO.getPayload(), resp);
+            case BY_TIME:
+                chargeByTimeService.work(requestVO.getPayload(), resp);
                 break;
             default:
-                chargeByTimeService.work(requestVO.getPayload(), resp);
+                chargeByUseService.work(requestVO.getPayload(), resp);
+                break;
         }
         return resp;
     }

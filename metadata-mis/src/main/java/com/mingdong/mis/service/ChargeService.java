@@ -20,5 +20,5 @@ public interface ChargeService
     /**
      * 查询账户余额及计费方式
      */
-    CheckResult checkAccountAndBillPlan(Long clientId, Long productId, Integer billPlan);
+    CheckResult checkAccountAndBillPlan();
 }

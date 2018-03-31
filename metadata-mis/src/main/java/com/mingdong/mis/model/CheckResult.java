@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 public class CheckResult
 {
     private MDResult result;
-    private Long clientProductId;
     private BigDecimal unitAmt;
     private BigDecimal balance;
 
@@ -24,16 +23,6 @@ public class CheckResult
     public void setResult(MDResult result)
     {
         this.result = result;
-    }
-
-    public Long getClientProductId()
-    {
-        return clientProductId;
-    }
-
-    public void setClientProductId(Long clientProductId)
-    {
-        this.clientProductId = clientProductId;
     }
 
     public BigDecimal getUnitAmt()

@@ -6,7 +6,6 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.common.util.WebUtils;
 import com.mingdong.core.annotation.AuthRequired;
 import com.mingdong.mis.component.RedisDao;
-import com.mingdong.mis.constant.APIProduct;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.model.MDResp;
@@ -33,7 +32,8 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
         String uri = request.getRequestURI();
-        logger.info("rest api request: [{}], {}", request.getMethod(), uri);
+        String ip = WebUtils.getIp(request);
+        logger.info("rest api request from {}: [{}], {}", ip, request.getMethod(), uri);
         MDResp resp = MDResp.create();
         RequestThread.init();
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
@@ -42,6 +42,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
             if(annotation != null)
             {
                 String token = request.getHeader(Field.HEADER_ACCESS_TOKEN);
+                // 验证接入规范
                 if(StringUtils.isNullBlank(token))
                 {
                     resp.setResult(MDResult.ACCESS_DENIED);
@@ -49,36 +50,28 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                     return false;
                 }
                 UserAuth auth = redisDao.findAuth(token);
+                // 验证请求凭证
                 if(auth == null)
                 {
                     resp.setResult(MDResult.INVALID_ACCESS_TOKEN);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
-                APIProduct product = APIProduct.targetOf(auth.getProduct());
-                if(product == null || !uri.equals(product.getUri()))
-                {
-                    resp.setResult(MDResult.ACCESS_RESTRICTED);
-                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
-                    return false;
-                }
-                String ip = WebUtils.getIp(request);
+                // 验证ip白名单
                 if(!auth.getHost().equals(ip))
                 {
                     resp.setResult(MDResult.INVALID_CLIENT_IP);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
-                RequestThread.setClientId(auth.getClientId());
-                RequestThread.setUserId(auth.getUserId());
-                RequestThread.setProductId(auth.getProductId());
-                RequestThread.setClientProductId(auth.getClientProductId());
-                RequestThread.setProduct(product);
-                RequestThread.setBillPlan(auth.getBillPlan());
-                RequestThread.setStart(auth.getStart());
-                RequestThread.setEnd(auth.getEnd());
-                RequestThread.setHost(ip);
-                RequestThread.setAppSecret(auth.getSecretKey());
+                RequestThread.setAccessInfo(auth);
+                // 验证产品权限
+                if(RequestThread.getProduct() == null || !uri.equals(RequestThread.getProduct().getUri()))
+                {
+                    resp.setResult(MDResult.ACCESS_RESTRICTED);
+                    response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
+                    return false;
+                }
             }
         }
         RequestThread.setResp(resp);

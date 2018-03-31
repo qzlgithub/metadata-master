@@ -16,6 +16,7 @@ import com.mingdong.mis.domain.mapper.ClientUserMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.model.CheckResult;
+import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
 import com.mingdong.mis.mongo.entity.RequestLog;
 import com.mingdong.mis.service.ChargeService;
@@ -100,11 +101,11 @@ public class ChargeServiceImpl implements ChargeService
     }
 
     @Override
-    public CheckResult checkAccountAndBillPlan(Long clientId, Long productId, Integer billPlan)
+    public CheckResult checkAccountAndBillPlan()
     {
         CheckResult result = new CheckResult();
-        ClientProduct clientProduct = clientProductMapper.findByClientAndProduct(clientId, productId);
-        if(!billPlan.equals(clientProduct.getBillPlan()))
+        ClientProduct clientProduct = clientProductMapper.findById(RequestThread.getClientProductId());
+        if(!RequestThread.getBillPlan().equals(clientProduct.getBillPlan()))
         {
             // 计费方式改变
             result.setResult(MDResult.SYSTEM_BUSY);
@@ -117,7 +118,6 @@ public class ChargeServiceImpl implements ChargeService
             result.setResult(MDResult.INSUFFICIENT_BALANCE);
             return result;
         }
-        result.setClientProductId(clientProduct.getId());
         result.setBalance(clientProduct.getBalance());
         result.setUnitAmt(recharge.getUnitAmt());
         return result;
