@@ -12,6 +12,8 @@ import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.UserAuth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -23,14 +25,16 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 public class AccessInterceptor extends HandlerInterceptorAdapter
 {
+    private static Logger logger = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
-        MDResp resp = MDResp.create();
         String uri = request.getRequestURI();
+        logger.info("rest api request: [{}], {}", request.getMethod(), uri);
+        MDResp resp = MDResp.create();
         RequestThread.init();
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {

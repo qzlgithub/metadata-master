@@ -25,7 +25,6 @@ import com.mingdong.mis.domain.mapper.ClientProductMapper;
 import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.ProductClientInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
-import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.ProductTxtMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +38,6 @@ public class ProductRpcServiceImpl implements ProductRpcService
 {
     @Resource
     private RechargeMapper rechargeMapper;
-    @Resource
-    private ProductRechargeInfoMapper productRechargeInfoMapper;
     @Resource
     private ProductClientInfoMapper productClientInfoMapper;
     @Resource
