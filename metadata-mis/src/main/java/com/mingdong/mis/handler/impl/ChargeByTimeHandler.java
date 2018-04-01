@@ -35,25 +35,25 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        String uuid = StringUtils.getUuid();
         long t = System.currentTimeMillis();
-        logger.info(uuid + " [1]: " + 0);
+        String uuid = StringUtils.getUuid();
         redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
-        logger.info(uuid + " [2]: " + (System.currentTimeMillis() - t));
+        long t1 = System.currentTimeMillis();
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.setResult(MDResult.PRODUCT_EXPIRED);
             return;
         }
         Metadata metadata = routeHandler.routeProcessor(payload);
-        logger.info(uuid + " [3]: " + (System.currentTimeMillis() - t));
+        long t2 = System.currentTimeMillis();
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
-        logger.info(uuid + " [4]: " + (System.currentTimeMillis() - t));
+        long t3 = System.currentTimeMillis();
         resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
         resp.setRequestNo(requestNo);
         resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
-        logger.info(uuid + " [5]: " + (System.currentTimeMillis() - t));
+        logger.info("request-{} : {}/r, {}/m, {}/m, {}", uuid, t1 - t, t2 - t1, t3 - t2,
+                (System.currentTimeMillis() - t3));
     }
 
     /**
