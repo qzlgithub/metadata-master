@@ -2,7 +2,6 @@ package com.mingdong.mis.handler.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MDResult;
@@ -35,25 +34,18 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        long t = System.currentTimeMillis();
-        String uuid = StringUtils.getUuid();
         redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
-        long t1 = System.currentTimeMillis();
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.setResult(MDResult.PRODUCT_EXPIRED);
             return;
         }
         Metadata metadata = routeHandler.routeProcessor(payload);
-        long t2 = System.currentTimeMillis();
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
-        long t3 = System.currentTimeMillis();
         resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
         resp.setRequestNo(requestNo);
         resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
-        logger.info("request-{} : {}/r, {}/m, {}/m, {}", uuid, t1 - t, t2 - t1, t3 - t2,
-                (System.currentTimeMillis() - t3));
     }
 
     /**
