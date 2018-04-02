@@ -48,9 +48,10 @@ public class OverdueProcessor implements IProcessor<PhoneVO>
             if(!CollectionUtils.isEmpty(opList))
             {
                 List<OverduePlatformBO> list = new ArrayList<>(opList.size());
+                OverduePlatformBO op;
                 for(FinOverduePlatform o : opList)
                 {
-                    OverduePlatformBO op = new OverduePlatformBO();
+                    op = new OverduePlatformBO();
                     op.setPlatformCode(o.getPlatformCode());
                     op.setPlatformType(o.getPlatformType());
                     op.setOverdueEarliestTime(o.getOverdueEarliestTime());
