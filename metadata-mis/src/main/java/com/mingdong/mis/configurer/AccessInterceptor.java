@@ -31,11 +31,11 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
+        RequestThread.init();
         String uri = request.getRequestURI();
         String ip = WebUtils.getIp(request);
-        logger.info("rest api request from {}: [{}], {}", ip, request.getMethod(), uri);
+        // logger.info("rest api request from {}: [{}], {}", ip, request.getMethod(), uri);
         MDResp resp = MDResp.create();
-        RequestThread.init();
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
             AuthRequired annotation = ((HandlerMethod) handler).getMethod().getAnnotation(AuthRequired.class);
@@ -82,6 +82,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception
     {
+        logger.info("request elapsed time: {}", System.currentTimeMillis() - RequestThread.getTimestamp());
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
     }

@@ -9,6 +9,7 @@ public class RequestThread
     public static void init()
     {
         RequestHolder holder = new RequestHolder();
+        holder.setTimestamp(System.currentTimeMillis());
         threadHolder.set(holder);
     }
 
@@ -106,5 +107,10 @@ public class RequestThread
     public static void setResp(MDResp resp)
     {
         get().setResp(resp);
+    }
+
+    public static long getTimestamp()
+    {
+        return get().getTimestamp();
     }
 }

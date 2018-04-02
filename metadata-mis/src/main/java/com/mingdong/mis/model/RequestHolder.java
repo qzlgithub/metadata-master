@@ -4,9 +4,20 @@ import com.mingdong.mis.constant.APIProduct;
 
 class RequestHolder
 {
+    private long timestamp;
     private APIProduct product;
     private UserAuth userAuth;
     private MDResp resp;
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp)
+    {
+        this.timestamp = timestamp;
+    }
 
     public APIProduct getProduct()
     {
