@@ -13,7 +13,7 @@ spring:
     password: fFQ@8RJhjE3j7DJ%
   thymeleaf:
     enabled: true
-    cache: false
+    cache: true
     check-template-location: true
     content-type: text/html
     encoding: UTF-8

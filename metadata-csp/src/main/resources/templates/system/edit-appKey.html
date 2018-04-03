@@ -49,13 +49,13 @@
                 <div class="margin-auto">
                     <div class="clearfix tc mt20" style="margin-left: 190px;">
                         <span class="set-center-step fl w30"><i class="icon-01 icon mr10"></i><br/>密码验证</span>
-                        <span class="fl w30"><i class="icon-02 icon mr10"></i><br/>获取AppId</span>
+                        <span class="fl w30"><i class="icon-02 icon mr10"></i><br/>获取SecretKey</span>
                     </div>
                 </div>
 
                 <div class="m30 w70 pt40" style="margin:auto!important;">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">AppKey：</label>
+                        <label class="layui-form-label">SecretKey：</label>
                         <div class="layui-input-block">
                             <input type="text" id="app-key" readonly="readonly" placeholder="未设置"
                                    class="layui-input w60"
@@ -107,7 +107,7 @@
     $("#save-credential").click(function() {
         var appKey = $("#app-key").val();
         if(appKey === '') {
-            layer.msg("请生成AppKey！");
+            layer.msg("请生成SecretKey！");
             return;
         }
         $.ajax({
