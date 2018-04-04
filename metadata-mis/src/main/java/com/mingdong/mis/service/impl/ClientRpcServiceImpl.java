@@ -40,6 +40,7 @@ import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.model.dto.response.UserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.util.DateCalculateUtils;
+import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.Client;
 import com.mingdong.mis.domain.entity.ClientContact;
@@ -85,6 +86,7 @@ import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.StatsMapper;
 import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
+import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
 import com.mingdong.mis.mongo.entity.RequestLog;
 import org.slf4j.Logger;
@@ -109,6 +111,9 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private static final Integer INC_STAT = 1;
     private static final Integer REQ_STAT = 2;
     private static final Integer RCG_STAT = 3;
+
+    @Resource
+    private RedisDao redisDao;
     @Resource
     private SistemMapper sistemMapper;
     @Resource
@@ -540,6 +545,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
             upUpd.setUpdateTime(current);
             upUpd.setReqHost(reqHost);
             clientUserProductMapper.updateSkipNull(upUpd);
+            upUpd = clientUserProductMapper.findById(up.getId());
+            UserAuth auth = redisDao.findAuth(upUpd.getAccessToken());
+            if(auth != null)
+            {
+                auth.setHost(reqHost);
+                redisDao.saveUserAuth(upUpd.getAccessToken(), auth,
+                        (upUpd.getValidTime().getTime() - new Date().getTime()) / 1000 + 60);
+            }
         }
         return responseDTO;
     }

@@ -12,11 +12,14 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.TradeRpcService;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.domain.entity.ClientProduct;
+import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
 import com.mingdong.mis.domain.entity.Recharge;
 import com.mingdong.mis.domain.mapper.ClientProductMapper;
+import com.mingdong.mis.domain.mapper.ClientUserProductMapper;
 import com.mingdong.mis.domain.mapper.ProductMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
+import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.service.ClientMessageService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,8 @@ public class TradeRpcServiceImpl implements TradeRpcService
     private ClientProductMapper clientProductMapper;
     @Resource
     private ClientMessageService clientMessageService;
+    @Resource
+    private ClientUserProductMapper clientUserProductMapper;
 
     @Override
     @Transactional
@@ -168,6 +173,22 @@ public class TradeRpcServiceImpl implements TradeRpcService
                     temp.setBalance(balance.add(reqDTO.getAmount()));
                 }
                 clientProductMapper.updateSkipNull(temp);
+                List<ClientUserProduct> clientUserProductList = clientUserProductMapper.getListBy(
+                        clientProduct.getClientId(), clientProduct.getProductId());
+                for(ClientUserProduct item : clientUserProductList)
+                {
+                    if(!StringUtils.isNullBlank(item.getAccessToken()))
+                    {
+                        UserAuth auth = redisDao.findAuth(item.getAccessToken());
+                        if(auth != null)
+                        {
+                            auth.setBillPlan(reqDTO.getBillPlan());
+                            redisDao.saveUserAuth(item.getAccessToken(), auth,
+                                    (item.getValidTime().getTime() - new Date().getTime()) / 1000 + 60);
+                        }
+                    }
+                }
+
             }
             // 保存客户充值消息
             clientMessageService.sendMessage(messageType.getId(), reqDTO.getClientId(),

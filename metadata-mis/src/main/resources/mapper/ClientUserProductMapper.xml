@@ -73,4 +73,19 @@
         <include refid="select_all" />
         where `product_id` = #{productId}
     </select>
+
+    <select id="getListBy" resultMap="BaseResultMap">
+        select *
+        from client_user_product cup inner join client_user cu
+                on cup.user_id = cu.id
+        <where>
+            <if test="clientId != null">cu.`client_id` = #{clientId}</if>
+            <if test="productId != null">and cup.`product_id` = #{productId}</if>
+        </where>
+    </select>
+
+    <select id="findById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` = #{id}
+    </select>
 </mapper>

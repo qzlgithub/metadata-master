@@ -17,4 +17,8 @@ public interface ClientUserProductMapper
     ClientUserProduct findByUserAndProduct(@Param("userId") Long userId, @Param("productId") Long productId);
 
     List<ClientUserProduct> getListByProduct(Long productId);
+
+    List<ClientUserProduct> getListBy(@Param("clientId") Long clientId, @Param("productId") Long productId);
+
+    ClientUserProduct findById(Long id);
 }
