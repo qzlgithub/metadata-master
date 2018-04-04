@@ -1,10 +1,5 @@
 server:
   port: 80
-  ssl:
-    key-store: classpath:214569387540097.pfx
-    key-store-password: 214569387540097
-    keyStoreType: PKCS12
-    keyAlias: 1
 
 spring:
   redis:
