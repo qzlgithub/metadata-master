@@ -35,9 +35,4 @@
         where `name` = 'SERVICE_QQ'
     </select>
     
-    <select id="getFilePth" resultType="String">
-        select `value`
-        from `sistem`
-        where `name` = 'FILE_PATH'
-    </select>
 </mapper>

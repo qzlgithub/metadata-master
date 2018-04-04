@@ -14,5 +14,4 @@ public interface SistemMapper
 
     String getServiceQQ();
 
-    String getFilePth();
 }
