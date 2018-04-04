@@ -12,6 +12,14 @@ img {
     display: block;
 }
 
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    background-color: rgb(0, 0, 0) !important;
+    background-image: none !important;
+    color: rgb(0, 0, 0) !important;
+    -webkit-tap-highlight-color:rgba(0,0,0,0) !important;
+}
+
 /*header */
 .navbar-inverse {
     background: #fff;
@@ -88,7 +96,7 @@ img {
 }
 
 .navbar-header {
-    padding-right: 5%;
+    padding-right: 0%;
 }
 
 .carousel-inner > .item > a > img, .carousel-inner > .item > img, .img-responsive, .thumbnail a > img, .thumbnail > img {
@@ -105,7 +113,7 @@ img {
 .header1 a i {
     background: url(../images/logo.png) no-repeat;
     background-size: contain;
-    width: 214px;
+    width: 200px;
     height: 77px;
     display: inline-block;
 }
@@ -113,7 +121,7 @@ img {
 .header2 a i {
     background: url(../images/logo-1.png) no-repeat;
     background-size: contain;
-    width: 214px;
+    width: 200px;
     height: 77px;
     display: inline-block;
 }

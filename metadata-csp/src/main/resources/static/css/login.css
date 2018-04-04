@@ -9,8 +9,130 @@
 
 body#login {
     color: #333;
-    background: #579fe9 url('../images/login-bg.png') no-repeat center -6px;
+    background-image: linear-gradient(to right, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);
 }
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    background-color: rgb(0, 0, 0) !important;
+    background-image: none !important;
+    color: rgb(0, 0, 0) !important;
+    -webkit-tap-highlight-color:rgba(0,0,0,0) !important;
+}
+
+/*header */
+
+.navbar-inverse .navbar-toggle {
+    border-color: #245285;
+    margin-top: 22px;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar {
+    background-color: #245285;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: #fff
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #fff;
+    background: none;
+}
+
+.navbar-inverse{background-color: rgba(255,255,255,0); border-color:rgba(255,255,255,0);}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    margin-top: 10px;
+}
+
+.navbar-nav {
+    margin-top: 10px;
+}
+
+.navbar-inverse .navbar-nav > li {
+    margin: 0px 5px;
+}
+
+.nav > li > a {
+    padding: 10px 23px;
+}
+
+.header1 .navbar-nav > li > a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.header2 .navbar-nav > li > a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    background: #627fc9;
+    color: #fff;
+    border-radius: 3px;
+}
+
+/*.navbar-inverse .navbar-nav>li>a:visited{color: #245285}*/
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    background: #627fc9;
+    border-radius: 3px;
+}
+
+.login {
+    border: solid 1px #245285;
+    color: #245285;
+    padding: 0px 6px;
+}
+
+.login:hover {
+    background: #245285;
+    color: #fff;
+}
+
+.navbar-header {
+    padding-right: 0%;
+}
+
+.carousel-inner > .item > a > img, .carousel-inner > .item > img, .img-responsive, .thumbnail a > img, .thumbnail > img {
+    display: initial;
+    max-width: initial;
+    height: initial;
+}
+
+
+.header1 a i {
+    background: url(../images/logo.png) no-repeat;
+    background-size: contain;
+    width: 200px;
+    height: 77px;
+    display: inline-block;
+}
+
+.header2 a i {
+    background: url(../images/logo-1.png) no-repeat;
+    background-size: contain;
+    width: 214px;
+    height: 77px;
+    display: inline-block;
+}
+
+.header2 {
+    color: #fff;
+    background: #000;
+}
+
+.navbar-right li {
+    color: #fff;
+}
+
+.navbar-right li span {
+    margin-right: 10px;
+}
+
+
+
 
 #login-wrapper #login-top {
     height: 60px;
@@ -19,14 +141,13 @@ body#login {
     width: 374px;
     margin-right: 27%;
     font-size: 40px;
-    margin-top: 190px;
+    margin-top: 140px;
 }
 
 #login-wrapper #login-content {
     text-align: left;
     width: 445px;
     margin: 0 auto;
-    margin-right: 25%;
     background: #fff;
     padding: 50px 60px 95px;
     border-radius: 5px;
@@ -46,7 +167,7 @@ body#login {
     width: 256px;
     float: left;
     font-family: Arial;
-    border: solid 1px #1d98db;
+    border: solid 1px #c1c2c3;
     font-size: 16px;
     padding: 8px;
     border-radius: 3px;

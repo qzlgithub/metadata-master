@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="/static/css/site.min.css"/>
     <link rel="stylesheet" href="/static/css/animate.min.css"/>
     <link rel="stylesheet" href="/static/css/base.css"/>
-    <link rel="stylesheet" href="/static/css/common.css"/>
     <link rel="stylesheet" href="/static/css/login.css" media="all"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -30,12 +29,12 @@
     <!-- Favicons -->
     <link rel="shortcut icon" href="/static/images/icon/favicon.png"/>
 </head>
-<body id="login" style="background-color:#2273c6">
+<body id="login" class="pt10 ">
 <div id="login-wrapper" class="png_bg">
     <div th:include="website/common :: top"></div>
     <div id="login-top"></div>
-    <div id="login-content" class="pt35 important">
-        <div class="tc fz-24 mb15">登录</div>
+    <div id="login-content" class="pt25 important">
+        <div class="tc fz-20 mb15">欢迎登录</div>
         <p class="clearfix">
             <label>用户名：</label>
             <input class="text-input" type="text" id="username" title=""/>
@@ -57,7 +56,7 @@
                 <img id='captcha' align='absmiddle' onclick="changeImage()" th:src="${imageCaptcha}"/>
             </a>
         </p>
-        <p class="mt20" style="padding-left: 66px;">
+        <p class="mt20">
             <input id="user-login" class="button" type="button" value="登 录"
                    style="padding: 10px 20px; width: 100%; font-size: 18px!important;"/>
         </p>
