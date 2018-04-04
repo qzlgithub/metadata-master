@@ -240,13 +240,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .fixedBox ul.fixedBoxList li.Service .ServiceBox {
-    background: #eee;
-    left: -142px;
-    top: -10px;
+    background: #fff;
+    left: -129px;
+    top: 1px;
     display: none;
     position: absolute;
     z-index: 999;
-    padding: 10px;
+    padding: 10px 20px;
+    border: solid 1px #ccc;
 }
 
 .fixedBox ul.fixedBoxList li.Service .ServiceBox em {
@@ -264,7 +265,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .weixin-icon {
-    top: 52px;
+    top: 46px;
 }
 
 .weixin-icon-nav {
@@ -278,7 +279,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .sina-icon {
-    top: 104px;
+    top: 92px;
 }
 
 /******icon*******/
