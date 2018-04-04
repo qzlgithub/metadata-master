@@ -1489,7 +1489,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
                 clientRemind.setCount(clientProductInfosTemp.size());
                 clientRemind.setDay(
-                        1 + DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
+                        DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
                 clientRemind.setDispose(TrueOrFalse.FALSE);
                 clientRemindMapper.add(clientRemind);
                 clientRemindProductsTemp = new ArrayList<>();
