@@ -1035,8 +1035,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 ari.setProductName(o.getProductName());
                 ari.setBillPlan(o.getBillPlan());
                 ari.setHit(o.getHit());
-                ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
-                ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                if(!BillPlan.BY_TIME.equals(o.getBillPlan()))
+                {
+                    ari.setFee(NumberUtils.centAmtToYuan(o.getFee()));
+                    ari.setBalance(NumberUtils.centAmtToYuan(o.getBalance()));
+                }
                 list.add(ari);
             }
             dto.setList(list);
