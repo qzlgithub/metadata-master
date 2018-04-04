@@ -77,6 +77,7 @@ function userLogin() {
                 sessionStorage.setItem("user_name", data.name);
                 sessionStorage.setItem("manager_qq", data.managerQq);
                 sessionStorage.setItem("first_login", data.firstLogin);
+                sessionStorage.setItem("service_qq", data.serviceQq);
                 window.location.href = "/home.html";
             }
             else {

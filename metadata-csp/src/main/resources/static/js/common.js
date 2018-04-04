@@ -8,7 +8,9 @@ $(function() {
 });
 function settingQq(){
     var managerQq = sessionStorage.getItem("manager_qq");
+    var serviceQq = sessionStorage.getItem("service_qq");
     $(".setting-qq-class").attr("href","http://wpa.qq.com/msgrd?v=3&uin="+managerQq+"&site=qq&menu=yes");
+    $(".service-qq-class").attr("href","http://wpa.qq.com/msgrd?v=3&uin="+serviceQq+"&site=qq&menu=yes");
 }
 $("#exit").click(function() {
     $.ajax({

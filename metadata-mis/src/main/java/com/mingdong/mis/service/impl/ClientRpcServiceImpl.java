@@ -201,6 +201,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userResDTO.setManagerQq(manager == null ? "" : manager.getQq());
         userResDTO.setFirstLogin(
                 Constant.DEFAULT_ENC_PWD.equals(user.getPassword()) ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        userResDTO.setServiceQq(sistemMapper.getServiceQQ());
         return userResDTO;
     }
 

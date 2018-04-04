@@ -76,4 +76,5 @@ public interface Field
     String AUTHOR = "author";
     String PUBLISH_TIME = "publishTime";
     String LOGIN = "login";
+    String SERVICE_QQ = "serviceQq";
 }

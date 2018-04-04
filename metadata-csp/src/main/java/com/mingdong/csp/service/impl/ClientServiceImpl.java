@@ -60,6 +60,7 @@ public class ClientServiceImpl implements ClientService
         redisDao.saveUserSession(sessionId, session);
         resp.addData(Field.NAME, dto.getName());
         resp.addData(Field.MANAGER_QQ, dto.getManagerQq());
+        resp.addData(Field.SERVICE_QQ, dto.getServiceQq());
         resp.addData(Field.FIRST_LOGIN, dto.getFirstLogin());
     }
 
