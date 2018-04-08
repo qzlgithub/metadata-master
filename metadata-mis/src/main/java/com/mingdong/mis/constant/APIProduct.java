@@ -2,7 +2,8 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    FIN_CDK("CDK", "/credit/overdue");
+    FIN_CDK("CDK", "/credit/overdue"),
+    FIN_HMD("HMD", "/credit/blacklist");
 
     private final String code;
     private final String uri;
@@ -20,21 +21,6 @@ public enum APIProduct
             for(APIProduct o : APIProduct.values())
             {
                 if(code.equals(o.code))
-                {
-                    return o;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static APIProduct targetOf(String name)
-    {
-        if(name != null)
-        {
-            for(APIProduct o : APIProduct.values())
-            {
-                if(name.equals(o.name()))
                 {
                     return o;
                 }

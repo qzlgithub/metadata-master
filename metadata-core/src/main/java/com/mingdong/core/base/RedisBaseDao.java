@@ -1,12 +1,16 @@
 package com.mingdong.core.base;
 
 import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.types.Expiration;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RedisBaseDao<K extends Serializable, V extends Serializable>
 {
@@ -21,6 +25,21 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
     private String deserialize(byte[] bytes)
     {
         return redisTemplate.getStringSerializer().deserialize(bytes);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Set<String> limitScan(int db, long limit)
+    {
+        return (Set<String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            Set<String> keys = new HashSet<>();
+            Cursor<byte[]> cursor = conn.scan(ScanOptions.scanOptions().count(1000).build());
+            while(cursor.hasNext() && keys.size() <= limit)
+            {
+                keys.add(deserialize(cursor.next()));
+            }
+            return keys;
+        });
     }
 
     @SuppressWarnings("unchecked")

@@ -7,7 +7,10 @@ import com.mingdong.core.base.RedisBaseDao;
 import com.mingdong.mis.model.UserAuth;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class RedisDao extends RedisBaseDao
@@ -48,10 +51,10 @@ public class RedisDao extends RedisBaseDao
     public String getRechargeNo()
     {
         String dateStr = DateUtils.format(new Date(), "yyMMdd");
-        Long num = incr(DB.SEQUENCE, Key.RECHARGE_NO_PREFIX + dateStr);
+        Long num = incr(DB.SYSTEM, Key.RECHARGE_NO_PREFIX + dateStr);
         if(num == 1)
         {
-            expire(DB.SEQUENCE, Key.RECHARGE_NO_PREFIX + dateStr, 86460L);
+            expire(DB.SYSTEM, Key.RECHARGE_NO_PREFIX + dateStr, 86460L);
         }
         return "RO" + dateStr + String.format("%06d", num);
     }
@@ -62,10 +65,10 @@ public class RedisDao extends RedisBaseDao
     public String getRequestNo(Date date)
     {
         String dateStr = DateUtils.format(date, "yyMMddHH");
-        Long num = incr(DB.SEQUENCE, Key.REQUEST_NO_PREFIX + dateStr);
+        Long num = incr(DB.SYSTEM, Key.REQUEST_NO_PREFIX + dateStr);
         if(num == 1)
         {
-            expire(DB.SEQUENCE, Key.REQUEST_NO_PREFIX + dateStr, 3660L);
+            expire(DB.SYSTEM, Key.REQUEST_NO_PREFIX + dateStr, 3660L);
         }
         return "CO" + dateStr + String.format("%08d", num);
     }
@@ -75,8 +78,8 @@ public class RedisDao extends RedisBaseDao
      */
     public boolean lockProductAccount(String account, String lockName)
     {
-        setExNx(DB.SEQUENCE, account, lockName, 60);
-        String name = get(DB.SEQUENCE, account);
+        setExNx(DB.SYSTEM, account, lockName, 60);
+        String name = get(DB.SYSTEM, account);
         return lockName.equals(name);
     }
 
@@ -85,10 +88,10 @@ public class RedisDao extends RedisBaseDao
      */
     public void freeProductAccount(String account, String lockName)
     {
-        String name = get(DB.SEQUENCE, account);
+        String name = get(DB.SYSTEM, account);
         if(lockName.equals(name))
         {
-            del(DB.SEQUENCE, account);
+            del(DB.SYSTEM, account);
         }
     }
 
@@ -97,7 +100,7 @@ public class RedisDao extends RedisBaseDao
      */
     public String getDSAuthToken()
     {
-        return get(DB.OTHER, Key.DS_API_TOKEN);
+        return get(DB.SYSTEM, Key.DS_API_TOKEN);
     }
 
     /**
@@ -105,28 +108,78 @@ public class RedisDao extends RedisBaseDao
      */
     public void setDSAuthToken(String token, long seconds)
     {
-        setEx(DB.OTHER, Key.DS_API_TOKEN, token, seconds);
+        setEx(DB.SYSTEM, Key.DS_API_TOKEN, token, seconds);
     }
 
     /**
      * 产品访问量监控
      */
-    public void incProductTraffic(long timestamp, Long productId)
+    public void realTimeTraffic(long timestamp, Long productId, Long clientId)
     {
         long l = timestamp - timestamp % 300;
         hIncrBy(DB.PRODUCT_TRAFFIC, String.valueOf(l), String.valueOf(productId), 1);
+        hIncrBy(DB.CLIENT_TRAFFIC, String.valueOf(l), String.valueOf(clientId), 1);
+    }
+
+    /**
+     * 流量数据定时清理
+     *
+     * @param timestamp 当前时间的Unix时间戳
+     */
+    public boolean cleanUpTraffic(long timestamp)
+    {
+        int[] dbs = new int[]{DB.PRODUCT_TRAFFIC, DB.CLIENT_TRAFFIC};
+        try
+        {
+            for(int db : dbs)
+            {
+                Set allKeys = limitScan(db, 1000);
+                List<String> keys = new ArrayList<>();
+                String s;
+                for(Object key : allKeys)
+                {
+                    s = String.valueOf(key);
+                    if(timestamp - Long.parseLong(s) > 3900)
+                    {
+                        keys.add(s);
+                    }
+                }
+                if(keys.size() > 0)
+                {
+                    del(db, keys.toArray(new String[keys.size()]));
+                }
+            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    //************************* 用户池缓存 *************************
+    public void setPersonCache(String phone, String personId)
+    {
+        setEx(DB.PERSON_POOL, phone, personId, 600);
+    }
+
+    public String findPersonByPhone(String phone)
+    {
+        return get(DB.PERSON_POOL, phone);
     }
 
     interface DB
     {
+        // 系统数据
+        int SYSTEM = 1;
         // 客户token数据库
-        int USER_AUTH = 1;
-        // 系统序列
-        int SEQUENCE = 2;
-        // 产品请求监控数据库
-        int PRODUCT_TRAFFIC = 3;
-        // 其他数据
-        int OTHER = 4;
+        int USER_AUTH = 2;
+        // 用户缓冲池
+        int PERSON_POOL = 3;
+        // 产品请求实时监控数据库
+        int PRODUCT_TRAFFIC = 4;
+        // 产品请求实时监控数据库
+        int CLIENT_TRAFFIC = 5;
     }
 
     interface Key

@@ -4,5 +4,5 @@ import com.mingdong.mis.mongo.entity.FinOverdueUser;
 
 public interface FinOverdueUserDao
 {
-    FinOverdueUser findByPhone(String phone);
+    FinOverdueUser findByPerson(String personId);
 }

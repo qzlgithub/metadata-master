@@ -7,7 +7,7 @@ import com.mingdong.mis.handler.impl.ChargeByTimeHandler;
 import com.mingdong.mis.handler.impl.ChargeByUseHandler;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.RequestThread;
-import com.mingdong.mis.model.vo.PhoneVO;
+import com.mingdong.mis.model.vo.PersonVO;
 import com.mingdong.mis.model.vo.RequestVO;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ public class CreditController
 
     @AuthRequired
     @RequestMapping(value = "/credit/overdue")
-    public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PhoneVO> requestVO)
+    public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
         MDResp resp = RequestThread.getResp();
         MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
@@ -34,15 +34,35 @@ public class CreditController
             resp.setResult(result);
             return resp;
         }
-        BillPlan billPlan = BillPlan.getById(RequestThread.getBillPlan());
-        switch(billPlan)
+        if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
         {
-            case BY_TIME:
-                chargeByTimeService.work(requestVO.getPayload(), resp);
-                break;
-            default:
-                chargeByUseService.work(requestVO.getPayload(), resp);
-                break;
+            chargeByTimeService.work(requestVO.getPayload(), resp);
+        }
+        else
+        {
+            chargeByUseService.work(requestVO.getPayload(), resp);
+        }
+        return resp;
+    }
+
+    @AuthRequired
+    @RequestMapping(value = "/credit/blacklist")
+    public MDResp checkPersonInBlacklist(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        MDResp resp = RequestThread.getResp();
+        MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
+        if(result != MDResult.OK)
+        {
+            resp.setResult(result);
+            return resp;
+        }
+        if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
+        {
+            chargeByTimeService.work(requestVO.getPayload(), resp);
+        }
+        else
+        {
+            chargeByUseService.work(requestVO.getPayload(), resp);
         }
         return resp;
     }

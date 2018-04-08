@@ -34,7 +34,7 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        redisDao.incProductTraffic(resp.getTimestamp(), RequestThread.getProductId());
+        redisDao.realTimeTraffic(resp.getTimestamp(), RequestThread.getProductId(), RequestThread.getClientId());
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.setResult(MDResult.PRODUCT_EXPIRED);
@@ -43,9 +43,16 @@ public class ChargeByTimeHandler implements IChargeHandler
         Metadata metadata = routeHandler.routeProcessor(payload);
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
-        resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
         resp.setRequestNo(requestNo);
-        resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
+        if(metadata.isHit())
+        {
+            resp.setStatus(TrueOrFalse.FALSE);
+            resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
+        }
+        else
+        {
+            resp.setStatus(TrueOrFalse.TRUE);
+        }
     }
 
     /**

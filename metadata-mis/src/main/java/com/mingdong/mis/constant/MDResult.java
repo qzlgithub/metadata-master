@@ -13,6 +13,7 @@ public enum MDResult
     APP_ID_NOT_EXIST(105, "指定的AppID不存在"),
     ACCESS_RESTRICTED(106, "访问受限，请求凭证无此接口的访问权限"),
     INVALID_ACCESS_TOKEN(107, "请求凭证无效，请重新获取"),
+    INVALID_REQUEST_PARAM(108, "请求参数无效或字段缺失"),
 
     CLIENT_ACCT_DISABLED(201, "客户主账号已被禁用"),
     CLIENT_SUB_ACCT_NOT_EXIST(202, "客户子账号不存在或已删除"),
@@ -22,9 +23,7 @@ public enum MDResult
     INVALID_ACCESS_KEY(206, "无效的接入密钥"),
     PRODUCT_DISABLED(207, "服务已停用"),
     INSUFFICIENT_BALANCE(208, "账户余额不足"),
-    PRODUCT_EXPIRED(209, "服务已过期"),
-    // just comment
-    ;
+    PRODUCT_EXPIRED(209, "服务已过期");
 
     private final int code;
     private final String message;

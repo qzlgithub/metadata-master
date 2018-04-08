@@ -1,16 +1,13 @@
 package com.mingdong.mis.mongo.entity;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "fin_overdue_platform")
 public class FinOverduePlatform
 {
-    @Id
-    private String id;
-    @Field("phone")
-    private String phone;
+    @Field("person_id")
+    private String personId;
     @Field("platform_code")
     private String platformCode;
     @Field("platform_type")
@@ -20,24 +17,14 @@ public class FinOverduePlatform
     @Field("overdue_latest_time")
     private String overdueLatestTime;
 
-    public String getId()
+    public String getPersonId()
     {
-        return id;
+        return personId;
     }
 
-    public void setId(String id)
+    public void setPersonId(String personId)
     {
-        this.id = id;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
+        this.personId = personId;
     }
 
     public String getPlatformCode()

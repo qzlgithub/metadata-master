@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class FinOverdueUser
 {
     @Id
-    private String id;
+    private String personId;
     @Field("overdue_amount_max")
     private BigDecimal overdueAmountMax;
     @Field("overdue_days_max")
@@ -36,14 +36,14 @@ public class FinOverdueUser
     @Field("overdue_platform_90_days")
     private Integer overduePlatform90Days;
 
-    public String getId()
+    public String getPersonId()
     {
-        return id;
+        return personId;
     }
 
-    public void setId(String id)
+    public void setPersonId(String personId)
     {
-        this.id = id;
+        this.personId = personId;
     }
 
     public BigDecimal getOverdueAmountMax()

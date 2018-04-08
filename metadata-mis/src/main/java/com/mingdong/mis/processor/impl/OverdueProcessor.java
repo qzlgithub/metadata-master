@@ -1,10 +1,11 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.OverdueBO;
 import com.mingdong.mis.model.metadata.OverduePlatformBO;
-import com.mingdong.mis.model.vo.PhoneVO;
+import com.mingdong.mis.model.vo.PersonVO;
 import com.mingdong.mis.mongo.dao.FinOverduePlatformDao;
 import com.mingdong.mis.mongo.dao.FinOverdueUserDao;
 import com.mingdong.mis.mongo.entity.FinOverduePlatform;
@@ -17,18 +18,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class OverdueProcessor implements IProcessor<PhoneVO>
+public class OverdueProcessor implements IProcessor<PersonVO>
 {
+    @Resource
+    private RedisDao redisDao;
+    @Resource
+    private BaseProcessor baseProcessor;
     @Resource
     private FinOverdueUserDao finOverdueUserDao;
     @Resource
     private FinOverduePlatformDao finOverduePlatformDao;
 
     @Override
-    public Metadata<OverdueBO> process(PhoneVO payload)
+    public Metadata<OverdueBO> process(PersonVO payload)
     {
         Metadata<OverdueBO> metadata = new Metadata<>();
-        FinOverdueUser finOverdueUser = finOverdueUserDao.findByPhone(payload.getPhone());
+        String personId = redisDao.findPersonByPhone(payload.getPhone());
+        personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+        if(personId == null)
+        {
+            metadata.setHit(false);
+            return metadata;
+        }
+        FinOverdueUser finOverdueUser = finOverdueUserDao.findByPerson(personId);
         if(finOverdueUser != null)
         {
             OverdueBO bo = new OverdueBO();
@@ -44,7 +56,7 @@ public class OverdueProcessor implements IProcessor<PhoneVO>
             bo.setOverduePlatform30Days(finOverdueUser.getOverduePlatform30Days());
             bo.setOverduePlatform60Days(finOverdueUser.getOverduePlatform60Days());
             bo.setOverduePlatform90Days(finOverdueUser.getOverduePlatform90Days());
-            List<FinOverduePlatform> opList = finOverduePlatformDao.findByPhone(payload.getPhone());
+            List<FinOverduePlatform> opList = finOverduePlatformDao.findByPerson(personId);
             if(!CollectionUtils.isEmpty(opList))
             {
                 List<OverduePlatformBO> list = new ArrayList<>(opList.size());
@@ -62,6 +74,10 @@ public class OverdueProcessor implements IProcessor<PhoneVO>
             }
             metadata.setHit(true);
             metadata.setData(bo);
+        }
+        else
+        {
+            metadata.setHit(false);
         }
         return metadata;
     }
