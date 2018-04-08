@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="monitor/common :: top"></div>
+
+    <div th:include="monitor/common :: left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="p20">
+            <div class="public-title2">2018年2月10日 18:20</div>
+            <div class="layui-row layui-col-space10 mt15">
+                <!--left-->
+                <div class="layui-col-md9">
+                    <!--请求趋势-->
+                    <dl class="grid-demo grid-demo-bg1 public-warp1">
+                        <dt class="pl20 important">
+                            <em>请求趋势</em>
+                            <span class="public-button ml30 position-r choose-show cp">选择客户<i class="layui-icon va pl5">&#xe61a;</i></span>
+                            <div class="third-select">
+                                <p class="mt5">（一次最多选5个）</p>
+                                <ul class="layui-form choose-check-list mt20 clearfix pb20">
+                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
+                                               checked=""/></li>
+                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
+                                               checked=""/></li>
+                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
+                                               checked=""/></li>
+                                </ul>
+                                <ul class="mt10 pb20 bd-top pt10 check-list">
+                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                    <div class="mt15 tr"><span class="button-qr choose-hide cp">确认</span></div>
+                                </ul>
+                            </div>
+                        </dt>
+                        <dd><img src="/static/monitor/images/data-img1.png"/></dd>
+                    </dl>
+                    <!--请求趋势 end-->
+                    <!--接口预警 实时请求-->
+                    <div class="mt10">
+                        <!--接口预警-->
+                        <dl class="grid-demo grid-demo-bg1  public-warp1">
+                            <dt><em>客户稳定</em><span class="fr fz-12 important">近7天</span></dt>
+                            <dd>
+                                <ul class="product-mon clearfix pb20">
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                    <li>
+                                        <p>杭州熊大基金</p>
+                                        <img src="/static/monitor/images/data-img2.png"/>
+                                    </li>
+                                </ul>
+                                <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
+                                        class="icon right-down ml10"></i></div>
+                            </dd>
+                        </dl>
+                        <!--接口预警 end-->
+                    </div>
+                    <!--接口预警 实时请求 end-->
+                </div>
+                <!--left end-->
+                <!--right-->
+                <div class="layui-col-md3">
+                    <dl class="grid-demo grid-demo-bg1  public-warp1">
+                        <dt><em>警报</em><span class="icon icon3 fr"></span></dt>
+                        <dd>
+                            <table class="public-table1">
+                                <tr>
+                                    <th>警报类型</th>
+                                    <th>接口名称</th>
+                                    <th>最近时间</th>
+                                </tr>
+                                <tbody>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </dd>
+                    </dl>
+                    <dl class="grid-demo grid-demo-bg1  public-warp1 mt10">
+                        <dt><em>区域分布</em><span class="fr fz-12 important">近24h</span></dt>
+                        <dd class="pl20 pr20">
+                            <img src="/static/monitor/images/map.png"/>
+                        </dd>
+                    </dl>
+                    <dl class="grid-demo grid-demo-bg1 public-warp1 mt10">
+                        <dt><em>实时请求</em></dt>
+                        <dd>
+                            <table class="public-table1">
+                                <tbody>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>20ms</td>
+                                    <td>200</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>20ms</td>
+                                    <td>200</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>20ms</td>
+                                    <td>200</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>20ms</td>
+                                    <td>200</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>20ms</td>
+                                    <td>200</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </dd>
+                    </dl>
+                </div>
+                <!--right end-->
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/monitor-common.js"></script>
+<script>
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app'], function() {
+        var app = layui.app,
+            $ = layui.jquery
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    });
+    $(document).ready(function() {
+        $(".choose-hide").click(function() {
+            $(".third-select").hide();
+        });
+        $(".choose-show").click(function() {
+            $(".third-select").show();
+        });
+    });
+</script>
+</body>
+
+</html>

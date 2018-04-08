@@ -49,7 +49,7 @@ public class HomePageController
     @RequestMapping(value = "/stats.html")
     public ModelAndView statsPage()
     {
-        ModelAndView view = new ModelAndView("stats/index");
+        ModelAndView view = new ModelAndView("monitor/index");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

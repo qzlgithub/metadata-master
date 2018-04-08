@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<div th:fragment="top">
+    <div class="layui-header">
+        <div class="layui-logo mt10 ml20"><img src="/static/monitor/images/logo.png"/></div>
+        <ul class="layui-nav layui-layout-left kit-nav layui-menu">
+            <li class="layui-nav-item bd-right-none tc important">
+                <a href="javascript:;">
+                    <img src="/static/monitor/images/icon/menu-icon4.png" style="width: auto;"/>
+                    <p style="line-height: 0px;" class="fz-12 important" id="manager-user-name-id"></p>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;" class="position-r mt15 important">
+                    <img src="/static/monitor/images/icon/menu-icon3.png"/>
+                    <i class="top-email" id="top-red">99</i>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/user/logout" class="mt15 important">
+                    <img src="/static/monitor/images/icon/menu-icon2.png"/>
+                </a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right kit-nav">
+
+        </ul>
+    </div>
+    <script>
+        document.getElementById("manager-user-name-id").innerHTML = sessionStorage.getItem("user_name");
+    </script>
+</div>
+
+<div th:fragment="left">
+    <div class="layui-side layui-bg-black kit-side">
+        <div class="layui-side-scroll treebox">
+            <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree menu" lay-filter="kitNavbar" kit-navbar="">
+                <li class="layui-nav-item level1" onclick="window.location.href='/stats.html'">
+                    <a href="javascript:;"><span class="icon icon1"></span><em>首页</em><i></i></a>
+                </li>
+                <li class="layui-nav-item level1">
+                    <a class="" href="javascript:;"><span class="icon icon2"></span><em>数据监控</em><i></i></a>
+                    <dl class="layui-nav-child level2">
+                        <dd class="">
+                            <a href="/monitoring/other.html">
+                                <i class="layui-icon">&#xe602;</i><span> 第三方监控</span></a>
+                        </dd>
+                        <dd>
+                            <a href="/monitoring/customer.html">
+                                <i class="layui-icon">&#xe602;</i><span> 客户监控</span></a>
+                        </dd>
+                        <dd>
+                            <a href="/monitoring/product.html">
+                                <i class="layui-icon">&#xe602;</i><span> 产品监控</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item level1">
+                    <a class="" href="javascript:;"><span class="icon icon3"></span><em>警报系统</em><i></i></a>
+                    <dl class="layui-nav-child level2">
+                        <dd>
+                            <a href="/alarm/wait.html">
+                                <i class="layui-icon">&#xe602;</i><span>待处理</span></a>
+                        </dd>
+                        <dd>
+                            <a href="/alarm/already.html">
+                                <i class="layui-icon">&#xe602;</i><span>已处理</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item level1">
+                    <a class="" href="javascript:;"><span class="icon icon4"></span><em>运营统计</em><i></i></a>
+                    <dl class="layui-nav-child level2">
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>客户统计</span></a>
+                        </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>客户请求统计</span></a>
+                        </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
+                        </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
+                        </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
+                        </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item level1">
+                    <a class="" href="javascript:;"><span class="icon icon3"></span><em>系统设置</em><i></i></a>
+                    <dl class="layui-nav-child level2">
+                        <dd>
+                            <a href="/warning/setting/list.html">
+                                <i class="layui-icon">&#xe602;</i><span>警报设置</span></a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+ #login-wrapper #login-content .notification{
+border: 0;
+background-color: #122753;
+color: #fff !important;
+height:40px;
+}
+
+/********************************      Login Page      ********************************/
+
+body#login{
+color: #fff;
+background: #579fe9 url('../images/login-bg.png') no-repeat center 120px;
+}
+
+#login-wrapper{
+background: url('../imaGes/bg-login-top.gif') top left repeat-x;
+}
+
+#login-wrapper #login-top{
+height: 103px;
+text-align: center;
+margin: auto;
+width: 374px;
+margin-right: 27%;
+font-size: 40px;
+margin-top: 190px;
+}
+
+#login-wrapper #login-content{
+text-align: left;
+width: 330px;
+margin: 0 auto;
+margin-right: 25%;
+background: #fff;
+padding: 50px 60px 95px;
+border-radius:5px;
+}
+
+#login-wrapper #login-content label{
+color: #fff;
+line-height:30px;
+font-weight: normal;
+font-size: 14px;
+font-family: Arial, sans-serif;
+float: left;
+width: 68px;
+padding: 0;
+}
+
+#login-wrapper #login-content input{
+width: 200px;
+float: left;
+font-family:Arial;
+border:solid 1px #1d98db;
+font-size:16px;
+padding: 8px;
+border-radius: 3px;
+}
+#login-wrapper #login-content input.button{
+margin: 0 10px 0 0;
+}
+#login-wrapper #login-content .text_auth{ width:100px; float:left}
+#login-wrapper #login-content .img_auth{ float:left; margin-left:10px; padding-top:0px;}
+#login-wrapper #login-content .img_auth img {width: 86px; height: 40px; }
+
+#login-wrapper #login-content p{
+padding: 0;
+}
+
+#login-wrapper #login-content p#remember-password{
+float: right;
+}
+
+#login-wrapper #login-content p#remember-password input{
+float: none;
+width: auto;
+border: 0;
+background: none;
+margin: 0 10px 0 0;
+}
+
+#login-wrapper #login-content p .button{
+width: auto;
+}
+/************ Button ************/
+.button{
+font-family: Verdana, Arial, sans-serif;
+display: inline-block;
+background: #579fe9;
+border: 1px solid #579fe9 !important;
+padding: 4px 7px 4px 7px;
+_padding: 4px 2px 4px 2px !important;
+color: #fff !important;
+font-size: 12px !important;
+cursor: pointer;
+}
+
+form input.text-input, {
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+border-radius: 3px;
+}
+.clear {
+    clear: both;
+    height: 5px;
+    _height: 1px;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+    border-color: #579fe9!important;
+    background-color: #579fe9!important;
+    color: #fff;
+}

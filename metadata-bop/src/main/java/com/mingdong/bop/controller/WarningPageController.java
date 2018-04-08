@@ -22,7 +22,7 @@ public class WarningPageController
     @RequestMapping(value = "/warning/setting/list.html")
     public ModelAndView list()
     {
-        ModelAndView view = new ModelAndView("warning/list");
+        ModelAndView view = new ModelAndView("monitor/setting/list");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -31,7 +31,7 @@ public class WarningPageController
     @GetMapping(value = "/warning/setting/edit.html")
     public ModelAndView edit(@RequestParam(Field.ID) Long id)
     {
-        ModelAndView view = new ModelAndView("articles/edit");
+        ModelAndView view = new ModelAndView("monitor/setting/edit");
         view.addAllObjects(RequestThread.getMap());
         view.addAllObjects(systemService.getWarningSetting(id));
         return view;

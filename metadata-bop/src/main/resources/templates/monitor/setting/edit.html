@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
+    <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/monitor/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="monitor/common :: top"></div>
+
+    <div th:include="monitor/common :: left"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="p20">
+            <div class="public-title3">警报设置<span class="fr"><a href="" class="return-btn ml10">返回</a></span></div>
+            <div class="layui-row layui-col-space10 mt15">
+                <!--请求趋势-->
+                <dl class="grid-demo grid-demo-bg1 public-warp1">
+                    <dd>
+                        <div class="fz-16 col6 mt30 pl40">所选：第三方监控——请求失败过多</div>
+                        <div class="layui-form from1 w60 col6 ml40">
+                            <p class=" mt30 bg1 p10">一、选择通知方式 <span class="col3 pl30">（至少选择一种通知方式）</span></p>
+                            <div class="layui-form-item nt20 pl40">
+                                <input type="checkbox" name="like1[write]" lay-skin="primary" title="手机短信" checked="">
+                            </div>
+                            <div class="layui-form-item mt20 pl40">
+                                <input type="checkbox" name="like1[write]" lay-skin="primary" title="现场警报" checked="">
+                                <div class="flex">
+                                    <div class="imageFileInput mt20 ml20">
+                                        <input class="fileInput" type="file" id="" name="">
+                                    </div>
+                                    <em class="pt50">（支持小于2M的.mp3文件）</em>
+                                </div>
+                                <div class="pl20 mt10">我相信<i class="layui-icon fz-28 va">&#xe645;</i></div>
+
+                            </div>
+                            <p class=" mt30 bg1 p10">二、设置阀值</p>
+                            <p class="edit-set p10 tc mt20">超过预警阀值将触发警报</p>
+                            <p class="mt10 mb20 mt20 fz-18">设置预警阀值</p>
+                            <p class="flex">
+                                <span class="mt10"><i class="col3 fz-16">*</i> 一般预警</span>
+                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
+                                <span class="mt10 ml20 mr20">&lt;</span>
+                                <span class="mt10 ml20 mr20">连续出错</span>
+                                <span class="mt10 ml20 mr20"><=</span>
+                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
+                                <span class="mt10 col3 ml10">请填写正整数（未填写/小数/负数  触发）</span>
+                            </p>
+                            <p class="flex mt20 pb40">
+                                <span class="mt10"><i class="col3 fz-16">*</i> 一般预警</span>
+                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
+                                <span class="mt10 ml20 mr20">&lt;</span>
+                                <span class="mt10 ml20 mr20">连续出错</span>
+                                <span class="mt10 ml20 mr20"><=</span>
+                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
+                                <span class="mt10 col3 ml10">左边的数值要小于右边的数值</span>
+                            </p>
+                            <div class="layui-form-item mt40 pb40">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                    <button type="reset" class="layui-btn return-form">返回</button>
+                                </div>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--请求趋势 end-->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/monitor-common.js"></script>
+<script>
+    layui.config({
+        base: '../../static/build/js/'
+    }).use(['app', 'laydate'], function() {
+        var laydate = layui.laydate; //日期
+        $ = layui.jquery
+        app = layui.app;
+        app.set({
+            type: 'iframe'
+        }).init();
+        //详情鼠标经过
+        $("td div").mouseover(function() {
+            $(this).find(".detai-ceng").show();
+        }).mouseout(function() {
+            $(this).find(".detai-ceng").hide();
+        });
+    });
+</script>
+</body>
+
+</html>
