@@ -231,15 +231,17 @@ public interface ClientRpcService
 
     ListDTO<StatsDateInfoResDTO> getRevenueListStats(Date fromDate, Date toDate);
 
-    void statsByData(Date date);
+    void statsByDate(Date date);
 
     void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList);
 
-    void statsRechargeByData(Date date);
+    void statsRechargeByDate(Date date);
 
     BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate, Long managerId);
 
     Integer getAllClientCount(Long managerId);
 
     Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
+
+    void cleanTraffic(Date date);
 }

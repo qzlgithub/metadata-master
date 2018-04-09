@@ -21,7 +21,7 @@ public class SchedulerJobs
     {
         JobDetail jobDetail = JobBuilder.newJob(StatsJob.class).withIdentity("statsJob", "jobGroup").build();
         //        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0/10 * * * * ?");//每十秒
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 3 0-23 * * ?");//每小时的第3分钟开始执行
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 3 * * * ?");//每小时的第3分钟开始执行
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("statsJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
         SchedulerManage.addJob(jobDetail, cronTrigger);
@@ -37,8 +37,23 @@ public class SchedulerJobs
                 .withIdentity("clientRemindJob", "jobGroup")
                 .build();
         //        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/1 * * * ?");//每1分钟
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 0 * * ?");//每天凌晨0点执行
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 0 * * ?");//每天0点执行
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("clientRemindJob", "jobGroup").withSchedule(
+                scheduleBuilder).build();
+        SchedulerManage.addJob(jobDetail, cronTrigger);
+    }
+
+    /**
+     * 定时任务-清理定时缓存数据
+     */
+    @PostConstruct
+    private void cleanTraffic()
+    {
+        JobDetail jobDetail = JobBuilder.newJob(ClientRemindJob.class)
+                .withIdentity("cleanTrafficJob", "jobGroup")
+                .build();
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 * * * ?");//每小时执行
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("cleanTrafficJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
         SchedulerManage.addJob(jobDetail, cronTrigger);
     }

@@ -1541,7 +1541,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 clientRemindProductMapper.addList(clientRemindProductsTemp);
             }
         }
-        System.out.println("======================客户服务提醒统计完成");
     }
 
     @Override
@@ -1684,7 +1683,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public void statsByData(Date date)
+    public void statsByDate(Date date)
     {
         SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1728,10 +1727,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
             return;
         }
-        logger.info("定时统计---" + longSdf.format(calendar.getTime()));
         Stats stats = new Stats();
         Date nowDate = new Date();
-        logger.info("定时统计nowDate===" + longSdf.format(nowDate));
         stats.setCreateTime(nowDate);
         stats.setUpdateTime(nowDate);
         stats.setStatsYear(year);
@@ -1757,7 +1754,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public void statsRechargeByData(Date date)
+    public void statsRechargeByDate(Date date)
     {
         SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1796,9 +1793,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         List<StatsRechargeInfo> statsRechargeInfos = statsClientMapper.statsRechargeByData(hourBefore, hourAfter);
         if(!CollectionUtils.isEmpty(statsRechargeInfos))
         {
-            logger.info("充值定时统计---" + longSdf.format(calendar.getTime()));
             Date nowDate = new Date();
-            logger.info("充值定时统计nowDate===" + longSdf.format(nowDate));
             List<StatsRecharge> statsRecharges = new ArrayList<>();
             StatsRecharge statsRecharge;
             for(StatsRechargeInfo item : statsRechargeInfos)
@@ -1840,6 +1835,12 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId)
     {
         return statsClientMapper.getClientCountByDate(fromDate, toDate, managerId);
+    }
+
+    @Override
+    public void cleanTraffic(Date date)
+    {
+        redisDao.cleanUpTraffic(date.getTime());
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)

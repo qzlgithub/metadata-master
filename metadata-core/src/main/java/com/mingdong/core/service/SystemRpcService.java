@@ -5,6 +5,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
+import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
@@ -118,4 +119,6 @@ public interface SystemRpcService
     ResponseDTO updateWarningSetting(WarningSettingReqDTO warningSettingResDTO);
 
     ResponseDTO changeWarningSettingStatus(Long id, Integer status);
+
+    ResponseDTO addJobLog(JobLogReqDTO jobLog);
 }

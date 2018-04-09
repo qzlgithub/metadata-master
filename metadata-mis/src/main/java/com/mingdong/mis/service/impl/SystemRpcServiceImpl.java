@@ -11,6 +11,7 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
+import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
 import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
@@ -28,11 +29,15 @@ import com.mingdong.mis.domain.entity.Articles;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
+import com.mingdong.mis.domain.entity.Job;
+import com.mingdong.mis.domain.entity.JobLog;
 import com.mingdong.mis.domain.entity.WarningSetting;
 import com.mingdong.mis.domain.mapper.ArticlesMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
+import com.mingdong.mis.domain.mapper.JobLogMapper;
+import com.mingdong.mis.domain.mapper.JobMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.WarningSettingMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +61,10 @@ public class SystemRpcServiceImpl implements SystemRpcService
     private ArticlesMapper articlesMapper;
     @Resource
     private WarningSettingMapper warningSettingMapper;
+    @Resource
+    private JobLogMapper jobLogMapper;
+    @Resource
+    private JobMapper jobMapper;
 
     @Override
     public ListDTO<DictIndustryResDTO> getIndustryList(Long parentIndustryId, Integer enabled)
@@ -607,6 +616,27 @@ public class SystemRpcServiceImpl implements SystemRpcService
         warningSetting.setUpdateTime(new Date());
         warningSetting.setEnabled(status);
         warningSettingMapper.updateSkipNull(warningSetting);
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO addJobLog(JobLogReqDTO jobLog)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        JobLog addJobLog = new JobLog();
+        Date date = new Date();
+        addJobLog.setCreateTime(date);
+        addJobLog.setJobCode(jobLog.getJobCode());
+        addJobLog.setSuccess(jobLog.getSuccess());
+        addJobLog.setRemark(jobLog.getRemark());
+        jobLogMapper.add(addJobLog);
+        if(TrueOrFalse.TRUE.equals(jobLog.getSuccess()))
+        {
+            Job job = new Job();
+            job.setCode(jobLog.getJobCode());
+            job.setLastSucTime(date);
+            jobMapper.updateSkipNull(job);
+        }
         return responseDTO;
     }
 }
