@@ -505,4 +505,3 @@ create table `job_log`
 )
   engine = InnoDB
   default charset = utf8;
-
