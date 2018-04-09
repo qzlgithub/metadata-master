@@ -1,6 +1,8 @@
 package com.mingdong.core.model.dto.request;
 
-public class JobLogReqDTO
+import java.io.Serializable;
+
+public class JobLogReqDTO implements Serializable
 {
     private String jobCode;
     private Integer success;

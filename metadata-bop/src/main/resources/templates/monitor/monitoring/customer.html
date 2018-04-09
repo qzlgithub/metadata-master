@@ -33,13 +33,8 @@
                             <span class="public-button ml30 position-r choose-show cp">选择客户<i class="layui-icon va pl5">&#xe61a;</i></span>
                             <div class="third-select">
                                 <p class="mt5">（一次最多选5个）</p>
-                                <ul class="layui-form choose-check-list mt20 clearfix pb20">
-                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
-                                               checked=""/></li>
-                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
-                                               checked=""/></li>
-                                    <li><input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
-                                               checked=""/></li>
+                                <ul class="layui-form choose-check-list mt20 clearfix pb20" id="customer-all-id">
+
                                 </ul>
                                 <ul class="mt10 pb20 bd-top pt10 check-list">
                                     <li class="layui-icon">身份验证<i>&#x1006;</i></li>
@@ -197,26 +192,7 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
-<script>
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app'], function() {
-        var app = layui.app,
-            $ = layui.jquery
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-    });
-    $(document).ready(function() {
-        $(".choose-hide").click(function() {
-            $(".third-select").hide();
-        });
-        $(".choose-show").click(function() {
-            $(".third-select").show();
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/business/monitoring-customer.js"></script>
 </body>
 
 </html>

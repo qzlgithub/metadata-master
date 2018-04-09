@@ -140,4 +140,6 @@ public interface ClientService
     void getClientRemindForTimes(Date date, Page page, RestListResp resp);
 
     void updateClientRemind(Long remindId, String remark, RestResp resp);
+
+    void getAllClient(RestListResp res);
 }

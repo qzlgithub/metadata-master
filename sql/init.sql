@@ -475,3 +475,34 @@ create table `warning_setting` (
 )
   engine = InnoDB
   default charset = utf8;
+
+-- ----------------------------
+-- Table structure for `job`
+-- ----------------------------
+drop table if exists `job`;
+create table `job`
+(
+  `code`          varchar(16) not null,
+  `name`          varchar(32) not null,
+  `last_suc_time` datetime default null,
+  primary key (`code`)
+)
+  engine = InnoDB
+  default charset = utf8;
+
+-- ----------------------------
+-- Table structure for `job_log`
+-- ----------------------------
+drop table if exists `job_log`;
+create table `job_log`
+(
+  `id`          bigint(20)          not null auto_increment,
+  `create_time` datetime            not null,
+  `job_code`    varchar(16)         not null,
+  `success`     tinyint(1) unsigned not null,
+  `remark`      varchar(256)        null,
+  primary key (`id`)
+)
+  engine = InnoDB
+  default charset = utf8;
+

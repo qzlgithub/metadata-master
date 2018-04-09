@@ -1843,6 +1843,29 @@ public class ClientRpcServiceImpl implements ClientRpcService
         redisDao.cleanUpTraffic(date.getTime());
     }
 
+    @Override
+    public ListDTO<ClientInfoResDTO> getAllClient()
+    {
+        ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
+        List<Client> clientList = clientMapper.findAll();
+        List<ClientInfoResDTO> dataList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(clientList))
+        {
+            ClientInfoResDTO clientInfoResDTO;
+            for(Client item : clientList)
+            {
+                clientInfoResDTO = new ClientInfoResDTO();
+                clientInfoResDTO.setClientId(item.getId());
+                clientInfoResDTO.setCorpName(item.getCorpName());
+                clientInfoResDTO.setShortName(item.getShortName());
+                dataList.add(clientInfoResDTO);
+            }
+        }
+        listDTO.setList(dataList);
+        listDTO.setTotal(dataList.size());
+        return listDTO;
+    }
+
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)
     {
         List<SubUserResDTO> list = new ArrayList<>();

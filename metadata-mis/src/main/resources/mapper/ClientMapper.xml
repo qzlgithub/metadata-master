@@ -24,6 +24,10 @@
         from `client`
     </sql>
 
+    <select id="findAll" resultMap="BaseResultMap">
+        <include refid="select_all" />
+    </select>
+
     <insert id="add" parameterType="Client" useGeneratedKeys="true" keyProperty="id">
         insert into `client`
         <trim prefix="(" suffix=")" suffixOverrides=",">

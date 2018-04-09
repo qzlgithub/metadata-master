@@ -31,4 +31,6 @@ public interface ClientMapper
             @Param("idList") List<Long> idList);
 
     int countByStartTime(Date date);
+
+    List<Client> findAll();
 }

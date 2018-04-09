@@ -914,6 +914,25 @@ public class ClientServiceImpl implements ClientService
         resp.setError(responseDTO.getResult());
     }
 
+    @Override
+    public void getAllClient(RestListResp res)
+    {
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getAllClient();
+        List<ClientInfoResDTO> dataList = listDTO.getList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            Map<String, Object> map;
+            for(ClientInfoResDTO item : dataList)
+            {
+                map = new HashMap<>();
+                map.put(Field.CLIENT_ID, item.getClientId());
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.SHORT_NAME, item.getShortName());
+            }
+        } res.setList(list);
+    }
+
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)
     {
         List<String> xData = DateRangeUtils.getRangeSpilt(range, unit); // x轴坐标名
