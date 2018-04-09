@@ -20,9 +20,9 @@ mybatis:
 
 mongodb:
   analysis:
-    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/metadata?replicaSet=mgset-5409523
+    uri: mongodb://matedata:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/metadata?replicaSet=mgset-5409523
   transaction:
-    uri: mongodb://md_recorder:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/metadata_access?replicaSet=mgset-5409523
+    uri: mongodb://matedata:A&Ni8HOu9#nn!0kJ@dds-uf660704d5f162941.mongodb.rds.aliyuncs.com:3717,dds-uf660704d5f162942.mongodb.rds.aliyuncs.com:3717/matedata?replicaSet=mgset-5409523
 
 dubbo:
   protocol:
