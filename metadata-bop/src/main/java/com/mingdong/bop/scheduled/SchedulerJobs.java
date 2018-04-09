@@ -49,7 +49,7 @@ public class SchedulerJobs
     @PostConstruct
     private void cleanTraffic()
     {
-        JobDetail jobDetail = JobBuilder.newJob(ClientRemindJob.class)
+        JobDetail jobDetail = JobBuilder.newJob(CleanTrafficJob.class)
                 .withIdentity("cleanTrafficJob", "jobGroup")
                 .build();
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 * * * ?");//每小时执行
