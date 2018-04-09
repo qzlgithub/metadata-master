@@ -500,7 +500,7 @@ create table `job_log`
   `create_time` datetime            not null,
   `job_code`    varchar(16)         not null,
   `success`     tinyint(1) unsigned not null,
-  `remark`      varchar(256)        null,
+  `remark`      varchar(256)                 default null,
   primary key (`id`)
 )
   engine = InnoDB
