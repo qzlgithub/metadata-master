@@ -172,4 +172,5 @@ insert into
   `product`
   (create_time, update_time, type, custom, code, name, cost_amt, remark, enabled)
 values
-  (now(), now(), 1, 0, 'CDK', '常欠客', '0', '常欠客', 1);
+  (now(), now(), 1, 0, 'FIN-CDK', '常欠客', '0', '常欠客', 1),
+  (now(), now(), 1, 0, 'FIN-HMD', '黑名单', '0', '黑名单', 1);

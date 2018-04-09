@@ -2,8 +2,8 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    FIN_CDK("CDK", "/credit/overdue"),
-    FIN_HMD("HMD", "/credit/blacklist");
+    FIN_CDK("FIN-CDK", "/credit/overdue"),
+    FIN_HMD("FIN-HMD", "/credit/blacklist");
 
     private final String code;
     private final String uri;
