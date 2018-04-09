@@ -18,4 +18,9 @@ public interface QuartzService
      * 客户服务提醒
      */
     void quartzClientRemind(Date date);
+
+    /**
+     * 清理定时缓存数据
+     */
+    void cleanTraffic(Date date);
 }
