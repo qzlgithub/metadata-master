@@ -43,13 +43,13 @@ public class QuartzServiceImpl implements QuartzService
         try
         {
             clientRpcService.statsRechargeByDate(date);
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
+            saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.TRUE, null);
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
-                    JobType.STATS_ALL.getName() + ":" + longSdf.format(date) + e.getMessage());
+            saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
+                    JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date) + e.getMessage());
         }
     }
 
@@ -59,13 +59,13 @@ public class QuartzServiceImpl implements QuartzService
         try
         {
             clientRpcService.quartzClientRemind(date);
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
+            saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.TRUE, null);
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
-                    JobType.STATS_ALL.getName() + ":" + longSdf.format(date) + e.getMessage());
+            saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.FALSE,
+                    JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date) + e.getMessage());
         }
     }
 
@@ -75,13 +75,13 @@ public class QuartzServiceImpl implements QuartzService
         try
         {
             clientRpcService.cleanTraffic(date);
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
+            saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.TRUE, null);
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
-                    JobType.STATS_ALL.getName() + ":" + longSdf.format(date) + e.getMessage());
+            saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.FALSE,
+                    JobType.CLEAN_TRAFFIC.getName() + ":" + longSdf.format(date) + e.getMessage());
         }
     }
 
