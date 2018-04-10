@@ -55,20 +55,20 @@ public class ClientServiceImpl implements ClientService
         ClientProduct clientProduct = clientProductMapper.findByAppId(appId);
         if(clientProduct == null)
         {
-            res.setResult(MDResult.APP_ID_NOT_EXIST); // AppID无效
+            res.response(MDResult.APP_ID_NOT_EXIST); // AppID无效
             return;
         }
         Product product = productMapper.findById(clientProduct.getProductId());
         if(product == null || !TrueOrFalse.TRUE.equals(product.getEnabled()))
         {
-            res.setResult(MDResult.PRODUCT_DISABLED); // 服务已禁用
+            res.response(MDResult.PRODUCT_DISABLED); // 服务已禁用
             return;
         }
         // 校验客户账号是否禁用
         Client client = clientMapper.findById(clientProduct.getClientId());
         if(!TrueOrFalse.TRUE.equals(client.getEnabled()) || !TrueOrFalse.FALSE.equals(client.getDeleted()))
         {
-            res.setResult(MDResult.CLIENT_ACCT_DISABLED); // 企业账号已被禁用
+            res.response(MDResult.CLIENT_ACCT_DISABLED); // 企业账号已被禁用
             return;
         }
         ClientUser user;
@@ -79,12 +79,12 @@ public class ClientServiceImpl implements ClientService
             if(user == null || !TrueOrFalse.FALSE.equals(user.getDeleted()) || !client.getId().equals(
                     user.getClientId()))
             {
-                res.setResult(MDResult.CLIENT_SUB_ACCT_NOT_EXIST); // 子账号不存在
+                res.response(MDResult.CLIENT_SUB_ACCT_NOT_EXIST); // 子账号不存在
                 return;
             }
             else if(!TrueOrFalse.TRUE.equals(user.getEnabled()))
             {
-                res.setResult(MDResult.CLIENT_SUB_ACCT_DISABLED); // 子账号已被禁用
+                res.response(MDResult.CLIENT_SUB_ACCT_DISABLED); // 子账号已被禁用
                 return;
             }
         }
@@ -94,7 +94,7 @@ public class ClientServiceImpl implements ClientService
         }
         if(StringUtils.isNullBlank(user.getAppSecret()))
         {
-            res.setResult(MDResult.SECRET_KEY_NOT_SET); // 未设置用户密钥
+            res.response(MDResult.SECRET_KEY_NOT_SET); // 未设置用户密钥
             return;
         }
         // 查询用户账号对于产品的安全配置信息
@@ -102,13 +102,13 @@ public class ClientServiceImpl implements ClientService
                 product.getId());
         if(clientUserProduct == null || StringUtils.isNullBlank(clientUserProduct.getReqHost()))
         {
-            res.setResult(MDResult.CLIENT_IP_NOT_SET);
+            res.response(MDResult.CLIENT_IP_NOT_SET);
             return;
         }
         // 验证请求密钥
         if(!checkAccessKey(user.getAppSecret(), timestamp, accessKey))
         {
-            res.setResult(MDResult.INVALID_ACCESS_KEY);
+            res.response(MDResult.INVALID_ACCESS_KEY);
             return;
         }
         String accessToken;
@@ -159,8 +159,8 @@ public class ClientServiceImpl implements ClientService
         auth.setSecretKey(user.getAppSecret());
         auth.setHost(clientUserProduct.getReqHost());
         redisDao.saveUserAuth(accessToken, auth, seconds);
-        res.add(Field.ACCESS_TOKEN, accessToken);
-        res.add(Field.EXPIRATION, validTime.getTime() / 1000);
+        res.addResultData(Field.ACCESS_TOKEN, accessToken);
+        res.addResultData(Field.EXPIRATION, validTime.getTime() / 1000);
     }
 
     /**

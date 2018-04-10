@@ -3,16 +3,14 @@ package com.mingdong.mis.model;
 import com.mingdong.mis.constant.MDResult;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MDResp
 {
     private Integer code; // 请求状态：0-成功，其他-失败
-    private Integer status; // 查询状态：0-正常命中，1-未命中
     private long timestamp;
     private String requestNo;
-    private Map<String, Object> data;
+    private MDRes result;
 
     private MDResp()
     {
@@ -23,6 +21,7 @@ public class MDResp
         MDResp o = new MDResp();
         o.setCode(MDResult.OK.getCode());
         o.setTimestamp(System.currentTimeMillis() / 1000);
+        o.setResult(new MDRes());
         return o;
     }
 
@@ -34,16 +33,6 @@ public class MDResp
     public void setCode(Integer code)
     {
         this.code = code;
-    }
-
-    public Integer getStatus()
-    {
-        return status;
-    }
-
-    public void setStatus(Integer status)
-    {
-        this.status = status;
     }
 
     public long getTimestamp()
@@ -66,40 +55,34 @@ public class MDResp
         this.requestNo = requestNo;
     }
 
-    public Map<String, Object> getData()
+    public MDRes getResult()
     {
-        return data;
+        return result;
     }
 
-    public void setData(Map<String, Object> data)
+    public void setResult(MDRes result)
     {
-        this.data = data;
+        this.result = result;
     }
 
-    public void setResult(MDResult mr)
+    public void setResultStatus(Integer status)
     {
-        code = mr.getCode();
+        result.setStatus(status);
     }
 
-    public void add(String k, Object v)
+    public void setResultData(Map<String, Object> data)
     {
-        if(data == null)
-        {
-            data = new HashMap<>();
-        }
-        data.put(k, v);
+        result.setData(data);
     }
 
-    public void addAll(Map<String, Object> map)
+    public void addResultData(String k, Object v)
     {
-        if(data == null)
-        {
-            data = map;
-        }
-        else
-        {
-            data.putAll(map);
-        }
+        result.addData(k, v);
+    }
+
+    public void response(MDResult mdResult)
+    {
+        code = mdResult.getCode();
     }
 
     public Date requestAt()

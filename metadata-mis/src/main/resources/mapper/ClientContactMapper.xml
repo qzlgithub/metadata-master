@@ -16,7 +16,8 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `client_id`, `name`, `position`, `phone`, `email`, `general`
-        from `client_contact`
+        from
+            `client_contact`
     </sql>
 
     <!-- @formatter:off -->
@@ -41,14 +42,9 @@
 
     <update id="updateById" parameterType="ClientContact">
         update `client_contact`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `client_id`   = #{clientId},
-            `name`        = #{name},
-            `position`    = #{position},
-            `phone`       = #{phone},
-            `email`       = #{email},
-            `general`     = #{general}
+        set `create_time`   = #{createTime}, `update_time` = #{updateTime}, `client_id` =
+        #{clientId}, `name` = #{name}, `position` = #{position}, `phone` = #{phone}, `email` = #{email}, `general` =
+        #{general}
         where `id` = #{id}
     </update>
 

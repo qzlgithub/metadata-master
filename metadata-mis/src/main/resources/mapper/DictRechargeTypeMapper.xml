@@ -41,12 +41,8 @@
 
     <update id="updateById" parameterType="DictRechargeType">
         update `dict_recharge_type`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `name`        = #{name},
-            `remark`      = #{remark},
-            `enabled`     = #{enabled},
-            `deleted`     = #{deleted}
+        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `name` = #{name},
+            `remark`      = #{remark}, `enabled` = #{enabled}, `deleted` = #{deleted}
         where `id` = #{id}
     </update>
 

@@ -54,8 +54,7 @@
         select
             `id`, `create_time`, `update_time`, `code`, `name`, `seq_no`, `parent_id`, `enabled`
         from `dict_industry`
-        where
-            `id` = #{id}
+        where `id` = #{id}
     </select>
 
     <select id="getByParentAndStatus" resultMap="BaseResultMap">

@@ -77,14 +77,13 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `type`, `image_path`, `user_id`, `title`, `synopsis`, `author`,
-            `content`, `order_id`,`publish_time`, `published`, `deleted`
+            `content`, `order_id`, `publish_time`, `published`, `deleted`
         from articles
     </sql>
 
     <select id="findListAll" resultMap="BaseResultMap">
         <include refid="select_all" />
-        where `deleted` = 0
-        order by `order_id` desc
+        where `deleted` = 0 order by `order_id` desc
     </select>
 
     <select id="findById" resultMap="BaseResultMap" parameterType="Long">
@@ -106,9 +105,7 @@
     </select>
 
     <select id="countByType" resultType="Integer" parameterType="Integer">
-        select count(`id`)
-        from articles
-        where `deleted` = 0 and `published` = 1
+        select count(`id`) from articles where `deleted` = 0 and `published` = 1
         <if test="type != null">and `type` = #{type}</if>
     </select>
 

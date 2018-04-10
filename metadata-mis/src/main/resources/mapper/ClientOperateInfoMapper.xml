@@ -16,14 +16,11 @@
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
         select
-            col.`create_time` as operate_time,
-            col.`type`        as type,
-            col.`reason`      as reason,
-            m.`name`          as manager_name
-        from `client_operate_log` col
-            left join `user` m
+            col.`create_time` as operate_time, col.`type` as type, col.`reason` as reason, m.`name` as manager_name
+        from `client_operate_log` col left join `user` m
                 on col.`manager_id` = m.`id`
-        where col.`client_id` = #{clientId}
+        where col.`client_id` =
+              #{clientId}
         order by col.`create_time` desc
     </select>
 </mapper>

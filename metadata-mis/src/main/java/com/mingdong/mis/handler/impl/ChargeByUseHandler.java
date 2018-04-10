@@ -46,23 +46,23 @@ public class ChargeByUseHandler implements IChargeHandler
             locked = redisDao.lockProductAccount(lockId, lockVal);
             if(!locked)
             {
-                resp.setResult(MDResult.SYSTEM_BUSY);
+                resp.response(MDResult.SYSTEM_BUSY);
                 return;
             }
             // 查询产品余额及计费方式
             CheckResult checkResult = chargeService.checkAccountAndBillPlan();
             if(checkResult.getResult() != MDResult.OK)
             {
-                resp.setResult(checkResult.getResult());
+                resp.response(checkResult.getResult());
                 return;
             }
             Metadata metadata = routeHandler.routeProcessor(payload);
             // 请求计费，保存查询记录，并返回请求编号
             String requestNo = dataService.chargeAndSaveRequestLog(checkResult.getUnitAmt(), checkResult.getBalance(),
                     payload, metadata.isHit(), resp.requestAt());
-            resp.setStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
+            resp.setResultStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             resp.setRequestNo(requestNo);
-            resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
+            resp.setResultData((JSONObject) JSON.toJSON(metadata.getData()));
         }
         finally
         {

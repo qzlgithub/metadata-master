@@ -45,7 +45,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                 // 验证接入规范
                 if(StringUtils.isNullBlank(token))
                 {
-                    resp.setResult(MDResult.ACCESS_DENIED);
+                    resp.response(MDResult.ACCESS_DENIED);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
@@ -53,14 +53,14 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                 // 验证请求凭证
                 if(auth == null)
                 {
-                    resp.setResult(MDResult.INVALID_ACCESS_TOKEN);
+                    resp.response(MDResult.INVALID_ACCESS_TOKEN);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
                 // 验证ip白名单
                 if(!auth.getHost().equals(ip))
                 {
-                    resp.setResult(MDResult.INVALID_CLIENT_IP);
+                    resp.response(MDResult.INVALID_CLIENT_IP);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }
@@ -68,7 +68,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
                 // 验证产品权限
                 if(RequestThread.getProduct() == null || !uri.equals(RequestThread.getProduct().getUri()))
                 {
-                    resp.setResult(MDResult.ACCESS_RESTRICTED);
+                    resp.response(MDResult.ACCESS_RESTRICTED);
                     response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charset.UTF_8));
                     return false;
                 }

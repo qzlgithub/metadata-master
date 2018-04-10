@@ -10,10 +10,7 @@
     </resultMap>
 
     <insert id="addList" parameterType="List">
-        insert into
-            `group_function`
-            (`create_time`, `update_time`, `group_id`, `privilege_id`)
-        values
+        insert into `group_function` (`create_time`, `update_time`, `group_id`, `privilege_id`) values
         <foreach collection="list" item="item" separator=",">
             (#{item.createTime}, #{item.updateTime}, #{item.groupId}, #{item.privilegeId})
         </foreach>
@@ -31,11 +28,14 @@
     </update>
 
     <delete id="deleteByGroupId" parameterType="Long">
-        delete from `group_function` where `group_id` = #{groupId}
+        delete from `group_function`
+        where `group_id` = #{groupId}
     </delete>
 
     <select id="getByGroupId" parameterType="Long" resultMap="BaseResultMap">
-        select `privilege_id` from `group_function` where `group_id` = #{groupId}
+        select `privilege_id`
+        from `group_function`
+        where `group_id` = #{groupId}
     </select>
 
 </mapper>

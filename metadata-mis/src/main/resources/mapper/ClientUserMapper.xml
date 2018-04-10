@@ -57,17 +57,9 @@
 
     <update id="updateById" parameterType="ClientUser">
         update `client_user`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `client_id`   = #{clientId},
-            `name`        = #{name},
-            `phone`       = #{phone},
-            `email`       = #{email},
-            `username`    = #{username},
-            `password`    = #{password},
-            `app_secret`  = #{appSecret},
-            `enabled`     = #{enabled},
-            `deleted`     = #{deleted}
+        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `client_id` =
+        #{clientId}, `name` = #{name}, `phone` = #{phone}, `email` = #{email}, `username` = #{username}, `password` =
+        #{password}, `app_secret` = #{appSecret}, `enabled` = #{enabled}, `deleted` = #{deleted}
         where `id` = #{id}
     </update>
 
@@ -137,28 +129,21 @@
     </select>
     <select id="getSubUserListByClient" parameterType="Long" resultMap="BaseResultMap">
         select
-            cur.`id`          as id,
-            cur.`create_time` as create_time,
-            cur.`update_time` as update_time,
-            cur.`client_id`   as client_id,
-            cur.`name`        as name,
-            cur.`phone`       as phone,
-            cur.`email`       as email,
-            cur.`username`    as username,
-            cur.`password`    as password,
-            cur.`app_secret`  as app_secret,
-            cur.`enabled`     as enabled,
-            cur.`deleted`     as deleted
-        from client_user cur
-            inner join client ct
-                on cur.`client_id` = ct.`id` and cur.`deleted` = 0 and cur.`id` != ct.`primary_user_id` and
+            cur.`id` as       id, cur.`create_time` as create_time, cur.`update_time` as update_time, cur.`client_id` as
+                              client_id, cur.`name` as name, cur.`phone` as phone, cur.`email` as email,
+            cur.`username` as username,
+            cur.`password` as password, cur.`app_secret` as app_secret, cur.`enabled` as enabled,
+            cur.`deleted` as  deleted
+        from client_user cur inner join client ct
+                on cur.`client_id` = ct.`id` and cur.`deleted` = 0 and cur.`id` !=
+                                                                       ct.`primary_user_id` and
                    cur.`client_id` = #{clientId}
     </select>
     <select id="countSubUserListByClient" parameterType="Long" resultType="Integer">
         select count(cur.`id`)
-        from client_user cur
-            inner join client ct
-                on cur.`client_id` = ct.`id` and cur.`deleted` = 0 and cur.`id` != ct.`primary_user_id` and
+        from client_user cur inner join client ct
+                on cur.`client_id` = ct.`id` and cur.`deleted`
+                                                 = 0 and cur.`id` != ct.`primary_user_id` and
                    cur.`client_id` = #{clientId}
     </select>
 </mapper>

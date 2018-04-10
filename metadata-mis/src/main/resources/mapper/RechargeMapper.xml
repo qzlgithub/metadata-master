@@ -24,7 +24,8 @@
         select
             `id`, `create_time`, `update_time`, `client_id`, `product_id`, `trade_no`, `contract_no`, `bill_plan`,
             `recharge_type`, `amount`, `balance`, `start_date`, `end_date`, `unit_amt`, `remark`, `manager_id`
-        from `recharge`
+        from
+            `recharge`
     </sql>
 
     <insert id="add" parameterType="Recharge" useGeneratedKeys="true" keyProperty="id">
@@ -92,16 +93,6 @@
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}
-    </select>
-
-    <select id="countBy" resultType="int">
-        select count(*) from `recharge`
-        <where>
-            <if test="clientId != null">`client_id` = #{clientId}</if>
-            <if test="productId != null">and `product_id` = #{productId}</if>
-            <if test="startTime != null">and `create_time` >= #{startTime}</if>
-            <if test="endTime != null">and `create_time` &lt; #{endTime}</if>
-        </where>
     </select>
 
     <select id="findByContractNo" parameterType="String" resultMap="BaseResultMap">

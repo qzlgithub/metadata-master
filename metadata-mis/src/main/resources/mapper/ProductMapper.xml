@@ -50,17 +50,10 @@
 
     <update id="updateById" parameterType="Product">
         update `product`
-        set `create_time` = #{createTime},
-            `update_time` = #{updateTime},
-            `type`        = #{type},
-            `code`        = #{code},
-            `name`        = #{name},
-            `cost_amt`    = #{costAmt},
-            `remark`      = #{remark},
-            `enabled`     = #{enabled},
-            `custom`      = #{custom}
-        where `id` =
-              #{id}
+        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `type` = #{type}, `code` =
+        #{code}, `name`   = #{name}, `cost_amt` = #{costAmt}, `remark` = #{remark}, `enabled` = #{enabled}, `custom` =
+        #{custom}
+        where `id` = #{id}
     </update>
 
     <update id="updateSkipNull" parameterType="Product">
@@ -82,11 +75,6 @@
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}
-    </select>
-
-    <select id="findByName" parameterType="String" resultMap="BaseResultMap">
-        <include refid="select_all" />
-        where `name` = #{name}
     </select>
 
     <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">
@@ -116,10 +104,7 @@
     </select>
 
     <select id="countByType" resultType="int">
-        select
-        count(*)
-        from `product`
-        where `enabled` = 1
+        select count(*) from `product` where `enabled` = 1
         <if test="custom != null">and `custom` = #{custom}</if>
         <if test="typeIdList != null and typeIdList.size() > 0">
             and `type` in

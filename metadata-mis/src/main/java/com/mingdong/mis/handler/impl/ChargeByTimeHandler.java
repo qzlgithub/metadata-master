@@ -37,7 +37,7 @@ public class ChargeByTimeHandler implements IChargeHandler
         redisDao.realTimeTraffic(resp.getTimestamp(), RequestThread.getProductId(), RequestThread.getClientId());
         if(!checkTimeValid(resp.getTimestamp()))
         {
-            resp.setResult(MDResult.PRODUCT_EXPIRED);
+            resp.response(MDResult.PRODUCT_EXPIRED);
             return;
         }
         Metadata metadata = routeHandler.routeProcessor(payload);
@@ -46,12 +46,12 @@ public class ChargeByTimeHandler implements IChargeHandler
         resp.setRequestNo(requestNo);
         if(metadata.isHit())
         {
-            resp.setStatus(TrueOrFalse.FALSE);
-            resp.setData((JSONObject) JSON.toJSON(metadata.getData()));
+            resp.setResultStatus(TrueOrFalse.FALSE);
+            resp.setResultData((JSONObject) JSON.toJSON(metadata.getData()));
         }
         else
         {
-            resp.setStatus(TrueOrFalse.TRUE);
+            resp.setResultStatus(TrueOrFalse.TRUE);
         }
     }
 

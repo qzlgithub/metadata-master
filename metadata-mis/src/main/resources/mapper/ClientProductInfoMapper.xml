@@ -23,7 +23,8 @@
                 on cp.`client_id` = c.`id`
             left join `client_remind_product` crp
                 on r.`id` = crp.`recharge_id`
-        where crp.`remind` is null and r.`bill_plan` = 1 and r.`end_date` >= #{before} and r.`end_date` &lt; #{after}
+        where crp.`remind` is null and r.`bill_plan` = 1 and
+              r.`end_date` >= #{before} and r.`end_date` &lt; #{after}
     </select>
 
     <select id="getWillOverByTimes" resultMap="BaseResultMap">
@@ -39,7 +40,8 @@
                 on cp.`client_id` = c.`id`
             left join `client_remind_product` crp
                 on r.`id` = crp.`recharge_id`
-        where crp.`remind` is null and r.`bill_plan` != 1 and cp.`balance` &lt;= #{amount}
+        where crp.`remind` is null and r.`bill_plan` != 1 and
+              cp.`balance` &lt;= #{amount}
     </select>
 
 </mapper>

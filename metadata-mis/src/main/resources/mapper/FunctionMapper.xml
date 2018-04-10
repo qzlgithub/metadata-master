@@ -74,7 +74,8 @@
             p.`id`, p.`name`
         from `function` p
             join `group_function` rp
-                on p.`id` = rp.`privilege_id` and rp.`group_id` = #{groupId}
+                on p.`id` = rp.`privilege_id` and
+                   rp.`group_id` = #{groupId}
         where p.`parent_id` = 0
     </select>
 </mapper>

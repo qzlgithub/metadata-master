@@ -88,14 +88,11 @@
     </delete>
 
     <insert id="addAll" parameterType="List">
-        insert into
-            `client_product`
-            (`id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`, `bill_plan`, `balance`,
-             `latest_recharge_id`, `opened`)
-        values
+        insert into `client_product` (`id`, `create_time`, `update_time`, `client_id`, `product_id`, `app_id`,
+        `bill_plan`, `balance`, `latest_recharge_id`, `opened`) values
         <foreach collection="list" item="item" separator=",">
             (#{item.id}, #{item.createTime}, #{item.updateTime}, #{item.clientId}, #{item.productId}, #{item.appId},
-             #{item.billPlan}, #{item.balance}, #{item.latestRechargeId}, #{item.opened})
+            #{item.billPlan}, #{item.balance}, #{item.latestRechargeId}, #{item.opened})
         </foreach>
     </insert>
 </mapper>

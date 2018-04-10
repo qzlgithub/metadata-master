@@ -15,8 +15,6 @@ public interface ProductMapper
 
     Product findById(Long id);
 
-    Product findByName(String name);
-
     List<Product> getListByStatus(Integer enabled);
 
     int countBy(@Param("keyword") String keyword, @Param("type") Integer type, @Param("custom") Integer custom,

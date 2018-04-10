@@ -28,6 +28,8 @@
     </delete>
 
     <update id="disposeByClientRemindId" parameterType="Long">
-        update `client_remind_product` set `remind` = 1 where `remind_id` = #{remindId}
+        update `client_remind_product`
+        set `remind` = 1
+        where `remind_id` = #{remindId}
     </update>
 </mapper>

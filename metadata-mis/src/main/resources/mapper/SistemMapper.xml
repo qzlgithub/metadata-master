@@ -11,15 +11,13 @@
 
     <update id="updateClientUserMax">
         update `sistem`
-        set `value`       = #{clientUserMax},
-            `update_time` = #{date}
+        set `value` = #{clientUserMax}, `update_time` = #{date}
         where `name` = 'CLIENT_SUB_USER_QTY'
     </update>
 
     <update id="updateServiceQQ">
         update `sistem`
-        set `value`       = #{serviceQQ},
-            `update_time` = #{date}
+        set `value` = #{serviceQQ}, `update_time` = #{date}
         where `name` = 'SERVICE_QQ'
     </update>
 
@@ -34,5 +32,4 @@
         from `sistem`
         where `name` = 'SERVICE_QQ'
     </select>
-    
 </mapper>

@@ -18,8 +18,8 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `recharge_type`, `stats_year`, `stats_month`, `stats_week`, `stats_day`
-            , `stats_hour`, `stats_date`, `amount`
+            `id`, `create_time`, `update_time`, `recharge_type`, `stats_year`, `stats_month`, `stats_week`,
+            `stats_day`, `stats_hour`, `stats_date`, `amount`
         from `stats_recharge`
     </sql>
 
@@ -77,55 +77,49 @@
 
     <select id="getListGroupByHour" resultMap="BaseResultMap">
         select
-            sr.`recharge_type` as recharge_type,
-            sr.`stats_hour`    as stats_hour,
-            rt.`name`          as recharge_type_name,
+            sr.`recharge_type` as recharge_type, sr.`stats_hour` as stats_hour, rt.`name` as recharge_type_name,
             sum(sr.`amount`)   as amount
-        from `stats_recharge` sr
-            left join `dict_recharge_type` rt
-                on sr.`recharge_type` = rt.`id`
+        from `stats_recharge` sr left join `dict_recharge_type` rt
+                on sr.`recharge_type` =
+                   rt.`id`
         where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
-        group by sr.`recharge_type`, sr.`stats_hour`
+        group by sr.`recharge_type`,
+            sr.`stats_hour`
     </select>
 
     <select id="getListGroupByDay" resultMap="BaseResultMap">
         select
-            sr.`recharge_type` as recharge_type,
-            sr.`stats_date`    as stats_date,
-            rt.`name`          as recharge_type_name,
+            sr.`recharge_type` as recharge_type, sr.`stats_date` as stats_date, rt.`name` as recharge_type_name,
             sum(sr.`amount`)   as amount
-        from `stats_recharge` sr
-            left join `dict_recharge_type` rt
-                on sr.`recharge_type` = rt.`id`
+        from `stats_recharge` sr left join `dict_recharge_type` rt
+                on sr.`recharge_type` =
+                   rt.`id`
         where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
-        group by sr.`recharge_type`, sr.`stats_date`
+        group by sr.`recharge_type`,
+            sr.`stats_date`
     </select>
 
     <select id="getListGroupByWeek" resultMap="BaseResultMap">
         select
-            sr.`recharge_type` as recharge_type,
-            sr.`stats_year`    as stats_year,
-            sr.`stats_week`    as stats_week,
-            rt.`name`          as recharge_type_name,
-            sum(sr.`amount`)   as amount
-        from `stats_recharge` sr
-            left join `dict_recharge_type` rt
+            sr.`recharge_type` as recharge_type, sr.`stats_year` as stats_year, sr.`stats_week` as stats_week,
+            rt.`name`          as recharge_type_name, sum(sr.`amount`) as amount
+        from `stats_recharge` sr left join
+            `dict_recharge_type` rt
                 on sr.`recharge_type` = rt.`id`
-        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        where sr.`stats_date` >= #{startDate} and
+              sr.`stats_date` &lt;= #{endDate}
         group by sr.`recharge_type`, sr.`stats_year`, sr.`stats_week`
     </select>
 
     <select id="getListGroupByMonth" resultMap="BaseResultMap">
         select
-            sr.`recharge_type` as recharge_type,
-            sr.`stats_year`    as stats_year,
-            sr.`stats_month`   as stats_month,
-            rt.`name`          as recharge_type_name,
-            sum(sr.`amount`)   as amount
-        from `stats_recharge` sr
-            left join `dict_recharge_type` rt
+            sr.`recharge_type` as recharge_type, sr.`stats_year` as stats_year, sr.`stats_month` as stats_month,
+            rt.`name`          as recharge_type_name, sum(sr.`amount`) as amount
+        from `stats_recharge` sr left join
+            `dict_recharge_type` rt
                 on sr.`recharge_type` = rt.`id`
-        where sr.`stats_date` >= #{startDate} and sr.`stats_date` &lt;= #{endDate}
+        where sr.`stats_date` >= #{startDate} and
+              sr.`stats_date` &lt;= #{endDate}
         group by sr.`recharge_type`, sr.`stats_year`, sr.`stats_month`;
     </select>
 </mapper>

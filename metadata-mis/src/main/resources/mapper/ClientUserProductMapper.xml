@@ -14,8 +14,7 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `user_id`, `product_id`, `req_host`, `access_token`,
-            `valid_time`
+            `id`, `create_time`, `update_time`, `user_id`, `product_id`, `req_host`, `access_token`, `valid_time`
         from `client_user_product`
     </sql>
 
@@ -75,9 +74,7 @@
     </select>
 
     <select id="getListBy" resultMap="BaseResultMap">
-        select *
-        from client_user_product cup inner join client_user cu
-                on cup.user_id = cu.id
+        select * from client_user_product cup inner join client_user cu on cup.user_id = cu.id
         <where>
             <if test="clientId != null">cu.`client_id` = #{clientId}</if>
             <if test="productId != null">and cup.`product_id` = #{productId}</if>

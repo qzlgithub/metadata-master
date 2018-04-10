@@ -19,8 +19,8 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`, `primary_user_id`,
-            `username`, `manager_id`, `account_qty`, `enabled`, `deleted`
+            `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`,
+            `primary_user_id`, `username`, `manager_id`, `account_qty`, `enabled`, `deleted`
         from `client`
     </sql>
 
@@ -64,18 +64,10 @@
 
     <update id="updateById" parameterType="Client">
         update `client`
-        set `create_time`     = #{createTime},
-            `update_time`     = #{updateTime},
-            `corp_name`       = #{corpName},
-            `short_name`      = #{shortName},
-            `license`         = #{license},
-            `industry_id`     = #{industryId},
-            `primary_user_id` = #{primaryUserId},
-            `username`        = #{username},
-            `manager_id`      = #{managerId},
-            `account_qty`     = #{accountQty},
-            `enabled`         = #{enabled},
-            `deleted`         = #{deleted}
+        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `corp_name` = #{corpName},
+            `short_name` = #{shortName}, `license` = #{license}, `industry_id` = #{industryId}, `primary_user_id` =
+        #{primaryUserId}, `username` = #{username}, `manager_id` = #{managerId}, `account_qty` = #{accountQty},
+            `enabled` = #{enabled}, `deleted` = #{deleted}
         where `id` = #{id}
     </update>
 

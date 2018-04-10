@@ -31,7 +31,7 @@ public class CreditController
         MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
         if(result != MDResult.OK)
         {
-            resp.setResult(result);
+            resp.response(result);
             return resp;
         }
         if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
@@ -53,7 +53,7 @@ public class CreditController
         MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
         if(result != MDResult.OK)
         {
-            resp.setResult(result);
+            resp.response(result);
             return resp;
         }
         if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))

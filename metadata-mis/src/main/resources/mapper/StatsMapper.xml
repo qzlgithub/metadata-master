@@ -65,51 +65,37 @@
 
     <select id="getListGroupByHour" resultMap="BaseResultMap">
         select
-            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
-            <if test="type == 2">sum(`client_request`) as client_request,</if>
-            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
-            `stats_hour` as stats_hour
-        from `stats`
-        where `stats_date` >= #{startTime}
-          and `stats_date` &lt;= #{endTime}
+        <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+        <if test="type == 2">sum(`client_request`) as client_request,</if>
+        <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+        `stats_hour` as stats_hour from `stats` where `stats_date` >= #{startTime} and `stats_date` &lt;= #{endTime}
         group by `stats_hour`
     </select>
 
     <select id="getListGroupByDay" resultMap="BaseResultMap">
         select
-            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
-            <if test="type == 2">sum(`client_request`) as client_request,</if>
-            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
-            `stats_date` as stats_date
-        from `stats`
-        where `stats_date` >= #{startTime}
-          and `stats_date` &lt;= #{endTime}
+        <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+        <if test="type == 2">sum(`client_request`) as client_request,</if>
+        <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+        `stats_date` as stats_date from `stats` where `stats_date` >= #{startTime} and `stats_date` &lt;= #{endTime}
         group by `stats_date`
     </select>
 
     <select id="getListGroupByWeek" resultMap="BaseResultMap">
         select
-            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
-            <if test="type == 2">sum(`client_request`) as client_request,</if>
-            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
-            `stats_year` as stats_year,
-            `stats_week` as stats_week
-        from `stats`
-        where `stats_date` >= #{startTime}
-          and `stats_date` &lt;= #{endTime}
-        group by `stats_year`, `stats_week`
+        <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+        <if test="type == 2">sum(`client_request`) as client_request,</if>
+        <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+        `stats_year` as stats_year, `stats_week` as stats_week from `stats` where `stats_date` >= #{startTime} and
+        `stats_date` &lt;= #{endTime} group by `stats_year`, `stats_week`
     </select>
 
     <select id="getListGroupByMonth" resultMap="BaseResultMap">
         select
-            <if test="type == 1">sum(`client_increment`) as client_increment,</if>
-            <if test="type == 2">sum(`client_request`) as client_request,</if>
-            <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
-            `stats_year` as stats_year,
-            `stats_month` as stats_month
-        from `stats`
-        where `stats_date` >= #{startTime}
-          and `stats_date` &lt;= #{endTime}
-        group by `stats_year`, `stats_month`
+        <if test="type == 1">sum(`client_increment`) as client_increment,</if>
+        <if test="type == 2">sum(`client_request`) as client_request,</if>
+        <if test="type == 3">sum(`client_recharge`) as client_recharge,</if>
+        `stats_year` as stats_year, `stats_month` as stats_month from `stats` where `stats_date` >= #{startTime} and
+        `stats_date` &lt;= #{endTime} group by `stats_year`, `stats_month`
     </select>
 </mapper>

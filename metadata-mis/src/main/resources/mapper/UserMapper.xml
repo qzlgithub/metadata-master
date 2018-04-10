@@ -20,8 +20,8 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `role_type`, `username`, `password`, `name`, `phone`, `qq`, `group_id`,
-            `enabled`, `session_id`,`alarm`,`pacify`
+            `id`, `create_time`, `update_time`, `role_type`, `username`, `password`, `name`, `phone`, `qq`,
+            `group_id`, `enabled`, `session_id`, `alarm`, `pacify`
         from `user`
     </sql>
 
