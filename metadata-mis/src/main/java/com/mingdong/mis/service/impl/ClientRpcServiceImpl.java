@@ -1840,7 +1840,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Override
     public void cleanTraffic(Date date)
     {
-        redisDao.cleanUpTraffic(date.getTime());
+        redisDao.cleanUpTraffic(date.getTime() / 1000);
     }
 
     @Override
@@ -1864,6 +1864,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
         listDTO.setList(dataList);
         listDTO.setTotal(dataList.size());
         return listDTO;
+    }
+
+    @Override
+    public ResponseDTO getStatsClientRequestCache(List<Long> clientIdList)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        return responseDTO;
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)

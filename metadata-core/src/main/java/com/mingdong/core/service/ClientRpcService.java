@@ -246,4 +246,6 @@ public interface ClientRpcService
     void cleanTraffic(Date date);
 
     ListDTO<ClientInfoResDTO> getAllClient();
+
+    ResponseDTO getStatsClientRequestCache(List<Long> clientIdList);
 }

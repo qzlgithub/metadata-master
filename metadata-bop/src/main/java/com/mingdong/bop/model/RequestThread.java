@@ -15,9 +15,6 @@ public class RequestThread
     public static final List<String> financeLinks = new ArrayList<>();
     public static final List<String> systemLinks = new ArrayList<>();
     private static final ThreadLocal<RequestHolder> threadHolder = new ThreadLocal<>();
-    public static String clientLinkPath;
-    public static String financeLinkPath;
-    public static String systemLinkPath;
 
     static
     {
@@ -74,54 +71,48 @@ public class RequestThread
 
     public static String getClientLink()
     {
-        if(clientLinkPath == null)
+        String clientLinkPath;
+        List<String> tempList = new ArrayList<>(get().getiPrivilege());
+        tempList.retainAll(clientLinks);
+        if(!CollectionUtils.isEmpty(tempList))
         {
-            List<String> tempList = new ArrayList<>(get().getiPrivilege());
-            tempList.retainAll(clientLinks);
-            if(!CollectionUtils.isEmpty(tempList))
-            {
-                clientLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }
-            else
-            {
-                clientLinkPath = "";
-            }
+            clientLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+        }
+        else
+        {
+            clientLinkPath = "";
         }
         return clientLinkPath;
     }
 
     public static String getFinanceLink()
     {
-        if(financeLinkPath == null)
+        String financeLinkPath;
+        List<String> tempList = new ArrayList<>(get().getiPrivilege());
+        tempList.retainAll(financeLinks);
+        if(!CollectionUtils.isEmpty(tempList))
         {
-            List<String> tempList = new ArrayList<>(get().getiPrivilege());
-            tempList.retainAll(financeLinks);
-            if(!CollectionUtils.isEmpty(tempList))
-            {
-                financeLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }
-            else
-            {
-                financeLinkPath = "";
-            }
+            financeLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+        }
+        else
+        {
+            financeLinkPath = "";
         }
         return financeLinkPath;
     }
 
     public static String getSystemLink()
     {
-        if(systemLinkPath == null)
+        String systemLinkPath;
+        List<String> tempList = new ArrayList<>(get().getiPrivilege());
+        tempList.retainAll(systemLinks);
+        if(!CollectionUtils.isEmpty(tempList))
         {
-            List<String> tempList = new ArrayList<>(get().getiPrivilege());
-            tempList.retainAll(systemLinks);
-            if(!CollectionUtils.isEmpty(tempList))
-            {
-                systemLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
-            }
-            else
-            {
-                systemLinkPath = "";
-            }
+            systemLinkPath = ModulePath.getPathByModuleId(tempList.get(0));
+        }
+        else
+        {
+            systemLinkPath = "";
         }
         return systemLinkPath;
     }
