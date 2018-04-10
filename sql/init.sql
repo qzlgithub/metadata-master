@@ -12,7 +12,7 @@ create table `articles` (
   `title`        varchar(32)         not null,
   `synopsis`     varchar(256)        not null,
   `author`       varchar(32)                  default null,
-  `content`      text                not null,
+  `content`      mediumtext          not null,
   `order_id`     int(11)             not null,
   `publish_time` date                         default null,
   `published`    tinyint(1) unsigned not null,
