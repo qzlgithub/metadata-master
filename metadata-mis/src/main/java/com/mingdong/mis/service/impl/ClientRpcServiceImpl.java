@@ -745,6 +745,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         clientUpd.setLicense(dto.getLicense());
         clientUpd.setIndustryId(dto.getIndustryId());
         clientUpd.setManagerId(dto.getManagerId());
+        clientUpd.setEnabled(dto.getEnabled());
         clientMapper.updateSkipNull(clientUpd);
         ClientUser userUpd = new ClientUser();
         userUpd.setId(client.getPrimaryUserId());
