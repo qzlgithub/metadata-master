@@ -21,7 +21,6 @@ public class MDResp
         MDResp o = new MDResp();
         o.setCode(MDResult.OK.getCode());
         o.setTimestamp(System.currentTimeMillis() / 1000);
-        o.setResult(new MDRes());
         return o;
     }
 
@@ -67,16 +66,31 @@ public class MDResp
 
     public void setResultStatus(Integer status)
     {
-        result.setStatus(status);
+        if(result == null)
+        {
+            result = new MDRes(status);
+        }
+        else
+        {
+            result.setStatus(status);
+        }
     }
 
     public void setResultData(Map<String, Object> data)
     {
+        if(result == null)
+        {
+            result = new MDRes();
+        }
         result.setData(data);
     }
 
     public void addResultData(String k, Object v)
     {
+        if(result == null)
+        {
+            result = new MDRes();
+        }
         result.addData(k, v);
     }
 

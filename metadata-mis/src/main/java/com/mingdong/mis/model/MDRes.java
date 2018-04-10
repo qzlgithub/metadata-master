@@ -8,9 +8,14 @@ public class MDRes
     private Integer status;
     private Map<String, Object> data;
 
+    MDRes(Integer status)
+    {
+        this.status = status;
+    }
+
     MDRes()
     {
-        status = 0;
+        new MDRes(0);
     }
 
     public Integer getStatus()
