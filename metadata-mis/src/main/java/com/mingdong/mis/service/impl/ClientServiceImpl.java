@@ -153,7 +153,7 @@ public class ClientServiceImpl implements ClientService
         {
             Recharge recharge = rechargeMapper.findById(clientProduct.getLatestRechargeId());
             auth.setStart(recharge.getStartDate().getTime());
-            auth.setEnd(recharge.getEndDate().getTime());
+            auth.setEnd(recharge.getEndDate().getTime() + 86400000); // 失效时间为到期日第二天的0时
         }
         auth.setProduct(product.getCode());
         auth.setSecretKey(user.getAppSecret());
