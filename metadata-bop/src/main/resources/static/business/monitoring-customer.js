@@ -52,7 +52,7 @@ function initData() {
     changeSelectedClient();
     setInterval(function() {
         changeSelectedClient();
-    }, 2000);
+    }, 3000);
 }
 
 function refreshCheckbox() {
@@ -110,7 +110,6 @@ function changeSelectedClient() {
                 tempMap = {};
                 tempMap['name'] = legendData[i];
                 tempMap['type'] = 'line';
-                tempMap['stack'] = '总量';
                 tempMap['data'] = seriesData[i];
                 series[i] = tempMap;
             }
@@ -126,11 +125,6 @@ function changeSelectedClient() {
                     right: '4%',
                     bottom: '3%',
                     containLabel: true
-                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
                 },
                 xAxis: {
                     type: 'category',
