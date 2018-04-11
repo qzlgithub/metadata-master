@@ -1,7 +1,6 @@
 package com.test.mis;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.core.exception.MetadataHttpException;
@@ -53,13 +52,14 @@ public class APITest
             String content = String.format(TEMPLATE, ts, sign, phone, NAME, ID_NO);
             HttpEntity entity = HttpUtils.postData(URL_HMD, headers, content);
             String s = EntityUtils.toString(entity);
-            JSONObject json = JSON.parseObject(s);
+            System.out.println(pass + "/" + times + ", " + phone + ", " + s);
+            /*JSONObject json = JSON.parseObject(s);
             boolean hit = json.getInteger("code") == 0 && json.getJSONObject("result").getInteger("status") == 0;
             if(hit)
             {
                 pass++;
             }
-            System.out.println(pass + "/" + times + ", " + phone + ", " + (hit ? 1 : 0));
+            System.out.println(pass + "/" + times + ", " + phone + ", " + (hit ? 1 : 0));*/
         }
         System.out.println(pass + " / " + phoneList.size());
     }
