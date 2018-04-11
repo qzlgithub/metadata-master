@@ -5,7 +5,7 @@ public enum MDResult
     OK(0, "ok"),
 
     ACCESS_DENIED(1, "访问受限，请求凭证缺失"),
-    INVALID_ACCESS_TOKEN(2, "请求凭证无效，请重新获取"),
+    INVALID_ACCESS_TOKEN(2, "访问受限，请求凭证无效，请重新获取"),
     ACCESS_RESTRICTED(3, "访问受限，请求凭证无此接口的访问权限"),
 
     INVALID_CLIENT_IP(100, "无效的请求地址"),
