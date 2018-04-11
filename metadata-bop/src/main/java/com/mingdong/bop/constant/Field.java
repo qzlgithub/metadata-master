@@ -176,4 +176,7 @@ public interface Field
     String FILE_OTHER_PATH = "fileOtherPath";
     String FILE_REALITY_PATH = "fileRealityPath";
     String HIT = "hit";
+    String LEGEND_DATA = "legendData";
+    String X_AXIS_DATA = "xAxisData";
+    String SERIES_DATA = "seriesData";
 }

@@ -9,7 +9,9 @@ import org.springframework.data.redis.core.types.Expiration;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RedisBaseDao<K extends Serializable, V extends Serializable>
@@ -22,9 +24,29 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         return redisTemplate.getStringSerializer().serialize(s);
     }
 
+    private List<byte[]> serializeList(String... strs)
+    {
+        List<byte[]> list = new ArrayList<>();
+        for(String item : strs)
+        {
+            list.add(redisTemplate.getStringSerializer().serialize(item));
+        }
+        return list;
+    }
+
     private String deserialize(byte[] bytes)
     {
         return redisTemplate.getStringSerializer().deserialize(bytes);
+    }
+
+    private List<String> deserializeList(List<byte[]> byteList)
+    {
+        List<String> list = new ArrayList<>();
+        for(byte[] item : byteList)
+        {
+            list.add(redisTemplate.getStringSerializer().deserialize(item));
+        }
+        return list;
     }
 
     @SuppressWarnings("unchecked")
@@ -157,6 +179,18 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
             byte[] v = serialize(field);
             byte[] value = conn.hGet(k, v);
             return value == null ? null : deserialize(value);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<String> hMGet(int db, String key, String... fields)
+    {
+        return (List<String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            List<byte[]> v = serializeList(fields);
+            List<byte[]> value = conn.hMGet(k, v.toArray(new byte[0][0]));
+            return value == null ? null : deserializeList(value);
         });
     }
 

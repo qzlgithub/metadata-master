@@ -11,6 +11,7 @@
 .inline-flex { display: inline-flex;}
 .table { display: table;}
 .table-cell { display: table-cell;}
+.display-none{display: none;}
 
 /*clearfix */
 .clearfix:after{content: "."; display: block; height: 0; clear: both; visibility: hidden;}
