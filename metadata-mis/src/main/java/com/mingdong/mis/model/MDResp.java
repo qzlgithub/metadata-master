@@ -1,8 +1,10 @@
 package com.mingdong.mis.model;
 
 import com.mingdong.mis.constant.MDResult;
+import com.mingdong.mis.constant.ResCode;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MDResp
@@ -10,7 +12,8 @@ public class MDResp
     private Integer code; // 请求状态：0-成功，其他-失败
     private long timestamp;
     private String requestNo;
-    private MDRes result;
+    private Integer resCode;
+    private Map<String, Object> resData;
 
     private MDResp()
     {
@@ -21,6 +24,7 @@ public class MDResp
         MDResp o = new MDResp();
         o.setCode(MDResult.OK.getCode());
         o.setTimestamp(System.currentTimeMillis() / 1000);
+        o.setResCode(ResCode.NORMAL);
         return o;
     }
 
@@ -54,44 +58,33 @@ public class MDResp
         this.requestNo = requestNo;
     }
 
-    public MDRes getResult()
+    public Integer getResCode()
     {
-        return result;
+        return resCode;
     }
 
-    public void setResult(MDRes result)
+    public void setResCode(Integer resCode)
     {
-        this.result = result;
+        this.resCode = resCode;
     }
 
-    public void setResultStatus(Integer status)
+    public Map<String, Object> getResData()
     {
-        if(result == null)
-        {
-            result = new MDRes(status);
-        }
-        else
-        {
-            result.setStatus(status);
-        }
+        return resData;
     }
 
-    public void setResultData(Map<String, Object> data)
+    public void setResData(Map<String, Object> resData)
     {
-        if(result == null)
-        {
-            result = new MDRes();
-        }
-        result.setData(data);
+        this.resData = resData;
     }
 
-    public void addResultData(String k, Object v)
+    public void addResData(String k, Object v)
     {
-        if(result == null)
+        if(resData == null)
         {
-            result = new MDRes();
+            resData = new HashMap<>();
         }
-        result.addData(k, v);
+        resData.put(k, v);
     }
 
     public void response(MDResult mdResult)

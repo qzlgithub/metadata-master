@@ -159,8 +159,8 @@ public class ClientServiceImpl implements ClientService
         auth.setSecretKey(user.getAppSecret());
         auth.setHost(clientUserProduct.getReqHost());
         redisDao.saveUserAuth(accessToken, auth, seconds);
-        res.addResultData(Field.ACCESS_TOKEN, accessToken);
-        res.addResultData(Field.EXPIRATION, validTime.getTime() / 1000);
+        res.addResData(Field.ACCESS_TOKEN, accessToken);
+        res.addResData(Field.EXPIRATION, validTime.getTime() / 1000);
     }
 
     /**

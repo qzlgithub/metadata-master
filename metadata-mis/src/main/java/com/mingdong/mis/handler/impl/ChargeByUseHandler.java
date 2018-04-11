@@ -60,9 +60,16 @@ public class ChargeByUseHandler implements IChargeHandler
             // 请求计费，保存查询记录，并返回请求编号
             String requestNo = dataService.chargeAndSaveRequestLog(checkResult.getUnitAmt(), checkResult.getBalance(),
                     payload, metadata.isHit(), resp.requestAt());
-            resp.setResultStatus(metadata.isHit() ? TrueOrFalse.FALSE : TrueOrFalse.TRUE);
             resp.setRequestNo(requestNo);
-            resp.setResultData((JSONObject) JSON.toJSON(metadata.getData()));
+            if(metadata.isHit())
+            {
+                resp.setResCode(TrueOrFalse.FALSE);
+                resp.setResData((JSONObject) JSON.toJSON(metadata.getData()));
+            }
+            else
+            {
+                resp.setResCode(TrueOrFalse.TRUE);
+            }
         }
         finally
         {

@@ -11,8 +11,6 @@ import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.service.DataService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -23,7 +21,6 @@ import javax.annotation.Resource;
 @Component
 public class ChargeByTimeHandler implements IChargeHandler
 {
-    private static Logger logger = LoggerFactory.getLogger(ChargeByTimeHandler.class);
     @Resource
     private RedisDao redisDao;
     @Resource
@@ -46,12 +43,12 @@ public class ChargeByTimeHandler implements IChargeHandler
         resp.setRequestNo(requestNo);
         if(metadata.isHit())
         {
-            resp.setResultStatus(TrueOrFalse.FALSE);
-            resp.setResultData((JSONObject) JSON.toJSON(metadata.getData()));
+            resp.setResCode(TrueOrFalse.FALSE);
+            resp.setResData((JSONObject) JSON.toJSON(metadata.getData()));
         }
         else
         {
-            resp.setResultStatus(TrueOrFalse.TRUE);
+            resp.setResCode(TrueOrFalse.TRUE);
         }
     }
 

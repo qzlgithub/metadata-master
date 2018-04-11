@@ -1,6 +1,7 @@
 package com.test.mis;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.core.exception.MetadataHttpException;
@@ -12,15 +13,16 @@ import org.apache.http.util.EntityUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 
 public class APITest
 {
     private static final String URL_CDK = "http://47.100.162.249:9900/credit/overdue";
+    private static final String URL_HMD = "http://47.100.162.249:9900/credit/blacklist";
     private static final String PHONE_FILE_PATH = "e://phone.txt";
     private static final String SECRET_KEY = "95016dbd7c834fa39ae81aae30622269";
     private static final String NAME = "测试";
@@ -30,13 +32,12 @@ public class APITest
 
     public static void main(String[] args) throws IOException, MetadataCoreException, MetadataHttpException
     {
-        List<String> phoneList = readPhoneNumber();
-        System.out.println("total: " + phoneList.size());
+        Set<String> phoneList = readPhoneNumber();
         long ts;
-        int pass = 0;
+        int pass = 0, times = 0;
         for(String phone : phoneList)
         {
-            pass++;
+            times++;
             ts = System.currentTimeMillis() / 1000;
             Map<String, Object> m = new HashMap<>();
             m.put("phone", phone);
@@ -48,19 +49,26 @@ public class APITest
             Map<String, String> headers = new HashMap<>();
             headers.put("accept-version", "1.0");
             headers.put("Content-Type", "application/json");
-            headers.put("Access-Token", "a2sb1f64rc87mc5ava7b61xbp4n8ka0ft9y7tdg33606qdc65244qbcabd8a74qa");
+            headers.put("Access-Token", "5009ndk2y29ep301dekd82w5t4k3obj8ga6cla055496hf8cl78cm4x3e5f7e114");
             String content = String.format(TEMPLATE, ts, sign, phone, NAME, ID_NO);
-            HttpEntity entity = HttpUtils.postData(URL_CDK, headers, content);
+            HttpEntity entity = HttpUtils.postData(URL_HMD, headers, content);
             String s = EntityUtils.toString(entity);
-
-            System.out.println(pass + " - " + phone + " : " + s);
+            JSONObject json = JSON.parseObject(s);
+            boolean hit = json.getInteger("code") == 0 && json.getJSONObject("result").getInteger("status") == 0;
+            if(hit)
+            {
+                pass++;
+            }
+            System.out.println(pass + "/" + times + ", " + phone + ", " + (hit ? 1 : 0));
         }
+        System.out.println(pass + " / " + phoneList.size());
     }
 
-    private static List<String> readPhoneNumber() throws IOException
+    private static Set<String> readPhoneNumber() throws IOException
     {
-        List<String> phoneList = new ArrayList<>(9999);
+        Set<String> phoneList = new HashSet<>(9999);
         FileReader reader = new FileReader(PHONE_FILE_PATH);
+        //        FileReader reader = new FileReader("e://test_res.txt");
         BufferedReader br = new BufferedReader(reader);
         String str;
         while((str = br.readLine()) != null)
@@ -71,4 +79,14 @@ public class APITest
         reader.close();
         return phoneList;
     }
+
+    /*public static void main(String[] args) throws IOException
+    {
+        List<String> dataList = readPhoneNumber();
+        for(String s : dataList)
+        {
+            String[] temp = s.split(",");
+            System.out.println(temp[1].trim() + ", " + temp[2].trim());
+        }
+    }*/
 }
