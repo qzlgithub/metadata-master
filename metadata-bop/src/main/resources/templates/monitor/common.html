@@ -3,8 +3,13 @@
 <body>
 <div th:fragment="top">
     <div class="layui-header">
-        <div class="layui-logo mt10 ml20"><img src="/static/monitor/images/logo.png"/></div>
+        <div class="layui-logo mt10 ml20">
+            <img src="/static/monitor/images/logo.png"/>
+        </div>
         <ul class="layui-nav layui-layout-left kit-nav layui-menu">
+            <li class="layui-nav-item bd-right-none tc important">
+                <a href="/enter.html" th:if="${i_enter}" class="col6">选择系统</a>
+            </li>
             <li class="layui-nav-item bd-right-none tc important">
                 <a href="javascript:;">
                     <img src="/static/monitor/images/icon/menu-icon4.png" style="width: auto;"/>
@@ -84,16 +89,16 @@
                         </dd>
                         <dd>
                             <a href="customer-index.html">
-                                <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
-                        </dd>
-                        <dd>
-                            <a href="customer-index.html">
-                                <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
-                        </dd>
-                        <dd>
-                            <a href="customer-index.html">
                                 <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
                         </dd>
+                        <dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
+                        </dd>
+                        <!--<dd>
+                            <a href="customer-index.html">
+                                <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
+                        </dd>-->
                         <!--<dd>
                             <a href="customer-index.html">
                                 <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>

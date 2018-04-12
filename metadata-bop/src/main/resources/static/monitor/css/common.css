@@ -110,3 +110,4 @@ a:hover.key-button,a:hover.add-button{color: #fff}
 
 .layui-table {width: 100%;background-color: #021923; color: #fff;}
 .layui-form-checkbox[lay-skin=primary] span{font-size: 12px;}
+.kit-layout-admin .layui-body{bottom: 0px;}
