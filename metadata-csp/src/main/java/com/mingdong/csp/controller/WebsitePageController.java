@@ -2,13 +2,19 @@ package com.mingdong.csp.controller;
 
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
+import com.mingdong.csp.service.SystemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
+
 @Controller
 public class WebsitePageController
 {
+    @Resource
+    private SystemService systemService;
+
     @GetMapping(value = {"/", "/index.html"})
     public ModelAndView indexPage()
     {
@@ -78,6 +84,7 @@ public class WebsitePageController
     {
         ModelAndView view = new ModelAndView("website/about");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
+        view.addObject(Field.SERVICE_QQ,systemService.getServiceQq());
         return view;
     }
 

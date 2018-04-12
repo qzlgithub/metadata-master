@@ -111,4 +111,32 @@ public class ProductServiceImpl implements ProductService
             res.setList(list);
         }
     }
+
+    @Override
+    public void getAllProduct(RestListResp res)
+    {
+        ListDTO<ProductResDTO> listDTO = productRpcService.getAllProduct();
+        List<ProductResDTO> dataList = listDTO.getList();
+        List<Map<String, Object>> list = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            Map<String, Object> map;
+            for(ProductResDTO item : dataList)
+            {
+                map = new HashMap<>();
+                map.put(Field.PRODUCT_ID, item.getId() + "");
+                map.put(Field.NAME, item.getName());
+                list.add(map);
+            }
+        }
+        res.setList(list);
+    }
+
+    @Override
+    public void getStatsProductRequestCache(List<Long> productIdList, RestResp res)
+    {
+        ResponseDTO responseDTO = productRpcService.getStatsProductRequestCache(productIdList);
+        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
+        res.addData(Field.DATA,jsonStr);
+    }
 }

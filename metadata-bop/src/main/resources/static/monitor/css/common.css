@@ -109,4 +109,4 @@ a:hover.key-button,a:hover.add-button{color: #fff}
 .layui-table-sort .layui-table-sort-asc { border-bottom-color: #fff;}
 
 .layui-table {width: 100%;background-color: #021923; color: #fff;}
-.layui-form-checkbox[lay-skin=primary] span{color: #fff;}
+.layui-form-checkbox[lay-skin=primary] span{font-size: 12px;}

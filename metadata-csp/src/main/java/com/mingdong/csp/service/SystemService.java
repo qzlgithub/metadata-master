@@ -10,4 +10,5 @@ public interface SystemService
 
     void getNewsDetail(Long id, RestResp resp);
 
+    String getServiceQq();
 }

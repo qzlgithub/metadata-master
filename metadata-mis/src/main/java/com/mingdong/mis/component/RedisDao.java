@@ -119,6 +119,58 @@ public class RedisDao extends RedisBaseDao
         long l = timestamp - timestamp % 300;
         hIncrBy(DB.PRODUCT_TRAFFIC, String.valueOf(l), String.valueOf(productId), 1);
         hIncrBy(DB.CLIENT_TRAFFIC, String.valueOf(l), String.valueOf(clientId), 1);
+        hIncrBy(DB.PRODUCT_TRAFFIC, String.valueOf(l), Key.ALL_COUNT, 1);
+        hIncrBy(DB.CLIENT_TRAFFIC, String.valueOf(l), Key.ALL_COUNT, 1);
+    }
+
+    /**
+     * 获取客户访问量
+     *
+     * @param timestamp Unix时间戳
+     */
+    public List readClientTraffic(long timestamp, List<Long> clientIds)
+    {
+        List<String> clientIdsStr = new ArrayList<>();
+        for(Long item : clientIds)
+        {
+            clientIdsStr.add(String.valueOf(item));
+        }
+        return hMGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), clientIdsStr.toArray(new String[0]));
+    }
+
+    /**
+     * 获取产品访问量
+     *
+     * @param timestamp Unix时间戳
+     */
+    public List readProductTraffic(long timestamp, List<Long> productIds)
+    {
+        List<String> productIdsStr = new ArrayList<>();
+        for(Long item : productIds)
+        {
+            productIdsStr.add(String.valueOf(item));
+        }
+        return hMGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), productIdsStr.toArray(new String[0]));
+    }
+
+    /**
+     * 获取客户访问总量
+     *
+     * @param timestamp Unix时间戳
+     */
+    public String readClientTrafficAll(long timestamp)
+    {
+        return hGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
+    }
+
+    /**
+     * 获取产品访问总量
+     *
+     * @param timestamp Unix时间戳
+     */
+    public String readProductTrafficAll(long timestamp)
+    {
+        return hGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
     }
 
     /**
@@ -187,5 +239,6 @@ public class RedisDao extends RedisBaseDao
         String DS_API_TOKEN = "ds_api_token";
         String RECHARGE_NO_PREFIX = "recharge_no:";
         String REQUEST_NO_PREFIX = "request_no:";
+        String ALL_COUNT = "all_count";
     }
 }

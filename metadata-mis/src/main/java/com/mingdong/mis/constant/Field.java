@@ -22,4 +22,8 @@ public interface Field
     String SUB_ACCOUNT_MAX = "subAccountMax";
     String MISS_COUNT = "missCount";
     String SESSION_ID = "sessionId";
+    String DATA = "data";
+    String LEGEND_DATA = "legendData";
+    String X_AXIS_DATA = "xAxisData";
+    String SERIES_DATA = "seriesData";
 }

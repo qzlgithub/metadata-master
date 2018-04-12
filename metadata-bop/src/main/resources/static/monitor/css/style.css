@@ -100,12 +100,12 @@ img{width: 100%; display: inline-block;}
 .public-table2 td .general{background: #99cc00; padding: 3px 4px;}
 .public-table2 td a{color: #fff;}
 
-.third-select{background: rgba(22,77,102,0.9); padding: 10px; width: 560px; z-index: 19891024; position: absolute; display: none; left: 11%; top: 46px;}
+.third-select{background: #fff; padding: 10px; width: 560px; z-index: 19891024; position: absolute; display: none; left: 11%; top: 46px;border: 1px solid #e7e7e7}
 .choose-check-list li{float: left; font-size: 12px; padding: 10px;}
 .choose-check-list li input{padding-right: 10px;}
-.check-list li{background: #fff; border-radius: 3px; color: #000; font-size: 12px; position: relative; float: left; padding: 5px 10px; margin: 10px;}
-.check-list li i{font-size: 12px; position: absolute; top: -7px; background: #ff0000; border-radius: 50%; width: 16px; height: 16px; color: #fff; text-align: center; line-height: 16px;}
-.button-qr{background: #a4d8f1; color: #002738; font-size: 14px; padding: 8px 10px; border-radius: 3px;}
+.check-list li{background: #3c9fe2; border-radius: 3px; color: #fff; font-size: 12px; position: relative; float: left; padding: 5px 10px; margin: 10px;}
+.check-list li i{font-size: 12px; position: absolute; top: -7px; background: #ff0000; border-radius: 50%; width: 16px; height: 16px; color: #fff; text-align: center; line-height: 16px; cursor: pointer;}
+.button-qr{background: #a4d8f1; color: #002738; font-size: 14px; padding: 8px 14px; border-radius: 3px;}
 
 /*******客户监控******/
 .product-mon li{float: left; width: 31.33333333%; margin:0 1%;}
@@ -151,7 +151,40 @@ img{width: 100%; display: inline-block;}
 .product-check{background: #014a66;}
 
 .product-data-br{border-right: solid 1px #d6d6d6;}
-.product-fx span{background: #fff; border:solid 1px #e7e7e7; padding: 5px 10px; color: #333;}
+.product-fx span{background: #fff; border:solid 1px #e7e7e7; padding: 5px 10px; color: #333; float: left;}
 .product-fx span.active{background: #129cff; color: #fff; border:solid 1px #129cff; color: #fff;}
 .product-fx-warp li{float: left; margin-right: 20px;}
 .date-icon{position: absolute; right: 6px; top: 6px;}
+
+
+.product-tjnav{width:160px;}
+.product-tjnav h3{ cursor:pointer; line-height:33px; height:33px; background-color:#fff; color:#000; border:solid 1px #e7e7e7;}
+.product-tjnav a{display:block; line-height:30px;color:#666666; padding-left: 5px;}
+.product-tjnav a:hover{background-color:#eee; color:#000;}
+.product-tjnav div{display:none; border:1px solid #e7e7e7; border-top:none;position:absolute; width: 138px; z-index: 9999; background: #fff;}
+
+
+.product-tjnav1{width:160px;}
+.product-tjnav1 h3{ cursor:pointer; line-height:33px; height:33px; background-color:#fff; color:#000; border:solid 1px #e7e7e7;}
+.product-tjnav1 a{display:block; line-height:30px;color:#666666; padding-left: 5px;}
+.product-tjnav1 a:hover{background-color:#eee; color:#000;}
+.product-nav1{display:none; border:1px solid #e7e7e7; border-top:none;position:absolute; width: 500px; z-index: 9999; background: #fff;}
+.product-nav1 .layui-form-checkbox[lay-skin=primary] span{color: #333; font-size: 12px;}
+
+.public-height{height: 180px; overflow: hidden;overflow-y: scroll;}
+.public-height { overflow-x: hidden; overflow-y: scroll;}
+
+ /* for Chrome */
+/*.public-height::-webkit-scrollbar {
+    display: none;
+}*/
+
+.public-height::-webkit-scrollbar { width: 8px;  height: 1px;}
+.public-height::-webkit-scrollbar-thumb {border-radius: 10px; -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); background: #0384b6;}
+.public-height::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); border-radius: 10px; background: #021923;}
+
+.public-height2{height: 258px; overflow: hidden;overflow-y: scroll;}
+.public-height2 { overflow-x: hidden; overflow-y: scroll;}
+.public-height2::-webkit-scrollbar { width: 8px;  height: 1px;}
+.public-height2::-webkit-scrollbar-thumb {border-radius: 10px; -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); background: #0384b6;}
+.public-height2::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); border-radius: 10px; background: #021923;}

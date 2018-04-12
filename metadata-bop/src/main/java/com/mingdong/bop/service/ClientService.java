@@ -142,4 +142,7 @@ public interface ClientService
     void updateClientRemind(Long remindId, String remark, RestResp resp);
 
     void getAllClient(RestListResp res);
+
+    void getStatsClientRequestCache(List<Long> clientIdList, RestResp res);
+
 }

@@ -33,32 +33,23 @@
                             <span class="public-button ml30 position-r choose-show cp">选择产品<i class="layui-icon va pl5">&#xe61a;</i></span>
                             <div class="third-select">
                                 <p class="mt5">（一次最多选5个）</p>
-                                <ul class="layui-form choose-check-list mt20 clearfix pb20">
-                                    <li><label><input type="checkbox" name="like1" lay-skin="primary" checked=""/>
-                                        身份验证</label></li>
-                                    <li><label><input type="checkbox" name="like1" lay-skin="primary" checked=""/>
-                                        身份验证</label></li>
-                                    <li><label><input type="checkbox" name="like1" lay-skin="primary" checked=""/>
-                                        身份验证</label></li>
+                                <ul class="layui-form choose-check-list mt20 clearfix pb20" id="product-all">
+
                                 </ul>
-                                <ul class="mt10 pb20 bd-top pt10 check-list">
-                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
-                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
-                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
-                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
-                                    <li class="layui-icon">身份验证<i>&#x1006;</i></li>
+                                <ul class="mt10 pb20 bd-top pt10 check-list" id="selected-product">
+
                                     <div class="mt15 tr"><span class="button-qr choose-hide cp">确认</span></div>
                                 </ul>
                             </div>
                         </dt>
-                        <dd><img src="/static/monitor/images/data-img1.png"/></dd>
+                        <dd id="main-chart" style="width: 100%;height:468px;"></dd>
                     </dl>
                     <!--请求趋势 end-->
                     <!--接口预警 实时请求-->
                     <div class="layui-row layui-col-space10 mt5">
                         <!--接口预警-->
                         <div class="layui-col-md7">
-                            <dl class="grid-demo grid-demo-bg1  public-warp1">
+                            <dl class="grid-demo grid-demo-bg1 public-warp1">
                                 <dt><em>接口预警</em></dt>
                                 <dd>
                                     <table class="public-table1">
@@ -225,26 +216,9 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
-<script>
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app'], function() {
-        var app = layui.app,
-            $ = layui.jquery
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-    });
-    $(document).ready(function() {
-        $(".choose-hide").click(function() {
-            $(".third-select").hide();
-        });
-        $(".choose-show").click(function() {
-            $(".third-select").show();
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
+<script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
+<script type="text/javascript" src="/static/business/monitoring-product.js"></script>
 </body>
 
 </html>

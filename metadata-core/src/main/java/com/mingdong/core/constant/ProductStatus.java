@@ -1,5 +1,7 @@
 package com.mingdong.core.constant;
 
+import com.mingdong.core.util.DateCalculateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -21,18 +23,18 @@ public enum ProductStatus
 
     public static Integer getStatusByDate(Date fromDate, Date toDate)
     {
-        Date now = new Date();
+        Date now = DateCalculateUtils.getCurrentDate(new Date());
         if(now.before(fromDate))
         {
             return NOT_START.getId();
         }
+        else if(0 <= (toDate.getTime() - now.getTime()) && (toDate.getTime() - now.getTime()) < 7 * 24 * 3600 * 1000)
+        {
+            return NEARLY_EXPIRE.getId();
+        }
         else if(now.after(toDate))
         {
             return EXPIRED.getId();
-        }
-        else if(toDate.getTime() - now.getTime() < 7 * 24 * 3600 * 1000)
-        {
-            return NEARLY_EXPIRE.getId();
         }
         return NORMAL.getId();
     }

@@ -8,6 +8,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.service.SystemRpcService;
@@ -61,5 +62,12 @@ public class SystemServiceImpl implements SystemService
                 StringUtils.isNullBlank(articlesDetailResDTO.getAuthor()) ? "" : articlesDetailResDTO.getAuthor());
         map.put(Field.CONTENT, articlesDetailResDTO.getContent());
         resp.addAllData(map);
+    }
+
+    @Override
+    public String getServiceQq()
+    {
+        SistemDTO systemSetting = systemRpcService.getSystemSetting();
+        return StringUtils.isNullBlank(systemSetting.getServiceQQ()) ? "" : systemSetting.getServiceQQ();
     }
 }

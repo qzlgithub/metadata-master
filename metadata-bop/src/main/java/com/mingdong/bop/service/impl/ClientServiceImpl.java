@@ -926,11 +926,21 @@ public class ClientServiceImpl implements ClientService
             for(ClientInfoResDTO item : dataList)
             {
                 map = new HashMap<>();
-                map.put(Field.CLIENT_ID, item.getClientId());
+                map.put(Field.CLIENT_ID, item.getClientId() + "");
                 map.put(Field.CORP_NAME, item.getCorpName());
                 map.put(Field.SHORT_NAME, item.getShortName());
+                list.add(map);
             }
-        } res.setList(list);
+        }
+        res.setList(list);
+    }
+
+    @Override
+    public void getStatsClientRequestCache(List<Long> clientIdList, RestResp res)
+    {
+        ResponseDTO responseDTO = clientRpcService.getStatsClientRequestCache(clientIdList);
+        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
+        res.addData(Field.DATA,jsonStr);
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>管理后台</title>
+    <link rel="stylesheet" href="./../../layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link rel="stylesheet" href="./../../css/app.css" media="all">
+    <link rel="stylesheet" href="./../../css/style.css" media="all">
+    <link rel="stylesheet" href="./../../css/base.css" media="all">
+    <link rel="stylesheet" href="./../../css/common.css" media="all">
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin kit-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo mt10 ml20"><img src="./../../images/logo.png"></div>
+            <ul class="layui-nav layui-layout-left kit-nav layui-menu">
+                <li class="layui-nav-item bd-right-none tc important" >
+                    <a href="javascript:;">
+                        <img src="./../../images/icon/menu-icon4.png" style="width: auto;">
+                        <p style="line-height: 0px;" class="fz-12 important">欢迎，admin</p>
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+               		<a href="javascript:;" class="position-r mt15 important">
+               			<img src="./../../images/icon/menu-icon3.png">
+                        <i class="top-email">99</i>
+               		</a>
+                </li>
+                <li class="layui-nav-item">
+                	<a href="javascript:;" class="mt15 important">
+	                	<img src="./../../images/icon/menu-icon2.png">
+                	</a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right kit-nav">
+                
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black kit-side">
+            <div class="layui-side-scroll treebox">
+                <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree menu" lay-filter="kitNavbar" kit-navbar>
+                    <li class="layui-nav-item level1">
+                        <a class="" href="javascript:;"><span class="icon icon1"></span><em>首页</em><i></i></a>
+                    </li>
+                    <li class="layui-nav-item level1">
+                        <a class="" href="javascript:;"><span class="icon icon2"></span><em>数据监控</em><i></i></a>
+                        <dl class="layui-nav-child level2">
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span> 第三方监控</span></a>
+                            </dd>
+                             <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span> 客户监控</span></a>
+                            </dd>
+                             <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span> 产品监控</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item level1">
+                        <a class="" href="javascript:;"><span class="icon icon3"></span><em>警报系统</em><i></i></a>
+                        <dl class="layui-nav-child level2">
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>待处理</span></a>
+                            </dd>
+                             <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>已处理</span></a>
+                            </dd>
+                             <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>警报统计</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item level1">
+                        <a class="" href="javascript:;"><span class="icon icon4"></span><em>运营统计</em><i></i></a>
+                        <dl class="layui-nav-child level2">
+                            <dd class="layui-this">
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>客户统计</span></a>
+                            </dd>
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>客户请求统计</span></a>
+                            </dd>
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
+                            </dd>
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
+                            </dd>
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
+                            </dd>
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item level1">
+                        <a class="" href="javascript:;"><span class="icon icon3" ></span><em>系统设置</em><i></i></a>
+                        <dl class="layui-nav-child level2">
+                            <dd>
+                                <a href="customer-index.html">
+                                    <i class="layui-icon">&#xe602;</i><span>警报设置</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div class="p20">
+                <div class="public-title3">2018年2月10日   18:20</div>
+                <div class="mt10">
+                    <!--营收数据-->
+                    <dl class="public-data public-warp1">
+                        <dt class="mt0 important">产品请求数据</dt>
+                        <dd class="product-check m20 layui-row col6">
+                            <div class="layui-col-xs6 product-data-br">
+                                <table width="80%" class="lh50 tc margin-auto">
+                                    <thead>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th class="tc">今日</th>
+                                            <th class="tc">昨日</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>查询次数</td>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                        <tr>
+                                            <td>失败次数</td>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                        <tr>
+                                            <td>未击中</td>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-col-xs6">
+                                <table width="60%" class="lh50 tc margin-auto">
+                                    <thead>
+                                        <tr>
+                                            <th class="tc">本月</th>
+                                            <th class="tc">累计</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                        <tr>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                        <tr>
+                                            <td>100000次</td>
+                                            <td>100000次</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="public-data public-warp1 mt15">
+                        <dt>收入统计</dt>
+                        <dd class="layui-row">
+                            <ul class="clearfix p10 product-fx-warp col6">
+                                <li class="product-fx mt5 clearfix">
+                                    <span class="active">今天</span>
+                                    <span>昨天</span>
+                                    <span>近7天</span>
+                                    <span>近30天</span>
+                                </li>
+                                <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date" id="date1" autocomplete="off" class="layui-input"></em><i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                                <li class="mt10"><label class="contrast-time2 va"><input type="checkbox" name=""></label>对比时间</li>
+                                <li class="position-r display-none time-input2"><em class="inline-block"><input type="text" name="date" id="date1" autocomplete="off" class="layui-input"></em><i class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                                <li class="product-tjnav1 pl40 mr5 important" style="margin-top: 2px;">
+                                    <h3 class="pl10 pr10 product-title1">选择产品 <i class="layui-icon fr">&#xe61a;</i>   </h3>
+                                    <div class="p10 product-tjlist1 product-nav1">
+                                        <p class="mt5 flex pl10 layui-form"><span class="mt10 mr10"><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose" title="全部产品"></span><em class="fr"><input type="text" class="layui-input" placeholder="请输入搜索产品"></em></p>
+                                        <div class="public-height" id="pro_type">
+                                            <div class="mt10">
+                                                <div class="col5 mt10 pl10">金融风控</div>
+                                                <ul class="layui-form choose-check-list clearfix pb5  col5 important">
+                                                  <li><input type="checkbox" name="checked"  value="1" lay-skin="primary" lay-filter="choose" title="黑名单"></li>
+                                                  <li><input type="checkbox" name="checked"  value="2" lay-skin="primary" lay-filter="choose" title="信用评级"></li>
+                                                </ul>
+                                            </div>
+                                            <div class="mt10">
+                                                <div class="col5 mt10 pl10">金融风控</div>
+                                                <ul class="layui-form choose-check-list clearfix pb5  col5 important">
+                                                  <li><input type="checkbox" name="checked"  value="1" lay-skin="primary" lay-filter="choose" title="黑名单"></li>
+                                                  <li><input type="checkbox" name="checked"  value="2" lay-skin="primary" lay-filter="choose" title="信用评级"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <ul class="mt10 pb20 bd-top pt10 check-list">
+                                          <div class="mt15 tr"><span class="button-qr choose-hide cp nav-close1">确认</span></div>
+                                      </ul>
+                                    </div>
+                                </li>
+                                <li class="product-fx mt5 clearfix">
+                                    <span class="active">按时</span>
+                                    <span>按日</span>
+                                    <span>按周</span>
+                                    <span>按月</span>
+                                </li>
+                            </ul>
+                            <!--搜索-->
+                            <ul class="search-list clearfix pb15 mt20 col6">
+                                <li>客户账号
+                                    <input type="text" name="username" placeholder="请输入" class="search-input">
+                                </li>
+                                <li><button class="check-button">查询</button></li>
+                            </ul>
+                            <!--搜索 end-->
+                            <div class="layui-row w60 margin-auto mt20 fb col6 fz-16">
+                                <span class="layui-col-md4 tc lh25 ">查询次数：<i class="col3 fz-22">1,6599,00</i></span>
+                                <span class="layui-col-md4 tc lh25">失败次数：<i class="col3 fz-22">1,6599,00</i></span>
+                                <span class="layui-col-md4 tc lh25">未击中：<i class="col3 fz-22">1,6599,00</i></span>
+                            </div>
+                            <div class="tc mt20 mb20"><img src="./../../images/data-img1.png"></div>
+                            <p class="tc pt20 pb20 col6 fz-18">217/10/1-2017/11/1    总收入:1,989,900元</p>
+                        </dd>
+                    </dl>
+                    <!--营收数据 end-->
+                    <dl class="public-data mt15">
+                        <dd class="layui-row layui-col-space10 p0 important">
+                            <div class="layui-col-md5">
+                                <div class=" public-warp1 ">
+                                    <p class="tc mt20 mb40">
+                                        <select class="select-list">
+                                            <option value="1">收入-产品占比</option>
+                                            <option value="2">成本-产品占比</option>
+                                            <option value="2">收益-产品占比</option>
+                                        </select>
+                                    </p>
+                                    <p class="tc"><img src="./../../images/data-img1.png"></p>
+                                </div>
+                            </div>
+                            <div class="layui-col-md7">
+                                <div class="p30 tc public-warp1 ">
+                                    <p class="tc"><img src="./../../images/data-img222.png"></p>
+                                </div> 
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            2017 &copy;
+            <a href="http://kit.zhengjinfan.cn/">kit.zhengjinfan.cn/</a> MIT license
+
+        </div>.
+    </div>
+    <script src="./../../layui/layui.js"></script>
+    <script src="./../../js/jquery-2.1.1.js"></script>
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script>
+        layui.config({
+            base: '../../js/'
+        }).use(['app'], function() {
+            var app = layui.app,
+                $ = layui.jquery
+            //主入口
+            app.set({
+                type: 'iframe'
+            }).init();
+
+        });
+        $(function(){
+            $(".treebox .level1>a").click(function(){
+                $(this).addClass('current')   //给当前元素添加"current"样式
+                .find('i').addClass('down')   //小箭头向下样式
+                .parent().next().slideDown('slow','easeOutQuad')  //下一个元素显示
+                .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
+                .find('i').removeClass('down').parent().next().slideUp('slow','easeOutQuad');//隐藏
+                 return false; //阻止默认时间
+            });
+            $(".treebox .menu li").each(function(){
+               $(this).find('dl').each(function(){
+                    if($(this).find('dd').hasClass('layui-this')){
+                        $(this).prev().find('i').addClass('down');
+                        $(this).prev().addClass('current');
+                        $(this).css("display","block");
+                    }
+               })
+            });
+        })
+        //对比时间
+        $(document).ready(function(){
+            $(".contrast-time2").click(function(){
+                $(".time-input2").toggle();
+            });
+        });
+        //统计产品 点击下拉
+        $(document).ready(function(){
+            $(".product-title1").click(function(){
+                $(".product-tjlist1").toggle();
+            });
+            $(".nav-close1").click(function(){
+                $(".product-tjlist1").hide();
+            })
+        });
+        $(document).ready(function(){
+            $(".product-title2").click(function(){
+                $(".product-tjlist2").toggle();
+            });
+            $(".nav-close2").click(function(){
+                $(".product-tjlist2").hide();
+            })
+        });
+        //全选
+        layui.use(['form','layer','jquery','laypage'], function(){
+        var form = layui.form,
+            layer = parent.layer === undefined ? layui.layer : parent.layer,
+            laypage = layui.laypage,
+            $ = layui.jquery;
+
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+            console.log(13213213123);
+                var child = $('#pro_type').find('li input[type="checkbox"]:not([name="show"])');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+			var childCount = $("#pro_type li").length;
+            //通过判断文章是否全部选中来确定全选按钮是否选中
+            form.on("checkbox(choose)", function (data) {
+                var child = $(data.elem).parents('ul').find('li input[type="checkbox"]:not([name="show"])');
+                console.log($(data.elem).parents('#pro_type'))
+                var childChecked = $(data.elem).parents('#pro_type').find('li input[type="checkbox"]:checked');
+				console.log("child",childCount);
+				console.log("childChecked",childChecked.length);
+				//console.log("checked",$(data.elem).parents('.product-nav1').find('span input#allChoose').get(0));
+                console.log(childChecked.length == childCount)
+                if (childChecked.length == childCount) {
+                    $(data.elem).parents('.product-nav1').find('span input#allChoose').get(0).checked = true;
+                } else {
+                    $(data.elem).parents('.product-nav1').find('span input#allChoose').get(0).checked = false;
+                }
+                form.render('checkbox');
+            }) 
+        });
+    </script>
+</body>
+
+</html>

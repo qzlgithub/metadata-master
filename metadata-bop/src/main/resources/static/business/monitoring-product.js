@@ -20,23 +20,23 @@ layui.config({
     $(".choose-hide").click(function() {
         $(".third-select").hide();
         arr = [];
-        $("input[name='clientName']:checked").each(function() {
+        $("input[name='productName']:checked").each(function() {
             arr.push($(this).val());
         });
-        changeSelectedClient();
+        changeSelectedProduct();
     });
-    findCustomerAll();
-    form.on('checkbox(clientFilter)', function(data) {
+    findClientAll();
+    form.on('checkbox(productFilter)', function(data) {
         if(data.elem.checked) {
             var htmlStr = '<li class="layui-icon" data-id="' + data.value + '" id="selected-' + data.value + '">' + data.elem.title + '<i class="selected-delete">&#x1006;</i></li>';
-            $("#selected-client").prepend(htmlStr);
+            $("#selected-product").prepend(htmlStr);
         }
         else {
             $("#selected-" + data.value).remove();
         }
         refreshCheckbox();
     });
-    $("#selected-client").on("click", ".selected-delete", function() {
+    $("#selected-product").on("click", ".selected-delete", function() {
         var id = $(this).parent().attr("data-id");
         $("#checkbox-" + id).prop("checked", false);
         $(this).parent().remove();
@@ -46,47 +46,47 @@ layui.config({
 });
 
 function initData() {
-    $("input[name='clientName']:checked").each(function() {
+    $("input[name='productName']:checked").each(function() {
         arr.push($(this).val());
     });
-    changeSelectedClient();
+    changeSelectedProduct();
     setInterval(function() {
-        changeSelectedClient();
+        changeSelectedProduct();
     }, 3000);
 }
 
 function refreshCheckbox() {
     var count = 0;
-    $("input[name='clientName']:checked").each(function() {
+    $("input[name='productName']:checked").each(function() {
         count++;
     });
     if(count == 5) {
-        $("input[name='clientName']:not(:checked)").each(function() {
+        $("input[name='productName']:not(:checked)").each(function() {
             $(this).attr("disabled", "true");
         });
     }
     else {
-        $("input[name='clientName']:not(:checked)").each(function() {
+        $("input[name='productName']:not(:checked)").each(function() {
             $(this).removeAttr("disabled");
         });
     }
     form.render('checkbox');
 }
 
-function findCustomerAll() {
+function findClientAll() {
     $.get(
-        "/monitoring/customer/allCustomer",
+        "/monitoring/product/allProduct",
         {},
         function(data) {
             var list = data.list;
             var htmlStr = '';
-            $("#client-all").empty();
+            $("#product-all").empty();
             for(var i in list) {
                 htmlStr += '<li>';
-                htmlStr += '<input type="checkbox" name="clientName" id="checkbox-' + list[i].clientId + '" value="' + list[i].clientId + '" lay-skin="primary" lay-filter="clientFilter" title="' + list[i].corpName + '"  />';
+                htmlStr += '<input type="checkbox" name="productName" id="checkbox-' + list[i].productId + '" value="' + list[i].productId + '" lay-skin="primary" lay-filter="productFilter" title="' + list[i].name + '"  />';
                 htmlStr += '</li>';
             }
-            $("#client-all").html(htmlStr);
+            $("#product-all").html(htmlStr);
             form.render('checkbox');
         }
     );
@@ -94,10 +94,10 @@ function findCustomerAll() {
 
 var mainChart = echarts.init(document.getElementById('main-chart'), 'dark');
 
-function changeSelectedClient() {
+function changeSelectedProduct() {
     $.get(
-        "/monitoring/customer/request",
-        {"clientId": arr.join(",")},
+        "/monitoring/product/request",
+        {"productId": arr.join(",")},
         function(data) {
             var jsonStr = data.data.data;
             var json = JSON.parse(jsonStr);

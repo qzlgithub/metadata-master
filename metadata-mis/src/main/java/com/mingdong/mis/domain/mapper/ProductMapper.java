@@ -27,4 +27,7 @@ public interface ProductMapper
 
     List<Product> getListByType(@Param("typeIdList") List<Integer> productTypeList, @Param("custom") Integer custom);
 
+    List<Product> findAll();
+
+    List<Product> getListByIds(@Param("ids")List<Long> ids);
 }

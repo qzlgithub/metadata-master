@@ -17,6 +17,7 @@ public class DateCalculateUtils
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
 
@@ -36,6 +37,7 @@ public class DateCalculateUtils
         {
             calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0,
                     0);
+            calendar.set(Calendar.MILLISECOND, 0);
         }
         calendar.add(Calendar.DAY_OF_MONTH, -beforeNumber);
         return calendar.getTime();
@@ -57,6 +59,7 @@ public class DateCalculateUtils
         {
             calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0,
                     0);
+            calendar.set(Calendar.MILLISECOND, 0);
         }
         return calendar.getTime();
     }
