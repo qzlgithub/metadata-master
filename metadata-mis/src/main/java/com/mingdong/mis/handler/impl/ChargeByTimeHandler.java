@@ -2,9 +2,9 @@ package com.mingdong.mis.handler.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.mis.component.RedisDao;
+import com.mingdong.mis.component.MQProducer;
 import com.mingdong.mis.constant.MDResult;
+import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.handler.IChargeHandler;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.Metadata;
@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 public class ChargeByTimeHandler implements IChargeHandler
 {
     @Resource
-    private RedisDao redisDao;
+    private MQProducer mqProducer;
     @Resource
     private DataService dataService;
     @Resource
@@ -31,7 +31,8 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        redisDao.realTimeTraffic(resp.getTimestamp(), RequestThread.getProductId(), RequestThread.getClientId());
+        mqProducer.userRequest(RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
+                RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.response(MDResult.PRODUCT_EXPIRED);
@@ -43,12 +44,12 @@ public class ChargeByTimeHandler implements IChargeHandler
         resp.setRequestNo(requestNo);
         if(metadata.isHit())
         {
-            resp.setResCode(TrueOrFalse.FALSE);
+            resp.setResCode(ResCode.NORMAL);
             resp.setResData((JSONObject) JSON.toJSON(metadata.getData()));
         }
         else
         {
-            resp.setResCode(TrueOrFalse.TRUE);
+            resp.setResCode(ResCode.NOT_HIT);
         }
     }
 

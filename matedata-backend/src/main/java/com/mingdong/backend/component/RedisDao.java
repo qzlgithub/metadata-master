@@ -1,4 +1,4 @@
-package com.mingdong.mq.component;
+package com.mingdong.backend.component;
 
 import com.mingdong.core.base.RedisBaseDao;
 import org.springframework.stereotype.Repository;

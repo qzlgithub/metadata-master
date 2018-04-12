@@ -1,6 +1,7 @@
 package com.test.mis;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.core.exception.MetadataHttpException;
@@ -12,10 +13,10 @@ import org.apache.http.util.EntityUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 
 public class APITest
@@ -31,7 +32,7 @@ public class APITest
 
     public static void main(String[] args) throws IOException, MetadataCoreException, MetadataHttpException
     {
-        Set<String> phoneList = readPhoneNumber();
+        List<String> phoneList = readPhoneNumber();
         long ts;
         int pass = 0, times = 0;
         for(String phone : phoneList)
@@ -52,21 +53,20 @@ public class APITest
             String content = String.format(TEMPLATE, ts, sign, phone, NAME, ID_NO);
             HttpEntity entity = HttpUtils.postData(URL_HMD, headers, content);
             String s = EntityUtils.toString(entity);
-            System.out.println(pass + "/" + times + ", " + phone + ", " + s);
-            /*JSONObject json = JSON.parseObject(s);
-            boolean hit = json.getInteger("code") == 0 && json.getJSONObject("result").getInteger("status") == 0;
+            JSONObject json = JSON.parseObject(s);
+            boolean hit = json.getInteger("code") == 0 && json.getInteger("resCode") == 0;
             if(hit)
             {
                 pass++;
             }
-            System.out.println(pass + "/" + times + ", " + phone + ", " + (hit ? 1 : 0));*/
+            System.out.println(phone + ",\"" + s.replaceAll("\"", "\"\"") + "\"," + (hit ? 1 : 0) + "," + times);
         }
         System.out.println(pass + " / " + phoneList.size());
     }
 
-    private static Set<String> readPhoneNumber() throws IOException
+    private static List<String> readPhoneNumber() throws IOException
     {
-        Set<String> phoneList = new HashSet<>(9999);
+        List<String> phoneList = new ArrayList<>(9999);
         FileReader reader = new FileReader(PHONE_FILE_PATH);
         //        FileReader reader = new FileReader("e://test_res.txt");
         BufferedReader br = new BufferedReader(reader);

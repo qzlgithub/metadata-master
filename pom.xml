@@ -11,9 +11,12 @@
     <modules>
         <module>metadata-bop</module>
         <module>metadata-csp</module>
-        <module>metadata-core</module>
+
         <module>metadata-mis</module>
-        <module>metadata-mq</module>
+        <module>matedata-backend</module>
+
+        <module>metadata-core</module>
+        <module>matedata-backend-com</module>
     </modules>
 
     <parent>
@@ -30,7 +33,7 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <spring-data-redis.version>1.8.9.RELEASE</spring-data-redis.version>
-        <spring-kafka.version>2.1.5.RELEASE</spring-kafka.version>
+        <spring-kafka.version>1.3.4.RELEASE</spring-kafka.version>
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <mybatis.version>3.4.5</mybatis.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
