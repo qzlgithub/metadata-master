@@ -33,4 +33,8 @@ public interface ProductService
     List<Dict> getProductDict();
 
     void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res);
+
+    void getAllProduct(RestListResp res);
+
+    void getStatsProductRequestCache(List<Long> productIdList, RestResp res);
 }

@@ -2,6 +2,7 @@ package com.mingdong.bop.controller;
 
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ClientService;
+import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.RestListResp;
@@ -20,6 +21,8 @@ public class MonitoringController
 {
     @Resource
     private ClientService clientService;
+    @Resource
+    private ProductService productService;
 
     @LoginRequired
     @GetMapping(value = "/monitoring/customer/allCustomer")
@@ -32,7 +35,7 @@ public class MonitoringController
 
     @LoginRequired
     @GetMapping(value = "/monitoring/customer/request")
-    public RestResp request(@RequestParam(value = Field.CLIENT_ID, required = false) String clientId)
+    public RestResp customerRequest(@RequestParam(value = Field.CLIENT_ID, required = false) String clientId)
     {
         RestResp res = new RestResp();
         List<Long> clientIdList = null;
@@ -45,6 +48,33 @@ public class MonitoringController
             }
         }
         clientService.getStatsClientRequestCache(clientIdList, res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/allProduct")
+    public RestListResp allProduct()
+    {
+        RestListResp res = new RestListResp();
+        productService.getAllProduct(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/request")
+    public RestResp productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) String productId)
+    {
+        RestResp res = new RestResp();
+        List<Long> productIdList = null;
+        if(!StringUtils.isNullBlank(productId))
+        {
+            List<String> strings = Arrays.asList(productId.split(","));
+            productIdList = new ArrayList<>();
+            for(String item : strings){
+                productIdList.add(Long.valueOf(item));
+            }
+        }
+        productService.getStatsProductRequestCache(productIdList, res);
         return res;
     }
 }

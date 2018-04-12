@@ -72,6 +72,18 @@
         where `id` = #{id}
     </update>
 
+    <select id="findAll" resultMap="BaseResultMap">
+        <include refid="select_all" />
+    </select>
+
+    <select id="getListByIds" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}
