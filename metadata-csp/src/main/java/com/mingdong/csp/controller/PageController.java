@@ -1,6 +1,5 @@
 package com.mingdong.csp.controller;
 
-import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
@@ -9,6 +8,7 @@ import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestResp;
+import com.mingdong.core.util.CaptchaUtils;
 import com.mingdong.csp.component.RedisDao;
 import com.mingdong.csp.constant.Field;
 import com.mingdong.csp.model.RequestThread;
@@ -22,12 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,14 +38,12 @@ public class PageController
     private ClientService clientService;
     @Resource
     private ProductService productService;
-    @Resource
-    private DefaultKaptcha kaptchaBuilder;
 
     /**
      * 登陆页
      */
     @GetMapping(value = {"login.html"})
-    public ModelAndView loginPage(HttpServletRequest request) throws IOException
+    public ModelAndView loginPage(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         String sessionId = session.getId();
@@ -61,14 +56,10 @@ public class PageController
             }
         }
         ModelAndView view = new ModelAndView("login");
-        /*ImageCode imageCode = CaptchaUtils.buildImageCode();
-        session.setAttribute(Field.IMAGE_CAPTCHA, imageCode.getCode());
-        view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + imageCode.getBase64Code());*/
         String txt = StringUtils.getRandomString(4);
         session.setAttribute(Field.IMAGE_CAPTCHA, txt);
-        BufferedImage image = kaptchaBuilder.createImage(txt);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", outputStream);
+        CaptchaUtils.outputWithText(txt, outputStream, 120, 35);
         String pic64 = Base64.encodeBase64String(outputStream.toByteArray());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + pic64);
         return view;

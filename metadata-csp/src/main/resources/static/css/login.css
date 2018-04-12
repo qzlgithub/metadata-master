@@ -17,7 +17,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     background-color: rgb(0, 0, 0) !important;
     background-image: none !important;
     color: rgb(0, 0, 0) !important;
-    -webkit-tap-highlight-color:rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
 }
 
 /*header */
@@ -40,7 +40,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     background: none;
 }
 
-.navbar-inverse{background-color: rgba(255,255,255,0); border-color:rgba(255,255,255,0);}
+.navbar-inverse {
+    background-color: rgba(255, 255, 255, 0);
+    border-color: rgba(255, 255, 255, 0);
+}
 
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
     margin-top: 10px;
@@ -101,7 +104,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     height: initial;
 }
 
-
 .header1 a i {
     background: url(../images/logo.png) no-repeat;
     background-size: contain;
@@ -130,9 +132,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .navbar-right li span {
     margin-right: 10px;
 }
-
-
-
 
 #login-wrapper #login-top {
     height: 60px;
@@ -178,7 +177,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 #login-wrapper #login-content .text_auth {
-    width: 160px;
+    width: 120px;
     float: left
 }
 
@@ -189,7 +188,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 #login-wrapper #login-content .img_auth img {
-    width: 86px;
+    width: 120px;
     height: 40px;
 }
 
