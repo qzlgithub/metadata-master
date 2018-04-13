@@ -43,29 +43,6 @@ create table `stats_recharge` (
   default charset = utf8;
 
 -- ----------------------------
--- Table structure for `warning_setting`
--- ----------------------------
-drop table if exists `warning_setting`;
-create table `warning_setting` (
-  `id`             bigint(20)          not null auto_increment,
-  `create_time`    datetime            not null,
-  `update_time`    datetime            not null,
-  `content`        varchar(64)                  default null,
-  `type`           tinyint(3)          not null,
-  `send`           tinyint(1) unsigned not null,
-  `play`           tinyint(1) unsigned not null,
-  `file_name`      varchar(128)                 default null,
-  `file_path`      varchar(128)                 default null,
-  `general_limit`  int(11)                      default null,
-  `severity_limit` int(11)                      default null,
-  `warning_limit`  int(11)                      default null,
-  `enabled`        tinyint(1) unsigned not null,
-  primary key (`id`)
-)
-  engine = InnoDB
-  default charset = utf8;
-
--- ----------------------------
 -- Table structure for `job`
 -- ----------------------------
 drop table if exists `job`;
@@ -90,6 +67,30 @@ create table `job_log`
   `job_code`    varchar(16)         not null,
   `success`     tinyint(1) unsigned not null,
   `remark`      varchar(256)                 default null,
+  primary key (`id`)
+)
+  engine = InnoDB
+  default charset = utf8;
+
+-- ----------------------------
+-- Table structure for `warning_setting`
+-- ----------------------------
+drop table if exists `warning_setting`;
+create table `warning_setting` (
+  `id`             bigint(20)          not null auto_increment,
+  `code`           varchar(16)         not null,
+  `create_time`    datetime            not null,
+  `update_time`    datetime            not null,
+  `content`        varchar(64)                  default null,
+  `type`           tinyint(3)          not null,
+  `send`           tinyint(1) unsigned not null,
+  `play`           tinyint(1) unsigned not null,
+  `file_name`      varchar(128)                 default null,
+  `file_path`      varchar(128)                 default null,
+  `general_limit`  int(11)                      default null,
+  `severity_limit` int(11)                      default null,
+  `warning_limit`  int(11)                      default null,
+  `enabled`        tinyint(1) unsigned not null,
   primary key (`id`)
 )
   engine = InnoDB
