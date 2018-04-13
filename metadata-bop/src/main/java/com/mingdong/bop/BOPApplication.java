@@ -1,5 +1,6 @@
 package com.mingdong.bop;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.HttpStatus;
 
 @SpringBootApplication
+@MapperScan("com.mingdong.bop.domain.mapper")
 @ImportResource({"classpath:dubbo.xml"})
 public class BOPApplication
 {

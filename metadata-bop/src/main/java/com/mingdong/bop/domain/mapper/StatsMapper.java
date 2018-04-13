@@ -1,12 +1,11 @@
-package com.mingdong.mis.domain.mapper;
+package com.mingdong.bop.domain.mapper;
 
-import com.mingdong.mis.domain.entity.Stats;
+import com.mingdong.bop.domain.entity.Stats;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
 
-@Deprecated
 public interface StatsMapper
 {
     List<Stats> findStatsBy(@Param("day") Date day, @Param("hour") Integer hour);

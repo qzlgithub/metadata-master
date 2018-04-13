@@ -1,9 +1,8 @@
-package com.mingdong.mis.domain.entity;
+package com.mingdong.bop.domain.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Deprecated
 public class StatsRecharge
 {
     private Long id;

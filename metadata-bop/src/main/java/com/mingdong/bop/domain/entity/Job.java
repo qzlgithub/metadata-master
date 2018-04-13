@@ -1,8 +1,7 @@
-package com.mingdong.mis.domain.entity;
+package com.mingdong.bop.domain.entity;
 
 import java.util.Date;
 
-@Deprecated
 public class Job
 {
     private String code;

@@ -45,11 +45,19 @@ public class HomePageController
         return view;
     }
 
+    /**
+     * 统计数据：
+     * 1. 客户数：30日新增，总数
+     * 2. 充值金额：近7天，近30天
+     * 3. 平台收入：近7天，近30天
+     * 4. 产品请求次数/失败次数：今日，昨日，本月，累计
+     */
     @LoginRequired
     @RequestMapping(value = "/stats.html")
     public ModelAndView statsPage()
     {
         ModelAndView view = new ModelAndView("monitor/index");
+        // Map<String,Object> clientStats =
         view.addAllObjects(RequestThread.getMap());
         return view;
     }

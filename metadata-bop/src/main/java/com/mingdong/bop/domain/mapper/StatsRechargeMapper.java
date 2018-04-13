@@ -1,12 +1,11 @@
-package com.mingdong.mis.domain.mapper;
+package com.mingdong.bop.domain.mapper;
 
-import com.mingdong.mis.domain.entity.StatsRecharge;
+import com.mingdong.bop.domain.entity.StatsRecharge;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
 
-@Deprecated
 public interface StatsRechargeMapper
 {
     List<StatsRecharge> findStatsRechargeBy(@Param("day") Date day, @Param("hour") Integer hour);

@@ -1,10 +1,9 @@
-package com.mingdong.mis.domain.mapper;
+package com.mingdong.bop.domain.mapper;
 
-import com.mingdong.mis.domain.entity.WarningSetting;
+import com.mingdong.bop.domain.entity.WarningSetting;
 
 import java.util.List;
 
-@Deprecated
 public interface WarningSettingMapper
 {
     void updateSkipNull(WarningSetting warningSetting);
