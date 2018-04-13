@@ -1,20 +1,16 @@
 package com.mingdong.mis.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
-import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.Md5Utils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ClientRemindType;
 import com.mingdong.core.constant.Constant;
-import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
@@ -33,7 +29,6 @@ import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
-import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
@@ -59,9 +54,7 @@ import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.ProductClientInfo;
 import com.mingdong.mis.domain.entity.ProductRechargeInfo;
 import com.mingdong.mis.domain.entity.Recharge;
-import com.mingdong.mis.domain.entity.Stats;
 import com.mingdong.mis.domain.entity.StatsDateInfo;
-import com.mingdong.mis.domain.entity.StatsRecharge;
 import com.mingdong.mis.domain.entity.StatsRechargeInfo;
 import com.mingdong.mis.domain.entity.User;
 import com.mingdong.mis.domain.mapper.ClientContactMapper;
@@ -83,8 +76,6 @@ import com.mingdong.mis.domain.mapper.ProductRechargeInfoMapper;
 import com.mingdong.mis.domain.mapper.RechargeMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.domain.mapper.StatsClientMapper;
-import com.mingdong.mis.domain.mapper.StatsMapper;
-import com.mingdong.mis.domain.mapper.StatsRechargeMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
@@ -120,10 +111,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private DictIndustryMapper dictIndustryMapper;
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private StatsMapper statsMapper;
-    @Resource
-    private StatsRechargeMapper statsRechargeMapper;
     @Resource
     private ClientMapper clientMapper;
     @Resource
@@ -1258,109 +1245,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit)
-    {
-        Map<String, Integer> map = new HashMap<>();
-        if(rangeUnit == RangeUnit.HOUR)
-        {
-            List<Stats> statsList = statsMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd(), INC_STAT);
-            for(Stats o : statsList)
-            {
-                if(o.getClientIncrement() != 0)
-                {
-                    map.put(o.getStatsHour() + "", o.getClientIncrement());
-                }
-            }
-        }
-        else if(rangeUnit == RangeUnit.DAY || rangeUnit == RangeUnit.WEEK || rangeUnit == RangeUnit.MONTH)
-        {
-            if(rangeUnit == RangeUnit.DAY)
-            {
-                List<Stats> statsList1 = statsMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd(),
-                        INC_STAT);
-                for(Stats o : statsList1)
-                {
-                    map.put(DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2), o.getClientIncrement());
-                }
-            }
-            else if(rangeUnit == RangeUnit.WEEK)
-            {
-                List<Stats> statsList2 = statsMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd(),
-                        INC_STAT);
-                for(Stats o : statsList2)
-                {
-                    map.put(o.getStatsYear() + String.format("%02d", o.getStatsWeek()), o.getClientIncrement());
-                }
-            }
-            else
-            {
-                List<Stats> statsList3 = statsMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd(),
-                        INC_STAT);
-                for(Stats o : statsList3)
-                {
-                    map.put(o.getStatsYear() + String.format("/%02d", o.getStatsMonth()), o.getClientIncrement());
-                }
-            }
-
-        }
-        return map;
-    }
-
-    @Override
-    public Map<String, List<RechargeStatsDTO>> getClientRechargeTrend(DateRange dateRange, RangeUnit rangeUnit)
-    {
-        Map<String, List<RechargeStatsDTO>> map = new HashMap<>();
-        List<StatsRecharge> dataList;
-        if(rangeUnit == RangeUnit.DAY)
-        {
-            dataList = statsRechargeMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd());
-        }
-        else if(rangeUnit == RangeUnit.WEEK)
-        {
-            dataList = statsRechargeMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd());
-        }
-        else if(rangeUnit == RangeUnit.MONTH)
-        {
-            dataList = statsRechargeMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd());
-        }
-        else
-        {
-            dataList = statsRechargeMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd());
-        }
-        for(StatsRecharge o : dataList)
-        {
-            String name;
-            if(rangeUnit == RangeUnit.DAY)
-            {
-                name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
-            }
-            else if(rangeUnit == RangeUnit.WEEK)
-            {
-                name = o.getStatsYear() + String.format("%02d", o.getStatsWeek());
-            }
-            else if(rangeUnit == RangeUnit.MONTH)
-            {
-                name = o.getStatsYear() + String.format("/%02d", o.getStatsMonth());
-            }
-            else
-            {
-                name = o.getStatsHour() + "";
-            }
-            List<RechargeStatsDTO> list = map.get(name);
-            if(CollectionUtils.isEmpty(list))
-            {
-                list = new ArrayList<>();
-            }
-            RechargeStatsDTO dto = new RechargeStatsDTO();
-            dto.setRechargeTypeName(o.getRechargeTypeName());
-            dto.setAmount(o.getAmount());
-            list.add(dto);
-            map.put(name, list);
-        }
-        return map;
-    }
-
-    @Override
     public ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
             Page page)
     {
@@ -1686,62 +1570,66 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Transactional
     public void statsByDate(Date date)
     {
-        SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if(hour == 0)
-        {
-            hour = 24;
-        }
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
-                calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
-        Date hourAfter = calendar.getTime();
-        calendar.add(Calendar.HOUR_OF_DAY, -1);
-        Date hourBefore = calendar.getTime();
-        Date dayDate;
-        try
-        {
-            dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
-        }
-        catch(Exception e)
-        {
-            logger.error(e.getMessage());
-            return;
-        }
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        List<Stats> statsList = statsMapper.findStatsBy(dayDate, hour);
-        if(!CollectionUtils.isEmpty(statsList))
-        {
-            logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "统计已存在！");
-            return;
-        }
-        int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter, null);
-        long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
-        BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
-        if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
-        {
-            logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
-            return;
-        }
-        Stats stats = new Stats();
-        Date nowDate = new Date();
-        stats.setCreateTime(nowDate);
-        stats.setUpdateTime(nowDate);
-        stats.setStatsYear(year);
-        stats.setStatsMonth(month);
-        stats.setStatsWeek(week);
-        stats.setStatsDay(day);
-        stats.setStatsHour(hour);
-        stats.setStatsDate(dayDate);
-        stats.setClientIncrement(clientCount);
-        stats.setClientRequest(Long.valueOf(requestCount + ""));
-        stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
-        statsMapper.add(stats);
+        new Thread(() -> {
+            SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                if(hour == 0)
+                {
+                    hour = 24;
+                }
+                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
+                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                Date hourAfter = calendar.getTime();
+                calendar.add(Calendar.HOUR_OF_DAY, -1);
+                Date hourBefore = calendar.getTime();
+                Date dayDate;
+                try
+                {
+                    dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
+                }
+                catch(Exception e)
+                {
+                    logger.error(e.getMessage());
+                    return;
+                }
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int week = calendar.get(Calendar.WEEK_OF_YEAR);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter, null);
+                long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
+                BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
+                if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
+                {
+                    logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
+                    return;
+                }
+                //                Stats stats = new Stats();
+                //                Date nowDate = new Date();
+                //                stats.setCreateTime(nowDate);
+                //                stats.setUpdateTime(nowDate);
+                //                stats.setStatsYear(year);
+                //                stats.setStatsMonth(month);
+                //                stats.setStatsWeek(week);
+                //                stats.setStatsDay(day);
+                //                stats.setStatsHour(hour);
+                //                stats.setStatsDate(dayDate);
+                //                stats.setClientIncrement(clientCount);
+                //                stats.setClientRequest(Long.valueOf(requestCount + ""));
+                //                stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
+                //                statsMapper.add(stats);
+            }
+            catch(Exception e)
+            {
+                logger.error(longSdf.format(date) + " statsByDate error!" + e.getMessage());
+            }
+
+        }).start();
     }
 
     @Override
@@ -1757,67 +1645,71 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Override
     public void statsRechargeByDate(Date date)
     {
-        SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if(hour == 0)
-        {
-            hour = 24;
-        }
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
-                calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
-        Date hourAfter = calendar.getTime();
-        calendar.add(Calendar.HOUR_OF_DAY, -1);
-        Date hourBefore = calendar.getTime();
-        Date dayDate;
-        try
-        {
-            dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
-        }
-        catch(Exception e)
-        {
-            logger.error(e.getMessage());
-            return;
-        }
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        List<StatsRecharge> statsList = statsRechargeMapper.findStatsRechargeBy(dayDate, hour);
-        if(!CollectionUtils.isEmpty(statsList))
-        {
-            logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "统计已存在！");
-            return;
-        }
-        List<StatsRechargeInfo> statsRechargeInfos = statsClientMapper.statsRechargeByData(hourBefore, hourAfter);
-        if(!CollectionUtils.isEmpty(statsRechargeInfos))
-        {
-            Date nowDate = new Date();
-            List<StatsRecharge> statsRecharges = new ArrayList<>();
-            StatsRecharge statsRecharge;
-            for(StatsRechargeInfo item : statsRechargeInfos)
+        new Thread(() -> {
+            SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try
             {
-                statsRecharge = new StatsRecharge();
-                statsRecharge.setRechargeType(item.getRechargeType());
-                statsRecharge.setAmount(item.getAmount());
-                statsRecharge.setCreateTime(nowDate);
-                statsRecharge.setUpdateTime(nowDate);
-                statsRecharge.setStatsYear(year);
-                statsRecharge.setStatsMonth(month);
-                statsRecharge.setStatsWeek(week);
-                statsRecharge.setStatsDay(day);
-                statsRecharge.setStatsHour(hour);
-                statsRecharge.setStatsDate(dayDate);
-                statsRecharges.add(statsRecharge);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                if(hour == 0)
+                {
+                    hour = 24;
+                }
+                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
+                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                Date hourAfter = calendar.getTime();
+                calendar.add(Calendar.HOUR_OF_DAY, -1);
+                Date hourBefore = calendar.getTime();
+                Date dayDate;
+                try
+                {
+                    dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
+                }
+                catch(Exception e)
+                {
+                    logger.error(e.getMessage());
+                    return;
+                }
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int week = calendar.get(Calendar.WEEK_OF_YEAR);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                List<StatsRechargeInfo> statsRechargeInfos = statsClientMapper.statsRechargeByData(hourBefore,
+                        hourAfter);
+                if(!CollectionUtils.isEmpty(statsRechargeInfos))
+                {
+                    Date nowDate = new Date();
+                    //                    List<StatsRecharge> statsRecharges = new ArrayList<>();
+                    //                    StatsRecharge statsRecharge;
+                    //                    for(StatsRechargeInfo item : statsRechargeInfos)
+                    //                    {
+                    //                        statsRecharge = new StatsRecharge();
+                    //                        statsRecharge.setRechargeType(item.getRechargeType());
+                    //                        statsRecharge.setAmount(item.getAmount());
+                    //                        statsRecharge.setCreateTime(nowDate);
+                    //                        statsRecharge.setUpdateTime(nowDate);
+                    //                        statsRecharge.setStatsYear(year);
+                    //                        statsRecharge.setStatsMonth(month);
+                    //                        statsRecharge.setStatsWeek(week);
+                    //                        statsRecharge.setStatsDay(day);
+                    //                        statsRecharge.setStatsHour(hour);
+                    //                        statsRecharge.setStatsDate(dayDate);
+                    //                        statsRecharges.add(statsRecharge);
+                    //                    }
+                    //                    statsRechargeMapper.addAll(statsRecharges);
+                }
+                else
+                {
+                    logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
+                }
             }
-            statsRechargeMapper.addAll(statsRecharges);
-        }
-        else
-        {
-            logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
-        }
+            catch(Exception e)
+            {
+                logger.error(longSdf.format(date) + "statsRechargeByDate error!" + e.getMessage());
+            }
+        });
     }
 
     @Override

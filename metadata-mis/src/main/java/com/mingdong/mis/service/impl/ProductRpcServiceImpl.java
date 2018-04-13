@@ -431,4 +431,5 @@ public class ProductRpcServiceImpl implements ProductRpcService
         listDTO.setList(prList);
         return listDTO;
     }
+
 }

@@ -54,27 +54,27 @@
                                 <ul class="product-mon clearfix pb20">
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-1" style="width: 380px;height:95px;"></div>
                                     </li>
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-2" style="width: 380px;height:95px;"></div>
                                     </li>
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-3" style="width: 380px;height:95px;"></div>
                                     </li>
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-4" style="width: 380px;height:95px;"></div>
                                     </li>
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-5" style="width: 380px;height:95px;"></div>
                                     </li>
                                     <li>
                                         <p>杭州熊大基金</p>
-                                        <img src="/static/monitor/images/data-img2.png"/>
+                                        <div id="line-chart-6" style="width: 380px;height:95px;"></div>
                                     </li>
                                 </ul>
                                 <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
@@ -89,7 +89,7 @@
                 <!--right-->
                 <div class="layui-col-md3">
                     <dl class="grid-demo grid-demo-bg1  public-warp1">
-                        <dt><em>警报</em><span class="icon icon3 fr"></span></dt>
+                        <dt><em>警报</em><span class="icon icon3-close fr"></span></dt>
                         <dd>
                             <table class="public-table1">
                                 <tr>
@@ -140,40 +140,13 @@
                     </dl>
                     <dl class="grid-demo grid-demo-bg1 public-warp1 mt10">
                         <dt><em>实时请求</em></dt>
-                        <dd>
-                            <table class="public-table2">
-                                <tbody>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>20ms</td>
-                                    <td>200</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>20ms</td>
-                                    <td>200</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>20ms</td>
-                                    <td>200</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>20ms</td>
-                                    <td>200</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>20ms</td>
-                                    <td>200</td>
-                                </tr>
+                        <dd id="colee" style="overflow:hidden;height:258px;">
+                            <table class="public-table2" id="colee1">
+                                <tbody id="table-tbody">
+
                                 </tbody>
+                            </table>
+                            <table class="public-table2" id="colee2">
                             </table>
                         </dd>
                     </dl>
@@ -191,6 +164,23 @@
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/asset/map/js/china.js"></script>
+<script>
+    //无缝隙滚动
+    var speed=30;
+    var colee2=document.getElementById("colee2");
+    var colee1=document.getElementById("colee1");
+    var colee=document.getElementById("colee");
+    //colee2.innerHTML=colee1.innerHTML; //克隆colee1为colee2
+    function Marquee1(){
+        //当滚动至colee1与colee2交界时
+        if(colee2.offsetTop-colee.scrollTop==0){
+            colee.scrollTop-=colee1.offsetHeight; //colee跳到最顶端
+        }else{
+            colee.scrollTop++
+        }
+    }
+    setInterval(Marquee1,speed)//设置定时器
+</script>
 <script type="text/javascript" src="/static/business/monitoring-customer.js"></script>
 </body>
 

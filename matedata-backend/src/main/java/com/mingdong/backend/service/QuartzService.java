@@ -1,4 +1,4 @@
-package com.mingdong.bop.service;
+package com.mingdong.backend.service;
 
 import java.util.Date;
 

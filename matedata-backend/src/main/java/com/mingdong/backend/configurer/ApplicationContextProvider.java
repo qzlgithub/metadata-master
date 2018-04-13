@@ -1,4 +1,4 @@
-package com.mingdong.bop.configurer;
+package com.mingdong.backend.configurer;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

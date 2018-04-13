@@ -10,8 +10,10 @@ import org.springframework.data.redis.core.types.Expiration;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class RedisBaseDao<K extends Serializable, V extends Serializable>
@@ -29,7 +31,7 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         List<byte[]> list = new ArrayList<>();
         for(String item : strs)
         {
-            list.add(redisTemplate.getStringSerializer().serialize(item));
+            list.add(serialize(item));
         }
         return list;
     }
@@ -54,9 +56,18 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         List<String> list = new ArrayList<>();
         for(byte[] item : byteList)
         {
-            list.add(redisTemplate.getStringSerializer().deserialize(item));
+            list.add(deserialize(item));
         }
         return list;
+    }
+
+    private Map<String, String> deserializeMap(Map<byte[], byte[]> byteMap)
+    {
+        Map<String, String> map = new HashMap<>();
+        byteMap.forEach((k, v) -> {
+            map.put(deserialize(k), deserialize(v));
+        });
+        return map;
     }
 
     @SuppressWarnings("unchecked")
@@ -201,6 +212,17 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
             List<byte[]> v = serializeList(fields);
             List<byte[]> value = conn.hMGet(k, v.toArray(new byte[0][0]));
             return deserializeList(value);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Map<String, String> hGetAll(int db, String key)
+    {
+        return (Map<String, String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            Map<byte[], byte[]> value = conn.hGetAll(k);
+            return value == null ? null : deserializeMap(value);
         });
     }
 

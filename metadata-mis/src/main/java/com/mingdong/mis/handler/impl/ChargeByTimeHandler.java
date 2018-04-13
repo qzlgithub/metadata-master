@@ -31,8 +31,6 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        mqProducer.userRequest(RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
-                RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.response(MDResult.PRODUCT_EXPIRED);
@@ -41,6 +39,8 @@ public class ChargeByTimeHandler implements IChargeHandler
         Metadata metadata = routeHandler.routeProcessor(payload);
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
+        mqProducer.userRequest(requestNo,RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
+                RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
         resp.setRequestNo(requestNo);
         if(metadata.isHit())
         {

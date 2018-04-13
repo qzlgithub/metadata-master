@@ -1,6 +1,7 @@
 package com.mingdong.backend.component;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
 import org.springframework.stereotype.Repository;
 
@@ -81,27 +82,47 @@ public class RedisDao extends RedisBaseDao
     /**
      * 获取客户访问量
      */
-    public List readClientTraffic(long timestamp, List<Long> clientIds)
+    public List<Long> readClientTraffic(long timestamp, List<Long> clientIds)
     {
         List<String> clientIdsStr = new ArrayList<>();
         for(Long item : clientIds)
         {
             clientIdsStr.add(String.valueOf(item));
         }
-        return hMGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), clientIdsStr.toArray(new String[0]));
+        List countList = hMGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), clientIdsStr.toArray(new String[0]));
+        List<Long> longCountList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(countList))
+        {
+            for(Object item : countList)
+            {
+                longCountList.add(
+                        StringUtils.isNullBlank(String.valueOf(item)) ? 0 : Long.valueOf(String.valueOf(item)));
+            }
+        }
+        return longCountList;
     }
 
     /**
      * 获取产品访问量
      */
-    public List<String> readProductTraffic(long timestamp, List<Long> productIds)
+    public List<Long> readProductTraffic(long timestamp, List<Long> productIds)
     {
         List<String> productIdsStr = new ArrayList<>();
         for(Long item : productIds)
         {
             productIdsStr.add(String.valueOf(item));
         }
-        return hMGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), productIdsStr.toArray(new String[0]));
+        List countList = hMGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), productIdsStr.toArray(new String[0]));
+        List<Long> longCountList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(countList))
+        {
+            for(Object item : countList)
+            {
+                longCountList.add(
+                        StringUtils.isNullBlank(String.valueOf(item)) ? 0 : Long.valueOf(String.valueOf(item)));
+            }
+        }
+        return longCountList;
     }
 
     /**
@@ -156,6 +177,27 @@ public class RedisDao extends RedisBaseDao
         }
     }
 
+    /**
+     * 获取当前时间下的所有请求量
+     */
+    public Map readProductTrafficHGetAll(long timestamp)
+    {
+        return hGetAll(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp));
+    }
+
+    /**
+     * 获取所有请求的产品名称
+     */
+    public Map<Long, String> getProductNameAll()
+    {
+        Map<Long, String> map = new HashMap<>();
+        Map getMap = hGetAll(DB.METADATA, Key.PRODUCT);
+        getMap.forEach((k, v) -> {
+            map.put(Long.valueOf(String.valueOf(k)), String.valueOf(v));
+        });
+        return map;
+    }
+
     interface DB
     {
         // 元数据 & 字典数据
@@ -166,7 +208,7 @@ public class RedisDao extends RedisBaseDao
         int CLIENT_TRAFFIC = 3;
     }
 
-    interface Key
+    public interface Key
     {
         String PRODUCT = "metadata:product";
         String CLIENT = "metadata:client";

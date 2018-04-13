@@ -142,4 +142,12 @@ public class ProductServiceImpl implements ProductService
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }
+
+    @Override
+    public void getProductRatio(RestResp res)
+    {
+        ResponseDTO responseDTO = trafficService.getStatsProductRatio();
+        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
+        res.addData(Field.DATA, jsonStr);
+    }
 }

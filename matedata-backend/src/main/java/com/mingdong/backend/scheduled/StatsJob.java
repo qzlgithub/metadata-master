@@ -1,7 +1,7 @@
-package com.mingdong.bop.scheduled;
+package com.mingdong.backend.scheduled;
 
-import com.mingdong.bop.configurer.ApplicationContextProvider;
-import com.mingdong.bop.service.QuartzService;
+import com.mingdong.backend.configurer.ApplicationContextProvider;
+import com.mingdong.backend.service.QuartzService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 

@@ -22,7 +22,7 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div class="p20">
-            <div class="public-title2">2018年2月10日 18:20</div>
+            <div class="public-title4">2018年2月10日 18:20</div>
             <div class="layui-row layui-col-space10 mt15">
                 <!--left-->
                 <div class="layui-col-md9">
@@ -99,40 +99,13 @@
                         <div class="layui-col-md5">
                             <dl class="grid-demo grid-demo-bg1  public-warp1">
                                 <dt><em>实时请求</em></dt>
-                                <dd>
-                                    <table class="public-table1">
-                                        <tbody>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td>20ms</td>
-                                            <td>200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td>20ms</td>
-                                            <td>200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td>20ms</td>
-                                            <td>200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td>20ms</td>
-                                            <td>200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td>20ms</td>
-                                            <td>200</td>
-                                        </tr>
+                                <dd id="colee" style="overflow:hidden;height:258px;">
+                                    <table class="public-table2" id="colee1">
+                                        <tbody id="table-tbody">
+
                                         </tbody>
+                                    </table>
+                                    <table class="public-table2" id="colee2">
                                     </table>
                                 </dd>
                             </dl>
@@ -198,9 +171,9 @@
                         <dt><em>接口稳定</em><span class="fr fz-12 important">近7天</span></dt>
                         <dd class="pl20 pr20">
                             <p class="col6">身份验证</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="mt10" id="line-chart-1" style="width: 340px;height:85px;"></p>
                             <p class="col6 mt10">消费行为</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="mt10" id="line-chart-2" style="width: 340px;height:85px;"></p>
                             <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
                                     class="icon right-down ml10"></i></div>
                         </dd>
@@ -219,6 +192,26 @@
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
 <script type="text/javascript" src="/static/business/monitoring-product.js"></script>
+<script>
+    //无缝隙滚动
+    var speed = 30;
+    var colee2 = document.getElementById("colee2");
+    var colee1 = document.getElementById("colee1");
+    var colee = document.getElementById("colee");
+
+    //colee2.innerHTML=colee1.innerHTML; //克隆colee1为colee2
+    function Marquee1() {
+        //当滚动至colee1与colee2交界时
+        if(colee2.offsetTop - colee.scrollTop == 0) {
+            colee.scrollTop -= colee1.offsetHeight; //colee跳到最顶端
+        }
+        else {
+            colee.scrollTop++
+        }
+    }
+    setInterval(Marquee1, speed)//设置定时器
+
+</script>
 </body>
 
 </html>

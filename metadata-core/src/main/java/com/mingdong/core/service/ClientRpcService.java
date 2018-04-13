@@ -1,8 +1,6 @@
 package com.mingdong.core.service;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.core.constant.RangeUnit;
-import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
@@ -19,7 +17,6 @@ import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
-import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
@@ -28,7 +25,6 @@ import com.mingdong.core.model.dto.response.UserResDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public interface ClientRpcService
 {
@@ -183,10 +179,6 @@ public interface ClientRpcService
     ResponseDTO saveUserCredential(ClientUserReqDTO clientUserReqDTO);
 
     int getClientIncrementFrom(Date date);
-
-    Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit);
-
-    Map<String, List<RechargeStatsDTO>> getClientRechargeTrend(DateRange dateRange, RangeUnit rangeUnit);
 
     ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
             Page page);

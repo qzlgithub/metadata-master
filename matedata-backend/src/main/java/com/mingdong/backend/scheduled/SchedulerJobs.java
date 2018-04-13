@@ -1,4 +1,4 @@
-package com.mingdong.bop.scheduled;
+package com.mingdong.backend.scheduled;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;

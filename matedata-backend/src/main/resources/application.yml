@@ -25,6 +25,6 @@ mybatis:
 
 dubbo:
   protocol:
-    port: 33002
+    port: 33009
   registry:
     address: 192.168.2.222:2181

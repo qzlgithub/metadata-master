@@ -5,10 +5,8 @@ import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.SistemDTO;
 import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
-import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
-import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
@@ -17,7 +15,6 @@ import com.mingdong.core.model.dto.response.IndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
-import com.mingdong.core.model.dto.response.WarningSettingResDTO;
 
 import java.util.List;
 
@@ -112,13 +109,4 @@ public interface SystemRpcService
 
     ListDTO<ArticlesResDTO> getArticlesList(Integer type, Page page);
 
-    ListDTO<WarningSettingResDTO> getWarningSettingList();
-
-    WarningSettingResDTO getWarningSetting(Long id);
-
-    ResponseDTO updateWarningSetting(WarningSettingReqDTO warningSettingResDTO);
-
-    ResponseDTO changeWarningSettingStatus(Long id, Integer status);
-
-    ResponseDTO addJobLog(JobLogReqDTO jobLog);
 }

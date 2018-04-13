@@ -2,6 +2,7 @@ package com.mingdong.backend.model;
 
 public class Traffic
 {
+    private String requestNo;
     private Long clientId;
     private String corpName;
     private Long productId;
@@ -10,14 +11,26 @@ public class Traffic
     private String host;
     private int hashCode;
 
-    public Traffic(Long clientId, String corpName, Long productId, String productName, Long timestamp, String host)
+    public Traffic(String requestNo, Long clientId, String corpName, Long productId, String productName, Long timestamp,
+            String host)
     {
+        this.requestNo = requestNo;
         this.clientId = clientId;
         this.corpName = corpName;
         this.productId = productId;
         this.productName = productName;
         this.timestamp = timestamp;
         this.host = host;
+    }
+
+    public String getRequestNo()
+    {
+        return requestNo;
+    }
+
+    public void setRequestNo(String requestNo)
+    {
+        this.requestNo = requestNo;
     }
 
     public Long getClientId()

@@ -1,12 +1,14 @@
-package com.mingdong.bop.service.impl;
+package com.mingdong.backend.service.impl;
 
-import com.mingdong.backend.service.TrafficService;
-import com.mingdong.bop.service.QuartzService;
+import com.mingdong.backend.component.RedisDao;
+import com.mingdong.backend.domain.entity.Job;
+import com.mingdong.backend.domain.entity.JobLog;
+import com.mingdong.backend.domain.mapper.JobLogMapper;
+import com.mingdong.backend.domain.mapper.JobMapper;
+import com.mingdong.backend.service.QuartzService;
 import com.mingdong.core.constant.JobType;
 import com.mingdong.core.constant.TrueOrFalse;
-import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.service.ClientRpcService;
-import com.mingdong.core.service.SystemRpcService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,11 +20,13 @@ public class QuartzServiceImpl implements QuartzService
 {
     private SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Resource
+    private RedisDao redisDao;
+    @Resource
     private ClientRpcService clientRpcService;
     @Resource
-    private SystemRpcService systemRpcService;
+    private JobLogMapper jobLogMapper;
     @Resource
-    private TrafficService trafficService;
+    private JobMapper jobMapper;
 
     @Override
     public void statsByData(Date date)
@@ -73,7 +77,7 @@ public class QuartzServiceImpl implements QuartzService
     {
         try
         {
-            trafficService.cleanTraffic(date);
+            redisDao.cleanUpTraffic(date.getTime() / 1000);
             saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.TRUE, null);
         }
         catch(Exception e)
@@ -87,11 +91,20 @@ public class QuartzServiceImpl implements QuartzService
     {
         try
         {
-            JobLogReqDTO jobLog = new JobLogReqDTO();
-            jobLog.setJobCode(jobType.getCode());
-            jobLog.setSuccess(success);
-            jobLog.setRemark(remark);
-            systemRpcService.addJobLog(jobLog);
+            JobLog addJobLog = new JobLog();
+            Date date = new Date();
+            addJobLog.setCreateTime(date);
+            addJobLog.setJobCode(jobType.getCode());
+            addJobLog.setSuccess(success);
+            addJobLog.setRemark(remark);
+            jobLogMapper.add(addJobLog);
+            if(TrueOrFalse.TRUE.equals(success))
+            {
+                Job job = new Job();
+                job.setCode(jobType.getCode());
+                job.setLastSucTime(date);
+                jobMapper.updateSkipNull(job);
+            }
         }
         catch(Exception e)
         {

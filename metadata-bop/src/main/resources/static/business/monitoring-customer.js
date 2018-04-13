@@ -44,7 +44,7 @@ layui.config({
     });
     initData();
 });
-
+var index = 0;
 function initData() {
     $("input[name='clientName']:checked").each(function() {
         arr.push($(this).val());
@@ -52,8 +52,53 @@ function initData() {
     changeSelectedClient();
     setInterval(function() {
         changeSelectedClient();
+        for(var i = 0; i < 10; i++) {
+            $("#table-tbody").append('<tr><td>192.168.1.1='+(index++)+'</td><td>身份验证</td><td>请求失败</td></tr>');
+            if($("#table-tbody").children().length > 20) {
+                $("#table-tbody").children().first().remove();
+            }
+        }
     }, 3000);
     getMapChart();
+    getLineChart();
+}
+
+function getLineChart(){
+    var lineChart1 = echarts.init(document.getElementById('line-chart-1'), 'dark');
+    var lineChart2 = echarts.init(document.getElementById('line-chart-2'), 'dark');
+    var lineChart3 = echarts.init(document.getElementById('line-chart-3'), 'dark');
+    var lineChart4 = echarts.init(document.getElementById('line-chart-4'), 'dark');
+    var lineChart5 = echarts.init(document.getElementById('line-chart-5'), 'dark');
+    var lineChart6 = echarts.init(document.getElementById('line-chart-6'), 'dark');
+    var option = {
+        xAxis: {
+            show: false,
+            type: 'category',
+            boundaryGap: false,
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            show: false,
+            type: 'value'
+        },
+        grid:{
+            right:0,
+            left:0,
+            top:0,
+            bottom:0
+        },
+        series: [{
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line',
+            areaStyle: {}
+        }]
+    };
+    lineChart1.setOption(option);
+    lineChart2.setOption(option);
+    lineChart3.setOption(option);
+    lineChart4.setOption(option);
+    lineChart5.setOption(option);
+    lineChart6.setOption(option);
 }
 
 function refreshCheckbox() {

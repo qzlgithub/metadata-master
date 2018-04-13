@@ -37,4 +37,6 @@ public interface ProductService
     void getAllProduct(RestListResp res);
 
     void getStatsProductRequestCache(List<Long> productIdList, RestResp res);
+
+    void getProductRatio(RestResp res);
 }

@@ -113,7 +113,7 @@ public class RedisDao extends RedisBaseDao
         int PERSON_POOL = 3;
     }
 
-    interface Key
+    public interface Key
     {
         String RECHARGE_NO_PREFIX = "recharge_no:";
         String REQUEST_NO_PREFIX = "request_no:";

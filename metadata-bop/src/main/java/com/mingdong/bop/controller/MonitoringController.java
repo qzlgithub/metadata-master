@@ -43,7 +43,8 @@ public class MonitoringController
         {
             List<String> strings = Arrays.asList(clientId.split(","));
             clientIdList = new ArrayList<>();
-            for(String item : strings){
+            for(String item : strings)
+            {
                 clientIdList.add(Long.valueOf(item));
             }
         }
@@ -70,11 +71,21 @@ public class MonitoringController
         {
             List<String> strings = Arrays.asList(productId.split(","));
             productIdList = new ArrayList<>();
-            for(String item : strings){
+            for(String item : strings)
+            {
                 productIdList.add(Long.valueOf(item));
             }
         }
         productService.getStatsProductRequestCache(productIdList, res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/ratio")
+    public RestResp productRatio()
+    {
+        RestResp res = new RestResp();
+        productService.getProductRatio(res);
         return res;
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
     <meta charset="utf-8"/>
@@ -16,21 +16,17 @@
 <body>
 <div class="layui-layout layui-layout-admin kit-layout-admin" style="background: #3c9fe2;">
     <div class="layui-header container" style="height: 80px;">
-        <div class="layui-logo mt10"><img src="/static/images/logo.png"/> </div>
+        <div class="layui-logo mt10"><img src="/static/images/logo.png"/></div>
         <div class="layui-logo kit-logo-mobile">元数据管理平台</div>
-        <ul class="layui-nav layui-layout-left kit-nav layui-menu">
-            <li class="layui-nav-item bd-right-none important">
-                <a>
-                    <img src="/static/images/icon/photo.png" class=""/>
-                    <p id="manager-user-name-id"></p>
+        <ul class="fr">
+            <li class="layui-nav-item bd-right-none mt25 important">
+                <a href="/user/logout">
+                    <img src="/static/images/icon/exit-icon.png"/>
                 </a>
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right kit-nav"></ul>
     </div>
-    <script>
-        document.getElementById("manager-user-name-id").innerHTML = sessionStorage.getItem("user_name");
-    </script>
     <div style="background: #f7f7f7; min-height: 768px;" class="layui-layout layui-layout-admin kit-layout-admin">
         <div class="container">
             <h1 class="public-title">选择系统</h1>

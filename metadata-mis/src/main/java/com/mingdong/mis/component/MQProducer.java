@@ -15,10 +15,10 @@ public class MQProducer
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void userRequest(Long clientId, String corpName, Long productId, String productName, String ip,
-            AbsPayload payload, long timestamp)
+    public void userRequest(String requestNo, Long clientId, String corpName, Long productId, String productName,
+            String ip, AbsPayload payload, long timestamp)
     {
-        Traffic traffic = new Traffic(clientId, corpName, productId, productName, timestamp, ip);
+        Traffic traffic = new Traffic(requestNo, clientId, corpName, productId, productName, timestamp, ip);
         traffic.setHashCode(JSON.toJSONString(payload).hashCode());
         kafkaTemplate.send(KafkaTopic.TRAFFIC, JSON.toJSONString(traffic));
     }

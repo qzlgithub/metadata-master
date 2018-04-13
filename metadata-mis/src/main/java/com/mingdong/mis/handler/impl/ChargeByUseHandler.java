@@ -39,8 +39,6 @@ public class ChargeByUseHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        mqProducer.userRequest(RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
-                RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
         String lockId = RequestThread.getProduct().name() + "-C" + RequestThread.getClientId();
         String lockVal = StringUtils.getUuid();
         boolean locked = false;
@@ -64,6 +62,8 @@ public class ChargeByUseHandler implements IChargeHandler
             // 请求计费，保存查询记录，并返回请求编号
             String requestNo = dataService.chargeAndSaveRequestLog(checkResult.getUnitAmt(), checkResult.getBalance(),
                     payload, metadata.isHit(), resp.requestAt());
+            mqProducer.userRequest(requestNo,RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
+                    RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
             resp.setRequestNo(requestNo);
             if(metadata.isHit())
             {
