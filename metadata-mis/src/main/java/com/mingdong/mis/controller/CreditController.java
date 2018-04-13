@@ -27,27 +27,17 @@ public class CreditController
     @RequestMapping(value = "/credit/overdue")
     public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
-        MDResp resp = RequestThread.getResp();
-        MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
-        if(result != MDResult.OK)
-        {
-            resp.response(result);
-            return resp;
-        }
-        if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
-        {
-            chargeByTimeService.work(requestVO.getPayload(), resp);
-        }
-        else
-        {
-            chargeByUseService.work(requestVO.getPayload(), resp);
-        }
-        return resp;
+        return revokeAPI(requestVO);
     }
 
     @AuthRequired
     @RequestMapping(value = "/credit/blacklist")
     public MDResp checkPersonInBlacklist(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
+    private MDResp revokeAPI(RequestVO requestVO)
     {
         MDResp resp = RequestThread.getResp();
         MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
