@@ -34,9 +34,7 @@ public class QuartzServiceImpl implements QuartzService
         }
         catch(Exception e)
         {
-            e.printStackTrace();
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
-                    JobType.STATS_ALL.getName() + ":" + longSdf.format(date) + e.getMessage());
+            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE, JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
         }
     }
 
@@ -50,9 +48,8 @@ public class QuartzServiceImpl implements QuartzService
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
-                    JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date) + e.getMessage());
+                    JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
         }
     }
 
@@ -66,9 +63,8 @@ public class QuartzServiceImpl implements QuartzService
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.FALSE,
-                    JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date) + e.getMessage());
+                    JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date));
         }
     }
 
@@ -82,9 +78,8 @@ public class QuartzServiceImpl implements QuartzService
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.FALSE,
-                    JobType.CLEAN_TRAFFIC.getName() + ":" + longSdf.format(date) + e.getMessage());
+                    JobType.CLEAN_TRAFFIC.getName() + ":" + longSdf.format(date));
         }
     }
 
