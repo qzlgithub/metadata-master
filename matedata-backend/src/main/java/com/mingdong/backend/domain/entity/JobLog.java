@@ -1,4 +1,4 @@
-package com.mingdong.bop.domain.entity;
+package com.mingdong.backend.domain.entity;
 
 import java.util.Date;
 

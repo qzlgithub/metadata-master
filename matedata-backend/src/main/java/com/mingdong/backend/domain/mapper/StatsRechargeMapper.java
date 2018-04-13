@@ -1,6 +1,6 @@
-package com.mingdong.bop.domain.mapper;
+package com.mingdong.backend.domain.mapper;
 
-import com.mingdong.bop.domain.entity.StatsRecharge;
+import com.mingdong.backend.domain.entity.StatsRecharge;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

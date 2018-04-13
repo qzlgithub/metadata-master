@@ -1,6 +1,6 @@
-package com.mingdong.bop.domain.mapper;
+package com.mingdong.backend.domain.mapper;
 
-import com.mingdong.bop.domain.entity.WarningSetting;
+import com.mingdong.backend.domain.entity.WarningSetting;
 
 import java.util.List;
 
