@@ -19,6 +19,8 @@ public class TrafficListener
     public void process(String msg)
     {
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
+        redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
+                traffic.getProductName());
         redisDao.realTimeTraffic(traffic.getTimestamp(), traffic.getProductId(), traffic.getClientId());
     }
 }

@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.mingdong.backend.service.TrafficService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.constant.DateFormat;
@@ -34,6 +35,8 @@ public class ProductServiceImpl implements ProductService
     private CommonRpcService commonRpcService;
     @Resource
     private ProductRpcService productRpcService;
+    @Resource
+    private TrafficService trafficService;
 
     @Override
     public Map<String, Object> getProductInfoData(Long productId)
@@ -135,8 +138,8 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getStatsProductRequestCache(List<Long> productIdList, RestResp res)
     {
-        ResponseDTO responseDTO = productRpcService.getStatsProductRequestCache(productIdList);
+        ResponseDTO responseDTO = trafficService.getStatsProductRequestCache(productIdList);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
-        res.addData(Field.DATA,jsonStr);
+        res.addData(Field.DATA, jsonStr);
     }
 }

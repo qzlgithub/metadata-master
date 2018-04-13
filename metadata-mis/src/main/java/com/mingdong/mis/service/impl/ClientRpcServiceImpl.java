@@ -1,7 +1,5 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -103,7 +101,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1842,12 +1839,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public void cleanTraffic(Date date)
-    {
-        redisDao.cleanUpTraffic(date.getTime() / 1000);
-    }
-
-    @Override
     public ListDTO<ClientInfoResDTO> getAllClient()
     {
         ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
@@ -1868,65 +1859,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         listDTO.setList(dataList);
         listDTO.setTotal(dataList.size());
         return listDTO;
-    }
-
-    @Override
-    public ResponseDTO getStatsClientRequestCache(List<Long> clientIdList)
-    {
-        ResponseDTO responseDTO = new ResponseDTO();
-        long currentTime = System.currentTimeMillis() / 1000;
-        long afterKey = currentTime - currentTime % 300;
-        long beforeKey = afterKey - 3600;
-        JSONArray legendData = new JSONArray();
-        JSONArray xAxisData = new JSONArray();
-        JSONArray seriesData = new JSONArray();
-        JSONArray jsonArrayTemp;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        if(!CollectionUtils.isEmpty(clientIdList))
-        {
-            Map<Long, JSONArray> mapTemp = new LinkedHashMap<>();
-            List<Client> clientList = clientMapper.getListByIdList(clientIdList);
-            Map<Long, Client> clientMap = new HashMap<>();
-            for(Client item : clientList)
-            {
-                clientMap.put(item.getId(), item);
-                legendData.add(item.getCorpName());
-                jsonArrayTemp = new JSONArray();
-                mapTemp.put(item.getId(), jsonArrayTemp);
-            }
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                List<String> list = redisDao.readClientTraffic(beforeKey, clientIdList);
-                for(int i = 0; i < clientIdList.size(); i++)
-                {
-                    mapTemp.get(clientIdList.get(i)).add(list.get(i) == null ? "0" : list.get(i));
-                }
-                beforeKey += 300;
-            }
-            mapTemp.forEach((k, v) -> {
-                seriesData.add(v);
-            });
-        }
-        else
-        {
-            legendData.add("总体");
-            jsonArrayTemp = new JSONArray();
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                String count = redisDao.readClientTrafficAll(beforeKey);
-                jsonArrayTemp.add(StringUtils.isNullBlank(count) ? "0" : count);
-                beforeKey += 300;
-            }
-            seriesData.add(jsonArrayTemp);
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Field.LEGEND_DATA, legendData);
-        jsonObject.put(Field.X_AXIS_DATA, xAxisData);
-        jsonObject.put(Field.SERIES_DATA, seriesData);
-        responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
-        return responseDTO;
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)

@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.mingdong.backend.service.TrafficService;
 import com.mingdong.bop.service.QuartzService;
 import com.mingdong.core.constant.JobType;
 import com.mingdong.core.constant.TrueOrFalse;
@@ -20,6 +21,8 @@ public class QuartzServiceImpl implements QuartzService
     private ClientRpcService clientRpcService;
     @Resource
     private SystemRpcService systemRpcService;
+    @Resource
+    private TrafficService trafficService;
 
     @Override
     public void statsByData(Date date)
@@ -74,7 +77,7 @@ public class QuartzServiceImpl implements QuartzService
     {
         try
         {
-            clientRpcService.cleanTraffic(date);
+            trafficService.cleanTraffic(date);
             saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.TRUE, null);
         }
         catch(Exception e)

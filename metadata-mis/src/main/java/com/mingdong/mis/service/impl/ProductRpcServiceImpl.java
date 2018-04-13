@@ -1,7 +1,5 @@
 package com.mingdong.mis.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
@@ -17,7 +15,6 @@ import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.mis.component.RedisDao;
-import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.domain.entity.ClientProduct;
 import com.mingdong.mis.domain.entity.ClientUserProduct;
 import com.mingdong.mis.domain.entity.Product;
@@ -33,13 +30,9 @@ import com.mingdong.mis.domain.mapper.RechargeMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProductRpcServiceImpl implements ProductRpcService
 {
@@ -437,64 +430,5 @@ public class ProductRpcServiceImpl implements ProductRpcService
         }
         listDTO.setList(prList);
         return listDTO;
-    }
-
-    @Override
-    public ResponseDTO getStatsProductRequestCache(List<Long> productIdList)
-    {
-        ResponseDTO responseDTO = new ResponseDTO();
-        long currentTime = System.currentTimeMillis() / 1000;
-        long afterKey = currentTime - currentTime % 300;
-        long beforeKey = afterKey - 3600;
-        JSONArray legendData = new JSONArray();
-        JSONArray xAxisData = new JSONArray();
-        JSONArray seriesData = new JSONArray();
-        JSONArray jsonArrayTemp;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        if(!CollectionUtils.isEmpty(productIdList))
-        {
-            Map<Long, JSONArray> mapTemp = new LinkedHashMap<>();
-            List<Product> productList = productMapper.getListByIds(productIdList);
-            Map<Long, Product> clientMap = new HashMap<>();
-            for(Product item : productList)
-            {
-                clientMap.put(item.getId(), item);
-                legendData.add(item.getName());
-                jsonArrayTemp = new JSONArray();
-                mapTemp.put(item.getId(), jsonArrayTemp);
-            }
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                List<String> list = redisDao.readProductTraffic(beforeKey, productIdList);
-                for(int i = 0; i < productIdList.size(); i++)
-                {
-                    mapTemp.get(productIdList.get(i)).add(list.get(i) == null ? "0" : list.get(i));
-                }
-                beforeKey += 300;
-            }
-            mapTemp.forEach((k, v) -> {
-                seriesData.add(v);
-            });
-        }
-        else
-        {
-            legendData.add("总体");
-            jsonArrayTemp = new JSONArray();
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                String count = redisDao.readProductTrafficAll(beforeKey);
-                jsonArrayTemp.add(StringUtils.isNullBlank(count) ? "0" : count);
-                beforeKey += 300;
-            }
-            seriesData.add(jsonArrayTemp);
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Field.LEGEND_DATA, legendData);
-        jsonObject.put(Field.X_AXIS_DATA, xAxisData);
-        jsonObject.put(Field.SERIES_DATA, seriesData);
-        responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
-        return responseDTO;
     }
 }

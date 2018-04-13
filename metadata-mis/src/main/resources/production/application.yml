@@ -6,6 +6,11 @@ spring:
     host: s4.mingdong.com
     port: 6379
     password: UPKxSxCJBte&Mb@t
+  kafka:
+    producer:
+      bootstrap-servers: s4.mingdong.com:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver

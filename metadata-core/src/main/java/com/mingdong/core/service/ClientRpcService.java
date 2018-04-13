@@ -243,9 +243,7 @@ public interface ClientRpcService
 
     Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
 
-    void cleanTraffic(Date date);
+
 
     ListDTO<ClientInfoResDTO> getAllClient();
-
-    ResponseDTO getStatsClientRequestCache(List<Long> clientIdList);
 }

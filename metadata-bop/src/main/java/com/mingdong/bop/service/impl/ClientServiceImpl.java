@@ -1,6 +1,7 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.mingdong.backend.service.TrafficService;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
@@ -86,6 +87,8 @@ public class ClientServiceImpl implements ClientService
     private SystemRpcService systemRpcService;
     @Resource
     private TradeRpcService tradeRpcService;
+    @Resource
+    private TrafficService trafficService;
 
     @Override
     public void checkIfUsernameExist(String username, RestResp resp)
@@ -938,9 +941,9 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getStatsClientRequestCache(List<Long> clientIdList, RestResp res)
     {
-        ResponseDTO responseDTO = clientRpcService.getStatsClientRequestCache(clientIdList);
+        ResponseDTO responseDTO = trafficService.getStatsClientRequestCache(clientIdList);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
-        res.addData(Field.DATA,jsonStr);
+        res.addData(Field.DATA, jsonStr);
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

@@ -34,6 +34,16 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         return list;
     }
 
+    private byte[][] serializeArray(String... strs)
+    {
+        byte[][] arr = new byte[strs.length][];
+        for(int i = 0; i < strs.length; i++)
+        {
+            arr[i] = serialize(strs[i]);
+        }
+        return arr;
+    }
+
     private String deserialize(byte[] bytes)
     {
         return redisTemplate.getStringSerializer().deserialize(bytes);
@@ -185,12 +195,12 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
     @SuppressWarnings("unchecked")
     protected List<String> hMGet(int db, String key, String... fields)
     {
-        return (List<String>) redisTemplate.execute((RedisCallback) conn -> {
+        return redisTemplate.execute((RedisCallback<List<String>>) conn -> {
             conn.select(db);
             byte[] k = serialize(key);
             List<byte[]> v = serializeList(fields);
             List<byte[]> value = conn.hMGet(k, v.toArray(new byte[0][0]));
-            return value == null ? null : deserializeList(value);
+            return deserializeList(value);
         });
     }
 
