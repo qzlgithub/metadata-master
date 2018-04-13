@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication(exclude = MongoAutoConfiguration.class)
 @EnableConfigurationProperties(MultipleMongoProperties.class)
 @MapperScan("com.mingdong.mis.domain.mapper")
-@ImportResource({"classpath:config/dubbo.xml"})
+@ImportResource({"classpath:dubbo.xml"})
 public class MISApplication
 {
     public static void main(String[] args)

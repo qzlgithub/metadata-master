@@ -32,4 +32,13 @@
     <bean id="managerRpcService" class="com.mingdong.mis.service.impl.ManagerRpcServiceImpl" />
     <bean id="systemRpcService" class="com.mingdong.mis.service.impl.SystemRpcServiceImpl" />
     <bean id="tradeRpcService" class="com.mingdong.mis.service.impl.TradeRpcServiceImpl" />
+
+    <!--***************************************************************************-->
+    <!-- consumer配置：生成远程服务代理，和本地bean一样调用 -->
+    <dubbo:reference retries="0" timeout="5000" check="false" id="trafficService" url="dubbo://192.168.2.232:33009/"
+                     interface="com.mingdong.backend.service.TrafficService"/>
+    <dubbo:reference retries="0" timeout="5000" check="false" id="dataStatsService" url="dubbo://192.168.2.232:33009/"
+                     interface="com.mingdong.backend.service.DataStatsService"/>
+    <dubbo:reference retries="0" timeout="5000" check="false" id="warningService" url="dubbo://192.168.2.232:33009/"
+                     interface="com.mingdong.backend.service.WarningService"/>
 </beans>

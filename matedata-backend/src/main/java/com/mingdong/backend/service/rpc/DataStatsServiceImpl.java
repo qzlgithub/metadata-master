@@ -10,10 +10,14 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.dto.request.StatsDTO;
+import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +134,53 @@ public class DataStatsServiceImpl implements DataStatsService
             map.put(name, list);
         }
         return map;
+    }
+
+    @Override
+    public ResponseDTO addStats(StatsDTO statsDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Stats stats = new Stats();
+        Date date = new Date();
+        stats.setCreateTime(date);
+        stats.setUpdateTime(date);
+        stats.setStatsYear(statsDTO.getStatsYear());
+        stats.setStatsMonth(statsDTO.getStatsMonth());
+        stats.setStatsWeek(statsDTO.getStatsWeek());
+        stats.setStatsDay(statsDTO.getStatsDay());
+        stats.setStatsHour(statsDTO.getStatsHour());
+        stats.setStatsDate(statsDTO.getStatsDate());
+        stats.setClientIncrement(statsDTO.getClientIncrement());
+        stats.setClientRequest(statsDTO.getClientRequest());
+        stats.setClientRecharge(statsDTO.getClientRecharge());
+        statsMapper.add(stats);
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO addStatsRechargeList(List<StatsRechargeDTO> statsRecharges)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<StatsRecharge> statsRechargeList = new ArrayList<>();
+        StatsRecharge statsRecharge;
+        Date date = new Date();
+        for(StatsRechargeDTO item : statsRecharges)
+        {
+            statsRecharge = new StatsRecharge();
+            statsRecharge.setCreateTime(date);
+            statsRecharge.setUpdateTime(date);
+            statsRecharge.setRechargeType(item.getRechargeType());
+            statsRecharge.setAmount(item.getAmount());
+            statsRecharge.setStatsYear(item.getStatsYear());
+            statsRecharge.setStatsMonth(item.getStatsMonth());
+            statsRecharge.setStatsWeek(item.getStatsWeek());
+            statsRecharge.setStatsDay(item.getStatsDay());
+            statsRecharge.setStatsHour(item.getStatsHour());
+            statsRecharge.setStatsDate(item.getStatsDate());
+            statsRechargeList.add(statsRecharge);
+        }
+        statsRechargeMapper.addAll(statsRechargeList);
+        return responseDTO;
     }
 
 }

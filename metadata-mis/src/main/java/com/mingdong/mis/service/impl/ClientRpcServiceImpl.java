@@ -1,6 +1,7 @@
 package com.mingdong.mis.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.mingdong.backend.service.DataStatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
@@ -18,6 +19,8 @@ import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
+import com.mingdong.core.model.dto.request.StatsDTO;
+import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -147,6 +150,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     private ClientRemindMapper clientRemindMapper;
     @Resource
     private ClientRemindProductMapper clientRemindProductMapper;
+    @Resource
+    private DataStatsService dataStatsService;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -1573,7 +1578,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    @Transactional
     public void statsByDate(Date date)
     {
         new Thread(() -> {
@@ -1615,24 +1619,25 @@ public class ClientRpcServiceImpl implements ClientRpcService
                     logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
                     return;
                 }
-                //                Stats stats = new Stats();
-                //                Date nowDate = new Date();
-                //                stats.setCreateTime(nowDate);
-                //                stats.setUpdateTime(nowDate);
-                //                stats.setStatsYear(year);
-                //                stats.setStatsMonth(month);
-                //                stats.setStatsWeek(week);
-                //                stats.setStatsDay(day);
-                //                stats.setStatsHour(hour);
-                //                stats.setStatsDate(dayDate);
-                //                stats.setClientIncrement(clientCount);
-                //                stats.setClientRequest(Long.valueOf(requestCount + ""));
-                //                stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
-                //                statsMapper.add(stats);
+                StatsDTO stats = new StatsDTO();
+                stats.setStatsYear(year);
+                stats.setStatsMonth(month);
+                stats.setStatsWeek(week);
+                stats.setStatsDay(day);
+                stats.setStatsHour(hour);
+                stats.setStatsDate(dayDate);
+                stats.setClientIncrement(clientCount);
+                stats.setClientRequest(Long.valueOf(requestCount + ""));
+                stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
+                ResponseDTO responseDTO = dataStatsService.addStats(stats);
+                if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
+                {
+                    logger.error(longSdf.format(date) + " statsByDate error!");
+                }
             }
             catch(Exception e)
             {
-                logger.error(longSdf.format(date) + " statsByDate error!" + e.getMessage());
+                logger.error(longSdf.format(date) + " statsByDate error!");
             }
 
         }).start();
@@ -1686,25 +1691,26 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         hourAfter);
                 if(!CollectionUtils.isEmpty(statsRechargeInfos))
                 {
-                    Date nowDate = new Date();
-                    //                    List<StatsRecharge> statsRecharges = new ArrayList<>();
-                    //                    StatsRecharge statsRecharge;
-                    //                    for(StatsRechargeInfo item : statsRechargeInfos)
-                    //                    {
-                    //                        statsRecharge = new StatsRecharge();
-                    //                        statsRecharge.setRechargeType(item.getRechargeType());
-                    //                        statsRecharge.setAmount(item.getAmount());
-                    //                        statsRecharge.setCreateTime(nowDate);
-                    //                        statsRecharge.setUpdateTime(nowDate);
-                    //                        statsRecharge.setStatsYear(year);
-                    //                        statsRecharge.setStatsMonth(month);
-                    //                        statsRecharge.setStatsWeek(week);
-                    //                        statsRecharge.setStatsDay(day);
-                    //                        statsRecharge.setStatsHour(hour);
-                    //                        statsRecharge.setStatsDate(dayDate);
-                    //                        statsRecharges.add(statsRecharge);
-                    //                    }
-                    //                    statsRechargeMapper.addAll(statsRecharges);
+                    List<StatsRechargeDTO> statsRecharges = new ArrayList<>();
+                    StatsRechargeDTO statsRecharge;
+                    for(StatsRechargeInfo item : statsRechargeInfos)
+                    {
+                        statsRecharge = new StatsRechargeDTO();
+                        statsRecharge.setRechargeType(item.getRechargeType());
+                        statsRecharge.setAmount(item.getAmount());
+                        statsRecharge.setStatsYear(year);
+                        statsRecharge.setStatsMonth(month);
+                        statsRecharge.setStatsWeek(week);
+                        statsRecharge.setStatsDay(day);
+                        statsRecharge.setStatsHour(hour);
+                        statsRecharge.setStatsDate(dayDate);
+                        statsRecharges.add(statsRecharge);
+                    }
+                    ResponseDTO responseDTO = dataStatsService.addStatsRechargeList(statsRecharges);
+                    if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
+                    {
+                        logger.error(longSdf.format(date) + " statsRechargeByDate error!");
+                    }
                 }
                 else
                 {
