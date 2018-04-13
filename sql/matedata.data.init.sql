@@ -158,13 +158,3 @@ insert into
 values
   (now(), now(), 1, 0, 'FIN-CDK', '常欠客', '0', '常欠客', 1),
   (now(), now(), 1, 0, 'FIN-HMD', '黑名单', '0', '黑名单', 1);
-
--- job data
-insert into
-  `job`
-  (code, name, last_suc_time)
-values
-  ('STATS_ALL', '统计各维度', null),
-  ('STATS_RECHARGE', '统计充值', null),
-  ('CLIENT_REMIND', '客户服务提醒', null),
-  ('CLEAN_TRAFFIC', '清理定时缓存数据', null);
