@@ -21,7 +21,7 @@ spring:
 mybatis:
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: com.mingdong.mis.domain.entity
+  type-aliases-package: com.mingdong.backend.domain.entity
 
 dubbo:
   protocol:
