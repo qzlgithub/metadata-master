@@ -630,9 +630,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Override
     public void setClientPassword(List<Long> idList, String password)
     {
-        if(!CollectionUtils.isEmpty(idList))
+        List<Client> clientList = clientMapper.getListByIdList(idList);
+        if(!CollectionUtils.isEmpty(clientList))
         {
-            clientUserMapper.resetPasswordByIds(password, new Date(), idList);
+            List<Long> clientUserIdList = new ArrayList<>();
+            for(Client c : clientList)
+            {
+                clientUserIdList.add(c.getPrimaryUserId());
+            }
+            clientUserMapper.resetPasswordByIds(password, new Date(), clientUserIdList);
         }
     }
 
