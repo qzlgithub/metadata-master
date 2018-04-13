@@ -18,7 +18,6 @@ public class TrafficListener
     @KafkaListener(topics = KafkaTopic.TRAFFIC)
     public void process(String msg)
     {
-        System.out.println(msg);
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
