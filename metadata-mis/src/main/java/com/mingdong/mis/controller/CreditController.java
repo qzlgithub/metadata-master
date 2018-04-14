@@ -2,6 +2,7 @@ package com.mingdong.mis.controller;
 
 import com.mingdong.core.annotation.AuthRequired;
 import com.mingdong.core.constant.BillPlan;
+import com.mingdong.mis.component.MQProducer;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.handler.impl.ChargeByTimeHandler;
 import com.mingdong.mis.handler.impl.ChargeByUseHandler;
@@ -18,6 +19,8 @@ import javax.annotation.Resource;
 @RestController
 public class CreditController
 {
+    @Resource
+    private MQProducer mqProducer;
     @Resource
     private ChargeByTimeHandler chargeByTimeService;
     @Resource
@@ -40,19 +43,28 @@ public class CreditController
     private MDResp revokeAPI(RequestVO requestVO)
     {
         MDResp resp = RequestThread.getResp();
-        MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
-        if(result != MDResult.OK)
+        try
         {
-            resp.response(result);
-            return resp;
+            MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
+            if(result != MDResult.OK)
+            {
+                resp.response(result);
+                return resp;
+            }
+            if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
+            {
+                chargeByTimeService.work(requestVO.getPayload(), resp);
+            }
+            else
+            {
+                chargeByUseService.work(requestVO.getPayload(), resp);
+            }
         }
-        if(BillPlan.BY_TIME.equals(RequestThread.getBillPlan()))
+        finally
         {
-            chargeByTimeService.work(requestVO.getPayload(), resp);
-        }
-        else
-        {
-            chargeByUseService.work(requestVO.getPayload(), resp);
+            mqProducer.userRequest(RequestThread.getClientId(), RequestThread.getCorpName(),
+                    RequestThread.getProductId(), RequestThread.getProductName(), RequestThread.getHost(),
+                    requestVO.getPayload(), resp.getTimestamp(), "请求成功");
         }
         return resp;
     }

@@ -8,10 +8,13 @@ import com.mingdong.backend.service.TrafficService;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.ProductType;
+import com.mingdong.core.model.dto.ListDTO;
+import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -210,5 +213,43 @@ public class TrafficServiceImpl implements TrafficService
         jsonObject.put(Field.SERIES_DATA, seriesData);
         responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
         return responseDTO;
+    }
+
+    @Override
+    public ListDTO<RequestDetailResDTO> getProductRequestList(Integer size)
+    {
+        ListDTO<RequestDetailResDTO> listDTO = new ListDTO<>();
+        List<RequestDetailResDTO> list = new ArrayList<>();
+        listDTO.setList(list);
+        RequestDetailResDTO requestDetailResDTO;
+        for(int i = 0; i < size; i++)
+        {
+            requestDetailResDTO = redisDao.readProductRequestMessageFirst();
+            if(requestDetailResDTO == null)
+            {
+                break;
+            }
+            list.add(requestDetailResDTO);
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<RequestDetailResDTO> getClientRequestList(Integer size)
+    {
+        ListDTO<RequestDetailResDTO> listDTO = new ListDTO<>();
+        List<RequestDetailResDTO> list = new ArrayList<>();
+        listDTO.setList(list);
+        RequestDetailResDTO requestDetailResDTO;
+        for(int i = 0; i < size; i++)
+        {
+            requestDetailResDTO = redisDao.readClientRequestMessageFirst();
+            if(requestDetailResDTO == null)
+            {
+                break;
+            }
+            list.add(requestDetailResDTO);
+        }
+        return listDTO;
     }
 }

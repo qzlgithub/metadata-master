@@ -2,7 +2,6 @@ package com.mingdong.mis.handler.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mingdong.mis.component.MQProducer;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.handler.IChargeHandler;
@@ -22,8 +21,6 @@ import javax.annotation.Resource;
 public class ChargeByTimeHandler implements IChargeHandler
 {
     @Resource
-    private MQProducer mqProducer;
-    @Resource
     private DataService dataService;
     @Resource
     private RouteHandler routeHandler;
@@ -39,8 +36,6 @@ public class ChargeByTimeHandler implements IChargeHandler
         Metadata metadata = routeHandler.routeProcessor(payload);
         // 保存请求记录，并返回请求编号
         String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
-        mqProducer.userRequest(requestNo,RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
-                RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
         resp.setRequestNo(requestNo);
         if(metadata.isHit())
         {

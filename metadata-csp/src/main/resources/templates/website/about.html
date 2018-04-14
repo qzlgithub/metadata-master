@@ -33,15 +33,31 @@
 
 <div th:include="website/common :: top"></div>
 
-<div class="pb0 sbg_top about-banner">
-    <div class="container p20">
-        <div class="about-form w30 fr">
-            <div class="fz-16 lh30">
-                <p th:text="'客服Q Q：'+${serviceQq}"></p>
-                <p>热线电话： 0571-8795 5351</p>
-                <p>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：contact@matedata.net</p>
-                <p>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址： 杭州市拱墅区祥园路108号</p>
+<div class="pb0 sbg_top about-banner left">
+    <div class="container-map container" id="container1" style="position: relative; z-index: 9;">
+    </div>
+    <div class="container">
+        <div class="about-form w25" style="position: absolute; top: 0px; right: 11.4%;">
+            <div class="fz-16 lh30 important" >
+                <p class="clearfix fz-14 important">
+                    <i class="fl pr10"><img src="/static/website/images/icon/qq-icon.png" style="width: 22px;"/></i>67236746273
+                </p>
+                <p class="clearfix fz-14 important mt5">
+                    <i class="fl pr10"><img src="/static/website/images/icon/tel-icon-mix.png" style="width: 22px;"/></i>0571-2513 886
+                </p>
+                <p class="clearfix fz-14 important mt5">
+                    <i class="fl pr10"><img src="/static/website/images/icon/email-icon-mix.png" style="width: 22px;"/></i>Matedata@mingdong.com
+                </p>
+                <p class="clearfix fz-14 important mt5"><i class="fl pr10">
+                    <img src="/static/website/images/icon/address-icon.png" style="width: 22px;"/></i>杭州市拱墅区祥园路108号
+                </p>
             </div>
+            <!--  <div class="about-form-list mt15">
+               <p class="col3 fz-16">让客服联系您</p>
+               <p class="mt15"><input type="text" name="" placeholder="请输入姓名"></p>
+               <p class="mt15 position-r"><input type="text" name="" placeholder="请输入手机号"><button>提交</button></p>
+               <p class="col2 fz-14 mt10 tc">提交后会有专属客服为您服务</p>
+             </div> -->
         </div>
     </div>
 </div>
@@ -102,9 +118,26 @@
 <div th:include="website/common :: footer"></div>
 
 <script src="/static/website/js/jquery.min.js"></script>
+<script src="/static/website/js/jquery.baiduMap.min.js"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&amp;ak=A1LU7iHS0avqQwPLAxbhKn0UYSQCuRVH"></script>
 <script>
     $(function() {
         $("#page-about").addClass("active");
+    });
+    new BaiduMap({
+        id: "container1",
+        title: {
+            text: "智慧信息产业园",
+            className: "title"
+        },
+        content: {
+            className: "content",
+            text: ["地址：杭州市拱墅区智慧信息产业园G座5层", "电话：(010)65131892"]
+        },
+        point: {
+            lng: 120.124427,
+            lat: 30.342194
+        }
     });
 </script>
 </body>

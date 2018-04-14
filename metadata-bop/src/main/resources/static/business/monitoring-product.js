@@ -84,16 +84,34 @@ function initData() {
     });
     changeSelectedProduct();
     getScatterChart();
+    getRequestList();
+    timeReady();
+}
+
+function timeReady() {
     setInterval(function() {
         changeSelectedProduct();
         getScatterChart();
-        for(var i = 0; i < 20; i++) {
-            $("#table-tbody").append('<tr><td>192.168.1.1=' + (index++) + '</td><td>身份验证</td><td>请求失败</td></tr>');
-            if($("#table-tbody").children().length > 100) {
-                $("#table-tbody").children().first().remove();
+    }, 2000);
+    setInterval(function() {
+        getRequestList();
+    }, 1000);
+}
+
+function getRequestList() {
+    $.get(
+        "/monitoring/product/detail",
+        {},
+        function(data) {
+            var list = data.list;
+            for(var i in list) {
+                $("#table-tbody").append('<tr><td>' + list[i].host + '</td><td>' + list[i].productName + '</td><td>' + list[i].msg + '</td></tr>');
+                if($("#table-tbody").children().length > 100) {
+                    $("#table-tbody").children().first().remove();
+                }
             }
         }
-    }, 3000);
+    );
 }
 
 function refreshCheckbox() {

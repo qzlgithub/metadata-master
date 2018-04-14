@@ -2,22 +2,20 @@ package com.mingdong.core.constant;
 
 public enum Warning
 {
-    PRODUCT_ABNORMAL(1, "请求异常"),
-    CLIENT_FAILURE(2, "请求失败"),
-    OTHER_ABNORMAL(3, "请求异常"),
-    OTHER_FAILURE(4, "请求失败");
-    private int id;
+    PRODUCT_ABNORMAL("PRODUCT_ANOMALY", "请求异常"),
+    CLIENT_FAILURE("CLIENT_FAILURE", "请求失败");
+    private String code;
     private String name;
 
-    Warning(int id, String name)
+    Warning(String code, String name)
     {
-        this.id = id;
+        this.code = code;
         this.name = name;
     }
 
-    public int getId()
+    public String getCode()
     {
-        return id;
+        return code;
     }
 
     public String getName()

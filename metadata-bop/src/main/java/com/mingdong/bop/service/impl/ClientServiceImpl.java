@@ -46,6 +46,7 @@ import com.mingdong.core.model.dto.response.ProductDetailResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
@@ -947,6 +948,27 @@ public class ClientServiceImpl implements ClientService
         ResponseDTO responseDTO = trafficService.getStatsClientRequestCache(clientIdList);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
+    }
+
+    @Override
+    public void getCustomerRequestList(RestListResp res)
+    {
+        ListDTO<RequestDetailResDTO> listDTO = trafficService.getClientRequestList(30);
+        List<RequestDetailResDTO> list = listDTO.getList();
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> map;
+            for(RequestDetailResDTO item : list)
+            {
+                map = new HashMap<>();
+                map.put(Field.HOST, item.getHost());
+                map.put(Field.PRODUCT_NAME, item.getProductName());
+                map.put(Field.MSG, item.getMsg());
+                mapList.add(map);
+            }
+        }
+        res.setList(mapList);
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

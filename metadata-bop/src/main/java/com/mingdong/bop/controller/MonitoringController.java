@@ -53,11 +53,29 @@ public class MonitoringController
     }
 
     @LoginRequired
+    @GetMapping(value = "/monitoring/customer/detail")
+    public RestListResp customerDetail()
+    {
+        RestListResp res = new RestListResp();
+        clientService.getCustomerRequestList(res);
+        return res;
+    }
+
+    @LoginRequired
     @GetMapping(value = "/monitoring/product/allProduct")
     public RestListResp allProduct()
     {
         RestListResp res = new RestListResp();
         productService.getAllProduct(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/detail")
+    public RestListResp productDetail()
+    {
+        RestListResp res = new RestListResp();
+        productService.getProductRequestList(res);
         return res;
     }
 

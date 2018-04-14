@@ -145,4 +145,5 @@ public interface ClientService
 
     void getStatsClientRequestCache(List<Long> clientIdList, RestResp res);
 
+    void getCustomerRequestList(RestListResp res);
 }

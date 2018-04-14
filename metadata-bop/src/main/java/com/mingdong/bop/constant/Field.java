@@ -179,4 +179,9 @@ public interface Field
     String LEGEND_DATA = "legendData";
     String X_AXIS_DATA = "xAxisData";
     String SERIES_DATA = "seriesData";
+    String WARNING_PRODUCT = "warningProduct";
+    String WARNING_CLIENT = "warningClient";
+    String WARNING_OTHER = "warningOther";
+    String HOST = "host";
+    String MSG = "msg";
 }

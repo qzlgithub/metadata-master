@@ -551,6 +551,9 @@ public class SystemServiceImpl implements SystemService
                 other.add(mapTemp);
             }
         }
+        res.addData(Field.WARNING_PRODUCT, product);
+        res.addData(Field.WARNING_CLIENT, client);
+        res.addData(Field.WARNING_OTHER, other);
     }
 
     @Override

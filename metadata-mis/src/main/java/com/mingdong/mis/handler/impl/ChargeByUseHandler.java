@@ -3,7 +3,6 @@ package com.mingdong.mis.handler.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.StringUtils;
-import com.mingdong.mis.component.MQProducer;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.constant.ResCode;
@@ -27,8 +26,6 @@ public class ChargeByUseHandler implements IChargeHandler
 {
     @Resource
     private RedisDao redisDao;
-    @Resource
-    private MQProducer mqProducer;
     @Resource
     private DataService dataService;
     @Resource
@@ -62,8 +59,6 @@ public class ChargeByUseHandler implements IChargeHandler
             // 请求计费，保存查询记录，并返回请求编号
             String requestNo = dataService.chargeAndSaveRequestLog(checkResult.getUnitAmt(), checkResult.getBalance(),
                     payload, metadata.isHit(), resp.requestAt());
-            mqProducer.userRequest(requestNo,RequestThread.getClientId(), RequestThread.getCorpName(), RequestThread.getProductId(),
-                    RequestThread.getProductName(), RequestThread.getHost(), payload, resp.getTimestamp());
             resp.setRequestNo(requestNo);
             if(metadata.isHit())
             {

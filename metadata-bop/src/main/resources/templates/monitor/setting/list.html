@@ -27,118 +27,35 @@
                 <!--请求趋势-->
                 <dl class="grid-demo grid-demo-bg1 public-warp1">
                     <dd>
-                        <!--第三方监控-->
-                        <div class="fz-16 col6 mt10">第三方监控</div>
-                        <table class="public-table1 mt30">
-                            <tr>
-                                <th>错误码</th>
-                                <th>错误项目</th>
-                                <th>告警方式</th>
-                                <th>预警阀值</th>
-                                <th>操作</th>
-                            </tr>
-                            <tbody>
-                            <tr>
-                                <td>OX234</td>
-                                <td>请求失败过多</td>
-                                <td class="lh25">
-                                    <div class=" position-r">
-                                        手机短信 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
-                                        <div class="detai-ceng">
-                                            第三方接口验证请求失败次数过多
-                                        </div>
-                                        <!--提示层 end-->
-                                    </div>
-                                    <div class=" position-r">
-                                        现场警报 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
-                                        <div class="detai-ceng">
-                                            第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321
-                                        </div>
-                                        <!--提示层 end-->
-                                    </div>
-                                </td>
-                                <td class="lh25">
-                                    严重 100&lt;= 连续出错 &lt;800<br/>
-                                    一般 50&lt;= 连续出错 &lt;100
-                                </td>
-                                <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
-                                        class="col3 important">停用</span></td>
-                            </tr>
-                            <tr>
-                                <td>OX234</td>
-                                <td>请求失败过多</td>
-                                <td class="lh25">
-                                    <div class=" position-r">
-                                        手机短信 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
-                                        <div class="detai-ceng">
-                                            第三方接口验证请求失败次数过多
-                                        </div>
-                                        <!--提示层 end-->
-                                    </div>
-                                </td>
-                                <td class="lh25">
-                                    严重 100&lt;= 连续出错 &lt;800<br/>
-                                    一般 50&lt;= 连续出错 &lt;100
-                                </td>
-                                <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
-                                        class="col3 important">停用</span></td>
-                            </tr>
-                            <tr>
-                                <td>OX234</td>
-                                <td>请求失败过多</td>
-                                <td class="lh25">
-                                    <div class=" position-r">
-                                        现场警报 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
-                                        <div class="detai-ceng">
-                                            我相信<i class="layui-icon fz-28 va">&#xe645;</i>
-                                        </div>
-                                        <!--提示层 end-->
-                                    </div>
-                                </td>
-                                <td class="lh25">
-                                    严重 100&lt;= 连续出错 &lt;800<br/>
-                                    一般 50&lt;= 连续出错 &lt;100
-                                </td>
-                                <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
-                                        class="col3 important">停用</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <!--第三方监控 end-->
-                        <!--产品监控-->
                         <div class="fz-16 col6 mt30">产品监控</div>
                         <table class="public-table1 mt30">
+                            <thead>
                             <tr>
-                                <th>错误码</th>
                                 <th>错误项目</th>
                                 <th>告警方式</th>
                                 <th>预警阀值</th>
                                 <th>操作</th>
                             </tr>
-                            <tbody>
-                            <tr>
-                                <td>OX234</td>
+                            </thead>
+                            <tbody id="product-warning">
+                            <!--<tr>
                                 <td>请求失败过多</td>
                                 <td class="lh25">
                                     <div class=" position-r">
                                         手机短信 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
+                                        &lt;!&ndash;提示层&ndash;&gt;
                                         <div class="detai-ceng">
                                             第三方接口验证请求失败次数过多
                                         </div>
-                                        <!--提示层 end-->
+                                        &lt;!&ndash;提示层 end&ndash;&gt;
                                     </div>
                                     <div class=" position-r">
                                         现场警报 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
+                                        &lt;!&ndash;提示层&ndash;&gt;
                                         <div class="detai-ceng">
                                             第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321
                                         </div>
-                                        <!--提示层 end-->
+                                        &lt;!&ndash;提示层 end&ndash;&gt;
                                     </div>
                                 </td>
                                 <td class="lh25">
@@ -147,38 +64,39 @@
                                 </td>
                                 <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
                                         class="col3 important">停用</span></td>
-                            </tr>
+                            </tr>-->
+                            </tbody>
+                        </table>
+
+                        <div class="fz-16 col6 mt30">客户监控</div>
+                        <table class="public-table1 mt30">
+                            <thead>
                             <tr>
-                                <td>OX234</td>
+                                <th>错误项目</th>
+                                <th>告警方式</th>
+                                <th>预警阀值</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="client-warning">
+                            <!--<tr>
                                 <td>请求失败过多</td>
                                 <td class="lh25">
                                     <div class=" position-r">
                                         手机短信 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
+                                        &lt;!&ndash;提示层&ndash;&gt;
                                         <div class="detai-ceng">
                                             第三方接口验证请求失败次数过多
                                         </div>
-                                        <!--提示层 end-->
+                                        &lt;!&ndash;提示层 end&ndash;&gt;
                                     </div>
-                                </td>
-                                <td class="lh25">
-                                    严重 100&lt;= 连续出错 &lt;800<br/>
-                                    一般 50&lt;= 连续出错 &lt;100
-                                </td>
-                                <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
-                                        class="col3 important">停用</span></td>
-                            </tr>
-                            <tr>
-                                <td>OX234</td>
-                                <td>请求失败过多</td>
-                                <td class="lh25">
                                     <div class=" position-r">
                                         现场警报 <i class="col3 fz-14 ml10 detail cp">详情</i>
-                                        <!--提示层-->
+                                        &lt;!&ndash;提示层&ndash;&gt;
                                         <div class="detai-ceng">
-                                            我相信<i class="layui-icon fz-28 va">&#xe645;</i>
+                                            第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321第三方接口验证请求失败次数过多2321312321
                                         </div>
-                                        <!--提示层 end-->
+                                        &lt;!&ndash;提示层 end&ndash;&gt;
                                     </div>
                                 </td>
                                 <td class="lh25">
@@ -187,10 +105,9 @@
                                 </td>
                                 <td><a href="/warning/setting/edit.html" class="col4 important">编辑</a> | <span
                                         class="col3 important">停用</span></td>
-                            </tr>
+                            </tr>-->
                             </tbody>
                         </table>
-                        <!--第三方监控 end-->
                     </dd>
                 </dl>
                 <!--请求趋势 end-->
@@ -204,22 +121,7 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
-<script>
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['laydate', 'laypage', 'layer', 'table'], function() {
-        var laydate = layui.laydate; //日期
-        laypage = layui.laypage; //分页
-        layer = layui.layer; //弹层
-        table = layui.table;//表格
-        //详情鼠标经过
-        $("td div").mouseover(function() {
-            $(this).find(".detai-ceng").show();
-        }).mouseout(function() {
-            $(this).find(".detai-ceng").hide();
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/business/warning-list.js"></script>
 </body>
 
 </html>

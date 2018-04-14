@@ -16,6 +16,7 @@ import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
+import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
@@ -149,5 +150,26 @@ public class ProductServiceImpl implements ProductService
         ResponseDTO responseDTO = trafficService.getStatsProductRatio();
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
+    }
+
+    @Override
+    public void getProductRequestList(RestListResp res)
+    {
+        ListDTO<RequestDetailResDTO> listDTO = trafficService.getProductRequestList(30);
+        List<RequestDetailResDTO> list = listDTO.getList();
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> map;
+            for(RequestDetailResDTO item : list)
+            {
+                map = new HashMap<>();
+                map.put(Field.HOST, item.getHost());
+                map.put(Field.PRODUCT_NAME, item.getProductName());
+                map.put(Field.MSG, item.getMsg());
+                mapList.add(map);
+            }
+        }
+        res.setList(mapList);
     }
 }
