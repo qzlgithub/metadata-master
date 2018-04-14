@@ -1,8 +1,9 @@
 package com.mingdong.backend.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class SummaryStatsDTO
+public class SummaryStatsDTO implements Serializable
 {
     private Integer clientIncIn30Days;
     private Integer clientTotal;

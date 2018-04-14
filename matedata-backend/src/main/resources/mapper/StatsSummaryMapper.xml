@@ -34,7 +34,7 @@
         </where>
     </select>
 
-    <insert id="add" parameterType="Stats" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="StatsSummary" useGeneratedKeys="true" keyProperty="id">
         insert into `stats_summary`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>

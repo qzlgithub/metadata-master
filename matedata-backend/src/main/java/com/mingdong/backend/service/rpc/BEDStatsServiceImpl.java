@@ -3,13 +3,13 @@ package com.mingdong.backend.service.rpc;
 import com.mingdong.backend.domain.entity.StatsSummary;
 import com.mingdong.backend.domain.mapper.StatsSummaryMapper;
 import com.mingdong.backend.model.SummaryStatsDTO;
-import com.mingdong.backend.service.StatsService;
+import com.mingdong.backend.service.BEDStatsService;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 
-public class StatsServiceImpl implements StatsService
+public class BEDStatsServiceImpl implements BEDStatsService
 {
     @Resource
     private StatsSummaryMapper statsSummaryMapper;
@@ -35,34 +35,52 @@ public class StatsServiceImpl implements StatsService
         Date thisMonthFrom = calendar.getTime(); // 当月1日
         // 全量统计
         StatsSummary stats = statsSummaryMapper.getFullSummary();
-        res.setClientTotal(stats.getClientIncrement());
-        res.setRequestTotal(stats.getRequest());
-        res.setRequestFailedTotal(stats.getRequestFailed());
-        res.setRequest3rdFailedTotal(stats.getRequest3rdFailed());
+        if(stats != null)
+        {
+            res.setClientTotal(stats.getClientIncrement());
+            res.setRequestTotal(stats.getRequest());
+            res.setRequestFailedTotal(stats.getRequestFailed());
+            res.setRequest3rdFailedTotal(stats.getRequest3rdFailed());
+        }
         // 今日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(today);
-        res.setRequestToday(stats.getRequest());
-        res.setRequestFailedToday(stats.getRequestFailed());
-        res.setRequest3rdFailedToday(stats.getRequest3rdFailed());
-        res.setProfitAmountToday(stats.getProfit());
+        if(stats != null)
+        {
+            res.setRequestToday(stats.getRequest());
+            res.setRequestFailedToday(stats.getRequestFailed());
+            res.setRequest3rdFailedToday(stats.getRequest3rdFailed());
+            res.setProfitAmountToday(stats.getProfit());
+        }
         // 昨日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(yesterday);
-        res.setRequestYesterday(stats.getRequest());
-        res.setRequestFailedYesterday(stats.getRequestFailed());
-        res.setRequest3rdFailedYesterday(stats.getRequest3rdFailed());
-        res.setProfitAmountYesterday(stats.getProfit());
+        if(stats != null)
+        {
+            res.setRequestYesterday(stats.getRequest());
+            res.setRequestFailedYesterday(stats.getRequestFailed());
+            res.setRequest3rdFailedYesterday(stats.getRequest3rdFailed());
+            res.setProfitAmountYesterday(stats.getProfit());
+        }
         // 近7天统计数据
         stats = statsSummaryMapper.getSummaryStatsFromDate(latest7DaysFrom);
-        res.setRechargeAmountIn7Days(stats.getRecharge());
+        if(stats != null)
+        {
+            res.setRechargeAmountIn7Days(stats.getRecharge());
+        }
         // 近30天统计数据
         stats = statsSummaryMapper.getSummaryStatsFromDate(latest30DaysFrom);
-        res.setClientIncIn30Days(stats.getClientIncrement());
-        res.setRechargeAmountIn30Days(stats.getRecharge());
+        if(stats != null)
+        {
+            res.setClientIncIn30Days(stats.getClientIncrement());
+            res.setRechargeAmountIn30Days(stats.getRecharge());
+        }
         // 本月统计数据
         stats = statsSummaryMapper.getSummaryStatsFromDate(thisMonthFrom);
-        res.setRequestThisMonth(stats.getRequest());
-        res.setRequestFailedThisMonth(stats.getRequestFailed());
-        res.setRequest3rdFailedThisMonth(stats.getRequest3rdFailed());
+        if(stats != null)
+        {
+            res.setRequestThisMonth(stats.getRequest());
+            res.setRequestFailedThisMonth(stats.getRequestFailed());
+            res.setRequest3rdFailedThisMonth(stats.getRequest3rdFailed());
+        }
         return res;
     }
 }

@@ -184,4 +184,22 @@ public interface Field
     String WARNING_OTHER = "warningOther";
     String HOST = "host";
     String MSG = "msg";
+    String CLIENT_INC_30D = "clientInc30d";
+    String CLIENT_TOTAL = "clientTotal";
+    String RECHARGE_7D = "recharge7d";
+    String RECHARGE_30D = "recharge30d";
+    String PROFIT_TODAY = "profitToday";
+    String PROFIT_YESTERDAY = "profitYesterday";
+    String REQUEST_TODAY = "requestToday";
+    String REQUEST_YESTERDAY = "requestYesterday";
+    String REQUEST_THIS_MONTH = "requestThisMonth";
+    String REQUEST_TOTAL = "requestTotal";
+    String REQUEST_FAILED_TODAY = "requestFailedToday";
+    String REQUEST_FAILED_YESTERDAY = "requestFailedYesterday";
+    String REQUEST_FAILED_THIS_MONTH = "requestFailedThisMonth";
+    String REQUEST_FAILED_TOTAL = "requestFailedTotal";
+    String REQUEST_3RD_FAILED_TODAY = "request3rdFailedToday";
+    String REQUEST_3RD_FAILED_YESTERDAY = "request3rdFailedYesterday";
+    String REQUEST_3RD_FAILED_THIS_MONTH = "request3rdFailedThisMonth";
+    String REQUEST_3RD_FAILED_TOTAL = "request3rdFailedTotal";
 }

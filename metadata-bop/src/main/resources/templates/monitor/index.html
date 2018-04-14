@@ -33,8 +33,8 @@
                                 <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img1.png"/></span>
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">新增客户</p>
-                                    <p class="col4 mt10">近30天： 6381个 </p>
-                                    <p class="mt10 col6">总客户： 872000 个</p>
+                                    <p class="col4 mt10">近30天：<span th:text="${clientInc30d}"></span>个 </p>
+                                    <p class="mt10 col6">总客户：<span th:text="${clientTotal}"></span>个</p>
                                     <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                                 </div>
                             </li>
@@ -42,8 +42,8 @@
                                 <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img2.png"/></span>
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">客户充值</p>
-                                    <p class="col4 mt10">近7天充值： 6381元 </p>
-                                    <p class="mt10 col6">近30天充值： 872000 个</p>
+                                    <p class="col4 mt10">近7天充值：<span th:text="${recharge7d}"></span>元 </p>
+                                    <p class="mt10 col6">近30天充值：<span th:text="${recharge30d}"></span>个</p>
                                     <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                                 </div>
                             </li>
@@ -51,8 +51,12 @@
                                 <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img3.png"/></span>
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">平台收入</p>
-                                    <p class="col4 mt10">今日收入： 6381元/8000次</p>
-                                    <p class="mt10 col6">昨日收入： 6381元/8000次</p>
+                                    <p class="col4 mt10">
+                                        今日收入：<span th:text="${profitToday}"></span>元/<span th:text="${requestToday}"></span>次
+                                    </p>
+                                    <p class="mt10 col6">
+                                        昨日收入：<span th:text="${profitYesterday}"></span>元/<span th:text="${requestYesterday}"></span>次
+                                    </p>
                                     <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                                 </div>
                             </li>
@@ -76,13 +80,18 @@
                                 <tbody>
                                 <tr>
                                     <td>查询次数</td>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestToday}"></span>次</td>
+                                    <td><span th:text="${requestYesterday}"></span>次</td>
                                 </tr>
                                 <tr>
                                     <td>失败次数</td>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestFailedToday}"></span>次</td>
+                                    <td><span th:text="${requestFailedYesterday}"></span>次</td>
+                                </tr>
+                                <tr>
+                                    <td>第三方超时</td>
+                                    <td><span th:text="${request3rdFailedToday}"></span>次</td>
+                                    <td><span th:text="${request3rdFailedYesterday}"></span>次</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -97,12 +106,16 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestThisMonth}"></span>次</td>
+                                    <td><span th:text="${requestTotal}"></span>次</td>
                                 </tr>
                                 <tr>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestFailedThisMonth}"></span>次</td>
+                                    <td><span th:text="${requestFailedTotal}"></span>次</td>
+                                </tr>
+                                <tr>
+                                    <td><span th:text="${request3rdFailedThisMonth}"></span>次</td>
+                                    <td><span th:text="${request3rdFailedTotal}"></span>次</td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -1,5 +1,6 @@
 package com.mingdong.bop.controller;
 
+import com.mingdong.bop.manage.StatisticsManage;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.SystemService;
 import com.mingdong.core.annotation.LoginRequired;
@@ -8,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Controller
 public class HomePageController
 {
     @Resource
     private SystemService systemService;
+    @Resource
+    private StatisticsManage statisticsManage;
 
     @LoginRequired
     @RequestMapping(value = "/enter.html")
@@ -57,7 +61,8 @@ public class HomePageController
     public ModelAndView statsPage()
     {
         ModelAndView view = new ModelAndView("monitor/index");
-        // Map<String,Object> clientStats =
+        Map<String, Object> summaryMap = statisticsManage.getSummaryStatistics();
+        view.addAllObjects(summaryMap);
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
