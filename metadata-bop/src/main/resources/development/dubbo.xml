@@ -27,6 +27,9 @@
                      interface="com.mingdong.core.service.CommonRpcService"/>
     <dubbo:reference retries="0" timeout="5000" check="false" id="tradeRpcService" url="dubbo://192.168.2.232:33002/"
                      interface="com.mingdong.core.service.TradeRpcService"/>
+    <!-- backend -->
+    <dubbo:reference retries="0" timeout="5000" check="false" id="statsService" url="dubbo://192.168.2.232:33009/"
+                     interface="com.mingdong.backend.service.StatsService"/>
     <dubbo:reference retries="0" timeout="5000" check="false" id="trafficService" url="dubbo://192.168.2.232:33009/"
                      interface="com.mingdong.backend.service.TrafficService"/>
     <dubbo:reference retries="0" timeout="5000" check="false" id="dataStatsService" url="dubbo://192.168.2.232:33009/"

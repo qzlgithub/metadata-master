@@ -1,8 +1,8 @@
 package com.mingdong.backend.service.rpc;
 
-import com.mingdong.backend.domain.entity.Stats;
+import com.mingdong.backend.domain.entity.StatsSummary;
 import com.mingdong.backend.domain.entity.StatsRecharge;
-import com.mingdong.backend.domain.mapper.StatsMapper;
+import com.mingdong.backend.domain.mapper.StatsSummaryMapper;
 import com.mingdong.backend.domain.mapper.StatsRechargeMapper;
 import com.mingdong.backend.service.DataStatsService;
 import com.mingdong.common.constant.DateFormat;
@@ -29,7 +29,7 @@ public class DataStatsServiceImpl implements DataStatsService
     private static final Integer RCG_STAT = 3;
 
     @Resource
-    private StatsMapper statsMapper;
+    private StatsSummaryMapper statsSummaryMapper;
     @Resource
     private StatsRechargeMapper statsRechargeMapper;
 
@@ -39,8 +39,8 @@ public class DataStatsServiceImpl implements DataStatsService
         Map<String, Integer> map = new HashMap<>();
         if(rangeUnit == RangeUnit.HOUR)
         {
-            List<Stats> statsList = statsMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd(), INC_STAT);
-            for(Stats o : statsList)
+            List<StatsSummary> statsList = statsSummaryMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd(), INC_STAT);
+            for(StatsSummary o : statsList)
             {
                 if(o.getClientIncrement() != 0)
                 {
@@ -52,27 +52,27 @@ public class DataStatsServiceImpl implements DataStatsService
         {
             if(rangeUnit == RangeUnit.DAY)
             {
-                List<Stats> statsList1 = statsMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd(),
+                List<StatsSummary> statsList1 = statsSummaryMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd(),
                         INC_STAT);
-                for(Stats o : statsList1)
+                for(StatsSummary o : statsList1)
                 {
                     map.put(DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2), o.getClientIncrement());
                 }
             }
             else if(rangeUnit == RangeUnit.WEEK)
             {
-                List<Stats> statsList2 = statsMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd(),
+                List<StatsSummary> statsList2 = statsSummaryMapper.getListGroupByWeek(dateRange.getStart(), dateRange.getEnd(),
                         INC_STAT);
-                for(Stats o : statsList2)
+                for(StatsSummary o : statsList2)
                 {
                     map.put(o.getStatsYear() + String.format("%02d", o.getStatsWeek()), o.getClientIncrement());
                 }
             }
             else
             {
-                List<Stats> statsList3 = statsMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd(),
+                List<StatsSummary> statsList3 = statsSummaryMapper.getListGroupByMonth(dateRange.getStart(), dateRange.getEnd(),
                         INC_STAT);
-                for(Stats o : statsList3)
+                for(StatsSummary o : statsList3)
                 {
                     map.put(o.getStatsYear() + String.format("/%02d", o.getStatsMonth()), o.getClientIncrement());
                 }
@@ -140,7 +140,7 @@ public class DataStatsServiceImpl implements DataStatsService
     public ResponseDTO addStats(StatsDTO statsDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        Stats stats = new Stats();
+        StatsSummary stats = new StatsSummary();
         Date date = new Date();
         stats.setCreateTime(date);
         stats.setUpdateTime(date);
@@ -151,9 +151,9 @@ public class DataStatsServiceImpl implements DataStatsService
         stats.setStatsHour(statsDTO.getStatsHour());
         stats.setStatsDate(statsDTO.getStatsDate());
         stats.setClientIncrement(statsDTO.getClientIncrement());
-        stats.setClientRequest(statsDTO.getClientRequest());
-        stats.setClientRecharge(statsDTO.getClientRecharge());
-        statsMapper.add(stats);
+        stats.setRequest(statsDTO.getClientRequest());
+        stats.setRecharge(statsDTO.getClientRecharge());
+        statsSummaryMapper.add(stats);
         return responseDTO;
     }
 

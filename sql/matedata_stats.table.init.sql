@@ -1,20 +1,23 @@
 -- ----------------------------
 -- Table structure for `stats`
 -- ----------------------------
-drop table if exists `stats`;
-create table `stats` (
-  `id`               bigint(20)          not null auto_increment,
-  `create_time`      datetime            not null,
-  `update_time`      datetime            not null,
-  `client_increment` int(11)             not null,
-  `client_request`   bigint(20)          not null,
-  `client_recharge`  decimal(16, 2)      not null,
-  `stats_date`       date                not null,
-  `stats_year`       int(11)             not null,
-  `stats_month`      int(11)             not null,
-  `stats_week`       int(11)             not null,
-  `stats_day`        int(11)             not null,
-  `stats_hour`       tinyint(3) unsigned not null,
+drop table if exists `stats_summary`;
+create table `stats_summary` (
+  `id`                 bigint(20)                       not null auto_increment,
+  `create_time`        datetime                         not null,
+  `update_time`        datetime                         not null,
+  `client_increment`   int(11) default 0                not null,
+  `request`            bigint(20) default 0             not null,
+  `request_failed`     bigint(20) default 0             not null,
+  `request_3rd_failed` bigint(20) default 0             not null,
+  `recharge`           decimal(16, 2) default '0.00'    not null,
+  `profit`             decimal(16, 2) default '0.00'    not null,
+  `stats_date`         date                             not null,
+  `stats_year`         int(11)                          not null,
+  `stats_month`        int(11)                          not null,
+  `stats_week`         int(11)                          not null,
+  `stats_day`          int(11)                          not null,
+  `stats_hour`         tinyint(3) unsigned              not null,
   primary key (`id`),
   unique key `uk_date_hour` (`stats_date`, `stats_hour`) using btree
 )
