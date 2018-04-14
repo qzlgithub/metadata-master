@@ -26,39 +26,29 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         return redisTemplate.getStringSerializer().serialize(s);
     }
 
-    private List<byte[]> serializeList(String... strs)
-    {
-        List<byte[]> list = new ArrayList<>();
-        for(String item : strs)
-        {
-            list.add(serialize(item));
-        }
-        return list;
-    }
-
-    private byte[][] serializeArray(String... strs)
-    {
-        byte[][] arr = new byte[strs.length][];
-        for(int i = 0; i < strs.length; i++)
-        {
-            arr[i] = serialize(strs[i]);
-        }
-        return arr;
-    }
-
     private String deserialize(byte[] bytes)
     {
         return redisTemplate.getStringSerializer().deserialize(bytes);
     }
 
-    private List<String> deserializeList(List<byte[]> byteList)
+    private List<String> deserializeList(List<byte[]> bytes)
     {
         List<String> list = new ArrayList<>();
-        for(byte[] item : byteList)
+        for(byte[] item : bytes)
         {
             list.add(deserialize(item));
         }
         return list;
+    }
+
+    private Set<String> deserializeSet(Set<byte[]> bytes)
+    {
+        Set<String> set = new HashSet<>();
+        for(byte[] item : bytes)
+        {
+            set.add(deserialize(item));
+        }
+        return set;
     }
 
     private Map<String, String> deserializeMap(Map<byte[], byte[]> byteMap)
@@ -132,6 +122,40 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
     }
 
     @SuppressWarnings("unchecked")
+    protected void rPush(int db, String key, String value)
+    {
+        redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            byte[] v = serialize(value);
+            conn.rPush(k, v);
+            return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void lTrim(int db, String key, long start, long end)
+    {
+        redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            conn.lTrim(k, start, end);
+            return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected String lPop(int db, String key)
+    {
+        return (String) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            byte[] value = conn.lPop(k);
+            return value == null ? null : deserialize(value);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
     protected Boolean setNx(int db, String key, String value)
     {
         return (Boolean) redisTemplate.execute((RedisCallback) conn -> {
@@ -165,6 +189,33 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
             }
             conn.del(ks);
             return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void sAdd(int db, String key, String value)
+    {
+        redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            byte[] v = serialize(value);
+            conn.sAdd(k, v);
+            return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Set<String> sInter(int db, String... keys)
+    {
+        return (Set<String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[][] ks = new byte[keys.length][];
+            for(int i = 0; i < keys.length; i++)
+            {
+                ks[i] = serialize(keys[i]);
+            }
+            Set<byte[]> value = conn.sInter(ks);
+            return value == null ? null : deserializeSet(value);
         });
     }
 
@@ -209,9 +260,13 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         return redisTemplate.execute((RedisCallback<List<String>>) conn -> {
             conn.select(db);
             byte[] k = serialize(key);
-            List<byte[]> v = serializeList(fields);
-            List<byte[]> value = conn.hMGet(k, v.toArray(new byte[0][0]));
-            return deserializeList(value);
+            byte[][] v = new byte[fields.length][];
+            for(int i = 0; i < fields.length; i++)
+            {
+                v[i] = serialize(fields[i]);
+            }
+            List<byte[]> value = conn.hMGet(k, v);
+            return value == null ? null : deserializeList(value);
         });
     }
 

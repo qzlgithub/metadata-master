@@ -22,5 +22,7 @@ public class TrafficListener
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
         redisDao.realTimeTraffic(traffic.getTimestamp(), traffic.getProductId(), traffic.getClientId());
+        redisDao.requestMessage(traffic.getHost(), traffic.getProductName(), traffic.getCorpName(), traffic.getMsg());
+
     }
 }

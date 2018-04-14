@@ -50,17 +50,34 @@ function initData() {
         arr.push($(this).val());
     });
     changeSelectedClient();
-    setInterval(function() {
-        changeSelectedClient();
-        for(var i = 0; i < 10; i++) {
-            $("#table-tbody").append('<tr><td>192.168.1.1='+(index++)+'</td><td>身份验证</td><td>请求失败</td></tr>');
-            if($("#table-tbody").children().length > 20) {
-                $("#table-tbody").children().first().remove();
-            }
-        }
-    }, 3000);
     getMapChart();
     getLineChart();
+    timeReady();
+}
+
+function timeReady() {
+    setInterval(function() {
+        changeSelectedClient();
+    }, 2000);
+    setInterval(function() {
+        getRequestList();
+    }, 1000);
+}
+
+function getRequestList() {
+    $.get(
+        "/monitoring/customer/detail",
+        {},
+        function(data) {
+            var list = data.list;
+            for(var i in list) {
+                $("#table-tbody").append('<tr><td>' + list[i].host + '</td><td>' + list[i].productName + '</td><td>' + list[i].msg + '</td></tr>');
+                if($("#table-tbody").children().length > 100) {
+                    $("#table-tbody").children().first().remove();
+                }
+            }
+        }
+    );
 }
 
 function getLineChart(){

@@ -53,6 +53,11 @@ input{outline:none;}
 .slide-banner-font2{font-size: 30px; color: #fff; margin-top: 20px;}
 .slide-banner-font3{font-size: 24px; color: #fff; margin-top: 20px;}
 .slide-banner-font4 span{font-size: 20px; color: #fff; border:solid 1px #fff; border-radius: 15px; padding: 14px 57px;}
+.slide-banner-img2{background: url(../images/banner2.png) no-repeat center; min-width: 1188px; height: 100%; padding-left: 80px;}
+.slide-banner-img3{background: url(../images/banner3.png) no-repeat center; min-width: 1188px; height: 100%; padding-left: 80px;}
+.slide-banner-img4{background: url(../images/banner4.png) no-repeat center; min-width: 1188px; height: 100%; padding-left: 80px;}
+
+
 
 
 .lj-product-bg{background: url(../images/produt-bg.png) no-repeat; background-size: 100%;}
@@ -128,7 +133,7 @@ a.login-btn:hover{color: #fff; text-decoration: none;}
 
 
 /***关于我们****/
-.about-banner{background: url(../images/map.png) no-repeat center; background-size: 100%; height: 400px;overflow: hidden; position: relative;}
+.about-banner{ background-size: 100%; height: 400px;overflow: hidden; position: relative;}
 .about-banner-img{ min-width: 1188px; height: 100%;}
 .about-form{background: #58a2eb; color: #fff; padding: 20px;}
 .about-form-list{background: #fff; padding: 20px;}
@@ -167,3 +172,9 @@ a.login-btn:hover{color: #fff; text-decoration: none;}
 .public-button a{color: #459bf0; border-radius: 20px; padding: 12px 60px; border:solid 1px #459bf0; font-size: 16px;}
 
 a.return-button{width: 8%; border: solid 1px #999; border-radius: 20px; text-align: center; padding: 8px 12px; cursor: pointer; color: #999;}
+
+
+/***地图**/
+.left,.right {width: 100%;height: 500px;box-sizing: border-box;}
+.left {height: 400px;}
+.container-map {width: 100%;height: 100%;float: left;}

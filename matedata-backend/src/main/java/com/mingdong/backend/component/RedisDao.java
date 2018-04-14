@@ -1,12 +1,15 @@
 package com.mingdong.backend.component;
 
+import com.alibaba.fastjson.JSON;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.base.RedisBaseDao;
+import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,6 +80,32 @@ public class RedisDao extends RedisBaseDao
         hIncrBy(DB.CLIENT_TRAFFIC, s, String.valueOf(clientId), 1);
         hIncrBy(DB.PRODUCT_TRAFFIC, s, Key.ALL_COUNT, 1);
         hIncrBy(DB.CLIENT_TRAFFIC, s, Key.ALL_COUNT, 1);
+        sAdd(DB.PRODUCT_CLIENT, s, productId + "," + clientId);
+    }
+
+    /**
+     * 获取产品下请求的客户数量
+     */
+    public Map<Long,Long> readProductClient(long[] timestamp){
+        Map<Long,Long> map = new HashMap<>();
+        List<String> keys = new ArrayList<>();
+        for(long item : timestamp){
+            keys.add(String.valueOf(item));
+        }
+        Map<Long,Set<Long>> mapTemp = new HashMap<>();
+        Set<Long> setTemp;
+        Set set = sInter(DB.PRODUCT_CLIENT, keys.toArray(new String[0]));
+        if(!CollectionUtils.isEmpty(set)){
+            for(Object item : set){
+                String str = String.valueOf(item);
+                String[] split = str.split(",");
+                Long proId = Long.valueOf(split[0]);
+                Long clientId = Long.valueOf(split[1]);
+                setTemp = mapTemp.computeIfAbsent(proId, k -> new HashSet<>());
+                setTemp.add(clientId);
+            }
+        }
+        return map;
     }
 
     /**
@@ -198,14 +227,60 @@ public class RedisDao extends RedisBaseDao
         return map;
     }
 
+    /**
+     * 实时请求
+     */
+    public void requestMessage(String host, String productName, String corpName, String msg)
+    {
+        RequestDetailResDTO requestDetailResDTO = new RequestDetailResDTO();
+        requestDetailResDTO.setHost(host);
+        requestDetailResDTO.setProductName(productName);
+        requestDetailResDTO.setCorpName(corpName);
+        requestDetailResDTO.setMsg(msg);
+        rPush(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL, JSON.toJSONString(requestDetailResDTO));
+        lTrim(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL, 0, 999);
+        rPush(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL, JSON.toJSONString(requestDetailResDTO));
+        lTrim(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL, 0, 999);
+    }
+
+    /**
+     * 获取产品实时请求
+     */
+    public RequestDetailResDTO readProductRequestMessageFirst()
+    {
+        String value = lPop(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL);
+        if(!StringUtils.isNullBlank(value))
+        {
+            return JSON.parseObject(value, RequestDetailResDTO.class);
+        }
+        return null;
+    }
+
+    /**
+     * 获取客户实时请求
+     */
+    public RequestDetailResDTO readClientRequestMessageFirst()
+    {
+        String value = lPop(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL);
+        if(!StringUtils.isNullBlank(value))
+        {
+            return JSON.parseObject(value, RequestDetailResDTO.class);
+        }
+        return null;
+    }
+
     interface DB
     {
         // 元数据 & 字典数据
         int METADATA = 1;
-        // 产品请求实时监控数据库
+        // 产品请求计数实时监控数据库
         int PRODUCT_TRAFFIC = 2;
-        // 产品请求实时监控数据库
+        // 客户请求计数实时监控数据库
         int CLIENT_TRAFFIC = 3;
+        // 实时请求数据库
+        int TRAFFIC_DETAIL = 4;
+        // 产品下请求的客户
+        int PRODUCT_CLIENT = 5;
     }
 
     public interface Key
@@ -213,5 +288,7 @@ public class RedisDao extends RedisBaseDao
         String PRODUCT = "metadata:product";
         String CLIENT = "metadata:client";
         String ALL_COUNT = "all_count";
+        String PRODUCT_TRAFFIC_DETAIL = "product_traffic_detail";
+        String CLIENT_TRAFFIC_DETAIL = "client_traffic_detail";
     }
 }
