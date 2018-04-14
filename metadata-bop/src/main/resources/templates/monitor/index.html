@@ -52,10 +52,12 @@
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">平台收入</p>
                                     <p class="col4 mt10">
-                                        今日收入：<span th:text="${profitToday}"></span>元/<span th:text="${requestToday}"></span>次
+                                        今日收入：<span th:text="${profitToday}"></span>元/<span
+                                            th:text="${requestToday}"></span>次
                                     </p>
                                     <p class="mt10 col6">
-                                        昨日收入：<span th:text="${profitYesterday}"></span>元/<span th:text="${requestYesterday}"></span>次
+                                        昨日收入：<span th:text="${profitYesterday}"></span>元/<span
+                                            th:text="${requestYesterday}"></span>次
                                     </p>
                                     <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
                                 </div>
@@ -129,14 +131,15 @@
                 <!--运行情况-->
                 <div class=" layui-col-md6">
                     <dl class="public-data public-warp1 mt15">
-                        <dt class="mt10 important">运行情况<i class="icon icon6 va ml10 mt5"></i> <span
+                        <dt class="mt10 important">请求第三方<i class="icon icon6 va ml10 mt5"></i> <span
                                 class="fr fz-12 f-normal important">近24h</span>
                         </dt>
                         <dd>
-                            <p class="col6">总请求次数：<i class="col3">123,208,172</i>次
-                                <span class="fr">请求失败：<i class="col3">772</i>  次</span>
+                            <p class="col6">
+                                总请求次数：<i class="col3">123,208,172</i>次
+                                <span class="fr">请求失败：<i class="col3">772</i>次</span>
                             </p>
-                            <img src="/static/monitor/images/data-img1.png"/>
+                            <div id="thirdReqDiagram" style="width: 100%; height: 400px;"></div>
                             <p class="tr mt15"><a href="" class="col6"> 查看历史记录>></a></p>
                         </dd>
                     </dl>
@@ -148,9 +151,11 @@
                         <dt class="mt10 important">产品请求<i class="icon icon6 va ml10 mt5"></i> <span
                                 class="fr fz-12 f-normal important">近24h</span></dt>
                         <dd>
-                            <p class="col6">总请求次数：<i class="col3">123,208,172</i>次
-                                <span class="fr">请求失败：<i class="col3">772</i>  次</span></p>
-                            <img src="/static/monitor/images/data-img1.png"/>
+                            <p class="col6">
+                                总请求次数：<i class="col3">123,208,172</i>次
+                                <span class="fr">请求失败：<i class="col3">772</i>次</span>
+                            </p>
+                            <div id="productReqDiagram" style="width: 100%; height: 400px;"></div>
                             <p class="tr mt15"><a href="" class="col6"> 查看历史记录>></a></p>
                         </dd>
                     </dl>
@@ -310,6 +315,9 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
+<script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
+<script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
+<script type="text/javascript" src="/static/business/monitor-index.js"></script>
 <script>
     layui.config({
         base: '../../static/build/js/'

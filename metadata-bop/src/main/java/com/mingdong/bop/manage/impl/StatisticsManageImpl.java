@@ -5,6 +5,7 @@ import com.mingdong.backend.service.BEDStatsService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.manage.StatisticsManage;
 import com.mingdong.common.util.NumberUtils;
+import com.mingdong.core.model.RestResp;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,6 +17,8 @@ public class StatisticsManageImpl implements StatisticsManage
 {
     @Resource
     private BEDStatsService bedStatsService;
+    /*@Resource
+    private BEDDiagramService bedDiagramService;*/
 
     @Override
     public Map<String, Object> getSummaryStatistics()
@@ -50,5 +53,19 @@ public class StatisticsManageImpl implements StatisticsManage
         map.put(Field.REQUEST_3RD_FAILED_TOTAL,
                 stats.getRequest3rdFailedTotal() == null ? 0 : stats.getRequest3rdFailedTotal());
         return map;
+    }
+
+    @Override
+    public void getThirdRequestDiagramIn24h(RestResp resp)
+    {
+        resp.addData(Field.REQUEST_TOTAL, 723324L);
+        resp.addData(Field.REQUEST_FAILED_TOTAL, 232L);
+        resp.addData(Field.X_AXIS_DATA,
+                new String[]{"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:30", "08:00", "09:00",
+                        "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
+                        "20:00", "21:00", "22:00", "23:00"});
+        resp.addData(Field.SERIES_DATA,
+                new int[]{100, 200, 300, 400, 500, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600,
+                        400, 800, 700, 600, 400});
     }
 }
