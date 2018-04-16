@@ -29,19 +29,19 @@ create table `stats_summary` (
 -- ----------------------------
 drop table if exists `stats_recharge`;
 create table `stats_recharge` (
-  `id`            bigint(20)          not null auto_increment,
-  `create_time`   datetime            not null,
-  `update_time`   datetime            not null,
-  `recharge_type` tinyint(3) unsigned not null,
-  `stats_year`    int(10) unsigned    not null,
-  `stats_month`   tinyint(3) unsigned not null,
-  `stats_week`    tinyint(3) unsigned not null,
-  `stats_day`     tinyint(3) unsigned not null,
-  `stats_hour`    tinyint(3) unsigned not null,
-  `stats_date`    date                not null,
-  `amount`        decimal(16, 2)      not null,
+  `id`            bigint(20)                      not null auto_increment,
+  `create_time`   datetime                        not null,
+  `update_time`   datetime                        not null,
+  `recharge_type` tinyint(3) unsigned             not null,
+  `stats_year`    int(10) unsigned                not null,
+  `stats_month`   tinyint(3) unsigned             not null,
+  `stats_week`    tinyint(3) unsigned             not null,
+  `stats_day`     tinyint(3) unsigned             not null,
+  `stats_hour`    tinyint(3) unsigned             not null,
+  `stats_date`    date                            not null,
+  `amount`        decimal(16, 2) default '0.00'   not null,
   primary key (`id`),
-  unique key `uk_recharge_type_date_hour` (`recharge_type`,`stats_date`, `stats_hour`) using btree
+  unique key `uk_recharge_type_hour` (`recharge_type`, `stats_date`, `stats_hour`) using btree
 )
   engine = InnoDB
   default charset = utf8;
