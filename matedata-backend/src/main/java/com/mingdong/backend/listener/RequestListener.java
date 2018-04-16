@@ -26,7 +26,7 @@ public class RequestListener
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
-        redisDao.realTimeTraffic(traffic.getTimestamp(), traffic.getProductId(), traffic.getClientId());
+        redisDao.realTimeTraffic(traffic.getTimestamp() / 1000, traffic.getProductId(), traffic.getClientId());
         redisDao.requestMessage(traffic.getHost(), traffic.getProductName(), traffic.getCorpName(),
                 QueryStatus.getNameByCode(traffic.getStatus()));
     }
