@@ -1618,8 +1618,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 {
                     hour = 24;
                 }
-                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
-                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 Date hourAfter = calendar.getTime();
                 calendar.add(Calendar.HOUR_OF_DAY, -1);
@@ -1654,7 +1654,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 stats.setStatsHour(hour);
                 stats.setStatsDate(dayDate);
                 stats.setClientIncrement(clientCount);
-                stats.setClientRequest(Long.valueOf(requestCount + ""));
+                stats.setClientRequest(requestCount);
                 stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
                 ResponseDTO responseDTO = backendStatsService.addStats(stats);
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
@@ -1701,8 +1701,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 {
                     hour = 24;
                 }
-                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
-                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 Date hourAfter = calendar.getTime();
                 calendar.add(Calendar.HOUR_OF_DAY, -1);
