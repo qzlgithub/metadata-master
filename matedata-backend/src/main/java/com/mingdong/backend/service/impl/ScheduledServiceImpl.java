@@ -5,7 +5,7 @@ import com.mingdong.backend.domain.entity.Job;
 import com.mingdong.backend.domain.entity.JobLog;
 import com.mingdong.backend.domain.mapper.JobLogMapper;
 import com.mingdong.backend.domain.mapper.JobMapper;
-import com.mingdong.backend.service.QuartzService;
+import com.mingdong.backend.service.ScheduledService;
 import com.mingdong.core.constant.JobType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.service.ClientRpcService;
@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class QuartzServiceImpl implements QuartzService
+public class ScheduledServiceImpl implements ScheduledService
 {
     private SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Resource

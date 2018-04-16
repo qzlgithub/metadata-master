@@ -103,10 +103,10 @@
             </exclusions>
         </dependency>
         <!-- Quartz -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <profiles>

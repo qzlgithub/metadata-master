@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 @Component
-public class TrafficListener
+public class RequestListener
 {
     @Resource
     private RedisDao redisDao;
@@ -23,6 +23,5 @@ public class TrafficListener
                 traffic.getProductName());
         redisDao.realTimeTraffic(traffic.getTimestamp(), traffic.getProductId(), traffic.getClientId());
         redisDao.requestMessage(traffic.getHost(), traffic.getProductName(), traffic.getCorpName(), traffic.getMsg());
-
     }
 }

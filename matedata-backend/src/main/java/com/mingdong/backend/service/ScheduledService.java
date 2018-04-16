@@ -2,7 +2,7 @@ package com.mingdong.backend.service;
 
 import java.util.Date;
 
-public interface QuartzService
+public interface ScheduledService
 {
     /**
      * 总体统计
