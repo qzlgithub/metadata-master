@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.constant.Field;
-import com.mingdong.backend.service.TrafficService;
+import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.ProductType;
@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TrafficServiceImpl implements TrafficService
+public class BackendTrafficServiceImpl implements BackendTrafficService
 {
     @Resource
     private RedisDao redisDao;

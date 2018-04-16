@@ -5,7 +5,7 @@ import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.WarningSettingResDTO;
 
-public interface WarningService
+public interface BackendWarningService
 {
     WarningSettingResDTO getWarningSetting(Long id);
 

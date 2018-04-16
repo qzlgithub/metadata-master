@@ -1,0 +1,30 @@
+server:
+  port: 8802
+
+spring:
+  redis:
+    host: 192.168.2.222
+    port: 6379
+    password: 123456
+  kafka:
+    consumer:
+      bootstrap-servers: 192.168.2.222:9092
+      group-id: matedata
+      auto-offset-reset: earliest
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.2.222:3306/matedata_stats?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    username: matedata_stats
+    password: 123456
+
+mybatis:
+  config-location: classpath:config/mybatis-config.xml
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.mingdong.backend.domain.entity
+
+dubbo:
+  protocol:
+    port: 9902
+  registry:
+    address: 192.168.2.222:2181

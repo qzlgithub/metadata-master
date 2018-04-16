@@ -1,7 +1,7 @@
 package com.mingdong.bop.manage.impl;
 
 import com.mingdong.backend.model.SummaryStatsDTO;
-import com.mingdong.backend.service.BEDStatsService;
+import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.manage.StatisticsManage;
 import com.mingdong.common.util.NumberUtils;
@@ -16,15 +16,15 @@ import java.util.Map;
 public class StatisticsManageImpl implements StatisticsManage
 {
     @Resource
-    private BEDStatsService bedStatsService;
+    private BackendStatsService backendStatsService;
     /*@Resource
-    private BEDDiagramService bedDiagramService;*/
+    private BackendDiagramService bedDiagramService;*/
 
     @Override
     public Map<String, Object> getSummaryStatistics()
     {
         Map<String, Object> map = new HashMap<>();
-        SummaryStatsDTO stats = bedStatsService.getSummaryStatisticsInfo();
+        SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
         map.put(Field.CLIENT_INC_30D, stats.getClientIncIn30Days() == null ? 0 : stats.getClientIncIn30Days());
         map.put(Field.CLIENT_TOTAL, stats.getClientTotal() == null ? 0 : stats.getClientTotal());
         map.put(Field.RECHARGE_7D, NumberUtils.formatAmount(stats.getRechargeAmountIn7Days()));

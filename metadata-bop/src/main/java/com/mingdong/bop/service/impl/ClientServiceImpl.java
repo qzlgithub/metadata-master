@@ -1,8 +1,8 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mingdong.backend.service.DataStatsService;
-import com.mingdong.backend.service.TrafficService;
+import com.mingdong.backend.service.BackendStatsService;
+import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
@@ -90,9 +90,9 @@ public class ClientServiceImpl implements ClientService
     @Resource
     private TradeRpcService tradeRpcService;
     @Resource
-    private TrafficService trafficService;
+    private BackendTrafficService backendTrafficService;
     @Resource
-    private DataStatsService dataStatsService;
+    private BackendStatsService backendStatsService;
 
     @Override
     public void checkIfUsernameExist(String username, RestResp resp)
@@ -945,7 +945,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getStatsClientRequestCache(List<Long> clientIdList, RestResp res)
     {
-        ResponseDTO responseDTO = trafficService.getStatsClientRequestCache(clientIdList);
+        ResponseDTO responseDTO = backendTrafficService.getStatsClientRequestCache(clientIdList);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }
@@ -953,7 +953,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getCustomerRequestList(RestListResp res)
     {
-        ListDTO<RequestDetailResDTO> listDTO = trafficService.getClientRequestList(30);
+        ListDTO<RequestDetailResDTO> listDTO = backendTrafficService.getClientRequestList(30);
         List<RequestDetailResDTO> list = listDTO.getList();
         List<Map<String, Object>> mapList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(list))
@@ -977,7 +977,7 @@ public class ClientServiceImpl implements ClientService
         String name = DateUtils.format(range.getStart(), DateFormat.YYYY_MM_DD_2) + " - " + DateUtils.format(
                 range.getEnd(), DateFormat.YYYY_MM_DD_2); // 走势图名称
         List<Integer> data = new ArrayList<>(xData.size()); // 走势图数值
-        Map<String, Integer> m = dataStatsService.getClientIncreaseTrend(range, unit);
+        Map<String, Integer> m = backendStatsService.getClientIncreaseTrend(range, unit);
         for(String n : xData)
         {
             data.add(m.get(n) == null ? 0 : m.get(n));
@@ -994,7 +994,7 @@ public class ClientServiceImpl implements ClientService
                 range.getEnd(), DateFormat.YYYY_MM_DD_2);
         eChart.setName(stack);
         List<ESerie> series = new ArrayList<>();
-        Map<String, List<RechargeStatsDTO>> m = dataStatsService.getClientRechargeTrend(range, unit);
+        Map<String, List<RechargeStatsDTO>> m = backendStatsService.getClientRechargeTrend(range, unit);
         Map<String, String[]> typeMap = new HashMap<>();
         for(int i = 0; i < xData.size(); i++)
         {

@@ -1,5 +1,5 @@
 server:
-  port: 10003
+  port: 8801
 
 spring:
   redis:
@@ -31,6 +31,6 @@ mongodb:
 
 dubbo:
   protocol:
-    port: 33002
+    port: 9901
   registry:
     address: 192.168.2.222:2181

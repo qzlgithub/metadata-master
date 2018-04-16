@@ -2,7 +2,7 @@ package com.mingdong.backend.service.rpc;
 
 import com.mingdong.backend.domain.entity.WarningSetting;
 import com.mingdong.backend.domain.mapper.WarningSettingMapper;
-import com.mingdong.backend.service.WarningService;
+import com.mingdong.backend.service.BackendWarningService;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class WarningServiceImpl implements WarningService
+public class BackendWarningServiceImpl implements BackendWarningService
 {
     @Resource
     private WarningSettingMapper warningSettingMapper;

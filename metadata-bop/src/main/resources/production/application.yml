@@ -1,9 +1,9 @@
 server:
-  port: 8280
+  port: 8002
 
 spring:
   redis:
-    host: s2.mingdong.com
+    host: localhost
     port: 6379
     password: Zd4^GarJSA*PUDD0
   thymeleaf:

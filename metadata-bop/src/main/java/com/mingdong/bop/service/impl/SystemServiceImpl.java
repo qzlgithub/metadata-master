@@ -1,6 +1,6 @@
 package com.mingdong.bop.service.impl;
 
-import com.mingdong.backend.service.WarningService;
+import com.mingdong.backend.service.BackendWarningService;
 import com.mingdong.bop.component.FileUpload;
 import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
@@ -65,7 +65,7 @@ public class SystemServiceImpl implements SystemService
     @Resource
     private ClientRpcService clientRpcService;
     @Resource
-    private WarningService warningService;
+    private BackendWarningService backendWarningService;
 
     @Override
     public void checkIfIndustryExist(String code, RestResp resp)
@@ -521,7 +521,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void getWarningSettingList(RestResp res)
     {
-        ListDTO<WarningSettingResDTO> listDTO = warningService.getWarningSettingList();
+        ListDTO<WarningSettingResDTO> listDTO = backendWarningService.getWarningSettingList();
         List<WarningSettingResDTO> dataList = listDTO.getList();
         List<Map<String, Object>> product = new ArrayList<>();
         List<Map<String, Object>> client = new ArrayList<>();
@@ -562,7 +562,7 @@ public class SystemServiceImpl implements SystemService
     public Map<String, Object> getWarningSetting(Long id)
     {
         Map<String, Object> map = new HashMap<>();
-        WarningSettingResDTO warningSettingResDTO = warningService.getWarningSetting(id);
+        WarningSettingResDTO warningSettingResDTO = backendWarningService.getWarningSetting(id);
         if(warningSettingResDTO != null)
         {
             map.put(Field.ID, warningSettingResDTO.getId());
@@ -605,7 +605,7 @@ public class SystemServiceImpl implements SystemService
         warningSettingReqDTO.setWarningLimit(warningSettingVO.getWarningLimit());
         try
         {
-            ResponseDTO responseDTO = warningService.updateWarningSetting(warningSettingReqDTO);
+            ResponseDTO responseDTO = backendWarningService.updateWarningSetting(warningSettingReqDTO);
             if(responseDTO.getResult() != RestResult.SUCCESS)
             {
                 resp.setError(responseDTO.getResult());
@@ -622,7 +622,7 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void changeWarningSettingStatus(Long id, Integer status, RestResp resp)
     {
-        ResponseDTO responseDTO = warningService.changeWarningSettingStatus(id, status);
+        ResponseDTO responseDTO = backendWarningService.changeWarningSettingStatus(id, status);
         resp.setError(responseDTO.getResult());
     }
 

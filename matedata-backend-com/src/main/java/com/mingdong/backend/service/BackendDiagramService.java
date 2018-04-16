@@ -1,6 +1,6 @@
 package com.mingdong.backend.service;
 
-public interface BEDDiagramService
+public interface BackendDiagramService
 {
 
 }

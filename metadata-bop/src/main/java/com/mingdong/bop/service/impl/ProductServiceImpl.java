@@ -1,6 +1,6 @@
 package com.mingdong.bop.service.impl;
 
-import com.mingdong.backend.service.TrafficService;
+import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.constant.DateFormat;
@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService
     @Resource
     private ProductRpcService productRpcService;
     @Resource
-    private TrafficService trafficService;
+    private BackendTrafficService backendTrafficService;
 
     @Override
     public Map<String, Object> getProductInfoData(Long productId)
@@ -139,7 +139,7 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getStatsProductRequestCache(List<Long> productIdList, RestResp res)
     {
-        ResponseDTO responseDTO = trafficService.getStatsProductRequestCache(productIdList);
+        ResponseDTO responseDTO = backendTrafficService.getStatsProductRequestCache(productIdList);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }
@@ -147,7 +147,7 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getProductRatio(RestResp res)
     {
-        ResponseDTO responseDTO = trafficService.getStatsProductRatio();
+        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio();
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }
@@ -155,7 +155,7 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getProductRequestList(RestListResp res)
     {
-        ListDTO<RequestDetailResDTO> listDTO = trafficService.getProductRequestList(30);
+        ListDTO<RequestDetailResDTO> listDTO = backendTrafficService.getProductRequestList(30);
         List<RequestDetailResDTO> list = listDTO.getList();
         List<Map<String, Object>> mapList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(list))

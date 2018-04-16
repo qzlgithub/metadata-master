@@ -6,7 +6,7 @@ import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import java.util.List;
 
-public interface TrafficService
+public interface BackendTrafficService
 {
     ResponseDTO getStatsClientRequestCache(List<Long> clientIdList);
 

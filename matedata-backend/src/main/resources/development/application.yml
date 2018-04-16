@@ -1,5 +1,5 @@
 server:
-  port: 10004
+  port: 8802
 
 spring:
   redis:
@@ -25,6 +25,6 @@ mybatis:
 
 dubbo:
   protocol:
-    port: 33009
+    port: 9902
   registry:
     address: 192.168.2.222:2181

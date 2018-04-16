@@ -31,16 +31,16 @@
 
     <!--***************************************************************************-->
     <!-- consumer配置：生成远程服务代理，和本地bean一样调用 -->
-    <dubbo:reference retries="0" timeout="5000" check="false" id="productRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="productRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.ProductRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="clientRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="clientRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.ClientRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="managerRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="managerRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.ManagerRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="systemRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="systemRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.SystemRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.CommonRpcService" />
-    <dubbo:reference retries="0" timeout="5000" check="false" id="tradeRpcService" url="dubbo://localhost:9901/"
+    <dubbo:reference retries="0" timeout="5000" check="false" id="tradeRpcService" url="dubbo://192.168.2.222:9901/"
                      interface="com.mingdong.core.service.TradeRpcService" />
 </beans>

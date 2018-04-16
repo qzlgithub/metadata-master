@@ -29,7 +29,9 @@
                      interface="com.mingdong.core.service.TradeRpcService" />
     <!-- backend -->
     <dubbo:reference retries="0" timeout="5000" check="false" id="backendStatsService"
-                     interface="com.mingdong.backend.service.BEDStatsService"/>
-    <dubbo:reference retries="0" timeout="5000" check="false" id="trafficService"
-                     interface="com.mingdong.backend.service.TrafficService" />
+                     interface="com.mingdong.backend.service.BackendStatsService"/>
+    <dubbo:reference retries="0" timeout="5000" check="false" id="backendTrafficService"
+                     interface="com.mingdong.backend.service.BackendTrafficService" />
+    <dubbo:reference retries="0" timeout="5000" check="false" id="backendWarningService"
+                     interface="com.mingdong.backend.service.BackendWarningService" />
 </beans>

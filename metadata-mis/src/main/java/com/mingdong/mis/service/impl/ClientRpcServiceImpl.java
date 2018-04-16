@@ -1,7 +1,7 @@
 package com.mingdong.mis.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.mingdong.backend.service.DataStatsService;
+import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.Md5Utils;
@@ -102,9 +102,9 @@ import java.util.Set;
 public class ClientRpcServiceImpl implements ClientRpcService
 {
     private static final Logger logger = LoggerFactory.getLogger(ClientRpcServiceImpl.class);
-    private static final Integer INC_STAT = 1;
-    private static final Integer REQ_STAT = 2;
-    private static final Integer RCG_STAT = 3;
+    // private static final Integer INC_STAT = 1;
+    // private static final Integer REQ_STAT = 2;
+    // private static final Integer RCG_STAT = 3;
 
     @Resource
     private RedisDao redisDao;
@@ -151,7 +151,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Resource
     private ClientRemindProductMapper clientRemindProductMapper;
     @Resource
-    private DataStatsService dataStatsService;
+    private BackendStatsService backendStatsService;
 
     @Override
     public UserResDTO userLogin(String username, String password)
@@ -1630,7 +1630,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 stats.setClientIncrement(clientCount);
                 stats.setClientRequest(Long.valueOf(requestCount + ""));
                 stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
-                ResponseDTO responseDTO = dataStatsService.addStats(stats);
+                ResponseDTO responseDTO = backendStatsService.addStats(stats);
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                 {
                     logger.error(longSdf.format(date) + " statsByDate error!");
@@ -1707,7 +1707,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         statsRecharge.setStatsDate(dayDate);
                         statsRecharges.add(statsRecharge);
                     }
-                    ResponseDTO responseDTO = dataStatsService.addStatsRechargeList(statsRecharges);
+                    ResponseDTO responseDTO = backendStatsService.addStatsRechargeList(statsRecharges);
                     if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                     {
                         logger.error(longSdf.format(date) + " statsRechargeByDate error!");
