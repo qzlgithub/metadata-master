@@ -15,14 +15,14 @@ import javax.annotation.Resource;
 @Component
 public class RequestListener
 {
-    private static Logger logger = LoggerFactory.getLogger("ACCESS");
+    private static final Logger LOGGER = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
 
     @KafkaListener(topics = KafkaTopic.TRAFFIC)
     public void process(String msg)
     {
-        logger.info(">>> {}", msg);
+        LOGGER.info(">>> {}", msg);
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
