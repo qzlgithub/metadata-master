@@ -530,10 +530,12 @@ public class SystemServiceImpl implements SystemService
         for(WarningSettingResDTO item : dataList)
         {
             mapTemp = new HashMap<>();
-            mapTemp.put(Field.ID, item.getId());
+            mapTemp.put(Field.ID, item.getId() + "");
             mapTemp.put(Field.CONTENT, item.getContent());
             mapTemp.put(Field.SEND, item.getSend());
             mapTemp.put(Field.PLAY, item.getPlay());
+            mapTemp.put(Field.FILE_NAME, item.getFileName());
+            mapTemp.put(Field.FILE_PATH, item.getFilePath());
             mapTemp.put(Field.GENERAL_LIMIT, item.getGeneralLimit());
             mapTemp.put(Field.SEVERITY_LIMIT, item.getSeverityLimit());
             mapTemp.put(Field.WARNING_LIMIT, item.getWarningLimit());
@@ -566,7 +568,9 @@ public class SystemServiceImpl implements SystemService
             map.put(Field.ID, warningSettingResDTO.getId());
             map.put(Field.SEND, warningSettingResDTO.getSend());
             map.put(Field.PLAY, warningSettingResDTO.getPlay());
+            map.put(Field.CONTENT, warningSettingResDTO.getContent());
             map.put(Field.FILE_NAME, warningSettingResDTO.getFileName());
+            map.put(Field.FILE_PATH, warningSettingResDTO.getFilePath());
             map.put(Field.GENERAL_LIMIT, warningSettingResDTO.getGeneralLimit());
             map.put(Field.SEVERITY_LIMIT, warningSettingResDTO.getSeverityLimit());
             map.put(Field.WARNING_LIMIT, warningSettingResDTO.getWarningLimit());
@@ -594,11 +598,11 @@ public class SystemServiceImpl implements SystemService
         warningSettingReqDTO.setFileName(map == null ? null : map.get(Field.FILE_NAME));
         warningSettingReqDTO.setFilePath(
                 map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
-        warningSettingReqDTO.setSend(warningSettingReqDTO.getSend());
-        warningSettingReqDTO.setPlay(warningSettingReqDTO.getPlay());
-        warningSettingReqDTO.setGeneralLimit(warningSettingReqDTO.getGeneralLimit());
-        warningSettingReqDTO.setSeverityLimit(warningSettingReqDTO.getSeverityLimit());
-        warningSettingReqDTO.setWarningLimit(warningSettingReqDTO.getWarningLimit());
+        warningSettingReqDTO.setSend(warningSettingVO.getSend());
+        warningSettingReqDTO.setPlay(warningSettingVO.getPlay());
+        warningSettingReqDTO.setGeneralLimit(warningSettingVO.getGeneralLimit());
+        warningSettingReqDTO.setSeverityLimit(warningSettingVO.getSeverityLimit());
+        warningSettingReqDTO.setWarningLimit(warningSettingVO.getWarningLimit());
         try
         {
             ResponseDTO responseDTO = warningService.updateWarningSetting(warningSettingReqDTO);

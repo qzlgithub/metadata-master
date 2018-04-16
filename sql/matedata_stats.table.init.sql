@@ -40,7 +40,8 @@ create table `stats_recharge` (
   `stats_hour`    tinyint(3) unsigned not null,
   `stats_date`    date                not null,
   `amount`        decimal(16, 2)      not null,
-  primary key (`id`)
+  primary key (`id`),
+  unique key `uk_recharge_type_date_hour` (`recharge_type`,`stats_date`, `stats_hour`) using btree
 )
   engine = InnoDB
   default charset = utf8;

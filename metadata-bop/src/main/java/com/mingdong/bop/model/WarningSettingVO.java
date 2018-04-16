@@ -3,8 +3,8 @@ package com.mingdong.bop.model;
 public class WarningSettingVO
 {
     private Long id;
-    private Integer send;
-    private Integer play;
+    private int send;
+    private int play;
     private Integer generalLimit;
     private Integer severityLimit;
     private Integer warningLimit;

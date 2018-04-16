@@ -29,5 +29,7 @@ public interface ProductMapper
 
     List<Product> findAll();
 
-    List<Product> getListByIds(@Param("ids")List<Long> ids);
+    List<Product> getListByIds(@Param("ids") List<Long> ids);
+
+    Product findByCode(String code);
 }

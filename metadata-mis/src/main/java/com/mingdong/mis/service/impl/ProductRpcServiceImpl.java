@@ -432,4 +432,26 @@ public class ProductRpcServiceImpl implements ProductRpcService
         return listDTO;
     }
 
+    @Override
+    public ProductResDTO getProductInfoByCode(String code)
+    {
+        ProductResDTO productResDTO = new ProductResDTO();
+        Product product = productMapper.findByCode(code);
+        if(product == null)
+        {
+            productResDTO.setResult(RestResult.OBJECT_NOT_FOUND);
+            return productResDTO;
+        }
+        ProductTxt productTxt = productTxtMapper.findById(product.getId());
+        productResDTO.setType(product.getType());
+        productResDTO.setProductCode(product.getCode());
+        productResDTO.setName(product.getName());
+        productResDTO.setCostAmt(product.getCostAmt());
+        productResDTO.setCustom(product.getCustom());
+        productResDTO.setRemark(product.getRemark());
+        productResDTO.setContent(productTxt == null ? null : productTxt.getContent());
+        productResDTO.setEnabled(product.getEnabled());
+        return productResDTO;
+    }
+
 }

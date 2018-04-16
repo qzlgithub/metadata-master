@@ -49,29 +49,38 @@
             <div class="item active">
                 <div class="pb0 slide" alt="Bootstrap Touch Slider">
                     <div class="slide-banner1">
-                        <a href=""> <div class="container slide-banner-img1">
-                        </div></a>
+                        <a target="_blank"
+                           th:href="@{'http://wpa.qq.com/msgrd?v=3&amp;uin='+${serviceQq}+'&amp;site=qq&amp;menu=yes'}">
+                            <div class="container slide-banner-img1">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="item">
                 <div class="pb0 slide" alt="Bootstrap Touch Slider">
                     <div class="slide-banner1">
-                        <a href="#"><div class="container slide-banner-img2"></div></a>
+                        <a href="/product/show.html?code=FIN-CDK">
+                            <div class="container slide-banner-img2"></div>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="item">
                 <div class="pb0 slide" alt="Bootstrap Touch Slider">
                     <div class="slide-banner1">
-                        <a href="#"><div class="container slide-banner-img3"></div></a>
+                        <a href="/product/show.html?code=FIN-HMD">
+                            <div class="container slide-banner-img3"></div>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="item">
                 <div class="pb0 slide" alt="Bootstrap Touch Slider">
                     <div class="slide-banner1">
-                        <a href="#"><div class="container slide-banner-img4"></div></a>
+                        <a href="#">
+                            <div class="container slide-banner-img4"></div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -199,7 +208,7 @@
 <script>
     $(function() {
         $("#page-index").addClass("active");
-        $(".indextab").on("mouseover","li",function(){
+        $(".indextab").on("mouseover", "li", function() {
             // 设index为当前点击
             var index = $(this).index();
             // 点击添加样式利用siblings清除其他兄弟节点样式

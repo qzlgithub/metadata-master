@@ -522,5 +522,4 @@ public class SystemRpcServiceImpl implements SystemRpcService
         return listDTO;
     }
 
-
 }

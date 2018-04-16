@@ -117,6 +117,18 @@ public class PageController
     }
 
     @LoginRequired
+    @GetMapping(value = {"/product/show.html"})
+    public ModelAndView productIntroduce(@RequestParam(value = Field.CODE) String code)
+    {
+        ModelAndView view = new ModelAndView("product/introduce");
+        RestResp resp = new RestResp();
+        productService.getProductInfoByCode(code, resp);
+        view.addAllObjects(resp.getData());
+        view.addAllObjects(RequestThread.getPageData());
+        return view;
+    }
+
+    @LoginRequired
     @GetMapping(value = {"/product/mine.html"})
     public ModelAndView productMine()
     {

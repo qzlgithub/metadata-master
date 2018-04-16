@@ -220,6 +220,21 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
     }
 
     @SuppressWarnings("unchecked")
+    protected Set<String> sUnion(int db, String... keys)
+    {
+        return (Set<String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[][] ks = new byte[keys.length][];
+            for(int i = 0; i < keys.length; i++)
+            {
+                ks[i] = serialize(keys[i]);
+            }
+            Set<byte[]> value = conn.sUnion(ks);
+            return value == null ? null : deserializeSet(value);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
     protected void hSet(int db, String key, String field, String value)
     {
         redisTemplate.execute((RedisCallback) conn -> {

@@ -20,6 +20,7 @@ public class WebsitePageController
     {
         ModelAndView view = new ModelAndView("website/index");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
+        view.addObject(Field.SERVICE_QQ, systemService.getServiceQq());
         return view;
     }
 
@@ -84,7 +85,7 @@ public class WebsitePageController
     {
         ModelAndView view = new ModelAndView("website/about");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
-        view.addObject(Field.SERVICE_QQ,systemService.getServiceQq());
+        view.addObject(Field.SERVICE_QQ, systemService.getServiceQq());
         return view;
     }
 

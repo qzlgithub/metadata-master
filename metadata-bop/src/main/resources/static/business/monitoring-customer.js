@@ -57,10 +57,14 @@ function initData() {
 
 function timeReady() {
     setInterval(function() {
-        changeSelectedClient();
+        try{
+            changeSelectedClient();
+        }catch(e){}
     }, 2000);
     setInterval(function() {
-        getRequestList();
+        try{
+            getRequestList();
+        }catch(e){}
     }, 1000);
 }
 

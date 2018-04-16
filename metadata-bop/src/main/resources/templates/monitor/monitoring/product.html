@@ -53,6 +53,7 @@
                                 <dt><em>接口预警</em></dt>
                                 <dd>
                                     <table class="public-table1">
+                                        <thead>
                                         <tr>
                                             <th>预警类型</th>
                                             <th>接口名称</th>
@@ -60,35 +61,15 @@
                                             <th>次数</th>
                                             <th>最近时间</th>
                                         </tr>
+                                        </thead>
                                         <tbody>
-                                        <tr>
+                                        <!--<tr>
                                             <td>请求超时</td>
                                             <td>身份验证</td>
                                             <td><span class="general">一般</span></td>
                                             <td>20次</td>
                                             <td>02/20 15:15:15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td><span class="serious">严重</span></td>
-                                            <td>20次</td>
-                                            <td>02/20 15:15:15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td><span class="general">一般</span></td>
-                                            <td>20次</td>
-                                            <td>02/20 15:15:15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>请求超时</td>
-                                            <td>身份验证</td>
-                                            <td><span class="serious">严重</span></td>
-                                            <td>20次</td>
-                                            <td>02/20 15:15:15</td>
-                                        </tr>
+                                        </tr>-->
                                         </tbody>
                                     </table>
                                 </dd>
@@ -121,42 +102,19 @@
                         <dt><em>警报</em><span class="icon icon3 fr"></span></dt>
                         <dd>
                             <table class="public-table1">
+                                <thead>
                                 <tr>
                                     <th>警报类型</th>
                                     <th>接口名称</th>
                                     <th>最近时间</th>
                                 </tr>
+                                </thead>
                                 <tbody>
-                                <tr>
+                                <!--<tr>
                                     <td>请求超时</td>
                                     <td>身份验证</td>
                                     <td>02/20 15:15:15</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>02/20 15:15:15</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>02/20 15:15:15</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>02/20 15:15:15</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>02/20 15:15:15</td>
-                                </tr>
-                                <tr>
-                                    <td>请求超时</td>
-                                    <td>身份验证</td>
-                                    <td>02/20 15:15:15</td>
-                                </tr>
+                                </tr>-->
                                 </tbody>
                             </table>
                         </dd>
@@ -174,8 +132,11 @@
                             <p class="mt10" id="line-chart-1" style="width: 340px;height:85px;"></p>
                             <p class="col6 mt10">消费行为</p>
                             <p class="mt10" id="line-chart-2" style="width: 340px;height:85px;"></p>
-                            <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
-                                    class="icon right-down ml10"></i></div>
+                            <div class="mt20 tr col6 fz-14">
+                                <i class="icon left-up mr10 important"></i>
+                                1/5
+                                <i class="icon right-down ml10"></i>
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -209,6 +170,7 @@
             colee.scrollTop++
         }
     }
+
     setInterval(Marquee1, speed)//设置定时器
 
 </script>

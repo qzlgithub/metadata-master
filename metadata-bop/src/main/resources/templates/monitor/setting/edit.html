@@ -5,6 +5,9 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
+    <!--[if lt IE 9]>
+    <script src="http://cdn.static.runoob.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
     <link rel="stylesheet" href="/static/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
@@ -22,59 +25,73 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div class="p20">
-            <div class="public-title3">警报设置<span class="fr"><a href="" class="return-btn ml10">返回</a></span></div>
+            <div class="public-title3">警报设置<span class="fr"><a href="/warning/setting/list.html"
+                                                               class="return-btn ml10">返回</a></span></div>
             <div class="layui-row layui-col-space10 mt15">
-                <!--请求趋势-->
                 <dl class="grid-demo grid-demo-bg1 public-warp1">
                     <dd>
-                        <div class="fz-16 col6 mt30 pl40">所选：第三方监控——请求失败过多</div>
+                        <div class="fz-16 col6 mt30 pl40">所选：<span th:text="${content}"></span></div>
                         <div class="layui-form from1 w60 col6 ml40">
-                            <p class=" mt30 bg1 p10">一、选择通知方式 <span class="col3 pl30">（至少选择一种通知方式）</span></p>
-                            <div class="layui-form-item nt20 pl40">
-                                <input type="checkbox" name="like1[write]" lay-skin="primary" title="手机短信" checked="">
-                            </div>
-                            <div class="layui-form-item mt20 pl40">
-                                <input type="checkbox" name="like1[write]" lay-skin="primary" title="现场警报" checked="">
-                                <div class="flex">
-                                    <div class="imageFileInput mt20 ml20">
-                                        <input class="fileInput" type="file" id="" name="">
-                                    </div>
-                                    <em class="pt50">（支持小于2M的.mp3文件）</em>
+                            <form id="formData" enctype="multipart/form-data">
+                                <input type="hidden" name="id" th:value="${id}"/>
+                                <p class=" mt30 bg1 p10">一、选择通知方式 <span class="col3 pl30">（至少选择一种通知方式）</span></p>
+                                <div class="layui-form-item nt20 pl40">
+                                    <input type="checkbox" name="send" value="1" lay-skin="primary" title="手机短信"
+                                           th:checked="${send} == 1"/>
                                 </div>
-                                <div class="pl20 mt10">我相信<i class="layui-icon fz-28 va">&#xe645;</i></div>
+                                <div class="layui-form-item mt20 pl40">
+                                    <input type="checkbox" name="play" value="1" lay-skin="primary" title="现场警报"
+                                           th:checked="${play} == 1"/>
+                                    <div class="flex">
+                                        <div class="imageFileInput mt20 ml20">
+                                            <input class="fileInput" type="file" id="file" name="upfile"
+                                                   onchange="fileChange(this);"/>
+                                        </div>
+                                        <em class="pt50">（支持小于3M的mp3文件）</em>
+                                    </div>
+                                    <div class="pl20 mt10"><span th:text="${fileName}" id="showFileName"></span>
+                                        <i class="layui-icon fz-28 va" id="playButton" th:if="${filePath != null}"
+                                           onclick="bf()">&#xe645;
+                                        </i>
+                                        <audio style="display:none" id="music" th:if="${filePath != null}"
+                                               controls="">
+                                            <source th:src="${filePath}"/>
+                                        </audio>
+                                    </div>
 
-                            </div>
-                            <p class=" mt30 bg1 p10">二、设置阀值</p>
-                            <p class="edit-set p10 tc mt20">超过预警阀值将触发警报</p>
-                            <p class="mt10 mb20 mt20 fz-18">设置预警阀值</p>
-                            <p class="flex">
-                                <span class="mt10"><i class="col3 fz-16">*</i> 一般预警</span>
-                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
-                                <span class="mt10 ml20 mr20">&lt;</span>
-                                <span class="mt10 ml20 mr20">连续出错</span>
-                                <span class="mt10 ml20 mr20"><=</span>
-                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
-                                <span class="mt10 col3 ml10">请填写正整数（未填写/小数/负数  触发）</span>
-                            </p>
-                            <p class="flex mt20 pb40">
-                                <span class="mt10"><i class="col3 fz-16">*</i> 一般预警</span>
-                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
-                                <span class="mt10 ml20 mr20">&lt;</span>
-                                <span class="mt10 ml20 mr20">连续出错</span>
-                                <span class="mt10 ml20 mr20"><=</span>
-                                <input type="tel" name="num" class="layui-input w10 ml30" placeholder="出错次数">
-                                <span class="mt10 col3 ml10">左边的数值要小于右边的数值</span>
-                            </p>
+                                </div>
+                                <p class=" mt30 bg1 p10">二、设置阀值</p>
+                                <p class="edit-set p10 tc mt20">超过预警阀值将触发警报</p>
+                                <p class="mt10 mb20 mt20 fz-18">设置预警阀值（连续出错次数）</p>
+                                <p class="flex">
+                                    <input type="tel" id="generalLimit" name="generalLimit" class="layui-input w10 ml30"
+                                           placeholder="出错次数" th:value="${generalLimit}" maxlength="5"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"/>
+                                    <span class="mt10 ml20 mr20">&lt;=</span>
+                                    <span class="mt10 ml20 mr20">一般预警</span>
+                                    <span class="mt10 ml20 mr20">&lt;</span>
+                                    <input type="tel" id="severityLimit" name="severityLimit"
+                                           class="layui-input w10 ml30"
+                                           placeholder="出错次数" th:value="${severityLimit}" maxlength="5"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"/>
+                                    <span class="mt10 ml20 mr20">&lt;=</span>
+                                    <span class="mt10 ml20 mr20">严重预警</span>
+                                    <span class="mt10 ml20 mr20">&lt;</span>
+                                    <input type="tel" id="warningLimit" name="warningLimit" class="layui-input w10 ml30"
+                                           placeholder="出错次数" th:value="${warningLimit}" maxlength="5"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"/>
+                                </p>
+                            </form>
                             <div class="layui-form-item mt40 pb40">
                                 <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-                                    <button type="reset" class="layui-btn return-form">返回</button>
+                                    <a href="javascript:;" class="layui-btn" onclick="saveData()">立即提交</a>
+                                    <a href="/warning/setting/list.html" type="reset"
+                                       class="layui-btn return-form">返回</a>
                                 </div>
                             </div>
                         </div>
                     </dd>
                 </dl>
-                <!--请求趋势 end-->
             </div>
         </div>
     </div>
@@ -85,24 +102,8 @@
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
-<script>
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app', 'laydate'], function() {
-        var laydate = layui.laydate; //日期
-        $ = layui.jquery
-        app = layui.app;
-        app.set({
-            type: 'iframe'
-        }).init();
-        //详情鼠标经过
-        $("td div").mouseover(function() {
-            $(this).find(".detai-ceng").show();
-        }).mouseout(function() {
-            $(this).find(".detai-ceng").hide();
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/js/jquery.form.min.js"></script>
+<script type="text/javascript" src="/static/business/warning-edit.js"></script>
 </body>
 
 </html>

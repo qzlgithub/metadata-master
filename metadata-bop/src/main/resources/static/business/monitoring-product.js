@@ -90,11 +90,23 @@ function initData() {
 
 function timeReady() {
     setInterval(function() {
-        changeSelectedProduct();
-        getScatterChart();
+        try {
+            changeSelectedProduct();
+        }
+        catch(e) {
+        }
+        try {
+            getScatterChart();
+        }
+        catch(e) {
+        }
     }, 2000);
     setInterval(function() {
-        getRequestList();
+        try {
+            getRequestList();
+        }
+        catch(e) {
+        }
     }, 1000);
 }
 

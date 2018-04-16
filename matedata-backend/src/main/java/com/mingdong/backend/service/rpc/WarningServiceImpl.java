@@ -20,33 +20,6 @@ public class WarningServiceImpl implements WarningService
     private WarningSettingMapper warningSettingMapper;
 
     @Override
-    public ListDTO<WarningSettingResDTO> getWarningSettingList()
-    {
-        ListDTO<WarningSettingResDTO> listDTO = new ListDTO<>();
-        List<WarningSetting> listAll = warningSettingMapper.getListAll();
-        List<WarningSettingResDTO> dataList = new ArrayList<>();
-        WarningSettingResDTO warningSettingResDTO;
-        for(WarningSetting item : listAll)
-        {
-            warningSettingResDTO = new WarningSettingResDTO();
-            warningSettingResDTO.setId(item.getId());
-            warningSettingResDTO.setContent(item.getContent());
-            warningSettingResDTO.setEnabled(item.getEnabled());
-            warningSettingResDTO.setFileName(item.getFileName());
-            warningSettingResDTO.setFilePath(item.getFilePath());
-            warningSettingResDTO.setPlay(item.getPlay());
-            warningSettingResDTO.setSend(item.getSend());
-            warningSettingResDTO.setType(item.getType());
-            warningSettingResDTO.setGeneralLimit(item.getGeneralLimit());
-            warningSettingResDTO.setSeverityLimit(item.getSeverityLimit());
-            warningSettingResDTO.setWarningLimit(item.getWarningLimit());
-            dataList.add(warningSettingResDTO);
-        }
-        listDTO.setList(dataList);
-        return listDTO;
-    }
-
-    @Override
     public WarningSettingResDTO getWarningSetting(Long id)
     {
         WarningSetting warningSetting = warningSettingMapper.findById(id);
@@ -99,5 +72,32 @@ public class WarningServiceImpl implements WarningService
         warningSetting.setEnabled(status);
         warningSettingMapper.updateSkipNull(warningSetting);
         return responseDTO;
+    }
+
+    @Override
+    public ListDTO<WarningSettingResDTO> getWarningSettingList()
+    {
+        ListDTO<WarningSettingResDTO> listDTO = new ListDTO<>();
+        List<WarningSetting> listAll = warningSettingMapper.getListAll();
+        List<WarningSettingResDTO> dataList = new ArrayList<>();
+        WarningSettingResDTO warningSettingResDTO;
+        for(WarningSetting item : listAll)
+        {
+            warningSettingResDTO = new WarningSettingResDTO();
+            warningSettingResDTO.setId(item.getId());
+            warningSettingResDTO.setContent(item.getContent());
+            warningSettingResDTO.setEnabled(item.getEnabled());
+            warningSettingResDTO.setFileName(item.getFileName());
+            warningSettingResDTO.setFilePath(item.getFilePath());
+            warningSettingResDTO.setPlay(item.getPlay());
+            warningSettingResDTO.setSend(item.getSend());
+            warningSettingResDTO.setType(item.getType());
+            warningSettingResDTO.setGeneralLimit(item.getGeneralLimit());
+            warningSettingResDTO.setSeverityLimit(item.getSeverityLimit());
+            warningSettingResDTO.setWarningLimit(item.getWarningLimit());
+            dataList.add(warningSettingResDTO);
+        }
+        listDTO.setList(dataList);
+        return listDTO;
     }
 }

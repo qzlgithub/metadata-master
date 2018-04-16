@@ -365,4 +365,12 @@ public class ProductServiceImpl implements ProductService
             res.setList(list);
         }
     }
+
+    @Override
+    public void getProductInfoByCode(String code, RestResp resp)
+    {
+        ProductResDTO productInfoData = productRpcService.getProductInfoByCode(code);
+        resp.addData(Field.NAME, productInfoData.getName());
+        resp.addData(Field.CONTENT, productInfoData.getContent());
+    }
 }

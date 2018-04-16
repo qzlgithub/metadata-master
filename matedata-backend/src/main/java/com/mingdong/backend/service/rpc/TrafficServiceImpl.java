@@ -156,8 +156,10 @@ public class TrafficServiceImpl implements TrafficService
         Map<Long, Integer> productRequestProTemp;//key productId
         Map<String, String> mapTemp;
         Map<Long, String> prodMap = redisDao.getProductNameAll();
+        List<Long> keys = new ArrayList<>();
         while(beforeKey <= afterKey)
         {
+            keys.add(beforeKey);
             mapTemp = redisDao.readProductTrafficHGetAll(beforeKey);
             for(Map.Entry<String, String> entry : mapTemp.entrySet())
             {
@@ -178,6 +180,8 @@ public class TrafficServiceImpl implements TrafficService
             }
             beforeKey += 300;
         }
+        Map<Long, Integer> productClientCount = redisDao.readProductClient(
+                keys.stream().mapToLong(t -> t.longValue()).toArray());
         for(Map.Entry<String, Map<Long, Long>> entry : productTypeRequestCount.entrySet())
         {
             String key = entry.getKey();
@@ -196,13 +200,14 @@ public class TrafficServiceImpl implements TrafficService
             productRequestCountTemp = productTypeRequestCount.get(key);
             for(Map.Entry<Long, Integer> entry2 : productRequestProTemp.entrySet())
             {
-                Long longKey = entry2.getKey();
+                Long productId = entry2.getKey();
                 Integer intValue = entry2.getValue();
                 jsonArrayTemp2 = new JSONArray();
-                jsonArrayTemp2.add(productRequestCountTemp.get(longKey) + "");
+                jsonArrayTemp2.add(productRequestCountTemp.get(productId) + "");
                 jsonArrayTemp2.add(intValue + "");
-                jsonArrayTemp2.add((int) (Math.random() * 10) + "");
-                jsonArrayTemp2.add(prodMap.get(longKey));
+                jsonArrayTemp2.add(
+                        productClientCount.get(productId) != null ? productClientCount.get(productId) + "" : 99);
+                jsonArrayTemp2.add(prodMap.get(productId));
                 jsonArrayTemp2.add(productType);
                 jsonArrayTemp.add(jsonArrayTemp2);
             }

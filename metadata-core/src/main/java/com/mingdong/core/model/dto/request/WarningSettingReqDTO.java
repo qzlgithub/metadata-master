@@ -1,6 +1,8 @@
 package com.mingdong.core.model.dto.request;
 
-public class WarningSettingReqDTO
+import java.io.Serializable;
+
+public class WarningSettingReqDTO implements Serializable
 {
     private Long id;
     private String content;

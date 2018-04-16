@@ -86,17 +86,21 @@ public class RedisDao extends RedisBaseDao
     /**
      * 获取产品下请求的客户数量
      */
-    public Map<Long,Long> readProductClient(long[] timestamp){
-        Map<Long,Long> map = new HashMap<>();
+    public Map<Long, Integer> readProductClient(long... timestamp)
+    {
+        Map<Long, Integer> map = new HashMap<>();
         List<String> keys = new ArrayList<>();
-        for(long item : timestamp){
+        for(long item : timestamp)
+        {
             keys.add(String.valueOf(item));
         }
-        Map<Long,Set<Long>> mapTemp = new HashMap<>();
+        Map<Long, Set<Long>> mapTemp = new HashMap<>();
         Set<Long> setTemp;
-        Set set = sInter(DB.PRODUCT_CLIENT, keys.toArray(new String[0]));
-        if(!CollectionUtils.isEmpty(set)){
-            for(Object item : set){
+        Set set = sUnion(DB.PRODUCT_CLIENT, keys.toArray(new String[0]));
+        if(!CollectionUtils.isEmpty(set))
+        {
+            for(Object item : set)
+            {
                 String str = String.valueOf(item);
                 String[] split = str.split(",");
                 Long proId = Long.valueOf(split[0]);
@@ -105,6 +109,9 @@ public class RedisDao extends RedisBaseDao
                 setTemp.add(clientId);
             }
         }
+        mapTemp.forEach((k, v) -> {
+            map.put(k, v.size());
+        });
         return map;
     }
 
@@ -188,7 +195,7 @@ public class RedisDao extends RedisBaseDao
                 for(Object key : allKeys)
                 {
                     s = String.valueOf(key);
-                    if(timestamp - Long.parseLong(s) > 3900)
+                    if(timestamp - Long.parseLong(s) > (3600 * 24 + 300))
                     {
                         keys.add(s);
                     }

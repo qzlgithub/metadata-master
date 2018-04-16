@@ -52,7 +52,7 @@ public class SchedulerJobs
         JobDetail jobDetail = JobBuilder.newJob(CleanTrafficJob.class)
                 .withIdentity("cleanTrafficJob", "jobGroup")
                 .build();
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 * * * ?");//每小时执行
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 3 * * * ?");//每小时的第3分钟开始执行
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("cleanTrafficJob", "jobGroup").withSchedule(
                 scheduleBuilder).build();
         SchedulerManage.addJob(jobDetail, cronTrigger);

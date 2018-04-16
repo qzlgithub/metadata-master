@@ -89,6 +89,11 @@
         where `id` = #{id}
     </select>
 
+    <select id="findByCode" parameterType="String" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `code` = #{code}
+    </select>
+
     <select id="getListByStatus" parameterType="Integer" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `enabled` = #{enabled}
