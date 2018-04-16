@@ -13,12 +13,13 @@ public class TaskManage
     @Resource
     private ScheduledService scheduledService;
 
-    @Scheduled(cron = "0 3 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void startStatsJob()
     {
         Date date = new Date();
         scheduledService.statsByData(date);
         scheduledService.statsRechargeByData(date);
+        scheduledService.statsRequest(date);
     }
 
     @Scheduled(cron = "0 3 * * * ?")

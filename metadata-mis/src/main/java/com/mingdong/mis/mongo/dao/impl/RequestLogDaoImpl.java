@@ -4,6 +4,8 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
+import com.mingdong.mis.mongo.entity.ClientRequestCount;
+import com.mingdong.mis.mongo.entity.ProductRequestCount;
 import com.mingdong.mis.mongo.entity.RequestLog;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -139,6 +141,48 @@ public class RequestLogDaoImpl implements RequestLogDao
         query.skip((page.getPageNum() - 1) * page.getPageSize()).limit(page.getPageSize());
         query.with(new Sort(Sort.Direction.DESC, "timestamp", "_id")); // 按请求序号倒序
         return mongoTemplate.find(query, RequestLog.class);
+    }
+
+    @Override
+    public List<ClientRequestCount> findClientRequestCountByTime(Date startTime, Date endTime)
+    {
+        Criteria criteria = Criteria.where("timestamp");
+        if(startTime != null)
+        {
+            criteria.gte(startTime);
+        }
+        if(endTime != null)
+        {
+            criteria.lt(endTime);
+        }
+        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria), Aggregation.project("client_id"),
+                Aggregation.unwind("client_id"), Aggregation.group("client_id").count().as("count"),
+                Aggregation.project("count").and("clientId").previousOperation(),
+                Aggregation.sort(Sort.Direction.DESC, "count"));
+        AggregationResults<ClientRequestCount> groupResults = mongoTemplate.aggregate(agg, "request_log",
+                ClientRequestCount.class);
+        return groupResults.getMappedResults();
+    }
+
+    @Override
+    public List<ProductRequestCount> findProductRequestCountByTime(Date startTime, Date endTime)
+    {
+        Criteria criteria = Criteria.where("timestamp");
+        if(startTime != null)
+        {
+            criteria.gte(startTime);
+        }
+        if(endTime != null)
+        {
+            criteria.lt(endTime);
+        }
+        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria), Aggregation.project("product_id"),
+                Aggregation.unwind("product_id"), Aggregation.group("product_id").count().as("count"),
+                Aggregation.project("count").and("productId").previousOperation(),
+                Aggregation.sort(Sort.Direction.DESC, "count"));
+        AggregationResults<ProductRequestCount> groupResults = mongoTemplate.aggregate(agg, "request_log",
+                ProductRequestCount.class);
+        return groupResults.getMappedResults();
     }
 
     private void setTimeRange(Query query, Date startTime, Date endTime)

@@ -6,7 +6,8 @@ values
   ('STATS_ALL', '统计各维度', null),
   ('STATS_RECHARGE', '统计充值', null),
   ('CLIENT_REMIND', '客户服务提醒', null),
-  ('CLEAN_TRAFFIC', '清理定时缓存数据', null);
+  ('CLEAN_TRAFFIC', '清理定时缓存数据', null),
+  ('STATS_REQUEST', '统计请求量', null);
 
 -- warning_setting data
 insert into

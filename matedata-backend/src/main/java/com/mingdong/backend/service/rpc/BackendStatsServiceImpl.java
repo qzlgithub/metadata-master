@@ -1,7 +1,15 @@
 package com.mingdong.backend.service.rpc;
 
+import com.mingdong.backend.domain.entity.Job;
+import com.mingdong.backend.domain.entity.JobLog;
+import com.mingdong.backend.domain.entity.StatsClientRequest;
+import com.mingdong.backend.domain.entity.StatsProductRequest;
 import com.mingdong.backend.domain.entity.StatsRecharge;
 import com.mingdong.backend.domain.entity.StatsSummary;
+import com.mingdong.backend.domain.mapper.JobLogMapper;
+import com.mingdong.backend.domain.mapper.JobMapper;
+import com.mingdong.backend.domain.mapper.StatsClientRequestMapper;
+import com.mingdong.backend.domain.mapper.StatsProductRequestMapper;
 import com.mingdong.backend.domain.mapper.StatsRechargeMapper;
 import com.mingdong.backend.domain.mapper.StatsSummaryMapper;
 import com.mingdong.backend.model.SummaryStatsDTO;
@@ -10,11 +18,16 @@ import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.RangeUnit;
+import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.dto.request.JobLogReqDTO;
+import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
+import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -34,6 +47,14 @@ public class BackendStatsServiceImpl implements BackendStatsService
     private StatsSummaryMapper statsSummaryMapper;
     @Resource
     private StatsRechargeMapper statsRechargeMapper;
+    @Resource
+    private JobLogMapper jobLogMapper;
+    @Resource
+    private JobMapper jobMapper;
+    @Resource
+    private StatsClientRequestMapper statsClientRequestMapper;
+    @Resource
+    private StatsProductRequestMapper statsProductRequestMapper;
 
     @Override
     public SummaryStatsDTO getSummaryStatisticsInfo()
@@ -210,6 +231,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
     }
 
     @Override
+    @Transactional
     public ResponseDTO addStats(StatsDTO statsDTO)
     {
         ResponseDTO responseDTO = new ResponseDTO();
@@ -231,6 +253,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
     }
 
     @Override
+    @Transactional
     public ResponseDTO addStatsRechargeList(List<StatsRechargeDTO> statsRecharges)
     {
         ResponseDTO responseDTO = new ResponseDTO();
@@ -255,4 +278,79 @@ public class BackendStatsServiceImpl implements BackendStatsService
         statsRechargeMapper.addAll(statsRechargeList);
         return responseDTO;
     }
+
+    @Override
+    @Transactional
+    public ResponseDTO addJobLog(JobLogReqDTO jobLogReqDTO)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        JobLog addJobLog = new JobLog();
+        Date date = new Date();
+        addJobLog.setCreateTime(date);
+        addJobLog.setJobCode(jobLogReqDTO.getJobCode());
+        addJobLog.setSuccess(jobLogReqDTO.getSuccess());
+        addJobLog.setRemark(jobLogReqDTO.getRemark());
+        jobLogMapper.add(addJobLog);
+        if(TrueOrFalse.TRUE.equals(jobLogReqDTO.getSuccess()))
+        {
+            Job job = new Job();
+            job.setCode(jobLogReqDTO.getJobCode());
+            job.setLastSucTime(date);
+            jobMapper.updateSkipNull(job);
+        }
+        return responseDTO;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
+            List<StatsProductRequestReqDTO> addStatsProductRequest)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<StatsClientRequest> statsClientRequests = new ArrayList<>();
+        List<StatsProductRequest> statsProductRequests = new ArrayList<>();
+        Date date = new Date();
+        if(!CollectionUtils.isEmpty(addStatsClientRequest))
+        {
+            StatsClientRequest statsClientRequest;
+            for(StatsClientRequestReqDTO item : addStatsClientRequest)
+            {
+                statsClientRequest = new StatsClientRequest();
+                statsClientRequest.setCreateTime(date);
+                statsClientRequest.setUpdateTime(date);
+                statsClientRequest.setStatsDate(item.getStatsDate());
+                statsClientRequest.setStatsDay(item.getStatsDay());
+                statsClientRequest.setStatsHour(item.getStatsHour());
+                statsClientRequest.setStatsMonth(item.getStatsMonth());
+                statsClientRequest.setStatsWeek(item.getStatsWeek());
+                statsClientRequest.setStatsYear(item.getStatsYear());
+                statsClientRequest.setClientId(item.getClientId());
+                statsClientRequest.setRequest(item.getRequest());
+                statsClientRequests.add(statsClientRequest);
+            }
+            statsClientRequestMapper.addAll(statsClientRequests);
+        }
+        if(!CollectionUtils.isEmpty(addStatsProductRequest))
+        {
+            StatsProductRequest statsProductRequest;
+            for(StatsProductRequestReqDTO item : addStatsProductRequest)
+            {
+                statsProductRequest = new StatsProductRequest();
+                statsProductRequest.setCreateTime(date);
+                statsProductRequest.setUpdateTime(date);
+                statsProductRequest.setStatsDate(item.getStatsDate());
+                statsProductRequest.setStatsDay(item.getStatsDay());
+                statsProductRequest.setStatsHour(item.getStatsHour());
+                statsProductRequest.setStatsMonth(item.getStatsMonth());
+                statsProductRequest.setStatsWeek(item.getStatsWeek());
+                statsProductRequest.setStatsYear(item.getStatsYear());
+                statsProductRequest.setProductId(item.getProductId());
+                statsProductRequest.setRequest(item.getRequest());
+                statsProductRequests.add(statsProductRequest);
+            }
+            statsProductRequestMapper.addAll(statsProductRequests);
+        }
+        return responseDTO;
+    }
+
 }

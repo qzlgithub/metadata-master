@@ -31,45 +31,19 @@ public class ScheduledServiceImpl implements ScheduledService
     @Override
     public void statsByData(Date date)
     {
-        try
-        {
-            clientRpcService.statsByDate(date);
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
-        }
-        catch(Exception e)
-        {
-            saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE, JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
-        }
+        clientRpcService.statsByDate(date);
     }
 
     @Override
     public void statsRechargeByData(Date date)
     {
-        try
-        {
-            clientRpcService.statsRechargeByDate(date);
-            saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.TRUE, null);
-        }
-        catch(Exception e)
-        {
-            saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
-                    JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
-        }
+        clientRpcService.statsRechargeByDate(date);
     }
 
     @Override
     public void quartzClientRemind(Date date)
     {
-        try
-        {
-            clientRpcService.quartzClientRemind(date);
-            saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.TRUE, null);
-        }
-        catch(Exception e)
-        {
-            saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.FALSE,
-                    JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date));
-        }
+        clientRpcService.quartzClientRemind(date);
     }
 
     @Override
@@ -85,6 +59,12 @@ public class ScheduledServiceImpl implements ScheduledService
             saveJobLog(JobType.CLEAN_TRAFFIC, TrueOrFalse.FALSE,
                     JobType.CLEAN_TRAFFIC.getName() + ":" + longSdf.format(date));
         }
+    }
+
+    @Override
+    public void statsRequest(Date date)
+    {
+        clientRpcService.statsRequestByDate(date);
     }
 
     private void saveJobLog(JobType jobType, Integer success, String remark)

@@ -36,7 +36,10 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
         JSONArray legendData = new JSONArray();
         JSONArray xAxisData = new JSONArray();
         JSONArray seriesData = new JSONArray();
+        JSONArray convertData = new JSONArray();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String[] city = {"杭州", "金华", "张家界", "厦门", "汕头", "上海", "成都", "呼和浩特", "哈尔滨", "唐山", "开封", "齐齐哈尔"};
+        Map<String, Long> cityCount = new HashMap<>();
         if(!CollectionUtils.isEmpty(clientIdList))
         {
             Map<Long, JSONArray> mapTemp = new LinkedHashMap<>();
@@ -54,6 +57,13 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
                 {
                     mapTemp.get(clientIdList.get(i)).add(list.get(i) == null ? "0" : list.get(i) + "");
                 }
+                String count = redisDao.readClientTrafficAll(beforeKey);
+                if(!StringUtils.isNullBlank(count))
+                {
+                    int i = (int) (Math.random() * city.length);
+                    Long c = cityCount.computeIfAbsent(city[i], k -> 0l);
+                    cityCount.put(city[i], c + Long.valueOf(count));
+                }
                 beforeKey += 300;
             }
             mapTemp.forEach((k, v) -> {
@@ -69,14 +79,29 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
                 xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
                 String count = redisDao.readClientTrafficAll(beforeKey);
                 jsonArrayTemp.add(StringUtils.isNullBlank(count) ? "0" : count);
+                if(!StringUtils.isNullBlank(count))
+                {
+                    int i = (int) (Math.random() * city.length);
+                    Long c = cityCount.computeIfAbsent(city[i], k -> 0l);
+                    cityCount.put(city[i], c + Long.valueOf(count));
+                }
                 beforeKey += 300;
             }
             seriesData.add(jsonArrayTemp);
+        }
+        JSONObject jsonObjectTemp;
+        for(Map.Entry<String, Long> entry : cityCount.entrySet())
+        {
+            jsonObjectTemp = new JSONObject();
+            jsonObjectTemp.put(Field.NAME, entry.getKey());
+            jsonObjectTemp.put(Field.VALUE, entry.getValue());
+            convertData.add(jsonObjectTemp);
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Field.LEGEND_DATA, legendData);
         jsonObject.put(Field.X_AXIS_DATA, xAxisData);
         jsonObject.put(Field.SERIES_DATA, seriesData);
+        jsonObject.put(Field.CONVERT_DATA, convertData);
         responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
         return responseDTO;
     }

@@ -6,4 +6,7 @@ public interface Field
     String LEGEND_DATA = "legendData";
     String X_AXIS_DATA = "xAxisData";
     String SERIES_DATA = "seriesData";
+    String NAME = "name";
+    String VALUE = "value";
+    String CONVERT_DATA = "convertData";
 }

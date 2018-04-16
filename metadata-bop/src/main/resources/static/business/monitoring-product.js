@@ -230,7 +230,7 @@ function getScatterChart() {
                     data: seriesData[i],
                     type: 'scatter',
                     symbolSize: function(data) {
-                        return Math.sqrt(data[2]) / 0.2;
+                        return Math.sqrt(data[2]) * 2;
                     },
                     label: {
                         emphasis: {

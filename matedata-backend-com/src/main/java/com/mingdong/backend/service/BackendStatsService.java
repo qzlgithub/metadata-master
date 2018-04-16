@@ -3,7 +3,10 @@ package com.mingdong.backend.service;
 import com.mingdong.backend.model.SummaryStatsDTO;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.dto.request.JobLogReqDTO;
+import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
+import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -22,4 +25,9 @@ public interface BackendStatsService
     ResponseDTO addStats(StatsDTO stats);
 
     ResponseDTO addStatsRechargeList(List<StatsRechargeDTO> statsRecharges);
+
+    ResponseDTO addJobLog(JobLogReqDTO jobLogReqDTO);
+
+    ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
+            List<StatsProductRequestReqDTO> addStatsProductRequest);
 }

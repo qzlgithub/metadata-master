@@ -23,4 +23,9 @@ public interface ScheduledService
      * 清理定时缓存数据
      */
     void cleanTraffic(Date date);
+
+    /**
+     * 统计请求量
+     */
+    void statsRequest(Date date);
 }

@@ -10,6 +10,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.ClientRemindType;
 import com.mingdong.core.constant.Constant;
+import com.mingdong.core.constant.JobType;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
@@ -19,7 +20,10 @@ import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
+import com.mingdong.core.model.dto.request.JobLogReqDTO;
+import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
+import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
@@ -82,6 +86,8 @@ import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
+import com.mingdong.mis.mongo.entity.ClientRequestCount;
+import com.mingdong.mis.mongo.entity.ProductRequestCount;
 import com.mingdong.mis.mongo.entity.RequestLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1297,146 +1303,165 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Transactional
     public void quartzClientRemind(Date date)
     {
-        //先删除未处理的记录
-        List<ClientRemind> clientReminds = clientRemindMapper.getListByDispose(TrueOrFalse.FALSE);
-        if(!CollectionUtils.isEmpty(clientReminds))
-        {
-            List<Long> crIds = new ArrayList<>();
-            for(ClientRemind item : clientReminds)
+        new Thread(() -> {
+            SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try
             {
-                crIds.add(item.getId());
-            }
-            clientRemindProductMapper.deleteByRemindIds(crIds);
-            clientRemindMapper.deleteByIds(crIds);
-        }
-        //找出需要提醒的客户服务
-        SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
-        Date before;
-        Date after = calendar.getTime();
-        try
-        {
-            before = shortSdf.parse(shortSdf.format(date));
-            after = shortSdf.parse(shortSdf.format(after));
-        }
-        catch(Exception e)
-        {
-            logger.error(e.getMessage());
-            return;
-        }
-        Set<Long> clientIdSet = new HashSet<>();
-        //即将过期的7天
-        List<ClientProductInfo> willOverByDate = clientProductInfoMapper.getWillOverByDate(before, after);
-        for(ClientProductInfo item : willOverByDate)
-        {
-            clientIdSet.add(item.getClientId());
-        }
-        //余额不足<=500
-        List<ClientProductInfo> willOverByTimes = clientProductInfoMapper.getWillOverByTimes(new BigDecimal(500));
-        for(ClientProductInfo item : willOverByTimes)
-        {
-            clientIdSet.add(item.getClientId());
-        }
-        if(!CollectionUtils.isEmpty(clientIdSet))
-        {
-            List<ClientContact> listByClients = clientContactMapper.getListByClients(new ArrayList<>(clientIdSet));
-            Map<Long, List<ClientContact>> clientIdContactListMap = new HashMap<>();
-            List<ClientContact> clientContactsTemp;
-            for(ClientContact item : listByClients)
-            {
-                clientContactsTemp = clientIdContactListMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
-                clientContactsTemp.add(item);
-            }
-            Map<Long, List<ClientProductInfo>> infoListByDateMap = new HashMap<>();
-            Map<Long, List<ClientProductInfo>> infoListByTimesMap = new HashMap<>();
-            List<ClientProductInfo> clientProductInfosTemp;
-            for(ClientProductInfo item : willOverByDate)
-            {
-                clientProductInfosTemp = infoListByDateMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
-                clientProductInfosTemp.add(item);
-            }
-            for(ClientProductInfo item : willOverByTimes)
-            {
-                clientProductInfosTemp = infoListByTimesMap.computeIfAbsent(item.getClientId(), k -> new ArrayList<>());
-                clientProductInfosTemp.add(item);
-            }
-            ClientRemind clientRemind;
-            ClientRemindProduct clientRemindProduct;
-            List<ClientRemindProduct> clientRemindProductsTemp;
-            Date currDate = new Date();
-            //时间
-            for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByDateMap.entrySet())
-            {
-                clientProductInfosTemp = entry2.getValue();
-                clientRemind = new ClientRemind();
-                clientRemind.setCreateTime(currDate);
-                clientRemind.setUpdateTime(currDate);
-                clientRemind.setRemindDate(before);
-                clientRemind.setType(ClientRemindType.DATE.getId());
-                clientRemind.setClientId(entry2.getKey());
-                clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
-                if(clientContactsTemp != null)
+                //先删除未处理的记录
+                List<ClientRemind> clientReminds = clientRemindMapper.getListByDispose(TrueOrFalse.FALSE);
+                if(!CollectionUtils.isEmpty(clientReminds))
                 {
-                    clientRemind.setLinkName(clientContactsTemp.get(0).getName());
-                    clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
+                    List<Long> crIds = new ArrayList<>();
+                    for(ClientRemind item : clientReminds)
+                    {
+                        crIds.add(item.getId());
+                    }
+                    clientRemindProductMapper.deleteByRemindIds(crIds);
+                    clientRemindMapper.deleteByIds(crIds);
                 }
-                clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
-                clientRemind.setCount(clientProductInfosTemp.size());
-                clientRemind.setDay(
-                        DateCalculateUtils.getBetweenDayDif(before, clientProductInfosTemp.get(0).getEndDate()));
-                clientRemind.setDispose(TrueOrFalse.FALSE);
-                clientRemindMapper.add(clientRemind);
-                clientRemindProductsTemp = new ArrayList<>();
-                for(ClientProductInfo item : clientProductInfosTemp)
+                //找出需要提醒的客户服务
+                SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_MONTH, 7);
+                Date before;
+                Date after = calendar.getTime();
+                try
                 {
-                    clientRemindProduct = new ClientRemindProduct();
-                    clientRemindProduct.setUpdateTime(currDate);
-                    clientRemindProduct.setCreateTime(currDate);
-                    clientRemindProduct.setRemindId(clientRemind.getId());
-                    clientRemindProduct.setProductId(item.getProductId());
-                    clientRemindProduct.setRechargeId(item.getRechargeId());
-                    clientRemindProduct.setRemind(TrueOrFalse.FALSE);
-                    clientRemindProductsTemp.add(clientRemindProduct);
+                    before = shortSdf.parse(shortSdf.format(date));
+                    after = shortSdf.parse(shortSdf.format(after));
                 }
-                clientRemindProductMapper.addList(clientRemindProductsTemp);
+                catch(Exception e)
+                {
+                    logger.error(e.getMessage());
+                    return;
+                }
+                Set<Long> clientIdSet = new HashSet<>();
+                //即将过期的7天
+                List<ClientProductInfo> willOverByDate = clientProductInfoMapper.getWillOverByDate(before, after);
+                for(ClientProductInfo item : willOverByDate)
+                {
+                    clientIdSet.add(item.getClientId());
+                }
+                //余额不足<=500
+                List<ClientProductInfo> willOverByTimes = clientProductInfoMapper.getWillOverByTimes(
+                        new BigDecimal(500));
+                for(ClientProductInfo item : willOverByTimes)
+                {
+                    clientIdSet.add(item.getClientId());
+                }
+                if(!CollectionUtils.isEmpty(clientIdSet))
+                {
+                    List<ClientContact> listByClients = clientContactMapper.getListByClients(
+                            new ArrayList<>(clientIdSet));
+                    Map<Long, List<ClientContact>> clientIdContactListMap = new HashMap<>();
+                    List<ClientContact> clientContactsTemp;
+                    for(ClientContact item : listByClients)
+                    {
+                        clientContactsTemp = clientIdContactListMap.computeIfAbsent(item.getClientId(),
+                                k -> new ArrayList<>());
+                        clientContactsTemp.add(item);
+                    }
+                    Map<Long, List<ClientProductInfo>> infoListByDateMap = new HashMap<>();
+                    Map<Long, List<ClientProductInfo>> infoListByTimesMap = new HashMap<>();
+                    List<ClientProductInfo> clientProductInfosTemp;
+                    for(ClientProductInfo item : willOverByDate)
+                    {
+                        clientProductInfosTemp = infoListByDateMap.computeIfAbsent(item.getClientId(),
+                                k -> new ArrayList<>());
+                        clientProductInfosTemp.add(item);
+                    }
+                    for(ClientProductInfo item : willOverByTimes)
+                    {
+                        clientProductInfosTemp = infoListByTimesMap.computeIfAbsent(item.getClientId(),
+                                k -> new ArrayList<>());
+                        clientProductInfosTemp.add(item);
+                    }
+                    ClientRemind clientRemind;
+                    ClientRemindProduct clientRemindProduct;
+                    List<ClientRemindProduct> clientRemindProductsTemp;
+                    Date currDate = new Date();
+                    //时间
+                    for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByDateMap.entrySet())
+                    {
+                        clientProductInfosTemp = entry2.getValue();
+                        clientRemind = new ClientRemind();
+                        clientRemind.setCreateTime(currDate);
+                        clientRemind.setUpdateTime(currDate);
+                        clientRemind.setRemindDate(before);
+                        clientRemind.setType(ClientRemindType.DATE.getId());
+                        clientRemind.setClientId(entry2.getKey());
+                        clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                        if(clientContactsTemp != null)
+                        {
+                            clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                            clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
+                        }
+                        clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                        clientRemind.setCount(clientProductInfosTemp.size());
+                        clientRemind.setDay(DateCalculateUtils.getBetweenDayDif(before,
+                                clientProductInfosTemp.get(0).getEndDate()));
+                        clientRemind.setDispose(TrueOrFalse.FALSE);
+                        clientRemindMapper.add(clientRemind);
+                        clientRemindProductsTemp = new ArrayList<>();
+                        for(ClientProductInfo item : clientProductInfosTemp)
+                        {
+                            clientRemindProduct = new ClientRemindProduct();
+                            clientRemindProduct.setUpdateTime(currDate);
+                            clientRemindProduct.setCreateTime(currDate);
+                            clientRemindProduct.setRemindId(clientRemind.getId());
+                            clientRemindProduct.setProductId(item.getProductId());
+                            clientRemindProduct.setRechargeId(item.getRechargeId());
+                            clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                            clientRemindProductsTemp.add(clientRemindProduct);
+                        }
+                        clientRemindProductMapper.addList(clientRemindProductsTemp);
+                    }
+                    //计次
+                    for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByTimesMap.entrySet())
+                    {
+                        clientProductInfosTemp = entry2.getValue();
+                        clientRemind = new ClientRemind();
+                        clientRemind.setCreateTime(currDate);
+                        clientRemind.setUpdateTime(currDate);
+                        clientRemind.setRemindDate(before);
+                        clientRemind.setType(ClientRemindType.TIMES.getId());
+                        clientRemind.setClientId(entry2.getKey());
+                        clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
+                        if(clientContactsTemp != null)
+                        {
+                            clientRemind.setLinkName(clientContactsTemp.get(0).getName());
+                            clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
+                        }
+                        clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
+                        clientRemind.setCount(clientProductInfosTemp.size());
+                        clientRemind.setDispose(TrueOrFalse.FALSE);
+                        clientRemindMapper.add(clientRemind);
+                        clientRemindProductsTemp = new ArrayList<>();
+                        for(ClientProductInfo item : clientProductInfosTemp)
+                        {
+                            clientRemindProduct = new ClientRemindProduct();
+                            clientRemindProduct.setCreateTime(currDate);
+                            clientRemindProduct.setUpdateTime(currDate);
+                            clientRemindProduct.setRemindId(clientRemind.getId());
+                            clientRemindProduct.setProductId(item.getProductId());
+                            clientRemindProduct.setRechargeId(item.getRechargeId());
+                            clientRemindProduct.setRemind(TrueOrFalse.FALSE);
+                            clientRemindProductsTemp.add(clientRemindProduct);
+                        }
+                        clientRemindProductMapper.addList(clientRemindProductsTemp);
+                    }
+                }
+                saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.TRUE, null);
             }
-            //计次
-            for(Map.Entry<Long, List<ClientProductInfo>> entry2 : infoListByTimesMap.entrySet())
+            catch(Exception e)
             {
-                clientProductInfosTemp = entry2.getValue();
-                clientRemind = new ClientRemind();
-                clientRemind.setCreateTime(currDate);
-                clientRemind.setUpdateTime(currDate);
-                clientRemind.setRemindDate(before);
-                clientRemind.setType(ClientRemindType.TIMES.getId());
-                clientRemind.setClientId(entry2.getKey());
-                clientContactsTemp = clientIdContactListMap.get(entry2.getKey());
-                if(clientContactsTemp != null)
-                {
-                    clientRemind.setLinkName(clientContactsTemp.get(0).getName());
-                    clientRemind.setLinkPhone(clientContactsTemp.get(0).getPhone());
-                }
-                clientRemind.setProductId(clientProductInfosTemp.get(0).getProductId());
-                clientRemind.setCount(clientProductInfosTemp.size());
-                clientRemind.setDispose(TrueOrFalse.FALSE);
-                clientRemindMapper.add(clientRemind);
-                clientRemindProductsTemp = new ArrayList<>();
-                for(ClientProductInfo item : clientProductInfosTemp)
-                {
-                    clientRemindProduct = new ClientRemindProduct();
-                    clientRemindProduct.setCreateTime(currDate);
-                    clientRemindProduct.setUpdateTime(currDate);
-                    clientRemindProduct.setRemindId(clientRemind.getId());
-                    clientRemindProduct.setProductId(item.getProductId());
-                    clientRemindProduct.setRechargeId(item.getRechargeId());
-                    clientRemindProduct.setRemind(TrueOrFalse.FALSE);
-                    clientRemindProductsTemp.add(clientRemindProduct);
-                }
-                clientRemindProductMapper.addList(clientRemindProductsTemp);
+                saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.FALSE,
+                        JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date));
+                logger.error(longSdf.format(date) + "quartzClientRemind error!" + e.getMessage());
             }
-        }
+        }).start();
+
     }
 
     @Override
@@ -1595,6 +1620,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 }
                 calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
                         calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
                 Date hourAfter = calendar.getTime();
                 calendar.add(Calendar.HOUR_OF_DAY, -1);
                 Date hourBefore = calendar.getTime();
@@ -1634,11 +1660,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                 {
                     logger.error(longSdf.format(date) + " statsByDate error!");
+                    saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
+                            JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
+                    return;
                 }
+                saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
             }
             catch(Exception e)
             {
                 logger.error(longSdf.format(date) + " statsByDate error!");
+                saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
+                        JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
             }
 
         }).start();
@@ -1671,6 +1703,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 }
                 calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
                         calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
                 Date hourAfter = calendar.getTime();
                 calendar.add(Calendar.HOUR_OF_DAY, -1);
                 Date hourBefore = calendar.getTime();
@@ -1711,16 +1744,22 @@ public class ClientRpcServiceImpl implements ClientRpcService
                     if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                     {
                         logger.error(longSdf.format(date) + " statsRechargeByDate error!");
+                        saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
+                                JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
+                        return;
                     }
                 }
                 else
                 {
                     logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
                 }
+                saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.TRUE, null);
             }
             catch(Exception e)
             {
                 logger.error(longSdf.format(date) + "statsRechargeByDate error!" + e.getMessage());
+                saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
+                        JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
             }
         });
     }
@@ -1764,6 +1803,101 @@ public class ClientRpcServiceImpl implements ClientRpcService
         listDTO.setList(dataList);
         listDTO.setTotal(dataList.size());
         return listDTO;
+    }
+
+    @Override
+    public void statsRequestByDate(Date date)
+    {
+        new Thread(() -> {
+            SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                if(hour == 0)
+                {
+                    hour = 24;
+                }
+                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
+                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                Date hourAfter = calendar.getTime();
+                calendar.add(Calendar.HOUR_OF_DAY, -1);
+                Date hourBefore = calendar.getTime();
+                Date dayDate;
+                try
+                {
+                    dayDate = longSdf.parse(shortSdf.format(calendar.getTime()) + " 00:00:00");
+                }
+                catch(Exception e)
+                {
+                    logger.error(e.getMessage());
+                    return;
+                }
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int week = calendar.get(Calendar.WEEK_OF_YEAR);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                List<ClientRequestCount> clientRequestCountByTime = requestLogDao.findClientRequestCountByTime(
+                        hourBefore, hourAfter);
+                List<ProductRequestCount> productRequestCountByTime = requestLogDao.findProductRequestCountByTime(
+                        hourBefore, hourAfter);
+                List<StatsClientRequestReqDTO> addStatsClientRequest = new ArrayList<>();
+                List<StatsProductRequestReqDTO> addStatsProductRequest = new ArrayList<>();
+                if(!CollectionUtils.isEmpty(clientRequestCountByTime))
+                {
+                    StatsClientRequestReqDTO statsClientRequestReqDTO;
+                    for(ClientRequestCount item : clientRequestCountByTime)
+                    {
+                        statsClientRequestReqDTO = new StatsClientRequestReqDTO();
+                        statsClientRequestReqDTO.setStatsYear(year);
+                        statsClientRequestReqDTO.setStatsMonth(month);
+                        statsClientRequestReqDTO.setStatsWeek(week);
+                        statsClientRequestReqDTO.setStatsDay(day);
+                        statsClientRequestReqDTO.setStatsHour(hour);
+                        statsClientRequestReqDTO.setStatsDate(dayDate);
+                        statsClientRequestReqDTO.setClientId(item.getClientId());
+                        statsClientRequestReqDTO.setRequest(item.getCount());
+                        addStatsClientRequest.add(statsClientRequestReqDTO);
+                    }
+                }
+                if(!CollectionUtils.isEmpty(productRequestCountByTime))
+                {
+                    StatsProductRequestReqDTO statsProductRequestReqDTO;
+                    for(ProductRequestCount item : productRequestCountByTime)
+                    {
+                        statsProductRequestReqDTO = new StatsProductRequestReqDTO();
+                        statsProductRequestReqDTO.setStatsYear(year);
+                        statsProductRequestReqDTO.setStatsMonth(month);
+                        statsProductRequestReqDTO.setStatsWeek(week);
+                        statsProductRequestReqDTO.setStatsDay(day);
+                        statsProductRequestReqDTO.setStatsHour(hour);
+                        statsProductRequestReqDTO.setStatsDate(dayDate);
+                        statsProductRequestReqDTO.setProductId(item.getProductId());
+                        statsProductRequestReqDTO.setRequest(item.getCount());
+                        addStatsProductRequest.add(statsProductRequestReqDTO);
+                    }
+                }
+                ResponseDTO responseDTO = backendStatsService.addStatsRequest(addStatsClientRequest,
+                        addStatsProductRequest);
+                if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
+                {
+                    logger.error(longSdf.format(date) + " statsByDate error!");
+                    saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.FALSE,
+                            JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
+                    return;
+                }
+                saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.TRUE, null);
+            }
+            catch(Exception e)
+            {
+                logger.error(longSdf.format(date) + "statsRequestByDate error!" + e.getMessage());
+                saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.FALSE,
+                        JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
+            }
+        }).start();
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)
@@ -1819,5 +1953,21 @@ public class ClientRpcServiceImpl implements ClientRpcService
         client.setUpdateTime(new Date());
         client.setAccountQty(quantity > 1 ? (quantity - 1) : 0);
         clientMapper.updateSkipNull(client);
+    }
+
+    private void saveJobLog(JobType jobType, Integer success, String remark)
+    {
+        try
+        {
+            JobLogReqDTO jobLogReqDTO = new JobLogReqDTO();
+            jobLogReqDTO.setJobCode(jobType.getCode());
+            jobLogReqDTO.setSuccess(success);
+            jobLogReqDTO.setRemark(remark);
+            backendStatsService.addJobLog(jobLogReqDTO);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

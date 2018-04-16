@@ -5,7 +5,8 @@ public enum JobType
     STATS_ALL("STATS_ALL", "统计各维度"),
     STATS_RECHARGE("STATS_RECHARGE", "统计充值"),
     CLIENT_REMIND("CLIENT_REMIND", "客户服务提醒"),
-    CLEAN_TRAFFIC("CLEAN_TRAFFIC", "清理定时缓存数据");
+    CLEAN_TRAFFIC("CLEAN_TRAFFIC", "清理定时缓存数据"),
+    STATS_REQUEST("STATS_REQUEST", "统计请求量");
 
     private final String code;
     private final String name;

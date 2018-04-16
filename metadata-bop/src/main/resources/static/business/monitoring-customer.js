@@ -50,7 +50,6 @@ function initData() {
         arr.push($(this).val());
     });
     changeSelectedClient();
-    getMapChart();
     getLineChart();
     timeReady();
 }
@@ -172,6 +171,7 @@ function changeSelectedClient() {
             var legendData = json.legendData;
             var xAxisData = json.xAxisData;
             var seriesData = json.seriesData;
+            var convertData = json.convertData;
             var series = [];
             var tempMap;
             for(var i in legendData) {
@@ -204,11 +204,12 @@ function changeSelectedClient() {
                 },
                 series: series
             }, true);
+            getMapChart(convertData);
         }
     );
 }
 
-function getMapChart() {
+function getMapChart(seriesData) {
     var geoCoordMap = {
         "海门": [121.15, 31.89],
         "鄂尔多斯": [109.781327, 39.608266],
@@ -452,9 +453,7 @@ function getMapChart() {
                 name: '请求量',
                 type: 'scatter',
                 coordinateSystem: 'geo',
-                data: convertData([
-                    {name: "杭州", value: 300}
-                ]),
+                data: convertData(seriesData),
                 symbolSize: 12,
                 label: {
                     normal: {
@@ -472,5 +471,5 @@ function getMapChart() {
                 }
             }
         ]
-    });
+    },true);
 }

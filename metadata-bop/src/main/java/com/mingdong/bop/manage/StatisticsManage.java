@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface StatisticsManage
 {
-    Map<String,Object> getSummaryStatistics();
+    Map<String, Object> getSummaryStatistics();
 
     void getThirdRequestDiagramIn24h(RestResp resp);
 }

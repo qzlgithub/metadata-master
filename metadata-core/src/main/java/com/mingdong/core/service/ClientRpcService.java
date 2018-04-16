@@ -236,4 +236,6 @@ public interface ClientRpcService
     Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
 
     ListDTO<ClientInfoResDTO> getAllClient();
+
+    void statsRequestByDate(Date date);
 }

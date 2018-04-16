@@ -21,7 +21,7 @@
         from `recharge`
         <where>
             <if test="fromDate != null">`create_time` >= #{fromDate}</if>
-            <if test="toDate != null">and `create_time` &lt;= #{toDate}</if>
+            <if test="toDate != null">and `create_time` &lt; #{toDate}</if>
         </where>
         group by `recharge_type`, `amount`
     </select>
@@ -41,7 +41,7 @@
                 `create_time` &gt;= #{fromDate}
             </if>
             <if test="toDate != null">
-                and `create_time` &lt;= #{toDate}
+                and `create_time` &lt; #{toDate}
             </if>
             <if test="managerId != null">
                 and `manager_id` = #{managerId}
@@ -55,7 +55,7 @@
             and `create_time` &gt;= #{fromDate}
         </if>
         <if test="toDate != null">
-            and `create_time` &lt;= #{toDate}
+            and `create_time` &lt; #{toDate}
         </if>
         <if test="managerId != null">
             and `manager_id` = #{managerId}
