@@ -36,6 +36,7 @@ public class ChargeByUseHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
+        RequestThread.setPayloadId(JSON.toJSONString(payload).hashCode());
         String lockId = RequestThread.getProduct().name() + "-C" + RequestThread.getClientId();
         String lockVal = StringUtils.getUuid();
         boolean locked = false;

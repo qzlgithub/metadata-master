@@ -113,4 +113,14 @@ public class RequestThread
     {
         return get().getTimestamp();
     }
+
+    public static int getPayloadId()
+    {
+        return get().getPayloadId();
+    }
+
+    public static void setPayloadId(int payloadId)
+    {
+        get().setPayloadId(payloadId);
+    }
 }

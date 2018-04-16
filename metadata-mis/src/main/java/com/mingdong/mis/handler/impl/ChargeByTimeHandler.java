@@ -28,6 +28,7 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
+        RequestThread.setPayloadId(JSON.toJSONString(payload).hashCode());
         if(!checkTimeValid(resp.getTimestamp()))
         {
             resp.response(MDResult.PRODUCT_EXPIRED);

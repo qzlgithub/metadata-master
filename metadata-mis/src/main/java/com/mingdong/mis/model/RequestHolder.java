@@ -5,6 +5,7 @@ import com.mingdong.mis.constant.APIProduct;
 class RequestHolder
 {
     private long timestamp;
+    private int payloadId;
     private APIProduct product;
     private UserAuth userAuth;
     private MDResp resp;
@@ -17,6 +18,16 @@ class RequestHolder
     public void setTimestamp(long timestamp)
     {
         this.timestamp = timestamp;
+    }
+
+    public int getPayloadId()
+    {
+        return payloadId;
+    }
+
+    public void setPayloadId(int payloadId)
+    {
+        this.payloadId = payloadId;
     }
 
     public APIProduct getProduct()

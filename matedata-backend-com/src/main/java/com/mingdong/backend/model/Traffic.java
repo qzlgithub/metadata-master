@@ -2,35 +2,23 @@ package com.mingdong.backend.model;
 
 public class Traffic
 {
+    private Integer status;
     private Long clientId;
     private String corpName;
     private Long productId;
     private String productName;
     private Long timestamp;
     private String host;
-    private int hashCode;
-    private String msg;
+    private Integer payloadId;
 
-    public Traffic(Long clientId, String corpName, Long productId, String productName, Long timestamp, String host,
-            String msg)
+    public Integer getStatus()
     {
-        this.clientId = clientId;
-        this.corpName = corpName;
-        this.productId = productId;
-        this.productName = productName;
-        this.timestamp = timestamp;
-        this.host = host;
-        this.msg = msg;
+        return status;
     }
 
-    public String getMsg()
+    public void setStatus(Integer status)
     {
-        return msg;
-    }
-
-    public void setMsg(String msg)
-    {
-        this.msg = msg;
+        this.status = status;
     }
 
     public Long getClientId()
@@ -93,13 +81,13 @@ public class Traffic
         this.host = host;
     }
 
-    public int getHashCode()
+    public Integer getPayloadId()
     {
-        return hashCode;
+        return payloadId;
     }
 
-    public void setHashCode(int hashCode)
+    public void setPayloadId(Integer payloadId)
     {
-        this.hashCode = hashCode;
+        this.payloadId = payloadId;
     }
 }

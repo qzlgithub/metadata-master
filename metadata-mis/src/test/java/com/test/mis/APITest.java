@@ -23,8 +23,8 @@ public class APITest
 {
     private static final String URL_CDK = "http://47.100.162.249:9900/credit/overdue";
     private static final String URL_HMD = "http://47.100.162.249:9900/credit/blacklist";
-    private static final String PHONE_FILE_PATH = "e://phone.txt";
-    private static final String SECRET_KEY = "95016dbd7c834fa39ae81aae30622269";
+    private static final String PHONE_FILE_PATH = "e://phone_0416.txt";
+    private static final String SECRET_KEY = "0d593dc3cacb49b1a090d0b14b1e2c6a";
     private static final String NAME = "测试";
     private static final String ID_NO = "330123199001011122";
     private static final String TEMPLATE =
@@ -49,7 +49,7 @@ public class APITest
             Map<String, String> headers = new HashMap<>();
             headers.put("accept-version", "1.0");
             headers.put("Content-Type", "application/json");
-            headers.put("Access-Token", "5009ndk2y29ep301dekd82w5t4k3obj8ga6cla055496hf8cl78cm4x3e5f7e114");
+            headers.put("Access-Token", "f7q1i411r2oaa51cg8v2b2x264vbofw1rbzak10az8jfyfnbj2ceoeo4i1p2958f");
             String content = String.format(TEMPLATE, ts, sign, phone, NAME, ID_NO);
             HttpEntity entity = HttpUtils.postData(URL_HMD, headers, content);
             String s = EntityUtils.toString(entity);

@@ -5,6 +5,8 @@ import com.mingdong.common.constant.Charset;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.common.util.WebUtils;
 import com.mingdong.core.annotation.AuthRequired;
+import com.mingdong.core.constant.QueryStatus;
+import com.mingdong.mis.component.MQKit;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.constant.MDResult;
@@ -27,6 +29,8 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     private static Logger logger = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
+    @Resource
+    private MQKit mqKit;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
@@ -34,7 +38,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
         RequestThread.init();
         String uri = request.getRequestURI();
         String ip = WebUtils.getIp(request);
-        // logger.info("rest api request from {}: [{}], {}", ip, request.getMethod(), uri);
+        logger.info("rest api request from {}: [{}], {}", ip, request.getMethod(), uri);
         MDResp resp = MDResp.create();
         if(handler.getClass().isAssignableFrom(HandlerMethod.class))
         {
@@ -82,7 +86,10 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception
     {
-        logger.info("request elapsed time: {}", System.currentTimeMillis() - RequestThread.getTimestamp());
+        // logger.info("request elapsed time: {}", System.currentTimeMillis() - RequestThread.getTimestamp());
+        mqKit.userRequest(RequestThread.getHost(), RequestThread.getTimestamp(), RequestThread.getClientId(),
+                RequestThread.getCorpName(), RequestThread.getProductId(), RequestThread.getProductName(),
+                RequestThread.getPayloadId(), ex == null ? QueryStatus.NORMAL : QueryStatus.FAILED);
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
     }
