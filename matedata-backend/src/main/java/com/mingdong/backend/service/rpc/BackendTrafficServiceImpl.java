@@ -113,7 +113,6 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     public LineDiagramDTO getStatsProductRequestCache(List<Long> productIdList, Date date)
     {
         LineDiagramDTO res = new LineDiagramDTO();
-        // TODO
         List<String> periodList = getPeriodInOneHour(date);
         res.setxAxis(periodList);
         List<LegendDTO> legendList = new ArrayList<>();
