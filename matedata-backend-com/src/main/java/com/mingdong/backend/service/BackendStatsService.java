@@ -21,6 +21,9 @@ import java.util.Map;
 
 public interface BackendStatsService
 {
+    /**
+     * 获取可监控的客户字典数据
+     */
     ListDTO<Dict> getMonitoredClient();
 
     SummaryStatsDTO getSummaryStatisticsInfo();

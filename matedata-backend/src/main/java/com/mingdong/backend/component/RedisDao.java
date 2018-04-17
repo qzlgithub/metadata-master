@@ -30,6 +30,14 @@ public class RedisDao extends RedisBaseDao
     }
 
     /**
+     * 获取缓存中所有的客户字典数据
+     */
+    public Map<String, String> getAllClient()
+    {
+        return hGetAll(DB.METADATA, Key.CLIENT);
+    }
+
+    /**
      * 获取指定客户ID对应的企业名称
      */
     public Map<Long, String> getClientCorpName(List<Long> clientIdList)
@@ -322,11 +330,6 @@ public class RedisDao extends RedisBaseDao
             list.add(s == null ? 0L : Long.valueOf(s));
         }
         return list;
-    }
-
-    public Map<String, String> getAllClient()
-    {
-        return hGetAll(DB.METADATA, Key.CLIENT);
     }
 
     interface DB
