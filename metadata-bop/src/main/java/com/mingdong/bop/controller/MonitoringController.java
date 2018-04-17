@@ -68,7 +68,7 @@ public class MonitoringController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestResp res = new RestResp();
-        clientService.getClientTraffic(new Page(pageNum,pageSize),res);
+        clientService.getClientTraffic(new Page(pageNum, pageSize), res);
         return res;
     }
 
@@ -127,7 +127,7 @@ public class MonitoringController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestResp res = new RestResp();
-        productService.getProductTraffic(new Page(pageNum,pageSize),res);
+        productService.getProductTraffic(new Page(pageNum, pageSize), res);
         return res;
     }
 }
