@@ -1,6 +1,7 @@
 package com.mingdong.bop.manage.impl;
 
 import com.mingdong.backend.model.SummaryStatsDTO;
+import com.mingdong.backend.service.BackendDiagramService;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.manage.StatisticsManage;
@@ -17,8 +18,8 @@ public class StatisticsManageImpl implements StatisticsManage
 {
     @Resource
     private BackendStatsService backendStatsService;
-    /*@Resource
-    private BackendDiagramService bedDiagramService;*/
+    @Resource
+    private BackendDiagramService backendDiagramService;
 
     @Override
     public Map<String, Object> getSummaryStatistics()
@@ -58,6 +59,7 @@ public class StatisticsManageImpl implements StatisticsManage
     @Override
     public void getThirdRequestDiagramIn24h(RestResp resp)
     {
+
         resp.addData(Field.REQUEST_TOTAL, 723324L);
         resp.addData(Field.REQUEST_FAILED_TOTAL, 232L);
         resp.addData(Field.X_AXIS_DATA,

@@ -27,6 +27,7 @@ public class RequestListener
         LOGGER.info(">>> {}", msg);
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
         String hourStr = getRequestHourMin(traffic.getTimestamp());
+
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
         redisDao.realTimeTraffic(hourStr, traffic.getProductId(), traffic.getClientId());
