@@ -45,25 +45,30 @@ layui.config({
     initData();
 });
 var index = 0;
+
 function initData() {
     $("input[name='clientName']:checked").each(function() {
         arr.push($(this).val());
     });
     changeSelectedClient();
-    getLineChart();
+    getLineChart(1);
     timeReady();
 }
 
 function timeReady() {
     setInterval(function() {
-        try{
+        try {
             changeSelectedClient();
-        }catch(e){}
+        }
+        catch(e) {
+        }
     }, 2000);
     setInterval(function() {
-        try{
+        try {
             getRequestList();
-        }catch(e){}
+        }
+        catch(e) {
+        }
     }, 1000);
 }
 
@@ -83,42 +88,99 @@ function getRequestList() {
     );
 }
 
-function getLineChart(){
-    var lineChart1 = echarts.init(document.getElementById('line-chart-1'), 'dark');
-    var lineChart2 = echarts.init(document.getElementById('line-chart-2'), 'dark');
-    var lineChart3 = echarts.init(document.getElementById('line-chart-3'), 'dark');
-    var lineChart4 = echarts.init(document.getElementById('line-chart-4'), 'dark');
-    var lineChart5 = echarts.init(document.getElementById('line-chart-5'), 'dark');
-    var lineChart6 = echarts.init(document.getElementById('line-chart-6'), 'dark');
-    var option = {
-        xAxis: {
-            show: false,
-            type: 'category',
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            show: false,
-            type: 'value'
-        },
-        grid:{
-            right:0,
-            left:0,
-            top:0,
-            bottom:0
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            areaStyle: {}
-        }]
-    };
-    lineChart1.setOption(option);
-    lineChart2.setOption(option);
-    lineChart3.setOption(option);
-    lineChart4.setOption(option);
-    lineChart5.setOption(option);
-    lineChart6.setOption(option);
+var isLock = false;
+var currPage = 1;
+var totalPage = 0;
+
+function previousPage() {
+    if(isLock) {
+        return;
+    }
+    isLock = true;
+    if(currPage <= 1) {
+        isLock = false;
+        return;
+    }
+    getLineChart(--currPage);
+}
+
+function nextPage() {
+    if(isLock) {
+        return;
+    }
+    isLock = true;
+    if(currPage >= totalPage) {
+        isLock = false;
+        return;
+    }
+    getLineChart(++currPage);
+}
+
+function getLineChart(page) {
+    $("#line-chart-0").html('');
+    $("#line-chart-0").removeAttr('_echarts_instance_');
+    $("#line-chart-1").html('');
+    $("#line-chart-1").removeAttr('_echarts_instance_');
+    $("#line-chart-2").html('');
+    $("#line-chart-2").removeAttr('_echarts_instance_');
+    $("#line-chart-3").html('');
+    $("#line-chart-3").removeAttr('_echarts_instance_');
+    $("#line-chart-4").html('');
+    $("#line-chart-4").removeAttr('_echarts_instance_');
+    $("#line-chart-5").html('');
+    $("#line-chart-5").removeAttr('_echarts_instance_');
+    $("#product-name-0").html('');
+    $("#product-name-1").html('');
+    $("#product-name-2").html('');
+    $("#product-name-3").html('');
+    $("#product-name-4").html('');
+    $("#product-name-5").html('');
+    $.get(
+        "/monitoring/customer/traffic",
+        {"pageNum": page, "pageSize": 6},
+        function(data) {
+            var pages = data.data.pages;
+            totalPage = pages;
+            var xAxisData = data.data.xAxisData;
+            var clientData = data.data.productData;
+            var seriesData = data.data.seriesData;
+            for(var i in clientData) {
+                $("#product-name-" + i).text(clientData[i]);
+                var lineChart = echarts.init(document.getElementById('line-chart-' + i), 'dark');
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: "{b} : {c}"
+                    },
+                    xAxis: {
+                        show: false,
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xAxisData
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'value'
+                    },
+                    grid: {
+                        right: 0,
+                        left: 0,
+                        top: 0,
+                        bottom: 0
+                    },
+                    series: [{
+                        data: seriesData[i],
+                        type: 'line',
+                        areaStyle: {}
+                    }]
+                };
+                lineChart.setOption(option);
+            }
+            $("#page-div").show();
+            $("#page").text(page + "/" + pages);
+            isLock = false;
+        }
+    );
 }
 
 function refreshCheckbox() {
@@ -471,5 +533,5 @@ function getMapChart(seriesData) {
                 }
             }
         ]
-    },true);
+    }, true);
 }

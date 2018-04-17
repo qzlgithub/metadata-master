@@ -53,32 +53,35 @@
                             <dd>
                                 <ul class="product-mon clearfix pb20">
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-1" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-0"></p>
+                                        <div id="line-chart-0" style="width: 100%;height:95px;"></div>
                                     </li>
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-2" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-1"></p>
+                                        <div id="line-chart-1" style="width: 100%;height:95px;"></div>
                                     </li>
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-3" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-2"></p>
+                                        <div id="line-chart-2" style="width: 100%;height:95px;"></div>
                                     </li>
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-4" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-3"></p>
+                                        <div id="line-chart-3" style="width: 100%;height:95px;"></div>
                                     </li>
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-5" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-4"></p>
+                                        <div id="line-chart-4" style="width: 100%;height:95px;"></div>
                                     </li>
                                     <li>
-                                        <p>杭州熊大基金</p>
-                                        <div id="line-chart-6" style="width: 380px;height:95px;"></div>
+                                        <p id="product-name-5"></p>
+                                        <div id="line-chart-5" style="width: 100%;height:95px;"></div>
                                     </li>
                                 </ul>
-                                <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
-                                        class="icon right-down ml10"></i></div>
+                                <div class="mt20 tr col6 fz-14" id="page-div" style="display:none">
+                                    <i class="icon left-up mr10 important" onclick="previousPage()"></i>
+                                    <span id="page"></span>
+                                    <i class="icon right-down ml10" onclick="nextPage()"></i>
+                                </div>
                             </dd>
                         </dl>
                         <!--接口预警 end-->
@@ -90,7 +93,7 @@
                 <div class="layui-col-md3">
                     <dl class="grid-demo grid-demo-bg1  public-warp1">
                         <dt><em>警报</em><span class="icon icon3-close fr"></span></dt>
-                        <dd>
+                        <dd style="overflow:hidden;height:233px;">
                             <table class="public-table1">
                                 <thead>
                                 <tr>
@@ -101,6 +104,25 @@
                                 </thead>
                                 <tbody>
                                 <!--<tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr><tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
                                     <td>请求超时</td>
                                     <td>身份验证</td>
                                     <td>02/20 15:15:15</td>
@@ -117,7 +139,7 @@
                     </dl>
                     <dl class="grid-demo grid-demo-bg1 public-warp1 mt10">
                         <dt><em>实时请求</em></dt>
-                        <dd id="colee" style="overflow:hidden;height:258px;">
+                        <dd id="colee" style="overflow:hidden;height:233px;">
                             <table class="public-table2" id="colee1">
                                 <tbody id="table-tbody">
 

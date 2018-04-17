@@ -1820,8 +1820,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 {
                     hour = 24;
                 }
-                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
-                        calendar.get(Calendar.HOUR_OF_DAY), 0, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 Date hourAfter = calendar.getTime();
                 calendar.add(Calendar.HOUR_OF_DAY, -1);

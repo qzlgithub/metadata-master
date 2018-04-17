@@ -36,4 +36,13 @@
     </insert>
     <!-- @formatter:on -->
 
+    <select id="getProductTrafficByProductIds" resultMap="BaseResultMap">
+        <include refid="select_all"></include>
+        where `stats_date` >= #{beforeDate}
+        and `stats_date` &lt; #{afterDate} and product_id
+        <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </select>
+
 </mapper>

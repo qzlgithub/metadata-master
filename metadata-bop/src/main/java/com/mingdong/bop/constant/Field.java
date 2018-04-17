@@ -203,4 +203,5 @@ public interface Field
     String REQUEST_3RD_FAILED_THIS_MONTH = "request3rdFailedThisMonth";
     String REQUEST_3RD_FAILED_TOTAL = "request3rdFailedTotal";
     String FILE_PATH = "filePath";
+    String PRODUCT_DATA = "productData";
 }

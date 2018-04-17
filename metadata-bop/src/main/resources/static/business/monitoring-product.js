@@ -43,37 +43,89 @@ layui.config({
         refreshCheckbox();
     });
     initData();
-    getLineChart();
+    getLineChart(1);
 });
+var isLock = false;
+var currPage = 1;
+var totalPage = 0;
 
-function getLineChart() {
-    var lineChart1 = echarts.init(document.getElementById('line-chart-1'), 'dark');
-    var lineChart2 = echarts.init(document.getElementById('line-chart-2'), 'dark');
-    var option = {
-        xAxis: {
-            show: false,
-            type: 'category',
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            show: false,
-            type: 'value'
-        },
-        grid: {
-            right: 0,
-            left: 0,
-            top: 0,
-            bottom: 0
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            areaStyle: {}
-        }]
-    };
-    lineChart1.setOption(option);
-    lineChart2.setOption(option);
+function previousPage() {
+    if(isLock) {
+        return;
+    }
+    isLock = true;
+    if(currPage <= 1) {
+        isLock = false;
+        return;
+    }
+    getLineChart(--currPage);
+}
+
+function nextPage() {
+    if(isLock) {
+        return;
+    }
+    isLock = true;
+    if(currPage >= totalPage) {
+        isLock = false;
+        return;
+    }
+    getLineChart(++currPage);
+}
+
+function getLineChart(page) {
+    $("#line-chart-0").html('');
+    $("#line-chart-0").removeAttr('_echarts_instance_');
+    $("#line-chart-1").html('');
+    $("#line-chart-1").removeAttr('_echarts_instance_');
+    $("#product-name-0").html('');
+    $("#product-name-1").html('');
+    $.get(
+        "/monitoring/product/traffic",
+        {"pageNum": page, "pageSize": 2},
+        function(data) {
+            var pages = data.data.pages;
+            totalPage = pages;
+            var xAxisData = data.data.xAxisData;
+            var productData = data.data.productData;
+            var seriesData = data.data.seriesData;
+            for(var i in productData) {
+                $("#product-name-" + i).text(productData[i]);
+                var lineChart = echarts.init(document.getElementById('line-chart-' + i), 'dark');
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: "{b} : {c}"
+                    },
+                    xAxis: {
+                        show: false,
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xAxisData
+                    },
+                    yAxis: {
+                        show: false,
+                        type: 'value'
+                    },
+                    grid: {
+                        right: 0,
+                        left: 0,
+                        top: 0,
+                        bottom: 0
+                    },
+                    series: [{
+                        data: seriesData[i],
+                        type: 'line',
+                        areaStyle: {}
+                    }]
+                };
+                lineChart.setOption(option);
+            }
+            $("#page-div").show();
+            $("#page").text(page + "/" + pages);
+            isLock = false;
+        }
+    );
 }
 
 var index = 0;
@@ -230,7 +282,7 @@ function getScatterChart() {
                     data: seriesData[i],
                     type: 'scatter',
                     symbolSize: function(data) {
-                        return Math.sqrt(data[2]) * 2;
+                        return Math.sqrt(data[2]) / 0.2;
                     },
                     label: {
                         emphasis: {
