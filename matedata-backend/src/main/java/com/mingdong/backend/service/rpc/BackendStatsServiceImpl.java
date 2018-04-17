@@ -390,7 +390,8 @@ public class BackendStatsServiceImpl implements BackendStatsService
             Date afterDate)
     {
         ListDTO<StatsClientRequestResDTO> listDTO = new ListDTO<>();
-        List<StatsClientRequest> list = statsClientRequestMapper.getClientTrafficByClientIds(clientIds, beforeDate, afterDate);
+        List<StatsClientRequest> list = statsClientRequestMapper.getClientTrafficByClientIds(clientIds, beforeDate,
+                afterDate);
         List<StatsClientRequestResDTO> dataList = new ArrayList<>();
         listDTO.setList(dataList);
         if(!CollectionUtils.isEmpty(list))

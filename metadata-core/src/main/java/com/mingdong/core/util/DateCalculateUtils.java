@@ -147,7 +147,8 @@ public class DateCalculateUtils
         }
     }
 
-    public static void changeZero(Calendar calendar){
+    public static void changeZero(Calendar calendar)
+    {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
