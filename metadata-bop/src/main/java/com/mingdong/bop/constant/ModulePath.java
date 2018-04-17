@@ -2,6 +2,7 @@ package com.mingdong.bop.constant;
 
 public enum ModulePath
 {
+    //管理平台====================
     // 系统设置
     SETTING_MENU("/setting/menu.html", ModuleName.SETTING_MENU, "12100"),
     SETTING_RECHARGE("/setting/recharge.html", ModuleName.SETTING_RECHARGE, "12200"),
@@ -30,7 +31,22 @@ public enum ModulePath
     CLIENT_CONSUMPTION("/client/consumption.html", ModuleName.CLIENT_INDEX, ""),
     // 财务
     FINANCE_RECHARGE("/finance/recharge.html", ModuleName.FINANCE_RECHARGE, "51100"),
-    FINANCE_CONSUMPTION("/finance/consumption.html", ModuleName.FINANCE_CONSUMPTION, "51200");
+    FINANCE_CONSUMPTION("/finance/consumption.html", ModuleName.FINANCE_CONSUMPTION, "51200"),
+    //============================
+
+    //监控平台=======================
+    //数据监控
+    MONITORING_PRODUCT("/monitoring/product.html", ModuleName.MONITORING_PRODUCT, ""),
+    MONITORING_CUSTOMER("/monitoring/customer.html", ModuleName.MONITORING_CUSTOMER, ""),
+    MONITORING_OTHER("/monitoring/other.html", ModuleName.MONITORING_OTHER, ""),
+    //警报系统
+
+    //运营统计
+
+    //警报设置
+    WARNING_SETTING_LIST("/warning/setting/list.html", ModuleName.WARNING_SETTING, ""),
+    WARNING_SETTING_EDIT("/warning/setting/edit.html", ModuleName.WARNING_SETTING, "");
+    //===============================
 
     private final String path;
     private final String module;

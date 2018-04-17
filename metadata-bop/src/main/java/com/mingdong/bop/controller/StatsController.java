@@ -2,17 +2,12 @@ package com.mingdong.bop.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mingdong.bop.constant.Field;
-import com.mingdong.bop.constant.ScopeType;
 import com.mingdong.bop.manage.StatisticsManage;
 import com.mingdong.bop.service.StatsService;
-import com.mingdong.common.model.Page;
 import com.mingdong.core.annotation.LoginRequired;
-import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -52,7 +47,14 @@ public class StatsController
         return resp;
     }
 
-    @LoginRequired
+
+
+
+
+
+
+
+    /*@LoginRequired
     @GetMapping(value = "/stats/client/list")
     public RestListResp getClientList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
@@ -119,9 +121,6 @@ public class StatsController
         return jsonArray.toJSONString();
     }
 
-    /**
-     * TODO TBD：营收数据列表
-     */
     @LoginRequired
     @GetMapping(value = "/stats/client/revenueList")
     public RestListResp getRevenueList(@RequestParam(value = Field.SCOPE_TYPE, required = false) String scopeType,
@@ -141,5 +140,5 @@ public class StatsController
         ScopeType scopeTypeEnum = ScopeType.getScopeType(scopeType);
         JSONArray jsonArray = statsService.getRevenueListJson(scopeTypeEnum);
         return jsonArray.toJSONString();
-    }
+    }*/
 }
