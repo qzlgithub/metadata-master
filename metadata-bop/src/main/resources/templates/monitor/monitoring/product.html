@@ -51,7 +51,7 @@
                         <div class="layui-col-md7">
                             <dl class="grid-demo grid-demo-bg1 public-warp1">
                                 <dt><em>接口预警</em></dt>
-                                <dd>
+                                <dd style="overflow: hidden; height: 360px;">
                                     <table class="public-table1">
                                         <thead>
                                         <tr>
@@ -69,6 +69,27 @@
                                             <td><span class="general">一般</span></td>
                                             <td>20次</td>
                                             <td>02/20 15:15:15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>请求超时</td>
+                                            <td>身份验证</td>
+                                            <td><span class="serious">严重</span></td>
+                                            <td>20次</td>
+                                            <td>02/20 15:15:15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>请求超时</td>
+                                            <td>身份验证</td>
+                                            <td><span class="general">一般</span></td>
+                                            <td>20次</td>
+                                            <td>02/20 15:15:15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>请求超时</td>
+                                            <td>身份验证</td>
+                                            <td><span class="serious">严重</span></td>
+                                            <td>20次</td>
+                                            <td>02/20 15:15:15</td>
                                         </tr>-->
                                         </tbody>
                                     </table>
@@ -80,7 +101,7 @@
                         <div class="layui-col-md5">
                             <dl class="grid-demo grid-demo-bg1  public-warp1">
                                 <dt><em>实时请求</em></dt>
-                                <dd id="colee" style="overflow:hidden;height:258px;">
+                                <dd id="colee" style="overflow:hidden;height:360px;">
                                     <table class="public-table2" id="colee1">
                                         <tbody id="table-tbody">
 
@@ -100,7 +121,7 @@
                 <div class="layui-col-md3">
                     <dl class="grid-demo grid-demo-bg1  public-warp1">
                         <dt><em>警报</em><span class="icon icon3 fr"></span></dt>
-                        <dd>
+                        <dd style="overflow: hidden; height: 196px;">
                             <table class="public-table1">
                                 <thead>
                                 <tr>
@@ -111,6 +132,20 @@
                                 </thead>
                                 <tbody>
                                 <!--<tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr>
+                                <tr>
+                                    <td>请求超时</td>
+                                    <td>身份验证</td>
+                                    <td>02/20 15:15:15</td>
+                                </tr><tr>
                                     <td>请求超时</td>
                                     <td>身份验证</td>
                                     <td>02/20 15:15:15</td>
@@ -127,15 +162,17 @@
                     </dl>
                     <dl class="grid-demo grid-demo-bg1  public-warp1 mt10">
                         <dt><em>接口稳定</em><span class="fr fz-12 important">近7天</span></dt>
-                        <dd class="pl20 pr20">
-                            <p class="col6">身份验证</p>
-                            <p class="mt10" id="line-chart-1" style="width: 340px;height:85px;"></p>
-                            <p class="col6 mt10">消费行为</p>
-                            <p class="mt10" id="line-chart-2" style="width: 340px;height:85px;"></p>
-                            <div class="mt20 tr col6 fz-14">
-                                <i class="icon left-up mr10 important"></i>
-                                1/5
-                                <i class="icon right-down ml10"></i>
+                        <dd class="pl20 pr20" style="overflow: hidden; height: 286px;">
+                            <div style="height: 244px; overflow:hidden;">
+                                <p class="col6" id="product-name-0"></p>
+                                <p class="mt10" id="line-chart-0" style="width: 100%;height:85px;"></p>
+                                <p class="col6 mt10" id="product-name-1"></p>
+                                <p class="mt10" id="line-chart-1" style="width: 100%;height:85px;"></p>
+                            </div>
+                            <div class="mt20 tr col6 fz-14" id="page-div" style="display:none">
+                                <i class="icon left-up mr10 important" onclick="previousPage()"></i>
+                                <span id="page"></span>
+                                <i class="icon right-down ml10" onclick="nextPage()"></i>
                             </div>
                         </dd>
                     </dl>

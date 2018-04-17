@@ -111,7 +111,7 @@ img{width: 100%; display: inline-block;}
 .button-qr{background: #a4d8f1; color: #002738; font-size: 14px; padding: 8px 14px; border-radius: 3px;}
 
 /*******客户监控******/
-.product-mon li{float: left; width: 31.33333333%; margin:0 1%;}
+.product-mon li{float: left; width: 31.33333333%; margin:0 1%; height:140px;}
 .product-mon li p{color: #fff; padding: 10px 0px;}
 
 .layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{

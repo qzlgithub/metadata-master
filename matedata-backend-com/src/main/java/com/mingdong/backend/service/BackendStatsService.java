@@ -3,6 +3,7 @@ package com.mingdong.backend.service;
 import com.mingdong.backend.model.SummaryStatsDTO;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
@@ -10,7 +11,10 @@ import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +34,8 @@ public interface BackendStatsService
 
     ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
             List<StatsProductRequestReqDTO> addStatsProductRequest);
+
+    ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate, Date afterDate);
+
+    ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate, Date afterDate);
 }

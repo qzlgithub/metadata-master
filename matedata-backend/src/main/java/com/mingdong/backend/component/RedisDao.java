@@ -152,8 +152,7 @@ public class RedisDao extends RedisBaseDao
         {
             for(Object item : countList)
             {
-                longCountList.add(
-                        StringUtils.isNullBlank(String.valueOf(item)) ? 0 : Long.valueOf(String.valueOf(item)));
+                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
             }
         }
         return longCountList;
@@ -175,8 +174,7 @@ public class RedisDao extends RedisBaseDao
         {
             for(Object item : countList)
             {
-                longCountList.add(
-                        StringUtils.isNullBlank(String.valueOf(item)) ? 0 : Long.valueOf(String.valueOf(item)));
+                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
             }
         }
         return longCountList;

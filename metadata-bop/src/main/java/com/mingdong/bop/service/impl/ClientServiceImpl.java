@@ -1,6 +1,7 @@
 package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.component.RedisDao;
@@ -48,12 +49,14 @@ import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import com.mingdong.core.service.TradeRpcService;
+import com.mingdong.core.util.DateCalculateUtils;
 import com.mingdong.core.util.DateRangeUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -67,6 +70,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -969,6 +973,73 @@ public class ClientServiceImpl implements ClientService
             }
         }
         res.setList(mapList);
+    }
+
+    @Override
+    public void getClientTraffic(Page page, RestResp res)
+    {
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListBy(null, null, null, null, page);
+        List<ClientInfoResDTO> dataList = listDTO.getList();
+        res.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Long> productIds = new ArrayList<>();
+            for(ClientInfoResDTO item : dataList)
+            {
+                productIds.add(item.getClientId());
+            }
+            Date date = new Date();
+            Date afterDate = DateCalculateUtils.getCurrentDate(date);
+            Date beforeDate = DateCalculateUtils.getBeforeDayDate(date, 7, true);
+            ListDTO<StatsClientRequestResDTO> requestResDTOListDTO = backendStatsService.getClientTrafficByClientIds(
+                    productIds, beforeDate, afterDate);
+            List<StatsClientRequestResDTO> list = requestResDTOListDTO.getList();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            JSONArray productData = new JSONArray();
+            JSONArray xAxisData = new JSONArray();
+            JSONArray seriesData = new JSONArray();
+            JSONArray jsonArrayTemp;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(beforeDate);
+            while(beforeDate.before(afterDate))
+            {
+                xAxisData.add(sdf.format(calendar.getTime()));
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                beforeDate = calendar.getTime();
+            }
+            Map<Long, Map<String, Long>> map = new HashMap<>();//key productId
+            Map<String, Long> mapTemp;//key yyyy-MM-dd
+            if(!CollectionUtils.isEmpty(list))
+            {
+                for(StatsClientRequestResDTO item : list)
+                {
+                    mapTemp = map.computeIfAbsent(item.getClientId(), k -> new HashMap<>());
+                    String format = sdf.format(item.getStatsDate());
+                    Long count = mapTemp.computeIfAbsent(format, k -> 0l);
+                    mapTemp.put(format, count + item.getRequest());
+                }
+            }
+            for(ClientInfoResDTO item : dataList)
+            {
+                productData.add(item.getCorpName());
+                mapTemp = map.get(item.getClientId());
+                if(mapTemp == null)
+                {
+                    mapTemp = new HashMap<>();
+                }
+                jsonArrayTemp = new JSONArray();
+                for(int i = 0; i < xAxisData.size(); i++)
+                {
+                    String dateStr = xAxisData.getString(i);
+                    Long count = mapTemp.get(dateStr);
+                    jsonArrayTemp.add(count == null ? 0 : count);
+                }
+                seriesData.add(jsonArrayTemp);
+            }
+            res.addData(Field.PRODUCT_DATA, productData);
+            res.addData(Field.X_AXIS_DATA, xAxisData);
+            res.addData(Field.SERIES_DATA, seriesData);
+        }
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

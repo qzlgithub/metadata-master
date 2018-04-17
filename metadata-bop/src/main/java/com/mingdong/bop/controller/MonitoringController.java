@@ -3,6 +3,7 @@ package com.mingdong.bop.controller;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ProductService;
+import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.RestListResp;
@@ -62,6 +63,16 @@ public class MonitoringController
     }
 
     @LoginRequired
+    @GetMapping(value = "/monitoring/customer/traffic")
+    public RestResp customerTraffic(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        RestResp res = new RestResp();
+        clientService.getClientTraffic(new Page(pageNum,pageSize),res);
+        return res;
+    }
+
+    @LoginRequired
     @GetMapping(value = "/monitoring/product/allProduct")
     public RestListResp allProduct()
     {
@@ -107,6 +118,16 @@ public class MonitoringController
     {
         RestResp res = new RestResp();
         productService.getProductRatio(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/traffic")
+    public RestResp productTraffic(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
+            @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
+    {
+        RestResp res = new RestResp();
+        productService.getProductTraffic(new Page(pageNum,pageSize),res);
         return res;
     }
 }

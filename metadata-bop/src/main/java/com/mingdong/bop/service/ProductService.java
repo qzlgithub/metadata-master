@@ -41,4 +41,6 @@ public interface ProductService
     void getProductRatio(RestResp res);
 
     void getProductRequestList(RestListResp res);
+
+    void getProductTraffic(Page page, RestResp res);
 }

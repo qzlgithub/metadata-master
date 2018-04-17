@@ -20,6 +20,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
@@ -27,6 +28,8 @@ import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -351,6 +354,63 @@ public class BackendStatsServiceImpl implements BackendStatsService
             statsProductRequestMapper.addAll(statsProductRequests);
         }
         return responseDTO;
+    }
+
+    @Override
+    public ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
+            Date afterDate)
+    {
+        ListDTO<StatsProductRequestResDTO> listDTO = new ListDTO<>();
+        List<StatsProductRequest> list = statsProductRequestMapper.getProductTrafficByProductIds(productIds, beforeDate,
+                afterDate);
+        List<StatsProductRequestResDTO> dataList = new ArrayList<>();
+        listDTO.setList(dataList);
+        if(!CollectionUtils.isEmpty(list))
+        {
+            StatsProductRequestResDTO statsProductRequestResDTO;
+            for(StatsProductRequest item : list)
+            {
+                statsProductRequestResDTO = new StatsProductRequestResDTO();
+                statsProductRequestResDTO.setProductId(item.getProductId());
+                statsProductRequestResDTO.setRequest(item.getRequest());
+                statsProductRequestResDTO.setStatsDate(item.getStatsDate());
+                statsProductRequestResDTO.setStatsDay(item.getStatsDay());
+                statsProductRequestResDTO.setStatsHour(item.getStatsHour());
+                statsProductRequestResDTO.setStatsMonth(item.getStatsMonth());
+                statsProductRequestResDTO.setStatsWeek(item.getStatsWeek());
+                statsProductRequestResDTO.setStatsYear(item.getStatsYear());
+                dataList.add(statsProductRequestResDTO);
+            }
+        }
+        return listDTO;
+    }
+
+    @Override
+    public ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
+            Date afterDate)
+    {
+        ListDTO<StatsClientRequestResDTO> listDTO = new ListDTO<>();
+        List<StatsClientRequest> list = statsClientRequestMapper.getClientTrafficByClientIds(clientIds, beforeDate, afterDate);
+        List<StatsClientRequestResDTO> dataList = new ArrayList<>();
+        listDTO.setList(dataList);
+        if(!CollectionUtils.isEmpty(list))
+        {
+            StatsClientRequestResDTO statsClientRequestResDTO;
+            for(StatsClientRequest item : list)
+            {
+                statsClientRequestResDTO = new StatsClientRequestResDTO();
+                statsClientRequestResDTO.setClientId(item.getClientId());
+                statsClientRequestResDTO.setRequest(item.getRequest());
+                statsClientRequestResDTO.setStatsDate(item.getStatsDate());
+                statsClientRequestResDTO.setStatsDay(item.getStatsDay());
+                statsClientRequestResDTO.setStatsHour(item.getStatsHour());
+                statsClientRequestResDTO.setStatsMonth(item.getStatsMonth());
+                statsClientRequestResDTO.setStatsWeek(item.getStatsWeek());
+                statsClientRequestResDTO.setStatsYear(item.getStatsYear());
+                dataList.add(statsClientRequestResDTO);
+            }
+        }
+        return listDTO;
     }
 
 }
