@@ -170,45 +170,47 @@ function changeSelectedProduct() {
     $.get(
         "/monitoring/product/request",
         {"productId": arr.join(",")},
-        function(data) {
-            var jsonStr = data.data.data;
-            var json = JSON.parse(jsonStr);
-            var legendData = json.legendData;
-            var xAxisData = json.xAxisData;
-            var seriesData = json.seriesData;
-            var series = [];
-            var tempMap;
-            for(var i in legendData) {
-                tempMap = {};
-                tempMap['name'] = legendData[i];
-                tempMap['type'] = 'line';
-                tempMap['data'] = seriesData[i];
-                series[i] = tempMap;
+        function(res) {
+            if(res.code === '000000') {
+                var data = res.data;
+                var legendData = [];
+                var series = [];
+                var xAxisData = data.xAxisData;
+                var lines = data.lineData;
+                for(var i in lines) {
+                    legendData.push(lines[i].name);
+                    series.push({
+                        "type": "line",
+                        "name": lines[i].name,
+                        "data": lines[i].series,
+                        "smooth": true
+                    })
+                }
+                var option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: legendData
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xAxisData
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: series
+                };
+                mainChart.setOption(option, true);
             }
-            var option = {
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data: legendData
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: xAxisData
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: series
-            };
-            mainChart.setOption(option, true);
         }
     );
 }

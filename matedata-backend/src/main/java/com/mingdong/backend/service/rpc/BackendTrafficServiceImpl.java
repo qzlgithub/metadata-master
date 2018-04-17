@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.constant.Field;
+import com.mingdong.backend.model.LegendDTO;
+import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.model.dto.ListDTO;
@@ -107,56 +110,37 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     }
 
     @Override
-    public ResponseDTO getStatsProductRequestCache(List<Long> productIdList)
+    public LineDiagramDTO getStatsProductRequestCache(List<Long> productIdList, Date date)
     {
-        ResponseDTO responseDTO = new ResponseDTO();
-        long currentTime = System.currentTimeMillis() / 1000;
-        long afterKey = currentTime - currentTime % 300;
-        long beforeKey = afterKey - 3600;
-        JSONArray legendData = new JSONArray();
-        JSONArray xAxisData = new JSONArray();
-        JSONArray seriesData = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        if(!CollectionUtils.isEmpty(productIdList))
+        LineDiagramDTO res = new LineDiagramDTO();
+        // TODO
+        List<String> periodList = getPeriodInOneHour(date);
+        res.setxAxis(periodList);
+        List<LegendDTO> legendList = new ArrayList<>();
+        List<Long> trafficList;
+        LegendDTO legend;
+        if(CollectionUtils.isEmpty(productIdList))
         {
-            Map<Long, JSONArray> mapTemp = new LinkedHashMap<>();
-            Map<Long, String> prodMap = redisDao.getProductName(productIdList);
-            for(Long productId : productIdList)
-            {
-                legendData.add(prodMap.get(productId));
-                mapTemp.put(productId, new JSONArray());
-            }
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                List<Long> list = redisDao.readProductTraffic(beforeKey, productIdList);
-                for(int i = 0; i < productIdList.size(); i++)
-                {
-                    mapTemp.get(productIdList.get(i)).add(list.get(i) == null ? "0" : list.get(i) + "");
-                }
-                beforeKey += 300;
-            }
-            mapTemp.forEach((k, v) -> seriesData.add(v));
+            trafficList = redisDao.getProductTraffic(periodList, null);
+            legend = new LegendDTO();
+            legend.setName("总体");
+            legend.setSeries(trafficList);
+            legendList.add(legend);
         }
         else
         {
-            legendData.add("总体");
-            JSONArray jsonArrayTemp = new JSONArray();
-            while(beforeKey <= afterKey)
+            Map<Long, String> productNameMap = redisDao.getProductName(productIdList);
+            for(Long productId : productIdList)
             {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                String count = redisDao.readProductTrafficAll(beforeKey);
-                jsonArrayTemp.add(StringUtils.isNullBlank(count) ? "0" : count);
-                beforeKey += 300;
+                trafficList = redisDao.getProductTraffic(periodList, productId);
+                legend = new LegendDTO();
+                legend.setName(productNameMap.get(productId));
+                legend.setSeries(trafficList);
+                legendList.add(legend);
             }
-            seriesData.add(jsonArrayTemp);
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Field.LEGEND_DATA, legendData);
-        jsonObject.put(Field.X_AXIS_DATA, xAxisData);
-        jsonObject.put(Field.SERIES_DATA, seriesData);
-        responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
-        return responseDTO;
+        res.setLegendList(legendList);
+        return res;
     }
 
     @Override
@@ -281,5 +265,17 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
             list.add(requestDetailResDTO);
         }
         return listDTO;
+    }
+
+    private List<String> getPeriodInOneHour(Date date)
+    {
+        int t = 12;
+        long ts = date.getTime() - date.getTime() % 300000;
+        List<String> list = new ArrayList<>(t);
+        for(int i = t - 1; i >= 0; i--)
+        {
+            list.add(DateUtils.format(new Date(ts - 300000 * i), "HH:mm"));
+        }
+        return list;
     }
 }

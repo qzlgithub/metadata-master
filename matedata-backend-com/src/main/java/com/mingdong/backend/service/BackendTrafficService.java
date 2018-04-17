@@ -1,16 +1,18 @@
 package com.mingdong.backend.service;
 
+import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BackendTrafficService
 {
     ResponseDTO getStatsClientRequestCache(List<Long> clientIdList);
 
-    ResponseDTO getStatsProductRequestCache(List<Long> productIdList);
+    LineDiagramDTO getStatsProductRequestCache(List<Long> productIdList, Date date);
 
     ResponseDTO getStatsProductRatio();
 

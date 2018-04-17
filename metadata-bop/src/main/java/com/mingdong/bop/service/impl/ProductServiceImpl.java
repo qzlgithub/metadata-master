@@ -1,5 +1,6 @@
 package com.mingdong.bop.service.impl;
 
+import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ProductService;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,9 +141,10 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getStatsProductRequestCache(List<Long> productIdList, RestResp res)
     {
-        ResponseDTO responseDTO = backendTrafficService.getStatsProductRequestCache(productIdList);
-        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
-        res.addData(Field.DATA, jsonStr);
+        Date date = new Date();
+        LineDiagramDTO dto = backendTrafficService.getStatsProductRequestCache(productIdList, date);
+        res.addData(Field.X_AXIS_DATA, dto.getxAxis());
+        res.addData(Field.LINE_DATA, dto.getLegendList());
     }
 
     @Override

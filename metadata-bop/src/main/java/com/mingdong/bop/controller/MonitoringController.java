@@ -79,6 +79,9 @@ public class MonitoringController
         return res;
     }
 
+    /**
+     * 产品请求监控图（近1小时）
+     */
     @LoginRequired
     @GetMapping(value = "/monitoring/product/request")
     public RestResp productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) String productId)

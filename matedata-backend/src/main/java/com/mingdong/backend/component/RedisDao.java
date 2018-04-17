@@ -298,6 +298,20 @@ public class RedisDao extends RedisBaseDao
         return null;
     }
 
+    /**
+     * 获取指定产品在某一时间区间内的实时流量
+     */
+    public List<Long> getProductTraffic(List<String> periodList, Long productId)
+    {
+        List<Long> list = new ArrayList<>(periodList.size());
+        for(String p : periodList)
+        {
+            String s = hGet(DB.PRODUCT_TRAFFIC, p, productId == null ? Key.ALL_COUNT : String.valueOf(productId));
+            list.add(s == null ? 0L : Long.valueOf(s));
+        }
+        return list;
+    }
+
     interface DB
     {
         // 元数据 & 字典数据
