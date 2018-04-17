@@ -310,6 +310,25 @@ public class RedisDao extends RedisBaseDao
         return list;
     }
 
+    /**
+     * 获取指定客户在某一时间区间内的实时流量
+     */
+    public List<Long> getClientTraffic(List<String> periodList, Long clientId)
+    {
+        List<Long> list = new ArrayList<>(periodList.size());
+        for(String p : periodList)
+        {
+            String s = hGet(DB.CLIENT_TRAFFIC, p, clientId == null ? Key.ALL_COUNT : String.valueOf(clientId));
+            list.add(s == null ? 0L : Long.valueOf(s));
+        }
+        return list;
+    }
+
+    public Map<String, String> getAllClient()
+    {
+        return hGetAll(DB.METADATA, Key.CLIENT);
+    }
+
     interface DB
     {
         // 元数据 & 字典数据

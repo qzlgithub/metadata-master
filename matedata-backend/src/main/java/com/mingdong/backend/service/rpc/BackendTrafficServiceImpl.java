@@ -9,18 +9,15 @@ import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
-import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.ProductType;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,83 +27,36 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     private RedisDao redisDao;
 
     @Override
-    public ResponseDTO getStatsClientRequestCache(List<Long> clientIdList)
+    public LineDiagramDTO getStatsClientRequestCache(List<Long> clientIdList, Date date)
     {
-        ResponseDTO responseDTO = new ResponseDTO();
-        long currentTime = System.currentTimeMillis() / 1000;
-        long afterKey = currentTime - currentTime % 300;
-        long beforeKey = afterKey - 3600;
-        JSONArray legendData = new JSONArray();
-        JSONArray xAxisData = new JSONArray();
-        JSONArray seriesData = new JSONArray();
-        JSONArray convertData = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String[] city = {"杭州", "金华", "张家界", "厦门", "汕头", "上海", "成都", "呼和浩特", "哈尔滨", "唐山", "开封", "齐齐哈尔"};
-        Map<String, Long> cityCount = new HashMap<>();
-        if(!CollectionUtils.isEmpty(clientIdList))
+        LineDiagramDTO res = new LineDiagramDTO();
+        List<String> periodList = getPeriodInOneHour(date);
+        res.setxAxis(periodList);
+        List<LegendDTO> legendList = new ArrayList<>();
+        List<Long> trafficList;
+        LegendDTO legend;
+        if(CollectionUtils.isEmpty(clientIdList))
         {
-            Map<Long, JSONArray> mapTemp = new LinkedHashMap<>();
-            Map<Long, String> clientMap = redisDao.getClientCorpName(clientIdList);
-            for(Long clientId : clientIdList)
-            {
-                legendData.add(clientMap.get(clientId));
-                mapTemp.put(clientId, new JSONArray());
-            }
-            while(beforeKey <= afterKey)
-            {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                List<Long> list = redisDao.readClientTraffic(beforeKey, clientIdList);
-                for(int i = 0; i < clientIdList.size(); i++)
-                {
-                    mapTemp.get(clientIdList.get(i)).add(list.get(i) == null ? "0" : list.get(i) + "");
-                }
-                String count = redisDao.readClientTrafficAll(beforeKey);
-                if(!StringUtils.isNullBlank(count))
-                {
-                    int i = (int) (Math.random() * city.length);
-                    Long c = cityCount.computeIfAbsent(city[i], k -> 0l);
-                    cityCount.put(city[i], c + Long.valueOf(count));
-                }
-                beforeKey += 300;
-            }
-            mapTemp.forEach((k, v) -> {
-                seriesData.add(v);
-            });
+            trafficList = redisDao.getClientTraffic(periodList, null);
+            legend = new LegendDTO();
+            legend.setName("总体");
+            legend.setSeries(trafficList);
+            legendList.add(legend);
         }
         else
         {
-            legendData.add("总体");
-            JSONArray jsonArrayTemp = new JSONArray();
-            while(beforeKey <= afterKey)
+            Map<Long, String> corpNameMap = redisDao.getClientCorpName(clientIdList);
+            for(Long clientId : clientIdList)
             {
-                xAxisData.add(sdf.format(new Date(beforeKey * 1000)));
-                String count = redisDao.readClientTrafficAll(beforeKey);
-                jsonArrayTemp.add(StringUtils.isNullBlank(count) ? "0" : count);
-                if(!StringUtils.isNullBlank(count))
-                {
-                    int i = (int) (Math.random() * city.length);
-                    Long c = cityCount.computeIfAbsent(city[i], k -> 0l);
-                    cityCount.put(city[i], c + Long.valueOf(count));
-                }
-                beforeKey += 300;
+                trafficList = redisDao.getClientTraffic(periodList, clientId);
+                legend = new LegendDTO();
+                legend.setName(corpNameMap.get(clientId));
+                legend.setSeries(trafficList);
+                legendList.add(legend);
             }
-            seriesData.add(jsonArrayTemp);
         }
-        JSONObject jsonObjectTemp;
-        for(Map.Entry<String, Long> entry : cityCount.entrySet())
-        {
-            jsonObjectTemp = new JSONObject();
-            jsonObjectTemp.put(Field.NAME, entry.getKey());
-            jsonObjectTemp.put(Field.VALUE, entry.getValue());
-            convertData.add(jsonObjectTemp);
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Field.LEGEND_DATA, legendData);
-        jsonObject.put(Field.X_AXIS_DATA, xAxisData);
-        jsonObject.put(Field.SERIES_DATA, seriesData);
-        jsonObject.put(Field.CONVERT_DATA, convertData);
-        responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
-        return responseDTO;
+        res.setLegendList(legendList);
+        return res;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.mingdong.bop.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.component.RedisDao;
@@ -28,6 +29,7 @@ import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import com.mingdong.core.model.dto.ListDTO;
@@ -928,30 +930,29 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void getAllClient(RestListResp res)
     {
-        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getAllClient();
-        List<ClientInfoResDTO> dataList = listDTO.getList();
-        List<Map<String, Object>> list = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(dataList))
+        ListDTO<Dict> listDTO = backendStatsService.getMonitoredClient();
+        if(!CollectionUtils.isEmpty(listDTO.getList()))
         {
+            List<Map<String, Object>> list = new ArrayList<>(listDTO.getList().size());
             Map<String, Object> map;
-            for(ClientInfoResDTO item : dataList)
+            for(Dict dict : listDTO.getList())
             {
                 map = new HashMap<>();
-                map.put(Field.CLIENT_ID, item.getClientId() + "");
-                map.put(Field.CORP_NAME, item.getCorpName());
-                map.put(Field.SHORT_NAME, item.getShortName());
+                map.put(Field.CLIENT_ID, dict.getKey());
+                map.put(Field.CORP_NAME, dict.getValue());
                 list.add(map);
             }
+            res.setList(list);
         }
-        res.setList(list);
     }
 
     @Override
     public void getStatsClientRequestCache(List<Long> clientIdList, RestResp res)
     {
-        ResponseDTO responseDTO = backendTrafficService.getStatsClientRequestCache(clientIdList);
-        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
-        res.addData(Field.DATA, jsonStr);
+        Date date = new Date();
+        LineDiagramDTO dto = backendTrafficService.getStatsClientRequestCache(clientIdList, date);
+        res.addData(Field.X_AXIS_DATA, dto.getxAxis());
+        res.addData(Field.LINE_DATA, dto.getLegendList());
     }
 
     @Override

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -39,16 +38,7 @@ public class MonitoringController
     public RestResp customerRequest(@RequestParam(value = Field.CLIENT_ID, required = false) String clientId)
     {
         RestResp res = new RestResp();
-        List<Long> clientIdList = null;
-        if(!StringUtils.isNullBlank(clientId))
-        {
-            List<String> strings = Arrays.asList(clientId.split(","));
-            clientIdList = new ArrayList<>();
-            for(String item : strings)
-            {
-                clientIdList.add(Long.valueOf(item));
-            }
-        }
+        List<Long> clientIdList = convertStringToList(clientId);
         clientService.getStatsClientRequestCache(clientIdList, res);
         return res;
     }
@@ -98,16 +88,7 @@ public class MonitoringController
     public RestResp productRequest(@RequestParam(value = Field.PRODUCT_ID, required = false) String productId)
     {
         RestResp res = new RestResp();
-        List<Long> productIdList = null;
-        if(!StringUtils.isNullBlank(productId))
-        {
-            List<String> strings = Arrays.asList(productId.split(","));
-            productIdList = new ArrayList<>();
-            for(String item : strings)
-            {
-                productIdList.add(Long.valueOf(item));
-            }
-        }
+        List<Long> productIdList = convertStringToList(productId);
         productService.getStatsProductRequestCache(productIdList, res);
         return res;
     }
@@ -129,5 +110,19 @@ public class MonitoringController
         RestResp res = new RestResp();
         productService.getProductTraffic(new Page(pageNum, pageSize), res);
         return res;
+    }
+
+    private List<Long> convertStringToList(String str)
+    {
+        List<Long> idList = new ArrayList<>();
+        if(!StringUtils.isNullBlank(str))
+        {
+            String[] arr = str.split(",");
+            for(String s : arr)
+            {
+                idList.add(Long.valueOf(s));
+            }
+        }
+        return idList;
     }
 }
