@@ -15,7 +15,7 @@ public class TrafficController
     @GetMapping(value = "/traffic")
     public String clientRequest()
     {
-        redisDao.realTimeTraffic(System.currentTimeMillis() / 1000, 1999L, 2999L);
+        //redisDao.realTimeTraffic(System.currentTimeMillis() / 1000, 1999L, 2999L);
         return "ok";
     }
 }
