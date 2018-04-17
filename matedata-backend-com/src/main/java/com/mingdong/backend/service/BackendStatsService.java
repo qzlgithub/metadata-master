@@ -3,6 +3,7 @@ package com.mingdong.backend.service;
 import com.mingdong.backend.model.SummaryStatsDTO;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
@@ -20,6 +21,11 @@ import java.util.Map;
 
 public interface BackendStatsService
 {
+    /**
+     * 获取可监控的客户字典数据
+     */
+    ListDTO<Dict> getMonitoredClient();
+
     SummaryStatsDTO getSummaryStatisticsInfo();
 
     Map<String, Integer> getClientIncreaseTrend(DateRange dateRange, RangeUnit rangeUnit);
@@ -35,7 +41,9 @@ public interface BackendStatsService
     ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
             List<StatsProductRequestReqDTO> addStatsProductRequest);
 
-    ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate, Date afterDate);
+    ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
+            Date afterDate);
 
-    ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate, Date afterDate);
+    ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
+            Date afterDate);
 }

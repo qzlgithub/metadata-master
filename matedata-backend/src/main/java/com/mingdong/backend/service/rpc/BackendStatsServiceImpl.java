@@ -1,5 +1,6 @@
 package com.mingdong.backend.service.rpc;
 
+import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.domain.entity.Job;
 import com.mingdong.backend.domain.entity.JobLog;
 import com.mingdong.backend.domain.entity.StatsClientRequest;
@@ -20,6 +21,7 @@ import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.DateRange;
+import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
@@ -47,6 +49,8 @@ public class BackendStatsServiceImpl implements BackendStatsService
     // private static final Integer RCG_STAT = 3;
 
     @Resource
+    private RedisDao redisDao;
+    @Resource
     private StatsSummaryMapper statsSummaryMapper;
     @Resource
     private StatsRechargeMapper statsRechargeMapper;
@@ -58,6 +62,26 @@ public class BackendStatsServiceImpl implements BackendStatsService
     private StatsClientRequestMapper statsClientRequestMapper;
     @Resource
     private StatsProductRequestMapper statsProductRequestMapper;
+
+    @Override
+    public ListDTO<Dict> getMonitoredClient()
+    {
+        ListDTO<Dict> listDTO = new ListDTO<>();
+        Map<String, String> clientMap = redisDao.getAllClient();
+        if(clientMap != null)
+        {
+            List<Dict> list = new ArrayList<>();
+            Dict dict;
+            for(Map.Entry<String, String> entry : clientMap.entrySet())
+            {
+                dict = new Dict(entry.getKey(), entry.getValue());
+                list.add(dict);
+            }
+            listDTO.setList(list);
+            listDTO.setTotal(list.size());
+        }
+        return listDTO;
+    }
 
     @Override
     public SummaryStatsDTO getSummaryStatisticsInfo()

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BackendTrafficService
 {
-    ResponseDTO getStatsClientRequestCache(List<Long> clientIdList);
+    LineDiagramDTO getStatsClientRequestCache(List<Long> clientIdList, Date date);
 
     LineDiagramDTO getStatsProductRequestCache(List<Long> productIdList, Date date);
 

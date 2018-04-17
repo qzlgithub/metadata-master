@@ -216,6 +216,13 @@ function findClientAll() {
 }
 
 var mainChart = echarts.init(document.getElementById('main-chart'), 'dark');
+mainChart.setOption({
+    tooltip: {trigger: 'axis'},
+    grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+    xAxis: {type: 'category', boundaryGap: false, data: []},
+    yAxis: {type: 'value'},
+    series: []
+});
 var scatterChart = echarts.init(document.getElementById('scatter-chart'), 'dark');
 
 function changeSelectedProduct() {
@@ -238,30 +245,15 @@ function changeSelectedProduct() {
                         "smooth": true
                     })
                 }
-                var option = {
-                    tooltip: {
-                        trigger: 'axis'
-                    },
+                mainChart.setOption({
                     legend: {
                         data: legendData
                     },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
                     xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
                         data: xAxisData
                     },
-                    yAxis: {
-                        type: 'value'
-                    },
                     series: series
-                };
-                mainChart.setOption(option, true);
+                });
             }
         }
     );

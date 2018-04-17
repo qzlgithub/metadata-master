@@ -269,7 +269,6 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         });
     }
 
-    @SuppressWarnings("unchecked")
     protected List<String> hMGet(int db, String key, String... fields)
     {
         return redisTemplate.execute((RedisCallback<List<String>>) conn -> {
@@ -285,10 +284,9 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
         });
     }
 
-    @SuppressWarnings("unchecked")
     protected Map<String, String> hGetAll(int db, String key)
     {
-        return (Map<String, String>) redisTemplate.execute((RedisCallback) conn -> {
+        return redisTemplate.execute((RedisCallback<Map<String, String>>) conn -> {
             conn.select(db);
             byte[] k = serialize(key);
             Map<byte[], byte[]> value = conn.hGetAll(k);
