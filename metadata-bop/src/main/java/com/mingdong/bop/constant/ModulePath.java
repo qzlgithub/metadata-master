@@ -37,12 +37,17 @@ public enum ModulePath
     //监控平台=======================
     //数据监控
     MONITORING_PRODUCT("/monitoring/product.html", ModuleName.MONITORING_PRODUCT, ""),
-    MONITORING_CUSTOMER("/monitoring/customer.html", ModuleName.MONITORING_CUSTOMER, ""),
-    MONITORING_OTHER("/monitoring/other.html", ModuleName.MONITORING_OTHER, ""),
+    MONITORING_CUSTOMER("/monitoring/client.html", ModuleName.MONITORING_CUSTOMER, ""),
+    MONITORING_OTHER("/monitoring/third.html", ModuleName.MONITORING_THIRD, ""),
     //警报系统
 
     //运营统计
-
+    STATS_CLIENT("/stats/client.html", ModuleName.STATS_CLIENT, ""),
+    STATS_RECHARGE("/stats/recharge.html", ModuleName.STATS_RECHARGE, ""),
+    STATS_REQUEST_CLIENT("/stats/request/client.html", ModuleName.STATS_REQUEST_CLIENT, ""),
+    STATS_REQUEST_PRODUCT("/stats/request/product.html", ModuleName.STATS_REQUEST_PRODUCT, ""),
+    STATS_REQUEST_THIRD("/stats/request/third.html", ModuleName.STATS_REQUEST_THIRD, ""),
+    STATS_REVENUE("/stats/revenue.html", ModuleName.STATS_REVENUE, ""),
     //警报设置
     WARNING_SETTING_LIST("/warning/setting/list.html", ModuleName.WARNING_SETTING, ""),
     WARNING_SETTING_EDIT("/warning/setting/edit.html", ModuleName.WARNING_SETTING, "");

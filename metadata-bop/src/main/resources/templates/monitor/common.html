@@ -52,11 +52,11 @@
                                 <i class="layui-icon">&#xe602;</i><span> 产品监控</span></a>
                         </dd>
                         <dd th:class="${i_module eq 'monitoring-customer'} ? 'layui-this':''">
-                            <a href="/monitoring/customer.html">
+                            <a href="/monitoring/client.html">
                                 <i class="layui-icon">&#xe602;</i><span> 客户监控</span></a>
                         </dd>
-                        <!--<dd th:class="${i_module eq 'monitoring-other'} ? 'layui-this':''">
-                            <a href="/monitoring/other.html">
+                        <!--<dd th:class="${i_module eq 'monitoring-third'} ? 'layui-this':''">
+                            <a href="/monitoring/third.html">
                                 <i class="layui-icon">&#xe602;</i><span> 第三方监控</span></a>
                         </dd>-->
                     </dl>
@@ -77,28 +77,28 @@
                 <li class="layui-nav-item level1">
                     <a class="" href="javascript:;"><span class="icon icon4"></span><em>运营统计</em><i></i></a>
                     <dl class="layui-nav-child level2">
-                        <dd th:class="${i_module eq '123456'} ? 'layui-this':''">
-                            <a href="customer-index.html">
+                        <dd th:class="${i_module eq 'stats-client'} ? 'layui-this':''">
+                            <a href="/stats/client.html">
                                 <i class="layui-icon">&#xe602;</i><span>客户统计</span></a>
                         </dd>
-                        <dd th:class="${i_module eq '123456'} ? 'layui-this':''">
-                            <a href="customer-index.html">
+                        <dd th:class="${i_module eq 'stats-request-client'} ? 'layui-this':''">
+                            <a href="/stats/request/client.html">
                                 <i class="layui-icon">&#xe602;</i><span>客户请求统计</span></a>
                         </dd>
-                        <dd th:class="${i_module eq '123456'} ? 'layui-this':''">
-                            <a href="customer-index.html">
+                        <dd th:class="${i_module eq 'stats-request-product'} ? 'layui-this':''">
+                            <a href="/stats/request/product.html">
                                 <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
                         </dd>
-                        <!--<dd >
-                            <a href="customer-index.html">
+                        <!--<dd th:class="${i_module eq 'stats-request-third'} ? 'layui-this':''">
+                            <a href="/stats/request/third.html">
                                 <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>
                         </dd>-->
-                        <dd th:class="${i_module eq '123456'} ? 'layui-this':''">
-                            <a href="customer-index.html">
+                        <dd th:class="${i_module eq 'stats-recharge'} ? 'layui-this':''">
+                            <a href="/stats/recharge.html">
                                 <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
                         </dd>
-                        <!--<dd id="30006">
-                            <a href="customer-index.html">
+                        <!--<dd th:class="${i_module eq 'stats-revenue'} ? 'layui-this':''">
+                            <a href="/stats/revenue.html">
                                 <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
                         </dd>-->
                     </dl>

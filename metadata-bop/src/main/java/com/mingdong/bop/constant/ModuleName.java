@@ -25,11 +25,16 @@ public interface ModuleName
     //数据监控
     String MONITORING_PRODUCT = "monitoring-product";
     String MONITORING_CUSTOMER = "monitoring-customer";
-    String MONITORING_OTHER = "monitoring-other";
+    String MONITORING_THIRD = "monitoring-third";
     //警报系统
 
     //运营统计
-
+    String STATS_CLIENT = "stats-client";
+    String STATS_RECHARGE = "stats-recharge";
+    String STATS_REQUEST_CLIENT = "stats-request-client";
+    String STATS_REQUEST_PRODUCT = "stats-request-product";
+    String STATS_REQUEST_THIRD = "stats-request-third";
+    String STATS_REVENUE = "stats-revenue";
     //警报设置
     String WARNING_SETTING = "warning-setting";
     //==========================

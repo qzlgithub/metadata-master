@@ -25,7 +25,7 @@ public class MonitoringController
     private ProductService productService;
 
     @LoginRequired
-    @GetMapping(value = "/monitoring/customer/allCustomer")
+    @GetMapping(value = "/monitoring/client/allCustomer")
     public RestListResp allCustomer()
     {
         RestListResp res = new RestListResp();
@@ -34,7 +34,7 @@ public class MonitoringController
     }
 
     @LoginRequired
-    @GetMapping(value = "/monitoring/customer/request")
+    @GetMapping(value = "/monitoring/client/request")
     public RestResp customerRequest(@RequestParam(value = Field.CLIENT_ID, required = false) String clientId)
     {
         RestResp res = new RestResp();
@@ -44,7 +44,7 @@ public class MonitoringController
     }
 
     @LoginRequired
-    @GetMapping(value = "/monitoring/customer/detail")
+    @GetMapping(value = "/monitoring/client/detail")
     public RestListResp customerDetail()
     {
         RestListResp res = new RestListResp();
@@ -53,7 +53,7 @@ public class MonitoringController
     }
 
     @LoginRequired
-    @GetMapping(value = "/monitoring/customer/traffic")
+    @GetMapping(value = "/monitoring/client/traffic")
     public RestResp customerTraffic(@RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {

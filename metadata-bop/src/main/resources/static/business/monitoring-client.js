@@ -74,7 +74,7 @@ function timeReady() {
 
 function getRequestList() {
     $.get(
-        "/monitoring/customer/detail",
+        "/monitoring/client/detail",
         {},
         function(data) {
             var list = data.list;
@@ -136,7 +136,7 @@ function getLineChart(page) {
     $("#product-name-4").html('');
     $("#product-name-5").html('');
     $.get(
-        "/monitoring/customer/traffic",
+        "/monitoring/client/traffic",
         {"pageNum": page, "pageSize": 6},
         function(data) {
             var pages = data.data.pages;
@@ -203,7 +203,7 @@ function refreshCheckbox() {
 
 function findCustomerAll() {
     $.get(
-        "/monitoring/customer/allCustomer",
+        "/monitoring/client/allCustomer",
         {},
         function(data) {
             var list = data.list;
@@ -232,7 +232,7 @@ var mapChart = echarts.init(document.getElementById('map-chart'), 'dark');
 
 function changeSelectedClient() {
     $.get(
-        "/monitoring/customer/request",
+        "/monitoring/client/request",
         {"clientId": arr.join(",")},
         function(res) {
             if(res.code === '000000') {

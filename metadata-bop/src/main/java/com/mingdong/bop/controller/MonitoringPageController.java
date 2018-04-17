@@ -20,19 +20,19 @@ public class MonitoringPageController
     }
 
     @LoginRequired
-    @RequestMapping(value = "/monitoring/customer.html")
+    @RequestMapping(value = "/monitoring/client.html")
     public ModelAndView customer()
     {
-        ModelAndView view = new ModelAndView("monitor/monitoring/customer");
+        ModelAndView view = new ModelAndView("monitor/monitoring/client");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
 
     @LoginRequired
-    @RequestMapping(value = "/monitoring/other.html")
+    @RequestMapping(value = "/monitoring/third.html")
     public ModelAndView other()
     {
-        ModelAndView view = new ModelAndView("monitor/monitoring/other");
+        ModelAndView view = new ModelAndView("monitor/monitoring/third");
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
