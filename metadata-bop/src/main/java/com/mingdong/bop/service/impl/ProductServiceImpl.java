@@ -1,7 +1,7 @@
 package com.mingdong.bop.service.impl;
 
-import com.mingdong.backend.model.LineDiagramDTO;
 import com.alibaba.fastjson.JSONArray;
+import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.constant.Field;
@@ -32,7 +32,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
