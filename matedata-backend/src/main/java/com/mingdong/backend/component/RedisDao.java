@@ -17,6 +17,9 @@ import java.util.Set;
 @Repository
 public class RedisDao extends RedisBaseDao
 {
+    // 近24小时分段流量监视
+    private static String currHourMin;
+
     /**
      * 缓存客户及产品字典数据
      */
@@ -73,14 +76,32 @@ public class RedisDao extends RedisBaseDao
     /**
      * 产品访问量监控
      */
-    public void realTimeTraffic(long timestamp, Long productId, Long clientId)
+    public void realTimeTraffic(String hourMin, Long productId, Long clientId)
     {
-        String s = String.valueOf(timestamp - timestamp % 300);
-        hIncrBy(DB.PRODUCT_TRAFFIC, s, String.valueOf(productId), 1);
-        hIncrBy(DB.CLIENT_TRAFFIC, s, String.valueOf(clientId), 1);
-        hIncrBy(DB.PRODUCT_TRAFFIC, s, Key.ALL_COUNT, 1);
-        hIncrBy(DB.CLIENT_TRAFFIC, s, Key.ALL_COUNT, 1);
-        sAdd(DB.PRODUCT_CLIENT, s, productId + "," + clientId);
+        checkCurrHourMin(hourMin);
+        hIncrBy(DB.PRODUCT_TRAFFIC, hourMin, String.valueOf(productId), 1);
+        hIncrBy(DB.CLIENT_TRAFFIC, hourMin, String.valueOf(clientId), 1);
+        hIncrBy(DB.PRODUCT_TRAFFIC, hourMin, Key.ALL_COUNT, 1);
+        hIncrBy(DB.CLIENT_TRAFFIC, hourMin, Key.ALL_COUNT, 1);
+        sAdd(DB.PRODUCT_CLIENT, hourMin, productId + "," + clientId);
+    }
+
+    private void checkCurrHourMin(String realHourMin)
+    {
+        if(realHourMin.equals(currHourMin))
+        {
+            return;
+        }
+        synchronized(this)
+        {
+            if(!realHourMin.equals(currHourMin))
+            {
+                del(DB.PRODUCT_TRAFFIC, realHourMin);
+                del(DB.CLIENT_TRAFFIC, realHourMin);
+                del(DB.PRODUCT_CLIENT, realHourMin);
+                currHourMin = realHourMin;
+            }
+        }
     }
 
     /**
@@ -182,6 +203,7 @@ public class RedisDao extends RedisBaseDao
      *
      * @param timestamp 当前时间的Unix时间戳
      */
+    @Deprecated
     public boolean cleanUpTraffic(long timestamp)
     {
         int[] dbs = new int[]{DB.PRODUCT_TRAFFIC, DB.CLIENT_TRAFFIC};

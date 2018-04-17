@@ -1,8 +1,6 @@
 package com.mingdong.mis.util;
 
-import com.alibaba.fastjson.JSON;
 import com.mingdong.common.constant.Charset;
-import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +10,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
 
 public class SignUtils
 {
     private static final String HMAC_SHA_256 = "HmacSHA256";
-    private static final Logger logger = LoggerFactory.getLogger(SignUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SignUtils.class);
 
     private SignUtils()
     {
@@ -37,7 +32,7 @@ public class SignUtils
         }
         catch(NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e)
         {
-            logger.error("Failed to get signature of data[{}] with key[{}]: {}", content, key, e.getMessage());
+            LOGGER.error("Failed to get signature of data[{}] with key[{}]: {}", content, key, e.getMessage());
             throw new MetadataCoreException("error to obtain digital signature");
         }
     }
@@ -56,23 +51,5 @@ public class SignUtils
             sb.append(s);
         }
         return sb.toString().toLowerCase();
-    }
-
-    public static void main(String[] args) throws MetadataCoreException
-    {
-        long ts = System.currentTimeMillis() / 1000;
-        System.out.println("timestamp: " + ts);
-        Map<String, Object> m = new HashMap<>();
-        m.put("phone", "13001499993");
-        m.put("timestamp", ts);
-        SortedMap sm = MapUtils.sortKey(m);
-        String str = JSON.toJSONString(sm);
-        System.out.println("str: " + str);
-        String[] keys = {"5d8cc53f6b5045068c28e7e6e572af05"};
-        for(String key : keys)
-        {
-            String sign = sign(str, key);
-            System.out.println("sign: " + sign);
-        }
     }
 }
