@@ -26,7 +26,7 @@ public enum TimeScope
                 return o;
             }
         }
-        return CUSTOM;
+        return null;
     }
 
     public int getCode()
