@@ -35,7 +35,7 @@ layui.use(['laydate'], function() {
                 $("#endDate").val("");
             }
             var scope = $('#scopeOcx').find('.active').data("scope");
-            if(scope === '0') {
+            if(scope === 0) {
                 refresh_chart();
             }
         }
@@ -52,7 +52,7 @@ layui.use(['laydate'], function() {
                 $("#compareFrom").val("");
             }
             var scope = $('#scopeOcx').find('.active').data("scope");
-            if(scope === '0') {
+            if(scope === 0) {
                 refresh_chart();
             }
         }

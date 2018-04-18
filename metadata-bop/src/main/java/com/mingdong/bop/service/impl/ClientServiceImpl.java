@@ -764,7 +764,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientIncreaseTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
+    public void getClientIncrementDiagramData(DateRange range, RangeUnit unit, Date compareFrom, RestResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
         ChartData cd = getClientIncreaseTrendOfRange(range, unit);

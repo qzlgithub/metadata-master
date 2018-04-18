@@ -5,6 +5,7 @@ import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.model.vo.PersonVO;
 import com.mingdong.mis.processor.impl.BlacklistProcessor;
+import com.mingdong.mis.processor.impl.MultiRegisterProcessor;
 import com.mingdong.mis.processor.impl.OverdueProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ public class RouteHandler
     @Resource
     private OverdueProcessor overdueProcessor;
     @Resource
+    private MultiRegisterProcessor multiRegisterProcessor;
+    @Resource
     private BlacklistProcessor blacklistProcessor;
 
     public Metadata routeProcessor(AbsPayload payload)
@@ -27,6 +30,8 @@ public class RouteHandler
         {
             case FIN_CDK:
                 return overdueProcessor.process((PersonVO) payload);
+            case FIN_DTK:
+                return multiRegisterProcessor.process((PersonVO) payload);
             case FIN_HMD:
                 return blacklistProcessor.process((PersonVO) payload);
             default:

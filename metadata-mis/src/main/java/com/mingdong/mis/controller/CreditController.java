@@ -37,6 +37,13 @@ public class CreditController
         return revokeAPI(requestVO);
     }
 
+    @AuthRequired
+    @RequestMapping(value = "/credit/multi-register")
+    public MDResp getTargetRegisterInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
     private MDResp revokeAPI(RequestVO requestVO)
     {
         MDResp resp = RequestThread.getResp();

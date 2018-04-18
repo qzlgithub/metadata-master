@@ -97,6 +97,7 @@
             r.`contract_no` as contract_no,
             r.`start_date`  as start_date,
             r.`end_date`    as end_date,
+            r.`unit_amt`    as unit_amt,
             c.`corp_name`   as corp_name,
             c.`short_name`  as short_name,
             c.`username`    as username,

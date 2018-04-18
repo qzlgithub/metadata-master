@@ -1,5 +1,21 @@
 -- ----------------------------
--- Table structure for `stats`
+-- Table structure for `failed_request_log`
+-- ----------------------------
+drop table if exists `failed_request_log`;
+create table `failed_request_log`
+(
+  `id`           bigint           not null auto_increment,
+  `request_time` datetime         not null,
+  `client_id`    bigint           not null,
+  `product_id`   bigint           not null,
+  `status`       tinyint unsigned not null,
+  primary key (`id`)
+)
+  engine = InnoDB
+  default charset = utf8;
+
+-- ----------------------------
+-- Table structure for `stats_summary`
 -- ----------------------------
 drop table if exists `stats_summary`;
 create table `stats_summary` (
@@ -105,19 +121,19 @@ create table `warning_setting` (
 -- ----------------------------
 drop table if exists `stats_client_request`;
 create table `stats_client_request` (
-  `id`            bigint(20)          not null auto_increment,
-  `create_time`   datetime            not null,
-  `update_time`   datetime            not null,
-  `client_id`     bigint(20)          not null,
-  `stats_year`    int(10) unsigned    not null,
-  `stats_month`   tinyint(3) unsigned not null,
-  `stats_week`    tinyint(3) unsigned not null,
-  `stats_day`     tinyint(3) unsigned not null,
-  `stats_hour`    tinyint(3) unsigned not null,
-  `stats_date`    date                not null,
-  `request`       bigint(20) default 0             not null,
+  `id`          bigint(20)                       not null auto_increment,
+  `create_time` datetime                         not null,
+  `update_time` datetime                         not null,
+  `client_id`   bigint(20)                       not null,
+  `stats_year`  int(10) unsigned                 not null,
+  `stats_month` tinyint(3) unsigned              not null,
+  `stats_week`  tinyint(3) unsigned              not null,
+  `stats_day`   tinyint(3) unsigned              not null,
+  `stats_hour`  tinyint(3) unsigned              not null,
+  `stats_date`  date                             not null,
+  `request`     bigint(20) default 0             not null,
   primary key (`id`),
-  unique key `uk_client_request_date_hour` (`client_id`,`stats_date`, `stats_hour`) using btree
+  unique key `uk_client_request_date_hour` (`client_id`, `stats_date`, `stats_hour`) using btree
 )
   engine = InnoDB
   default charset = utf8;
@@ -127,19 +143,19 @@ create table `stats_client_request` (
 -- ----------------------------
 drop table if exists `stats_product_request`;
 create table `stats_product_request` (
-  `id`            bigint(20)          not null auto_increment,
-  `create_time`   datetime            not null,
-  `update_time`   datetime            not null,
-  `product_id`     bigint(20)          not null,
-  `stats_year`    int(10) unsigned    not null,
-  `stats_month`   tinyint(3) unsigned not null,
-  `stats_week`    tinyint(3) unsigned not null,
-  `stats_day`     tinyint(3) unsigned not null,
-  `stats_hour`    tinyint(3) unsigned not null,
-  `stats_date`    date                not null,
-  `request`       bigint(20) default 0             not null,
+  `id`          bigint(20)                       not null auto_increment,
+  `create_time` datetime                         not null,
+  `update_time` datetime                         not null,
+  `product_id`  bigint(20)                       not null,
+  `stats_year`  int(10) unsigned                 not null,
+  `stats_month` tinyint(3) unsigned              not null,
+  `stats_week`  tinyint(3) unsigned              not null,
+  `stats_day`   tinyint(3) unsigned              not null,
+  `stats_hour`  tinyint(3) unsigned              not null,
+  `stats_date`  date                             not null,
+  `request`     bigint(20) default 0             not null,
   primary key (`id`),
-  unique key `uk_product_request_date_hour` (`product_id`,`stats_date`, `stats_hour`) using btree
+  unique key `uk_product_request_date_hour` (`product_id`, `stats_date`, `stats_hour`) using btree
 )
   engine = InnoDB
   default charset = utf8;

@@ -3,12 +3,12 @@ package com.mingdong.bop.controller;
 import com.mingdong.bop.constant.TimeScope;
 import com.mingdong.bop.model.ChartVO;
 import com.mingdong.bop.service.ClientService;
+import com.mingdong.bop.util.DateRangeUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.RestResp;
-import com.mingdong.bop.util.DateRangeUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,23 +26,29 @@ public class DiagramController
     public RestResp getClientIncrementDiagramData(@RequestBody ChartVO chartVO)
     {
         RestResp resp = new RestResp();
-        Integer days = chartVO.getScope();
-        RangeUnit rangeUnit = RangeUnit.getById(chartVO.getUnit());
-        if(days == null || rangeUnit == null)
+        TimeScope scope = TimeScope.getByCode(chartVO.getScope());
+        if(scope != TimeScope.CUSTOM && scope != TimeScope.LATEST_30_DAYS && scope != TimeScope.LATEST_90_DAYS &&
+                scope != TimeScope.LATEST_1_YEAR)
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        if(days == 0 && (chartVO.getStartDate() == null || chartVO.getEndDate() == null))
+        RangeUnit unit = RangeUnit.getById(chartVO.getUnit());
+        if(unit == null)
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
+        if(scope == TimeScope.CUSTOM && (chartVO.getStartDate() == null || chartVO.getEndDate() == null))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
         DateRange range;
         Date compareFrom = null;
-        if(days != 0)
+        if(scope != TimeScope.CUSTOM)
         {
-            range = DateRangeUtils.getTimeRangeByScope(TimeScope.getByCode(days));
+            range = DateRangeUtils.getTimeRangeByScope(scope);
         }
         else
         {
@@ -53,7 +59,7 @@ public class DiagramController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getClientIncreaseTrend(range, compareFrom, rangeUnit, resp);
+        clientService.getClientIncrementDiagramData(range, unit, compareFrom, resp);
         return resp;
     }
 

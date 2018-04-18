@@ -131,7 +131,7 @@ public interface ClientService
      */
     int getClientIncrementFrom(Date date);
 
-    void getClientIncreaseTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
+    void getClientIncrementDiagramData(DateRange range, RangeUnit unit, Date compareFrom, RestResp resp);
 
     void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
 
