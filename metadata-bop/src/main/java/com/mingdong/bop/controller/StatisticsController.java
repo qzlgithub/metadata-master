@@ -43,9 +43,9 @@ public class StatisticsController
         return mv;
     }
 
-    /**
+    /*
      * 客户新增数走势图
-     */
+
     @PostMapping(value = "/client/chart")
     public RestResp getClientChartData(@RequestBody ChartVO chartVO)
     {
@@ -77,9 +77,9 @@ public class StatisticsController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getClientIncreaseTrend(range, compareFrom, rangeUnit, resp);
+        clientService.getClientIncrementDiagramData(range, rangeUnit, compareFrom, resp);
         return resp;
-    }
+    }*/
 
     /**
      * 客户新增数走势图
