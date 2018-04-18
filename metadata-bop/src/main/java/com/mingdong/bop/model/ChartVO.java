@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class ChartVO
 {
-    private Integer days;
+    private Integer scope;
     private Integer unit;
     private Date startDate;
     private Date endDate;
     private Date compareFrom;
 
-    public Integer getDays()
+    public Integer getScope()
     {
-        return days;
+        return scope;
     }
 
-    public void setDays(Integer days)
+    public void setScope(Integer scope)
     {
-        this.days = days;
+        this.scope = scope;
     }
 
     public Integer getUnit()

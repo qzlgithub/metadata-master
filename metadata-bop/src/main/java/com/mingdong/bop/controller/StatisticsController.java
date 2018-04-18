@@ -50,7 +50,7 @@ public class StatisticsController
     public RestResp getClientChartData(@RequestBody ChartVO chartVO)
     {
         RestResp resp = new RestResp();
-        Integer days = chartVO.getDays();
+        Integer days = chartVO.getScope();
         RangeUnit rangeUnit = RangeUnit.getById(chartVO.getUnit());
         if(days == null || rangeUnit == null)
         {
@@ -88,7 +88,7 @@ public class StatisticsController
     public RestResp getRechargeChartData(@RequestBody ChartVO chartVO)
     {
         RestResp resp = new RestResp();
-        Integer days = chartVO.getDays();
+        Integer days = chartVO.getScope();
         RangeUnit rangeUnit = RangeUnit.getById(chartVO.getUnit());
         if(days == null || rangeUnit == null)
         {
