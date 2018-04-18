@@ -123,6 +123,6 @@ img{width: 100%; display: block;}
 
 .indicators-line > .carousel-indicators li{-webkit-border-radius: 2px!important; border-radius: 2px!important;  width: 69px!important; height: 5px!important;}
 .indicators-line > .carousel-indicators{bottom: -1%!important;}
-.carousel-indicators li{border: 1px solid #455580!important;}
-.indicators-line > .carousel-indicators .active{background-color: #455580!important;}
-.indicators-line > .carousel-indicators .active:before{background-color: #455580!important;}
+.carousel-indicators li{border: 1px solid #fff!important;}
+.indicators-line > .carousel-indicators .active{background-color: #fff!important;}
+.indicators-line > .carousel-indicators .active:before{background-color: #fff!important;}
