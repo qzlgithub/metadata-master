@@ -7,8 +7,11 @@ public class SummaryStatsDTO implements Serializable
 {
     private Integer clientIncIn30Days;
     private Integer clientTotal;
+    private BigDecimal rechargeAmountToday;
     private BigDecimal rechargeAmountIn7Days;
     private BigDecimal rechargeAmountIn30Days;
+    private BigDecimal rechargeAmountThisMonth;
+    private BigDecimal rechargeAmountTotal;
     private BigDecimal profitAmountToday;
     private BigDecimal profitAmountYesterday;
     private Long requestToday;
@@ -23,6 +26,36 @@ public class SummaryStatsDTO implements Serializable
     private Long request3rdFailedYesterday;
     private Long request3rdFailedThisMonth;
     private Long request3rdFailedTotal;
+
+    public BigDecimal getRechargeAmountToday()
+    {
+        return rechargeAmountToday;
+    }
+
+    public void setRechargeAmountToday(BigDecimal rechargeAmountToday)
+    {
+        this.rechargeAmountToday = rechargeAmountToday;
+    }
+
+    public BigDecimal getRechargeAmountThisMonth()
+    {
+        return rechargeAmountThisMonth;
+    }
+
+    public void setRechargeAmountThisMonth(BigDecimal rechargeAmountThisMonth)
+    {
+        this.rechargeAmountThisMonth = rechargeAmountThisMonth;
+    }
+
+    public BigDecimal getRechargeAmountTotal()
+    {
+        return rechargeAmountTotal;
+    }
+
+    public void setRechargeAmountTotal(BigDecimal rechargeAmountTotal)
+    {
+        this.rechargeAmountTotal = rechargeAmountTotal;
+    }
 
     public Integer getClientIncIn30Days()
     {

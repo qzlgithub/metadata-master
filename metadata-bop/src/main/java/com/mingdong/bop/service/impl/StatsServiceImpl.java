@@ -872,25 +872,25 @@ public class StatsServiceImpl implements StatsService
         Date beforeDate = new Date();
         switch(scopeType)
         {
-            case NOW:
+            case TODAY:
                 beforeDate = DateCalculateUtils.getCurrentDate(currentDay);
                 break;
             case YESTERDAY:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 1, true);
                 break;
-            case WEEK:
+            case NEARBY_7D:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 6, true);
                 break;
-            case HALF_MONTH:
+            case NEARBY_15D:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 14, true);
                 break;
-            case MONTH:
+            case NEARBY_30D:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 29, true);
                 break;
-            case QUARTER:
+            case THIS_QUARTER:
                 beforeDate = DateCalculateUtils.getCurrentQuarterFirstDate(currentDay, true);
                 break;
-            case YEAR:
+            case NEARBY_365D:
                 beforeDate = DateCalculateUtils.getBeforeDayDate(currentDay, 364, true);
                 break;
             default:

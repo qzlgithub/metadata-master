@@ -115,13 +115,13 @@ public class RedisDao extends RedisBaseDao
     /**
      * 获取产品下请求的客户数量
      */
-    public Map<Long, Integer> readProductClient(long... timestamp)
+    public Map<Long, Integer> readProductClient(List<String> periodList)
     {
         Map<Long, Integer> map = new HashMap<>();
         List<String> keys = new ArrayList<>();
-        for(long item : timestamp)
+        for(String item : periodList)
         {
-            keys.add(String.valueOf(item));
+            keys.add(item);
         }
         Map<Long, Set<Long>> mapTemp = new HashMap<>();
         Set<Long> setTemp;
@@ -144,110 +144,110 @@ public class RedisDao extends RedisBaseDao
         return map;
     }
 
-    /**
-     * 获取客户访问量
-     */
-    public List<Long> readClientTraffic(long timestamp, List<Long> clientIds)
-    {
-        List<String> clientIdsStr = new ArrayList<>();
-        for(Long item : clientIds)
-        {
-            clientIdsStr.add(String.valueOf(item));
-        }
-        List countList = hMGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), clientIdsStr.toArray(new String[0]));
-        List<Long> longCountList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(countList))
-        {
-            for(Object item : countList)
-            {
-                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
-            }
-        }
-        return longCountList;
-    }
+    //    /**
+    //     * 获取客户访问量
+    //     *//*
+    //    public List<Long> readClientTraffic(long timestamp, List<Long> clientIds)
+    //    {
+    //        List<String> clientIdsStr = new ArrayList<>();
+    //        for(Long item : clientIds)
+    //        {
+    //            clientIdsStr.add(String.valueOf(item));
+    //        }
+    //        List countList = hMGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), clientIdsStr.toArray(new String[0]));
+    //        List<Long> longCountList = new ArrayList<>();
+    //        if(!CollectionUtils.isEmpty(countList))
+    //        {
+    //            for(Object item : countList)
+    //            {
+    //                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
+    //            }
+    //        }
+    //        return longCountList;
+    //    }
+    //
+    //    *//**
+    //     * 获取产品访问量
+    //     *//*
+    //    public List<Long> readProductTraffic(long timestamp, List<Long> productIds)
+    //    {
+    //        List<String> productIdsStr = new ArrayList<>();
+    //        for(Long item : productIds)
+    //        {
+    //            productIdsStr.add(String.valueOf(item));
+    //        }
+    //        List countList = hMGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), productIdsStr.toArray(new String[0]));
+    //        List<Long> longCountList = new ArrayList<>();
+    //        if(!CollectionUtils.isEmpty(countList))
+    //        {
+    //            for(Object item : countList)
+    //            {
+    //                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
+    //            }
+    //        }
+    //        return longCountList;
+    //    }
+    //
+    //    *//**
+    //     * 获取客户访问总量
+    //     *//*
+    //    public String readClientTrafficAll(long timestamp)
+    //    {
+    //        return hGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
+    //    }
+    //
+    //    *//**
+    //     * 获取产品访问总量
+    //     *//*
+    //    public String readProductTrafficAll(long timestamp)
+    //    {
+    //        return hGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
+    //    }
+    //
+    //    *//**
+    //     * 流量数据定时清理
+    //     *
+    //     * @param timestamp 当前时间的Unix时间戳
+    //     *//*
+    //    @Deprecated
+    //    public boolean cleanUpTraffic(long timestamp)
+    //    {
+    //        int[] dbs = new int[]{DB.PRODUCT_TRAFFIC, DB.CLIENT_TRAFFIC};
+    //        try
+    //        {
+    //            for(int db : dbs)
+    //            {
+    //                Set allKeys = limitScan(db, 1000);
+    //                List<String> keys = new ArrayList<>();
+    //                String s;
+    //                for(Object key : allKeys)
+    //                {
+    //                    s = String.valueOf(key);
+    //                    if(timestamp - Long.parseLong(s) > (3600 * 24 + 300))
+    //                    {
+    //                        keys.add(s);
+    //                    }
+    //                }
+    //                if(keys.size() > 0)
+    //                {
+    //                    del(db, keys.toArray(new String[keys.size()]));
+    //                }
+    //            }
+    //            return true;
+    //        }
+    //        catch(Exception e)
+    //        {
+    //            return false;
+    //        }
+    //    }*/
 
-    /**
-     * 获取产品访问量
-     */
-    public List<Long> readProductTraffic(long timestamp, List<Long> productIds)
-    {
-        List<String> productIdsStr = new ArrayList<>();
-        for(Long item : productIds)
+        /**
+         * 获取当前时间下的所有请求量
+         */
+        public Map readProductTrafficHGetAll(String period)
         {
-            productIdsStr.add(String.valueOf(item));
+            return hGetAll(DB.PRODUCT_TRAFFIC, period);
         }
-        List countList = hMGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), productIdsStr.toArray(new String[0]));
-        List<Long> longCountList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(countList))
-        {
-            for(Object item : countList)
-            {
-                longCountList.add(item == null ? 0 : Long.valueOf(String.valueOf(item)));
-            }
-        }
-        return longCountList;
-    }
-
-    /**
-     * 获取客户访问总量
-     */
-    public String readClientTrafficAll(long timestamp)
-    {
-        return hGet(DB.CLIENT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
-    }
-
-    /**
-     * 获取产品访问总量
-     */
-    public String readProductTrafficAll(long timestamp)
-    {
-        return hGet(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp), Key.ALL_COUNT);
-    }
-
-    /**
-     * 流量数据定时清理
-     *
-     * @param timestamp 当前时间的Unix时间戳
-     */
-    @Deprecated
-    public boolean cleanUpTraffic(long timestamp)
-    {
-        int[] dbs = new int[]{DB.PRODUCT_TRAFFIC, DB.CLIENT_TRAFFIC};
-        try
-        {
-            for(int db : dbs)
-            {
-                Set allKeys = limitScan(db, 1000);
-                List<String> keys = new ArrayList<>();
-                String s;
-                for(Object key : allKeys)
-                {
-                    s = String.valueOf(key);
-                    if(timestamp - Long.parseLong(s) > (3600 * 24 + 300))
-                    {
-                        keys.add(s);
-                    }
-                }
-                if(keys.size() > 0)
-                {
-                    del(db, keys.toArray(new String[keys.size()]));
-                }
-            }
-            return true;
-        }
-        catch(Exception e)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * 获取当前时间下的所有请求量
-     */
-    public Map readProductTrafficHGetAll(long timestamp)
-    {
-        return hGetAll(DB.PRODUCT_TRAFFIC, String.valueOf(timestamp));
-    }
 
     /**
      * 获取所有请求的产品名称

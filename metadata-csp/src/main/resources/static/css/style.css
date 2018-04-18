@@ -284,3 +284,31 @@ body{color: #484848; background: #eeefef;}
 
 
 .return-button{width: 8%; border: solid 1px #627fc9; border-radius: 4px; text-align: center; padding: 5px 0px; cursor: pointer; color: #627fc9;}
+
+
+@media (min-width: 1024px){
+    .comment-qq{position: fixed; right: 1%;}
+} /*>=1024的设备*/
+
+@media (min-width: 1100px) {
+    .comment-qq{position: fixed; right: 1%;}
+} /*>=1100的设备*/
+@media (min-width: 1280px) {
+    .comment-qq{position: fixed; right: 1%;}
+} /*>=1280的设备*/
+
+@media (min-width: 1366px) {
+
+    .comment-qq{position: fixed; right: -3%;}
+}
+
+@media (min-width: 1440px) {
+    .comment-qq{position: fixed; right: -1%;}
+}
+
+@media (min-width: 1680px) {
+    .comment-qq{position: fixed; right: 5%;}
+}
+@media (min-width: 1920px) {
+    .comment-qq{position: fixed; right: 9%;}
+}

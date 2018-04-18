@@ -93,12 +93,9 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     }
 
     @Override
-    public ResponseDTO getStatsProductRatio()
+    public ResponseDTO getStatsProductRatio(Date date)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        long currentTime = System.currentTimeMillis() / 1000;
-        long afterKey = currentTime - currentTime % 300;
-        long beforeKey = afterKey - 3600;
         JSONArray legendData = new JSONArray();
         JSONArray seriesData = new JSONArray();
         JSONArray jsonArrayTemp;
@@ -114,11 +111,10 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
         Map<Long, Integer> productRequestProTemp;//key productId
         Map<String, String> mapTemp;
         Map<Long, String> prodMap = redisDao.getProductNameAll();
-        List<Long> keys = new ArrayList<>();
-        while(beforeKey <= afterKey)
+        List<String> periodList = getPeriodInOneHour(date);
+        for(String item : periodList)
         {
-            keys.add(beforeKey);
-            mapTemp = redisDao.readProductTrafficHGetAll(beforeKey);
+            mapTemp = redisDao.readProductTrafficHGetAll(item);
             for(Map.Entry<String, String> entry : mapTemp.entrySet())
             {
                 String key = entry.getKey();
@@ -136,10 +132,8 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
                     productRequestCountTemp.put(longKey, count += Long.valueOf(value));
                 }
             }
-            beforeKey += 300;
         }
-        Map<Long, Integer> productClientCount = redisDao.readProductClient(
-                keys.stream().mapToLong(t -> t.longValue()).toArray());
+        Map<Long, Integer> productClientCount = redisDao.readProductClient(periodList);
         for(Map.Entry<String, Map<Long, Long>> entry : productTypeRequestCount.entrySet())
         {
             String key = entry.getKey();

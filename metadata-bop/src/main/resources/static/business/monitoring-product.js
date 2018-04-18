@@ -224,6 +224,27 @@ mainChart.setOption({
     series: []
 });
 var scatterChart = echarts.init(document.getElementById('scatter-chart'), 'dark');
+scatterChart.setOption({
+    legend: {
+        right: 10
+    },
+    xAxis: {
+        splitLine: {
+            lineStyle: {
+                type: 'dashed'
+            }
+        }
+    },
+    yAxis: {
+        splitLine: {
+            lineStyle: {
+                type: 'dashed'
+            }
+        },
+        scale: true
+    },
+    series: []
+});
 
 function changeSelectedProduct() {
     $.get(
@@ -296,29 +317,12 @@ function getScatterChart() {
                     }
                 });
             }
-            var option = {
+            scatterChart.setOption({
                 legend: {
-                    right: 10,
                     data: legendData
                 },
-                xAxis: {
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
-                    }
-                },
-                yAxis: {
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
-                    },
-                    scale: true
-                },
                 series: series
-            };
-            scatterChart.setOption(option, true);
+            });
         }
     );
 }

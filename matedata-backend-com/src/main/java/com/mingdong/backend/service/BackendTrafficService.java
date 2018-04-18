@@ -14,7 +14,7 @@ public interface BackendTrafficService
 
     LineDiagramDTO getStatsProductRequestCache(List<Long> productIdList, Date date);
 
-    ResponseDTO getStatsProductRatio();
+    ResponseDTO getStatsProductRatio(Date date);
 
     ListDTO<RequestDetailResDTO> getProductRequestList(Integer size);
 

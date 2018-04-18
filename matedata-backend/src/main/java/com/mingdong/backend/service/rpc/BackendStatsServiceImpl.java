@@ -28,10 +28,12 @@ import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
 import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
+import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
 import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
+import com.mingdong.core.service.SystemRpcService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -62,6 +64,8 @@ public class BackendStatsServiceImpl implements BackendStatsService
     private StatsClientRequestMapper statsClientRequestMapper;
     @Resource
     private StatsProductRequestMapper statsProductRequestMapper;
+    @Resource
+    private SystemRpcService systemRpcService;
 
     @Override
     public ListDTO<Dict> getMonitoredClient()
@@ -110,6 +114,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestTotal(stats.getRequest());
             res.setRequestFailedTotal(stats.getRequestFailed());
             res.setRequest3rdFailedTotal(stats.getRequest3rdFailed());
+            res.setRechargeAmountTotal(stats.getRecharge());
         }
         // 今日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(today);
@@ -119,6 +124,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestFailedToday(stats.getRequestFailed());
             res.setRequest3rdFailedToday(stats.getRequest3rdFailed());
             res.setProfitAmountToday(stats.getProfit());
+            res.setRechargeAmountToday(stats.getRecharge());
         }
         // 昨日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(yesterday);
@@ -149,6 +155,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestThisMonth(stats.getRequest());
             res.setRequestFailedThisMonth(stats.getRequestFailed());
             res.setRequest3rdFailedThisMonth(stats.getRequest3rdFailed());
+            res.setRechargeAmountThisMonth(stats.getRecharge());
         }
         return res;
     }
@@ -208,9 +215,9 @@ public class BackendStatsServiceImpl implements BackendStatsService
     {
         Map<String, List<RechargeStatsDTO>> map = new HashMap<>();
         List<StatsRecharge> dataList;
-        if(rangeUnit == RangeUnit.DAY)
+        if(rangeUnit == RangeUnit.HOUR)
         {
-            dataList = statsRechargeMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd());
+            dataList = statsRechargeMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd());
         }
         else if(rangeUnit == RangeUnit.WEEK)
         {
@@ -222,14 +229,22 @@ public class BackendStatsServiceImpl implements BackendStatsService
         }
         else
         {
-            dataList = statsRechargeMapper.getListGroupByHour(dateRange.getStart(), dateRange.getEnd());
+            dataList = statsRechargeMapper.getListGroupByDay(dateRange.getStart(), dateRange.getEnd());
+        }
+        ListDTO<DictRechargeTypeResDTO> rechargeTypeList = systemRpcService.getRechargeTypeList(null, null);
+        List<DictRechargeTypeResDTO> list1 = rechargeTypeList.getList();
+        Map<Integer,String> rechargeTypeNameMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list1)){
+            for(DictRechargeTypeResDTO item : list1){
+                rechargeTypeNameMap.put(item.getId(),item.getName());
+            }
         }
         for(StatsRecharge o : dataList)
         {
             String name;
-            if(rangeUnit == RangeUnit.DAY)
+            if(rangeUnit == RangeUnit.HOUR)
             {
-                name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
+                name = o.getStatsHour() + "";
             }
             else if(rangeUnit == RangeUnit.WEEK)
             {
@@ -241,7 +256,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             }
             else
             {
-                name = o.getStatsHour() + "";
+                name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
             }
             List<RechargeStatsDTO> list = map.get(name);
             if(CollectionUtils.isEmpty(list))
@@ -249,7 +264,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
                 list = new ArrayList<>();
             }
             RechargeStatsDTO dto = new RechargeStatsDTO();
-            dto.setRechargeTypeName(o.getRechargeTypeName());
+            dto.setRechargeTypeName(rechargeTypeNameMap.get(o.getRechargeType()));
             dto.setAmount(o.getAmount());
             list.add(dto);
             map.put(name, list);

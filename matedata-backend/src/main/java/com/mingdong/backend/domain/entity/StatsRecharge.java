@@ -9,7 +9,6 @@ public class StatsRecharge
     private Date createTime;
     private Date updateTime;
     private Integer rechargeType;
-    private String rechargeTypeName;
     private Integer statsYear;
     private Integer statsMonth;
     private Integer statsWeek;
@@ -56,16 +55,6 @@ public class StatsRecharge
     public void setRechargeType(Integer rechargeType)
     {
         this.rechargeType = rechargeType;
-    }
-
-    public String getRechargeTypeName()
-    {
-        return rechargeTypeName;
-    }
-
-    public void setRechargeTypeName(String rechargeTypeName)
-    {
-        this.rechargeTypeName = rechargeTypeName;
     }
 
     public Integer getStatsYear()

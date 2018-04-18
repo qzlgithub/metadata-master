@@ -205,4 +205,8 @@ public interface Field
     String FILE_PATH = "filePath";
     String PRODUCT_DATA = "productData";
     String LINE_DATA = "lineData";
+    String RECHARGE_TODAY = "rechargeToday";
+    String RECHARGE_THIS_MONTH = "rechargeThisMonth";
+    String RECHARGE_TOTAL = "rechargeTotal";
+    String CONTRAS_DATE = "contrasDate";
 }

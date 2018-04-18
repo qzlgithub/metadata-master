@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.manage.StatisticsManage;
-import com.mingdong.bop.service.StatsService;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,6 @@ import javax.annotation.Resource;
 @RestController
 public class StatsController
 {
-    @Resource
-    private StatsService statsService;
     @Resource
     private StatisticsManage statisticsManage;
 
@@ -46,13 +43,6 @@ public class StatsController
         resp.addData(Field.DATA, arr);
         return resp;
     }
-
-
-
-
-
-
-
 
     /*@LoginRequired
     @GetMapping(value = "/stats/client/list")

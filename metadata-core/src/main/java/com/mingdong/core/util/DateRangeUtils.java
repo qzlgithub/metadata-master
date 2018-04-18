@@ -280,6 +280,9 @@ public class DateRangeUtils
 
     public static List<String> getRangeSpilt(DateRange range, RangeUnit rangeUnit)
     {
+        if(rangeUnit == null){
+            return getRangeSpiltByDay(range);
+        }
         switch(rangeUnit)
         {
             case DAY:

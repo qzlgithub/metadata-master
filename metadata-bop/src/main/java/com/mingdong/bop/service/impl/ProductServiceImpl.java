@@ -158,7 +158,8 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void getProductRatio(RestResp res)
     {
-        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio();
+        Date date = new Date();
+        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio(date);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }

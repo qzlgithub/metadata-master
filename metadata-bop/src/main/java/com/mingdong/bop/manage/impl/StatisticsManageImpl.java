@@ -57,6 +57,18 @@ public class StatisticsManageImpl implements StatisticsManage
     }
 
     @Override
+    public Map<String, Object> getRechargeStatistics()
+    {
+        Map<String, Object> map = new HashMap<>();
+        SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
+        map.put(Field.RECHARGE_TODAY,NumberUtils.formatAmount(stats.getRechargeAmountToday()));
+        map.put(Field.RECHARGE_7D,NumberUtils.formatAmount(stats.getRechargeAmountIn7Days()));
+        map.put(Field.RECHARGE_THIS_MONTH,NumberUtils.formatAmount(stats.getRechargeAmountThisMonth()));
+        map.put(Field.RECHARGE_TOTAL,NumberUtils.formatAmount(stats.getRechargeAmountTotal()));
+        return map;
+    }
+
+    @Override
     public void getThirdRequestDiagramIn24h(RestResp resp)
     {
 
@@ -70,4 +82,5 @@ public class StatisticsManageImpl implements StatisticsManage
                 new int[]{100, 200, 300, 400, 500, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600,
                         400, 800, 700, 600, 400});
     }
+
 }

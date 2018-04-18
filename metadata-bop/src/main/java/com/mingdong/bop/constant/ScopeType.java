@@ -2,13 +2,24 @@ package com.mingdong.bop.constant;
 
 public enum ScopeType
 {
-    NOW("0"),
+    //今天
+    TODAY("0"),
+    //明天
     YESTERDAY("1"),
-    WEEK("2"),
-    HALF_MONTH("3"),
-    MONTH("4"),
-    QUARTER("5"),
-    YEAR("6");
+    //近7天
+    NEARBY_7D("2"),
+    //近15天
+    NEARBY_15D("3"),
+    //近30天
+    NEARBY_30D("4"),
+    //近90天
+    NEARBY_90D("5"),
+    //近365天
+    NEARBY_365D("6"),
+    //当前月
+    THIS_MONTH("7"),
+    //当前季度
+    THIS_QUARTER("8");
 
     private String type;
 

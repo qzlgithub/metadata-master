@@ -32,25 +32,25 @@
                             <li class="layui-col-md2 layui-col-list">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">今日充值(元)</p>
-                                    <p class="col4 mt20 tc fz-24">500000 </p>
+                                    <p class="col4 mt20 tc fz-24"><span th:text="${rechargeToday}"></span> </p>
                                 </div>
                             </li>
                             <li class="layui-col-md2 layui-col-list ml30 mr30">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">近7天充值(元)</p>
-                                    <p class="col4 mt20 tc fz-24">500000 </p>
+                                    <p class="col4 mt20 tc fz-24"><span th:text="${recharge7d}"></span> </p>
                                 </div>
                             </li>
                             <li class="layui-col-md2 layui-col-list mr30">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">当月充值(元)</p>
-                                    <p class="col4 mt20 tc fz-24">500000 </p>
+                                    <p class="col4 mt20 tc fz-24"><span th:text="${rechargeThisMonth}"></span> </p>
                                 </div>
                             </li>
                             <li class="layui-col-md2 layui-col-list">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">充值总量(元)</p>
-                                    <p class="col4 mt20 tc fz-24">500000 </p>
+                                    <p class="col4 mt20 tc fz-24"><span th:text="${rechargeTotal}"></span> </p>
                                 </div>
                             </li>
                         </ul>
@@ -61,33 +61,43 @@
                 <dl class="public-data public-warp1 mt15">
                     <dd class="layui-row">
                         <ul class="clearfix p10 product-fx-warp col6">
-                            <li class="product-fx mt5 clearfix">
-                                <span class="active">近7日</span>
-                                <span>近15日</span>
-                                <span>近30日</span>
-                                <span>近一年</span>
+                            <li class="product-fx mt5 clearfix" id="selectType">
+                                <span class="active" typeData="3">近7日</span>
+                                <span typeData="4">近30日</span>
+                                <span typeData="6">近一年</span>
+                                <span typeData="0">自定义</span>
                             </li>
-                            <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date"
-                                                                                        id="date1" autocomplete="off"
-                                                                                        class="layui-input"/></em><i
-                                    class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                            <li class="mt10"><label
-                                    class="contrast-time2 va"><input type="checkbox" name=""/></label>对比时间
+                            <span style="display: none" id="showData">
+                            <li class="position-r">统计时间：
+                                <em class="inline-block">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" id="dates"/>
+                                        <input type="hidden" id="fromDate" name="fromDate"/>
+                                        <input type="hidden" id="toDate" name="toDate"/>
+                                    </div>
+                                </em>
+                                <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
                             </li>
-                            <li class="position-r time-input2 display-none"><em class="inline-block"><input type="text"
-                                                                                                            name="date"
-                                                                                                            id="date2"
-                                                                                                            autocomplete="off"
-                                                                                                            class="layui-input"/></em><i
-                                    class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                            <li class="mt10">
+                                <label class="contrast-time2 va">
+                                    <input type="checkbox" name="" id="selectContrast"/>
+                                </label>对比时间
+                            </li>
+                            <li class="position-r time-input2 display-none">
+                                <em class="inline-block">
+                                    <input type="text" class="layui-input" id="contrastDate" />
+                                </em>
+                                <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
+                            </li>
+                            </span>
                         </ul>
-                        <p class="tc pt20 pb20 col4 fz-16">217/10/1-2017/11/1 总收入:1,989,900元</p>
+                        <p class="tc pt20 pb20 col4 fz-16" id="recharge-total">2017/10/1-2017/11/1 总充值:1,989,900元</p>
                         <div class="layui-row tc mt20 mb20" id="panel">
                             <div class="layui-col-md4 p30">
-                                <p class="tc"><img src="/static/monitor/images/data-img23.png"/></p>
+                                <p class="tc" style="width:530px;height:450px;" id="charPie"></p>
                             </div>
                             <div class="layui-col-md8 p30 tc">
-                                <p class="tc"><img src="/static/monitor/images/data-img4.png"/></p>
+                                <p class="tc" style="width:1000px;height:450px;"  id="charBar"></p>
                             </div>
                         </div>
                     </dd>
@@ -103,43 +113,8 @@
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
-<script>
-    layui.config({
-        base: '../../js/'
-    }).use(['app'], function() {
-        var app = layui.app,
-            $ = layui.jquery
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-    });
-    $(function() {
-        $(".treebox .level1>a").click(function() {
-            $(this).addClass('current')   //给当前元素添加"current"样式
-            .find('i').addClass('down')   //小箭头向下样式
-            .parent().next().slideDown('slow', 'easeOutQuad')  //下一个元素显示
-            .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
-            .find('i').removeClass('down').parent().next().slideUp('slow', 'easeOutQuad');//隐藏
-            return false; //阻止默认时间
-        });
-        $(".treebox .menu li").each(function() {
-            $(this).find('dl').each(function() {
-                if($(this).find('dd').hasClass('layui-this')) {
-                    $(this).prev().find('i').addClass('down');
-                    $(this).prev().addClass('current');
-                    $(this).css("display", "block");
-                }
-            })
-        });
-    })
-    //对比时间
-    $(document).ready(function() {
-        $(".contrast-time2").click(function() {
-            $(".time-input2").toggle();
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/business/stats-recharge.js"></script>
+
 </body>
 
 </html>
