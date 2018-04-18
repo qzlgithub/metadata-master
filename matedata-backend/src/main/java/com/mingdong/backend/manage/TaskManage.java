@@ -22,12 +22,6 @@ public class TaskManage
         scheduledService.statsRequest(date);
     }
 
-    @Scheduled(cron = "0 3 * * * ?")
-    public void startCleanTrafficJob()
-    {
-        scheduledService.cleanTraffic(new Date());
-    }
-
     @Scheduled(cron = "0 0 0 * * *")
     public void startClientRemindJob()
     {
