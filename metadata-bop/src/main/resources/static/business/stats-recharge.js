@@ -27,19 +27,14 @@ layui.config({
     });
     //对比时间
     $(document).ready(function() {
-        $(".contrast-time2").click(function() {
+        $(".contrast-time2").change(function() {
             $(".time-input2").toggle();
         });
     });
     $("#selectType").on('click','span',function(){
         $("#selectType span").removeClass('active');
         $(this).addClass('active');
-        var typeData = $(this).attr('typeData');
-        if(typeData == 0){
-            $("#showData").show();
-        }else{
-            $("#showData").hide();
-        }
+        chartBar();
     });
     initChart();
 });

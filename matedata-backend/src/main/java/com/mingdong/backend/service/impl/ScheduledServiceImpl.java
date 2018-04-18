@@ -22,23 +22,6 @@ public class ScheduledServiceImpl implements ScheduledService
     @Override
     public void statsRechargeByData(Date date)
     {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        Date parse = new Date();
-//        try
-//        {
-//            parse = sdf.parse("2018-01-01");
-//        }
-//        catch(ParseException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(parse);
-//        while(calendar.getTime().before(date)){
-//            clientRpcService.statsRechargeByDate(calendar.getTime());
-//            calendar.add(Calendar.DAY_OF_MONTH,1);
-//        }
-
         clientRpcService.statsRechargeByDate(date);
     }
 

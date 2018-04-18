@@ -1721,26 +1721,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int week = calendar.get(Calendar.WEEK_OF_YEAR);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-
-//                List<StatsRechargeDTO> statsRecharges = new ArrayList<>();
-//                StatsRechargeDTO statsRecharge;
-//                for(int i=1;i<4;i++)
-//                {
-//                    statsRecharge = new StatsRechargeDTO();
-//                    statsRecharge.setRechargeType(i);
-//                    statsRecharge.setAmount(new BigDecimal(Math.random()*10000));
-//                    statsRecharge.setStatsYear(year);
-//                    statsRecharge.setStatsMonth(month);
-//                    statsRecharge.setStatsWeek(week);
-//                    statsRecharge.setStatsDay(day);
-//                    statsRecharge.setStatsHour(hour);
-//                    statsRecharge.setStatsDate(dayDate);
-//                    statsRecharges.add(statsRecharge);
-//                }
-//                System.out.println(longSdf.format(calendar.getTime()));
-//                backendStatsService.addStatsRechargeList(statsRecharges);
-
                 List<StatsRechargeInfo> statsRechargeInfos = statsClientMapper.statsRechargeByData(hourBefore,
                         hourAfter);
                 if(!CollectionUtils.isEmpty(statsRechargeInfos))
@@ -1781,7 +1761,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
                         JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
             }
-        });
+        }).start();
     }
 
     @Override
