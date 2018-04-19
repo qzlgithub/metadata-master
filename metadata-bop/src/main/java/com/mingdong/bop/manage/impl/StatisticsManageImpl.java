@@ -61,17 +61,16 @@ public class StatisticsManageImpl implements StatisticsManage
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
-        map.put(Field.RECHARGE_TODAY,NumberUtils.formatAmount(stats.getRechargeAmountToday()));
-        map.put(Field.RECHARGE_7D,NumberUtils.formatAmount(stats.getRechargeAmountIn7Days()));
-        map.put(Field.RECHARGE_THIS_MONTH,NumberUtils.formatAmount(stats.getRechargeAmountThisMonth()));
-        map.put(Field.RECHARGE_TOTAL,NumberUtils.formatAmount(stats.getRechargeAmountTotal()));
+        map.put(Field.RECHARGE_TODAY, NumberUtils.formatAmount(stats.getRechargeAmountToday()));
+        map.put(Field.RECHARGE_7D, NumberUtils.formatAmount(stats.getRechargeAmountIn7Days()));
+        map.put(Field.RECHARGE_THIS_MONTH, NumberUtils.formatAmount(stats.getRechargeAmountThisMonth()));
+        map.put(Field.RECHARGE_TOTAL, NumberUtils.formatAmount(stats.getRechargeAmountTotal()));
         return map;
     }
 
     @Override
     public void getThirdRequestDiagramIn24h(RestResp resp)
     {
-
         resp.addData(Field.REQUEST_TOTAL, 723324L);
         resp.addData(Field.REQUEST_FAILED_TOTAL, 232L);
         resp.addData(Field.X_AXIS_DATA,
@@ -88,9 +87,9 @@ public class StatisticsManageImpl implements StatisticsManage
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
-        map.put(Field.CLIENT_INC_7D,stats.getClientIncIn7Days());
-        map.put(Field.CLIENT_INC_THIS_MONTH,stats.getClientIncThisMonth());
-        map.put(Field.CLIENT_TOTAL,stats.getClientTotal());
+        map.put(Field.CLIENT_INC_7D, stats.getClientIncIn7Days());
+        map.put(Field.CLIENT_INC_THIS_MONTH, stats.getClientIncThisMonth());
+        map.put(Field.CLIENT_TOTAL, stats.getClientTotal());
         return map;
     }
 
