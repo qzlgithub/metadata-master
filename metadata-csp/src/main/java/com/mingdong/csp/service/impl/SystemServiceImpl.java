@@ -41,6 +41,7 @@ public class SystemServiceImpl implements SystemService
             {
                 Map<String, Object> m = new HashMap<>();
                 m.put(Field.ID, o.getId() + "");
+                m.put(Field.TYPE, o.getType());
                 m.put(Field.PUBLISH_TIME, DateUtils.format(o.getPublishTime(), DateFormat.YYYY_MM_DD));
                 m.put(Field.TITLE, o.getTitle());
                 m.put(Field.IMAGE_PATH, o.getImagePath());

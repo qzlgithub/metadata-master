@@ -75,5 +75,11 @@
         $("#page-news").addClass("active");
     });
 </script>
+<script th:inline="javascript">
+    var id = [[${id}]];
+    if(id != null){
+        getNewsDetail(id);
+    }
+</script>
 </body>
 </html>
