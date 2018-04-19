@@ -6,7 +6,6 @@ import com.mingdong.common.util.MapUtils;
 import com.mingdong.core.exception.MetadataCoreException;
 import com.mingdong.mis.constant.Field;
 import com.mingdong.mis.model.MDResp;
-import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.service.ClientService;
 import com.mingdong.mis.util.SignUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +33,7 @@ public class SecurityController
             @RequestParam(value = Field.USERNAME, required = false) String username,
             @RequestParam(value = Field.REFRESH, required = false) Integer refresh)
     {
-        MDResp res = RequestThread.getResp();
+        MDResp res = MDResp.create();
         clientService.getClientAccessToken(appId, timestamp, accessKey, username, refresh, res);
         return res;
     }
