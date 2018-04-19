@@ -9,7 +9,7 @@ body {
 }
 
 img{width: 100%; display: block;}
-.new-inf img {width: auto !important; display: block;}
+.new-inf img {width: auto !important; display: inline-block;}
 
 .bg1{background: #f7f7f7}
 .bg2{background: #fff}
