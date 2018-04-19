@@ -98,7 +98,7 @@ function fetch_product_list(obj, page_function) {
                 htmlStr += '<p class="product-style mt5">类别：' + list[d].type + '</p>';
                 htmlStr += '</dt>';
                 htmlStr += '<dd>';
-                htmlStr += '<p>' + list[d].remark + '</p>';
+                htmlStr += '<p class="pb10">' + list[d].remark + '</p>';
                 htmlStr += '<p class="mt10 tc"><a href="/product/introduce.html?id=' + list[d].id + '" class="more">更多</a></p>';
                 htmlStr += '</dd>';
                 htmlStr += '</dl>';
