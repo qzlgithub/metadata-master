@@ -22,7 +22,7 @@ function getNewsList(obj) {
                 }else if(list[d].type == 2){
                     htmlStr += 'onclick="window.location.href=\'/news-company.html?id='+list[d].id+'\'">';
                 }
-                htmlStr += '<img src="' + list[d].imagePath + '"/></p>';
+                htmlStr += '<img class="cp" src="' + list[d].imagePath + '"/></p>';
                 htmlStr += '<p class="fz-16 col4 mt10">' + list[d].title + '</p>';
                 htmlStr += '<p class="col2 mt5">' + list[d].synopsis + '</p>';
                 htmlStr += '</li>';

@@ -13,4 +13,6 @@ public interface StatisticsManage
     void getThirdRequestDiagramIn24h(RestResp resp);
 
     Map<String,Object> getClientStatisticsIndex();
+
+    Map<String,Object> getRequestProductStatisticsIndex();
 }

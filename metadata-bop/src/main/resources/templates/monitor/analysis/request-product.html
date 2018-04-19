@@ -83,7 +83,7 @@
                     </dd>
                 </dl>
                 <dl class="public-data public-warp1 mt15">
-                    <dt>收入统计</dt>
+                    <dt>请求统计</dt>
                     <dd class="layui-row">
                         <ul class="clearfix p10 product-fx-warp col6">
                             <li class="product-fx mt5 clearfix">
@@ -92,30 +92,39 @@
                                 <span>近7天</span>
                                 <span>近30天</span>
                             </li>
-                            <li class="position-r">统计时间：<em class="inline-block"><input type="text" name="date"
-                                                                                        id="date1" autocomplete="off"
-                                                                                        class="layui-input"/></em><i
-                                    class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
-                            <li class="mt10"><label
-                                    class="contrast-time2 va"><input type="checkbox" name=""/></label>对比时间
+                            <li class="position-r">统计时间：
+                                <em class="inline-block">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" id="dates"/>
+                                        <input type="hidden" id="fromDate" name="fromDate"/>
+                                        <input type="hidden" id="toDate" name="toDate"/>
+                                    </div>
+                                </em>
+                                <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
                             </li>
-                            <li class="position-r display-none time-input2"><em class="inline-block"><input type="text"
-                                                                                                            name="date"
-                                                                                                            id="date2"
-                                                                                                            autocomplete="off"
-                                                                                                            class="layui-input"/></em><i
-                                    class="layui-icon fz-24 date-icon col4">&#xe637;</i></li>
+                            <li class="mt10">
+                                <label class="contrast-time2 va">
+                                    <input type="checkbox" name="" id="selectContrast"/>
+                                </label>对比时间
+                            </li>
+                            <li class="position-r time-input2 display-none">
+                                <em class="inline-block">
+                                    <input type="text" class="layui-input" id="contrastDate"/>
+                                </em>
+                                <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
+                            </li>
                             <li class="product-tjnav1 pl40 mr5 important" style="margin-top: 2px;">
                                 <h3 class="pl10 pr10 product-title1">选择产品 <i class="layui-icon fr">&#xe61a;</i></h3>
                                 <div class="p10 product-tjlist1 product-nav1">
-                                    <p class="mt5 flex pl10 layui-form"><span class="mt10 mr10"><input type="checkbox"
-                                                                                                       name=""
-                                                                                                       lay-skin="primary"
-                                                                                                       lay-filter="allChoose"
-                                                                                                       id="allChoose"
-                                                                                                       title="全部产品"/></span><em
-                                            class="fr"><input type="text" class="layui-input"
-                                                              placeholder="请输入搜索产品"/></em></p>
+                                    <p class="mt5 flex pl10 layui-form">
+                                        <span class="mt10 mr10">
+                                        <input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"
+                                               id="allChoose" title="全部产品"/>
+                                        </span>
+                                        <em class="fr">
+                                            <input type="text" class="layui-input" placeholder="请输入搜索产品"/>
+                                        </em>
+                                    </p>
                                     <div class="public-height" id="pro_type">
                                         <div class="mt10">
                                             <div class="col5 mt10 pl10">金融风控</div>
@@ -159,13 +168,7 @@
                             </li>
                         </ul>
                         <!--搜索 end-->
-                        <div class="layui-row w60 margin-auto mt20 fb col6 fz-16">
-                            <span class="layui-col-md4 tc lh25 ">查询次数：<i class="col3 fz-22">1,6599,00</i></span>
-                            <span class="layui-col-md4 tc lh25">失败次数：<i class="col3 fz-22">1,6599,00</i></span>
-                            <span class="layui-col-md4 tc lh25">未击中：<i class="col3 fz-22">1,6599,00</i></span>
-                        </div>
                         <div class="tc mt20 mb20"><img src="/static/monitor/images/data-img1.png"/></div>
-                        <p class="tc pt20 pb20 col6 fz-18">217/10/1-2017/11/1 总收入:1,989,900元</p>
                     </dd>
                 </dl>
                 <!--营收数据 end-->
@@ -200,94 +203,8 @@
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
-<script>
-    layui.config({
-        base: '../../js/'
-    }).use(['app'], function() {
-        var app = layui.app,
-            $ = layui.jquery
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-    });
-    $(function() {
-        $(".treebox .level1>a").click(function() {
-            $(this).addClass('current')   //给当前元素添加"current"样式
-            .find('i').addClass('down')   //小箭头向下样式
-            .parent().next().slideDown('slow', 'easeOutQuad')  //下一个元素显示
-            .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
-            .find('i').removeClass('down').parent().next().slideUp('slow', 'easeOutQuad');//隐藏
-            return false; //阻止默认时间
-        });
-        $(".treebox .menu li").each(function() {
-            $(this).find('dl').each(function() {
-                if($(this).find('dd').hasClass('layui-this')) {
-                    $(this).prev().find('i').addClass('down');
-                    $(this).prev().addClass('current');
-                    $(this).css("display", "block");
-                }
-            })
-        });
-    })
-    //对比时间
-    $(document).ready(function() {
-        $(".contrast-time2").click(function() {
-            $(".time-input2").toggle();
-        });
-    });
-    //统计产品 点击下拉
-    $(document).ready(function() {
-        $(".product-title1").click(function() {
-            $(".product-tjlist1").toggle();
-        });
-        $(".nav-close1").click(function() {
-            $(".product-tjlist1").hide();
-        })
-    });
-    $(document).ready(function() {
-        $(".product-title2").click(function() {
-            $(".product-tjlist2").toggle();
-        });
-        $(".nav-close2").click(function() {
-            $(".product-tjlist2").hide();
-        })
-    });
-    //全选
-    layui.use(['form', 'layer', 'jquery', 'laypage'], function() {
-        var form = layui.form,
-            layer = parent.layer === undefined ? layui.layer : parent.layer,
-            laypage = layui.laypage,
-            $ = layui.jquery;
-        //全选
-        form.on('checkbox(allChoose)', function(data) {
-            console.log(13213213123);
-            var child = $('#pro_type').find('li input[type="checkbox"]:not([name="show"])');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
-        });
-        var childCount = $("#pro_type li").length;
-        //通过判断文章是否全部选中来确定全选按钮是否选中
-        form.on("checkbox(choose)", function(data) {
-            var child = $(data.elem).parents('ul').find('li input[type="checkbox"]:not([name="show"])');
-            console.log($(data.elem).parents('#pro_type'))
-            var childChecked = $(data.elem).parents('#pro_type').find('li input[type="checkbox"]:checked');
-            console.log("child", childCount);
-            console.log("childChecked", childChecked.length);
-            //console.log("checked",$(data.elem).parents('.product-nav1').find('span input#allChoose').get(0));
-            console.log(childChecked.length == childCount)
-            if(childChecked.length == childCount) {
-                $(data.elem).parents('.product-nav1').find('span input#allChoose').get(0).checked = true;
-            }
-            else {
-                $(data.elem).parents('.product-nav1').find('span input#allChoose').get(0).checked = false;
-            }
-            form.render('checkbox');
-        })
-    });
-</script>
+<script type="text/javascript" src="/static/business/stats-request-product.js"></script>
+
 </body>
 
 </html>

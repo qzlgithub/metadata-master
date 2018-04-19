@@ -53,7 +53,7 @@ function getNewsList(obj, pageFun) {
             var htmlStr = '';
             for(var d in list) {
                 htmlStr += '<li class="row">';
-                htmlStr += '<div class="col-md-3"><img src="' + list[d].imagePath + '"/></div>';
+                htmlStr += '<div class="col-md-3"><a href="javascript:" class="more-detail" data-id="' + list[d].id + '"><img src="' + list[d].imagePath + '"/></a></div>';
                 htmlStr += '<div class="col-md-9">';
                 htmlStr += '<p class="title">' + list[d].title + '</p>';
                 htmlStr += '<p class="time">发布时间：' + list[d].publishTime + '</p>';

@@ -39,21 +39,12 @@ public class StatsPageController
     }
 
     @LoginRequired
-    @RequestMapping(value = "/stats/request/client.html")
-    public ModelAndView statsRequestClient()
-    {
-        ModelAndView view = new ModelAndView("monitor/analysis/request-client");
-
-        view.addAllObjects(RequestThread.getMap());
-        return view;
-    }
-
-    @LoginRequired
     @RequestMapping(value = "/stats/request/product.html")
     public ModelAndView statsRequestProduct()
     {
         ModelAndView view = new ModelAndView("monitor/analysis/request-product");
-
+        Map<String, Object> summaryMap = statisticsManage.getRequestProductStatisticsIndex();
+        view.addAllObjects(summaryMap);
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
