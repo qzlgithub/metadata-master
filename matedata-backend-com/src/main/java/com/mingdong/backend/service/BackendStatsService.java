@@ -46,4 +46,6 @@ public interface BackendStatsService
 
     ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
             Date afterDate);
+
+    List<RechargeStatsDTO> getClientRechargeTypeTotal(DateRange range);
 }

@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 public class SummaryStatsDTO implements Serializable
 {
     private Integer clientIncIn30Days;
+    private Integer clientIncIn7Days;
+    private Integer clientIncThisMonth;
     private Integer clientTotal;
     private BigDecimal rechargeAmountToday;
     private BigDecimal rechargeAmountIn7Days;
@@ -26,6 +28,26 @@ public class SummaryStatsDTO implements Serializable
     private Long request3rdFailedYesterday;
     private Long request3rdFailedThisMonth;
     private Long request3rdFailedTotal;
+
+    public Integer getClientIncIn7Days()
+    {
+        return clientIncIn7Days;
+    }
+
+    public void setClientIncIn7Days(Integer clientIncIn7Days)
+    {
+        this.clientIncIn7Days = clientIncIn7Days;
+    }
+
+    public Integer getClientIncThisMonth()
+    {
+        return clientIncThisMonth;
+    }
+
+    public void setClientIncThisMonth(Integer clientIncThisMonth)
+    {
+        this.clientIncThisMonth = clientIncThisMonth;
+    }
 
     public BigDecimal getRechargeAmountToday()
     {

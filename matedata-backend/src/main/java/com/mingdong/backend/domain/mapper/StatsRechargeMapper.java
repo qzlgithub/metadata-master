@@ -21,4 +21,6 @@ public interface StatsRechargeMapper
     List<StatsRecharge> getListGroupByWeek(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     List<StatsRecharge> getListGroupByMonth(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<StatsRecharge> getListGroupByType(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

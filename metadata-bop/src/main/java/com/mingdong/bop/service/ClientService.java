@@ -133,7 +133,7 @@ public interface ClientService
 
     void getClientIncrementDiagramData(DateRange range, RangeUnit unit, Date compareFrom, RestResp resp);
 
-    void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
+    void getClientRechargeBar(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
 
     void getClientRemindForDate(Date date, Page page, RestListResp resp);
 
@@ -148,4 +148,6 @@ public interface ClientService
     void getCustomerRequestList(RestListResp res);
 
     void getClientTraffic(Page page, RestResp res);
+
+    void getClientRechargePie(DateRange range, Date compareFrom, RestResp resp);
 }

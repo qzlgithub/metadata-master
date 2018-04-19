@@ -1,6 +1,5 @@
 package com.mingdong.bop.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendStatsService;
@@ -10,7 +9,9 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.EChart;
+import com.mingdong.bop.model.EChartPie;
 import com.mingdong.bop.model.ESerie;
+import com.mingdong.bop.model.ESeriePie;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.SystemService;
@@ -800,7 +801,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientRechargeTrend(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
+    public void getClientRechargeBar(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp)
     {
         List<Map<String, Object>> list = new ArrayList<>();
         EChart eChart = getClientRechargeTrendOfRange(range, unit);
@@ -840,7 +841,6 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.X_DATA, xAxis);
         resp.addData(Field.LIST, list);
-        System.out.println(JSON.toJSONString(resp));
     }
 
     @Override
@@ -1041,6 +1041,91 @@ public class ClientServiceImpl implements ClientService
             res.addData(Field.X_AXIS_DATA, xAxisData);
             res.addData(Field.SERIES_DATA, seriesData);
         }
+    }
+
+    @Override
+    public void getClientRechargePie(DateRange range, Date compareFrom, RestResp resp)
+    {
+        List<Map<String, Object>> list = new ArrayList<>();
+        EChartPie eChartPie = getClientRechargePieOfRange(range);
+        List<ESeriePie> series = eChartPie.getSeries();
+        Map<String, Object> mapTemp;
+        for(ESeriePie item : series)
+        {
+            mapTemp = new HashMap<>();
+            mapTemp.put(Field.NAME, item.getName());
+            mapTemp.put(Field.DATA, item.getData());
+            list.add(mapTemp);
+        }
+        resp.addData(Field.LIST, list);
+        resp.addData(Field.LEGEND_DATA, eChartPie.getLegendData());
+
+        //        List<Map<String, Object>> list = new ArrayList<>();
+        //        EChart eChart = getClientRechargePieOfRange(range);
+        //        List<String> xAxis = eChart.getxAxis();
+        //        for(ESerie o : eChart.getSeries())
+        //        {
+        //            Map<String, Object> serie = new HashMap<>();
+        //            serie.put(Field.NAME, o.getName());
+        //            serie.put(Field.STACK, eChart.getName());
+        //            serie.put(Field.DATA, o.getData());
+        //            list.add(serie);
+        //        }
+        //        if(compareFrom != null)
+        //        {
+        //            long diff = range.getEnd().getTime() - range.getStart().getTime();
+        //            Date compareTo = new Date(compareFrom.getTime() + diff);
+        //            DateRange compareRange = new DateRange(compareFrom, compareTo);
+        //            EChart eChart1 = getClientRechargeTrendOfRange(compareRange, unit);
+        //            if(RangeUnit.HOUR != unit)
+        //            {
+        //                List<String> xData1 = eChart1.getxAxis();
+        //                List<String> tempList = new ArrayList<>(xAxis.size());
+        //                for(int i = 0; i < xAxis.size(); i++)
+        //                {
+        //                    tempList.add(xAxis.get(i) + "&" + xData1.get(i));
+        //                }
+        //                xAxis = tempList;
+        //            }
+        //            for(ESerie o : eChart1.getSeries())
+        //            {
+        //                Map<String, Object> serie = new HashMap<>();
+        //                serie.put(Field.NAME, o.getName());
+        //                serie.put(Field.STACK, eChart1.getName());
+        //                serie.put(Field.DATA, o.getData());
+        //                list.add(serie);
+        //            }
+        //        }
+        //        resp.addData(Field.X_DATA, xAxis);
+        //        resp.addData(Field.LIST, list);
+    }
+
+    private EChartPie getClientRechargePieOfRange(DateRange range)
+    {
+        EChartPie eChartPie = new EChartPie();
+        List<ESeriePie> series = new ArrayList<>();
+        eChartPie.setSeries(series);
+        List<String> legendData = new ArrayList<>();
+        eChartPie.setLegendData(legendData);
+        List<RechargeStatsDTO> listData = backendStatsService.getClientRechargeTypeTotal(range);
+        if(!CollectionUtils.isEmpty(listData))
+        {
+            ESeriePie eSeriePie = new ESeriePie();
+            series.add(eSeriePie);
+            eSeriePie.setName("产品类型");
+            List<Map<String, String>> data = new ArrayList<>();
+            eSeriePie.setData(data);
+            Map<String, String> mapTemp;
+            for(RechargeStatsDTO item : listData)
+            {
+                mapTemp = new HashMap<>();
+                legendData.add(item.getRechargeTypeName());
+                mapTemp.put(Field.NAME, item.getRechargeTypeName());
+                mapTemp.put(Field.VALUE, NumberUtils.formatAmount(item.getAmount()));
+                data.add(mapTemp);
+            }
+        }
+        return eChartPie;
     }
 
     private ChartData getClientIncreaseTrendOfRange(DateRange range, RangeUnit unit)

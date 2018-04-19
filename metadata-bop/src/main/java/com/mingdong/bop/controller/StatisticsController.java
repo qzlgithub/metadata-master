@@ -115,7 +115,7 @@ public class StatisticsController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getClientRechargeTrend(range, compareFrom, rangeUnit, resp);
+        clientService.getClientRechargeBar(range, compareFrom, rangeUnit, resp);
         return resp;
     }
 }

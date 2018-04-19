@@ -64,7 +64,7 @@ public class DiagramController
     }
 
     @PostMapping(value = "/diagram/recharge/bar")
-    public RestResp getRechargeChartData(@RequestBody ChartVO chartVO)
+    public RestResp getRechargeChartBar(@RequestBody ChartVO chartVO)
     {
         RestResp resp = new RestResp();
         Integer scope = chartVO.getScope();
@@ -93,7 +93,41 @@ public class DiagramController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getClientRechargeTrend(range, compareFrom, null, resp);
+        clientService.getClientRechargeBar(range, compareFrom, null, resp);
+        return resp;
+    }
+
+    @PostMapping(value = "/diagram/recharge/pie")
+    public RestResp getRechargeChartPie(@RequestBody ChartVO chartVO)
+    {
+        RestResp resp = new RestResp();
+        Integer scope = chartVO.getScope();
+        if(scope == null)
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
+        if(scope == 0 && (chartVO.getStartDate() == null || chartVO.getEndDate() == null))
+        {
+            resp.setError(RestResult.KEY_FIELD_MISSING);
+            return resp;
+        }
+        DateRange range;
+        Date compareFrom = null;
+        if(scope != 0)
+        {
+            range = DateRangeUtils.getTimeRangeByScope(TimeScope.getByCode(scope));
+        }
+        else
+        {
+            range = new DateRange(DateUtils.clearTime(chartVO.getStartDate()),
+                    DateUtils.clearTime(chartVO.getEndDate()));
+            if(chartVO.getCompareFrom() != null)
+            {
+                compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
+            }
+        }
+        clientService.getClientRechargePie(range, compareFrom, resp);
         return resp;
     }
 }

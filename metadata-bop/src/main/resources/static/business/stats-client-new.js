@@ -41,16 +41,8 @@ layui.use(['laydate'], function() {
         }
     });
     laydate.render({
-        elem: '#date2',
-        range: true,
+        elem: '#compareFrom',
         done: function(value, date) {
-            if(value !== "") {
-                var dates = value.split(" - ");
-                $("#compareFrom").val(dates[0]);
-            }
-            else {
-                $("#compareFrom").val("");
-            }
             var scope = $('#scopeOcx').find('.active').data("scope");
             if(scope === 0) {
                 refresh_chart();
@@ -59,7 +51,7 @@ layui.use(['laydate'], function() {
     });
 });
 $(document).ready(function() {
-    $(".contrast-time2").click(function() {
+    $(".contrast-time2").change(function() {
         $(".time-input2").toggle();
     });
 });
@@ -72,8 +64,10 @@ function refresh_chart() {
     var unit = $('#unitOcx').find('.active').data("unit");
     var start_date = $("#startDate").val();
     var end_date = $("#endDate").val();
-    var compare_from = $("#compareFrom").val();
-    console.log(scope + ", " + unit + ", " + start_date + ", " + end_date + ", " + compare_from);
+    var compare_from = null;
+    if($("#selectContrast").is(":checked")) {
+        compare_from = $("#compareFrom").val();
+    }
     $.ajax({
         type: "post",
         url: "/diagram/client/increment",
