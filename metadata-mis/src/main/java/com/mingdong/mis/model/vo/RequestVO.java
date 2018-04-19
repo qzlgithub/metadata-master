@@ -15,7 +15,7 @@ import java.util.SortedMap;
 
 public class RequestVO<T extends AbsPayload>
 {
-    private static final Logger logger = LoggerFactory.getLogger(RequestVO.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestVO.class);
     private Long timestamp;
     private String sign;
     private T payload;
@@ -63,7 +63,7 @@ public class RequestVO<T extends AbsPayload>
         }
         catch(MetadataCoreException e)
         {
-            logger.error("Error occurred while check digital signature, data: {}, key: {}", str, appSecret);
+            LOGGER.error("Error occurred while check digital signature, data: {}, key: {}", str, appSecret);
             return false;
         }
     }
@@ -74,9 +74,7 @@ public class RequestVO<T extends AbsPayload>
         {
             return MDResult.INVALID_REQUEST_PARAM;
         }
-        // TODO 客户请求时间戳认证
-        //if(timestamp == null || Math.abs(System.currentTimeMillis()/1000 - timestamp) > 300)
-        else if(timestamp == null || Math.abs(System.currentTimeMillis() / 1000 - timestamp) < 0)
+        else if(timestamp == null || Math.abs(System.currentTimeMillis() / 1000 - timestamp) > 300)
         {
             return MDResult.INVALID_TIMESTAMP;
         }
