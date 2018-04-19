@@ -545,12 +545,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
             upUpd.setReqHost(reqHost);
             clientUserProductMapper.updateSkipNull(upUpd);
             upUpd = clientUserProductMapper.findById(up.getId());
-            UserAuth auth = redisDao.findAuth(upUpd.getAccessToken());
-            if(auth != null)
+            if(upUpd != null)
             {
-                auth.setHost(reqHost);
-                redisDao.saveUserAuth(upUpd.getAccessToken(), auth,
-                        (upUpd.getValidTime().getTime() - new Date().getTime()) / 1000 + 60);
+                UserAuth auth = redisDao.findAuth(upUpd.getAccessToken());
+                if(auth != null)
+                {
+                    auth.setHost(reqHost);
+                    redisDao.saveUserAuth(upUpd.getAccessToken(), auth,
+                            (upUpd.getValidTime().getTime() - new Date().getTime()) / 1000 + 60);
+                }
             }
         }
         return responseDTO;
