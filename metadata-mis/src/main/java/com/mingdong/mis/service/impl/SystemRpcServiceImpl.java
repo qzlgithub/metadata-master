@@ -511,6 +511,7 @@ public class SystemRpcServiceImpl implements SystemRpcService
             {
                 ArticlesResDTO pd = new ArticlesResDTO();
                 pd.setId(o.getId());
+                pd.setType(o.getType());
                 pd.setPublishTime(o.getPublishTime());
                 pd.setTitle(o.getTitle());
                 pd.setSynopsis(o.getSynopsis());

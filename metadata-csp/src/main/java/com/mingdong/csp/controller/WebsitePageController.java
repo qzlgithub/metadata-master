@@ -5,6 +5,7 @@ import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.service.SystemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -41,18 +42,20 @@ public class WebsitePageController
     }
 
     @GetMapping(value = {"/news.html"})
-    public ModelAndView newsBusinessPage()
+    public ModelAndView newsBusinessPage(@RequestParam(value = Field.ID, required = false) Long id)
     {
         ModelAndView view = new ModelAndView("website/news-business");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
+        view.addObject(Field.ID,id);
         return view;
     }
 
     @GetMapping(value = {"/news-company.html"})
-    public ModelAndView newsCompanyPage()
+    public ModelAndView newsCompanyPage(@RequestParam(value = Field.ID, required = false) Integer id)
     {
         ModelAndView view = new ModelAndView("website/news-company");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
+        view.addObject(Field.ID,id);
         return view;
     }
 

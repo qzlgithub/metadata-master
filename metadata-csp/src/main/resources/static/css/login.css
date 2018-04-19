@@ -105,9 +105,9 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .header1 a i {
-    background: url(../images/logo.png) no-repeat;
+    background: url(../images/login-logo.png) no-repeat;
     background-size: contain;
-    width: 200px;
+    width: 250px;
     height: 77px;
     display: inline-block;
 }

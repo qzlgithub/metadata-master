@@ -31,7 +31,24 @@
 </head>
 <body id="login" class="pt10 ">
 <div id="login-wrapper" class="png_bg">
-    <div th:include="website/common :: top"></div>
+    <div class="navbar navbar-inverse mb0 header1"><!--navbar-fixed-top -->
+        <div class="container header-mt10 clearfix">
+            <div class="navbar-header">
+                <a class="navbar-brand hidden-sm navbar-logo pt0 important" href="index.html"><i
+                        class="header-logo"></i></a>
+            </div>
+            <div class="navbar-collapse collapse" role="navigation">
+                <ul class="nav navbar-nav fr">
+                    <li id="page-index"><a href="index.html">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
+                    <li id="page-product"><a href="product.html">热门产品</a></li>
+                    <li id="page-programme"><a href="programme.html">解决方案</a></li>
+                    <li id="page-news"><a href="news.html">新闻动态</a></li>
+                    <li id="page-about"><a href="about.html">关于元数据</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div id="login-top"></div>
     <div id="login-content" class="pt25 important">
         <div class="tc fz-20 mb15">欢迎登录</div>
