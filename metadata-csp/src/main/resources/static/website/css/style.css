@@ -108,7 +108,8 @@ a.login-btn:hover{color: #fff; text-decoration: none;}
 .product-list dt{border-left: solid 2px #49a0f5; font-size: 16px; font-weight: normal; padding: 20px; background: #fff;}
 .product-style{color: #747474;}
 .product-list dd{background: #eeeeee; padding: 20px; font-size: 14px; color: #747474;}
-.product-list dd .more{color: #49a0f5; border-radius: 20px; border:solid 1px #49a0f5; text-align: center; width: 40%; margin: auto; margin-top: 15px; padding: 5px 0px;}
+/*.product-list dd .more{color: #49a0f5; border-radius: 20px; border:solid 1px #49a0f5; text-align: center; width: 40%; margin: auto; margin-top: 15px; padding: 5px 0px;}*/
+a.more{color: #49a0f5;border-radius: 20px;border:solid 1px #49a0f5;text-align: center;width: 100%;margin: auto;margin-top: 15px;padding: 7px 33px;text-align:  center;}
 .product-list dd .more a{color:#49a0f5; }
 .product-list dd .more a:hover{color:#49a0f5; text-decoration: none;}
 /*****page****/

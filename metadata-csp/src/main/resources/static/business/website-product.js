@@ -90,16 +90,6 @@ function fetch_product_list(obj, page_function) {
             var pages = res.data.pages;
             var list = res.list;
             $("#productList").empty();
-            /*<dl>
-            <dt>
-            <p class="fb">金融预期常欠客</p>
-                <p class="product-style mt5">类别：金融借贷</p>
-            </dt>
-            <dd>
-            <p>专业帮您区分哪些客户经常被拒贷，为您放贷提供依据</p>
-            <p class="more mt10"><a href="#">更多</a></p>
-            </dd>
-            </dl>*/
             var htmlStr = '';
             for(var d in list) {
                 htmlStr += '<dl>';
@@ -109,7 +99,7 @@ function fetch_product_list(obj, page_function) {
                 htmlStr += '</dt>';
                 htmlStr += '<dd>';
                 htmlStr += '<p>' + list[d].remark + '</p>';
-                htmlStr += '<p class="more mt10"><a href="/product/introduce.html?id=' + list[d].id + '">更多</a></p>';
+                htmlStr += '<p class="mt10 tc"><a href="/product/introduce.html?id=' + list[d].id + '" class="more">更多</a></p>';
                 htmlStr += '</dd>';
                 htmlStr += '</dl>';
             }
