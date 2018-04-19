@@ -81,18 +81,6 @@
                             <a href="/stats/client.html">
                                 <i class="layui-icon">&#xe602;</i><span>客户统计</span></a>
                         </dd>
-                        <dd th:class="${i_module eq 'stats-request-client'} ? 'layui-this':''">
-                            <a href="/stats/request/client.html">
-                                <i class="layui-icon">&#xe602;</i><span>客户请求统计</span></a>
-                        </dd>
-                        <dd th:class="${i_module eq 'stats-request-product'} ? 'layui-this':''">
-                            <a href="/stats/request/product.html">
-                                <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
-                        </dd>
-                        <!--<dd th:class="${i_module eq 'stats-request-third'} ? 'layui-this':''">
-                            <a href="/stats/request/third.html">
-                                <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>
-                        </dd>-->
                         <dd th:class="${i_module eq 'stats-recharge'} ? 'layui-this':''">
                             <a href="/stats/recharge.html">
                                 <i class="layui-icon">&#xe602;</i><span>充值统计</span></a>
@@ -100,6 +88,14 @@
                         <!--<dd th:class="${i_module eq 'stats-revenue'} ? 'layui-this':''">
                             <a href="/stats/revenue.html">
                                 <i class="layui-icon">&#xe602;</i><span>营收统计</span></a>
+                        </dd>-->
+                        <dd th:class="${i_module eq 'stats-request-product'} ? 'layui-this':''">
+                            <a href="/stats/request/product.html">
+                                <i class="layui-icon">&#xe602;</i><span>产品请求统计</span></a>
+                        </dd>
+                        <!--<dd th:class="${i_module eq 'stats-request-third'} ? 'layui-this':''">
+                            <a href="/stats/request/third.html">
+                                <i class="layui-icon">&#xe602;</i><span>请求第三方统计</span></a>
                         </dd>-->
                     </dl>
                 </li>

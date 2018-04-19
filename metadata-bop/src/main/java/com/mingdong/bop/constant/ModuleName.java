@@ -31,7 +31,6 @@ public interface ModuleName
     //运营统计
     String STATS_CLIENT = "stats-client";
     String STATS_RECHARGE = "stats-recharge";
-    String STATS_REQUEST_CLIENT = "stats-request-client";
     String STATS_REQUEST_PRODUCT = "stats-request-product";
     String STATS_REQUEST_THIRD = "stats-request-third";
     String STATS_REVENUE = "stats-revenue";

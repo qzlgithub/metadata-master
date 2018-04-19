@@ -95,6 +95,10 @@ function refresh_chart() {
                 seriesData.push(s);
             }
             chart.setOption({
+                dataZoom: [{
+                    type: 'slider',
+                    show: true
+                }],
                 xAxis: {data: obj.xData},
                 legend: {data: legendData},
                 series: seriesData

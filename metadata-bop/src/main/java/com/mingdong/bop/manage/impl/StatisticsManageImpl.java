@@ -93,4 +93,13 @@ public class StatisticsManageImpl implements StatisticsManage
         return map;
     }
 
+    @Override
+    public Map<String, Object> getRequestProductStatisticsIndex()
+    {
+        Map<String, Object> map = new HashMap<>();
+        SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
+
+        return map;
+    }
+
 }
