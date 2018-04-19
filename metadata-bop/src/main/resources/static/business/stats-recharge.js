@@ -8,8 +8,8 @@ layui.config({
         type: 'iframe'
     }).init();
     laydate.render({
-        elem: '#dates'
-        , range: true,
+        elem: '#dates',
+        range: true,
         done: function(value, date) {
             if(value != "") {
                 var dates = value.split(" - ");
@@ -20,10 +20,14 @@ layui.config({
                 $("#fromDate").val("");
                 $("#toDate").val("");
             }
+            refreshChart();
         }
     });
     laydate.render({
-        elem: '#contrastDate'
+        elem: '#contrastDate',
+        done: function(value, date) {
+            refreshChart();
+        }
     });
     //对比时间
     $(document).ready(function() {
@@ -31,15 +35,15 @@ layui.config({
             $(".time-input2").toggle();
         });
     });
-    $("#selectType").on('click','span',function(){
+    $("#selectType").on('click', 'span', function() {
         $("#selectType span").removeClass('active');
         $(this).addClass('active');
-        chartBar();
+        refreshChart();
     });
-    initChart();
+    refreshChart();
 });
 
-function initChart() {
+function refreshChart() {
     chartPie();
     chartBar();
 }
@@ -52,55 +56,114 @@ function chartPie() {
     var fromDate = $("#fromDate").val();
     var toDate = $("#toDate").val();
     var contrastDate = null;
-    if($("#selectContrast").is(":checked")){
+    if($("#selectContrast").is(":checked")) {
         contrastDate = $("#contrastDate").val();
     }
-
-    var option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-        },
-        legend: {
-            orient: 'vertical',
-            x: 'left',
-            data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-        },
-        series: [
-            {
-                name: '访问来源',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                avoidLabelOverlap: false,
-                label: {
-                    normal: {
-                        show: false,
-                        position: 'center'
+    $.ajax({
+        type: "post",
+        url: "/diagram/recharge/pie",
+        data: JSON.stringify({
+            "scope": scope,
+            "startDate": fromDate,
+            "endDate": toDate,
+            "compareFrom": contrastDate
+        }),
+        contentType: "application/json",
+        success: function(res) {
+            if(res.code !== '000000') {
+                return;
+            }
+            var obj = res.data;
+            var list = obj.list;
+            var legendData = obj.legendData;
+            var seriesData = [];
+            for(var o in list) {
+                var s = {
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
                     },
-                    emphasis: {
-                        show: true,
-                        textStyle: {
-                            fontSize: '30',
-                            fontWeight: 'bold'
+                    labelLine: {
+                        normal: {
+                            show: false
                         }
                     }
-                },
-                labelLine: {
-                    normal: {
-                        show: false
-                    }
-                },
-                data: [
-                    {value: 335, name: '直接访问'},
-                    {value: 310, name: '邮件营销'},
-                    {value: 234, name: '联盟广告'},
-                    {value: 135, name: '视频广告'},
-                    {value: 1548, name: '搜索引擎'}
-                ]
+                };
+                s.name = list[o].name;
+                s.data = list[o].data;
+                seriesData.push(s);
             }
-        ]
-    };
-    chartPieObj.setOption(option);
+            chartPieObj.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: legendData
+                },
+                series: seriesData
+            }, true);
+        }
+    });
+    //var option = {
+    //    tooltip: {
+    //        trigger: 'item',
+    //        formatter: "{a} <br/>{b}: {c} ({d}%)"
+    //    },
+    //    legend: {
+    //        orient: 'vertical',
+    //        x: 'left',
+    //        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+    //    },
+    //    series: [
+    //        {
+    //            name: '访问来源',
+    //            type: 'pie',
+    //            radius: ['50%', '70%'],
+    //            avoidLabelOverlap: false,
+    //            label: {
+    //                normal: {
+    //                    show: false,
+    //                    position: 'center'
+    //                },
+    //                emphasis: {
+    //                    show: true,
+    //                    textStyle: {
+    //                        fontSize: '30',
+    //                        fontWeight: 'bold'
+    //                    }
+    //                }
+    //            },
+    //            labelLine: {
+    //                normal: {
+    //                    show: false
+    //                }
+    //            },
+    //            data: [
+    //                {value: 335, name: '直接访问'},
+    //                {value: 310, name: '邮件营销'},
+    //                {value: 234, name: '联盟广告'},
+    //                {value: 135, name: '视频广告'},
+    //                {value: 1548, name: '搜索引擎'}
+    //            ]
+    //        }
+    //    ]
+    //};
+    //chartPieObj.setOption(option);
 }
 
 function chartBar() {
@@ -108,7 +171,7 @@ function chartBar() {
     var fromDate = $("#fromDate").val();
     var toDate = $("#toDate").val();
     var contrastDate = null;
-    if($("#selectContrast").is(":checked")){
+    if($("#selectContrast").is(":checked")) {
         contrastDate = $("#contrastDate").val();
     }
     $.ajax({
@@ -125,7 +188,6 @@ function chartBar() {
             if(res.code !== '000000') {
                 return;
             }
-            chartBarObj.hideLoading();
             var obj = res.data;
             var list = obj.list;
             var legendData = [];

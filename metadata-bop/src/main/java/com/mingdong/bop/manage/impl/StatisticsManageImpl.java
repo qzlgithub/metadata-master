@@ -57,7 +57,7 @@ public class StatisticsManageImpl implements StatisticsManage
     }
 
     @Override
-    public Map<String, Object> getRechargeStatistics()
+    public Map<String, Object> getRechargeStatisticsIndex()
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
@@ -81,6 +81,17 @@ public class StatisticsManageImpl implements StatisticsManage
         resp.addData(Field.SERIES_DATA,
                 new int[]{100, 200, 300, 400, 500, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600,
                         400, 800, 700, 600, 400});
+    }
+
+    @Override
+    public Map<String, Object> getClientStatisticsIndex()
+    {
+        Map<String, Object> map = new HashMap<>();
+        SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
+        map.put(Field.CLIENT_INC_7D,stats.getClientIncIn7Days());
+        map.put(Field.CLIENT_INC_THIS_MONTH,stats.getClientIncThisMonth());
+        map.put(Field.CLIENT_TOTAL,stats.getClientTotal());
+        return map;
     }
 
 }

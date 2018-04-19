@@ -8,8 +8,9 @@ public interface StatisticsManage
 {
     Map<String, Object> getSummaryStatistics();
 
-    Map<String, Object> getRechargeStatistics();
+    Map<String, Object> getRechargeStatisticsIndex();
 
     void getThirdRequestDiagramIn24h(RestResp resp);
 
+    Map<String,Object> getClientStatisticsIndex();
 }

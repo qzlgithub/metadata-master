@@ -118,5 +118,15 @@
               sr.`stats_date` &lt;= #{endDate}
         group by sr.`recharge_type`, sr.`stats_year`, sr.`stats_month`;
     </select>
+
+    <select id="getListGroupByType" resultMap="BaseResultMap">
+        select
+            sr.`recharge_type` as recharge_type,
+            sum(sr.`amount`) as amount
+        from `stats_recharge` sr
+        where sr.`stats_date` >= #{startDate} and
+              sr.`stats_date` &lt;= #{endDate}
+        group by sr.`recharge_type`;
+    </select>
     <!-- @formatter:on -->
 </mapper>

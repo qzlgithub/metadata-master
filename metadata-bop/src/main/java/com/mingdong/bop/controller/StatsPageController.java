@@ -21,7 +21,8 @@ public class StatsPageController
     public ModelAndView statsClient()
     {
         ModelAndView view = new ModelAndView("monitor/analysis/client");
-
+        Map<String, Object> summaryMap = statisticsManage.getClientStatisticsIndex();
+        view.addAllObjects(summaryMap);
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
@@ -31,7 +32,7 @@ public class StatsPageController
     public ModelAndView statsRecharge()
     {
         ModelAndView view = new ModelAndView("monitor/analysis/recharge");
-        Map<String, Object> summaryMap = statisticsManage.getRechargeStatistics();
+        Map<String, Object> summaryMap = statisticsManage.getRechargeStatisticsIndex();
         view.addAllObjects(summaryMap);
         view.addAllObjects(RequestThread.getMap());
         return view;

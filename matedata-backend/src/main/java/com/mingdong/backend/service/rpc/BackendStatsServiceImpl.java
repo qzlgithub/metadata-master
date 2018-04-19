@@ -140,6 +140,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
         if(stats != null)
         {
             res.setRechargeAmountIn7Days(stats.getRecharge());
+            res.setClientIncIn7Days(stats.getClientIncrement());
         }
         // 近30天统计数据
         stats = statsSummaryMapper.getSummaryStatsFromDate(latest30DaysFrom);
@@ -156,6 +157,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestFailedThisMonth(stats.getRequestFailed());
             res.setRequest3rdFailedThisMonth(stats.getRequest3rdFailed());
             res.setRechargeAmountThisMonth(stats.getRecharge());
+            res.setClientIncThisMonth(stats.getClientIncrement());
         }
         return res;
     }
@@ -233,10 +235,12 @@ public class BackendStatsServiceImpl implements BackendStatsService
         }
         ListDTO<DictRechargeTypeResDTO> rechargeTypeList = systemRpcService.getRechargeTypeList(null, null);
         List<DictRechargeTypeResDTO> list1 = rechargeTypeList.getList();
-        Map<Integer,String> rechargeTypeNameMap = new HashMap<>();
-        if(!CollectionUtils.isEmpty(list1)){
-            for(DictRechargeTypeResDTO item : list1){
-                rechargeTypeNameMap.put(item.getId(),item.getName());
+        Map<Integer, String> rechargeTypeNameMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list1))
+        {
+            for(DictRechargeTypeResDTO item : list1)
+            {
+                rechargeTypeNameMap.put(item.getId(), item.getName());
             }
         }
         for(StatsRecharge o : dataList)
@@ -451,6 +455,33 @@ public class BackendStatsServiceImpl implements BackendStatsService
             }
         }
         return listDTO;
+    }
+
+    @Override
+    public List<RechargeStatsDTO> getClientRechargeTypeTotal(DateRange dateRange)
+    {
+        List<RechargeStatsDTO> list = new ArrayList<>();
+        List<StatsRecharge> dataList = statsRechargeMapper.getListGroupByType(dateRange.getStart(),
+                dateRange.getEnd());
+        ListDTO<DictRechargeTypeResDTO> rechargeTypeList = systemRpcService.getRechargeTypeList(null, null);
+        List<DictRechargeTypeResDTO> list1 = rechargeTypeList.getList();
+        Map<Integer, String> rechargeTypeNameMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list1))
+        {
+            for(DictRechargeTypeResDTO item : list1)
+            {
+                rechargeTypeNameMap.put(item.getId(), item.getName());
+            }
+        }
+        RechargeStatsDTO rechargeStatsDTO;
+        for(StatsRecharge o : dataList)
+        {
+            rechargeStatsDTO = new RechargeStatsDTO();
+            rechargeStatsDTO.setRechargeTypeName(rechargeTypeNameMap.get(o.getRechargeType()));
+            rechargeStatsDTO.setAmount(o.getAmount());
+            list.add(rechargeStatsDTO);
+        }
+        return list;
     }
 
 }

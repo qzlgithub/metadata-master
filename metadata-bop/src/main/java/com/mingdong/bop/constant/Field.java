@@ -209,4 +209,7 @@ public interface Field
     String RECHARGE_THIS_MONTH = "rechargeThisMonth";
     String RECHARGE_TOTAL = "rechargeTotal";
     String CONTRAS_DATE = "contrasDate";
+    String VALUE = "value";
+    String CLIENT_INC_7D = "clientInc7d";
+    String CLIENT_INC_THIS_MONTH = "clientIncThisMonth";
 }
