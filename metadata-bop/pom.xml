@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>metadata-bop</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
