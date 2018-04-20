@@ -13,8 +13,10 @@
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
 
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/css/site.min.css"/>
     <link rel="stylesheet" href="/static/css/animate.min.css"/>
     <link rel="stylesheet" href="/static/css/base.css"/>
@@ -41,8 +43,12 @@
         <dd class="row ml0 mr0 bd-none important">
             <div class="col-md-6">
                 <p id="home-greeting"></p>
-                <p class="col2 important pl25">您的服务目前各项指标正常，请放心使用~</p>
-                <!--p class="ml20"><span class="appid-btn">查看处理</span></p-->
+                <p class="col2 important pl25"
+                   th:if="${insufficientBalanceQty == 0} and ${nearlyExpireQty == 0} and ${inArrearQty == 0} and ${expiredQty == 0}">
+                    您的服务目前各项指标正常，请放心使用~</p>
+                <p class="col2 important pl25" th:if="${insufficientBalanceQty != 0} or ${nearlyExpireQty != 0} or ${inArrearQty != 0} or ${expiredQty != 0}"
+                   th:text="'您的服务' + ${insufficientBalanceQty} + '个服务余额不足、' + ${nearlyExpireQty} + '个即将过期、' + ${inArrearQty} + '个已欠费、' + ${expiredQty} + '个已过期，请及时处理~'"></p>
+                <p class="ml20"><a class="appid-btn" href="/product/mine.html#mms2">查看处理</a></p>
             </div>
             <div class="col-md-6 bd-left pl20" th:if="${isPrimary}">
                 <p class="p0 important">
@@ -177,7 +183,7 @@
 
 <script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://oss.matedata.net/resource/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.unveil.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.scrollUp.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.matchHeight-min.js"></script>

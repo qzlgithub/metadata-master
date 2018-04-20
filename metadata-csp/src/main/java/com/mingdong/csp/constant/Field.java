@@ -77,4 +77,8 @@ public interface Field
     String PUBLISH_TIME = "publishTime";
     String LOGIN = "login";
     String SERVICE_QQ = "serviceQq";
+    String INSUFFICIENT_BALANCE_QTY = "insufficientBalanceQty";
+    String NEARLY_EXPIRE_QTY = "nearlyExpireQty";
+    String EXPIRED_QTY = "expiredQty";
+    String IN_ARREAR_QTY = "inArrearQty";
 }

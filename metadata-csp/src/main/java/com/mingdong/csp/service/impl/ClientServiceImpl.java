@@ -155,6 +155,10 @@ public class ClientServiceImpl implements ClientService
         }
         ListDTO<ProductResDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();
+        int insufficientBalance = 0;
+        int nearlyExpire = 0;
+        int expired = 0;
+        int inArrear = 0;
         if(!CollectionUtils.isEmpty(openedList.getList()))
         {
             for(ProductResDTO d : openedList.getList())
@@ -163,6 +167,22 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.PRODUCT_ID, d.getId() + "");
                 map.put(Field.NAME, d.getName());
                 map.put(Field.STATUS, d.getStatus());
+                if(d.getStatus() == 2)
+                {
+                    nearlyExpire++;
+                }
+                else if(d.getStatus() == 3)
+                {
+                    expired++;
+                }
+                else if(d.getStatus() == 4)
+                {
+                    insufficientBalance++;
+                }
+                else if(d.getStatus() == 5)
+                {
+                    inArrear++;
+                }
                 map.put(Field.BILL_PLAN, d.getBillPlan());
                 if(BillPlan.BY_TIME.getId().equals(d.getBillPlan()))
                 {
@@ -191,6 +211,10 @@ public class ClientServiceImpl implements ClientService
                 unopened.add(map);
             }
         }
+        resp.addData(Field.INSUFFICIENT_BALANCE_QTY, insufficientBalance);
+        resp.addData(Field.NEARLY_EXPIRE_QTY, nearlyExpire);
+        resp.addData(Field.EXPIRED_QTY, expired);
+        resp.addData(Field.IN_ARREAR_QTY, inArrear);
         resp.addData(Field.OPENED_LIST, opened);
         resp.addData(Field.TO_OPEN_LIST, unopened);
         resp.addData(Field.IS_PRIMARY, RequestThread.getPrimary());
