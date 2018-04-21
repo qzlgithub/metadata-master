@@ -1,5 +1,6 @@
 package com.mingdong.mis.model;
 
+import com.mingdong.core.constant.QueryStatus;
 import com.mingdong.mis.constant.APIProduct;
 
 public class RequestThread
@@ -122,5 +123,25 @@ public class RequestThread
     public static void setPayloadId(int payloadId)
     {
         get().setPayloadId(payloadId);
+    }
+
+    public static Boolean getHit()
+    {
+        return get().getHit();
+    }
+
+    public static void setHit(Boolean hit)
+    {
+        get().setHit(hit);
+    }
+
+    public static QueryStatus getQueryStatus()
+    {
+        return get().getQueryStatus();
+    }
+
+    public static void setQueryStatus(QueryStatus queryStatus)
+    {
+        get().setQueryStatus(queryStatus);
     }
 }

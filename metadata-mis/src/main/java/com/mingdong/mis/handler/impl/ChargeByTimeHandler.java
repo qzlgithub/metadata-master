@@ -2,6 +2,7 @@ package com.mingdong.mis.handler.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mingdong.core.constant.QueryStatus;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.handler.IChargeHandler;
@@ -10,6 +11,8 @@ import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.RequestThread;
 import com.mingdong.mis.model.vo.AbsPayload;
 import com.mingdong.mis.service.DataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,6 +23,7 @@ import javax.annotation.Resource;
 @Component
 public class ChargeByTimeHandler implements IChargeHandler
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChargeByTimeHandler.class);
     @Resource
     private DataService dataService;
     @Resource
@@ -28,24 +32,36 @@ public class ChargeByTimeHandler implements IChargeHandler
     @Override
     public void work(AbsPayload payload, MDResp resp)
     {
-        RequestThread.setPayloadId(JSON.toJSONString(payload).hashCode());
-        if(!checkTimeValid(resp.getTimestamp()))
+        try
         {
-            resp.response(MDResult.PRODUCT_EXPIRED);
-            return;
+            if(!checkTimeValid(resp.getTimestamp()))
+            {
+                resp.response(MDResult.PRODUCT_EXPIRED);
+                return;
+            }
+            Metadata metadata = routeHandler.routeProcessor(payload);
+            // 保存请求记录，并返回请求编号
+            String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
+            resp.setRequestNo(requestNo);
+            if(metadata.isHit())
+            {
+                RequestThread.setHit(Boolean.TRUE);
+                resp.setResCode(ResCode.NORMAL);
+                resp.setResData((JSONObject) JSON.toJSON(metadata.getData()));
+            }
+            else
+            {
+                RequestThread.setHit(Boolean.FALSE);
+                resp.setResCode(ResCode.NOT_HIT);
+            }
         }
-        Metadata metadata = routeHandler.routeProcessor(payload);
-        // 保存请求记录，并返回请求编号
-        String requestNo = dataService.saveRequestLog(payload, metadata.isHit(), resp.requestAt());
-        resp.setRequestNo(requestNo);
-        if(metadata.isHit())
+        catch(Exception e)
         {
-            resp.setResCode(ResCode.NORMAL);
-            resp.setResData((JSONObject) JSON.toJSON(metadata.getData()));
-        }
-        else
-        {
-            resp.setResCode(ResCode.NOT_HIT);
+            RequestThread.setQueryStatus(QueryStatus.INTERNAL_ERROR);
+            resp.response(MDResult.SYSTEM_INTERNAL_ERROR);
+            LOGGER.error("API request error, clientId:{}, productName:{}, payload:{}, message:{}",
+                    RequestThread.getClientId(), RequestThread.getProductName(), JSON.toJSONString(payload),
+                    e.getMessage());
         }
     }
 

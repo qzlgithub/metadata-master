@@ -23,6 +23,9 @@ public class CreditController
     @Resource
     private ChargeByUseHandler chargeByUseService;
 
+    /**
+     * 1. 常欠客
+     */
     @AuthRequired
     @RequestMapping(value = "/credit/overdue")
     public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PersonVO> requestVO)
@@ -30,6 +33,9 @@ public class CreditController
         return revokeAPI(requestVO);
     }
 
+    /**
+     * 2. 黑名单
+     */
     @AuthRequired
     @RequestMapping(value = "/credit/blacklist")
     public MDResp checkPersonInBlacklist(@RequestBody RequestVO<PersonVO> requestVO)
@@ -37,6 +43,9 @@ public class CreditController
         return revokeAPI(requestVO);
     }
 
+    /**
+     * 3. 多头客
+     */
     @AuthRequired
     @RequestMapping(value = "/credit/multi-register")
     public MDResp getTargetRegisterInfo(@RequestBody RequestVO<PersonVO> requestVO)
@@ -46,6 +55,7 @@ public class CreditController
 
     private MDResp revokeAPI(RequestVO requestVO)
     {
+        RequestThread.setPayloadId(requestVO.getPayloadHashCode());
         MDResp resp = RequestThread.getResp();
         MDResult result = requestVO.checkParamAndSign(RequestThread.getSecretKey());
         if(result != MDResult.OK)

@@ -5,7 +5,6 @@ import com.mingdong.common.constant.Charset;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.common.util.WebUtils;
 import com.mingdong.core.annotation.AuthRequired;
-import com.mingdong.core.constant.QueryStatus;
 import com.mingdong.mis.component.MQKit;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.Field;
@@ -89,7 +88,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
         // logger.info("request elapsed time: {}", System.currentTimeMillis() - RequestThread.getTimestamp());
         mqKit.userRequest(RequestThread.getHost(), RequestThread.getTimestamp(), RequestThread.getClientId(),
                 RequestThread.getCorpName(), RequestThread.getProductId(), RequestThread.getProductName(),
-                RequestThread.getPayloadId(), ex == null ? QueryStatus.NORMAL : QueryStatus.FAILED);
+                RequestThread.getPayloadId(), RequestThread.getQueryStatus(), RequestThread.getHit());
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
     }

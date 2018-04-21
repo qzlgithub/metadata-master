@@ -2,8 +2,9 @@ package com.mingdong.core.constant;
 
 public enum QueryStatus
 {
-    NORMAL(0, "请求成功"),
-    FAILED(1, "请求失败");
+    SUCCESS(0, "请求成功"),
+    INTERNAL_ERROR(1, "系统内部错误"),
+    THIRD_API_ERROR(2, "第三方接口调用失败");
 
     private final int code;
     private final String name;
@@ -23,7 +24,7 @@ public enum QueryStatus
                 return o.name;
             }
         }
-        return NORMAL.name;
+        return SUCCESS.name;
     }
 
     public int getCode()

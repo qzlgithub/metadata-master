@@ -5,14 +5,15 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/css/base.css" media="all"/>
     <link rel="stylesheet" href="/static/css/common.css" media="all"/>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
     <link rel="stylesheet" href="/static/plugins/paging/css/paging.css" media="all"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
 </head>
 
 <body>
@@ -276,7 +277,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>单价：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-unit" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:70%; display: inline;" onblur="checkUnitPrice('renew-unit','unitPriceTip')"
+                           class="layui-input" style="width:70%; display: inline;"
+                           onblur="checkUnitPrice('renew-unit','unitPriceTip')"
                            maxlength="4"/> 元/次
                     <i class="col3 pl10" id="unitPriceTip" style="display: none"></i>
                 </div>
@@ -285,7 +287,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="renew-amt" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:60%; display: inline;" onblur="checkRecharge('renew-amt','rechargeTip')"
+                           class="layui-input" style="width:60%; display: inline;"
+                           onblur="checkRecharge('renew-amt','rechargeTip')"
                            maxlength="8"/> 元
                     <i class="col3 pl10" id="rechargeTip" style="display: none"></i>
                 </div>
@@ -359,7 +362,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>单价：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="open-unit" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:50%; display:inline;" onblur="checkUnitPrice('open-unit','openUnitTip')"/> 元/次
+                           class="layui-input" style="width:50%; display:inline;"
+                           onblur="checkUnitPrice('open-unit','openUnitTip')"/> 元/次
                     <i class="col3 pl10" id="openUnitTip" style="display: none"></i>
                 </div>
             </div>
@@ -367,7 +371,8 @@
                 <label class="layui-form-label renew-form-label"><i class="col3">*</i>充值金额：</label>
                 <div class="layui-input-block renew-input-block tl">
                     <input type="text" id="open-amt" lay-verify="required" placeholder="请输入" autocomplete="off"
-                           class="layui-input" style="width:60%; display:inline;" onblur="checkRecharge('open-amt','openAmtTip')"/> 元
+                           class="layui-input" style="width:60%; display:inline;"
+                           onblur="checkRecharge('open-amt','openAmtTip')"/> 元
                     <i class="col3 pl10" id="openAmtTip" style="display: none"></i>
                 </div>
             </div>
@@ -449,11 +454,13 @@
                     </colgroup>
                     <tbody>
                     <tr th:each="pro : ${productCustomList}" th:value="${pro.productId}">
-                        <td width="7%"><input type="checkbox" class="product-checkbox-class" th:id="'checkbox-'+${pro.productId}"
-                                   th:checked="${pro.isSelected == 1}" th:value="${pro.productId}"/></td>
-                        <td  width="25%" th:text="${pro.typeName}"></td>
-                        <td  width="25%" th:text="${pro.productName}" th:id="'productName-'+${pro.productId}"></td>
-                        <td  width="43%" th:text="${pro.remark}"></td>
+                        <td width="7%">
+                            <input type="checkbox" class="product-checkbox-class" th:id="'checkbox-'+${pro.productId}"
+                                   th:checked="${pro.isSelected == 1}" th:value="${pro.productId}"/>
+                        </td>
+                        <td width="25%" th:text="${pro.typeName}"></td>
+                        <td width="25%" th:text="${pro.productName}" th:id="'productName-'+${pro.productId}"></td>
+                        <td width="43%" th:text="${pro.remark}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -461,9 +468,10 @@
         </div>
         <ul class="service-list clearfix" id="selected-product">
             <li th:each="pro : ${productCustomList}"
-                th:if="${pro.isSelected == 1}" th:id="'ul-li-'+${pro.productId}"><span
-                    th:text="${pro.productName}"></span><i
-                    class="layui-icon fz-14 ul-li-class" th:value="${pro.productId}">&#x1006;</i></li>
+                th:if="${pro.isSelected == 1}" th:id="'ul-li-'+${pro.productId}">
+                <span th:text="${pro.productName}"></span>
+                <i class="layui-icon fz-14 ul-li-class" th:value="${pro.productId}">&#x1006;</i>
+            </li>
         </ul>
     </div>
 </div>

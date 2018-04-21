@@ -50,6 +50,15 @@ public class RequestVO<T extends AbsPayload>
         this.payload = payload;
     }
 
+    public int getPayloadHashCode()
+    {
+        if(payload != null)
+        {
+            return JSON.toJSONString(payload).hashCode();
+        }
+        return 0;
+    }
+
     private boolean checkSign(String appSecret)
     {
         JSONObject json = (JSONObject) JSON.toJSON(payload);

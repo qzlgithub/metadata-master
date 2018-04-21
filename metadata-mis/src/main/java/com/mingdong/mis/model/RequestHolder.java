@@ -1,11 +1,14 @@
 package com.mingdong.mis.model;
 
+import com.mingdong.core.constant.QueryStatus;
 import com.mingdong.mis.constant.APIProduct;
 
 class RequestHolder
 {
     private long timestamp;
     private int payloadId;
+    private Boolean hit;
+    private QueryStatus queryStatus;
     private APIProduct product;
     private UserAuth userAuth;
     private MDResp resp;
@@ -28,6 +31,26 @@ class RequestHolder
     public void setPayloadId(int payloadId)
     {
         this.payloadId = payloadId;
+    }
+
+    public Boolean getHit()
+    {
+        return hit;
+    }
+
+    public void setHit(Boolean hit)
+    {
+        this.hit = hit;
+    }
+
+    public QueryStatus getQueryStatus()
+    {
+        return queryStatus;
+    }
+
+    public void setQueryStatus(QueryStatus queryStatus)
+    {
+        this.queryStatus = queryStatus;
     }
 
     public APIProduct getProduct()

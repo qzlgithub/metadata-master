@@ -24,7 +24,8 @@ public enum MDResult
     INSUFFICIENT_BALANCE(205, "账户余额不足"),
     PRODUCT_EXPIRED(206, "服务已过期"),
 
-    SYSTEM_BUSY(900, "系统繁忙，请稍后重试");
+    SYSTEM_BUSY(900, "系统繁忙，请稍后重试"),
+    SYSTEM_INTERNAL_ERROR(901, "系统内部错误，请联系元数据客服");
 
     private final int code;
     private final String message;

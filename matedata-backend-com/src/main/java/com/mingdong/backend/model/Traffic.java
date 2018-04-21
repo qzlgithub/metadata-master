@@ -3,6 +3,7 @@ package com.mingdong.backend.model;
 public class Traffic
 {
     private Integer status;
+    private Boolean hit;
     private Long clientId;
     private String corpName;
     private Long productId;
@@ -19,6 +20,16 @@ public class Traffic
     public void setStatus(Integer status)
     {
         this.status = status;
+    }
+
+    public Boolean getHit()
+    {
+        return hit;
+    }
+
+    public void setHit(Boolean hit)
+    {
+        this.hit = hit;
     }
 
     public Long getClientId()
