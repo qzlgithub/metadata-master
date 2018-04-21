@@ -151,23 +151,43 @@
                 on cp.`product_id` = p.`id`
         where cp.`client_id` = #{clientId}
     </select>
-    <!-- @formatter:on -->
 
     <select id="countByClientOpened" resultType="int">
-        select count(*) from `product` p left join `client_product` cp on p.`id` = cp.`product_id` and cp.`client_id` =
-        #{clientId} where p.`enabled` = 1
+        select count(*)
+        from `product` p
+            left join `client_product` cp
+                on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
+        where p.`enabled` = 1
         <if test="opened == 1">and cp.`opened` = 1</if>
         <if test="opened == 0">and ((p.`custom` = 0 and cp.`id` is null) or (p.`custom` = 1 and cp.`opened` = 0))</if>
     </select>
 
     <select id="getListByClientOpened" resultMap="BaseResultMap">
-        select p.`id` as product_id, p.`name` as product_name, p.`code` as code, p.`custom` as custom, p.`type` as type,
-        cp.`app_id` as app_id, cp.`id` as client_product_id, cp.`bill_plan` as bill_plan, cp.`opened` as opened,
-        pr.`start_date` as start_date, pr.`end_date` as end_date, pr.`amount` as amount, cp.`balance` as balance,
-        pr.`unit_amt` as unit_amt, pr.`update_time` as arrear_time, p.`remark` as remark from `product` p left join
-        `client_product` cp on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId} left join `recharge` pr on
-        cp.`latest_recharge_id` = pr.`id` where p.`enabled` = 1
+        select
+            p.`id`           as product_id,
+            p.`name`         as product_name,
+            p.`code`         as code,
+            p.`custom`       as custom,
+            p.`type`         as type,
+            cp.`app_id`      as app_id,
+            cp.`id`          as client_product_id,
+            cp.`bill_plan`   as bill_plan,
+            cp.`opened`      as opened,
+            pr.`start_date`  as start_date,
+            pr.`end_date`    as end_date,
+            pr.`amount`      as amount,
+            cp.`balance`     as balance,
+            pr.`unit_amt`    as unit_amt,
+            cp.`update_time` as arrear_time,
+            p.`remark`       as remark
+        from `product` p
+            left join `client_product` cp
+                on p.`id` = cp.`product_id` and cp.`client_id` = #{clientId}
+            left join `recharge` pr
+                on cp.`latest_recharge_id` = pr.`id`
+        where p.`enabled` = 1
         <if test="opened == 1">and cp.`opened` = 1</if>
         <if test="opened == 0">and ((p.`custom` = 0 and cp.`id` is null) or (p.`custom` = 1 and cp.`opened` = 0))</if>
     </select>
+    <!-- @formatter:on -->
 </mapper>
