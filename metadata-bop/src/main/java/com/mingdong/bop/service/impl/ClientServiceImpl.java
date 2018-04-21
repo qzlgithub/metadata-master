@@ -9,6 +9,7 @@ import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ClientVO;
 import com.mingdong.bop.model.ContactVO;
 import com.mingdong.bop.model.EChart;
+import com.mingdong.bop.model.EChartLine;
 import com.mingdong.bop.model.EChartPie;
 import com.mingdong.bop.model.ESerie;
 import com.mingdong.bop.model.ESeriePie;
@@ -51,8 +52,9 @@ import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
 import com.mingdong.core.model.dto.response.RequestDetailResDTO;
+import com.mingdong.core.model.dto.response.RequestStatsResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
-import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsRequestResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
@@ -977,7 +979,7 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientTraffic(Page page, RestResp res)
+    public void getClientTraffic7d(Page page, RestResp res)
     {
         ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListBy(null, null, null, null, page);
         List<ClientInfoResDTO> dataList = listDTO.getList();
@@ -992,11 +994,11 @@ public class ClientServiceImpl implements ClientService
             Date date = new Date();
             Date afterDate = DateCalculateUtils.getCurrentDate(date);
             Date beforeDate = DateCalculateUtils.getBeforeDayDate(date, 7, true);
-            ListDTO<StatsClientRequestResDTO> requestResDTOListDTO = backendStatsService.getClientTrafficByClientIds(
+            ListDTO<StatsRequestResDTO> requestResDTOListDTO = backendStatsService.getClientTrafficByClientIds(
                     productIds, beforeDate, afterDate);
-            List<StatsClientRequestResDTO> list = requestResDTOListDTO.getList();
+            List<StatsRequestResDTO> list = requestResDTOListDTO.getList();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            JSONArray productData = new JSONArray();
+            JSONArray clientData = new JSONArray();
             JSONArray xAxisData = new JSONArray();
             JSONArray seriesData = new JSONArray();
             JSONArray jsonArrayTemp;
@@ -1012,7 +1014,7 @@ public class ClientServiceImpl implements ClientService
             Map<String, Long> mapTemp;//key yyyy-MM-dd
             if(!CollectionUtils.isEmpty(list))
             {
-                for(StatsClientRequestResDTO item : list)
+                for(StatsRequestResDTO item : list)
                 {
                     mapTemp = map.computeIfAbsent(item.getClientId(), k -> new HashMap<>());
                     String format = sdf.format(item.getStatsDate());
@@ -1022,7 +1024,7 @@ public class ClientServiceImpl implements ClientService
             }
             for(ClientInfoResDTO item : dataList)
             {
-                productData.add(item.getCorpName());
+                clientData.add(item.getCorpName());
                 mapTemp = map.get(item.getClientId());
                 if(mapTemp == null)
                 {
@@ -1037,7 +1039,7 @@ public class ClientServiceImpl implements ClientService
                 }
                 seriesData.add(jsonArrayTemp);
             }
-            res.addData(Field.PRODUCT_DATA, productData);
+            res.addData(Field.CLIENT_DATA, clientData);
             res.addData(Field.X_AXIS_DATA, xAxisData);
             res.addData(Field.SERIES_DATA, seriesData);
         }
@@ -1059,45 +1061,241 @@ public class ClientServiceImpl implements ClientService
         }
         resp.addData(Field.LIST, list);
         resp.addData(Field.LEGEND_DATA, eChartPie.getLegendData());
+    }
 
-        //        List<Map<String, Object>> list = new ArrayList<>();
-        //        EChart eChart = getClientRechargePieOfRange(range);
-        //        List<String> xAxis = eChart.getxAxis();
-        //        for(ESerie o : eChart.getSeries())
-        //        {
-        //            Map<String, Object> serie = new HashMap<>();
-        //            serie.put(Field.NAME, o.getName());
-        //            serie.put(Field.STACK, eChart.getName());
-        //            serie.put(Field.DATA, o.getData());
-        //            list.add(serie);
-        //        }
-        //        if(compareFrom != null)
-        //        {
-        //            long diff = range.getEnd().getTime() - range.getStart().getTime();
-        //            Date compareTo = new Date(compareFrom.getTime() + diff);
-        //            DateRange compareRange = new DateRange(compareFrom, compareTo);
-        //            EChart eChart1 = getClientRechargeTrendOfRange(compareRange, unit);
-        //            if(RangeUnit.HOUR != unit)
-        //            {
-        //                List<String> xData1 = eChart1.getxAxis();
-        //                List<String> tempList = new ArrayList<>(xAxis.size());
-        //                for(int i = 0; i < xAxis.size(); i++)
-        //                {
-        //                    tempList.add(xAxis.get(i) + "&" + xData1.get(i));
-        //                }
-        //                xAxis = tempList;
-        //            }
-        //            for(ESerie o : eChart1.getSeries())
-        //            {
-        //                Map<String, Object> serie = new HashMap<>();
-        //                serie.put(Field.NAME, o.getName());
-        //                serie.put(Field.STACK, eChart1.getName());
-        //                serie.put(Field.DATA, o.getData());
-        //                list.add(serie);
-        //            }
-        //        }
-        //        resp.addData(Field.X_DATA, xAxis);
-        //        resp.addData(Field.LIST, list);
+    @Override
+    public void getRequestStatsLine(DateRange range, RangeUnit unit, Date compareFrom, Long[] productIds,
+            String clientName, RestResp resp)
+    {
+        EChartLine eChartLine = getRequestStatsLineOfRange(range, unit, productIds, clientName);
+        resp.addData(Field.LEGEND_DATA, eChartLine.getLegendData());
+        resp.addData(Field.X_DATA, eChartLine.getxAxis());
+        resp.addData(Field.LIST, eChartLine.getSeries());
+    }
+
+    @Override
+    public void getRequestStatsPie(DateRange range, Date compareFrom, Long[] productIds, String clientName,
+            RestResp resp)
+    {
+        EChartPie eChartPie = getRequestStatsPieOfRange(range, productIds, clientName);
+        resp.addData(Field.LEGEND_DATA, eChartPie.getLegendData());
+        resp.addData(Field.LIST, eChartPie.getSeries());
+    }
+
+    @Override
+    public void getRequestStatsBar(DateRange range, Date compareFrom, Long[] productIds, String clientName,
+            RestResp resp)
+    {
+        EChartLine eChartLine = getRequestStatsBarOfRange(range, productIds, clientName);
+        resp.addData(Field.LEGEND_DATA, eChartLine.getLegendData());
+        resp.addData(Field.X_DATA, eChartLine.getxAxis());
+        resp.addData(Field.LIST, eChartLine.getSeries());
+    }
+
+    @Override
+    public void getClientTraffic24h(Page page, RestResp res)
+    {
+        ListDTO<ClientInfoResDTO> listDTO = clientRpcService.getClientInfoListBy(null, null, null, null, page);
+        List<ClientInfoResDTO> dataList = listDTO.getList();
+        res.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Long> productIds = new ArrayList<>();
+            for(ClientInfoResDTO item : dataList)
+            {
+                productIds.add(item.getClientId());
+            }
+            Date afterDate = new Date();
+            Date beforeDateZero = DateCalculateUtils.getBeforeDayDate(afterDate, 1, true);
+            Date beforeDate = DateCalculateUtils.getBeforeDayDate(afterDate, 1, false);
+            ListDTO<StatsRequestResDTO> requestResDTOListDTO = backendStatsService.getClientTrafficByClientIds(
+                    productIds, beforeDateZero, afterDate);
+            List<StatsRequestResDTO> list = requestResDTOListDTO.getList();
+            JSONArray clientData = new JSONArray();
+            JSONArray xAxisData = new JSONArray();
+            JSONArray seriesData = new JSONArray();
+            JSONArray jsonArrayTemp;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(beforeDate);
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(afterDate);
+            calendar2.add(Calendar.HOUR_OF_DAY, 1);
+            while(beforeDate.before(calendar2.getTime()))
+            {
+                xAxisData.add((calendar.get(Calendar.HOUR_OF_DAY) == 0 ? 24 : calendar.get(Calendar.HOUR_OF_DAY)) + "");
+                calendar.add(Calendar.HOUR_OF_DAY, 1);
+                beforeDate = calendar.getTime();
+            }
+            Map<Long, Map<String, Long>> map = new HashMap<>();//key productId
+            Map<String, Long> mapTemp;//key yyyy-MM-dd
+            if(!CollectionUtils.isEmpty(list))
+            {
+                for(StatsRequestResDTO item : list)
+                {
+                    mapTemp = map.computeIfAbsent(item.getClientId(), k -> new HashMap<>());
+                    Long count = mapTemp.computeIfAbsent(item.getStatsHour() + "", k -> 0l);
+                    mapTemp.put(item.getStatsHour() + "", count + item.getRequest());
+                }
+            }
+            for(ClientInfoResDTO item : dataList)
+            {
+                clientData.add(item.getCorpName());
+                mapTemp = map.get(item.getClientId());
+                if(mapTemp == null)
+                {
+                    mapTemp = new HashMap<>();
+                }
+                jsonArrayTemp = new JSONArray();
+                for(int i = 0; i < xAxisData.size(); i++)
+                {
+                    String dateStr = xAxisData.getString(i);
+                    Long count = mapTemp.get(dateStr);
+                    jsonArrayTemp.add(count == null ? 0 : count);
+                }
+                seriesData.add(jsonArrayTemp);
+            }
+            res.addData(Field.CLIENT_DATA, clientData);
+            res.addData(Field.X_AXIS_DATA, xAxisData);
+            res.addData(Field.SERIES_DATA, seriesData);
+        }
+    }
+
+    private EChartLine getRequestStatsBarOfRange(DateRange range, Long[] productIds, String clientName)
+    {
+        String requestStr = "请求数";
+        String requestFailedStr = "失败数";
+        String requestNotHitStr = "未击中数";
+        EChartLine eChartLine = new EChartLine();
+        List<String> xAxis = new ArrayList<>();
+        List<String> legendData = new ArrayList<>();
+        List<ESerie> series = new ArrayList<>();
+        eChartLine.setSeries(series);
+        eChartLine.setxAxis(xAxis);
+        eChartLine.setLegendData(legendData);
+        legendData.add(requestStr);
+        legendData.add(requestFailedStr);
+        legendData.add(requestNotHitStr);
+        Map<String, ESerie> map = new HashMap<>();
+        List<RequestStatsResDTO> requestStatsResDTOS;
+        if(productIds.length > 0)
+        {
+            requestStatsResDTOS = backendStatsService.getRequestStats(range, null, Arrays.asList(productIds),
+                    clientName);
+        }
+        else
+        {
+            requestStatsResDTOS = backendStatsService.getRequestStatsGroupByProduct(range, null, clientName);
+        }
+        ESerie eSerie;
+        eSerie = new ESerie();
+        series.add(eSerie);
+        map.put(requestStr, eSerie);
+        eSerie.setName(requestStr);
+        eSerie.setData(new ArrayList<>());
+        eSerie = new ESerie();
+        series.add(eSerie);
+        map.put(requestNotHitStr, eSerie);
+        eSerie.setName(requestNotHitStr);
+        eSerie.setData(new ArrayList<>());
+        eSerie = new ESerie();
+        series.add(eSerie);
+        map.put(requestFailedStr, eSerie);
+        eSerie.setName(requestFailedStr);
+        eSerie.setData(new ArrayList<>());
+        for(RequestStatsResDTO item : requestStatsResDTOS)
+        {
+            xAxis.add(item.getName());
+            eSerie = map.get(requestStr);
+            eSerie.getData().add(getRequestNumber(item.getRequestMap()));
+            eSerie = map.get(requestNotHitStr);
+            eSerie.getData().add(getRequestNumber(item.getRequestNotHitMap()));
+            eSerie = map.get(requestFailedStr);
+            eSerie.getData().add(getRequestNumber(item.getRequestFailedMap()));
+
+        }
+        return eChartLine;
+    }
+
+    private String getRequestNumber(Map<String, Long> map)
+    {
+        Long l = 0l;
+        for(Map.Entry<String, Long> entry : map.entrySet())
+        {
+            l += entry.getValue();
+        }
+        return l + "";
+    }
+
+    private EChartPie getRequestStatsPieOfRange(DateRange range, Long[] productIds, String clientName)
+    {
+        EChartPie eChartPie = new EChartPie();
+        List<RequestStatsResDTO> requestStatsResDTOS;
+        if(productIds.length > 0)
+        {
+            requestStatsResDTOS = backendStatsService.getRequestStats(range, null, Arrays.asList(productIds),
+                    clientName);
+        }
+        else
+        {
+            requestStatsResDTOS = backendStatsService.getRequestStatsGroupByProduct(range, null, clientName);
+        }
+        List<String> legendData = new ArrayList<>();
+        List<ESeriePie> series = new ArrayList<>();
+        eChartPie.setLegendData(legendData);
+        eChartPie.setSeries(series);
+        ESeriePie eSeriePie = new ESeriePie();
+        series.add(eSeriePie);
+        eSeriePie.setName("请求占比");
+        List<Map<String, String>> data = new ArrayList<>();
+        eSeriePie.setData(data);
+        Map<String, String> mapTemp;
+        for(RequestStatsResDTO item : requestStatsResDTOS)
+        {
+            legendData.add(item.getName());
+            mapTemp = new HashMap<>();
+            data.add(mapTemp);
+            mapTemp.put(Field.NAME, item.getName());
+            Map<String, Long> dataMap = item.getRequestMap();
+            Long allNumber = 0l;
+            for(Map.Entry<String, Long> entry : dataMap.entrySet())
+            {
+                allNumber += entry.getValue();
+            }
+            mapTemp.put(Field.VALUE, allNumber + "");
+        }
+        return eChartPie;
+    }
+
+    private EChartLine getRequestStatsLineOfRange(DateRange range, RangeUnit unit, Long[] productIds, String clientName)
+    {
+        EChartLine eChartLine = new EChartLine();
+        List<String> xData = DateRangeUtils.getRangeSpilt(range, unit); // x轴坐标名
+        List<RequestStatsResDTO> requestStatsResDTOS = backendStatsService.getRequestStats(range, unit,
+                Arrays.asList(productIds), clientName);
+        List<ESerie> series = new ArrayList<>();
+        List<String> legendData = new ArrayList<>();
+        eChartLine.setLegendData(legendData);
+        eChartLine.setxAxis(xData);
+        eChartLine.setSeries(series);
+        ESerie eSerie;
+        Map<String, Long> dataMap;
+        List<String> data;
+        for(RequestStatsResDTO item : requestStatsResDTOS)
+        {
+            eSerie = new ESerie();
+            series.add(eSerie);
+            legendData.add(item.getName());
+            eSerie.setName(item.getName());
+            data = new ArrayList<>();
+            eSerie.setData(data);
+            dataMap = item.getRequestMap();
+            for(String n : xData)
+            {
+                data.add(dataMap.get(n) == null ? "0" : (dataMap.get(n) + ""));
+            }
+        }
+        return eChartLine;
     }
 
     private EChartPie getClientRechargePieOfRange(DateRange range)

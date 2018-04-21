@@ -5,6 +5,7 @@ import com.mingdong.backend.model.LineDiagramDTO;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.backend.service.BackendTrafficService;
 import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.ProductListVO;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
@@ -21,7 +22,7 @@ import com.mingdong.core.model.dto.request.ProductReqDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.RequestDetailResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
-import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsRequestResDTO;
 import com.mingdong.core.service.CommonRpcService;
 import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.util.DateCalculateUtils;
@@ -127,7 +128,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getAllProduct(RestListResp res)
+    public void getAllProduct(RestResp res)
     {
         ListDTO<ProductResDTO> listDTO = productRpcService.getAllProduct();
         List<ProductResDTO> dataList = listDTO.getList();
@@ -143,7 +144,7 @@ public class ProductServiceImpl implements ProductService
                 list.add(map);
             }
         }
-        res.setList(list);
+        res.addData(Field.LIST, list);
     }
 
     @Override
@@ -156,10 +157,10 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductRatio(RestResp res)
+    public void getProductRatio1h(RestResp res)
     {
         Date date = new Date();
-        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio(date);
+        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio(date, 1);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
     }
@@ -186,7 +187,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getProductTraffic(Page page, RestResp res)
+    public void getProductTraffic7d(Page page, RestResp res)
     {
         ListDTO<ProductResDTO> listDTO = productRpcService.getProductList(null, null, null, null, page);
         List<ProductResDTO> dataList = listDTO.getList();
@@ -201,9 +202,9 @@ public class ProductServiceImpl implements ProductService
             Date date = new Date();
             Date afterDate = DateCalculateUtils.getCurrentDate(date);
             Date beforeDate = DateCalculateUtils.getBeforeDayDate(date, 7, true);
-            ListDTO<StatsProductRequestResDTO> requestResDTOListDTO = backendStatsService.getProductTrafficByProductIds(
+            ListDTO<StatsRequestResDTO> requestResDTOListDTO = backendStatsService.getProductTrafficByProductIds(
                     productIds, beforeDate, afterDate);
-            List<StatsProductRequestResDTO> list = requestResDTOListDTO.getList();
+            List<StatsRequestResDTO> list = requestResDTOListDTO.getList();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             JSONArray productData = new JSONArray();
             JSONArray xAxisData = new JSONArray();
@@ -221,7 +222,7 @@ public class ProductServiceImpl implements ProductService
             Map<String, Long> mapTemp;//key yyyy-MM-dd
             if(!CollectionUtils.isEmpty(list))
             {
-                for(StatsProductRequestResDTO item : list)
+                for(StatsRequestResDTO item : list)
                 {
                     mapTemp = map.computeIfAbsent(item.getProductId(), k -> new HashMap<>());
                     String format = sdf.format(item.getStatsDate());
@@ -250,6 +251,50 @@ public class ProductServiceImpl implements ProductService
             res.addData(Field.X_AXIS_DATA, xAxisData);
             res.addData(Field.SERIES_DATA, seriesData);
         }
+    }
+
+    @Override
+    public void getProductForType(RestResp res)
+    {
+        ListDTO<ProductResDTO> listDTO = productRpcService.getAllProduct();
+        List<ProductResDTO> dataList = listDTO.getList();
+        List<ProductListVO> list = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Map<String, Object>> listTemp;
+            ProductListVO productListVO;
+            Map<Integer, ProductListVO> map = new HashMap<>();
+            Map<String, Object> mapTemp;
+            for(ProductResDTO item : dataList)
+            {
+                productListVO = map.get(item.getType());
+                if(productListVO == null)
+                {
+                    productListVO = new ProductListVO();
+                    list.add(productListVO);
+                    map.put(item.getType(), productListVO);
+                    productListVO.setTypeName(ProductType.getNameById(item.getType()));
+                    listTemp = new ArrayList<>();
+                    productListVO.setList(listTemp);
+                }
+                listTemp = productListVO.getList();
+                mapTemp = new HashMap<>();
+                mapTemp.put(Field.PRODUCT_ID, item.getId() + "");
+                mapTemp.put(Field.NAME, item.getName());
+                listTemp.add(mapTemp);
+            }
+
+        }
+        res.addData(Field.LIST, list);
+    }
+
+    @Override
+    public void getProductRatio1d(RestResp res)
+    {
+        Date date = new Date();
+        ResponseDTO responseDTO = backendTrafficService.getStatsProductRatio(date, 2);
+        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
+        res.addData(Field.DATA, jsonStr);
     }
 
 }

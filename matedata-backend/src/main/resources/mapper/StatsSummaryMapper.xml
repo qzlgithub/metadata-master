@@ -13,6 +13,7 @@
         <result column="stats_date" property="statsDate" jdbcType="TIMESTAMP" />
         <result column="client_increment" property="clientIncrement" jdbcType="INTEGER" />
         <result column="request" property="request" jdbcType="BIGINT" />
+        <result column="request_not_hit" property="requestNotHit" jdbcType="BIGINT" />
         <result column="request_failed" property="requestFailed" jdbcType="BIGINT" />
         <result column="request_3rd_failed" property="request3rdFailed" jdbcType="BIGINT" />
         <result column="recharge" property="recharge" jdbcType="DECIMAL" />
@@ -22,7 +23,8 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
-            `stats_date`, `client_increment`, `request`, `request_failed`, `request_3rd_failed`, `recharge`, `profit`
+            `stats_date`, `client_increment`, `request`, `request_failed`, `request_3rd_failed`, `request_not_hit`,
+            `recharge`, `profit`
         from `stats_summary`
     </sql>
 
@@ -48,6 +50,7 @@
             <if test="statsDate != null">`stats_date`,</if>
             <if test="clientIncrement != null">`client_increment`,</if>
             <if test="request != null">`request`,</if>
+            <if test="requestNotHit != null">`request_not_hit`,</if>
             <if test="requestFailed != null">`request_failed`,</if>
             <if test="request3rdFailed != null">`request_3rd_failed`,</if>
             <if test="recharge != null">`recharge`,</if>
@@ -65,6 +68,7 @@
             <if test="statsDate != null">#{statsDate},</if>
             <if test="clientIncrement != null">#{clientIncrement},</if>
             <if test="request != null">#{request},</if>
+            <if test="requestNotHit != null">#{requestNotHit},</if>
             <if test="requestFailed != null">#{requestFailed},</if>
             <if test="request3rdFailed != null">#{request3rdFailed},</if>
             <if test="recharge != null">#{recharge},</if>
@@ -130,7 +134,8 @@
             sum(`request_failed`)     as request_failed,
             sum(`request_3rd_failed`) as request_3rd_failed,
             sum(`recharge`)           as recharge,
-            sum(`profit`)             as profit
+            sum(`profit`)             as profit,
+            sum(`request_not_hit`)    as request_not_hit
         from `stats_summary`
     </select>
 
@@ -141,7 +146,8 @@
             sum(`request_failed`)     as request_failed,
             sum(`request_3rd_failed`) as request_3rd_failed,
             sum(`recharge`)           as recharge,
-            sum(`profit`)             as profit
+            sum(`profit`)             as profit,
+            sum(`request_not_hit`)    as request_not_hit
         from `stats_summary`
         where `stats_date` = #{date}
     </select>
@@ -153,7 +159,8 @@
             sum(`request_failed`)     as request_failed,
             sum(`request_3rd_failed`) as request_3rd_failed,
             sum(`recharge`)           as recharge,
-            sum(`profit`)             as profit
+            sum(`profit`)             as profit,
+            sum(`request_not_hit`)    as request_not_hit
         from `stats_summary`
         where `stats_date` >= #{date}
     </select>

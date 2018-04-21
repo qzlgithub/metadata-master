@@ -1,13 +1,12 @@
-package com.mingdong.backend.domain.entity;
+package com.mingdong.core.model.dto.request;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class StatsProductRequest
+public class StatsRequestReqDTO implements Serializable
 {
-    private Long id;
-    private Date createTime;
-    private Date updateTime;
     private Long productId;
+    private Long clientId;
     private Integer statsYear;
     private Integer statsMonth;
     private Integer statsWeek;
@@ -15,35 +14,37 @@ public class StatsProductRequest
     private Integer statsHour;
     private Date statsDate;
     private Long request;
+    private Long requestFailed;
+    private Long requestNotHit;
 
-    public Long getId()
+    public Long getClientId()
     {
-        return id;
+        return clientId;
     }
 
-    public void setId(Long id)
+    public void setClientId(Long clientId)
     {
-        this.id = id;
+        this.clientId = clientId;
     }
 
-    public Date getCreateTime()
+    public Long getRequestFailed()
     {
-        return createTime;
+        return requestFailed;
     }
 
-    public void setCreateTime(Date createTime)
+    public void setRequestFailed(Long requestFailed)
     {
-        this.createTime = createTime;
+        this.requestFailed = requestFailed;
     }
 
-    public Date getUpdateTime()
+    public Long getRequestNotHit()
     {
-        return updateTime;
+        return requestNotHit;
     }
 
-    public void setUpdateTime(Date updateTime)
+    public void setRequestNotHit(Long requestNotHit)
     {
-        this.updateTime = updateTime;
+        this.requestNotHit = requestNotHit;
     }
 
     public Long getProductId()

@@ -21,10 +21,9 @@ import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
-import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
-import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
+import com.mingdong.core.model.dto.request.StatsRequestReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -86,9 +85,8 @@ import com.mingdong.mis.domain.mapper.StatsClientMapper;
 import com.mingdong.mis.domain.mapper.UserMapper;
 import com.mingdong.mis.model.UserAuth;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
-import com.mingdong.mis.mongo.entity.ClientRequestCount;
-import com.mingdong.mis.mongo.entity.ProductRequestCount;
 import com.mingdong.mis.mongo.entity.RequestLog;
+import com.mingdong.mis.mongo.entity.RequestNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -1608,7 +1606,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public void statsByDate(Date date)
     {
         new Thread(() -> {
-            // TODO 统计：（第三方）失败次数，收益
             SimpleDateFormat shortSdf = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat longSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try
@@ -1641,35 +1638,55 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 int week = calendar.get(Calendar.WEEK_OF_YEAR);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int clientCount = statsClientMapper.getClientCountByDate(hourBefore, hourAfter, null);
-                long requestCount = requestLogDao.countByRequestTime(hourBefore, hourAfter);
+                //                long requestNumber = requestLogDao.countByRequestTime(hourBefore, hourAfter);
+                List<RequestNumber> requestNumberList = requestLogDao.findRequestCountByTime(hourBefore, hourAfter);
                 BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
-                if(clientCount == 0 && requestCount == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
+                long requestNumber = 0;
+                long notHitNumber = 0;
+                if(!CollectionUtils.isEmpty(requestNumberList))
+                {
+                    for(RequestNumber item : requestNumberList)
+                    {
+                        requestNumber += item.getCount();
+                        if(TrueOrFalse.FALSE.equals(item.getHit()))
+                        {
+                            notHitNumber += item.getCount();
+                        }
+                    }
+                }
+                if(clientCount == 0 && requestNumber == 0 && "0.00".equals(NumberUtils.formatAmount(rechargeSum)))
                 {
                     logger.info("定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
-                    return;
                 }
-                StatsDTO stats = new StatsDTO();
-                stats.setStatsYear(year);
-                stats.setStatsMonth(month);
-                stats.setStatsWeek(week);
-                stats.setStatsDay(day);
-                stats.setStatsHour(hour);
-                stats.setStatsDate(dayDate);
-                stats.setClientIncrement(clientCount);
-                stats.setClientRequest(requestCount);
-                stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
-                ResponseDTO responseDTO = backendStatsService.addStats(stats);
-                if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
+                else
                 {
-                    logger.error(longSdf.format(date) + " statsByDate error!");
-                    saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
-                            JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
-                    return;
+                    StatsDTO stats = new StatsDTO();
+                    stats.setStatsYear(year);
+                    stats.setStatsMonth(month);
+                    stats.setStatsWeek(week);
+                    stats.setStatsDay(day);
+                    stats.setStatsHour(hour);
+                    stats.setStatsDate(dayDate);
+                    stats.setClientIncrement(clientCount);
+                    stats.setRequest(requestNumber);
+                    stats.setRequestNotHit(notHitNumber);
+                    //TODO 请求失败统计
+                    stats.setRequestFailed(0l);
+                    stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
+                    ResponseDTO responseDTO = backendStatsService.addStats(stats);
+                    if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
+                    {
+                        logger.error(longSdf.format(date) + " statsByDate error!");
+                        saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
+                                JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
+                        return;
+                    }
                 }
                 saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 logger.error(longSdf.format(date) + " statsByDate error!");
                 saveJobLog(JobType.STATS_ALL, TrueOrFalse.FALSE,
                         JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
@@ -1759,6 +1776,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 logger.error(longSdf.format(date) + "statsRechargeByDate error!" + e.getMessage());
                 saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.FALSE,
                         JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
@@ -1842,48 +1860,47 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int week = calendar.get(Calendar.WEEK_OF_YEAR);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                List<ClientRequestCount> clientRequestCountByTime = requestLogDao.findClientRequestCountByTime(
-                        hourBefore, hourAfter);
-                List<ProductRequestCount> productRequestCountByTime = requestLogDao.findProductRequestCountByTime(
-                        hourBefore, hourAfter);
-                List<StatsClientRequestReqDTO> addStatsClientRequest = new ArrayList<>();
-                List<StatsProductRequestReqDTO> addStatsProductRequest = new ArrayList<>();
-                if(!CollectionUtils.isEmpty(clientRequestCountByTime))
+                List<RequestNumber> requestNumberByTime = requestLogDao.findRequestGroupCountByTime(hourBefore,
+                        hourAfter);
+                List<StatsRequestReqDTO> addStatsRequest = new ArrayList<>();
+                if(!CollectionUtils.isEmpty(requestNumberByTime))
                 {
-                    StatsClientRequestReqDTO statsClientRequestReqDTO;
-                    for(ClientRequestCount item : clientRequestCountByTime)
+                    Map<String, RequestNumberVO> productIdRequestNumberMap = new HashMap<>();
+                    RequestNumberVO requestNumberVO;
+                    for(RequestNumber item : requestNumberByTime)
                     {
-                        statsClientRequestReqDTO = new StatsClientRequestReqDTO();
-                        statsClientRequestReqDTO.setStatsYear(year);
-                        statsClientRequestReqDTO.setStatsMonth(month);
-                        statsClientRequestReqDTO.setStatsWeek(week);
-                        statsClientRequestReqDTO.setStatsDay(day);
-                        statsClientRequestReqDTO.setStatsHour(hour);
-                        statsClientRequestReqDTO.setStatsDate(dayDate);
-                        statsClientRequestReqDTO.setClientId(item.getClientId());
-                        statsClientRequestReqDTO.setRequest(item.getCount());
-                        addStatsClientRequest.add(statsClientRequestReqDTO);
+                        requestNumberVO = productIdRequestNumberMap.computeIfAbsent(
+                                item.getProductId() + "" + item.getClientId(), k -> new RequestNumberVO());
+                        requestNumberVO.setProductId(item.getProductId());
+                        requestNumberVO.setClientId(item.getClientId());
+                        requestNumberVO.setTotal(requestNumberVO.getTotal() + item.getCount());
+                        if(TrueOrFalse.FALSE.equals(item.getHit()))
+                        {
+                            requestNumberVO.setNotHit(requestNumberVO.getNotHit() + item.getCount());
+                        }
+                        //TODO 请求失败统计
+
+                    }
+                    StatsRequestReqDTO statsRequestReqDTO;
+                    for(Map.Entry<String, RequestNumberVO> entry : productIdRequestNumberMap.entrySet())
+                    {
+                        requestNumberVO = entry.getValue();
+                        statsRequestReqDTO = new StatsRequestReqDTO();
+                        statsRequestReqDTO.setStatsYear(year);
+                        statsRequestReqDTO.setStatsMonth(month);
+                        statsRequestReqDTO.setStatsWeek(week);
+                        statsRequestReqDTO.setStatsDay(day);
+                        statsRequestReqDTO.setStatsHour(hour);
+                        statsRequestReqDTO.setStatsDate(dayDate);
+                        statsRequestReqDTO.setProductId(requestNumberVO.getProductId());
+                        statsRequestReqDTO.setClientId(requestNumberVO.getClientId());
+                        statsRequestReqDTO.setRequest(requestNumberVO.getTotal());
+                        statsRequestReqDTO.setRequestNotHit(requestNumberVO.getNotHit());
+                        statsRequestReqDTO.setRequestFailed(requestNumberVO.getFailed());
+                        addStatsRequest.add(statsRequestReqDTO);
                     }
                 }
-                if(!CollectionUtils.isEmpty(productRequestCountByTime))
-                {
-                    StatsProductRequestReqDTO statsProductRequestReqDTO;
-                    for(ProductRequestCount item : productRequestCountByTime)
-                    {
-                        statsProductRequestReqDTO = new StatsProductRequestReqDTO();
-                        statsProductRequestReqDTO.setStatsYear(year);
-                        statsProductRequestReqDTO.setStatsMonth(month);
-                        statsProductRequestReqDTO.setStatsWeek(week);
-                        statsProductRequestReqDTO.setStatsDay(day);
-                        statsProductRequestReqDTO.setStatsHour(hour);
-                        statsProductRequestReqDTO.setStatsDate(dayDate);
-                        statsProductRequestReqDTO.setProductId(item.getProductId());
-                        statsProductRequestReqDTO.setRequest(item.getCount());
-                        addStatsProductRequest.add(statsProductRequestReqDTO);
-                    }
-                }
-                ResponseDTO responseDTO = backendStatsService.addStatsRequest(addStatsClientRequest,
-                        addStatsProductRequest);
+                ResponseDTO responseDTO = backendStatsService.addStatsRequest(addStatsRequest);
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                 {
                     logger.error(longSdf.format(date) + " statsByDate error!");
@@ -1895,11 +1912,29 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 logger.error(longSdf.format(date) + "statsRequestByDate error!" + e.getMessage());
                 saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.FALSE,
                         JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
             }
         }).start();
+    }
+
+    @Override
+    public List<ClientInfoResDTO> getClientByCorpName(String corpName)
+    {
+        List<ClientInfoResDTO> returnList = new ArrayList<>();
+        ClientInfoResDTO clientInfoResDTO;
+        List<Client> clientList = clientMapper.findLikeByCorpName(corpName);
+        for(Client item : clientList)
+        {
+            clientInfoResDTO = new ClientInfoResDTO();
+            clientInfoResDTO.setClientId(item.getId());
+            clientInfoResDTO.setCorpName(item.getCorpName());
+            clientInfoResDTO.setShortName(item.getShortName());
+            returnList.add(clientInfoResDTO);
+        }
+        return returnList;
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)
@@ -1971,5 +2006,65 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             e.printStackTrace();
         }
+    }
+
+    class RequestNumberVO
+    {
+        private Long productId;
+        private Long clientId;
+        private long total;
+        private long notHit;
+        private long failed;
+
+        public Long getProductId()
+        {
+            return productId;
+        }
+
+        public void setProductId(Long productId)
+        {
+            this.productId = productId;
+        }
+
+        public Long getClientId()
+        {
+            return clientId;
+        }
+
+        public void setClientId(Long clientId)
+        {
+            this.clientId = clientId;
+        }
+
+        public long getFailed()
+        {
+            return failed;
+        }
+
+        public void setFailed(long failed)
+        {
+            this.failed = failed;
+        }
+
+        public long getTotal()
+        {
+            return total;
+        }
+
+        public void setTotal(long total)
+        {
+            this.total = total;
+        }
+
+        public long getNotHit()
+        {
+            return notHit;
+        }
+
+        public void setNotHit(long notHit)
+        {
+            this.notHit = notHit;
+        }
+
     }
 }

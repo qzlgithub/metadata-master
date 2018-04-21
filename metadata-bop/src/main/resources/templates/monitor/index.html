@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
@@ -35,7 +36,7 @@
                                     <p class="fz-16 mt10 col6">新增客户</p>
                                     <p class="col4 mt10">近30天：<span th:text="${clientInc30d}"></span>个 </p>
                                     <p class="mt10 col6">总客户：<span th:text="${clientTotal}"></span>个</p>
-                                    <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                    <p class="mt10 tr fz-12"><a href="/stats/client.html">查看明细</a></p>
                                 </div>
                             </li>
                             <li class="layui-col-md3 mr40 ml40">
@@ -44,7 +45,7 @@
                                     <p class="fz-16 mt10 col6">客户充值</p>
                                     <p class="col4 mt10">近7天充值：<span th:text="${recharge7d}"></span>元 </p>
                                     <p class="mt10 col6">近30天充值：<span th:text="${recharge30d}"></span>个</p>
-                                    <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                    <p class="mt10 tr fz-12"><a href="/stats/recharge.html">查看明细</a></p>
                                 </div>
                             </li>
                             <li class="layui-col-md3">
@@ -59,7 +60,7 @@
                                         昨日收入：<span th:text="${profitYesterday}"></span>元/<span
                                             th:text="${requestYesterday}"></span>次
                                     </p>
-                                    <p class="mt10 tr fz-12"><a href="#">查看明细</a></p>
+                                    <p class="mt10 tr fz-12"><a href="javascript:;">查看明细</a></p>
                                 </div>
                             </li>
                         </ul>
@@ -135,12 +136,12 @@
                                 class="fr fz-12 f-normal important">近24h</span>
                         </dt>
                         <dd>
-                            <p class="col6">
+                            <!--<p class="col6">
                                 总请求次数：<i class="col3">123,208,172</i>次
                                 <span class="fr">请求失败：<i class="col3">772</i>次</span>
-                            </p>
+                            </p>-->
                             <div id="thirdReqDiagram" style="width: 100%; height: 400px;"></div>
-                            <p class="tr mt15"><a href="" class="col6"> 查看历史记录>></a></p>
+                            <p class="tr mt15"><a href="javascript:;" class="col6"> 查看历史记录>></a></p>
                         </dd>
                     </dl>
                 </div>
@@ -151,12 +152,12 @@
                         <dt class="mt10 important">产品请求<i class="icon icon6 va ml10 mt5"></i> <span
                                 class="fr fz-12 f-normal important">近24h</span></dt>
                         <dd>
-                            <p class="col6">
+                            <!--<p class="col6">
                                 总请求次数：<i class="col3">123,208,172</i>次
                                 <span class="fr">请求失败：<i class="col3">772</i>次</span>
-                            </p>
+                            </p>-->
                             <div id="productReqDiagram" style="width: 100%; height: 400px;"></div>
-                            <p class="tr mt15"><a href="" class="col6"> 查看历史记录>></a></p>
+                            <p class="tr mt15"><a href="/stats/request/product.html" class="col6"> 查看历史记录>></a></p>
                         </dd>
                     </dl>
                 </div>
@@ -167,31 +168,34 @@
             <dl class="public-data public-warp1 mt15">
                 <dt class="mt10 important">客户状态<span class="fr fz-12 f-normal important">近24h</span></dt>
                 <dd>
-                    <ul class="layui-row layui-col-space10">
+                    <ul class="layui-row layui-col-space10" style="height: 150px; overflow: hidden;">
                         <li class=" layui-col-md3">
-                            <p class="col6">身份验证</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="col6" id="product-name-0"></p>
+                            <p class="mt10" id="line-chart-0" style="width: 100%;height:95px;"></p>
                         </li>
                         <li class=" layui-col-md3">
-                            <p class="col6">身份验证</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="col6" id="product-name-1"></p>
+                            <p class="mt10" id="line-chart-1" style="width: 100%;height:95px;"></p>
                         </li>
                         <li class=" layui-col-md3">
-                            <p class="col6">身份验证</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="col6" id="product-name-2"></p>
+                            <p class="mt10" id="line-chart-2" style="width: 100%;height:95px;"></p>
                         </li>
                         <li class=" layui-col-md3">
-                            <p class="col6">身份验证</p>
-                            <p class="mt10"><img src="/static/monitor/images/data-img2.png"/></p>
+                            <p class="col6" id="product-name-3"></p>
+                            <p class="mt10" id="line-chart-3" style="width: 100%;height:95px;"></p>
                         </li>
                     </ul>
-                    <div class="mt20 tr col6 fz-14"><i class="icon left-up mr10 important"></i>1/5<i
-                            class="icon right-down ml10"></i></div>
+                    <div class="mt20 tr col6 fz-14" id="page-div" style="display:none">
+                        <i class="icon left-up mr10 important" onclick="previousPage()"></i>
+                        <span id="page"></span>
+                        <i class="icon right-down ml10" onclick="nextPage()"></i>
+                    </div>
                 </dd>
             </dl>
             <!--客户状态 end-->
             <!--警报情况-->
-            <dl class="public-data mt15">
+            <!--<dl class="public-data mt15">
                 <dt class="mt20 important">警报情况</dt>
                 <dd class="layui-row layui-col-space10 p0 important">
                     <div class="layui-col-md4">
@@ -305,7 +309,7 @@
                     </div>
 
                 </dd>
-            </dl>
+            </dl>-->
             <!--警报情况 end-->
         </div>
     </div>

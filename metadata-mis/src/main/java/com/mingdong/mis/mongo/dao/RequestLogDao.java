@@ -1,9 +1,8 @@
 package com.mingdong.mis.mongo.dao;
 
 import com.mingdong.common.model.Page;
-import com.mingdong.mis.mongo.entity.ClientRequestCount;
-import com.mingdong.mis.mongo.entity.ProductRequestCount;
 import com.mingdong.mis.mongo.entity.RequestLog;
+import com.mingdong.mis.mongo.entity.RequestNumber;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,7 +23,7 @@ public interface RequestLogDao
     List<RequestLog> findByParam(String keyword, Long clientId, Long clientUserId, Long productId, Integer billPlan,
             Date startTime, Date endTime, Integer hit, Page page);
 
-    List<ClientRequestCount> findClientRequestCountByTime(Date startTime, Date endTime);
+    List<RequestNumber> findRequestGroupCountByTime(Date startTime, Date endTime);
 
-    List<ProductRequestCount> findProductRequestCountByTime(Date startTime, Date endTime);
+    List<RequestNumber> findRequestCountByTime(Date startTime, Date endTime);
 }

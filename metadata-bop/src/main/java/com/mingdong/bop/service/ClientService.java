@@ -147,7 +147,16 @@ public interface ClientService
 
     void getCustomerRequestList(RestListResp res);
 
-    void getClientTraffic(Page page, RestResp res);
+    void getClientTraffic7d(Page page, RestResp res);
 
     void getClientRechargePie(DateRange range, Date compareFrom, RestResp resp);
+
+    void getRequestStatsLine(DateRange range, RangeUnit unit, Date compareFrom, Long[] productIds, String clientName,
+            RestResp resp);
+
+    void getRequestStatsPie(DateRange range, Date compareFrom, Long[] productIds, String clientName, RestResp resp);
+
+    void getRequestStatsBar(DateRange range, Date compareFrom, Long[] productIds, String clientName, RestResp resp);
+
+    void getClientTraffic24h(Page page, RestResp res);
 }

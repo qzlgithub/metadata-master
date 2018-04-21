@@ -3,36 +3,38 @@ package com.mingdong.backend.service.rpc;
 import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.domain.entity.Job;
 import com.mingdong.backend.domain.entity.JobLog;
-import com.mingdong.backend.domain.entity.StatsClientRequest;
-import com.mingdong.backend.domain.entity.StatsProductRequest;
 import com.mingdong.backend.domain.entity.StatsRecharge;
+import com.mingdong.backend.domain.entity.StatsRequest;
 import com.mingdong.backend.domain.entity.StatsSummary;
 import com.mingdong.backend.domain.mapper.JobLogMapper;
 import com.mingdong.backend.domain.mapper.JobMapper;
-import com.mingdong.backend.domain.mapper.StatsClientRequestMapper;
-import com.mingdong.backend.domain.mapper.StatsProductRequestMapper;
 import com.mingdong.backend.domain.mapper.StatsRechargeMapper;
+import com.mingdong.backend.domain.mapper.StatsRequestMapper;
 import com.mingdong.backend.domain.mapper.StatsSummaryMapper;
 import com.mingdong.backend.model.SummaryStatsDTO;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RangeUnit;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
-import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
-import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
+import com.mingdong.core.model.dto.request.StatsRequestReqDTO;
+import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
+import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.RequestStatsResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
-import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
-import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsRequestResDTO;
+import com.mingdong.core.service.ClientRpcService;
+import com.mingdong.core.service.ProductRpcService;
 import com.mingdong.core.service.SystemRpcService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,11 +63,13 @@ public class BackendStatsServiceImpl implements BackendStatsService
     @Resource
     private JobMapper jobMapper;
     @Resource
-    private StatsClientRequestMapper statsClientRequestMapper;
-    @Resource
-    private StatsProductRequestMapper statsProductRequestMapper;
+    private StatsRequestMapper statsRequestMapper;
     @Resource
     private SystemRpcService systemRpcService;
+    @Resource
+    private ClientRpcService clientRpcService;
+    @Resource
+    private ProductRpcService productRpcService;
 
     @Override
     public ListDTO<Dict> getMonitoredClient()
@@ -115,6 +119,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestFailedTotal(stats.getRequestFailed());
             res.setRequest3rdFailedTotal(stats.getRequest3rdFailed());
             res.setRechargeAmountTotal(stats.getRecharge());
+            res.setRequestNotHitTotal(stats.getRequestNotHit());
         }
         // 今日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(today);
@@ -125,6 +130,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequest3rdFailedToday(stats.getRequest3rdFailed());
             res.setProfitAmountToday(stats.getProfit());
             res.setRechargeAmountToday(stats.getRecharge());
+            res.setRequestNotHitToday(stats.getRequestNotHit());
         }
         // 昨日统计数据
         stats = statsSummaryMapper.getSummaryStatsByDate(yesterday);
@@ -134,6 +140,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequestFailedYesterday(stats.getRequestFailed());
             res.setRequest3rdFailedYesterday(stats.getRequest3rdFailed());
             res.setProfitAmountYesterday(stats.getProfit());
+            res.setRequestNotHitYesterday(stats.getRequestNotHit());
         }
         // 近7天统计数据
         stats = statsSummaryMapper.getSummaryStatsFromDate(latest7DaysFrom);
@@ -158,6 +165,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
             res.setRequest3rdFailedThisMonth(stats.getRequest3rdFailed());
             res.setRechargeAmountThisMonth(stats.getRecharge());
             res.setClientIncThisMonth(stats.getClientIncrement());
+            res.setRequestNotHitThisMonth(stats.getRequestNotHit());
         }
         return res;
     }
@@ -292,8 +300,10 @@ public class BackendStatsServiceImpl implements BackendStatsService
         stats.setStatsHour(statsDTO.getStatsHour());
         stats.setStatsDate(statsDTO.getStatsDate());
         stats.setClientIncrement(statsDTO.getClientIncrement());
-        stats.setRequest(statsDTO.getClientRequest());
         stats.setRecharge(statsDTO.getClientRecharge());
+        stats.setRequest(statsDTO.getRequest());
+        stats.setRequestNotHit(statsDTO.getRequestNotHit());
+        stats.setRequestFailed(statsDTO.getRequestFailed());
         statsSummaryMapper.add(stats);
         return responseDTO;
     }
@@ -349,109 +359,88 @@ public class BackendStatsServiceImpl implements BackendStatsService
 
     @Override
     @Transactional
-    public ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
-            List<StatsProductRequestReqDTO> addStatsProductRequest)
+    public ResponseDTO addStatsRequest(List<StatsRequestReqDTO> addStatsRequest)
     {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<StatsClientRequest> statsClientRequests = new ArrayList<>();
-        List<StatsProductRequest> statsProductRequests = new ArrayList<>();
+        List<StatsRequest> statsRequests = new ArrayList<>();
         Date date = new Date();
-        if(!CollectionUtils.isEmpty(addStatsClientRequest))
+        if(!CollectionUtils.isEmpty(addStatsRequest))
         {
-            StatsClientRequest statsClientRequest;
-            for(StatsClientRequestReqDTO item : addStatsClientRequest)
+            StatsRequest statsRequest;
+            for(StatsRequestReqDTO item : addStatsRequest)
             {
-                statsClientRequest = new StatsClientRequest();
-                statsClientRequest.setCreateTime(date);
-                statsClientRequest.setUpdateTime(date);
-                statsClientRequest.setStatsDate(item.getStatsDate());
-                statsClientRequest.setStatsDay(item.getStatsDay());
-                statsClientRequest.setStatsHour(item.getStatsHour());
-                statsClientRequest.setStatsMonth(item.getStatsMonth());
-                statsClientRequest.setStatsWeek(item.getStatsWeek());
-                statsClientRequest.setStatsYear(item.getStatsYear());
-                statsClientRequest.setClientId(item.getClientId());
-                statsClientRequest.setRequest(item.getRequest());
-                statsClientRequests.add(statsClientRequest);
+                statsRequest = new StatsRequest();
+                statsRequest.setCreateTime(date);
+                statsRequest.setUpdateTime(date);
+                statsRequest.setStatsDate(item.getStatsDate());
+                statsRequest.setStatsDay(item.getStatsDay());
+                statsRequest.setStatsHour(item.getStatsHour());
+                statsRequest.setStatsMonth(item.getStatsMonth());
+                statsRequest.setStatsWeek(item.getStatsWeek());
+                statsRequest.setStatsYear(item.getStatsYear());
+                statsRequest.setProductId(item.getProductId());
+                statsRequest.setClientId(item.getClientId());
+                statsRequest.setRequest(item.getRequest());
+                statsRequest.setRequestNotHit(item.getRequestNotHit());
+                statsRequest.setRequestFailed(item.getRequestFailed());
+                statsRequests.add(statsRequest);
             }
-            statsClientRequestMapper.addAll(statsClientRequests);
-        }
-        if(!CollectionUtils.isEmpty(addStatsProductRequest))
-        {
-            StatsProductRequest statsProductRequest;
-            for(StatsProductRequestReqDTO item : addStatsProductRequest)
-            {
-                statsProductRequest = new StatsProductRequest();
-                statsProductRequest.setCreateTime(date);
-                statsProductRequest.setUpdateTime(date);
-                statsProductRequest.setStatsDate(item.getStatsDate());
-                statsProductRequest.setStatsDay(item.getStatsDay());
-                statsProductRequest.setStatsHour(item.getStatsHour());
-                statsProductRequest.setStatsMonth(item.getStatsMonth());
-                statsProductRequest.setStatsWeek(item.getStatsWeek());
-                statsProductRequest.setStatsYear(item.getStatsYear());
-                statsProductRequest.setProductId(item.getProductId());
-                statsProductRequest.setRequest(item.getRequest());
-                statsProductRequests.add(statsProductRequest);
-            }
-            statsProductRequestMapper.addAll(statsProductRequests);
+            statsRequestMapper.addAll(statsRequests);
         }
         return responseDTO;
     }
 
     @Override
-    public ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
+    public ListDTO<StatsRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
             Date afterDate)
     {
-        ListDTO<StatsProductRequestResDTO> listDTO = new ListDTO<>();
-        List<StatsProductRequest> list = statsProductRequestMapper.getProductTrafficByProductIds(productIds, beforeDate,
-                afterDate);
-        List<StatsProductRequestResDTO> dataList = new ArrayList<>();
+        ListDTO<StatsRequestResDTO> listDTO = new ListDTO<>();
+        List<StatsRequest> list = statsRequestMapper.getProductTrafficByProductIds(productIds, beforeDate, afterDate);
+        List<StatsRequestResDTO> dataList = new ArrayList<>();
         listDTO.setList(dataList);
         if(!CollectionUtils.isEmpty(list))
         {
-            StatsProductRequestResDTO statsProductRequestResDTO;
-            for(StatsProductRequest item : list)
+            StatsRequestResDTO statsRequestResDTO;
+            for(StatsRequest item : list)
             {
-                statsProductRequestResDTO = new StatsProductRequestResDTO();
-                statsProductRequestResDTO.setProductId(item.getProductId());
-                statsProductRequestResDTO.setRequest(item.getRequest());
-                statsProductRequestResDTO.setStatsDate(item.getStatsDate());
-                statsProductRequestResDTO.setStatsDay(item.getStatsDay());
-                statsProductRequestResDTO.setStatsHour(item.getStatsHour());
-                statsProductRequestResDTO.setStatsMonth(item.getStatsMonth());
-                statsProductRequestResDTO.setStatsWeek(item.getStatsWeek());
-                statsProductRequestResDTO.setStatsYear(item.getStatsYear());
-                dataList.add(statsProductRequestResDTO);
+                statsRequestResDTO = new StatsRequestResDTO();
+                statsRequestResDTO.setProductId(item.getProductId());
+                statsRequestResDTO.setRequest(item.getRequest());
+                statsRequestResDTO.setStatsDate(item.getStatsDate());
+                statsRequestResDTO.setStatsDay(item.getStatsDay());
+                statsRequestResDTO.setStatsHour(item.getStatsHour());
+                statsRequestResDTO.setStatsMonth(item.getStatsMonth());
+                statsRequestResDTO.setStatsWeek(item.getStatsWeek());
+                statsRequestResDTO.setStatsYear(item.getStatsYear());
+                dataList.add(statsRequestResDTO);
             }
         }
         return listDTO;
     }
 
     @Override
-    public ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
+    public ListDTO<StatsRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
             Date afterDate)
     {
-        ListDTO<StatsClientRequestResDTO> listDTO = new ListDTO<>();
-        List<StatsClientRequest> list = statsClientRequestMapper.getClientTrafficByClientIds(clientIds, beforeDate,
-                afterDate);
-        List<StatsClientRequestResDTO> dataList = new ArrayList<>();
+        ListDTO<StatsRequestResDTO> listDTO = new ListDTO<>();
+        List<StatsRequest> list = statsRequestMapper.getClientTrafficByClientIds(clientIds, beforeDate, afterDate);
+        List<StatsRequestResDTO> dataList = new ArrayList<>();
         listDTO.setList(dataList);
         if(!CollectionUtils.isEmpty(list))
         {
-            StatsClientRequestResDTO statsClientRequestResDTO;
-            for(StatsClientRequest item : list)
+            StatsRequestResDTO statsRequestResDTO;
+            for(StatsRequest item : list)
             {
-                statsClientRequestResDTO = new StatsClientRequestResDTO();
-                statsClientRequestResDTO.setClientId(item.getClientId());
-                statsClientRequestResDTO.setRequest(item.getRequest());
-                statsClientRequestResDTO.setStatsDate(item.getStatsDate());
-                statsClientRequestResDTO.setStatsDay(item.getStatsDay());
-                statsClientRequestResDTO.setStatsHour(item.getStatsHour());
-                statsClientRequestResDTO.setStatsMonth(item.getStatsMonth());
-                statsClientRequestResDTO.setStatsWeek(item.getStatsWeek());
-                statsClientRequestResDTO.setStatsYear(item.getStatsYear());
-                dataList.add(statsClientRequestResDTO);
+                statsRequestResDTO = new StatsRequestResDTO();
+                statsRequestResDTO.setClientId(item.getClientId());
+                statsRequestResDTO.setRequest(item.getRequest());
+                statsRequestResDTO.setStatsDate(item.getStatsDate());
+                statsRequestResDTO.setStatsDay(item.getStatsDay());
+                statsRequestResDTO.setStatsHour(item.getStatsHour());
+                statsRequestResDTO.setStatsMonth(item.getStatsMonth());
+                statsRequestResDTO.setStatsWeek(item.getStatsWeek());
+                statsRequestResDTO.setStatsYear(item.getStatsYear());
+                dataList.add(statsRequestResDTO);
             }
         }
         return listDTO;
@@ -461,8 +450,7 @@ public class BackendStatsServiceImpl implements BackendStatsService
     public List<RechargeStatsDTO> getClientRechargeTypeTotal(DateRange dateRange)
     {
         List<RechargeStatsDTO> list = new ArrayList<>();
-        List<StatsRecharge> dataList = statsRechargeMapper.getListGroupByType(dateRange.getStart(),
-                dateRange.getEnd());
+        List<StatsRecharge> dataList = statsRechargeMapper.getListGroupByType(dateRange.getStart(), dateRange.getEnd());
         ListDTO<DictRechargeTypeResDTO> rechargeTypeList = systemRpcService.getRechargeTypeList(null, null);
         List<DictRechargeTypeResDTO> list1 = rechargeTypeList.getList();
         Map<Integer, String> rechargeTypeNameMap = new HashMap<>();
@@ -482,6 +470,235 @@ public class BackendStatsServiceImpl implements BackendStatsService
             list.add(rechargeStatsDTO);
         }
         return list;
+    }
+
+    @Override
+    public List<RequestStatsResDTO> getRequestStats(DateRange range, RangeUnit unit, List<Long> productIds,
+            String clientName)
+    {
+        List<RequestStatsResDTO> requestStatsResDTOS = new ArrayList<>();
+        List<Long> clientIds = new ArrayList<>();
+        if(!StringUtils.isNullBlank(clientName))
+        {
+            List<ClientInfoResDTO> clientInfoResDTOS = clientRpcService.getClientByCorpName(clientName);
+            for(ClientInfoResDTO item : clientInfoResDTOS)
+            {
+                clientIds.add(item.getClientId());
+            }
+        }
+        List<StatsRequest> dataList;
+        if(unit == RangeUnit.HOUR)
+        {
+            if(!CollectionUtils.isEmpty(productIds))
+            {
+                dataList = statsRequestMapper.getRequestGroupByHourAndProductId(range.getStart(), range.getEnd(),
+                        productIds, clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+            else
+            {
+                dataList = statsRequestMapper.getRequestGroupByHour(range.getStart(), range.getEnd(),
+                        clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+        }
+        else if(unit == RangeUnit.WEEK)
+        {
+            if(!CollectionUtils.isEmpty(productIds))
+            {
+                dataList = statsRequestMapper.getRequestGroupByWeekAndProductId(range.getStart(), range.getEnd(),
+                        productIds, clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+            else
+            {
+                dataList = statsRequestMapper.getRequestGroupByWeek(range.getStart(), range.getEnd(),
+                        clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+        }
+        else if(unit == RangeUnit.MONTH)
+        {
+            if(!CollectionUtils.isEmpty(productIds))
+            {
+                dataList = statsRequestMapper.getRequestGroupByMonthAndProductId(range.getStart(), range.getEnd(),
+                        productIds, clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+            else
+            {
+                dataList = statsRequestMapper.getRequestGroupByMonth(range.getStart(), range.getEnd(),
+                        clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+        }
+        else
+        {
+            if(!CollectionUtils.isEmpty(productIds))
+            {
+                dataList = statsRequestMapper.getRequestGroupByDayAndProductId(range.getStart(), range.getEnd(),
+                        productIds, clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+            else
+            {
+                dataList = statsRequestMapper.getRequestGroupByDay(range.getStart(), range.getEnd(),
+                        clientIds.size() > 0 ? clientIds.get(0) : null);
+            }
+        }
+        if(!CollectionUtils.isEmpty(productIds))
+        {
+            List<ProductResDTO> productResDTOS = productRpcService.getProductList(productIds);
+            Map<Long, ProductResDTO> productResDTOMap = new HashMap<>();
+            for(ProductResDTO item : productResDTOS)
+            {
+                productResDTOMap.put(item.getId(), item);
+            }
+            Map<Long, RequestStatsResDTO> requestStatsResDTOMap = new HashMap<>();
+            handleStatsRequest(requestStatsResDTOS, unit, dataList, requestStatsResDTOMap, productResDTOMap);
+        }
+        else
+        {
+            RequestStatsResDTO requestStatsResDTO = new RequestStatsResDTO();
+            requestStatsResDTOS.add(requestStatsResDTO);
+            Map<String, Long> requestMap = new HashMap<>();
+            Map<String, Long> requestNotHitMap = new HashMap<>();
+            Map<String, Long> requestFailedMap = new HashMap<>();
+            requestStatsResDTO.setName("请求总量");
+            requestStatsResDTO.setRequestMap(requestMap);
+            for(StatsRequest o : dataList)
+            {
+                String name;
+                if(unit == RangeUnit.HOUR)
+                {
+                    name = o.getStatsHour() + "";
+                }
+                else if(unit == RangeUnit.WEEK)
+                {
+                    name = o.getStatsYear() + String.format("%02d", o.getStatsWeek());
+                }
+                else if(unit == RangeUnit.MONTH)
+                {
+                    name = o.getStatsYear() + String.format("/%02d", o.getStatsMonth());
+                }
+                else
+                {
+                    name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
+                }
+                Long longNumber = requestMap.computeIfAbsent(name, k -> 0l);
+                requestMap.put(name, longNumber + o.getRequest());
+                longNumber = requestNotHitMap.computeIfAbsent(name, k -> 0l);
+                requestNotHitMap.put(name, longNumber + o.getRequestNotHit());
+                longNumber = requestFailedMap.computeIfAbsent(name, k -> 0l);
+                requestFailedMap.put(name, longNumber + o.getRequestFailed());
+            }
+        }
+        return requestStatsResDTOS;
+    }
+
+    private void handleStatsRequest(List<RequestStatsResDTO> requestStatsResDTOS, RangeUnit unit,
+            List<StatsRequest> dataList, Map<Long, RequestStatsResDTO> requestStatsResDTOMap,
+            Map<Long, ProductResDTO> productResDTOMap)
+    {
+        RequestStatsResDTO requestStatsResDTO;
+        Map<String, Long> requestMapTemp;
+        Map<String, Long> requestFailedMapTemp;
+        Map<String, Long> requestNotHitMapTemp;
+        for(StatsRequest o : dataList)
+        {
+            requestStatsResDTO = requestStatsResDTOMap.get(o.getProductId());
+            if(requestStatsResDTO == null)
+            {
+                requestStatsResDTO = new RequestStatsResDTO();
+                requestStatsResDTO.setName(productResDTOMap.get(o.getProductId()).getName());
+                requestStatsResDTOS.add(requestStatsResDTO);
+                requestStatsResDTOMap.put(o.getProductId(), requestStatsResDTO);
+            }
+            requestMapTemp = requestStatsResDTO.getRequestMap();
+            if(requestMapTemp == null)
+            {
+                requestMapTemp = new HashMap<>();
+                requestStatsResDTO.setRequestMap(requestMapTemp);
+            }
+            requestFailedMapTemp = requestStatsResDTO.getRequestFailedMap();
+            if(requestFailedMapTemp == null)
+            {
+                requestFailedMapTemp = new HashMap<>();
+                requestStatsResDTO.setRequestFailedMap(requestFailedMapTemp);
+            }
+            requestNotHitMapTemp = requestStatsResDTO.getRequestNotHitMap();
+            if(requestNotHitMapTemp == null)
+            {
+                requestNotHitMapTemp = new HashMap<>();
+                requestStatsResDTO.setRequestNotHitMap(requestNotHitMapTemp);
+            }
+            String name;
+            if(unit == RangeUnit.HOUR)
+            {
+                name = o.getStatsHour() + "";
+            }
+            else if(unit == RangeUnit.WEEK)
+            {
+                name = o.getStatsYear() + String.format("%02d", o.getStatsWeek());
+            }
+            else if(unit == RangeUnit.MONTH)
+            {
+                name = o.getStatsYear() + String.format("/%02d", o.getStatsMonth());
+            }
+            else
+            {
+                name = DateUtils.format(o.getStatsDate(), DateFormat.YYYY_MM_DD_2);
+            }
+            Long longNumber = requestMapTemp.computeIfAbsent(name, k -> 0l);
+            requestMapTemp.put(name, longNumber + o.getRequest());
+            longNumber = requestNotHitMapTemp.computeIfAbsent(name, k -> 0l);
+            requestNotHitMapTemp.put(name, longNumber + o.getRequestNotHit());
+            longNumber = requestFailedMapTemp.computeIfAbsent(name, k -> 0l);
+            requestFailedMapTemp.put(name, longNumber + o.getRequestFailed());
+        }
+    }
+
+    @Override
+    public List<RequestStatsResDTO> getRequestStatsGroupByProduct(DateRange range, RangeUnit unit, String clientName)
+    {
+        List<RequestStatsResDTO> requestStatsResDTOS = new ArrayList<>();
+        List<Long> clientIds = new ArrayList<>();
+        if(!StringUtils.isNullBlank(clientName))
+        {
+            List<ClientInfoResDTO> clientInfoResDTOS = clientRpcService.getClientByCorpName(clientName);
+            for(ClientInfoResDTO item : clientInfoResDTOS)
+            {
+                clientIds.add(item.getClientId());
+            }
+        }
+        List<StatsRequest> dataList;
+        if(unit == RangeUnit.HOUR)
+        {
+            dataList = statsRequestMapper.getRequestGroupByHourAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else if(unit == RangeUnit.WEEK)
+        {
+            dataList = statsRequestMapper.getRequestGroupByWeekAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else if(unit == RangeUnit.MONTH)
+        {
+            dataList = statsRequestMapper.getRequestGroupByMonthAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else
+        {
+            dataList = statsRequestMapper.getRequestGroupByDayAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        List<Long> productIds = new ArrayList<>();
+        for(StatsRequest item : dataList)
+        {
+            productIds.add(item.getProductId());
+        }
+        List<ProductResDTO> productResDTOS = productRpcService.getProductList(productIds);
+        Map<Long, ProductResDTO> productResDTOMap = new HashMap<>();
+        for(ProductResDTO item : productResDTOS)
+        {
+            productResDTOMap.put(item.getId(), item);
+        }
+        Map<Long, RequestStatsResDTO> requestStatsResDTOMap = new HashMap<>();
+        handleStatsRequest(requestStatsResDTOS, unit, dataList, requestStatsResDTOMap, productResDTOMap);
+        return requestStatsResDTOS;
     }
 
 }

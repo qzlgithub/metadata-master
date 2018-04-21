@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.backend.domain.mapper.StatsRequestMapper">
+    <resultMap id="BaseResultMap" type="StatsRequest">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="stats_year" property="statsYear" jdbcType="INTEGER" />
+        <result column="stats_month" property="statsMonth" jdbcType="INTEGER" />
+        <result column="stats_week" property="statsWeek" jdbcType="INTEGER" />
+        <result column="stats_day" property="statsDay" jdbcType="INTEGER" />
+        <result column="stats_hour" property="statsHour" jdbcType="TINYINT" />
+        <result column="stats_date" property="statsDate" jdbcType="TIMESTAMP" />
+        <result column="request" property="request" jdbcType="BIGINT" />
+        <result column="request_not_hit" property="requestNotHit" jdbcType="BIGINT" />
+        <result column="request_failed" property="requestFailed" jdbcType="BIGINT" />
+    </resultMap>
+
+    <sql id="select_all">
+        select
+            `id`, `create_time`, `update_time`, `product_id`, `client_id`, `stats_year`, `stats_month`, `stats_week`,
+            `stats_day`, `stats_hour`, `stats_date`, `request`, `request_failed`, `request_not_hit`
+        from `stats_request`
+    </sql>
+
+    <!-- @formatter:off -->
+    <insert id="addAll" parameterType="List">
+        insert into
+            `stats_request`
+            (`create_time`, `update_time`, `stats_year`, `stats_month`, `stats_week`, `stats_day`, `stats_hour`,
+             `stats_date`, `product_id`,`client_id`, `request`,`request_failed`,`request_not_hit`)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.createTime}, #{item.updateTime}, #{item.statsYear}, #{item.statsMonth}, #{item.statsWeek},
+             #{item.statsDay}, #{item.statsHour}, #{item.statsDate}, #{item.productId}, #{item.clientId},
+            #{item.request},#{item.requestFailed}, #{item.requestNotHit})
+        </foreach>
+    </insert>
+
+    <select id="getProductTrafficByProductIds" resultMap="BaseResultMap">
+        <include refid="select_all"></include>
+        where `stats_date` >= #{beforeDate} and `stats_date` &lt; #{afterDate} and product_id
+        <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </select>
+
+    <select id="getClientTrafficByClientIds" resultMap="BaseResultMap">
+        <include refid="select_all"></include>
+        where `stats_date` >= #{beforeDate} and `stats_date` &lt; #{afterDate} and client_id
+        <foreach collection="clientIds" item="itemId" open=" in (" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </select>
+
+    <select id="getRequestGroupByHour" resultMap="BaseResultMap">
+        select
+        `stats_hour` as stats_hour,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        group by `stats_hour`
+    </select>
+
+    <select id="getRequestGroupByHourAndProductId" resultMap="BaseResultMap">
+        select
+        `stats_hour` as stats_hour,
+        `product_id` as product_id,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        <if test="productIds != null and productIds.size() > 0">
+            and product_id
+            <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+                #{itemId}
+            </foreach>
+        </if>
+        group by `stats_hour`,`product_id`
+    </select>
+
+    <select id="getRequestGroupByDay" resultMap="BaseResultMap">
+        select
+        `stats_date` as stats_date,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        group by `stats_date`
+    </select>
+
+    <select id="getRequestGroupByDayAndProductId" resultMap="BaseResultMap">
+        select
+        `stats_date` as stats_date,
+        `product_id` as product_id,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        <if test="productIds != null and productIds.size() > 0">
+            and product_id
+            <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+                #{itemId}
+            </foreach>
+        </if>
+        group by `stats_date`,`product_id`
+    </select>
+
+    <select id="getRequestGroupByWeek" resultMap="BaseResultMap">
+        select
+        `stats_year` as stats_year,
+        `stats_week` as stats_week,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        group by `stats_year`, `stats_week`
+    </select>
+
+    <select id="getRequestGroupByWeekAndProductId" resultMap="BaseResultMap">
+        select
+        `stats_year` as stats_year,
+        `stats_week` as stats_week,
+        `product_id` as product_id,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        <if test="productIds != null and productIds.size() > 0">
+            and product_id
+            <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+                #{itemId}
+            </foreach>
+        </if>
+        group by `stats_year`, `stats_week`,`product_id`
+    </select>
+
+    <select id="getRequestGroupByMonth" resultMap="BaseResultMap">
+        select
+        `stats_year` as stats_year,
+        `stats_month` as stats_month,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        group by `stats_year`, `stats_month`
+    </select>
+
+    <select id="getRequestGroupByMonthAndProductId" resultMap="BaseResultMap">
+        select
+        `stats_year` as stats_year,
+        `stats_month` as stats_month,
+        `product_id` as product_id,
+        sum(`request`) as request,
+        sum(`request_failed`) as request_failed,
+        sum(`request_not_hit`) as request_not_hit
+        from stats_request where `stats_date` >= #{beforeDate} and `stats_date` &lt;= #{afterDate}
+        <if test="clientId != null">and `client_id` = #{clientId}</if>
+        <if test="productIds != null and productIds.size() > 0">
+            and product_id
+            <foreach collection="productIds" item="itemId" open=" in (" close=")" separator=",">
+                #{itemId}
+            </foreach>
+        </if>
+        group by `stats_year`, `stats_month`,`product_id`
+    </select>
+
+    <!-- @formatter:on -->
+
+</mapper>

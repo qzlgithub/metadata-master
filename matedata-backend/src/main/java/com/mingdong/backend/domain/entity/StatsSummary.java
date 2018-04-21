@@ -18,8 +18,19 @@ public class StatsSummary
     private Long request;
     private Long requestFailed;
     private Long request3rdFailed;
+    private Long requestNotHit;
     private BigDecimal recharge;
     private BigDecimal profit;
+
+    public Long getRequestNotHit()
+    {
+        return requestNotHit;
+    }
+
+    public void setRequestNotHit(Long requestNotHit)
+    {
+        this.requestNotHit = requestNotHit;
+    }
 
     public Long getId()
     {

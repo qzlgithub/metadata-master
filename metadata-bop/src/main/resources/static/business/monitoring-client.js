@@ -142,7 +142,7 @@ function getLineChart(page) {
             var pages = data.data.pages;
             totalPage = pages;
             var xAxisData = data.data.xAxisData;
-            var clientData = data.data.productData;
+            var clientData = data.data.clientData;
             var seriesData = data.data.seriesData;
             for(var i in clientData) {
                 $("#product-name-" + i).text(clientData[i]);

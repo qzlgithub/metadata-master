@@ -4,9 +4,8 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.mis.mongo.dao.RequestLogDao;
-import com.mingdong.mis.mongo.entity.ClientRequestCount;
-import com.mingdong.mis.mongo.entity.ProductRequestCount;
 import com.mingdong.mis.mongo.entity.RequestLog;
+import com.mingdong.mis.mongo.entity.RequestNumber;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -144,7 +143,7 @@ public class RequestLogDaoImpl implements RequestLogDao
     }
 
     @Override
-    public List<ClientRequestCount> findClientRequestCountByTime(Date startTime, Date endTime)
+    public List<RequestNumber> findRequestGroupCountByTime(Date startTime, Date endTime)
     {
         Criteria criteria = Criteria.where("timestamp");
         if(startTime != null)
@@ -155,17 +154,18 @@ public class RequestLogDaoImpl implements RequestLogDao
         {
             criteria.lt(endTime);
         }
-        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria), Aggregation.project("client_id"),
-                Aggregation.unwind("client_id"), Aggregation.group("client_id").count().as("count"),
-                Aggregation.project("count").and("clientId").previousOperation(),
-                Aggregation.sort(Sort.Direction.DESC, "count"));
-        AggregationResults<ClientRequestCount> groupResults = mongoTemplate.aggregate(agg, "request_log",
-                ClientRequestCount.class);
+        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria),
+                Aggregation.project("client_id", "product_id", "hit"), Aggregation.group("client_id", "product_id",
+                        "hit").count().as("count"), Aggregation.project("client_id", "product_id", "hit", "count")
+                        .and("id")
+                        .previousOperation(), Aggregation.sort(Sort.Direction.DESC, "count"));
+        AggregationResults<RequestNumber> groupResults = mongoTemplate.aggregate(agg, "request_log",
+                RequestNumber.class);
         return groupResults.getMappedResults();
     }
 
     @Override
-    public List<ProductRequestCount> findProductRequestCountByTime(Date startTime, Date endTime)
+    public List<RequestNumber> findRequestCountByTime(Date startTime, Date endTime)
     {
         Criteria criteria = Criteria.where("timestamp");
         if(startTime != null)
@@ -176,12 +176,12 @@ public class RequestLogDaoImpl implements RequestLogDao
         {
             criteria.lt(endTime);
         }
-        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria), Aggregation.project("product_id"),
-                Aggregation.unwind("product_id"), Aggregation.group("product_id").count().as("count"),
-                Aggregation.project("count").and("productId").previousOperation(),
-                Aggregation.sort(Sort.Direction.DESC, "count"));
-        AggregationResults<ProductRequestCount> groupResults = mongoTemplate.aggregate(agg, "request_log",
-                ProductRequestCount.class);
+        Aggregation agg = Aggregation.newAggregation(Aggregation.match(criteria), Aggregation.project("hit"),
+                Aggregation.group("hit").count().as("count"), Aggregation.project("hit", "count")
+                        .and("id")
+                        .previousOperation(), Aggregation.sort(Sort.Direction.DESC, "count"));
+        AggregationResults<RequestNumber> groupResults = mongoTemplate.aggregate(agg, "request_log",
+                RequestNumber.class);
         return groupResults.getMappedResults();
     }
 

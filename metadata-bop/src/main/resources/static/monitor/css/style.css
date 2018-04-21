@@ -154,7 +154,7 @@ img{width: 100%; display: inline-block;}
 .product-check{background: #014a66;}
 
 .product-data-br{border-right: solid 1px #d6d6d6;}
-.product-fx span{background: #fff; border:solid 1px #e7e7e7; padding: 5px 10px; color: #333; float: left;}
+.product-fx span{background: #fff; border:solid 1px #e7e7e7; padding: 5px 10px; color: #333; float: left; cursor: pointer;}
 .product-fx span.active{background: #129cff; color: #fff; border:solid 1px #129cff; color: #fff;}
 .product-fx-warp li{float: left; margin-right: 20px;}
 .date-icon{position: absolute; right: 6px; top: 6px;}

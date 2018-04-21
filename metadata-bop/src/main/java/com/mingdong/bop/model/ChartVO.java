@@ -9,6 +9,28 @@ public class ChartVO
     private Date startDate;
     private Date endDate;
     private Date compareFrom;
+    private String clientName;
+    private Long[] productIds;
+
+    public String getClientName()
+    {
+        return clientName;
+    }
+
+    public void setClientName(String clientName)
+    {
+        this.clientName = clientName;
+    }
+
+    public Long[] getProductIds()
+    {
+        return productIds;
+    }
+
+    public void setProductIds(Long[] productIds)
+    {
+        this.productIds = productIds;
+    }
 
     public Integer getScope()
     {

@@ -238,4 +238,6 @@ public interface ClientRpcService
     ListDTO<ClientInfoResDTO> getAllClient();
 
     void statsRequestByDate(Date date);
+
+    List<ClientInfoResDTO> getClientByCorpName(String corpName);
 }

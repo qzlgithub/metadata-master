@@ -1,13 +1,12 @@
-package com.mingdong.backend.domain.entity;
+package com.mingdong.core.model.dto.response;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class StatsClientRequest
+public class StatsRequestResDTO implements Serializable
 {
-    private Long id;
-    private Date createTime;
-    private Date updateTime;
-    private Long ClientId;
+    private Long productId;
+    private Long clientId;
     private Integer statsYear;
     private Integer statsMonth;
     private Integer statsWeek;
@@ -15,45 +14,47 @@ public class StatsClientRequest
     private Integer statsHour;
     private Date statsDate;
     private Long request;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
-    }
+    private Long requestFailed;
+    private Long requestNotHit;
 
     public Long getClientId()
     {
-        return ClientId;
+        return clientId;
     }
 
     public void setClientId(Long clientId)
     {
-        ClientId = clientId;
+        this.clientId = clientId;
+    }
+
+    public Long getRequestFailed()
+    {
+        return requestFailed;
+    }
+
+    public void setRequestFailed(Long requestFailed)
+    {
+        this.requestFailed = requestFailed;
+    }
+
+    public Long getRequestNotHit()
+    {
+        return requestNotHit;
+    }
+
+    public void setRequestNotHit(Long requestNotHit)
+    {
+        this.requestNotHit = requestNotHit;
+    }
+
+    public Long getProductId()
+    {
+        return productId;
+    }
+
+    public void setProductId(Long productId)
+    {
+        this.productId = productId;
     }
 
     public Integer getStatsYear()

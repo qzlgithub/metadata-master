@@ -93,7 +93,7 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     }
 
     @Override
-    public ResponseDTO getStatsProductRatio(Date date)
+    public ResponseDTO getStatsProductRatio(Date date, int type)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         JSONArray legendData = new JSONArray();
@@ -111,7 +111,12 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
         Map<Long, Integer> productRequestProTemp;//key productId
         Map<String, String> mapTemp;
         Map<Long, String> prodMap = redisDao.getProductNameAll();
-        List<String> periodList = getPeriodInOneHour(date);
+        List<String> periodList;
+        if(type == 1){
+            periodList = getPeriodInOneHour(date);
+        }else{
+            periodList = getPeriodInOneDay(date);
+        }
         for(String item : periodList)
         {
             mapTemp = redisDao.readProductTrafficHGetAll(item);
@@ -213,6 +218,18 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
     private List<String> getPeriodInOneHour(Date date)
     {
         int t = 12;
+        long ts = date.getTime() - date.getTime() % 300000;
+        List<String> list = new ArrayList<>(t);
+        for(int i = t - 1; i >= 0; i--)
+        {
+            list.add(DateUtils.format(new Date(ts - 300000 * i), "HH:mm"));
+        }
+        return list;
+    }
+
+    private List<String> getPeriodInOneDay(Date date)
+    {
+        int t = 288;
         long ts = date.getTime() - date.getTime() % 300000;
         List<String> list = new ArrayList<>(t);
         for(int i = t - 1; i >= 0; i--)

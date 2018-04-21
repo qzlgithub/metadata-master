@@ -6,14 +6,13 @@ import com.mingdong.core.model.DateRange;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
-import com.mingdong.core.model.dto.request.StatsClientRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
-import com.mingdong.core.model.dto.request.StatsProductRequestReqDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
+import com.mingdong.core.model.dto.request.StatsRequestReqDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.RequestStatsResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
-import com.mingdong.core.model.dto.response.StatsClientRequestResDTO;
-import com.mingdong.core.model.dto.response.StatsProductRequestResDTO;
+import com.mingdong.core.model.dto.response.StatsRequestResDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -38,14 +37,18 @@ public interface BackendStatsService
 
     ResponseDTO addJobLog(JobLogReqDTO jobLogReqDTO);
 
-    ResponseDTO addStatsRequest(List<StatsClientRequestReqDTO> addStatsClientRequest,
-            List<StatsProductRequestReqDTO> addStatsProductRequest);
+    ResponseDTO addStatsRequest(List<StatsRequestReqDTO> addStatsRequest);
 
-    ListDTO<StatsProductRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
+    ListDTO<StatsRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
             Date afterDate);
 
-    ListDTO<StatsClientRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
+    ListDTO<StatsRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
             Date afterDate);
 
     List<RechargeStatsDTO> getClientRechargeTypeTotal(DateRange range);
+
+    List<RequestStatsResDTO> getRequestStats(DateRange range, RangeUnit unit, List<Long> productIds, String clientName);
+
+    List<RequestStatsResDTO> getRequestStatsGroupByProduct(DateRange range, RangeUnit unit, String clientName);
+
 }

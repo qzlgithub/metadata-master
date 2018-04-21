@@ -425,6 +425,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
                 productResDTO = new ProductResDTO();
                 productResDTO.setId(item.getId());
                 productResDTO.setName(item.getName());
+                productResDTO.setType(item.getType());
                 prList.add(productResDTO);
             }
         }
@@ -452,6 +453,23 @@ public class ProductRpcServiceImpl implements ProductRpcService
         productResDTO.setContent(productTxt == null ? null : productTxt.getContent());
         productResDTO.setEnabled(product.getEnabled());
         return productResDTO;
+    }
+
+    @Override
+    public List<ProductResDTO> getProductList(List<Long> productIds)
+    {
+        List<Product> listByIds = productMapper.getListByIds(productIds);
+        List<ProductResDTO> productResDTOS = new ArrayList<>();
+        ProductResDTO productResDTO;
+        for(Product item : listByIds){
+            productResDTO = new ProductResDTO();
+            productResDTO.setId(item.getId());
+            productResDTO.setType(item.getType());
+            productResDTO.setName(item.getName());
+            productResDTO.setCode(item.getCode());
+            productResDTOS.add(productResDTO);
+        }
+        return productResDTOS;
     }
 
 }

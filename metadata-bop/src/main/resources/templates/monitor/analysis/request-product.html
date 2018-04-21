@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
@@ -40,18 +41,18 @@
                                 <tbody>
                                 <tr>
                                     <td>查询次数</td>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestToday}"></span>次</td>
+                                    <td><span th:text="${requestYesterday}"></span>次</td>
                                 </tr>
                                 <tr>
                                     <td>失败次数</td>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestFailedToday}"></span>次</td>
+                                    <td><span th:text="${requestFailedYesterday}"></span>次</td>
                                 </tr>
                                 <tr>
                                     <td>未击中</td>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestNotHitToday}"></span>次</td>
+                                    <td><span th:text="${requestNotHitYesterday}"></span>次</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -66,16 +67,16 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestThisMonth}"></span>次</td>
+                                    <td><span th:text="${requestTotal}"></span>次</td>
                                 </tr>
                                 <tr>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestFailedThisMonth}"></span>次</td>
+                                    <td><span th:text="${requestFailedTotal}"></span>次</td>
                                 </tr>
                                 <tr>
-                                    <td>100000次</td>
-                                    <td>100000次</td>
+                                    <td><span th:text="${requestNotHitThisMonth}"></span>次</td>
+                                    <td><span th:text="${requestNotHitTotal}"></span>次</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -86,11 +87,12 @@
                     <dt>请求统计</dt>
                     <dd class="layui-row">
                         <ul class="clearfix p10 product-fx-warp col6">
-                            <li class="product-fx mt5 clearfix">
-                                <span class="active">今天</span>
-                                <span>昨天</span>
-                                <span>近7天</span>
-                                <span>近30天</span>
+                            <li class="product-fx mt5 clearfix" id="selectType">
+                                <span typeData="1" class="active">今天</span>
+                                <span typeData="2">昨天</span>
+                                <span typeData="3">近7天</span>
+                                <span typeData="4">近30天</span>
+                                <span typeData="0">自定义</span>
                             </li>
                             <li class="position-r">统计时间：
                                 <em class="inline-block">
@@ -102,7 +104,7 @@
                                 </em>
                                 <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
                             </li>
-                            <li class="mt10">
+                            <!--<li class="mt10">
                                 <label class="contrast-time2 va">
                                     <input type="checkbox" name="" id="selectContrast"/>
                                 </label>对比时间
@@ -112,7 +114,7 @@
                                     <input type="text" class="layui-input" id="contrastDate"/>
                                 </em>
                                 <i class="layui-icon fz-24 date-icon col4">&#xe637;</i>
-                            </li>
+                            </li>-->
                             <li class="product-tjnav1 pl40 mr5 important" style="margin-top: 2px;">
                                 <h3 class="pl10 pr10 product-title1">选择产品 <i class="layui-icon fr">&#xe61a;</i></h3>
                                 <div class="p10 product-tjlist1 product-nav1">
@@ -121,54 +123,37 @@
                                         <input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"
                                                id="allChoose" title="全部产品"/>
                                         </span>
-                                        <em class="fr">
-                                            <input type="text" class="layui-input" placeholder="请输入搜索产品"/>
-                                        </em>
                                     </p>
                                     <div class="public-height" id="pro_type">
-                                        <div class="mt10">
-                                            <div class="col5 mt10 pl10">金融风控</div>
-                                            <ul class="layui-form choose-check-list clearfix pb5  col5 important">
-                                                <li><input type="checkbox" name="checked" value="1" lay-skin="primary"
-                                                           lay-filter="choose" title="黑名单"/></li>
-                                                <li><input type="checkbox" name="checked" value="2" lay-skin="primary"
-                                                           lay-filter="choose" title="信用评级"/></li>
-                                            </ul>
-                                        </div>
-                                        <div class="mt10">
-                                            <div class="col5 mt10 pl10">金融风控</div>
-                                            <ul class="layui-form choose-check-list clearfix pb5  col5 important">
-                                                <li><input type="checkbox" name="checked" value="1" lay-skin="primary"
-                                                           lay-filter="choose" title="黑名单"/></li>
-                                                <li><input type="checkbox" name="checked" value="2" lay-skin="primary"
-                                                           lay-filter="choose" title="信用评级"/></li>
-                                            </ul>
-                                        </div>
+
                                     </div>
                                     <ul class="mt10 pb20 bd-top pt10 check-list">
-                                        <div class="mt15 tr"><span class="button-qr choose-hide cp nav-close1">确认</span>
+                                        <div class="mt15 tr">
+                                            <span class="button-qr choose-hide cp nav-close1" onclick="refreshChart()">确认</span>
                                         </div>
                                     </ul>
                                 </div>
                             </li>
-                            <li class="product-fx mt5 clearfix">
-                                <span class="active">按时</span>
-                                <span>按日</span>
-                                <span>按周</span>
-                                <span>按月</span>
+                            <li class="product-fx mt5 clearfix" id="unitOcx">
+                                <span data-unit="1" class="active">按时</span>
+                                <span data-unit="2">按日</span>
+                                <span data-unit="3">按周</span>
+                                <span data-unit="4">按月</span>
                             </li>
                         </ul>
                         <!--搜索-->
                         <ul class="search-list clearfix pb15 mt20 col6">
-                            <li>客户账号
-                                <input type="text" name="username" placeholder="请输入" class="search-input"/>
+                            <li>客户
+                                <input type="text" name="username" id="clientName" placeholder="请输入公司名称"
+                                       class="search-input"/>
                             </li>
                             <li>
-                                <button class="check-button">查询</button>
+                                <button class="cp check-button" onclick="refreshChart()">查询</button>
                             </li>
                         </ul>
                         <!--搜索 end-->
-                        <div class="tc mt20 mb20"><img src="/static/monitor/images/data-img1.png"/></div>
+                        <div class="tc mt20 mb20"
+                             style="width:100%;height:480px" id="chart-line"></div>
                     </dd>
                 </dl>
                 <!--营收数据 end-->
@@ -176,19 +161,12 @@
                     <dd class="layui-row layui-col-space10 p0 important">
                         <div class="layui-col-md5">
                             <div class=" public-warp1 ">
-                                <p class="tc mt20 mb40">
-                                    <select class="select-list">
-                                        <option value="1">收入-产品占比</option>
-                                        <option value="2">成本-产品占比</option>
-                                        <option value="2">收益-产品占比</option>
-                                    </select>
-                                </p>
-                                <p class="tc"><img src="/static/monitor/images/data-img1.png"/></p>
+                                <p class="tc" style="width:100%;height:480px" id="chart-pie"></p>
                             </div>
                         </div>
                         <div class="layui-col-md7">
-                            <div class="p30 tc public-warp1 ">
-                                <p class="tc"><img src="/static/monitor/images/data-img222.png"/></p>
+                            <div class=" public-warp1 ">
+                                <p class="tc" style="width:100%;height:480px" id="chart-bar"></p>
                             </div>
                         </div>
                     </dd>

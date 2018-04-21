@@ -28,6 +28,50 @@ public class SummaryStatsDTO implements Serializable
     private Long request3rdFailedYesterday;
     private Long request3rdFailedThisMonth;
     private Long request3rdFailedTotal;
+    private Long requestNotHitToday;
+    private Long requestNotHitYesterday;
+    private Long requestNotHitThisMonth;
+    private Long requestNotHitTotal;
+
+    public Long getRequestNotHitToday()
+    {
+        return requestNotHitToday;
+    }
+
+    public void setRequestNotHitToday(Long requestNotHitToday)
+    {
+        this.requestNotHitToday = requestNotHitToday;
+    }
+
+    public Long getRequestNotHitYesterday()
+    {
+        return requestNotHitYesterday;
+    }
+
+    public void setRequestNotHitYesterday(Long requestNotHitYesterday)
+    {
+        this.requestNotHitYesterday = requestNotHitYesterday;
+    }
+
+    public Long getRequestNotHitThisMonth()
+    {
+        return requestNotHitThisMonth;
+    }
+
+    public void setRequestNotHitThisMonth(Long requestNotHitThisMonth)
+    {
+        this.requestNotHitThisMonth = requestNotHitThisMonth;
+    }
+
+    public Long getRequestNotHitTotal()
+    {
+        return requestNotHitTotal;
+    }
+
+    public void setRequestNotHitTotal(Long requestNotHitTotal)
+    {
+        this.requestNotHitTotal = requestNotHitTotal;
+    }
 
     public Integer getClientIncIn7Days()
     {

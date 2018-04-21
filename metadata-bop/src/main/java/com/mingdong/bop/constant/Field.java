@@ -212,4 +212,9 @@ public interface Field
     String VALUE = "value";
     String CLIENT_INC_7D = "clientInc7d";
     String CLIENT_INC_THIS_MONTH = "clientIncThisMonth";
+    String REQUEST_NOT_HIT_TODAY = "requestNotHitToday";
+    String REQUEST_NOT_HIT_YESTERDAY = "requestNotHitYesterday";
+    String REQUEST_NOT_HIT_THIS_MONTH = "requestNotHitThisMonth";
+    String REQUEST_NOT_HIT_TOTAL = "requestNotHitTotal";
+    String CLIENT_DATA = "clientData";
 }

@@ -60,4 +60,6 @@ public interface ProductRpcService
     ListDTO<ProductResDTO> getAllProduct();
 
     ProductResDTO getProductInfoByCode(String code);
+
+    List<ProductResDTO> getProductList(List<Long> productIds);
 }

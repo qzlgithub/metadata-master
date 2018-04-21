@@ -58,16 +58,25 @@ public class MonitoringController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestResp res = new RestResp();
-        clientService.getClientTraffic(new Page(pageNum, pageSize), res);
+        clientService.getClientTraffic7d(new Page(pageNum, pageSize), res);
         return res;
     }
 
     @LoginRequired
     @GetMapping(value = "/monitoring/product/allProduct")
-    public RestListResp allProduct()
+    public RestResp allProduct()
     {
-        RestListResp res = new RestListResp();
+        RestResp res = new RestListResp();
         productService.getAllProduct(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/type")
+    public RestResp productType()
+    {
+        RestResp res = new RestListResp();
+        productService.getProductForType(res);
         return res;
     }
 
@@ -98,7 +107,7 @@ public class MonitoringController
     public RestResp productRatio()
     {
         RestResp res = new RestResp();
-        productService.getProductRatio(res);
+        productService.getProductRatio1h(res);
         return res;
     }
 
@@ -108,7 +117,7 @@ public class MonitoringController
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
         RestResp res = new RestResp();
-        productService.getProductTraffic(new Page(pageNum, pageSize), res);
+        productService.getProductTraffic7d(new Page(pageNum, pageSize), res);
         return res;
     }
 

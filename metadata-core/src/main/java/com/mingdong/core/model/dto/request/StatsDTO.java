@@ -13,8 +13,30 @@ public class StatsDTO implements Serializable
     private Integer statsHour;
     private Date statsDate;
     private Integer clientIncrement;
-    private Long clientRequest;
+    private Long request;
+    private Long requestFailed;
+    private Long requestNotHit;
     private BigDecimal clientRecharge;
+
+    public Long getRequestNotHit()
+    {
+        return requestNotHit;
+    }
+
+    public void setRequestNotHit(Long requestNotHit)
+    {
+        this.requestNotHit = requestNotHit;
+    }
+
+    public Long getRequestFailed()
+    {
+        return requestFailed;
+    }
+
+    public void setRequestFailed(Long requestFailed)
+    {
+        this.requestFailed = requestFailed;
+    }
 
     public Integer getStatsYear()
     {
@@ -86,14 +108,14 @@ public class StatsDTO implements Serializable
         this.clientIncrement = clientIncrement;
     }
 
-    public Long getClientRequest()
+    public Long getRequest()
     {
-        return clientRequest;
+        return request;
     }
 
-    public void setClientRequest(Long clientRequest)
+    public void setRequest(Long request)
     {
-        this.clientRequest = clientRequest;
+        this.request = request;
     }
 
     public BigDecimal getClientRecharge()

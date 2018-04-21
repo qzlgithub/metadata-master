@@ -98,7 +98,18 @@ public class StatisticsManageImpl implements StatisticsManage
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
-
+        map.put(Field.REQUEST_TODAY, stats.getRequestToday());
+        map.put(Field.REQUEST_YESTERDAY, stats.getRequestYesterday());
+        map.put(Field.REQUEST_THIS_MONTH, stats.getRequestThisMonth());
+        map.put(Field.REQUEST_TOTAL, stats.getRequestTotal());
+        map.put(Field.REQUEST_FAILED_TODAY, stats.getRequestFailedToday());
+        map.put(Field.REQUEST_FAILED_YESTERDAY, stats.getRequestFailedYesterday());
+        map.put(Field.REQUEST_FAILED_THIS_MONTH, stats.getRequestFailedThisMonth());
+        map.put(Field.REQUEST_FAILED_TOTAL, stats.getRequestFailedTotal());
+        map.put(Field.REQUEST_NOT_HIT_TODAY, stats.getRequestNotHitToday());
+        map.put(Field.REQUEST_NOT_HIT_YESTERDAY, stats.getRequestNotHitYesterday());
+        map.put(Field.REQUEST_NOT_HIT_THIS_MONTH, stats.getRequestNotHitThisMonth());
+        map.put(Field.REQUEST_NOT_HIT_TOTAL, stats.getRequestNotHitTotal());
         return map;
     }
 

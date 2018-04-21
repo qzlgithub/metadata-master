@@ -33,4 +33,6 @@ public interface ClientMapper
     int countByStartTime(Date date);
 
     List<Client> findAll();
+
+    List<Client> findLikeByCorpName(String corpName);
 }

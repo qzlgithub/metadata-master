@@ -34,13 +34,17 @@ public interface ProductService
 
     void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res);
 
-    void getAllProduct(RestListResp res);
+    void getAllProduct(RestResp res);
 
     void getStatsProductRequestCache(List<Long> productIdList, RestResp res);
 
-    void getProductRatio(RestResp res);
+    void getProductRatio1h(RestResp res);
 
     void getProductRequestList(RestListResp res);
 
-    void getProductTraffic(Page page, RestResp res);
+    void getProductTraffic7d(Page page, RestResp res);
+
+    void getProductForType(RestResp res);
+
+    void getProductRatio1d(RestResp res);
 }
