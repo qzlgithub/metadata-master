@@ -13,8 +13,10 @@
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
 
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link href="/static/css/site.min.css" rel="stylesheet"/>
     <link href="/static/css/animate.min.css" rel="stylesheet"/>
     <link href="/static/css/base.css" rel="stylesheet"/>
@@ -43,22 +45,26 @@
     <div class="row development">
         <div th:include="product :: left"></div>
         <div class="col-lg-10 col-sm-10 col-md-10 bd-left">
-            <div class="mt30 pl10 pr10 pb30">
+            <div class="mt30 pl10 pr10 pb30 layui-form">
                 <div class="border-title">历史消费记录</div>
                 <ul class="search-list clearfix border-b2 pb15 mt20">
-                    <li>产品服务：
-                        <select id="product-sel" name="modules" class="select-list" lay-search="">
-                            <option value="">全部</option>
-                            <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
-                                    th:selected="${o.key} eq ${productId}"></option>
-                        </select>
+                    <li style="display: flex; width: 28%;"><span style="margin-top: 9px;">产品服务：</span>
+                        <div style="width: 60%;">
+                            <select id="product-sel" name="modules" class="select-list" lay-search="">
+                                <option value="">全部</option>
+                                <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
+                                        th:selected="${o.key} eq ${productId}"></option>
+                            </select>
+                        </div>
                     </li>
-                    <li>是否击中：
-                        <select name="hit" id="hit" title="是否击中" class="select-list" lay-search="">
-                            <option value="">全部</option>
-                            <option value="0">未击中</option>
-                            <option value="1">击中</option>
-                        </select>
+                    <li style="display: flex; width: 28%"><span style="margin-top: 9px;">是否击中：</span>
+                        <div style="width: 60%;">
+                            <select name="hit" id="hit" title="是否击中" class="select-list" lay-search="">
+                                <option value="">全部</option>
+                                <option value="0">未击中</option>
+                                <option value="1">击中</option>
+                            </select>
+                        </div>
                     </li>
                     <li>统计时间：
                         <div class="ta_date" id="div_date1">
@@ -77,7 +83,7 @@
                 <div class="clearfix mt30">
                     <span class="fr mb10">
                         <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
-                        <a href="javascript:" class="add-button ml10" onclick="requestExport()">导出</a>
+                        <button class="add-button ml10" onclick="requestExport()" id="exportOcx">导出</button>
                     </span>
                 </div>
                 <table class="layui-table mt10">

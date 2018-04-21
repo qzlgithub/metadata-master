@@ -1,12 +1,8 @@
 var message;
 layui.config({
     base: '../build/js/'
-}).use(['app', 'message', 'laydate'], function() {
-    var app = layui.app, $ = layui.jquery, layer = layui.layer;
-    //将message设置为全局以便子页面调用
+}).use(['app', 'form', 'message', 'laydate'], function() {
     message = layui.message;
-    //主入口
-    //app.set({type: 'iframe'}).init();
 });
 $(function() {
     var fromObj = $("#from-date");
@@ -78,6 +74,12 @@ function getRechargeList(obj, pageFun) {
                 var total = data.total;
                 var pages = data.pages;
                 var list = data.list;
+                if(typeof list === 'undefined' || list.length === 0) {
+                    $("#exportOcx").attr('disabled', "true");
+                }
+                else {
+                    $("#exportOcx").removeAttr("disabled");
+                }
                 dataList.empty();
                 for(var o in list) {
                     var tr = template_tr.replace(/#{tradeTime}/g, list[o].tradeTime)
