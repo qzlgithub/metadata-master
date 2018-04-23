@@ -27,7 +27,7 @@
             <a><cite>添加客户</cite></a>
         </div>
         <div class="p20">
-            <div class="w60" id="data-div-id">
+            <div class="w60 layui-form" id="data-div-id">
                 <div class="m30">
                     <div class="layui-form-item">
                         <label class="layui-form-label"><i class="col3">*</i>账号：</label>
@@ -58,15 +58,13 @@
                         <label class="layui-form-label"><i class="col3">*</i>所属行业：</label>
                         <div class="layui-input-block clearfix">
                             <div style="width: 50%; float: left;">
-                                <select id="parentIndustryId" name="modules" onchange="getSubIndustry()"
-                                        class="select-list" style="width: 98%">
+                                <select id="parentIndustryId" style="width: 98%" lay-filter="parent-industry">
                                     <option th:each="ind:${parentIndustry}" th:value="${ind.id}"
                                             th:text="${ind.name}"></option>
                                 </select>
                             </div>
                             <div style="width: 50%; float: left;">
-                                <select id="industryId" name="modules" datames="所属行业" notnull="true" class="select-list"
-                                        style="width: 98%">
+                                <select id="industryId" datames="所属行业" notnull="true" style="width: 98%">
                                     <option th:each="ind:${industry}" th:value="${ind.id}"
                                             th:text="${ind.name}"></option>
                                 </select>

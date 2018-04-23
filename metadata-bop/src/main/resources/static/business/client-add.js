@@ -12,6 +12,20 @@ layui.config({
     app.set({
         type: 'iframe'
     }).init();
+    form.on('select(parent-industry)', function(data) {
+        var industryOcx = $("#industryId");
+        $.get(
+            "/m/dict/sub-industry",
+            {"parentId": data.value},
+            function(data) {
+                industryOcx.empty();
+                for(var d in data) {
+                    industryOcx.append(new Option(data[d].name, data[d].id));
+                }
+                form.render('select');
+            }
+        );
+    });
     $('#checkcompany').on('click', function() {
         layer.open({
             title: false,
@@ -136,26 +150,6 @@ $("#sameCompany").click(function() {
         }
     );
 });
-
-function getSubIndustry() {
-    var parentId = $("#parentIndustryId").val();
-    if(parentId !== "") {
-        $.get(
-            "/m/dict/sub-industry",
-            {"parentId": parentId},
-            function(data) {
-                $("#industryId").empty();
-                for(var d in data) {
-                    $("#industryId").append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
-                }
-            }
-        )
-    }
-    else {
-        $("#industryId").empty();
-    }
-}
-
 var isSubmit = false;
 
 function createUser() {
