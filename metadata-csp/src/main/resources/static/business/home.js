@@ -112,12 +112,9 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {
-                    layer.closeAll();
+                    window.location.href = "/login.html";
                 });
             }
         }
     })
-}
-
-function inform(id) {
 }

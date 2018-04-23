@@ -227,7 +227,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userUpd.setUpdateTime(new Date());
         userUpd.setPassword(Md5Utils.encrypt(newPassword));
         clientUserMapper.updateSkipNull(userUpd);
-        responseDTO.setResult(RestResult.SUCCESS);
         return responseDTO;
     }
 

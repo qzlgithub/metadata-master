@@ -19,7 +19,7 @@ public interface ClientService
     /**
      * 更改密码
      */
-    void changePassword(Long userId, String oldPwd, String newPwd, String repeatPwd, RestResp resp);
+    void changePassword(Long userId, String oldPwd, String newPwd, String repeatPwd, String sessionId, RestResp resp);
 
     /**
      * 添加子账号

@@ -70,7 +70,7 @@ public class ClientController
      */
     @LoginRequired
     @PostMapping(value = "/client/user/password")
-    public RestResp changePassword(@RequestBody JSONObject jsonReq)
+    public RestResp changePassword(HttpServletRequest request, @RequestBody JSONObject jsonReq)
     {
         RestResp resp = new RestResp();
         String oldPwd = jsonReq.getString(Field.ORG_PASSWORD);
@@ -81,7 +81,8 @@ public class ClientController
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, repeatPwd, resp);
+        clientService.changePassword(RequestThread.getUserId(), oldPwd, newPwd, repeatPwd, request.getSession().getId(),
+                resp);
         return resp;
     }
 
