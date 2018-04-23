@@ -11,8 +11,8 @@ public interface TradeService
     /**
      * 根据条件获取充值记录列表
      */
-    void getProductRechargeInfoList(String keyword, Long productId, Integer rechargeType, Date fromDate, Date toDate,
-            Page page, RestListResp res);
+    void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Integer rechargeType, Date fromDate,
+            Date toDate, Page page, RestListResp res);
 
     /**
      * 根据条件导出充值记录列表
