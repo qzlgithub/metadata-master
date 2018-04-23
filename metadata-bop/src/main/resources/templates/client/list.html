@@ -56,6 +56,15 @@
                         </select>
                     </div>
                 </li>
+                <li th:if="${isAdmin == 1}">
+                    客户经理：
+                    <div class="layui-inline" style="width: 120px">
+                        <select id="manager" name="manager-id">
+                            <option value="" selected="selected">全部</option>
+                            <option th:each="o : ${managerDict}" th:value="${o.key}" th:text="${o.value}"></option>
+                        </select>
+                    </div>
+                </li>
                 <li>
                     <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
                 </li>

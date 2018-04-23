@@ -379,22 +379,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
             responseDTO.setResult(RestResult.USERNAME_EXIST);
             return responseDTO;
         }
-        String config = sistemMapper.getClientUserMax();
-        List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
-        int subAccountCount = 0;
-        for(ClientUser cu : userList)
-        {
-            if(!cu.getId().equals(client.getPrimaryUserId()))
-            {
-                subAccountCount++;
-            }
-        }
-        int canSubAccountCount = Integer.parseInt(config);
-        if(subAccountCount >= canSubAccountCount)
-        {
-            responseDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
-            return responseDTO;
-        }
 
         Date current = new Date();
         user = new ClientUser();

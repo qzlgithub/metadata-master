@@ -17,7 +17,8 @@ layui.config({
             enabled: $("#enabled").val(),
             keyword: $("#keyword").val(),
             industryId: $("#industryId").val(),
-            parentIndustryId: $("#parentIndustryId").val()
+            parentIndustryId: $("#parentIndustryId").val(),
+            managerId: $("#manager").val()
         },
         cols: [[
             {type: 'checkbox', fixed: 'left', width: '5%'},
@@ -49,7 +50,8 @@ layui.config({
                 enabled: params['enabled'],
                 keyword: params['keyword'],
                 industryId: params['industry'],
-                parentIndustryId: params['parent-industry']
+                parentIndustryId: params['parent-industry'],
+                managerId: params['manager-id']
             },
             page: {
                 curr: 1
