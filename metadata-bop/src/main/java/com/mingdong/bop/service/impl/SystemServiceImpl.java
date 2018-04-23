@@ -258,7 +258,7 @@ public class SystemServiceImpl implements SystemService
             ListDTO<DictIndustryResDTO> listDTO2 = systemRpcService.getIndustryList(parentList.get(0).getId(),
                     TrueOrFalse.TRUE);
             List<DictIndustryResDTO> childList = listDTO2.getList();
-            if(CollectionUtils.isEmpty(childList))
+            if(!CollectionUtils.isEmpty(childList))
             {
                 for(DictIndustryResDTO industry : childList)
                 {
@@ -624,6 +624,13 @@ public class SystemServiceImpl implements SystemService
     {
         ResponseDTO responseDTO = backendWarningService.changeWarningSettingStatus(id, status);
         resp.setError(responseDTO.getResult());
+    }
+
+    @Override
+    public Integer getDefaultSubUserQty()
+    {
+        SistemDTO sistemDTO = systemRpcService.getSystemSetting();
+        return sistemDTO.getClientUserMax();
     }
 
     private void cacheAllIndustryData()

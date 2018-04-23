@@ -344,9 +344,9 @@ public class ClientServiceImpl implements ClientService
     {
         if(StringUtils.isNullBlank(vo.getUsername()) || StringUtils.isNullBlank(vo.getPassword()) ||
                 StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(vo.getShortName()) ||
-                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null || (!TrueOrFalse.TRUE.equals(
-                vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())) || CollectionUtils.isEmpty(
-                vo.getContacts()))
+                StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
+                vo.getAccountTotalQty() == null || (!TrueOrFalse.TRUE.equals(vo.getEnabled()) &&
+                !TrueOrFalse.FALSE.equals(vo.getEnabled())) || CollectionUtils.isEmpty(vo.getContacts()))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;
@@ -380,6 +380,7 @@ public class ClientServiceImpl implements ClientService
         dto.setLicense(vo.getLicense());
         dto.setUsername(vo.getUsername());
         dto.setContactList(contactList);
+        dto.setAccountTotalQty(vo.getAccountTotalQty() > 0 ? vo.getAccountTotalQty() : 0);
         dto.setEnabled(vo.getEnabled());
         dto.setManagerId(RequestThread.getOperatorId());
         ResponseDTO res = clientRpcService.addClient(dto);
@@ -404,6 +405,7 @@ public class ClientServiceImpl implements ClientService
         reqDTO.setIndustryId(vo.getIndustryId());
         reqDTO.setEnabled(vo.getEnabled());
         reqDTO.setManagerId(vo.getManagerId());
+        reqDTO.setAccountTotalQty(vo.getAccountTotalQty());
         List<ClientContactReqDTO> contactList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(vo.getContacts()))
         {
@@ -549,6 +551,7 @@ public class ClientServiceImpl implements ClientService
         data.put(Field.INDUSTRY_ID, dto.getIndustryId() + "");
         data.put(Field.USER_STATUS, dto.getEnabled());
         data.put(Field.MANAGER_ID, dto.getManagerId());
+        data.put(Field.ACCOUNT_TOTAL_QTY, dto.getAccountTotalQty());
         List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
         for(ClientContactReqDTO o : dto.getContacts())
         {

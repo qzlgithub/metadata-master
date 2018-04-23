@@ -11,6 +11,7 @@ public class ClientReqDTO implements Serializable
     private String license;
     private Long industryId;
     private String username;
+    private Integer accountTotalQty;
     private Integer enabled;
     private List<ClientContactReqDTO> contactList;
     private Long managerId;
@@ -73,6 +74,16 @@ public class ClientReqDTO implements Serializable
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public Integer getAccountTotalQty()
+    {
+        return accountTotalQty;
+    }
+
+    public void setAccountTotalQty(Integer accountTotalQty)
+    {
+        this.accountTotalQty = accountTotalQty;
     }
 
     public Integer getEnabled()

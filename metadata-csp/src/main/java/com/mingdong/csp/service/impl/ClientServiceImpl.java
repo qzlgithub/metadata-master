@@ -148,10 +148,15 @@ public class ClientServiceImpl implements ClientService
                 map.put(Field.NAME, u.getName());
                 list.add(map);
             }
-            resp.addData(Field.ALLOWED_QTY, subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX));
             resp.addData(Field.SUB_USER_LIST, list);
-            int count = Integer.valueOf(subUserList.getExtradata().get(Field.SUB_ACCOUNT_MAX)) - list.size();
-            resp.addData(Field.COUNT, count < 0 ? 0 : count);
+            if(subUserList.getExtradata() != null)
+            {
+                resp.addData(Field.COUNT, subUserList.getExtradata().get(Field.ACCOUNT_REMAIN_QTY));
+            }
+            else
+            {
+                resp.addData(Field.COUNT, 0);
+            }
         }
         ListDTO<ProductResDTO> openedList = productRpcService.getOpenedProductList(RequestThread.getClientId());
         List<Map<String, Object>> opened = new ArrayList<>();

@@ -13,6 +13,7 @@ public class ClientDetailResDTO extends ResponseDTO
     private String shortName;
     private String license;
     private Long industryId;
+    private Integer accountTotalQty;
     private Integer enabled;
     private List<ClientContactReqDTO> contacts;
     private List<ClientUserResDTO> users;
@@ -78,6 +79,16 @@ public class ClientDetailResDTO extends ResponseDTO
     public void setIndustryId(Long industryId)
     {
         this.industryId = industryId;
+    }
+
+    public Integer getAccountTotalQty()
+    {
+        return accountTotalQty;
+    }
+
+    public void setAccountTotalQty(Integer accountTotalQty)
+    {
+        this.accountTotalQty = accountTotalQty;
     }
 
     public Integer getEnabled()

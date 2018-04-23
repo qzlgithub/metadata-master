@@ -13,6 +13,7 @@
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="manager_id" property="managerId" jdbcType="BIGINT" />
         <result column="account_qty" property="accountQty" jdbcType="INTEGER" />
+        <result column="account_total_qty" property="accountTotalQty" jdbcType="INTEGER" />
         <result column="enabled" property="enabled" jdbcType="TINYINT" />
         <result column="deleted" property="deleted" jdbcType="TINYINT" />
     </resultMap>
@@ -20,7 +21,7 @@
     <sql id="select_all">
         select
             `id`, `create_time`, `update_time`, `corp_name`, `short_name`, `license`, `industry_id`,
-            `primary_user_id`, `username`, `manager_id`, `account_qty`, `enabled`, `deleted`
+            `primary_user_id`, `username`, `manager_id`, `account_qty`, `account_total_qty`, `enabled`, `deleted`
         from `client`
     </sql>
 
@@ -42,6 +43,7 @@
             <if test="username != null">`username`,</if>
             <if test="managerId != null">`manager_id`,</if>
             <if test="accountQty != null">`account_qty`,</if>
+            <if test="accountTotalQty != null">`account_total_qty`,</if>
             <if test="enabled != null">`enabled`,</if>
             <if test="deleted != null">`deleted`,</if>
         </trim>
@@ -57,6 +59,7 @@
             <if test="username != null">#{username},</if>
             <if test="managerId != null">#{managerId},</if>
             <if test="accountQty != null">#{accountQty},</if>
+            <if test="accountTotalQty != null">#{accountTotalQty},</if>
             <if test="enabled != null">#{enabled},</if>
             <if test="deleted != null">#{deleted},</if>
         </trim>
@@ -64,10 +67,19 @@
 
     <update id="updateById" parameterType="Client">
         update `client`
-        set `create_time` = #{createTime}, `update_time` = #{updateTime}, `corp_name` = #{corpName},
-            `short_name` = #{shortName}, `license` = #{license}, `industry_id` = #{industryId}, `primary_user_id` =
-        #{primaryUserId}, `username` = #{username}, `manager_id` = #{managerId}, `account_qty` = #{accountQty},
-            `enabled` = #{enabled}, `deleted` = #{deleted}
+        set `create_time`       = #{createTime},
+            `update_time`       = #{updateTime},
+            `corp_name`         = #{corpName},
+            `short_name`        = #{shortName},
+            `license`           = #{license},
+            `industry_id`       = #{industryId},
+            `primary_user_id`   = #{primaryUserId},
+            `username`          = #{username},
+            `manager_id`        = #{managerId},
+            `account_qty`       = #{accountQty},
+            `account_total_qty` = #{accountTotalQty},
+            `enabled`           = #{enabled},
+            `deleted`           = #{deleted}
         where `id` = #{id}
     </update>
 
@@ -84,21 +96,29 @@
             <if test="username != null">`username` = #{username},</if>
             <if test="managerId != null">`manager_id` = #{managerId},</if>
             <if test="accountQty != null">`account_qty` = #{accountQty},</if>
+            <if test="accountTotalQty != null">`account_total_qty` = #{accountTotalQty},</if>
             <if test="enabled != null">`enabled` = #{enabled},</if>
             <if test="deleted != null">`deleted` = #{deleted},</if>
         </set>
         where `id` = #{id}
     </update>
 
+    <!-- @formatter:off -->
     <update id="updateStatusByIds">
-        update `client` set `enabled` = #{enabled}, `update_time` = #{date} where `id` in
+        update `client`
+        set `enabled`     = #{enabled},
+            `update_time` = #{date}
+        where `id` in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>
 
     <update id="setClientDeleted">
-        update `client` set `deleted` = 1, `update_time` = #{date} where id in
+        update `client`
+        set `deleted`     = 1,
+            `update_time` = #{date}
+        where id in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
@@ -149,9 +169,8 @@
         </where>
     </select>
 
-    <select id="findLikeByCorpName" resultMap="BaseResultMap" parameterType="String" >
+    <select id="findLikeByCorpName" resultMap="BaseResultMap" parameterType="String">
         <include refid="select_all" />
         where `corp_name` like "%"#{corpName}"%"
     </select>
-
 </mapper>

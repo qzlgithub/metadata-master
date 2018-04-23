@@ -24,6 +24,7 @@ create table `stats_summary` (
   `update_time`        datetime                         not null,
   `client_increment`   int(11) default 0                not null,
   `request`            bigint(20) default 0             not null,
+  `request_not_hit`    bigint default 0                 not null,
   `request_failed`     bigint(20) default 0             not null,
   `request_3rd_failed` bigint(20) default 0             not null,
   `recharge`           decimal(16, 2) default '0.00'    not null,

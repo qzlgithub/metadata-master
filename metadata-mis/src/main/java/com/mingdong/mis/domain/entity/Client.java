@@ -15,6 +15,7 @@ public class Client
     private String username;
     private Long managerId;
     private Integer accountQty;
+    private Integer accountTotalQty;
     private Integer enabled;
     private Integer deleted;
 
@@ -126,6 +127,16 @@ public class Client
     public void setAccountQty(Integer accountQty)
     {
         this.accountQty = accountQty;
+    }
+
+    public Integer getAccountTotalQty()
+    {
+        return accountTotalQty;
+    }
+
+    public void setAccountTotalQty(Integer accountTotalQty)
+    {
+        this.accountTotalQty = accountTotalQty;
     }
 
     public Integer getEnabled()

@@ -24,7 +24,7 @@ public enum RestResult
     CONTRACT_IS_EXIST("100019", "合同编号已存在"),
     PRODUCT_NAME_EXIST("100020", "产品名称已存在"),
     PRODUCT_NOT_OPEN("100021", "客户未开通本产品"),
-    ACCOUNT_COUNT_MAX("100022", "账号数量已到上限"),
+    ACCOUNT_COUNT_MAX("100022", "账号数量已达上限"),
     PARAMETER_ERROR("100023", "参数错误"),
     INSUFFICIENT_BALANCE("100024", "账户余额不足或已过期"),
     CLIENT_NAME_EXIST("100025", "公司名称已存在"),

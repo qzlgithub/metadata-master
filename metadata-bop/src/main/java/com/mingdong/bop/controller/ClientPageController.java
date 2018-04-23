@@ -54,6 +54,7 @@ public class ClientPageController
     {
         ModelAndView view = new ModelAndView("client/add");
         view.addAllObjects(systemService.getInitIndustryMap());
+        view.addObject(Field.ACCOUNT_TOTAL_QTY, systemService.getDefaultSubUserQty());
         view.addObject(Field.DEFAULT_PASSWORD, Constant.DEFAULT_PASSWORD);
         view.addObject(Field.MANAGER_ID, RequestThread.getOperatorId());
         view.addAllObjects(RequestThread.getMap());

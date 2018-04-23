@@ -295,15 +295,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public ListDTO<SubUserResDTO> getSubUserList(Long clientId, Long userId, Page page)
     {
         ListDTO<SubUserResDTO> res = new ListDTO<>();
-        // 查询子账号个数限制
-        String max = sistemMapper.getClientUserMax();
-        res.addExtra(Field.SUB_ACCOUNT_MAX, max);
-
         Client client = clientMapper.findById(clientId);
         if(client == null || !userId.equals(client.getPrimaryUserId()))
         {
             return res;
         }
+        int accountRemainQty = client.getAccountTotalQty() - client.getAccountQty();
+        res.addExtra(Field.SUB_ACCOUNT_MAX, String.valueOf(client.getAccountTotalQty()));
+        res.addExtra(Field.ACCOUNT_REMAIN_QTY, String.valueOf(accountRemainQty > 0 ? accountRemainQty : 0));
         if(page == null)
         {
             List<SubUserResDTO> list = querySubUserOfClient(clientId);
@@ -367,6 +366,11 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(client == null)
         {
             responseDTO.setResult(RestResult.ONLY_PRIMARY_USER);
+            return responseDTO;
+        }
+        else if(client.getAccountQty() >= client.getAccountTotalQty())
+        {
+            responseDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
             return responseDTO;
         }
         ClientUser user = clientUserMapper.findByUsername(username);
@@ -688,6 +692,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         client.setUsername(reqDTO.getUsername());
         client.setManagerId(reqDTO.getManagerId());
         client.setAccountQty(0);
+        client.setAccountTotalQty(reqDTO.getAccountTotalQty());
         client.setEnabled(TrueOrFalse.TRUE);
         client.setDeleted(TrueOrFalse.FALSE);
         clientMapper.add(client);
@@ -748,6 +753,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         clientUpd.setShortName(dto.getShortName());
         clientUpd.setLicense(dto.getLicense());
         clientUpd.setIndustryId(dto.getIndustryId());
+        clientUpd.setAccountTotalQty(dto.getAccountTotalQty());
         clientUpd.setManagerId(dto.getManagerId());
         clientUpd.setEnabled(dto.getEnabled());
         clientMapper.updateSkipNull(clientUpd);
@@ -912,6 +918,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setShortName(client.getShortName());
         res.setLicense(client.getLicense());
         res.setIndustryId(client.getIndustryId());
+        res.setAccountTotalQty(client.getAccountTotalQty());
         res.setUsername(client.getUsername());
         res.setEnabled(client.getEnabled());
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);

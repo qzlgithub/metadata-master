@@ -36,6 +36,15 @@ layui.config({
         });
     });
 });
+
+function numberOnly() {
+    if(!(event.keyCode === 46) && !(event.keyCode === 8) && !(event.keyCode === 37) && !(event.keyCode === 39)) {
+        if(!((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105))) {
+            event.returnValue = false;
+        }
+    }
+}
+
 var sc_str = "<tr><td>#{corpName}</td>" +
     "<td>#{license}</td>" +
     "<td>#{managerName}</td>" +
@@ -62,10 +71,10 @@ $("#add_contact").click(function() {
     contacts.push(contact);
     var tr = contact_base_tr;
     if(contact.general) {
-        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" checked=\"\" id=\"general-#{id}\"/></span>";
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用\" checked=\"\" id=\"general-#{id}\"/></span>";
     }
     else {
-        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用联系人\" id=\"general-#{id}\"/></span>";
+        tr = tr + "<span class=\"layui-form\"><input type=\"checkbox\" title=\"常用\" id=\"general-#{id}\"/></span>";
     }
     tr = tr + "</td></tr>";
     tr = tr.replace(/#{name}/g, contact.name).replace(/#{position}/g, contact.position)
@@ -164,6 +173,7 @@ function createUser() {
     var shortName = $("#shortName").val();
     var industryId = $("#industryId").val();
     var license = $("#license").val();
+    var accountTotalQty = $("#accountTotalQty").val();
     var managerId = $("#managerId").val();
     var enabled = $("input[name='enabled']:checked").val();
     var contactList = [];
@@ -186,6 +196,7 @@ function createUser() {
             "industryId": industryId,
             "contacts": contactList,
             "license": license,
+            "accountTotalQty": accountTotalQty,
             "managerId": managerId,
             "enabled": enabled
         }),

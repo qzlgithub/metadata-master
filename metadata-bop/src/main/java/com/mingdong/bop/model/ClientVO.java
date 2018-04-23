@@ -11,6 +11,7 @@ public class ClientVO
     private Long industryId;
     private String username;
     private String password;
+    private Integer accountTotalQty;
     private Integer enabled;
     private Long managerId;
     private List<ContactVO> contacts;
@@ -94,6 +95,16 @@ public class ClientVO
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public Integer getAccountTotalQty()
+    {
+        return accountTotalQty;
+    }
+
+    public void setAccountTotalQty(Integer accountTotalQty)
+    {
+        this.accountTotalQty = accountTotalQty;
     }
 
     public Integer getEnabled()

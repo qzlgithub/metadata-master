@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -82,6 +83,14 @@
                             <i class="col3 pl10" id="licenseTip" style="display: none"></i>
                         </div>
                     </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i class="col3">*</i>子账号个数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="accountTotalQty" autocomplete="off" class="layui-input"
+                                   th:value="${accountTotalQty}" onkeydown="numberOnly()"/>
+                            <i class="col3 pl10" id="accountTotalQtyTip" style="display: none"></i>
+                        </div>
+                    </div>
                     <div class="layui-form-item" style="display: none;">
                         <label class="layui-form-label">账号状态：</label>
                         <div class="layui-input-block layui-form">
@@ -117,7 +126,7 @@
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
                     <a href="javascript:" id="save" class="layui-btn" onclick="createUser()">保存</a>
-                    <a href="javascript:history.back(-1);" class="layui-btn" >返回</a>
+                    <a href="javascript:history.back(-1);" class="layui-btn">返回</a>
                 </div>
             </div>
             <div class="fb ml100">创建账号默认密码为

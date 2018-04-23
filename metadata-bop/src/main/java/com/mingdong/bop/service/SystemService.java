@@ -130,4 +130,6 @@ public interface SystemService
     void updateWarningSetting(MultipartFile upfile, WarningSettingVO warningSettingVO, RestResp resp);
 
     void changeWarningSettingStatus(Long id, Integer status, RestResp resp);
+
+    Integer getDefaultSubUserQty();
 }

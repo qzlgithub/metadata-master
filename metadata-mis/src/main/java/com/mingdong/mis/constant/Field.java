@@ -26,4 +26,5 @@ public interface Field
     String LEGEND_DATA = "legendData";
     String X_AXIS_DATA = "xAxisData";
     String SERIES_DATA = "seriesData";
+    String ACCOUNT_REMAIN_QTY = "accountRemainQty";
 }

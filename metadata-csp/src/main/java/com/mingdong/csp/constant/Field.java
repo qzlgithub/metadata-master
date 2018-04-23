@@ -81,4 +81,5 @@ public interface Field
     String NEARLY_EXPIRE_QTY = "nearlyExpireQty";
     String EXPIRED_QTY = "expiredQty";
     String IN_ARREAR_QTY = "inArrearQty";
+    String ACCOUNT_REMAIN_QTY = "accountRemainQty";
 }
