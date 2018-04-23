@@ -15,16 +15,16 @@ public enum QueryStatus
         this.name = name;
     }
 
-    public static String getNameByCode(int code)
+    public static QueryStatus getByCode(int code)
     {
         for(QueryStatus o : QueryStatus.values())
         {
             if(code == o.code)
             {
-                return o.name;
+                return o;
             }
         }
-        return SUCCESS.name;
+        return SUCCESS;
     }
 
     public int getCode()

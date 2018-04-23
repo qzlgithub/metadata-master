@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.constant.KafkaTopic;
 import com.mingdong.backend.model.Traffic;
+import com.mingdong.backend.service.ClientRequestService;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.constant.QueryStatus;
 import org.slf4j.Logger;
@@ -20,6 +21,8 @@ public class RequestListener
     private static final Logger LOGGER = LoggerFactory.getLogger("ACCESS");
     @Resource
     private RedisDao redisDao;
+    @Resource
+    private ClientRequestService clientRequestService;
 
     @KafkaListener(topics = KafkaTopic.TRAFFIC)
     public void process(String msg)
@@ -27,12 +30,18 @@ public class RequestListener
         LOGGER.info(">>> {}", msg);
         Traffic traffic = JSON.parseObject(msg, Traffic.class);
         String hourStr = getRequestHourMin(traffic.getTimestamp());
+        QueryStatus queryStatus = QueryStatus.getByCode(traffic.getStatus());
 
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
         redisDao.realTimeTraffic(hourStr, traffic.getProductId(), traffic.getClientId());
         redisDao.requestMessage(traffic.getHost(), traffic.getProductName(), traffic.getCorpName(),
-                QueryStatus.getNameByCode(traffic.getStatus()));
+                queryStatus.getName());
+        if(queryStatus != QueryStatus.SUCCESS)
+        {
+            clientRequestService.saveErrorRequest(traffic.getTimestamp(), traffic.getClientId(), traffic.getProductId(),
+                    queryStatus);
+        }
     }
 
     private String getRequestHourMin(long timestamp)
