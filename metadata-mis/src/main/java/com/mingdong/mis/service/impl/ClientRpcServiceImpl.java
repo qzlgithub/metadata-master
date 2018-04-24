@@ -856,8 +856,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return responseDTO;
         }
         Date date = new Date();
-        List<Long> clientIdList = new ArrayList<>();
-        List<Long> userIdList = new ArrayList<>();
+        List<Long> clientIdList = new ArrayList<>(); // 客户ID列表
+        List<Long> userIdList = new ArrayList<>(); // 客户主账号ID列表
         List<ClientOperateLog> logList = new ArrayList<>(clientIdList.size());
         for(Client o : clientList)
         {
@@ -878,6 +878,22 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         if(clientIdList.size() > 0)
         {
+            if(TrueOrFalse.FALSE.equals(reqDTO.getEnabled()))
+            {
+                List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(clientIdList);
+                if(!CollectionUtils.isEmpty(cupList))
+                {
+                    List<Long> clientUserProductIdList = new ArrayList<>(cupList.size());
+                    List<String> tokenList = new ArrayList<>(cupList.size());
+                    for(ClientUserProduct o : cupList)
+                    {
+                        clientUserProductIdList.add(o.getId());
+                        tokenList.add(o.getAccessToken());
+                    }
+                    redisDao.dropUserAuth(tokenList.toArray(new String[cupList.size()]));
+                    clientUserProductMapper.clearAccessToken(date, clientUserProductIdList);
+                }
+            }
             clientOperateLogMapper.addList(logList);
             clientUserMapper.updateStatusByIds(reqDTO.getEnabled(), date, userIdList);
             clientMapper.updateStatusByIds(reqDTO.getEnabled(), date, clientIdList);

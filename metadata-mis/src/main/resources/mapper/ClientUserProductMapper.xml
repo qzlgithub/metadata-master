@@ -56,8 +56,12 @@
         where `id` = #{id}
     </update>
 
+    <!-- @formatter:off -->
     <update id="clearAccessToken">
-        update `client_user_product` set `update_time` = #{date}, `access_token` = null where `id` in
+        update `client_user_product`
+        set `update_time`  = #{date},
+            `access_token` = null
+        where `id` in
         <foreach collection="idList" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
@@ -84,5 +88,18 @@
     <select id="findById" parameterType="Long" resultMap="BaseResultMap">
         <include refid="select_all" />
         where `id` = #{id}
+    </select>
+
+    <select id="getTokenListByClients" parameterType="List" resultMap="BaseResultMap">
+        select
+            cup.`id`, cup.`access_token`
+        from `client_user_product` cup
+            join `client_user` cu
+                on cup.`user_id` = cu.`id`
+        where cup.`access_token` is not null
+          and cu.`client_id` in
+        <foreach collection="clientIdList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 </mapper>
