@@ -201,8 +201,9 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
 }
 
 function openProduct() {
+    $("#openBtn").attr("disabled", "true");
     var chargeType = $("#open-charge").val();
-    if(chargeType == 1) {
+    if(chargeType === 1) {
         if($("#open-dates").val() === "") {
             $("#openTimeTip").text("服务时间不能为空！").show();
             return;
@@ -263,6 +264,7 @@ function openProduct() {
 }
 
 function renewProduct() {
+    $("#renewBtn").attr("disabled", "true");
     var billPlan = $("#renew-bill-plan").val();
     if(billPlan == 1) {
         if($("#renew-dates").val() === "") {
