@@ -83,7 +83,7 @@
                     <label class="layui-form-label"><i class="col3">*</i>子账号个数：</label>
                     <div class="layui-input-block">
                         <input type="text" id="accountTotalQty" autocomplete="off" class="layui-input"
-                               th:value="${accountTotalQty}"/>
+                               th:value="${accountTotalQty}" onkeydown="numberOnly()"/>
                         <i class="col3 pl10" id="accountTotalQtyTip" style="display: none"></i>
                     </div>
                 </div>
