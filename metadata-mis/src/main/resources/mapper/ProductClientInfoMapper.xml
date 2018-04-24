@@ -65,6 +65,7 @@
             </foreach>
         </if>
         <if test="incOpened == null">and (cp.opened != 1 or cp.opened is null)</if>
+        order by p.`create_time` desc
     </select>
 
     <select id="getListByClient" parameterType="Long" resultMap="BaseResultMap">
