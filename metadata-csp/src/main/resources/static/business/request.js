@@ -1,4 +1,3 @@
-var message, main_table;
 var startDateOcx = $("#startDate"), endDateOcx = $("#endDate");
 layui.config({
     base: '../build/js/'
@@ -6,7 +5,6 @@ layui.config({
     var laydate = layui.laydate;
     var table = layui.table;
     var form = layui.form;
-    message = layui.message;
     laydate.render({
         elem: '#dateRange',
         btns: ['confirm'],
@@ -22,7 +20,7 @@ layui.config({
             }
         }
     });
-    main_table = table.render({
+    var main_table = table.render({
         elem: '#dataTable',
         page: true,
         limit: 10,

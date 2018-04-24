@@ -14,7 +14,8 @@ public interface ProductService
     /**
      * 获取客户产品充值记录
      */
-    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page, RestResp resp);
+    void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
+            RestListResp resp);
 
     /**
      * 导出客户产品充值记录

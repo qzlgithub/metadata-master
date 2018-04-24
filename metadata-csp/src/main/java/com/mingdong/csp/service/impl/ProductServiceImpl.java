@@ -49,11 +49,11 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void getProductRechargeRecord(Long clientId, Long productId, Date fromDate, Date toDate, Page page,
-            RestResp resp)
+            RestListResp resp)
     {
         ListDTO<RechargeResDTO> productRecListDTO = clientRpcService.getClientRechargeRecord(null, clientId, productId,
                 null, null, fromDate, toDate, page);
-        resp.addData(Field.TOTAL, productRecListDTO.getTotal());
+        resp.setTotal(productRecListDTO.getTotal());
         List<RechargeResDTO> dataList = productRecListDTO.getList();
         if(!CollectionUtils.isEmpty(dataList))
         {
@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService
                 m.put(Field.CONTRACT_NO, o.getContractNo());
                 list.add(m);
             }
-            resp.addData(Field.LIST, list);
+            resp.setList(list);
         }
     }
 
