@@ -174,10 +174,10 @@ public class PageController
         }
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         Date lastWeek = calendar.getTime();
-        view.addObject(Field.FROM_DATE, DateUtils.format(lastWeek, DateFormat.YYYY_MM_DD));
-        view.addObject(Field.TO_DATE, DateUtils.format(today, DateFormat.YYYY_MM_DD));
+        view.addObject(Field.FROM_DATE, DateUtils.format(lastWeek, DateFormat.YYYY_MM_DD_2));
+        view.addObject(Field.TO_DATE, DateUtils.format(today, DateFormat.YYYY_MM_DD_2));
         view.addAllObjects(RequestThread.getPageData());
         return view;
     }

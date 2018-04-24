@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit,
-            Page page, RestResp resp)
+            Page page, RestListResp resp)
     {
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientRequestRecord(clientId, null, productId,
                 fromDate, toDate, hit, page);
@@ -139,12 +139,9 @@ public class ProductServiceImpl implements ProductService
                 map.put(Field.BALANCE, NumberUtils.formatAmount(item.getBalance()));
                 list.add(map);
             }
-            resp.addData(Field.LIST, list);
+            resp.setList(list);
         }
-        resp.addData(Field.TOTAL, apiReqInfoListDTO.getTotal());
-        resp.addData(Field.PAGES, page.getPages(apiReqInfoListDTO.getTotal()));
-        resp.addData(Field.PAGE_NUM, page.getPageNum());
-        resp.addData(Field.PAGE_SIZE, page.getPageSize());
+        resp.setTotal(apiReqInfoListDTO.getTotal());
     }
 
     @Override
@@ -153,8 +150,8 @@ public class ProductServiceImpl implements ProductService
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("历史消费记录");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("时间");
-        row.createCell(1).setCellValue("消费单号");
+        row.createCell(0).setCellValue("查询时间");
+        row.createCell(1).setCellValue("查询单号");
         row.createCell(2).setCellValue("产品服务");
         row.createCell(3).setCellValue("计费方式");
         row.createCell(4).setCellValue("是否成功");

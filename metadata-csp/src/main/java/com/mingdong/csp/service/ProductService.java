@@ -25,7 +25,7 @@ public interface ProductService
      * 客户请求记录
      */
     void getProductRequestRecord(Long clientId, Long productId, Date fromDate, Date toDate, Integer hit, Page page,
-            RestResp resp);
+            RestListResp resp);
 
     /**
      * 导出客户请求记录

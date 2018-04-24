@@ -48,16 +48,18 @@
             <div class="mt30 pl10 pr10 pb30 layui-form">
                 <div class="border-title">历史消费记录</div>
                 <ul class="search-list clearfix border-b2 pb15 mt20">
-                    <li style="display: flex; width: 28%;"><span style="margin-top: 9px;">产品服务：</span>
+                    <li style="display: flex; width: 28%;">
+                        <span style="margin-top: 9px;">产品服务：</span>
                         <div style="width: 60%;">
-                            <select id="product-sel" name="modules" class="select-list" lay-search="">
+                            <select id="product-sel" name="product" class="select-list" lay-search="">
                                 <option value="">全部</option>
                                 <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
                                         th:selected="${o.key} eq ${productId}"></option>
                             </select>
                         </div>
                     </li>
-                    <li style="display: flex; width: 28%"><span style="margin-top: 9px;">是否击中：</span>
+                    <li style="display: flex; width: 28%">
+                        <span style="margin-top: 9px;">是否击中：</span>
                         <div style="width: 60%;">
                             <select name="hit" id="hit" title="是否击中" class="select-list" lay-search="">
                                 <option value="">全部</option>
@@ -66,49 +68,31 @@
                             </select>
                         </div>
                     </li>
-                    <li>统计时间：
-                        <div class="ta_date" id="div_date1">
-                            <span class="date_title" id="date"></span>
-                            <a class="opt_sel" id="input_trigger" href="javascript:;">
-                                <i class="i_orderd"></i>
-                            </a>
+                    <li style="display: flex; width: 32%">
+                        <span style="margin-top: 9px;">统计时间：</span>
+                        <div style="width: 70%">
+                            <input type="text" class="layui-input" id="dateRange" readonly="readonly"/>
                         </div>
                     </li>
                     <li>
-                        <input type="hidden" id="from-date" th:value="${fromDate}"/>
-                        <input type="hidden" id="to-date" th:value="${toDate}"/>
-                        <button class="check-button" id="search">查询</button>
+                        <input type="hidden" id="startDate" name="start-date" th:value="${fromDate}"/>
+                        <input type="hidden" id="endDate" name="end-date" th:value="${toDate}"/>
+                        <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
                     </li>
                 </ul>
                 <div class="clearfix mt30">
                     <span class="fr mb10">
                         <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
-                        <button class="add-button ml10" onclick="requestExport()" id="exportOcx">导出</button>
+                        <button class="layui-btn layui-btn-normal" onclick="requestExport()" id="exportOcx">导出</button>
                     </span>
                 </div>
-                <table class="layui-table mt10">
-                    <thead>
-                    <tr>
-                        <th>时间</th>
-                        <th>消费单号</th>
-                        <th>产品服务</th>
-                        <th>计费方式</th>
-                        <th>是否成功</th>
-                        <th>消费(元)</th>
-                        <th>余额(元)</th>
-                    </tr>
-                    </thead>
-                    <tbody id="data-list">
-                    </tbody>
-                </table>
-                <div class="box mt30" id="pagination"></div>
+                <table class="layui-table" id="dataTable"></table>
             </div>
         </div>
     </div>
 </div>
 <div th:include="common :: footer"></div>
 <div th:include="common :: right"></div>
-
 
 <script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
@@ -118,13 +102,10 @@
 <script type="text/javascript" src="/static/js/jquery.matchHeight-min.js"></script>
 <script type="text/javascript" src="/static/js/site.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap-touch-slider.js"></script>
-<script type="text/javascript" src="/static/js/lanrenzhijia.js"></script>
 <script type="text/javascript" src="/static/js/public.js"></script>
 <script type="text/javascript" src="/static/js/toc.min.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/md5.js"></script>
-<script type="text/javascript" src="/static/plugins/paging/js/paging.js"></script>
-<script type="text/javascript" src="/static/picker-date-range/dateRange.js"></script>
 <script type="text/javascript" src="/static/business/request.js"></script>
 </body>
 </html>

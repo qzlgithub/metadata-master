@@ -75,14 +75,14 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "/product/request/list")
-    public RestResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+    public RestListResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.HIT, required = false) Integer hit,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
-        RestResp resp = new RestResp();
+        RestListResp resp = new RestListResp();
         fromDate = fromDate == null ? null : BusinessUtils.getDayStartTime(fromDate);
         toDate = toDate == null ? null : BusinessUtils.getLastDayStartTime(toDate);
         productService.getProductRequestRecord(RequestThread.getClientId(), productId, fromDate, toDate, hit,
