@@ -280,6 +280,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return responseDTO;
         }
         Date current = new Date();
+        List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClientUser(subUserId);
+        disableClientRequestToken(current, cupList);
         ClientUser userUpd = new ClientUser();
         userUpd.setId(subUserId);
         userUpd.setUpdateTime(current);
