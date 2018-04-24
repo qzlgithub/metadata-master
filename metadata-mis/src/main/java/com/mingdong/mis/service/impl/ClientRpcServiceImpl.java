@@ -95,6 +95,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -745,6 +746,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userUpd.setUpdateTime(current);
         userUpd.setEnabled(dto.getEnabled());
         clientUserMapper.updateSkipNull(userUpd);
+        if(TrueOrFalse.FALSE.equals(dto.getEnabled()))
+        {
+            disableClientRequestToken(current, dto.getClientId());
+        }
         if(!CollectionUtils.isEmpty(delIds))
         {
             clientContactMapper.deleteByIds(delIds);
@@ -880,19 +885,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             if(TrueOrFalse.FALSE.equals(reqDTO.getEnabled()))
             {
-                List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(clientIdList);
-                if(!CollectionUtils.isEmpty(cupList))
-                {
-                    List<Long> clientUserProductIdList = new ArrayList<>(cupList.size());
-                    List<String> tokenList = new ArrayList<>(cupList.size());
-                    for(ClientUserProduct o : cupList)
-                    {
-                        clientUserProductIdList.add(o.getId());
-                        tokenList.add(o.getAccessToken());
-                    }
-                    redisDao.dropUserAuth(tokenList.toArray(new String[cupList.size()]));
-                    clientUserProductMapper.clearAccessToken(date, clientUserProductIdList);
-                }
+                disableClientRequestToken(date, clientIdList.toArray(new Long[clientIdList.size()]));
             }
             clientOperateLogMapper.addList(logList);
             clientUserMapper.updateStatusByIds(reqDTO.getEnabled(), date, userIdList);
@@ -1941,6 +1934,26 @@ public class ClientRpcServiceImpl implements ClientRpcService
             returnList.add(clientInfoResDTO);
         }
         return returnList;
+    }
+
+    /**
+     * 禁用客户的请求凭证
+     */
+    private void disableClientRequestToken(Date date, Long... clientId)
+    {
+        List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(Arrays.asList(clientId));
+        if(!CollectionUtils.isEmpty(cupList))
+        {
+            List<Long> clientUserProductIdList = new ArrayList<>(cupList.size());
+            List<String> tokenList = new ArrayList<>(cupList.size());
+            for(ClientUserProduct o : cupList)
+            {
+                clientUserProductIdList.add(o.getId());
+                tokenList.add(o.getAccessToken());
+            }
+            redisDao.dropUserAuth(tokenList.toArray(new String[cupList.size()]));
+            clientUserProductMapper.clearAccessToken(date, clientUserProductIdList);
+        }
     }
 
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)
