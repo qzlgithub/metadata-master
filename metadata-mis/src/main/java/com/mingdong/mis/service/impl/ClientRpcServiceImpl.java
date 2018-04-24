@@ -19,7 +19,6 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
-import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.request.JobLogReqDTO;
 import com.mingdong.core.model.dto.request.StatsDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
@@ -1641,6 +1640,16 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 //                long requestNumber = requestLogDao.countByRequestTime(hourBefore, hourAfter);
                 List<RequestNumber> requestNumberList = requestLogDao.findRequestCountByTime(hourBefore, hourAfter);
                 BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
+                List<RequestFailedCountResDTO> requestStatsFailed = backendStatsService.getRequestStatsFailed(
+                        hourBefore, hourAfter);
+                long faileNumber = 0;
+                if(!CollectionUtils.isEmpty(requestStatsFailed))
+                {
+                    for(RequestFailedCountResDTO item : requestStatsFailed)
+                    {
+                        faileNumber += item.getCount();
+                    }
+                }
                 long requestNumber = 0;
                 long notHitNumber = 0;
                 if(!CollectionUtils.isEmpty(requestNumberList))
@@ -1670,8 +1679,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                     stats.setClientIncrement(clientCount);
                     stats.setRequest(requestNumber);
                     stats.setRequestNotHit(notHitNumber);
-                    //TODO 请求失败统计
-                    stats.setRequestFailed(0l);
+                    stats.setRequestFailed(faileNumber);
                     stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
                     ResponseDTO responseDTO = backendStatsService.addStats(stats);
                     if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
@@ -1693,16 +1701,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
 
         }).start();
-    }
-
-    @Override
-    public void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList) // TODO 客户请求走势图
-    {
-        if(!CollectionUtils.isEmpty(clientIdList) || !CollectionUtils.isEmpty(intervalList))
-        {
-            return;
-        }
-        logger.info("{}: {}", clientIdList, intervalList);
     }
 
     @Override
@@ -1800,29 +1798,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
     public Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId)
     {
         return statsClientMapper.getClientCountByDate(fromDate, toDate, managerId);
-    }
-
-    @Override
-    public ListDTO<ClientInfoResDTO> getAllClient()
-    {
-        ListDTO<ClientInfoResDTO> listDTO = new ListDTO<>();
-        List<Client> clientList = clientMapper.findAll();
-        List<ClientInfoResDTO> dataList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(clientList))
-        {
-            ClientInfoResDTO clientInfoResDTO;
-            for(Client item : clientList)
-            {
-                clientInfoResDTO = new ClientInfoResDTO();
-                clientInfoResDTO.setClientId(item.getId());
-                clientInfoResDTO.setCorpName(item.getCorpName());
-                clientInfoResDTO.setShortName(item.getShortName());
-                dataList.add(clientInfoResDTO);
-            }
-        }
-        listDTO.setList(dataList);
-        listDTO.setTotal(dataList.size());
-        return listDTO;
     }
 
     @Override
