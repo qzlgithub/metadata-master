@@ -225,6 +225,12 @@ function editClient() {
         isSubmit = false;
         return;
     }
+    var accountTotalQty = $("#accountTotalQty").val();
+    var numRegex = /^[0-9]*$/;
+    if(!numRegex.test(accountTotalQty) || accountTotalQty < 0 || accountTotalQty > 100) {
+        layer.msg("子账号个数取值范围：[0, 100]");
+        return;
+    }
     var update = [];
     for(var o in edit_obj) {
         var obj = {};
@@ -250,7 +256,7 @@ function editClient() {
             "license": $("#license").val(),
             "industryId": $("#industry").val(),
             "managerId": $("#managerId").val(),
-            "accountTotalQty": $("#accountTotalQty").val(),
+            "accountTotalQty": accountTotalQty,
             "contactDel": del_obj,
             "contacts": update,
             "enabled": $("input[name='clientEnabled']:checked").val()
