@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -53,7 +54,7 @@
                 <li>
                     充值时间：
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="dates" />
+                        <input type="text" class="layui-input" id="dates"/>
                         <input type="hidden" id="fromDate" name="fromDate"/>
                         <input type="hidden" id="toDate" name="toDate"/>
                     </div>
@@ -68,7 +69,7 @@
                     </div>
                 </li>
                 <li th:if="${#lists.contains(i_privilege,'51101')}">
-                    <button class="layui-btn" lay-submit="" lay-filter="search" >查询</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
                 </li>
             </ul>
             <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'51102')}">

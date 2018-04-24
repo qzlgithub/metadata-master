@@ -161,13 +161,18 @@ function createUser() {
         isSubmit = false;
         return;
     }
+    var accountTotalQty = $("#accountTotalQty").val();
+    var numRegex = /^[0-9]*$/;
+    if(!numRegex.test(accountTotalQty) || accountTotalQty < 0 || accountTotalQty > 100) {
+        layer.msg("子账号个数取值范围：[0, 100]");
+        return;
+    }
     var username = $("#username").val();
     var password = MD5($("#password").text());
     var corpName = $("#corpName").val();
     var shortName = $("#shortName").val();
     var industryId = $("#industryId").val();
     var license = $("#license").val();
-    var accountTotalQty = $("#accountTotalQty").val();
     var managerId = $("#managerId").val();
     var enabled = $("input[name='enabled']:checked").val();
     var contactList = [];

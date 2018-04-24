@@ -95,7 +95,6 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -281,6 +280,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return responseDTO;
         }
         Date current = new Date();
+        List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClientUser(subUserId);
+        disableClientRequestToken(current, cupList);
         ClientUser userUpd = new ClientUser();
         userUpd.setId(subUserId);
         userUpd.setUpdateTime(current);
@@ -401,6 +402,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
     @Transactional
     public ResponseDTO changeSubUserStatus(Long clientId, Long clientUserId, Integer enabled)
     {
+        Date date = new Date();
         ResponseDTO responseDTO = new ResponseDTO();
         ClientUser clientUser = clientUserMapper.findById(clientUserId);
         if(clientUser == null || !clientId.equals(clientUser.getClientId()))
@@ -408,9 +410,14 @@ public class ClientRpcServiceImpl implements ClientRpcService
             responseDTO.setResult(RestResult.SUB_USER_NOT_EXIST);
             return responseDTO;
         }
+        if(TrueOrFalse.FALSE.equals(enabled))
+        {
+            List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClientUser(clientUserId);
+            disableClientRequestToken(date, cupList);
+        }
         ClientUser tempUser = new ClientUser();
         tempUser.setId(clientUserId);
-        tempUser.setUpdateTime(new Date());
+        tempUser.setUpdateTime(date);
         tempUser.setEnabled(enabled);
         clientUserMapper.updateSkipNull(tempUser);
         return responseDTO;
@@ -748,7 +755,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         clientUserMapper.updateSkipNull(userUpd);
         if(TrueOrFalse.FALSE.equals(dto.getEnabled()))
         {
-            disableClientRequestToken(current, dto.getClientId());
+            List<Long> clientIdList = new ArrayList<>();
+            clientIdList.add(dto.getClientId());
+            List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(clientIdList);
+            disableClientRequestToken(current, cupList);
         }
         if(!CollectionUtils.isEmpty(delIds))
         {
@@ -885,7 +895,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             if(TrueOrFalse.FALSE.equals(reqDTO.getEnabled()))
             {
-                disableClientRequestToken(date, clientIdList.toArray(new Long[clientIdList.size()]));
+                List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(clientIdList);
+                disableClientRequestToken(date, cupList);
             }
             clientOperateLogMapper.addList(logList);
             clientUserMapper.updateStatusByIds(reqDTO.getEnabled(), date, userIdList);
@@ -1934,9 +1945,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
     /**
      * 禁用客户的请求凭证
      */
-    private void disableClientRequestToken(Date date, Long... clientId)
+    private void disableClientRequestToken(Date date, List<ClientUserProduct> cupList)
     {
-        List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(Arrays.asList(clientId));
         if(!CollectionUtils.isEmpty(cupList))
         {
             List<Long> clientUserProductIdList = new ArrayList<>(cupList.size());

@@ -68,6 +68,15 @@ layui.config({
         });
     });
 });
+
+function numberOnly() {
+    if(!(event.keyCode === 46) && !(event.keyCode === 8) && !(event.keyCode === 37) && !(event.keyCode === 39)) {
+        if(!((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105))) {
+            event.returnValue = false;
+        }
+    }
+}
+
 var del_obj = [], edit_obj = [], contact = $("#contact-list");
 var contact_tr = "<tr id=\"#{id}\">" +
     "<td id=\"name-#{id}\">#{name}</td>" +
@@ -216,6 +225,12 @@ function editClient() {
         isSubmit = false;
         return;
     }
+    var accountTotalQty = $("#accountTotalQty").val();
+    var numRegex = /^[0-9]*$/;
+    if(!numRegex.test(accountTotalQty) || accountTotalQty < 0 || accountTotalQty > 100) {
+        layer.msg("子账号个数取值范围：[0, 100]");
+        return;
+    }
     var update = [];
     for(var o in edit_obj) {
         var obj = {};
@@ -241,7 +256,7 @@ function editClient() {
             "license": $("#license").val(),
             "industryId": $("#industry").val(),
             "managerId": $("#managerId").val(),
-            "accountTotalQty": $("#accountTotalQty").val(),
+            "accountTotalQty": accountTotalQty,
             "contactDel": del_obj,
             "contacts": update,
             "enabled": $("input[name='clientEnabled']:checked").val()

@@ -83,7 +83,7 @@
                     <label class="layui-form-label"><i class="col3">*</i>子账号个数：</label>
                     <div class="layui-input-block">
                         <input type="text" id="accountTotalQty" autocomplete="off" class="layui-input"
-                               th:value="${accountTotalQty}"/>
+                               th:value="${accountTotalQty}" onkeydown="numberOnly()"/>
                         <i class="col3 pl10" id="accountTotalQtyTip" style="display: none"></i>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人：</label>
                     <div class="layui-input-block layui-form">
-                        <span class="layui-btn layui-btn-primary" style="background-color:#fff" id="add-contact">
+                        <span class="layui-btn layui-btn-primary" id="add-contact">
                             <i class="layui-icon"></i>添加联系人</span>
                         <em class="col3">至少添加一位联系人</em>
                     </div>
@@ -195,7 +195,7 @@
 <div id="div-contact" class="modal">
     <div class="layui-layer-title">联系人</div>
     <div class="m30">
-        <div class="m30 mt0 mr40">
+        <div class="m30 mt0 mr40 layui-form">
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="col3">*</i>联系人：</label>
                 <div class="layui-input-block">

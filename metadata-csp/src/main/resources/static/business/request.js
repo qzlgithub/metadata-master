@@ -1,117 +1,86 @@
-var message;
+var startDateOcx = $("#startDate"), endDateOcx = $("#endDate");
 layui.config({
     base: '../build/js/'
-}).use(['app', 'form', 'message', 'laydate'], function() {
-    message = layui.message;
-});
-$(function() {
-    var fromObj = $("#from-date");
-    var toObj = $("#to-date");
-    new pickerDateRange('date', {
-        isTodayValid: true,
-        startDate: fromObj.val(),
-        endDate: toObj.val(),
-        needCompare: false,
-        defaultText: ' 至 ',
-        autoSubmit: true,
-        inputTrigger: 'input_trigger',
-        theme: 'ta',
-        success: function(obj) {
-            fromObj.val(obj.startDate);
-            toObj.val(obj.endDate);
+}).use(['app', 'form', 'message', 'laydate', 'table'], function() {
+    var laydate = layui.laydate;
+    var table = layui.table;
+    var form = layui.form;
+    laydate.render({
+        elem: '#dateRange',
+        btns: ['confirm'],
+        format: 'yyyy/MM/dd',
+        value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
+        range: '~',
+        min: -180,
+        done: function(value) {
+            if(value !== '') {
+                var dates = value.split(" ~ ");
+                startDateOcx.val(dates[0]);
+                endDateOcx.val(dates[1]);
+            }
         }
     });
-    requestListInit();
-});
-
-function requestListInit() {
-    var obj = {
-        pageNum: 1,
-        pageSize: 10,
-        productId: $("#product-sel").val(),
-        fromDate: $("#from-date").val(),
-        toDate: $("#to-date").val(),
-        hit: $("#hit").val()
-    };
-    getRequestList(obj, function(pageObj, pages, total) {
-        $('#pagination').paging({
-            initPageNo: pageObj['pageNum'],
-            totalPages: pages,
-            totalCount: '合计' + total + '条数据',
-            slideSpeed: 600,
-            jump: false,
-            callback: function(currentPage) {
-                pageObj['pageNum'] = currentPage;
-                getRequestList(obj);
-            }
-        })
-    });
-}
-
-var template_tr = '<tr>' +
-    '<td>#{tradeAt}</td>' +
-    '<td>#{tradeNo}</td>' +
-    '<td>#{productName}</td>' +
-    '<td>#{billPlan}</td>' +
-    '<td>#{hit}</td>' +
-    '<td>#{unitAmt}</td>' +
-    '<td>#{balance}</td>' +
-    '</tr>';
-
-function getRequestList(obj, pageFun) {
-    $.get(
-        "/product/request/list",
-        {
-            "pageNum": obj['pageNum'],
-            "pageSize": obj['pageSize'],
-            "productId": obj['productId'],
-            "hit": obj['hit'],
-            "fromDate": obj['fromDate'] === '' ? '' : obj['fromDate'] + " 00:00:00",
-            "toDate": obj['toDate'] === '' ? '' : obj['toDate'] + " 23:59:59"
+    var main_table = table.render({
+        elem: '#dataTable',
+        page: true,
+        limit: 10,
+        limits: [10, 15, 30, 50],
+        url: '/product/request/list',
+        where: {
+            productId: $("#product-sel").val(),
+            hit: $("#hit").val(),
+            fromDate: startDateOcx.val(),
+            toDate: endDateOcx.val()
         },
-        function(res) {
-            if(res.code === '000000') {
-                var dataList = $("#data-list");
-                var data = res.data;
-                var total = data.total;
-                var pages = data.pages;
-                var list = data.list;
-                if(typeof list === 'undefined' || list.length === 0) {
-                    $("#exportOcx").attr('disabled', "true");
-                }
-                else {
-                    $("#exportOcx").removeAttr("disabled");
-                }
-                dataList.empty();
-                for(var o in list) {
-                    var tr = template_tr.replace(/#{tradeAt}/g, list[o].tradeAt)
-                    .replace(/#{tradeNo}/g, list[o].tradeNo)
-                    .replace(/#{productName}/g, list[o].productName)
-                    .replace(/#{billPlan}/g, list[o].billPlan)
-                    .replace(/#{hit}/g, list[o].hit)
-                    .replace(/#{unitAmt}/g, list[o].unitAmt)
-                    .replace(/#{balance}/g, list[o].balance);
-                    dataList.append(tr);
-                }
-                if(typeof pageFun === 'function') {
-                    pageFun(obj, pages, total);
-                }
+        cols: [[
+            {field: 'tradeAt', title: '查询时间', align: 'center', width: '20%'},
+            {field: 'tradeNo', title: '查询单号', align: 'center', width: '20%'},
+            {field: 'productName', title: '产品服务', align: 'center', width: '13%'},
+            {field: 'billPlan', title: '计费方式', align: 'center', width: '13%'},
+            {field: 'hit', title: '是否成功', align: 'center', width: '10%'},
+            {field: 'unitAmt', title: '消费（元）', align: 'center', width: '12%'},
+            {field: 'balance', title: '余额（元）', align: 'center', width: '12%'}
+        ]],
+        request: {
+            pageName: 'pageNum', limitName: 'pageSize'
+        },
+        response: {
+            statusName: 'code',
+            statusCode: '000000',
+            msgName: 'message',
+            countName: 'total',
+            dataName: 'list'
+        },
+        done: function(res) {
+            if(res.total > 0) {
+                $("#exportOcx").removeAttr("disabled");
+            }
+            else {
+                $("#exportOcx").attr('disabled', "true");
             }
         }
-    );
-}
-
-$("#search").click(function() {
-    requestListInit();
+    });
+    form.on('submit(search)', function(data) {
+        var params = data.field;
+        main_table.reload({
+            where: {
+                productId: params['product'],
+                hit: params['hit'],
+                fromDate: params['start-date'],
+                toDate: params['end-date']
+            },
+            page: {
+                curr: 1
+            }
+        });
+    });
 });
 
 function requestExport() {
     var productId = $("#product-sel").val();
-    var fromDate = $("#from-date").val();
-    var toDate = $("#to-date").val();
     var hit = $("#hit").val();
-    var url = '/product/request/export?productId=' + productId + "&hit=" + hit
-        + "&fromDate=" + (fromDate == '' ? '' : fromDate + " 00:00:00")
-        + "&toDate=" + (toDate == '' ? '' : toDate + " 23:59:59");
+    var startDate = startDateOcx.val();
+    var endDate = endDateOcx.val();
+    var url = '/product/request/export?productId=' + productId + "&hit=" + hit + "&fromDate=" + startDate + "&toDate=" + endDate;
     location.href = encodeURI(url);
 }
