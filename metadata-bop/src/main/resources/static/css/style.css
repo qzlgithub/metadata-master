@@ -682,7 +682,8 @@ body {
 /******选择系统*****/
 .public-title{ font-size: 18px; padding: 25px 15px 15px 15px;}
 .choose li{ border:solid 1px #92d0fa; border-radius: 5px;  padding: 40px 0px; text-align: center; background: #def2ff; margin: 1%;
-    float: left; width: 21.3333%;}
+    float: left; width: 21.3333%; }
+.choose li:hover{border:solid 1px #92d0fa;background: #fff;}
 .choose li img{ width: 30%; margin: auto;}
 .choose li p{ font-size: 16px; color: #333; padding-top: 20px;}
 

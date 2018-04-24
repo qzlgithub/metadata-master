@@ -1653,12 +1653,12 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 BigDecimal rechargeSum = statsClientMapper.getClientRechargeByDate(hourBefore, hourAfter, null);
                 List<RequestFailedCountResDTO> requestStatsFailed = backendStatsService.getRequestStatsFailed(
                         hourBefore, hourAfter);
-                long faileNumber = 0;
+                long failedNumber = 0;
                 if(!CollectionUtils.isEmpty(requestStatsFailed))
                 {
                     for(RequestFailedCountResDTO item : requestStatsFailed)
                     {
-                        faileNumber += item.getCount();
+                        failedNumber += item.getCount();
                     }
                 }
                 long requestNumber = 0;
@@ -1690,7 +1690,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                     stats.setClientIncrement(clientCount);
                     stats.setRequest(requestNumber);
                     stats.setRequestNotHit(notHitNumber);
-                    stats.setRequestFailed(faileNumber);
+                    stats.setRequestFailed(failedNumber);
                     stats.setClientRecharge(rechargeSum != null ? rechargeSum : new BigDecimal(0));
                     ResponseDTO responseDTO = backendStatsService.addStats(stats);
                     if(!RestResult.SUCCESS.equals(responseDTO.getResult()))

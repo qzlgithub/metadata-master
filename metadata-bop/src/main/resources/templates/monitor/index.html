@@ -51,7 +51,7 @@
                             <li class="layui-col-md3">
                                 <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img3.png"/></span>
                                 <div class="layui-col-md9 fz-14">
-                                    <p class="fz-16 mt10 col6">平台收入</p>
+                                    <!--<p class="fz-16 mt10 col6">平台收入</p>
                                     <p class="col4 mt10">
                                         今日收入：<span th:text="${profitToday}"></span>元/<span
                                             th:text="${requestToday}"></span>次
@@ -60,7 +60,15 @@
                                         昨日收入：<span th:text="${profitYesterday}"></span>元/<span
                                             th:text="${requestYesterday}"></span>次
                                     </p>
-                                    <p class="mt10 tr fz-12"><a href="javascript:;">查看明细</a></p>
+                                    <p class="mt10 tr fz-12"><a href="javascript:;">查看明细</a></p>-->
+                                    <p class="fz-16 mt10 col6">平台请求</p>
+                                    <p class="col4 mt10">
+                                        今日：<span th:text="${requestToday}"></span>次
+                                    </p>
+                                    <p class="mt10 col6">
+                                        昨日：<span th:text="${requestYesterday}"></span>次
+                                    </p>
+                                    <p class="mt10 tr fz-12"><a href="/stats/request/product.html">查看明细</a></p>
                                 </div>
                             </li>
                         </ul>
