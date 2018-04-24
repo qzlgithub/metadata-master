@@ -19,11 +19,18 @@ function isUsername(obj){
 }
 //验证密码-密码规则：6-20位字母数字
 function isPassword(obj){
-    reg = /^[A-Za-z0-9]{6,20}$/;
-    if (!reg.test(obj)) {
+    if(obj == null || (obj.length < 6 || obj.length > 20)) {
         return false;
-    } else {
+    }
+    var reg1 = new RegExp(/^[0-9A-Za-z]+$/);
+    if (!reg1.test(obj)) {
+        return false;
+    }
+    var reg = new RegExp(/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/);
+    if (reg.test(obj)) {
         return true;
+    } else {
+        return false;
     }
 }
 //匹配社会信用代码
@@ -181,7 +188,7 @@ function judgeValidate(obj){
                     return true;
                 case "password":
                     if(!isPassword(value)){
-                        validateMsg = $(this).attr("datames") + "格式不匹配，必须6-20位字母数字！\n";
+                        validateMsg = $(this).attr("datames") + "格式不匹配，必须6-20位字母数字组成！\n";
                         validateFlag = false;
                         tipCss($(this), validateMsg,errorIndex++);
                     }

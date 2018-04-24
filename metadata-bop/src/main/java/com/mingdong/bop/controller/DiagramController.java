@@ -214,8 +214,7 @@ public class DiagramController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getRequestStatsPie(range, compareFrom, chartVO.getProductIds(), chartVO.getClientName(),
-                resp);
+        clientService.getRequestStatsPie(range, compareFrom, chartVO.getProductIds(), chartVO.getClientName(), resp);
         return resp;
     }
 
@@ -256,8 +255,7 @@ public class DiagramController
                 compareFrom = DateUtils.clearTime(chartVO.getCompareFrom());
             }
         }
-        clientService.getRequestStatsBar(range, compareFrom, chartVO.getProductIds(), chartVO.getClientName(),
-                resp);
+        clientService.getRequestStatsBar(range, compareFrom, chartVO.getProductIds(), chartVO.getClientName(), resp);
         return resp;
     }
 

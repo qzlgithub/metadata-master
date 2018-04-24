@@ -84,9 +84,8 @@ $("#chg-init-pwd").click(function() {
 });
 
 function changePwd(orgPwd, newPwd, repeatPwd) {
-    var reg = /^[A-Za-z0-9]{6,20}$/;
-    if(!reg.test(newPwd)) {
-        layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+    if(!isPassword(newPwd)) {
+        layer.msg("密码格式不匹配，必须6-20位字母数字组成！", {
             time: 2000
         });
         return;
@@ -117,7 +116,4 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
             }
         }
     })
-}
-
-function inform(id) {
 }

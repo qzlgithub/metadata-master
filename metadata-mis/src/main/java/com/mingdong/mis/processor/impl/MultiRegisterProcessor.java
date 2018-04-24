@@ -8,8 +8,8 @@ import com.mingdong.mis.model.metadata.MultiRegisterPlatformBO;
 import com.mingdong.mis.model.vo.PersonVO;
 import com.mingdong.mis.mongo.dao.FinRegisterPlatformDao;
 import com.mingdong.mis.mongo.dao.FinRegisterUserDao;
-import com.mingdong.mis.mongo.entity.FinRegisterUser;
 import com.mingdong.mis.mongo.entity.FinRegisterPlatform;
+import com.mingdong.mis.mongo.entity.FinRegisterUser;
 import com.mingdong.mis.processor.IProcessor;
 import org.springframework.stereotype.Component;
 

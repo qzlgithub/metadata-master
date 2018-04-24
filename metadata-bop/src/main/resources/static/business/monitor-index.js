@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
     getLineChart(1);
     getProductPro();
 });
@@ -90,8 +90,10 @@ function getLineChart(page) {
         }
     );
 }
-var scatterChart = echarts.init(document.getElementById('productReqDiagram'), 'dark');
-scatterChart.setOption({
+
+var productReqDiagram = echarts.init(document.getElementById('productReqDiagram'), 'dark');
+var thirdReqDiagram = echarts.init(document.getElementById('thirdReqDiagram'), 'dark');
+productReqDiagram.setOption({
     legend: {
         right: 10
     },
@@ -112,7 +114,26 @@ scatterChart.setOption({
     },
     series: []
 });
-function getProductPro(){
+thirdReqDiagram.setOption({
+    tooltip: {trigger: 'axis', axisPointer: {type: 'cross'}},
+    yAxis: {type: 'value', axisPointer: {snap: true}},
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:30", "08:00", "09:00",
+            "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
+            "20:00", "21:00", "22:00", "23:00"]
+    },
+    series: [{
+        name: '请求次数',
+        type: 'line',
+        color: 'red',
+        smooth: true,
+        data: []
+    }]
+});
+
+function getProductPro() {
     $.get(
         "/diagram/index/product",
         {},
@@ -149,7 +170,7 @@ function getProductPro(){
                     }
                 });
             }
-            scatterChart.setOption({
+            productReqDiagram.setOption({
                 legend: {
                     data: legendData
                 },
@@ -158,72 +179,3 @@ function getProductPro(){
         }
     );
 }
-
-
-//$.get(
-//    "/stats/request/third",
-//    function(res) {
-//        if(res.code === '000000') {
-//            var data = res.data;
-//            thirdReqChart.hideLoading();
-//            thirdReqChart.setOption({
-//                tooltip: {trigger: 'axis', axisPointer: {type: 'cross'}},
-//                yAxis: {type: 'value', axisPointer: {snap: true}},
-//                xAxis: {
-//                    type: 'category',
-//                    boundaryGap: false,
-//                    data: data.xAxisData
-//                },
-//                series: [{
-//                    name: '请求次数',
-//                    type: 'line',
-//                    color: 'red',
-//                    smooth: true,
-//                    data: data.seriesData
-//                }]
-//            });
-//        }
-//    }
-//);
-//$.get(
-//    "/stats/request/product",
-//    function(res) {
-//        if(res.code === '000000') {
-//            var legendData = [];
-//            var series = [];
-//            var data = res.data.data;
-//            for(var i in data) {
-//                legendData.push(data[i].productType);
-//                var _chartData = [];
-//                var product = data[i].product;
-//                for(var j in product) {
-//                    _chartData.push([product[j].request, product[j].ratio, product[j].client, product[j].name, data[i].productType]);
-//                }
-//                series.push({
-//                    name: data[i].productType,
-//                    data: _chartData,
-//                    type: 'scatter',
-//                    symbolSize: function(data) {
-//                        return Math.sqrt(data[2]) * 2;
-//                    },
-//                    label: {
-//                        emphasis: {
-//                            show: true,
-//                            formatter: function(param) {
-//                                return param.data[3];
-//                            },
-//                            position: 'inside'
-//                        }
-//                    }
-//                });
-//            }
-//            productReqChart.hideLoading();
-//            productReqChart.setOption({
-//                legend: {right: 10, data: legendData},
-//                xAxis: {splitLine: {lineStyle: {type: 'dashed'}}},
-//                yAxis: {splitLine: {lineStyle: {type: 'dashed'}}, scale: true, min: 0},
-//                series: series
-//            });
-//        }
-//    }
-//);

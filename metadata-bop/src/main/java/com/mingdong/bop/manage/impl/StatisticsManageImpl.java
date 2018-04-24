@@ -87,9 +87,9 @@ public class StatisticsManageImpl implements StatisticsManage
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
-        map.put(Field.CLIENT_INC_7D, stats.getClientIncIn7Days());
-        map.put(Field.CLIENT_INC_THIS_MONTH, stats.getClientIncThisMonth());
-        map.put(Field.CLIENT_TOTAL, stats.getClientTotal());
+        map.put(Field.CLIENT_INC_7D, stats.getClientIncIn7Days() == null ? 0 : stats.getClientIncIn7Days());
+        map.put(Field.CLIENT_INC_THIS_MONTH, stats.getClientIncThisMonth() == null ? 0 : stats.getClientIncThisMonth());
+        map.put(Field.CLIENT_TOTAL, stats.getClientTotal() == null ? 0 : stats.getClientTotal());
         return map;
     }
 
@@ -98,18 +98,22 @@ public class StatisticsManageImpl implements StatisticsManage
     {
         Map<String, Object> map = new HashMap<>();
         SummaryStatsDTO stats = backendStatsService.getSummaryStatisticsInfo();
-        map.put(Field.REQUEST_TODAY, stats.getRequestToday());
-        map.put(Field.REQUEST_YESTERDAY, stats.getRequestYesterday());
-        map.put(Field.REQUEST_THIS_MONTH, stats.getRequestThisMonth());
-        map.put(Field.REQUEST_TOTAL, stats.getRequestTotal());
-        map.put(Field.REQUEST_FAILED_TODAY, stats.getRequestFailedToday());
-        map.put(Field.REQUEST_FAILED_YESTERDAY, stats.getRequestFailedYesterday());
-        map.put(Field.REQUEST_FAILED_THIS_MONTH, stats.getRequestFailedThisMonth());
-        map.put(Field.REQUEST_FAILED_TOTAL, stats.getRequestFailedTotal());
-        map.put(Field.REQUEST_NOT_HIT_TODAY, stats.getRequestNotHitToday());
-        map.put(Field.REQUEST_NOT_HIT_YESTERDAY, stats.getRequestNotHitYesterday());
-        map.put(Field.REQUEST_NOT_HIT_THIS_MONTH, stats.getRequestNotHitThisMonth());
-        map.put(Field.REQUEST_NOT_HIT_TOTAL, stats.getRequestNotHitTotal());
+        map.put(Field.REQUEST_TODAY, stats.getRequestToday() == null ? 0 : stats.getRequestToday());
+        map.put(Field.REQUEST_YESTERDAY, stats.getRequestYesterday() == null ? 0 : stats.getRequestYesterday());
+        map.put(Field.REQUEST_THIS_MONTH, stats.getRequestThisMonth() == null ? 0 : stats.getRequestThisMonth());
+        map.put(Field.REQUEST_TOTAL, stats.getRequestTotal() == null ? 0 : stats.getRequestTotal());
+        map.put(Field.REQUEST_FAILED_TODAY, stats.getRequestFailedToday() == null ? 0 : stats.getRequestFailedToday());
+        map.put(Field.REQUEST_FAILED_YESTERDAY,
+                stats.getRequestFailedYesterday() == null ? 0 : stats.getRequestFailedYesterday());
+        map.put(Field.REQUEST_FAILED_THIS_MONTH,
+                stats.getRequestFailedThisMonth() == null ? 0 : stats.getRequestFailedThisMonth());
+        map.put(Field.REQUEST_FAILED_TOTAL, stats.getRequestFailedTotal() == null ? 0 : stats.getRequestFailedTotal());
+        map.put(Field.REQUEST_NOT_HIT_TODAY, stats.getRequestNotHitToday() == null ? 0 : stats.getRequestNotHitToday());
+        map.put(Field.REQUEST_NOT_HIT_YESTERDAY,
+                stats.getRequestNotHitYesterday() == null ? 0 : stats.getRequestNotHitYesterday());
+        map.put(Field.REQUEST_NOT_HIT_THIS_MONTH,
+                stats.getRequestNotHitThisMonth() == null ? 0 : stats.getRequestNotHitThisMonth());
+        map.put(Field.REQUEST_NOT_HIT_TOTAL, stats.getRequestNotHitTotal() == null ? 0 : stats.getRequestNotHitTotal());
         return map;
     }
 

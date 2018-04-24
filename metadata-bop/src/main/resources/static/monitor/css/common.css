@@ -52,6 +52,8 @@ body {
 .icon4{background: url(../images/icon/icon4.png)no-repeat; background-size: 100%;}
 .icon5{background: url(../images/icon/icon5.png)no-repeat; background-size: 100%;}
 .icon6{background: url(../images/icon/jt.png)no-repeat; background-size: 100%;}
+.icon7{background: url(../images/choose-icon.png)no-repeat; background-size: 100%; margin-bottom: 2px; width: 16px;
+    height: 16px;}
 
 .left-up{background: url(../images/icon/left-up.png)no-repeat; background-size: 100%; width: 12px;}
 .right-down{background: url(../images/icon/right-down.png)no-repeat; background-size: 100%; width: 12px;}

@@ -1,11 +1,13 @@
 package com.mingdong.backend.service.rpc;
 
 import com.mingdong.backend.component.RedisDao;
+import com.mingdong.backend.domain.entity.FailedRequestLogCount;
 import com.mingdong.backend.domain.entity.Job;
 import com.mingdong.backend.domain.entity.JobLog;
 import com.mingdong.backend.domain.entity.StatsRecharge;
 import com.mingdong.backend.domain.entity.StatsRequest;
 import com.mingdong.backend.domain.entity.StatsSummary;
+import com.mingdong.backend.domain.mapper.FailedRequestLogMapper;
 import com.mingdong.backend.domain.mapper.JobLogMapper;
 import com.mingdong.backend.domain.mapper.JobMapper;
 import com.mingdong.backend.domain.mapper.StatsRechargeMapper;
@@ -30,6 +32,7 @@ import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.DictRechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ProductResDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.RequestFailedCountResDTO;
 import com.mingdong.core.model.dto.response.RequestStatsResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsRequestResDTO;
@@ -70,6 +73,8 @@ public class BackendStatsServiceImpl implements BackendStatsService
     private ClientRpcService clientRpcService;
     @Resource
     private ProductRpcService productRpcService;
+    @Resource
+    private FailedRequestLogMapper failedRequestLogMapper;
 
     @Override
     public ListDTO<Dict> getMonitoredClient()
@@ -589,6 +594,94 @@ public class BackendStatsServiceImpl implements BackendStatsService
         return requestStatsResDTOS;
     }
 
+    @Override
+    public List<RequestStatsResDTO> getRequestStatsGroupByProduct(DateRange range, RangeUnit unit, String clientName)
+    {
+        List<RequestStatsResDTO> requestStatsResDTOS = new ArrayList<>();
+        List<Long> clientIds = new ArrayList<>();
+        if(!StringUtils.isNullBlank(clientName))
+        {
+            List<ClientInfoResDTO> clientInfoResDTOS = clientRpcService.getClientByCorpName(clientName);
+            for(ClientInfoResDTO item : clientInfoResDTOS)
+            {
+                clientIds.add(item.getClientId());
+            }
+        }
+        List<StatsRequest> dataList;
+        if(unit == RangeUnit.HOUR)
+        {
+            dataList = statsRequestMapper.getRequestGroupByHourAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else if(unit == RangeUnit.WEEK)
+        {
+            dataList = statsRequestMapper.getRequestGroupByWeekAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else if(unit == RangeUnit.MONTH)
+        {
+            dataList = statsRequestMapper.getRequestGroupByMonthAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        else
+        {
+            dataList = statsRequestMapper.getRequestGroupByDayAndProductId(range.getStart(), range.getEnd(), null,
+                    clientIds.size() > 0 ? clientIds.get(0) : null);
+        }
+        List<Long> productIds = new ArrayList<>();
+        for(StatsRequest item : dataList)
+        {
+            productIds.add(item.getProductId());
+        }
+        List<ProductResDTO> productResDTOS = productRpcService.getProductList(productIds);
+        Map<Long, ProductResDTO> productResDTOMap = new HashMap<>();
+        for(ProductResDTO item : productResDTOS)
+        {
+            productResDTOMap.put(item.getId(), item);
+        }
+        Map<Long, RequestStatsResDTO> requestStatsResDTOMap = new HashMap<>();
+        handleStatsRequest(requestStatsResDTOS, unit, dataList, requestStatsResDTOMap, productResDTOMap);
+        return requestStatsResDTOS;
+    }
+
+    @Override
+    public List<RequestFailedCountResDTO> getRequestStatsFailed(Date startTime, Date endTime)
+    {
+        List<FailedRequestLogCount> listGroupByProductAndClient =
+                failedRequestLogMapper.findListGroupByProductAndClient(startTime, endTime);
+        List<RequestFailedCountResDTO> dataList = new ArrayList<>();
+        RequestFailedCountResDTO requestFailedCountResDTO;
+        for(FailedRequestLogCount item : listGroupByProductAndClient)
+        {
+            requestFailedCountResDTO = new RequestFailedCountResDTO();
+            requestFailedCountResDTO.setClientId(item.getClientId());
+            requestFailedCountResDTO.setProductId(item.getProductId());
+            requestFailedCountResDTO.setCount(item.getCount());
+            dataList.add(requestFailedCountResDTO);
+        }
+        return dataList;
+    }
+
+    @Override
+    public ListDTO<Dict> getMonitoredProduct()
+    {
+        ListDTO<Dict> listDTO = new ListDTO<>();
+        Map<Long, String> productMap = redisDao.getProductNameAll();
+        if(productMap != null)
+        {
+            List<Dict> list = new ArrayList<>();
+            Dict dict;
+            for(Map.Entry<Long, String> entry : productMap.entrySet())
+            {
+                dict = new Dict(entry.getKey() + "", entry.getValue());
+                list.add(dict);
+            }
+            listDTO.setList(list);
+            listDTO.setTotal(list.size());
+        }
+        return listDTO;
+    }
+
     private void handleStatsRequest(List<RequestStatsResDTO> requestStatsResDTOS, RangeUnit unit,
             List<StatsRequest> dataList, Map<Long, RequestStatsResDTO> requestStatsResDTOMap,
             Map<Long, ProductResDTO> productResDTOMap)
@@ -649,56 +742,6 @@ public class BackendStatsServiceImpl implements BackendStatsService
             longNumber = requestFailedMapTemp.computeIfAbsent(name, k -> 0l);
             requestFailedMapTemp.put(name, longNumber + o.getRequestFailed());
         }
-    }
-
-    @Override
-    public List<RequestStatsResDTO> getRequestStatsGroupByProduct(DateRange range, RangeUnit unit, String clientName)
-    {
-        List<RequestStatsResDTO> requestStatsResDTOS = new ArrayList<>();
-        List<Long> clientIds = new ArrayList<>();
-        if(!StringUtils.isNullBlank(clientName))
-        {
-            List<ClientInfoResDTO> clientInfoResDTOS = clientRpcService.getClientByCorpName(clientName);
-            for(ClientInfoResDTO item : clientInfoResDTOS)
-            {
-                clientIds.add(item.getClientId());
-            }
-        }
-        List<StatsRequest> dataList;
-        if(unit == RangeUnit.HOUR)
-        {
-            dataList = statsRequestMapper.getRequestGroupByHourAndProductId(range.getStart(), range.getEnd(), null,
-                    clientIds.size() > 0 ? clientIds.get(0) : null);
-        }
-        else if(unit == RangeUnit.WEEK)
-        {
-            dataList = statsRequestMapper.getRequestGroupByWeekAndProductId(range.getStart(), range.getEnd(), null,
-                    clientIds.size() > 0 ? clientIds.get(0) : null);
-        }
-        else if(unit == RangeUnit.MONTH)
-        {
-            dataList = statsRequestMapper.getRequestGroupByMonthAndProductId(range.getStart(), range.getEnd(), null,
-                    clientIds.size() > 0 ? clientIds.get(0) : null);
-        }
-        else
-        {
-            dataList = statsRequestMapper.getRequestGroupByDayAndProductId(range.getStart(), range.getEnd(), null,
-                    clientIds.size() > 0 ? clientIds.get(0) : null);
-        }
-        List<Long> productIds = new ArrayList<>();
-        for(StatsRequest item : dataList)
-        {
-            productIds.add(item.getProductId());
-        }
-        List<ProductResDTO> productResDTOS = productRpcService.getProductList(productIds);
-        Map<Long, ProductResDTO> productResDTOMap = new HashMap<>();
-        for(ProductResDTO item : productResDTOS)
-        {
-            productResDTOMap.put(item.getId(), item);
-        }
-        Map<Long, RequestStatsResDTO> requestStatsResDTOMap = new HashMap<>();
-        handleStatsRequest(requestStatsResDTOS, unit, dataList, requestStatsResDTOMap, productResDTOMap);
-        return requestStatsResDTOS;
     }
 
 }

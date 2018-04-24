@@ -1164,6 +1164,15 @@ public class ClientServiceImpl implements ClientService
         }
     }
 
+    @Override
+    public void getClientCity1h(RestResp res)
+    {
+        Date date = new Date();
+        ResponseDTO responseDTO = backendTrafficService.getClientCityCache(date, 1);
+        String jsonStr = responseDTO.getExtradata().get(Field.DATA);
+        res.addData(Field.DATA, jsonStr);
+    }
+
     private EChartLine getRequestStatsBarOfRange(DateRange range, Long[] productIds, String clientName)
     {
         String requestStr = "请求数";

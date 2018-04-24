@@ -159,4 +159,6 @@ public interface ClientService
     void getRequestStatsBar(DateRange range, Date compareFrom, Long[] productIds, String clientName, RestResp resp);
 
     void getClientTraffic24h(Page page, RestResp res);
+
+    void getClientCity1h(RestResp res);
 }

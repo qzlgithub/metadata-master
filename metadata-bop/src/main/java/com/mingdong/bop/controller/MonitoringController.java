@@ -63,10 +63,19 @@ public class MonitoringController
     }
 
     @LoginRequired
-    @GetMapping(value = "/monitoring/product/allProduct")
-    public RestResp allProduct()
+    @GetMapping(value = "/monitoring/client/map")
+    public RestResp customerTrafficMap()
     {
-        RestResp res = new RestListResp();
+        RestResp res = new RestResp();
+        clientService.getClientCity1h(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/allProduct")
+    public RestListResp allProduct()
+    {
+        RestListResp res = new RestListResp();
         productService.getAllProduct(res);
         return res;
     }
@@ -75,7 +84,7 @@ public class MonitoringController
     @GetMapping(value = "/monitoring/product/type")
     public RestResp productType()
     {
-        RestResp res = new RestListResp();
+        RestResp res = new RestResp();
         productService.getProductForType(res);
         return res;
     }

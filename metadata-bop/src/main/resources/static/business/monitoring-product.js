@@ -135,8 +135,8 @@ function initData() {
         arr.push($(this).val());
     });
     changeSelectedProduct();
-    getScatterChart();
     getRequestList();
+    getScatterChart();
     timeReady();
 }
 
@@ -148,18 +148,16 @@ function timeReady() {
         catch(e) {
         }
         try {
-            getScatterChart();
-        }
-        catch(e) {
-        }
-    }, 2000);
-    setInterval(function() {
-        try {
             getRequestList();
         }
         catch(e) {
         }
-    }, 1000);
+        try {
+            getScatterChart();
+        }
+        catch(e) {
+        }
+    }, 3000);
 }
 
 function getRequestList() {

@@ -35,6 +35,7 @@ import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
+import com.mingdong.core.model.dto.response.RequestFailedCountResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsDateInfoResDTO;
 import com.mingdong.core.model.dto.response.SubUserResDTO;
@@ -1869,15 +1870,26 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 List<RequestNumber> requestNumberByTime = requestLogDao.findRequestGroupCountByTime(hourBefore,
                         hourAfter);
+                List<RequestFailedCountResDTO> requestStatsFailed = backendStatsService.getRequestStatsFailed(
+                        hourBefore, hourAfter);
+                Map<String, RequestFailedCountResDTO> failedCountMap = new HashMap<>();
+                RequestFailedCountResDTO requestFailedCountResDTO;
+                if(!CollectionUtils.isEmpty(requestStatsFailed))
+                {
+                    for(RequestFailedCountResDTO item : requestStatsFailed)
+                    {
+                        failedCountMap.put(item.getProductId() + "," + item.getClientId(), item);
+                    }
+                }
                 List<StatsRequestReqDTO> addStatsRequest = new ArrayList<>();
+                Map<String, RequestNumberVO> productIdRequestNumberMap = new HashMap<>();
+                RequestNumberVO requestNumberVO;
                 if(!CollectionUtils.isEmpty(requestNumberByTime))
                 {
-                    Map<String, RequestNumberVO> productIdRequestNumberMap = new HashMap<>();
-                    RequestNumberVO requestNumberVO;
                     for(RequestNumber item : requestNumberByTime)
                     {
                         requestNumberVO = productIdRequestNumberMap.computeIfAbsent(
-                                item.getProductId() + "" + item.getClientId(), k -> new RequestNumberVO());
+                                item.getProductId() + "," + item.getClientId(), k -> new RequestNumberVO());
                         requestNumberVO.setProductId(item.getProductId());
                         requestNumberVO.setClientId(item.getClientId());
                         requestNumberVO.setTotal(requestNumberVO.getTotal() + item.getCount());
@@ -1885,13 +1897,19 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         {
                             requestNumberVO.setNotHit(requestNumberVO.getNotHit() + item.getCount());
                         }
-                        //TODO 请求失败统计
-
                     }
-                    StatsRequestReqDTO statsRequestReqDTO;
-                    for(Map.Entry<String, RequestNumberVO> entry : productIdRequestNumberMap.entrySet())
+                }
+                Set<String> keys = productIdRequestNumberMap.keySet();
+                keys.addAll(failedCountMap.keySet());
+                StatsRequestReqDTO statsRequestReqDTO;
+                ResponseDTO responseDTO = new ResponseDTO();
+                if(!CollectionUtils.isEmpty(keys))
+                {
+                    for(String key : keys)
                     {
-                        requestNumberVO = entry.getValue();
+                        String[] split = key.split(",");
+                        requestFailedCountResDTO = failedCountMap.get(key);
+                        requestNumberVO = productIdRequestNumberMap.get(key);
                         statsRequestReqDTO = new StatsRequestReqDTO();
                         statsRequestReqDTO.setStatsYear(year);
                         statsRequestReqDTO.setStatsMonth(month);
@@ -1899,15 +1917,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         statsRequestReqDTO.setStatsDay(day);
                         statsRequestReqDTO.setStatsHour(hour);
                         statsRequestReqDTO.setStatsDate(dayDate);
-                        statsRequestReqDTO.setProductId(requestNumberVO.getProductId());
-                        statsRequestReqDTO.setClientId(requestNumberVO.getClientId());
-                        statsRequestReqDTO.setRequest(requestNumberVO.getTotal());
-                        statsRequestReqDTO.setRequestNotHit(requestNumberVO.getNotHit());
-                        statsRequestReqDTO.setRequestFailed(requestNumberVO.getFailed());
+                        statsRequestReqDTO.setProductId(Long.valueOf(split[0]));
+                        statsRequestReqDTO.setClientId(Long.valueOf(split[1]));
+                        statsRequestReqDTO.setRequest(requestNumberVO == null ? 0 : requestNumberVO.getTotal());
+                        statsRequestReqDTO.setRequestNotHit(requestNumberVO == null ? 0 : requestNumberVO.getNotHit());
+                        statsRequestReqDTO.setRequestFailed(
+                                requestFailedCountResDTO == null ? 0 : requestFailedCountResDTO.getCount());
                         addStatsRequest.add(statsRequestReqDTO);
                     }
+                    responseDTO = backendStatsService.addStatsRequest(addStatsRequest);
                 }
-                ResponseDTO responseDTO = backendStatsService.addStatsRequest(addStatsRequest);
+
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                 {
                     logger.error(longSdf.format(date) + " statsByDate error!");
@@ -2021,7 +2041,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         private Long clientId;
         private long total;
         private long notHit;
-        private long failed;
 
         public Long getProductId()
         {
@@ -2041,16 +2060,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         public void setClientId(Long clientId)
         {
             this.clientId = clientId;
-        }
-
-        public long getFailed()
-        {
-            return failed;
-        }
-
-        public void setFailed(long failed)
-        {
-            this.failed = failed;
         }
 
         public long getTotal()

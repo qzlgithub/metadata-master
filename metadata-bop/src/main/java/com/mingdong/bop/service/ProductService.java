@@ -34,7 +34,7 @@ public interface ProductService
 
     void getProductList(String keyword, Integer type, Integer custom, Integer status, Page page, RestListResp res);
 
-    void getAllProduct(RestResp res);
+    void getAllProduct(RestListResp res);
 
     void getStatsProductRequestCache(List<Long> productIdList, RestResp res);
 

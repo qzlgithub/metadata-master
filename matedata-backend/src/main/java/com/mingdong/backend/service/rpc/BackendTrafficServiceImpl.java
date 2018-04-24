@@ -112,9 +112,12 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
         Map<String, String> mapTemp;
         Map<Long, String> prodMap = redisDao.getProductNameAll();
         List<String> periodList;
-        if(type == 1){
+        if(type == 1)
+        {
             periodList = getPeriodInOneHour(date);
-        }else{
+        }
+        else
+        {
             periodList = getPeriodInOneDay(date);
         }
         for(String item : periodList)
@@ -213,6 +216,40 @@ public class BackendTrafficServiceImpl implements BackendTrafficService
             list.add(requestDetailResDTO);
         }
         return listDTO;
+    }
+
+    @Override
+    public ResponseDTO getClientCityCache(Date date, int type)
+    {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<String> periodList;
+        if(type == 1)
+        {
+            periodList = getPeriodInOneHour(date);
+        }
+        else
+        {
+            periodList = getPeriodInOneDay(date);
+        }
+        Map<String, Long> clientCityCount = redisDao.getClientTrafficCity(periodList);
+        JSONArray seriesData = new JSONArray();
+        JSONArray jsonArrayTemp = new JSONArray();
+        if(clientCityCount != null && clientCityCount.size() > 0)
+        {
+            JSONObject jsonObjectTemp;
+            for(Map.Entry<String, Long> entry : clientCityCount.entrySet())
+            {
+                jsonObjectTemp = new JSONObject();
+                jsonObjectTemp.put(Field.NAME, entry.getKey());
+                jsonObjectTemp.put(Field.VALUE, entry.getValue());
+                jsonArrayTemp.add(jsonObjectTemp);
+            }
+        }
+        seriesData.add(jsonArrayTemp);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Field.SERIES_DATA, seriesData);
+        responseDTO.addExtra(Field.DATA, jsonObject.toJSONString());
+        return responseDTO;
     }
 
     private List<String> getPeriodInOneHour(Date date)

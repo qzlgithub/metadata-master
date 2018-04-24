@@ -686,7 +686,7 @@ body {
 .choose li img{ width: 30%; margin: auto;}
 .choose li p{ font-size: 16px; color: #333; padding-top: 20px;}
 
-.tz-btn{border: solid 1px #fff; border-radius: 3px; font-size: 14px; padding: 7px 17px 8px 9px; text-align: center; color: #fff; margin-left: 10px; background: #0C9FD3;}
+.tz-btn{border-radius: 3px; font-size: 14px; padding: 7px 17px 8px 9px; text-align: center; color: #fff; margin-left: 10px; background: #057cd4;}
 a.tz-btn{color: #fff; text-decoration: none;}
 .home-list li{margin: 0.5%; float: left; width: 20.33333%; background: #fff;}
 .home-table-tab{border-bottom: solid 1px #1E9FFF;}
