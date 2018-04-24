@@ -37,7 +37,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test="incOpened == null">and (cp.opened != 1 or cp.opened is null)</if>
+        <if test="incOpened == null">and (cp.`opened` != 1 or cp.`opened` is null)</if>
     </select>
 
     <select id="getListBy" resultMap="BaseResultMap">
@@ -64,7 +64,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test="incOpened == null">and (cp.opened != 1 or cp.opened is null)</if>
+        <if test="incOpened == null">and (cp.`opened` != 1 or cp.`opened` is null)</if>
         order by p.`create_time` desc
     </select>
 
