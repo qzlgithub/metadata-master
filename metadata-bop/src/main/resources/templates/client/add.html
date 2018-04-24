@@ -23,11 +23,11 @@
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="javascript:">客户管理</a>
-            <a href="javascript:">客户管理</a>
+            <a href="/client/index.html">客户管理</a>
             <a><cite>添加客户</cite></a>
         </div>
         <div class="p20">
-            <div class="w60" id="data-div-id">
+            <div class="layui-form" id="data-div-id" style="width: 750px;">
                 <div class="m30">
                     <div class="layui-form-item">
                         <label class="layui-form-label"><i class="col3">*</i>账号：</label>
@@ -58,15 +58,13 @@
                         <label class="layui-form-label"><i class="col3">*</i>所属行业：</label>
                         <div class="layui-input-block clearfix">
                             <div style="width: 50%; float: left;">
-                                <select id="parentIndustryId" name="modules" onchange="getSubIndustry()"
-                                        class="select-list" style="width: 98%">
+                                <select id="parentIndustryId" style="width: 98%" lay-filter="parent-industry">
                                     <option th:each="ind:${parentIndustry}" th:value="${ind.id}"
                                             th:text="${ind.name}"></option>
                                 </select>
                             </div>
                             <div style="width: 50%; float: left;">
-                                <select id="industryId" name="modules" datames="所属行业" notnull="true" class="select-list"
-                                        style="width: 98%">
+                                <select id="industryId" datames="所属行业" notnull="true" style="width: 98%">
                                     <option th:each="ind:${industry}" th:value="${ind.id}"
                                             th:text="${ind.name}"></option>
                                 </select>
@@ -106,7 +104,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label" style="width: 132px">联系人：</label>
+                    <label class="layui-form-label" style="width: 145px">联系人：</label>
                     <div class="layui-input-block" style="margin-left: 160px;">
                         <span class="layui-btn col6" id="addcontacts">
                             <i class="layui-icon"></i>添加联系人

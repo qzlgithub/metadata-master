@@ -67,6 +67,7 @@ public class ClientController
             @RequestParam(value = Field.PARENT_INDUSTRY_ID, required = false) Long parentIndustryId,
             @RequestParam(value = Field.INDUSTRY_ID, required = false) Long industryId,
             @RequestParam(value = Field.ENABLED, required = false) Integer enabled,
+            @RequestParam(value = Field.MANAGER_ID, required = false) Long managerId,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
             @RequestParam(value = Field.PAGE_SIZE, required = false) Integer pageSize)
     {
@@ -78,7 +79,7 @@ public class ClientController
         }
         keyword = StringUtils.isNullBlank(keyword) ? null : keyword.trim();
         clientService.getClientList(keyword, parentIndustryId, industryId, enabled,
-                RequestThread.isManager() ? null : RequestThread.getOperatorId(), page, res);
+                RequestThread.isManager() ? managerId : RequestThread.getOperatorId(), page, res);
         return res;
     }
 

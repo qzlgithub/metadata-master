@@ -36,10 +36,13 @@ public class TradeServiceImpl implements TradeService
     private ClientRpcService clientRpcService;
 
     @Override
-    public void getProductRechargeInfoList(String keyword, Long productId, Integer rechargeType, Date fromDate,
-            Date toDate, Page page, RestListResp res)
+    public void getProductRechargeInfoList(String keyword, Long productId, Long managerId, Integer rechargeType,
+            Date fromDate, Date toDate, Page page, RestListResp res)
     {
-        Long managerId = RequestThread.isManager() ? null : RequestThread.getOperatorId();
+        if(!RequestThread.isManager())
+        {
+            managerId = RequestThread.getOperatorId();
+        }
         ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(keyword, null, productId, managerId,
                 rechargeType, fromDate, toDate, page);
         res.setTotal(listDTO.getTotal());

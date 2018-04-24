@@ -39,6 +39,11 @@ public class ClientPageController
     public ModelAndView clientIndexPage()
     {
         ModelAndView view = new ModelAndView("client/list");
+        view.addObject(Field.IS_ADMIN, RequestThread.isManager() ? TrueOrFalse.TRUE : TrueOrFalse.FALSE);
+        if(RequestThread.isManager())
+        {
+            view.addObject(Field.MANAGER_DICT, managerService.getAdminUserDict());
+        }
         List<Map<String, Object>> industryList = systemService.getIndustryList(0L, TrueOrFalse.TRUE);
         view.addObject(Field.INDUSTRY_LIST, industryList);
         view.addAllObjects(RequestThread.getMap());

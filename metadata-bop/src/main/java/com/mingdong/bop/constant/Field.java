@@ -218,4 +218,6 @@ public interface Field
     String REQUEST_NOT_HIT_TOTAL = "requestNotHitTotal";
     String CLIENT_DATA = "clientData";
     String ACCOUNT_TOTAL_QTY = "accountTotalQty";
+    String IS_ADMIN = "isAdmin";
+    String MANAGER_DICT = "managerDict";
 }

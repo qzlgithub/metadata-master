@@ -392,7 +392,8 @@ public class ClientServiceImpl implements ClientService
     {
         if(vo.getClientId() == null || StringUtils.isNullBlank(vo.getCorpName()) || StringUtils.isNullBlank(
                 vo.getShortName()) || StringUtils.isNullBlank(vo.getLicense()) || vo.getIndustryId() == null ||
-                (!TrueOrFalse.TRUE.equals(vo.getEnabled()) && !TrueOrFalse.FALSE.equals(vo.getEnabled())))
+                vo.getAccountTotalQty() == null || (!TrueOrFalse.TRUE.equals(vo.getEnabled()) &&
+                !TrueOrFalse.FALSE.equals(vo.getEnabled())))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return;

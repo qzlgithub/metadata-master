@@ -1,9 +1,11 @@
 $("#logout").click(function() {
-    // 管理员登出
-    $.post(
-        "/manager/logout",
-        function(data) {
-            window.location.href = "/";
+    layer.confirm('确定退出系统？', {
+        btn: ['确定', '取消'],
+        yes: function() {
+            window.location.href = "/user/logout";
+        },
+        no: function() {
+            layer.closeAll();
         }
-    )
+    });
 });

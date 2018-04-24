@@ -96,8 +96,7 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {
-                    layer.closeAll();
-                    window.location.href = "/system/security-setting.html";
+                    window.location.href = "/login.html";
                 });
             }
         }

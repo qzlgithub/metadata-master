@@ -10,6 +10,20 @@ layui.config({
     message = layui.message;
     //主入口
     app.set({type: 'iframe'}).init();
+    form.on('select(parent-industry)', function(data) {
+        var industryOcx = $("#industry");
+        $.get(
+            "/m/dict/sub-industry",
+            {"parentId": data.value},
+            function(data) {
+                industryOcx.empty();
+                for(var d in data) {
+                    industryOcx.append(new Option(data[d].name, data[d].id));
+                }
+                form.render('select');
+            }
+        );
+    });
     form.on("checkbox(general)", function() {
         var id = $(this).data("id");
         var obj = {};
@@ -191,20 +205,6 @@ $("#sameCompany").click(function() {
         }
     );
 });
-
-function fetchIndustry() {
-    $.get(
-        "/m/dict/sub-industry",
-        {"parentId": $("#parentIndustry").val()},
-        function(data) {
-            $("#industry").empty();
-            for(var d in data) {
-                $("#industry").append('<option value="' + data[d].id + '">' + data[d].name + '</option>');
-            }
-        }
-    )
-}
-
 var isSubmit = false;
 
 function editClient() {

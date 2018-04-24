@@ -23,11 +23,11 @@
     <div class="layui-body">
         <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
             <a href="javascript:">客户管理</a>
-            <a href="javascript:">客户管理</a>
+            <a href="/client/index.html">客户管理</a>
             <a><cite>编辑客户</cite></a>
         </div>
         <div class="p20">
-            <div class="m30" id="data-div-id">
+            <div class="m30 layui-form" id="data-div-id" style="width: 750px;">
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号：</label>
                     <div class="layui-input-block col2" th:text="${username}">账号</div>
@@ -52,8 +52,8 @@
                     <label class="layui-form-label"><i class="col3">*</i>所属行业：</label>
                     <div class="layui-input-block clearfix">
                         <div style="width: 50%; float: left;">
-                            <select id="parentIndustry" name="parentIndustry" onchange="fetchIndustry()"
-                                    class="select-list" style="width: 98%">
+                            <select id="parentIndustry" name="parentIndustry" style="width: 98%"
+                                    lay-filter="parent-industry">
                                 <option th:each="parent:${industryParentDict}" th:value="${parent.key}"
                                         th:text="${parent.value}"
                                         th:selected="${parent.key} eq ${parentIndustryId}"></option>
@@ -61,10 +61,11 @@
                         </div>
 
                         <div style="width: 50%; float: left;">
-                            <select id="industry" name="industry" class="select-list" datames="所属行业" notnull="true"
+                            <select id="industry" name="industry" datames="所属行业" notnull="true"
                                     style="width: 98%">
                                 <option th:each="child:${industryDict}" th:value="${child.key}"
-                                        th:text="${child.value}" th:selected="${child.key} eq ${industryId}"></option>
+                                        th:text="${child.value}"
+                                        th:selected="${child.key} eq ${industryId}"></option>
                             </select>
                         </div>
                     </div>

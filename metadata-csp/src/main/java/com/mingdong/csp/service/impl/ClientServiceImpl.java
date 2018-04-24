@@ -71,9 +71,14 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void changePassword(Long userId, String oldPwd, String newPwd, String repeatPwd, RestResp resp)
+    public void changePassword(Long userId, String oldPwd, String newPwd, String repeatPwd, String sessionId,
+            RestResp resp)
     {
         ResponseDTO dto = clientRpcService.changeUserPassword(userId, oldPwd, newPwd, repeatPwd);
+        if(dto.getResult() == RestResult.SUCCESS)
+        {
+            redisDao.dropUserSession(sessionId);
+        }
         resp.setError(dto.getResult());
     }
 

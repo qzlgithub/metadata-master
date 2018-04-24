@@ -43,8 +43,8 @@ public class FinanceController
             }
         }
         to = BusinessUtils.getLastDayStartTime(to);
-        tradeService.getProductRechargeInfoList(keyword, product, rechargeType, from, to, new Page(pageNum, pageSize),
-                res);
+        tradeService.getProductRechargeInfoList(keyword, product, manager, rechargeType, from, to,
+                new Page(pageNum, pageSize), res);
         return res;
     }
 

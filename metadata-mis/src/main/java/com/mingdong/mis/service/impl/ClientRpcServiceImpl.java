@@ -96,6 +96,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -228,7 +229,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userUpd.setUpdateTime(new Date());
         userUpd.setPassword(Md5Utils.encrypt(newPassword));
         clientUserMapper.updateSkipNull(userUpd);
-        responseDTO.setResult(RestResult.SUCCESS);
         return responseDTO;
     }
 
@@ -378,22 +378,6 @@ public class ClientRpcServiceImpl implements ClientRpcService
         if(user != null)
         {
             responseDTO.setResult(RestResult.USERNAME_EXIST);
-            return responseDTO;
-        }
-        String config = sistemMapper.getClientUserMax();
-        List<ClientUser> userList = clientUserMapper.getListByClientAndStatus(client.getId(), null, TrueOrFalse.FALSE);
-        int subAccountCount = 0;
-        for(ClientUser cu : userList)
-        {
-            if(!cu.getId().equals(client.getPrimaryUserId()))
-            {
-                subAccountCount++;
-            }
-        }
-        int canSubAccountCount = Integer.parseInt(config);
-        if(subAccountCount >= canSubAccountCount)
-        {
-            responseDTO.setResult(RestResult.ACCOUNT_COUNT_MAX);
             return responseDTO;
         }
 
@@ -763,6 +747,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         userUpd.setUpdateTime(current);
         userUpd.setEnabled(dto.getEnabled());
         clientUserMapper.updateSkipNull(userUpd);
+        if(TrueOrFalse.FALSE.equals(dto.getEnabled()))
+        {
+            disableClientRequestToken(current, dto.getClientId());
+        }
         if(!CollectionUtils.isEmpty(delIds))
         {
             clientContactMapper.deleteByIds(delIds);
@@ -874,8 +862,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
             return responseDTO;
         }
         Date date = new Date();
-        List<Long> clientIdList = new ArrayList<>();
-        List<Long> userIdList = new ArrayList<>();
+        List<Long> clientIdList = new ArrayList<>(); // 客户ID列表
+        List<Long> userIdList = new ArrayList<>(); // 客户主账号ID列表
         List<ClientOperateLog> logList = new ArrayList<>(clientIdList.size());
         for(Client o : clientList)
         {
@@ -896,6 +884,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         }
         if(clientIdList.size() > 0)
         {
+            if(TrueOrFalse.FALSE.equals(reqDTO.getEnabled()))
+            {
+                disableClientRequestToken(date, clientIdList.toArray(new Long[clientIdList.size()]));
+            }
             clientOperateLogMapper.addList(logList);
             clientUserMapper.updateStatusByIds(reqDTO.getEnabled(), date, userIdList);
             clientMapper.updateStatusByIds(reqDTO.getEnabled(), date, clientIdList);
@@ -1964,6 +1956,26 @@ public class ClientRpcServiceImpl implements ClientRpcService
         return returnList;
     }
 
+    /**
+     * 禁用客户的请求凭证
+     */
+    private void disableClientRequestToken(Date date, Long... clientId)
+    {
+        List<ClientUserProduct> cupList = clientUserProductMapper.getTokenListByClients(Arrays.asList(clientId));
+        if(!CollectionUtils.isEmpty(cupList))
+        {
+            List<Long> clientUserProductIdList = new ArrayList<>(cupList.size());
+            List<String> tokenList = new ArrayList<>(cupList.size());
+            for(ClientUserProduct o : cupList)
+            {
+                clientUserProductIdList.add(o.getId());
+                tokenList.add(o.getAccessToken());
+            }
+            redisDao.dropUserAuth(tokenList.toArray(new String[cupList.size()]));
+            clientUserProductMapper.clearAccessToken(date, clientUserProductIdList);
+        }
+    }
+
     private List<SubUserResDTO> querySubUserOfClient(Long clientId)
     {
         List<SubUserResDTO> list = new ArrayList<>();
@@ -2081,6 +2093,5 @@ public class ClientRpcServiceImpl implements ClientRpcService
         {
             this.notHit = notHit;
         }
-
     }
 }
