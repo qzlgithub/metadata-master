@@ -90,7 +90,7 @@ img{width: 100%; display: inline-block;}
 /*.public-table1 th:first-child,.public-table1 td:first-child{border-left:  solid 1px #8bacba;}*/
 .public-table1 tbody{margin-top:10px;}
 .public-table1 td{text-align: center; color: #fff; padding: 10px 0px; font-size: 14px; /*border-right: solid 1px #8bacba; border-bottom: solid 1px #8bacba;*/}
-.public-table1 tbody tr:hover{ background: #011d29;}
+.public-table1 tbody tr:hover{ background: #02293a;}
 .public-table1 td .serious{background: #ff0000; padding: 3px 4px;}
 .public-table1 td .general{background: #99cc00; padding: 3px 4px;}
 .public-table1 td a{color: #fff;}

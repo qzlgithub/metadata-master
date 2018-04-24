@@ -49,6 +49,10 @@ layui.use(['laydate'], function() {
             }
         }
     });
+    setInterval(function() {
+        var now = (new Date()).toLocaleString();
+        $('#current-time').html(now);
+    }, 1000);
 });
 $(document).ready(function() {
     $(".contrast-time2").change(function() {

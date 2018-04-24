@@ -206,7 +206,7 @@ function judgeValidate(obj) {
                     return true;
                 case "password":
                     if(!isPassword(value)) {
-                        validateMsg = $(this).attr("datames") + "格式不匹配，必须6-20位字母数字！\n";
+                        validateMsg = $(this).attr("datames") + "格式不匹配，必须6-20位字母数字组成！\n";
                         validateFlag = false;
                         tipCss($(this), validateMsg, errorIndex++);
                     }

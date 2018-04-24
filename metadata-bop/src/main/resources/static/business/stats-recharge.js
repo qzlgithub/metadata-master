@@ -38,6 +38,10 @@ layui.config({
         $(this).addClass('active');
         refreshChart();
     });
+    setInterval(function() {
+        var now = (new Date()).toLocaleString();
+        $('#current-time').html(now);
+    }, 1000);
     refreshChart();
 });
 
