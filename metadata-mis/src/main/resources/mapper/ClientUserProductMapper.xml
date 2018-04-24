@@ -102,4 +102,11 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="getTokenListByClientUser" parameterType="Long" resultMap="BaseResultMap">
+        select
+            `id`, `access_token`
+        from `client_user_product`
+        where `user_id` = #{userId} and `access_token` is not null
+    </select>
 </mapper>

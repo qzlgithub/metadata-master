@@ -23,4 +23,6 @@ public interface ClientUserProductMapper
     ClientUserProduct findById(Long id);
 
     List<ClientUserProduct> getTokenListByClients(@Param("clientIdList") List<Long> clientIdList);
+
+    List<ClientUserProduct> getTokenListByClientUser(Long clientUserId);
 }
