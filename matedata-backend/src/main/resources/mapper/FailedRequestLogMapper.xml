@@ -8,6 +8,12 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" />
         <result column="status" property="status" jdbcType="INTEGER" />
     </resultMap>
+    <resultMap id="ResultCountMap" type="FailedRequestLogCount">
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="count" property="count" jdbcType="BIGINT" />
+    </resultMap>
 
     <insert id="add" parameterType="FailedRequestLog">
         insert into
@@ -16,4 +22,14 @@
         values
             (#{requestTime}, #{clientId}, #{productId}, #{status})
     </insert>
+
+    <select id="findListGroupByProductAndClient" resultMap="ResultCountMap">
+        select
+            `product_id` as product_id,
+            `client_id`  as client_id,
+            count(`id`)  as count
+        from failed_request_log
+        where `request_time` >= #{fromDate} and `request_time` &lt;= #{toDate}
+        group by product_id, client_id
+    </select>
 </mapper>

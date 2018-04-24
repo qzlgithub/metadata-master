@@ -6,7 +6,7 @@ import java.util.Map;
 public class ESeriePie
 {
     private String name;
-    private List<Map<String,String>> data;
+    private List<Map<String, String>> data;
 
     public String getName()
     {

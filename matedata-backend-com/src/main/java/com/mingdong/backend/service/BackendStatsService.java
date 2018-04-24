@@ -10,6 +10,7 @@ import com.mingdong.core.model.dto.request.StatsDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.request.StatsRequestReqDTO;
 import com.mingdong.core.model.dto.response.RechargeStatsDTO;
+import com.mingdong.core.model.dto.response.RequestFailedCountResDTO;
 import com.mingdong.core.model.dto.response.RequestStatsResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.StatsRequestResDTO;
@@ -39,11 +40,9 @@ public interface BackendStatsService
 
     ResponseDTO addStatsRequest(List<StatsRequestReqDTO> addStatsRequest);
 
-    ListDTO<StatsRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate,
-            Date afterDate);
+    ListDTO<StatsRequestResDTO> getProductTrafficByProductIds(List<Long> productIds, Date beforeDate, Date afterDate);
 
-    ListDTO<StatsRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate,
-            Date afterDate);
+    ListDTO<StatsRequestResDTO> getClientTrafficByClientIds(List<Long> clientIds, Date beforeDate, Date afterDate);
 
     List<RechargeStatsDTO> getClientRechargeTypeTotal(DateRange range);
 
@@ -51,4 +50,7 @@ public interface BackendStatsService
 
     List<RequestStatsResDTO> getRequestStatsGroupByProduct(DateRange range, RangeUnit unit, String clientName);
 
+    List<RequestFailedCountResDTO> getRequestStatsFailed(Date startTime, Date endTime);
+
+    ListDTO<Dict> getMonitoredProduct();
 }

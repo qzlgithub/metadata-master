@@ -21,19 +21,21 @@
                         <a th:href="@{/system/message.html}">设置中心</a></li>
                     <li><a target="_blank" href="http://book.matedata.net">开发者文档</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right hidden-sm">
-                    <li class="fz-12 header">
-                        <span>
-                            <i class="icon user"></i><md id="greeting"></md>
-                        </span>
-                        <span class="position-r">
-                            <a href="/system/message.html" class="col6 icon eamil" id="message-right-id"></a>
+                <ul class="nav navbar-nav navbar-right hidden-sm ahover">
+                    <li class="fz-12 header" style="width: 132px; height: 22px; overflow: hidden; margin-top: 1px;">
+                        <i class="icon user" style="margin-bottom: 2px;"></i>
+                        <em id="greeting"></em>
+                    </li>
+                    <li>
+                        <span id="exit">
+                            <i class="icon exit"></i>
+                            <a href="javascript:;" class="col6">&nbsp;退出&nbsp;&nbsp;</a>|
                         </span>
                         <span class="cp">
                             <a href="/system/edit-pwd.html" class="col6">修改密码</a>
                         </span>
-                        <span id="exit">
-                            |&nbsp;&nbsp;<i class="icon exit"></i><a href="javascript:;" class="col6">&nbsp;退出</a>
+                        <span class="position-r">
+                            <a href="/system/message.html" class="col6 icon eamil" id="message-right-id"></a>
                         </span>
                     </li>
                 </ul>

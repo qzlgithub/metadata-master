@@ -9,6 +9,21 @@ $("#changePwd").click(function() {
     //$("#layui-layer1").show();
     //$("#layui-layer-shade1").show();
 });
+function isPasswordValidate(obj) {
+    if(obj == null || (obj.length < 6 || obj.length > 20)) {
+        return false;
+    }
+    var reg1 = new RegExp(/^[0-9A-Za-z]+$/);
+    if (!reg1.test(obj)) {
+        return false;
+    }
+    var reg = new RegExp(/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/);
+    if (reg.test(obj)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 $("#savePwd").click(function() {
     var oldPwd = $("#oldPwd").val();
     var newPwd = $("#newPwd").val();
@@ -25,9 +40,8 @@ $("#savePwd").click(function() {
                 layer.msg("新密码不能与旧密码相同");
                 return;
             }else{
-                var reg = /^[A-Za-z0-9]{6,20}$/;
-                if (!reg.test(newPwd)) {
-                    layer.msg("密码格式不匹配，必须6-20位字母数字！", {
+                if (!isPasswordValidate(newPwd)) {
+                    layer.msg("密码格式不匹配，必须6-20位字母数字组成！", {
                         time: 2000
                     });
                     return;

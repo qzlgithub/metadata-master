@@ -350,3 +350,6 @@ input:-webkit-autofill {
 }
 .ui-datepicker td span, .ui-datepicker td a{text-align: center!important;}
 .layui-btn-primary{border:0px;}
+
+.icon{ margin-bottom: 2px; width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 5px;}
+.choose-icon{background: url(../images/choose-icon.png)no-repeat; background-size: 100%;}

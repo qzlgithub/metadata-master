@@ -461,7 +461,8 @@ public class ProductRpcServiceImpl implements ProductRpcService
         List<Product> listByIds = productMapper.getListByIds(productIds);
         List<ProductResDTO> productResDTOS = new ArrayList<>();
         ProductResDTO productResDTO;
-        for(Product item : listByIds){
+        for(Product item : listByIds)
+        {
             productResDTO = new ProductResDTO();
             productResDTO.setId(item.getId());
             productResDTO.setType(item.getType());

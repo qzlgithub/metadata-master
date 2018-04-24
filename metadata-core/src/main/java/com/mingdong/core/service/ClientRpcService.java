@@ -6,7 +6,6 @@ import com.mingdong.core.model.dto.request.ClientContactReqDTO;
 import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.ClientUserReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
-import com.mingdong.core.model.dto.request.IntervalReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
@@ -225,8 +224,6 @@ public interface ClientRpcService
 
     void statsByDate(Date date);
 
-    void clientAccessTrend(List<Long> clientIdList, List<IntervalReqDTO> intervalList);
-
     void statsRechargeByDate(Date date);
 
     BigDecimal getClientRechargeStatsByDate(Date fromDate, Date toDate, Long managerId);
@@ -234,8 +231,6 @@ public interface ClientRpcService
     Integer getAllClientCount(Long managerId);
 
     Integer getClientCountByDate(Date fromDate, Date toDate, Long managerId);
-
-    ListDTO<ClientInfoResDTO> getAllClient();
 
     void statsRequestByDate(Date date);
 

@@ -46,7 +46,7 @@ public class WebsitePageController
     {
         ModelAndView view = new ModelAndView("website/news-business");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
-        view.addObject(Field.ID,id);
+        view.addObject(Field.ID, id);
         return view;
     }
 
@@ -55,7 +55,7 @@ public class WebsitePageController
     {
         ModelAndView view = new ModelAndView("website/news-company");
         view.addObject(Field.LOGIN, RequestThread.getIsLogin());
-        view.addObject(Field.ID,id);
+        view.addObject(Field.ID, id);
         return view;
     }
 

@@ -692,6 +692,7 @@ body {
     padding: 5px 25px;
     color: #627fc9;
     font-size: 14px;
+    background: #fff;
 }
 
 .border-b2 {
@@ -1059,3 +1060,4 @@ button:disabled {
     color: #999;
     border: solid 1px #ccc;
 }
+.ahover li span a:hover{color: #fff;}

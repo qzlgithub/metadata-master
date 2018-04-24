@@ -128,23 +128,23 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public void getAllProduct(RestResp res)
+    public void getAllProduct(RestListResp res)
     {
-        ListDTO<ProductResDTO> listDTO = productRpcService.getAllProduct();
-        List<ProductResDTO> dataList = listDTO.getList();
+        ListDTO<Dict> listDTO = backendStatsService.getMonitoredProduct();
+        List<Dict> dict = listDTO.getList();
         List<Map<String, Object>> list = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(dataList))
+        if(!CollectionUtils.isEmpty(dict))
         {
             Map<String, Object> map;
-            for(ProductResDTO item : dataList)
+            for(Dict item : dict)
             {
                 map = new HashMap<>();
-                map.put(Field.PRODUCT_ID, item.getId() + "");
-                map.put(Field.NAME, item.getName());
+                map.put(Field.PRODUCT_ID, item.getKey());
+                map.put(Field.NAME, item.getValue());
                 list.add(map);
             }
         }
-        res.addData(Field.LIST, list);
+        res.setList(list);
     }
 
     @Override

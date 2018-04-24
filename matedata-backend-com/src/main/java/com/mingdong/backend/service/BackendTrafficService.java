@@ -19,4 +19,6 @@ public interface BackendTrafficService
     ListDTO<RequestDetailResDTO> getProductRequestList(Integer size);
 
     ListDTO<RequestDetailResDTO> getClientRequestList(Integer size);
+
+    ResponseDTO getClientCityCache(Date date, int type);
 }

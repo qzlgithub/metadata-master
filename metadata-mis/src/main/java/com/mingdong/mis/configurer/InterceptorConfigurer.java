@@ -16,7 +16,10 @@ public class InterceptorConfigurer extends WebMvcConfigurerAdapter
     @Override
     public void addInterceptors(InterceptorRegistry registry)
     {
-        registry.addInterceptor(accessInterceptor).addPathPatterns("/**").excludePathPatterns("/error").excludePathPatterns("/security/access-token");
+        registry.addInterceptor(accessInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/error")
+                .excludePathPatterns("/security/access-token");
         super.addInterceptors(registry);
     }
 
