@@ -1,4 +1,4 @@
-var startDateOcx = $("#fromDate"), endDateOcx = $("#toDate");
+var startDateOcx = $("#fromDate"), endDateOcx = $("#toDate"), exportOcx = $("#exportBtn");
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'form', 'table', 'laydate'], function() {
@@ -57,6 +57,12 @@ layui.config({
         },
         done: function(res) {
             $("#summary").text("共请求" + res.total + "次，收入：￥" + res.data.totalFee);
+            if(res.total > 0) {
+                exportOcx.removeAttr('disabled');
+            }
+            else {
+                exportOcx.attr('disabled', true);
+            }
         }
     });
     form.on('submit(search)', function(data) {

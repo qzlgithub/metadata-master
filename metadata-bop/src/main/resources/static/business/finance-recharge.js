@@ -1,4 +1,4 @@
-var table, main_table;
+var table, main_table, exportOcx = $("#exportBtn");
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'table', 'form', 'laydate'], function() {
@@ -7,8 +7,8 @@ layui.config({
     laydate.render({
         elem: '#dates'
         , range: true,
-        done: function(value, date) {
-            if(value != "") {
+        done: function(value) {
+            if(value !== "") {
                 var dates = value.split(" - ");
                 $("#fromDate").val(dates[0]);
                 $("#toDate").val(dates[1]);
@@ -57,6 +57,12 @@ layui.config({
         },
         done: function(res) {
             $("#summary").text("充值总额：￥" + res.data.totalAmt);
+            if(res.total > 0) {
+                exportOcx.removeAttr('disabled');
+            }
+            else {
+                exportOcx.attr('disabled', true);
+            }
         }
     });
     form.on('submit(search)', function(data) {
