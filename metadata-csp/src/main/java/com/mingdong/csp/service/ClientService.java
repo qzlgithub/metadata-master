@@ -24,7 +24,8 @@ public interface ClientService
     /**
      * 添加子账号
      */
-    void addAccount(Long primaryAccountId, String username, String password, String name, String phone, RestResp resp);
+    void addAccount(Long primaryAccountId, String username, String password, String name, String phone, Integer enabled,
+            RestResp resp);
 
     /**
      * 子账号列表

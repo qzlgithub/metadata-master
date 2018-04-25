@@ -65,7 +65,8 @@ public interface ClientRpcService
     /**
      * 新增客户子帐号
      */
-    ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone);
+    ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, Integer enabled,
+            String phone);
 
     /**
      * 更改客户子帐号状态

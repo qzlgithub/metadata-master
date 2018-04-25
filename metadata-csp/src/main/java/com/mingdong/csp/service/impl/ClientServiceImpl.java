@@ -84,9 +84,9 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     public void addAccount(Long primaryAccountId, String username, String password, String name, String phone,
-            RestResp resp)
+            Integer enabled, RestResp resp)
     {
-        ResponseDTO dto = clientRpcService.addAccount(primaryAccountId, username, password, name, phone);
+        ResponseDTO dto = clientRpcService.addAccount(primaryAccountId, username, password, name, enabled, phone);
         resp.setError(dto.getResult());
     }
 

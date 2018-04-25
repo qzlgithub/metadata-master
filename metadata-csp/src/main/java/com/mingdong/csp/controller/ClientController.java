@@ -148,13 +148,15 @@ public class ClientController
         String password = jsonReq.getString(Field.PASSWORD);
         String name = jsonReq.getString(Field.NAME);
         String phone = jsonReq.getString(Field.PHONE);
+        Integer enabled = jsonReq.getInteger(Field.ENABLED);
         if(StringUtils.isNullBlank(username) || StringUtils.isNullBlank(password) || StringUtils.isNullBlank(name) ||
-                StringUtils.isNullBlank(phone))
+                StringUtils.isNullBlank(phone) || (!TrueOrFalse.TRUE.equals(enabled) && !TrueOrFalse.FALSE.equals(
+                enabled)))
         {
             resp.setError(RestResult.KEY_FIELD_MISSING);
             return resp;
         }
-        clientService.addAccount(RequestThread.getUserId(), username, password, name, phone, resp);
+        clientService.addAccount(RequestThread.getUserId(), username, password, name, phone, enabled, resp);
         return resp;
     }
 

@@ -360,7 +360,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
     @Override
     @Transactional
-    public ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, String phone)
+    public ResponseDTO addAccount(Long primaryAccountId, String username, String password, String name, Integer enabled,
+            String phone)
     {
         ResponseDTO responseDTO = new ResponseDTO();
         Client client = clientMapper.findByPrimaryAccount(primaryAccountId);
@@ -390,7 +391,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
         user.setPhone(phone);
         user.setUsername(username);
         user.setPassword(Md5Utils.encrypt(password));
-        user.setEnabled(TrueOrFalse.TRUE);
+        user.setEnabled(enabled);
         user.setDeleted(TrueOrFalse.FALSE);
         clientUserMapper.add(user);
         updateClientAccountQty(client.getId());
