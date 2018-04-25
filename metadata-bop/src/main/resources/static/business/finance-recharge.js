@@ -11,7 +11,6 @@ layui.config({
         format: 'yyyy/MM/dd',
         value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
         range: '~',
-        min: -180,
         max: 0,
         done: function(value) {
             if(value !== "") {
