@@ -73,14 +73,14 @@
                     </div>
                 </li>
                 <li th:if="${#lists.contains(i_privilege,'51201')}">
-                    <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
+                    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search">查询</button>
                 </li>
             </ul>
             <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'51202')}">
                 <em id="summary" class="fz-14"></em>
                 <span class="fr">
                     <i class="col2 mr10">一次最多导出1000条</i>
-                    <a href="javascript:;" class="add-button" onclick="exportXlsx()" id="exportBtn">导出</a>
+                    <button class="layui-btn layui-btn-disabled" id="exportBtn">导出</button>
                 </span>
             </div>
             <div class="mt20">

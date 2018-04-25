@@ -1,4 +1,5 @@
 var table, main_table, exportOcx = $("#exportBtn");
+var export_param = {};
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'table', 'form', 'laydate'], function() {
@@ -56,16 +57,24 @@ layui.config({
             dataName: 'list'
         },
         done: function(res) {
+            export_param.keyword = $("#keyword").val();
+            export_param.product = $("#product").val();
+            export_param.manager = $("#manager").val();
+            export_param.rechargeType = $("#rechargeType").val();
+            export_param.fromDate = $("#fromDate").val();
+            export_param.toDate = $("#toDate").val();
             $("#summary").text("充值总额：￥" + res.data.totalAmt);
             if(res.total > 0) {
                 exportOcx.removeAttr('disabled');
+                exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                exportOcx.attr('disabled', 'true');
+                exportOcx.addClass('layui-btn-disabled');
             }
         }
     });
     form.on('submit(search)', function(data) {
+        exportOcx.attr('disabled', true);
         var params = data.field;
         main_table.reload({
             where: {
@@ -82,20 +91,15 @@ layui.config({
         });
     });
 });
+$(function() {
+    exportOcx.on('click', function() {
+        exportXlsx();
+    })
+});
 
 function exportXlsx() {
-    var uri_param = '';
-    var params = ['keyword', 'product', 'manager', 'rechargeType', 'fromDate', 'toDate'];
-    var field, val;
-    for(var o in params) {
-        field = params[o];
-        val = $("#" + field).val();
-        if(val !== '' && val !== undefined) {
-            uri_param = uri_param + "&" + field + "=" + val;
-        }
-    }
-    if(uri_param !== '') {
-        uri_param = uri_param.replace('&', '?');
-    }
-    location.href = encodeURI('/exp/finance/recharge' + uri_param);
+    var uri_param = 'keyword=' + export_param.keyword + '&product=' + export_param.product + '&manager='
+        + export_param.manager + '&rechargeType=' + export_param.rechargeType + '&fromDate=' + export_param.fromDate
+        + '&toDate=' + export_param.toDate;
+    location.href = encodeURI('/exp/finance/recharge?' + uri_param);
 }
