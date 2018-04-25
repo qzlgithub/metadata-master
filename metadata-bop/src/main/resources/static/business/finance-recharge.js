@@ -69,12 +69,12 @@ layui.config({
                 exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                exportOcx.attr('disabled', true);
                 exportOcx.addClass('layui-btn-disabled');
             }
         }
     });
     form.on('submit(search)', function(data) {
+        exportOcx.attr('disabled', true);
         var params = data.field;
         main_table.reload({
             where: {
@@ -90,6 +90,11 @@ layui.config({
             }
         });
     });
+});
+$(function() {
+    exportOcx.on('click', function() {
+        exportXlsx();
+    })
 });
 
 function exportXlsx() {
