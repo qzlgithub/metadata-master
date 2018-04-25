@@ -6,17 +6,18 @@ layui.config({
     table = layui.table;
     var form = layui.form, laydate = layui.laydate;
     laydate.render({
-        elem: '#dates'
-        , range: true,
+        elem: '#dates',
+        btns: ['confirm'],
+        format: 'yyyy/MM/dd',
+        value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
+        range: '~',
+        min: -180,
+        max: 0,
         done: function(value) {
             if(value !== "") {
-                var dates = value.split(" - ");
+                var dates = value.split(" ~ ");
                 $("#fromDate").val(dates[0]);
                 $("#toDate").val(dates[1]);
-            }
-            else {
-                $("#fromDate").val("");
-                $("#toDate").val("");
             }
         }
     });

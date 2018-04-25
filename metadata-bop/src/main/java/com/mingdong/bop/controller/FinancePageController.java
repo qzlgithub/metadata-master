@@ -47,6 +47,12 @@ public class FinancePageController
     public ModelAndView gotoRechargeListPage()
     {
         ModelAndView view = new ModelAndView("finance/recharge");
+        Calendar calendar = Calendar.getInstance();
+        Date endDay = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startDay = calendar.getTime();
+        view.addObject(Field.START_DATE, DateUtils.format(startDay, DateFormat.YYYY_MM_DD_2));
+        view.addObject(Field.END_DATE, DateUtils.format(endDay, DateFormat.YYYY_MM_DD_2));
         view.addObject(Field.RECHARGE_TYPE_DICT, systemService.getRechargeDict());
         view.addObject(Field.PRODUCT_DICT, productService.getProductDict());
         view.addObject(Field.ADMIN_USER_DICT, managerService.getAdminUserDict());
