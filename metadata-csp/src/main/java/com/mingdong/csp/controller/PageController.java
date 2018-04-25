@@ -15,6 +15,7 @@ import com.mingdong.csp.model.RequestThread;
 import com.mingdong.csp.model.UserSession;
 import com.mingdong.csp.service.ClientService;
 import com.mingdong.csp.service.ProductService;
+import com.mingdong.csp.service.SystemService;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,8 @@ public class PageController
     private ClientService clientService;
     @Resource
     private ProductService productService;
+    @Resource
+    private SystemService systemService;
 
     /**
      * 登陆页
@@ -62,6 +65,7 @@ public class PageController
         CaptchaUtils.outputWithText(txt, outputStream, 120, 35);
         String pic64 = Base64.encodeBase64String(outputStream.toByteArray());
         view.addObject(Field.IMAGE_CAPTCHA, "data:image/png;base64," + pic64);
+        view.addObject(Field.SERVICE_QQ, systemService.getServiceQq());
         return view;
     }
 
