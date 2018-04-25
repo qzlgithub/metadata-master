@@ -199,25 +199,28 @@ function getOperateLogList(obj, pageFun, openLayerFun) {
         }
     );
 }
-
+var isSubmit = false;
 function openProduct() {
-    $("#openBtn").attr("disabled", "true");
+    if(isSubmit){
+        return;
+    }
+    isSubmit = true;
     var chargeType = $("#open-charge").val();
-    if(chargeType === 1) {
+    if(chargeType == 1) {
         if($("#open-dates").val() === "") {
             $("#openTimeTip").text("服务时间不能为空！").show();
+            isSubmit = false;
             return;
         }
     }
     else {
         if(!checkUnitPrice('open-unit', 'openUnitTip')) {
+            isSubmit = false;
             return;
         }
     }
     if(!checkRecharge('open-amt', 'openAmtTip')) {
-        return;
-    }
-    if(!checkOpenContract()) {
+        isSubmit = false;
         return;
     }
     var clientId = $("#client-id").val();
@@ -251,6 +254,7 @@ function openProduct() {
                 layer.msg("开通失败:" + res.message, {
                     time: 2000
                 });
+                isSubmit = false;
             }
             else {
                 layer.msg("开通成功", {
@@ -264,23 +268,30 @@ function openProduct() {
 }
 
 function renewProduct() {
-    $("#renewBtn").attr("disabled", "true");
+    if(isSubmit){
+        return;
+    }
+    isSubmit = true;
     var billPlan = $("#renew-bill-plan").val();
     if(billPlan == 1) {
         if($("#renew-dates").val() === "") {
             $("#renewTimeTip").text("服务时间不能为空！").show();
+            isSubmit = false;
             return;
         }
     }
     else {
         if(!checkUnitPrice('renew-unit', 'unitPriceTip')) {
+            isSubmit = false;
             return;
         }
     }
     if(!checkRecharge('renew-amt', 'rechargeTip')) {
+        isSubmit = false;
         return;
     }
     if(!checkContNumber()) {
+        isSubmit = false;
         return;
     }
     var clientId = $("#client-id").val();
@@ -314,6 +325,7 @@ function renewProduct() {
                 layer.msg("续费失败:" + res.message, {
                     time: 2000
                 });
+                isSubmit = false;
             }
             else {
                 layer.msg("续费成功", {
