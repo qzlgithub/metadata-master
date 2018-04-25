@@ -5,6 +5,7 @@ import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.service.TradeService;
 import com.mingdong.common.constant.DateFormat;
 import com.mingdong.common.model.Page;
+import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.core.constant.BillPlan;
@@ -107,34 +108,38 @@ public class TradeServiceImpl implements TradeService
         ListDTO<RechargeResDTO> listDTO = clientRpcService.getClientRechargeRecord(keyword, null, productId, managerId,
                 rechargeType, fromDate, toDate, page);
         List<RechargeResDTO> dataList = listDTO.getList();
-        RechargeResDTO dataInfo;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        StringBuffer sbf;
-        for(int i = 0; i < dataList.size(); i++)
+        if(!CollectionUtils.isEmpty(dataList))
         {
-            dataInfo = dataList.get(i);
-            dataRow = sheet.createRow(i + 1);
-            cell = dataRow.createCell(0);
-            cell.setCellValue(dataInfo.getRechargeAt());
-            cell.setCellStyle(timeStyle);
-            dataRow.createCell(1).setCellValue(dataInfo.getRechargeNo());
-            dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
-            dataRow.createCell(3).setCellValue(dataInfo.getProductName() == null ? "" : dataInfo.getProductName());
-            dataRow.createCell(4).setCellValue(dataInfo.getRechargeTypeName());
-            dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
-            sbf = new StringBuffer();
-            if(BillPlan.BY_TIME.equals(dataInfo.getBillPlan()))
+            RechargeResDTO dataInfo;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            StringBuffer sbf;
+            for(int i = 0; i < dataList.size(); i++)
             {
-                sbf.append(sdf.format(dataInfo.getStartDate())).append("-").append(sdf.format(dataInfo.getEndDate()));
+                dataInfo = dataList.get(i);
+                dataRow = sheet.createRow(i + 1);
+                cell = dataRow.createCell(0);
+                cell.setCellValue(dataInfo.getRechargeAt());
+                cell.setCellStyle(timeStyle);
+                dataRow.createCell(1).setCellValue(dataInfo.getRechargeNo());
+                dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+                dataRow.createCell(3).setCellValue(dataInfo.getProductName() == null ? "" : dataInfo.getProductName());
+                dataRow.createCell(4).setCellValue(dataInfo.getRechargeTypeName());
+                dataRow.createCell(5).setCellValue(NumberUtils.formatAmount(dataInfo.getAmount()));
+                sbf = new StringBuffer();
+                if(BillPlan.BY_TIME.equals(dataInfo.getBillPlan()))
+                {
+                    sbf.append(sdf.format(dataInfo.getStartDate())).append("-").append(
+                            sdf.format(dataInfo.getEndDate()));
+                }
+                else
+                {
+                    sbf.append(NumberUtils.formatAmount(dataInfo.getUnitAmt()));
+                }
+                dataRow.createCell(6).setCellValue(sbf.toString());
+                dataRow.createCell(7).setCellValue(dataInfo.getManagerName());
+                dataRow.createCell(8).setCellValue(dataInfo.getContractNo());
+                dataRow.createCell(9).setCellValue(dataInfo.getRemark());
             }
-            else
-            {
-                sbf.append(NumberUtils.formatAmount(dataInfo.getUnitAmt()));
-            }
-            dataRow.createCell(6).setCellValue(sbf.toString());
-            dataRow.createCell(7).setCellValue(dataInfo.getManagerName());
-            dataRow.createCell(8).setCellValue(dataInfo.getContractNo());
-            dataRow.createCell(9).setCellValue(dataInfo.getRemark());
         }
         return wb;
     }
@@ -207,36 +212,40 @@ public class TradeServiceImpl implements TradeService
         ListDTO<AccessResDTO> apiReqInfoListDTO = clientRpcService.getClientBillListBy(keyword, productId, billPlan,
                 fromDate, toDate, hit, page);
         List<AccessResDTO> dataList = apiReqInfoListDTO.getList();
-        AccessResDTO dataInfo;
-        for(int i = 0; i < dataList.size(); i++)
+        if(!CollectionUtils.isEmpty(dataList))
         {
-            dataInfo = dataList.get(i);
-            dataRow = sheet.createRow(i + 1);
-            cell = dataRow.createCell(0);
-            cell.setCellValue(dataInfo.getRequestAt());
-            cell.setCellStyle(timeStyle);
-            dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
-            dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
-            if(dataInfo.getPrimaryUsername().equals(dataInfo.getUsername()))
+            AccessResDTO dataInfo;
+            for(int i = 0; i < dataList.size(); i++)
             {
-                dataRow.createCell(3).setCellValue(dataInfo.getUsername());
-            }
-            else
-            {
-                dataRow.createCell(3).setCellValue(dataInfo.getUsername() + "(" + dataInfo.getPrimaryUsername() + ")");
-            }
-            dataRow.createCell(4).setCellValue(dataInfo.getProductName());
-            dataRow.createCell(5).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
-            dataRow.createCell(6).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
-            if(BillPlan.BY_TIME.getId().equals(dataInfo.getBillPlan()))
-            {
-                dataRow.createCell(7).setCellValue("/");
-                dataRow.createCell(8).setCellValue("/");
-            }
-            else
-            {
-                dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
-                dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+                dataInfo = dataList.get(i);
+                dataRow = sheet.createRow(i + 1);
+                cell = dataRow.createCell(0);
+                cell.setCellValue(dataInfo.getRequestAt());
+                cell.setCellStyle(timeStyle);
+                dataRow.createCell(1).setCellValue(dataInfo.getRequestNo());
+                dataRow.createCell(2).setCellValue(dataInfo.getCorpName());
+                if(dataInfo.getPrimaryUsername().equals(dataInfo.getUsername()))
+                {
+                    dataRow.createCell(3).setCellValue(dataInfo.getUsername());
+                }
+                else
+                {
+                    dataRow.createCell(3).setCellValue(
+                            dataInfo.getUsername() + "(" + dataInfo.getPrimaryUsername() + ")");
+                }
+                dataRow.createCell(4).setCellValue(dataInfo.getProductName());
+                dataRow.createCell(5).setCellValue(BillPlan.getById(dataInfo.getBillPlan()).getName());
+                dataRow.createCell(6).setCellValue(TrueOrFalse.TRUE.equals(dataInfo.getHit()) ? "击中" : "未击中");
+                if(BillPlan.BY_TIME.getId().equals(dataInfo.getBillPlan()))
+                {
+                    dataRow.createCell(7).setCellValue("/");
+                    dataRow.createCell(8).setCellValue("/");
+                }
+                else
+                {
+                    dataRow.createCell(7).setCellValue(NumberUtils.formatAmount(dataInfo.getFee()));
+                    dataRow.createCell(8).setCellValue(NumberUtils.formatAmount(dataInfo.getBalance()));
+                }
             }
         }
         return wb;

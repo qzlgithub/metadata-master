@@ -59,9 +59,11 @@ layui.config({
             $("#summary").text("共请求" + res.total + "次，收入：￥" + res.data.totalFee);
             if(res.total > 0) {
                 exportOcx.removeAttr('disabled');
+                exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                exportOcx.attr('disabled', 'true');
+                exportOcx.attr('disabled', true);
+                exportOcx.addClass('layui-btn-disabled');
             }
         }
     });

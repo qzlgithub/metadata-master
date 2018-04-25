@@ -673,9 +673,9 @@ body {
 .scroll-table thead tr{background-color: #f2f2f2;}
 /*.layui-btn{background-color: #1E9FFF;}*/
 
-.layui-btn{background-color: #1E9FFF; color:#fff;}
+/*.layui-btn{background-color: #1E9FFF; color:#fff;}
 .layui-btn-danger{background-color: #ff0000;}
-.layui-btn-normal{background-color: #0a7501;}
+.layui-btn-normal{background-color: #0a7501;}*/
 
 .container {padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; width: 1170px;}
 

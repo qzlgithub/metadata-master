@@ -59,9 +59,11 @@ layui.config({
             $("#summary").text("充值总额：￥" + res.data.totalAmt);
             if(res.total > 0) {
                 exportOcx.removeAttr('disabled');
+                exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                exportOcx.attr('disabled', 'true');
+                exportOcx.attr('disabled', true);
+                exportOcx.addClass('layui-btn-disabled');
             }
         }
     });
