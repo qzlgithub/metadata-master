@@ -43,11 +43,16 @@
         <dd class="row ml0 mr0 bd-none important">
             <div class="col-md-6">
                 <p id="home-greeting"></p>
-                <p class="col2 important pl25"
+                <input type="hidden" id="insufficientBalance" th:value="${insufficientBalanceQty"/>
+                <input type="hidden" id="nearlyExpire" th:value="${nearlyExpireQty"/>
+                <input type="hidden" id="inArrear" th:value="${inArrearQty"/>
+                <input type="hidden" id="expired" th:value="${expiredQty"/>
+                <p class="col2 important pl25" id="remindOcx">您的服务目前各项指标正常，请放心使用~</p>
+                <!--<p class="col2 important pl25"
                    th:if="${insufficientBalanceQty == 0} and ${nearlyExpireQty == 0} and ${inArrearQty == 0} and ${expiredQty == 0}">
                     您的服务目前各项指标正常，请放心使用~</p>
                 <p class="col2 important pl25" th:if="${insufficientBalanceQty != 0} or ${nearlyExpireQty != 0} or ${inArrearQty != 0} or ${expiredQty != 0}"
-                   th:text="'您的服务' + ${insufficientBalanceQty} + '个服务余额不足、' + ${nearlyExpireQty} + '个即将过期、' + ${inArrearQty} + '个已欠费、' + ${expiredQty} + '个已过期，请及时处理~'"></p>
+                   th:text="'您的服务' + ${insufficientBalanceQty} + '个服务余额不足、' + ${nearlyExpireQty} + '个即将过期、' + ${inArrearQty} + '个已欠费、' + ${expiredQty} + '个已过期，请及时处理~'"></p>-->
                 <p class="ml20"><a class="appid-btn" href="/product/mine.html#mms2">查看处理</a></p>
             </div>
             <div class="col-md-6 bd-left pl20" th:if="${isPrimary}">

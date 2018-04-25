@@ -1,3 +1,25 @@
+$(function() {
+    var insufficientBalanceQty = $("#insufficientBalance").val();
+    var nearlyExpireQty = $("#nearlyExpire").val();
+    var inArrearQty = $("#inArrear").val();
+    var expiredQty = $("#expired").val();
+    if(insufficientBalanceQty > 0 || nearlyExpireQty > 0 || inArrearQty > 0 || expiredQty > 0) {
+        var msg = [];
+        if(insufficientBalanceQty > 0) {
+            msg.push(insufficientBalanceQty + '个余额不足');
+        }
+        if(nearlyExpireQty > 0) {
+            msg.push(nearlyExpireQty + '个即将过期');
+        }
+        if(inArrearQty > 0) {
+            msg.push(inArrearQty + '个已欠费');
+        }
+        if(expiredQty > 0) {
+            msg.push(expiredQty + '个已过期');
+        }
+        $("#remindOcx").text('您的服务有' + msg.join("、") + '，请及时处理~');
+    }
+});
 var message;
 layui.config({
     base: '../build/js/'
