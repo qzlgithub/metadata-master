@@ -61,7 +61,7 @@ layui.config({
                 exportOcx.removeAttr('disabled');
             }
             else {
-                exportOcx.attr('disabled', true);
+                exportOcx.attr('disabled', 'true');
             }
         }
     });
