@@ -13,6 +13,7 @@ layui.config({
         value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
         range: '~',
         min: -180,
+        max: 0,
         done: function(value) {
             if(value !== '') {
                 var dates = value.split(" ~ ");

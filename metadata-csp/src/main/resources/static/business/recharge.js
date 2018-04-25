@@ -1,4 +1,4 @@
-var startDateOcx = $("#startDate"), endDateOcx = $("#endDate");
+var export_param = {}, startDateOcx = $("#startDate"), endDateOcx = $("#endDate"), exportOcx = $("#exportBtn");
 layui.use(['form', 'laydate', 'table'], function() {
     var table = layui.table;
     var laydate = layui.laydate;
@@ -10,6 +10,7 @@ layui.use(['form', 'laydate', 'table'], function() {
         value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
         range: '~',
         min: -180,
+        max: 0,
         done: function(value) {
             if(value !== '') {
                 var dates = value.split(" ~ ");
@@ -49,15 +50,20 @@ layui.use(['form', 'laydate', 'table'], function() {
             dataName: 'list'
         },
         done: function(res) {
+            export_param.productId = $("#product-sel").val();
+            export_param.startDate = startDateOcx.val();
+            export_param.endDate = endDateOcx.val();
             if(res.total > 0) {
-                $("#exportOcx").removeAttr("disabled");
+                exportOcx.removeAttr("disabled");
+                exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                $("#exportOcx").attr('disabled', "true");
+                exportOcx.addClass('layui-btn-disabled');
             }
         }
     });
     form.on('submit(search)', function(data) {
+        exportOcx.attr('disabled', true);
         var params = data.field;
         main_table.reload({
             where: {
@@ -71,11 +77,14 @@ layui.use(['form', 'laydate', 'table'], function() {
         });
     });
 });
+$(function() {
+    exportOcx.on('click', function() {
+        rechargeExport();
+    });
+});
 
 function rechargeExport() {
-    var productId = $("#product-sel").val();
-    var fromDate = startDateOcx.val();
-    var toDate = endDateOcx.val();
-    var url = '/product/recharge/export?productId=' + productId + "&fromDate=" + fromDate + "&toDate=" + toDate;
-    location.href = encodeURI(url);
+    var url = 'productId=' + export_param.productId + "&fromDate=" + export_param.startDate + "&toDate="
+        + export_param.endDate;
+    location.href = encodeURI('/product/recharge/export?' + url);
 }

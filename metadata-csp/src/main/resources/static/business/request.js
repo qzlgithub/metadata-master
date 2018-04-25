@@ -1,4 +1,4 @@
-var startDateOcx = $("#startDate"), endDateOcx = $("#endDate");
+var export_param = {}, startDateOcx = $("#startDate"), endDateOcx = $("#endDate"), exportOcx = $("#exportBtn");
 layui.config({
     base: '../build/js/'
 }).use(['app', 'form', 'message', 'laydate', 'table'], function() {
@@ -12,6 +12,7 @@ layui.config({
         value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
         range: '~',
         min: -180,
+        max: 0,
         done: function(value) {
             if(value !== '') {
                 var dates = value.split(' ~ ');
@@ -52,15 +53,21 @@ layui.config({
             dataName: 'list'
         },
         done: function(res) {
+            export_param.productId = $("#product-sel").val();
+            export_param.hit = $("#hit").val();
+            export_param.startDate = startDateOcx.val();
+            export_param.endDate = endDateOcx.val();
             if(res.total > 0) {
-                $("#exportOcx").removeAttr("disabled");
+                exportOcx.removeAttr("disabled");
+                exportOcx.removeClass('layui-btn-disabled');
             }
             else {
-                $("#exportOcx").attr('disabled', "true");
+                exportOcx.addClass('layui-btn-disabled');
             }
         }
     });
     form.on('submit(search)', function(data) {
+        exportOcx.attr('disabled', true);
         var params = data.field;
         main_table.reload({
             where: {
@@ -75,12 +82,14 @@ layui.config({
         });
     });
 });
+$(function() {
+    exportOcx.on('click', function() {
+        requestExport();
+    });
+});
 
 function requestExport() {
-    var productId = $("#product-sel").val();
-    var hit = $("#hit").val();
-    var startDate = startDateOcx.val();
-    var endDate = endDateOcx.val();
-    var url = '/product/request/export?productId=' + productId + "&hit=" + hit + "&fromDate=" + startDate + "&toDate=" + endDate;
-    location.href = encodeURI(url);
+    var url = 'productId=' + export_param.productId + "&hit=" + export_param.hit + "&fromDate="
+        + export_param.startDate + "&toDate=" + export_param.endDate;
+    location.href = encodeURI('/product/request/export?' + url);
 }

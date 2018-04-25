@@ -65,13 +65,13 @@
                     <li>
                         <input type="hidden" id="startDate" name="start-date" th:value="${fromDate}"/>
                         <input type="hidden" id="endDate" name="end-date" th:value="${toDate}"/>
-                        <button class="layui-btn" lay-submit="" lay-filter="search">查询</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search">查询</button>
                     </li>
                 </ul>
                 <div class="clearfix mt30">
                     <span class="fr mb10">
                         <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
-                        <button class="layui-btn layui-btn-normal" onclick="rechargeExport()" id="exportOcx">导出</button>
+                        <button class="layui-btn layui-btn-disabled" id="exportBtn">导出</button>
                     </span>
                 </div>
                 <table class="layui-table" id="dataTable"></table>
