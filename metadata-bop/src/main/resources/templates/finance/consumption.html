@@ -34,7 +34,7 @@
                 </li>
                 <li>
                     <label class="layui-form-label">产品服务：</label>
-                    <div class="layui-inline" style="width: 180px">
+                    <div class="layui-inline" style="width: 120px">
                         <div class="layui-input-inline layui-form">
                             <select name="product" id="product" title="产品服务" lay-search="">
                                 <option value="">全部</option>
@@ -45,7 +45,7 @@
                 </li>
                 <li>
                     <label class="layui-form-label">计费方式：</label>
-                    <div class="layui-input-inline" style="width: 180px">
+                    <div class="layui-input-inline" style="width: 120px">
                         <select name="bill-plan" id="billPlan" title="计费方式" lay-search="">
                             <option value="">全部</option>
                             <option value="1">按时间计费</option>
@@ -56,7 +56,7 @@
                 </li>
                 <li>
                     <label class="layui-form-label">是否击中：</label>
-                    <div class="layui-input-inline" style="width: 180px">
+                    <div class="layui-input-inline" style="width: 120px">
                         <select name="hit" id="hit" title="是否击中" lay-search="">
                             <option value="">全部</option>
                             <option value="0">未击中</option>
@@ -67,9 +67,9 @@
                 <li>
                     <label class="layui-form-label">消费时间：</label>
                     <div class="layui-input-inline" style="width: 180px">
-                        <input type="text" class="layui-input" id="dates" />
-                        <input type="hidden" id="fromDate" name="fromDate"/>
-                        <input type="hidden" id="toDate" name="toDate"/>
+                        <input type="text" class="layui-input" id="dates" readonly="readonly"/>
+                        <input type="hidden" id="fromDate" name="fromDate" th:value="${startDate}"/>
+                        <input type="hidden" id="toDate" name="toDate" th:value="${endDate}"/>
                     </div>
                 </li>
                 <li th:if="${#lists.contains(i_privilege,'51201')}">

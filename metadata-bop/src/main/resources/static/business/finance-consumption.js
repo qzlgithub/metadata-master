@@ -1,3 +1,4 @@
+var startDateOcx = $("#fromDate"), endDateOcx = $("#toDate");
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'form', 'table', 'laydate'], function() {
@@ -5,17 +6,17 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
     laydate.render({
-        elem: '#dates'
-        , range: true,
-        done: function(value, date) {
-            if(value != "") {
-                var dates = value.split(" - ");
-                $("#fromDate").val(dates[0]);
-                $("#toDate").val(dates[1]);
-            }
-            else {
-                $("#fromDate").val("");
-                $("#toDate").val("");
+        elem: '#dates',
+        btns: ['confirm'],
+        format: 'yyyy/MM/dd',
+        value: startDateOcx.val() + ' ~ ' + endDateOcx.val(),
+        range: '~',
+        min: -180,
+        done: function(value) {
+            if(value !== '') {
+                var dates = value.split(" ~ ");
+                startDateOcx.val(dates[0]);
+                endDateOcx.val(dates[1]);
             }
         }
     });
