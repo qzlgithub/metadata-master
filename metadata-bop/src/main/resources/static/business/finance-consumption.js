@@ -1,3 +1,4 @@
+var export_param = {};
 var startDateOcx = $("#fromDate"), endDateOcx = $("#toDate"), exportOcx = $("#exportBtn");
 layui.config({
     base: '../../static/build/js/'
@@ -56,6 +57,12 @@ layui.config({
             dataName: 'list'
         },
         done: function(res) {
+            export_param.keyword = $("#keyword").val();
+            export_param.product = $("#product").val();
+            export_param.billPlan = $("#billPlan").val();
+            export_param.hit = $("#hit").val();
+            export_param.fromDate = $("#fromDate").val();
+            export_param.toDate = $("#toDate").val();
             $("#summary").text("共请求" + res.total + "次，收入：￥" + res.data.totalFee);
             if(res.total > 0) {
                 exportOcx.removeAttr('disabled');
@@ -86,18 +93,8 @@ layui.config({
 });
 
 function exportXlsx() {
-    var uri_param = '';
-    var params = ['keyword', 'product', 'billPlan', 'fromDate', 'toDate', 'hit'];
-    var field, val;
-    for(var o in params) {
-        field = params[o];
-        val = $("#" + field).val();
-        if(val !== '') {
-            uri_param = uri_param + "&" + field + "=" + val;
-        }
-    }
-    if(uri_param !== '') {
-        uri_param = uri_param.replace('&', '?');
-    }
-    location.href = encodeURI('/exp/finance/request' + uri_param);
+    var uri_param = 'keyword=' + export_param.keyword + '&product=' + export_param.product + '&billPlan='
+        + export_param.billPlan + '&hit=' + export_param.hit + '&fromDate=' + export_param.fromDate
+        + '&toDate=' + export_param.toDate;
+    location.href = encodeURI('/exp/finance/request?' + uri_param);
 }
