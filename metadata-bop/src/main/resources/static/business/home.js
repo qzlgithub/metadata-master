@@ -1,11 +1,7 @@
-var form, message, table, main_table;
+var table;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'form', 'table', 'message'], function() {
-    var app = layui.app;
-    app.set({type: 'iframe'}).init();
-    message = layui.message;
-    form = layui.form;
+}).use(['table'], function() {
     table = layui.table;
     getDateList();
 });
@@ -69,7 +65,7 @@ function showNotice(id) {
 
 function getDateList() {
     $("#tip").hide();
-    main_table = table.render({
+    table.render({
         elem: '#dataTable',
         page: false,
         url: '/home/list/date',
@@ -100,7 +96,7 @@ function getDateList() {
 
 function getTimeList() {
     $("#tip").show();
-    main_table = table.render({
+    table.render({
         elem: '#dataTable',
         page: false,
         url: '/home/list/time',
