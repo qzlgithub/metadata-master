@@ -1,5 +1,5 @@
 var table, main_table, exportOcx = $("#exportBtn");
-var export_param = {};
+var export_param = {}, startDateOcx = $("#fromDate"), endDateOcx = $("#toDate");
 layui.config({
     base: '../../static/build/js/'
 }).use(['app', 'table', 'form', 'laydate'], function() {
