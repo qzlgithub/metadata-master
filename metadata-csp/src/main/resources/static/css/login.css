@@ -148,7 +148,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     width: 445px;
     margin: 0 auto;
     background: #fff;
-    padding: 50px 60px 95px;
+    padding: 50px 60px 5px;
     border-radius: 5px;
 }
 
@@ -242,3 +242,17 @@ form input.text-input {
     background-color: #579fe9 !important;
     color: #fff;
 }
+
+.icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+.kefu {
+    background: url(../images/server.png) no-repeat;
+    background-size: 100% 100%;
+    width: 30px;
+    height: 30px;
+}
+
+.lxkf{color:#ef6c38; border: solid 1px #ef6c38; border-radius: 4px; padding: 4px 10px;}
+a,a:hover,a:active,a:link{text-decoration: none}

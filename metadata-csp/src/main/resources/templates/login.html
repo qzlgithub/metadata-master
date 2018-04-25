@@ -13,8 +13,10 @@
     <meta property="qc:admins" content="1603466166416277433363757477167"/>
 
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/css/site.min.css"/>
     <link rel="stylesheet" href="/static/css/animate.min.css"/>
     <link rel="stylesheet" href="/static/css/base.css"/>
@@ -29,7 +31,7 @@
     <!-- Favicons -->
     <link rel="shortcut icon" href="/static/images/icon/favicon.png"/>
 </head>
-<body id="login" class="pt10 ">
+<body id="login">
 <div id="login-wrapper" class="png_bg">
     <div class="navbar navbar-inverse mb0 header1"><!--navbar-fixed-top -->
         <div class="container header-mt10 clearfix">
@@ -56,12 +58,12 @@
             <label>用户名：</label>
             <input class="text-input" type="text" id="username" title=""/>
         </p>
-        <p class="clearfix mt25 mb25 position-r" id="pwd-show">
+        <p class="clearfix mt25 position-r" id="pwd-show">
             <label>密　码：</label>
             <input class="text-input" type="password" id="enc-passcode" title=""/>
             <i class="close-eye icon" id="hide-pass" style="right: 11px;"></i>
         </p>
-        <p class="clearfix mt25 mb25 position-r" id="pwd-hide" style="display: none;">
+        <p class="clearfix mt25 position-r" id="pwd-hide" style="display: none;">
             <label>密　码：</label>
             <input class="text-input" type="text" id="dec-passcode" title=""/>
             <i class="open-eye icon" id="show-pass" style="right: 11px;"></i>
@@ -73,10 +75,14 @@
                 <img id='captcha' align='absmiddle' onclick="changeImage()" th:src="${imageCaptcha}"/>
             </a>
         </p>
-        <p class="mt20">
+        <p class="mt20 clearfix">
             <input id="user-login" class="button" type="button" value="登 录"
                    style="padding: 10px 20px; width: 100%; font-size: 18px!important;"/>
         </p>
+        <p class="fz-14 pt20 important" style="line-height: 30px;">元数据暂不接受注册，如果您想使用我们的产品，我们会为您提供专人服务
+            <a target="_blank"
+               th:href="@{'http://wpa.qq.com/msgrd?v=3&amp;uin='+${serviceQq}+'&amp;site=qq&amp;menu=yes'}"> <span
+                    class="fz-14 lxkf">联系我们</span></a></p>
     </div>
 </div>
 <script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
