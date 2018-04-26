@@ -13,8 +13,6 @@ public class FinRefuseUser
     private String personId;
     @Field("refuse_amount_max")
     private BigDecimal refuseAmountMax;
-    @Field("refuse_days_max")
-    private Integer refuseDaysMax;
     @Field("refuse_earliest_date")
     private String refuseEarliestDate;
     @Field("refuse_latest_date")
@@ -54,16 +52,6 @@ public class FinRefuseUser
     public void setRefuseAmountMax(BigDecimal refuseAmountMax)
     {
         this.refuseAmountMax = refuseAmountMax;
-    }
-
-    public Integer getRefuseDaysMax()
-    {
-        return refuseDaysMax;
-    }
-
-    public void setRefuseDaysMax(Integer refuseDaysMax)
-    {
-        this.refuseDaysMax = refuseDaysMax;
     }
 
     public String getRefuseEarliestDate()

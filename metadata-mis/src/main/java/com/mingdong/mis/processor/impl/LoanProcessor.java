@@ -45,7 +45,6 @@ public class LoanProcessor implements IProcessor<PersonVO>
         {
             LoanBO bo = new LoanBO();
             bo.setLoanAmountMax(finLoanUser.getLoanAmountMax());
-            bo.setLoanDaysMax(finLoanUser.getLoanDaysMax());
             bo.setLoanEarliestDate(finLoanUser.getLoanEarliestDate());
             bo.setLoanLatestDate(finLoanUser.getLoanLatestDate());
             bo.setLoanPlatformToday(finLoanUser.getLoanPlatformToday());

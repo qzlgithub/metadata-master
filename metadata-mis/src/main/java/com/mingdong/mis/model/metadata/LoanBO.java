@@ -6,7 +6,6 @@ import java.util.List;
 public class LoanBO
 {
     private BigDecimal loanAmountMax;
-    private Integer loanDaysMax;
     private String loanEarliestDate;
     private String loanLatestDate;
     private Integer loanPlatformTotal;
@@ -27,16 +26,6 @@ public class LoanBO
     public void setLoanAmountMax(BigDecimal loanAmountMax)
     {
         this.loanAmountMax = loanAmountMax;
-    }
-
-    public Integer getLoanDaysMax()
-    {
-        return loanDaysMax;
-    }
-
-    public void setLoanDaysMax(Integer loanDaysMax)
-    {
-        this.loanDaysMax = loanDaysMax;
     }
 
     public String getLoanEarliestDate()
