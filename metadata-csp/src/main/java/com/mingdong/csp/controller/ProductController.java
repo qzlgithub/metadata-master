@@ -32,7 +32,8 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "/product/recharge")
-    public RestListResp getProductRechargeRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+    public RestListResp getProductRechargeRecord(
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.PAGE_NUM, required = false) Integer pageNum,
@@ -74,7 +75,8 @@ public class ProductController
      */
     @LoginRequired
     @GetMapping(value = "/product/request/list")
-    public RestListResp getProductRequestRecord(@RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
+    public RestListResp getProductRequestRecord(
+            @RequestParam(value = Field.PRODUCT_ID, required = false) Long productId,
             @RequestParam(value = Field.FROM_DATE, required = false) Date fromDate,
             @RequestParam(value = Field.TO_DATE, required = false) Date toDate,
             @RequestParam(value = Field.HIT, required = false) Integer hit,

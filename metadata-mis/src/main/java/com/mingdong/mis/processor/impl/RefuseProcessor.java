@@ -28,7 +28,7 @@ public class RefuseProcessor implements IProcessor<PersonVO>
     private FinRefuseUserDao finRefuseUserDao;
     @Resource
     private FinRefusePlatformDao finRefusePlatformDao;
-    
+
     @Override
     public Metadata<RefuseBO> process(PersonVO payload)
     {
