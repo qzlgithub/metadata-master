@@ -2,12 +2,12 @@ package com.mingdong.mis.constant;
 
 public enum APIProduct
 {
-    FIN_HMD("FIN-HMD", "/credit/blacklist"),
-    FIN_CDK("FIN-CDK", "/credit/overdue"),
-    FIN_DTK("FIN-DTK", "/credit/multi-register"),
-    FIN_TGK("FIN-TGK", "/credit/loan"),
-    FIN_YLK("FIN-YLK", "/credit/repayment"),
-    FIN_JDK("FIN-JDK", "/credit/refuse");
+    FIN_HMD("FIN-HMD", "/credit/blacklist"), // 黑名单
+    FIN_CDK("FIN-CDK", "/credit/overdue"), // 常欠客
+    FIN_DTK("FIN-DTK", "/credit/multi-register"), // 多头客
+    FIN_TGK("FIN-TGK", "/credit/loan"), // 通过客
+    FIN_YLK("FIN-YLK", "/credit/repayment"), // 优良客
+    FIN_JDK("FIN-JDK", "/credit/refuse"); // 拒贷客
 
     private final String code;
     private final String uri;

@@ -15,10 +15,10 @@ public class FinOverdueUser
     private BigDecimal overdueAmountMax;
     @Field("overdue_days_max")
     private Integer overdueDaysMax;
-    @Field("overdue_earliest_date")
-    private String overdueEarliestDate;
-    @Field("overdue_latest_date")
-    private String overdueLatestDate;
+    @Field("overdue_earliest_time")
+    private String overdueEarliestTime;
+    @Field("overdue_latest_time")
+    private String overdueLatestTime;
     @Field("overdue_platform_total")
     private Integer overduePlatformTotal;
     @Field("overdue_platform_today")
@@ -66,24 +66,24 @@ public class FinOverdueUser
         this.overdueDaysMax = overdueDaysMax;
     }
 
-    public String getOverdueEarliestDate()
+    public String getOverdueEarliestTime()
     {
-        return overdueEarliestDate;
+        return overdueEarliestTime;
     }
 
-    public void setOverdueEarliestDate(String overdueEarliestDate)
+    public void setOverdueEarliestTime(String overdueEarliestTime)
     {
-        this.overdueEarliestDate = overdueEarliestDate;
+        this.overdueEarliestTime = overdueEarliestTime;
     }
 
-    public String getOverdueLatestDate()
+    public String getOverdueLatestTime()
     {
-        return overdueLatestDate;
+        return overdueLatestTime;
     }
 
-    public void setOverdueLatestDate(String overdueLatestDate)
+    public void setOverdueLatestTime(String overdueLatestTime)
     {
-        this.overdueLatestDate = overdueLatestDate;
+        this.overdueLatestTime = overdueLatestTime;
     }
 
     public Integer getOverduePlatformTotal()
