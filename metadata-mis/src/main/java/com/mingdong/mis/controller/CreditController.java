@@ -57,7 +57,7 @@ public class CreditController
      * 4. 通过客
      */
     @AuthRequired
-    @RequestMapping(value = "/credit/loan")
+    @RequestMapping(value = "/credit/creditable")
     public MDResp getTargetPassInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
         return revokeAPI(requestVO);
@@ -67,7 +67,7 @@ public class CreditController
      * 5. 优良客
      */
     @AuthRequired
-    @RequestMapping(value = "/credit/repayment")
+    @RequestMapping(value = "/credit/favourable")
     public MDResp getTargetExcellentInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
         return revokeAPI(requestVO);
@@ -77,7 +77,7 @@ public class CreditController
      * 6. 拒贷客
      */
     @AuthRequired
-    @RequestMapping(value = "/credit/refuse")
+    @RequestMapping(value = "/credit/rejectee")
     public MDResp getTargetRefuseInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
         return revokeAPI(requestVO);
