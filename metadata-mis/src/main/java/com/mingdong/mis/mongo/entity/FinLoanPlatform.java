@@ -12,10 +12,10 @@ public class FinLoanPlatform
     private String platformCode;
     @Field("platform_type")
     private String platformType;
-    @Field("loan_earliest_time")
-    private String loanEarliestTime;
-    @Field("loan_latest_time")
-    private String loanLatestTime;
+    @Field("loan_earliest_date")
+    private String loanEarliestDate;
+    @Field("loan_latest_date")
+    private String loanLatestDate;
 
     public String getPersonId()
     {
@@ -47,23 +47,23 @@ public class FinLoanPlatform
         this.platformType = platformType;
     }
 
-    public String getLoanEarliestTime()
+    public String getLoanEarliestDate()
     {
-        return loanEarliestTime;
+        return loanEarliestDate;
     }
 
-    public void setLoanEarliestTime(String loanEarliestTime)
+    public void setLoanEarliestDate(String loanEarliestDate)
     {
-        this.loanEarliestTime = loanEarliestTime;
+        this.loanEarliestDate = loanEarliestDate;
     }
 
-    public String getLoanLatestTime()
+    public String getLoanLatestDate()
     {
-        return loanLatestTime;
+        return loanLatestDate;
     }
 
-    public void setLoanLatestTime(String loanLatestTime)
+    public void setLoanLatestDate(String loanLatestDate)
     {
-        this.loanLatestTime = loanLatestTime;
+        this.loanLatestDate = loanLatestDate;
     }
 }

@@ -65,8 +65,8 @@ public class LoanProcessor implements IProcessor<PersonVO>
                     op = new LoanPlatformBO();
                     op.setPlatformCode(o.getPlatformCode());
                     op.setPlatformType(o.getPlatformType());
-                    op.setLoanEarliestTime(o.getLoanEarliestTime());
-                    op.setLoanLatestTime(o.getLoanLatestTime());
+                    op.setLoanEarliestDate(o.getLoanEarliestDate());
+                    op.setLoanLatestDate(o.getLoanLatestDate());
                     list.add(op);
                 }
                 bo.setLoanPlatforms(list);

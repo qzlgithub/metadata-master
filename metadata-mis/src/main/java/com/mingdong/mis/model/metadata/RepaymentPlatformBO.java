@@ -4,8 +4,8 @@ public class RepaymentPlatformBO
 {
     private String platformCode;
     private String platformType;
-    private String repaymentEarliestTime;
-    private String repaymentLatestTime;
+    private String repaymentEarliestDate;
+    private String repaymentLatestDate;
 
     public String getPlatformCode()
     {
@@ -27,23 +27,23 @@ public class RepaymentPlatformBO
         this.platformType = platformType;
     }
 
-    public String getRepaymentEarliestTime()
+    public String getRepaymentEarliestDate()
     {
-        return repaymentEarliestTime;
+        return repaymentEarliestDate;
     }
 
-    public void setRepaymentEarliestTime(String repaymentEarliestTime)
+    public void setRepaymentEarliestDate(String repaymentEarliestDate)
     {
-        this.repaymentEarliestTime = repaymentEarliestTime;
+        this.repaymentEarliestDate = repaymentEarliestDate;
     }
 
-    public String getRepaymentLatestTime()
+    public String getRepaymentLatestDate()
     {
-        return repaymentLatestTime;
+        return repaymentLatestDate;
     }
 
-    public void setRepaymentLatestTime(String repaymentLatestTime)
+    public void setRepaymentLatestDate(String repaymentLatestDate)
     {
-        this.repaymentLatestTime = repaymentLatestTime;
+        this.repaymentLatestDate = repaymentLatestDate;
     }
 }

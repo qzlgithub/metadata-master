@@ -12,10 +12,10 @@ public class FinRepaymentPlatform
     private String platformCode;
     @Field("platform_type")
     private String platformType;
-    @Field("repayment_earliest_time")
-    private String repaymentEarliestTime;
-    @Field("repayment_latest_time")
-    private String repaymentLatestTime;
+    @Field("repayment_earliest_date")
+    private String repaymentEarliestDate;
+    @Field("repayment_latest_date")
+    private String repaymentLatestDate;
 
     public String getPersonId()
     {
@@ -47,23 +47,23 @@ public class FinRepaymentPlatform
         this.platformType = platformType;
     }
 
-    public String getRepaymentEarliestTime()
+    public String getRepaymentEarliestDate()
     {
-        return repaymentEarliestTime;
+        return repaymentEarliestDate;
     }
 
-    public void setRepaymentEarliestTime(String repaymentEarliestTime)
+    public void setRepaymentEarliestDate(String repaymentEarliestDate)
     {
-        this.repaymentEarliestTime = repaymentEarliestTime;
+        this.repaymentEarliestDate = repaymentEarliestDate;
     }
 
-    public String getRepaymentLatestTime()
+    public String getRepaymentLatestDate()
     {
-        return repaymentLatestTime;
+        return repaymentLatestDate;
     }
 
-    public void setRepaymentLatestTime(String repaymentLatestTime)
+    public void setRepaymentLatestDate(String repaymentLatestDate)
     {
-        this.repaymentLatestTime = repaymentLatestTime;
+        this.repaymentLatestDate = repaymentLatestDate;
     }
 }

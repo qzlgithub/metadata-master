@@ -4,8 +4,8 @@ public class RefusePlatformBO
 {
     private String platformCode;
     private String platformType;
-    private String refuseEarliestTime;
-    private String refuseLatestTime;
+    private String refuseEarliestDate;
+    private String refuseLatestDate;
 
     public String getPlatformCode()
     {
@@ -27,23 +27,23 @@ public class RefusePlatformBO
         this.platformType = platformType;
     }
 
-    public String getRefuseEarliestTime()
+    public String getRefuseEarliestDate()
     {
-        return refuseEarliestTime;
+        return refuseEarliestDate;
     }
 
-    public void setRefuseEarliestTime(String refuseEarliestTime)
+    public void setRefuseEarliestDate(String refuseEarliestDate)
     {
-        this.refuseEarliestTime = refuseEarliestTime;
+        this.refuseEarliestDate = refuseEarliestDate;
     }
 
-    public String getRefuseLatestTime()
+    public String getRefuseLatestDate()
     {
-        return refuseLatestTime;
+        return refuseLatestDate;
     }
 
-    public void setRefuseLatestTime(String refuseLatestTime)
+    public void setRefuseLatestDate(String refuseLatestDate)
     {
-        this.refuseLatestTime = refuseLatestTime;
+        this.refuseLatestDate = refuseLatestDate;
     }
 }
