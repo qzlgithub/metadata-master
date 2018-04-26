@@ -4,7 +4,10 @@ public enum APIProduct
 {
     FIN_HMD("FIN-HMD", "/credit/blacklist"),
     FIN_CDK("FIN-CDK", "/credit/overdue"),
-    FIN_DTK("FIN-DTK", "/credit/multi-register");
+    FIN_DTK("FIN-DTK", "/credit/multi-register"),
+    FIN_TGK("FIN-TGK", "/credit/loan"),
+    FIN_YLK("FIN-YLK", "/credit/repayment"),
+    FIN_JDK("FIN-JDK", "/credit/refuse");
 
     private final String code;
     private final String uri;

@@ -53,6 +53,36 @@ public class CreditController
         return revokeAPI(requestVO);
     }
 
+    /**
+     * 4. 通过客
+     */
+    @AuthRequired
+    @RequestMapping(value = "/credit/loan")
+    public MDResp getTargetPassInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
+    /**
+     * 5. 优良客
+     */
+    @AuthRequired
+    @RequestMapping(value = "/credit/repayment")
+    public MDResp getTargetExcellentInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
+    /**
+     * 6. 拒贷客
+     */
+    @AuthRequired
+    @RequestMapping(value = "/credit/refuse")
+    public MDResp getTargetRefuseInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
     private MDResp revokeAPI(RequestVO requestVO)
     {
         RequestThread.setPayloadId(requestVO.getPayloadHashCode());

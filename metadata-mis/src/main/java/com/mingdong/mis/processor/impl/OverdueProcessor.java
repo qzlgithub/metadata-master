@@ -46,8 +46,8 @@ public class OverdueProcessor implements IProcessor<PersonVO>
             OverdueBO bo = new OverdueBO();
             bo.setOverdueAmountMax(finOverdueUser.getOverdueAmountMax());
             bo.setOverdueDaysMax(finOverdueUser.getOverdueDaysMax());
-            bo.setOverdueEarliestTime(finOverdueUser.getOverdueEarliestTime());
-            bo.setOverdueLatestTime(finOverdueUser.getOverdueLatestTime());
+            bo.setOverdueEarliestTime(finOverdueUser.getOverdueEarliestDate());
+            bo.setOverdueLatestTime(finOverdueUser.getOverdueLatestDate());
             bo.setOverduePlatformToday(finOverdueUser.getOverduePlatformToday());
             bo.setOverduePlatformTotal(finOverdueUser.getOverduePlatformTotal());
             bo.setOverduePlatform3Days(finOverdueUser.getOverduePlatform3Days());
