@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -28,7 +29,7 @@
             <ul class="search-list clearfix border-b2 pb25">
                 <li>
                     <label class="layui-form-label">产品名称：</label>
-                    <div class="layui-inline" style="width: 180px">
+                    <div class="layui-input-inline" style="width: 180px">
                         <select name="product-id" id="productId" lay-search="">
                             <option value="">全部</option>
                             <option th:each="o : ${productDict}" th:value="${o.key}" th:text="${o.value}"
@@ -38,21 +39,23 @@
                 </li>
                 <li class="clearfix">
                     <label class="layui-form-label">充值时间：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="dates" />
-                        <input type="hidden" id="fromDate" name="fromDate"/>
-                        <input type="hidden" id="toDate" name="toDate"/>
+                    <div class="layui-input-inline" style="width: 180px">
+                        <input type="text" class="layui-input" id="dates" readonly="readonly"/>
+                        <input type="hidden" id="fromDate" name="fromDate" th:value="${startDate}"/>
+                        <input type="hidden" id="toDate" name="toDate" th:value="${endDate}"/>
                     </div>
                 </li>
                 <li>
                     <input type="hidden" name="client-id" id="clientId" th:value="${clientId}"/>
-                    <a class="layui-btn" lay-submit="" lay-filter="search">查询</a>
+                    <a class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search">查询</a>
                 </li>
             </ul>
             <div class="clearfix mt20" th:if="${#lists.contains(i_privilege,'31111')}">
                 <span class="fr">
                     <i class="col2 mr10">一次最多导出<em>1000</em>条</i>
-                    <a class="layui-btn" lay-submit="" lay-filter="export">导出</a>
+                    <button class="layui-btn layui-btn-disabled" id="exportBtn" lay-submit="" lay-filter="export">
+                        导出
+                    </button>
                 </span>
             </div>
             <table class="layui-table" id="dataTable"></table>
