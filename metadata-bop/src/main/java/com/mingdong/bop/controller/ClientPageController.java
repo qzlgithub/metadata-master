@@ -6,6 +6,8 @@ import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ManagerService;
 import com.mingdong.bop.service.ProductService;
 import com.mingdong.bop.service.SystemService;
+import com.mingdong.common.constant.DateFormat;
+import com.mingdong.common.util.DateUtils;
 import com.mingdong.core.annotation.LoginRequired;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.Constant;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +108,12 @@ public class ClientPageController
             @RequestParam(value = Field.P, required = false) Long productId)
     {
         ModelAndView view = new ModelAndView("client/recharge");
+        Calendar calendar = Calendar.getInstance();
+        Date endDay = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startDay = calendar.getTime();
+        view.addObject(Field.START_DATE, DateUtils.format(startDay, DateFormat.YYYY_MM_DD_2));
+        view.addObject(Field.END_DATE, DateUtils.format(endDay, DateFormat.YYYY_MM_DD_2));
         view.addObject(Field.CLIENT_ID, clientId + "");
         view.addObject(Field.PRODUCT_ID, productId + "");
         // 查询客户企业名称
@@ -124,6 +134,12 @@ public class ClientPageController
             @RequestParam(value = Field.U, required = false) Long userId)
     {
         ModelAndView view = new ModelAndView("client/consumption");
+        Calendar calendar = Calendar.getInstance();
+        Date endDay = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startDay = calendar.getTime();
+        view.addObject(Field.START_DATE, DateUtils.format(startDay, DateFormat.YYYY_MM_DD_2));
+        view.addObject(Field.END_DATE, DateUtils.format(endDay, DateFormat.YYYY_MM_DD_2));
         view.addObject(Field.CLIENT_ID, clientId + "");
         view.addObject(Field.PRODUCT_ID, productId + "");
         view.addObject(Field.USER_ID, userId + "");
