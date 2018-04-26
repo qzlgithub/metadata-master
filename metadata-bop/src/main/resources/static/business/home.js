@@ -1,7 +1,9 @@
 var table;
 layui.config({
     base: '../../static/build/js/'
-}).use(['table'], function() {
+}).use(['app', 'table'], function() {
+    var app = layui.app;
+    app.set({type: 'iframe'}).init();
     table = layui.table;
     getDateList();
 });
