@@ -13,8 +13,6 @@ public class FinRepaymentUser
     private String personId;
     @Field("repayment_amount_max")
     private BigDecimal repaymentAmountMax;
-    @Field("repayment_days_max")
-    private Integer repaymentDaysMax;
     @Field("repayment_earliest_date")
     private String repaymentEarliestDate;
     @Field("repayment_latest_date")
@@ -54,16 +52,6 @@ public class FinRepaymentUser
     public void setRepaymentAmountMax(BigDecimal repaymentAmountMax)
     {
         this.repaymentAmountMax = repaymentAmountMax;
-    }
-
-    public Integer getRepaymentDaysMax()
-    {
-        return repaymentDaysMax;
-    }
-
-    public void setRepaymentDaysMax(Integer repaymentDaysMax)
-    {
-        this.repaymentDaysMax = repaymentDaysMax;
     }
 
     public String getRepaymentEarliestDate()

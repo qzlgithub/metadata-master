@@ -45,7 +45,6 @@ public class LoanProcessor implements IProcessor<PersonVO>
         {
             LoanBO bo = new LoanBO();
             bo.setLoanAmountMax(finLoanUser.getLoanAmountMax());
-            bo.setLoanDaysMax(finLoanUser.getLoanDaysMax());
             bo.setLoanEarliestDate(finLoanUser.getLoanEarliestDate());
             bo.setLoanLatestDate(finLoanUser.getLoanLatestDate());
             bo.setLoanPlatformToday(finLoanUser.getLoanPlatformToday());
@@ -66,8 +65,8 @@ public class LoanProcessor implements IProcessor<PersonVO>
                     op = new LoanPlatformBO();
                     op.setPlatformCode(o.getPlatformCode());
                     op.setPlatformType(o.getPlatformType());
-                    op.setLoanEarliestTime(o.getLoanEarliestTime());
-                    op.setLoanLatestTime(o.getLoanLatestTime());
+                    op.setLoanEarliestDate(o.getLoanEarliestDate());
+                    op.setLoanLatestDate(o.getLoanLatestDate());
                     list.add(op);
                 }
                 bo.setLoanPlatforms(list);

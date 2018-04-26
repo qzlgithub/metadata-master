@@ -6,7 +6,6 @@ import java.util.List;
 public class RefuseBO
 {
     private BigDecimal refuseAmountMax;
-    private Integer refuseDaysMax;
     private String refuseEarliestDate;
     private String refuseLatestDate;
     private Integer refusePlatformTotal;
@@ -27,16 +26,6 @@ public class RefuseBO
     public void setRefuseAmountMax(BigDecimal refuseAmountMax)
     {
         this.refuseAmountMax = refuseAmountMax;
-    }
-
-    public Integer getRefuseDaysMax()
-    {
-        return refuseDaysMax;
-    }
-
-    public void setRefuseDaysMax(Integer refuseDaysMax)
-    {
-        this.refuseDaysMax = refuseDaysMax;
     }
 
     public String getRefuseEarliestDate()

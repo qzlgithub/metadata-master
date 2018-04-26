@@ -45,7 +45,6 @@ public class RefuseProcessor implements IProcessor<PersonVO>
         {
             RefuseBO bo = new RefuseBO();
             bo.setRefuseAmountMax(finRefuseUser.getRefuseAmountMax());
-            bo.setRefuseDaysMax(finRefuseUser.getRefuseDaysMax());
             bo.setRefuseEarliestDate(finRefuseUser.getRefuseEarliestDate());
             bo.setRefuseLatestDate(finRefuseUser.getRefuseLatestDate());
             bo.setRefusePlatformToday(finRefuseUser.getRefusePlatformToday());
@@ -66,8 +65,8 @@ public class RefuseProcessor implements IProcessor<PersonVO>
                     op = new RefusePlatformBO();
                     op.setPlatformCode(o.getPlatformCode());
                     op.setPlatformType(o.getPlatformType());
-                    op.setRefuseEarliestTime(o.getRefuseEarliestTime());
-                    op.setRefuseLatestTime(o.getRefuseLatestTime());
+                    op.setRefuseEarliestDate(o.getRefuseEarliestDate());
+                    op.setRefuseLatestDate(o.getRefuseLatestDate());
                     list.add(op);
                 }
                 bo.setRefusePlatforms(list);

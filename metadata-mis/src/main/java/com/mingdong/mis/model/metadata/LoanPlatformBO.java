@@ -4,8 +4,8 @@ public class LoanPlatformBO
 {
     private String platformCode;
     private String platformType;
-    private String loanEarliestTime;
-    private String loanLatestTime;
+    private String loanEarliestDate;
+    private String loanLatestDate;
 
     public String getPlatformCode()
     {
@@ -27,23 +27,23 @@ public class LoanPlatformBO
         this.platformType = platformType;
     }
 
-    public String getLoanEarliestTime()
+    public String getLoanEarliestDate()
     {
-        return loanEarliestTime;
+        return loanEarliestDate;
     }
 
-    public void setLoanEarliestTime(String loanEarliestTime)
+    public void setLoanEarliestDate(String loanEarliestDate)
     {
-        this.loanEarliestTime = loanEarliestTime;
+        this.loanEarliestDate = loanEarliestDate;
     }
 
-    public String getLoanLatestTime()
+    public String getLoanLatestDate()
     {
-        return loanLatestTime;
+        return loanLatestDate;
     }
 
-    public void setLoanLatestTime(String loanLatestTime)
+    public void setLoanLatestDate(String loanLatestDate)
     {
-        this.loanLatestTime = loanLatestTime;
+        this.loanLatestDate = loanLatestDate;
     }
 }

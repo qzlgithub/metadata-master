@@ -6,7 +6,6 @@ import java.util.List;
 public class RepaymentBO
 {
     private BigDecimal repaymentAmountMax;
-    private Integer repaymentDaysMax;
     private String repaymentEarliestDate;
     private String repaymentLatestDate;
     private Integer repaymentPlatformTotal;
@@ -27,16 +26,6 @@ public class RepaymentBO
     public void setRepaymentAmountMax(BigDecimal repaymentAmountMax)
     {
         this.repaymentAmountMax = repaymentAmountMax;
-    }
-
-    public Integer getRepaymentDaysMax()
-    {
-        return repaymentDaysMax;
-    }
-
-    public void setRepaymentDaysMax(Integer repaymentDaysMax)
-    {
-        this.repaymentDaysMax = repaymentDaysMax;
     }
 
     public String getRepaymentEarliestDate()

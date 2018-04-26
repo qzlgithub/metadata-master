@@ -45,7 +45,6 @@ public class RepaymentProcessor implements IProcessor<PersonVO>
         {
             RepaymentBO bo = new RepaymentBO();
             bo.setRepaymentAmountMax(finRepaymentUser.getRepaymentAmountMax());
-            bo.setRepaymentDaysMax(finRepaymentUser.getRepaymentDaysMax());
             bo.setRepaymentEarliestDate(finRepaymentUser.getRepaymentEarliestDate());
             bo.setRepaymentLatestDate(finRepaymentUser.getRepaymentLatestDate());
             bo.setRepaymentPlatformToday(finRepaymentUser.getRepaymentPlatformToday());
@@ -66,8 +65,8 @@ public class RepaymentProcessor implements IProcessor<PersonVO>
                     op = new RepaymentPlatformBO();
                     op.setPlatformCode(o.getPlatformCode());
                     op.setPlatformType(o.getPlatformType());
-                    op.setRepaymentEarliestTime(o.getRepaymentEarliestTime());
-                    op.setRepaymentLatestTime(o.getRepaymentLatestTime());
+                    op.setRepaymentEarliestDate(o.getRepaymentEarliestDate());
+                    op.setRepaymentLatestDate(o.getRepaymentLatestDate());
                     list.add(op);
                 }
                 bo.setRepaymentPlatforms(list);

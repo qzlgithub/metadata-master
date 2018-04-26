@@ -13,8 +13,6 @@ public class FinLoanUser
     private String personId;
     @Field("loan_amount_max")
     private BigDecimal loanAmountMax;
-    @Field("loan_days_max")
-    private Integer loanDaysMax;
     @Field("loan_earliest_date")
     private String loanEarliestDate;
     @Field("loan_latest_date")
@@ -54,16 +52,6 @@ public class FinLoanUser
     public void setLoanAmountMax(BigDecimal loanAmountMax)
     {
         this.loanAmountMax = loanAmountMax;
-    }
-
-    public Integer getLoanDaysMax()
-    {
-        return loanDaysMax;
-    }
-
-    public void setLoanDaysMax(Integer loanDaysMax)
-    {
-        this.loanDaysMax = loanDaysMax;
     }
 
     public String getLoanEarliestDate()

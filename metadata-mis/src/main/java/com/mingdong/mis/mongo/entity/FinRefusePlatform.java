@@ -12,10 +12,10 @@ public class FinRefusePlatform
     private String platformCode;
     @Field("platform_type")
     private String platformType;
-    @Field("refuse_earliest_time")
-    private String refuseEarliestTime;
-    @Field("refuse_latest_time")
-    private String refuseLatestTime;
+    @Field("refuse_earliest_date")
+    private String refuseEarliestDate;
+    @Field("refuse_latest_date")
+    private String refuseLatestDate;
 
     public String getPersonId()
     {
@@ -47,23 +47,23 @@ public class FinRefusePlatform
         this.platformType = platformType;
     }
 
-    public String getRefuseEarliestTime()
+    public String getRefuseEarliestDate()
     {
-        return refuseEarliestTime;
+        return refuseEarliestDate;
     }
 
-    public void setRefuseEarliestTime(String refuseEarliestTime)
+    public void setRefuseEarliestDate(String refuseEarliestDate)
     {
-        this.refuseEarliestTime = refuseEarliestTime;
+        this.refuseEarliestDate = refuseEarliestDate;
     }
 
-    public String getRefuseLatestTime()
+    public String getRefuseLatestDate()
     {
-        return refuseLatestTime;
+        return refuseLatestDate;
     }
 
-    public void setRefuseLatestTime(String refuseLatestTime)
+    public void setRefuseLatestDate(String refuseLatestDate)
     {
-        this.refuseLatestTime = refuseLatestTime;
+        this.refuseLatestDate = refuseLatestDate;
     }
 }
