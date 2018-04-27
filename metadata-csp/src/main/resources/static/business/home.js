@@ -33,7 +33,7 @@ layui.config({
     //主入口
     //app.set({type: 'iframe'}).init();
     $("#home-greeting").text(getGreeting());
-    var first = sessionStorage.getItem("first_login");
+    var first = localStorage.getItem("first_login");
     if(first === "1") {
         layer.open({
             title: false,
@@ -129,7 +129,7 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
                 });
             }
             else {
-                sessionStorage.setItem('first_login', '0');
+                localStorage.setItem('first_login', '0');
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {

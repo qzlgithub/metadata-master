@@ -93,7 +93,7 @@
         form = layui.form;
     });
     $("#li-security-id").addClass("active");
-    var first = sessionStorage.getItem("first_login");
+    var first = localStorage.getItem("first_login");
     if(first === "1") {
         $("#li1-id").show();
     }else{

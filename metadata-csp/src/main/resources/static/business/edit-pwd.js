@@ -92,7 +92,7 @@ function changePwd(orgPwd, newPwd, repeatPwd) {
                 });
             }
             else {
-                sessionStorage.setItem('first_login', '0');
+                localStorage.setItem('first_login', '0');
                 layer.msg("修改成功", {
                     time: 2000
                 }, function() {

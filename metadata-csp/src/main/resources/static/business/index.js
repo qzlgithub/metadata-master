@@ -74,10 +74,10 @@ function userLogin() {
         success: function(res) {
             if(res.code === '000000') {
                 var data = res.data;
-                sessionStorage.setItem("user_name", data.name);
-                sessionStorage.setItem("manager_qq", data.managerQq);
-                sessionStorage.setItem("first_login", data.firstLogin);
-                sessionStorage.setItem("service_qq", data.serviceQq);
+                localStorage.setItem("user_name", data.name);
+                localStorage.setItem("manager_qq", data.managerQq);
+                localStorage.setItem("first_login", data.firstLogin);
+                localStorage.setItem("service_qq", data.serviceQq);
                 window.location.href = "/home.html";
             }
             else {

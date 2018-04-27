@@ -1,15 +1,15 @@
 $(function() {
     $("#greeting").text(getGreeting());
     settingQq();
-    var haveMessage = sessionStorage.getItem("have_message");
+    var haveMessage = localStorage.getItem("have_message");
     if(haveMessage === "1") {
         $("#message-right-id").append('<em class="email-icon"></em>');
     }
 });
 
 function settingQq() {
-    var managerQq = sessionStorage.getItem("manager_qq");
-    var serviceQq = sessionStorage.getItem("service_qq");
+    var managerQq = localStorage.getItem("manager_qq");
+    var serviceQq = localStorage.getItem("service_qq");
     $(".setting-qq-class").attr("href", "http://wpa.qq.com/msgrd?v=3&uin=" + managerQq + "&site=qq&menu=yes");
     $(".service-qq-class").attr("href", "http://wpa.qq.com/msgrd?v=3&uin=" + serviceQq + "&site=qq&menu=yes");
 }
@@ -37,12 +37,12 @@ $("#exit").click(function() {
 function getGreeting() {
     var hour = new Date().getHours();
     if(hour < 12) {
-        return sessionStorage.getItem("user_name");
+        return localStorage.getItem("user_name");
     }
     else if(hour < 18) {
-        return sessionStorage.getItem("user_name");
+        return localStorage.getItem("user_name");
     }
     else {
-        return sessionStorage.getItem("user_name");
+        return localStorage.getItem("user_name");
     }
 }

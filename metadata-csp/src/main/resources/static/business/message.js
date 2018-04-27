@@ -3,7 +3,7 @@ layui.use('form', function() {
     form = layui.form;
 });
 $(function() {
-    sessionStorage.setItem("have_message","0");
+    localStorage.setItem("have_message", "0");
     $("#li-message-id").addClass("active");
     var obj = {
         pageNum: 1,
