@@ -10,6 +10,7 @@ import com.mingdong.mis.processor.impl.MultiRegisterProcessor;
 import com.mingdong.mis.processor.impl.OverdueProcessor;
 import com.mingdong.mis.processor.impl.RefuseProcessor;
 import com.mingdong.mis.processor.impl.RepaymentProcessor;
+import com.mingdong.mis.processor.impl.ReportProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,8 @@ public class RouteHandler
     private RepaymentProcessor repaymentProcessor;
     @Resource
     private RefuseProcessor refuseProcessor;
+    @Resource
+    private ReportProcessor reportProcessor;
 
     public Metadata routeProcessor(AbsPayload payload)
     {
@@ -49,6 +52,8 @@ public class RouteHandler
                 return repaymentProcessor.process((PersonVO) payload);
             case FIN_JDK:
                 return refuseProcessor.process((PersonVO) payload);
+            case FIN_TJQXBG:
+                return reportProcessor.process((PersonVO) payload);
             default:
                 logger.warn("Invalid product: " + RequestThread.getProduct());
                 return null;
