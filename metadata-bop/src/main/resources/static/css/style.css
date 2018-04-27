@@ -693,3 +693,7 @@ a.tz-btn{color: #fff; text-decoration: none;}
 .home-table-tab{border-bottom: solid 1px #1E9FFF;}
 .home-table-tab li{background: #fff; padding: 10px 20px; color: #333;float: left; margin-right: 5px; border-radius: 5px 5px 0px 0px; cursor: pointer}
 .home-table-tab li.active{background:#1E9FFF; color: #fff; border-radius: 5px 5px 0px 0px}
+
+
+
+.layui-table-body .layui-none {line-height: 183px; text-align: center; color: #999; background: #fff;}

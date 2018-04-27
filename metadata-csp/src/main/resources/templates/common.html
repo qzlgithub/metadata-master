@@ -4,13 +4,30 @@
 <!-- top -->
 <div th:fragment="top">
     <div class="navbar navbar-inverse navbar-fixed-top mb0 header1">
-        <div class="container header-mt10">
-            <div class="navbar-header">
+        <div class="container header-mt10 clearfix">
+            <div class="navbar-header fl" style="width: 20%">
                 <a class="navbar-brand hidden-sm navbar-logo" href="../index.html"
                    onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'navbar-首页'])"><i class="header-logo"></i></a>
             </div>
-            <div class="navbar-collapse collapse" role="navigation">
-                <ul class="nav navbar-nav">
+            <div class="navbar-collapse collapse mt0 important fr" role="navigation" style="width: 80%">
+                <ul class="nav navbar-nav navbar-right hidden-sm ahover clearfix" style="width: 100%;">
+                    <li style="font-size: 12px;">
+                        <span class="position-r">
+                            <a href="/system/message.html" class="col6" id="message-right-id"><em class="icon eamil"></em>消息</a>
+                        </span>
+                        <span class="cp">
+                            <a href="/system/edit-pwd.html" class="col6"><em class="icon edit-pwd"></em>修改密码</a>
+                        </span>
+                        <span id="exit">
+                            <i class="icon exit"></i><a href="javascript:;" class="col6">退出</a>
+                        </span>
+                    </li>
+                    <li class="fz-12 header" style="height: 22px; margin-top: 1px;">
+                        <i class="icon user" style="margin-bottom: 2px;"></i>
+                        <em id="greeting"></em>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav clearfix mt0 important" style="width: 100%;">
                     <li th:class="${currPage eq 'home'} ? 'active' : ''">
                         <a th:href="@{/home.html}">主页</a></li>
                     <li th:class="${currPage eq 'my-product'} ? 'active' : ''">
@@ -20,23 +37,6 @@
                     <li th:class="${currPage eq 'system'} ? 'active' : ''">
                         <a th:href="@{/system/message.html}">设置中心</a></li>
                     <li><a target="_blank" href="http://book.matedata.net">开发者文档</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right hidden-sm ahover">
-                    <li class="fz-12 header" style="width: 132px; height: 22px; overflow: hidden; margin-top: 1px;">
-                        <i class="icon user" style="margin-bottom: 2px;"></i>
-                        <em id="greeting"></em>
-                    </li>
-                    <li style="font-size: 12px;">
-                        <span class="position-r">
-                            <a href="/system/message.html" class="col6 icon eamil" id="message-right-id"></a>
-                        </span>
-                        <span class="cp">
-                            <a href="/system/edit-pwd.html" class="col6">修改密码&nbsp;&nbsp;&nbsp;</a>|
-                        </span>
-                        <span id="exit">
-                            <i class="icon exit"></i><a href="javascript:;" class="col6">退出</a>
-                        </span>
-                    </li>
                 </ul>
             </div>
         </div>
