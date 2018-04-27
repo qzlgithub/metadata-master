@@ -533,11 +533,6 @@ function selectProductSave() {
     $("input[class=product-checkbox-class]:checked").each(function() {
         ids.push($(this).val());
     });
-    if(ids.length === 0) {
-        layer.msg("请选择至少一个服务");
-        isSubmit = false;
-        return;
-    }
     var clientId = $("#client-id").val();
     $.ajax({
         type: "post",
