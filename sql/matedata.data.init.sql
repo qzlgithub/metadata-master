@@ -156,9 +156,9 @@ insert into
   `product`
   (create_time, update_time, type, custom, code, name, cost_amt, remark, enabled)
 values
-  (now(), now(), 1, 0, 'FIN-HMD', '黑名单', '0', '黑名单', 1),
-  (now(), now(), 1, 0, 'FIN-CDK', '常欠客', '0', '常欠客', 1),
-  (now(), now(), 1, 0, 'FIN-DTK', '多头客', '0', '多头客', 1);
+  (now(), now(), 1, 0, 'FIN-HMD', '黑名单', '0', '挖掘出数据库中逾期天数达到过90天的客户信息', 1),
+  (now(), now(), 1, 0, 'FIN-CDK', '常欠客', '0', '详细记录客户借贷历史中逾期次数时间和逾期天数', 1),
+  (now(), now(), 1, 0, 'FIN-DTK', '多头客', '0', '高效精准的识别多家平台注册的客户并附详细报告', 1);
 
 -- dict_industry data
 insert into
