@@ -87,7 +87,7 @@ public class CreditController
      * 7. 全息报告
      */
     @AuthRequired
-    @RequestMapping(value = "/credit/report")
+    @RequestMapping(value = "/credit/hologram")
     public MDResp getTargetReportInfo(@RequestBody RequestVO<PersonVO> requestVO)
     {
         return revokeAPI(requestVO);

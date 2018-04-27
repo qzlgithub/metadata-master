@@ -15,7 +15,7 @@ public enum APIProduct
     // 拒贷客
     FIN_JDK("FIN-JDK", "/credit/rejectee"),
     // 天镜全息报告
-    FIN_TJQXBG("FIN_TJQXBG", "/credit/report");
+    FIN_TJQXBG("FIN_TJQXBG", "/credit/hologram");
 
     private final String code;
     private final String uri;

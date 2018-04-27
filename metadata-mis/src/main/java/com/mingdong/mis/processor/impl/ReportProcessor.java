@@ -100,7 +100,7 @@ public class ReportProcessor implements IProcessor<PersonVO>
         }
         else
         {
-            reportBO.setCreditableCode(ResCode.NOT_HIT);
+            reportBO.setFavourableCode(ResCode.NOT_HIT);
         }
         Metadata<RefuseBO> refuseBOMetadata = refuseProcessor.process(payload);
         if(refuseBOMetadata.isHit())
