@@ -522,6 +522,12 @@ function selectProductSave() {
     if(isSubmit) {
         return;
     }
+    if($(".product-checkbox-class").length == 0){
+        layer.msg("没有产品可以添加", {
+            time: 2000
+        });
+        return;
+    }
     isSubmit = true;
     var ids = [];
     $("input[class=product-checkbox-class]:checked").each(function() {
