@@ -56,7 +56,7 @@ function login() {
             }
             else {
                 var da = res.data;
-                sessionStorage.setItem("user_name", da.name);
+                localStorage.setItem("user_name", da.name);
                 window.location.href = "/enter.html";
             }
         }
