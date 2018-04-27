@@ -83,6 +83,16 @@ public class CreditController
         return revokeAPI(requestVO);
     }
 
+    /**
+     * 7. 全息报告
+     */
+    @AuthRequired
+    @RequestMapping(value = "/credit/report")
+    public MDResp getTargetReportInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    {
+        return revokeAPI(requestVO);
+    }
+
     private MDResp revokeAPI(RequestVO requestVO)
     {
         RequestThread.setPayloadId(requestVO.getPayloadHashCode());

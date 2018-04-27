@@ -13,7 +13,9 @@ public enum APIProduct
     // 优良客
     FIN_YLK("FIN-YLK", "/credit/favourable"),
     // 拒贷客
-    FIN_JDK("FIN-JDK", "/credit/rejectee");
+    FIN_JDK("FIN-JDK", "/credit/rejectee"),
+    // 天镜全息报告
+    FIN_TJQXBG("FIN_TJQXBG", "/credit/report");
 
     private final String code;
     private final String uri;
