@@ -1031,6 +1031,11 @@ body {
         position: fixed;
         right: -3%;
     }
+    .affix {
+        bottom: 55%;
+    }
+    .garbage-none{bottom: 67%;}
+
 }
 
 @media (min-width: 1440px) {
@@ -1038,6 +1043,7 @@ body {
         position: fixed;
         right: -1%;
     }
+    .garbage-none{bottom: 65%;}
 }
 
 @media (min-width: 1680px) {
@@ -1045,6 +1051,10 @@ body {
         position: fixed;
         right: 5%;
     }
+    .affix {
+        bottom: 70%;
+    }
+    .garbage-none{bottom: 77%;}
 }
 
 @media (min-width: 1920px) {
@@ -1052,11 +1062,14 @@ body {
         position: fixed;
         right: 9%;
     }
+    .affix {
+        bottom: 70%;
+    }
+    .garbage-none{bottom: 77%;}
 }
 
 button:disabled {
     background-color: #ccc;
-    color: #999;
     color: #999;
     border: solid 1px #ccc;
 }

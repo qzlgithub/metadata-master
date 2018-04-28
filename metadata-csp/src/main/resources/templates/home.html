@@ -47,13 +47,13 @@
                 <input type="hidden" id="nearlyExpire" th:value="${nearlyExpireQty}"/>
                 <input type="hidden" id="inArrear" th:value="${inArrearQty}"/>
                 <input type="hidden" id="expired" th:value="${expiredQty}"/>
-                <p class="col2 important pl25" id="remindOcx">您的服务目前各项指标正常，请放心使用~</p>
+                <p class="col2 important tc" id="remindOcx">您的服务目前各项指标正常，请放心使用~</p>
                 <!--<p class="col2 important pl25"
                    th:if="${insufficientBalanceQty == 0} and ${nearlyExpireQty == 0} and ${inArrearQty == 0} and ${expiredQty == 0}">
                     您的服务目前各项指标正常，请放心使用~</p>
                 <p class="col2 important pl25" th:if="${insufficientBalanceQty != 0} or ${nearlyExpireQty != 0} or ${inArrearQty != 0} or ${expiredQty != 0}"
                    th:text="'您的服务' + ${insufficientBalanceQty} + '个服务余额不足、' + ${nearlyExpireQty} + '个即将过期、' + ${inArrearQty} + '个已欠费、' + ${expiredQty} + '个已过期，请及时处理~'"></p>-->
-                <p class="ml20"><a class="appid-btn" href="/product/mine.html#mms2">查看处理</a></p>
+                <p class="tc "><a class="appid-btn" href="/product/mine.html">查看处理</a></p>
             </div>
             <div class="col-md-6 bd-left pl20" th:if="${isPrimary}">
                 <p class="p0 important">
@@ -63,6 +63,10 @@
                     <a href="/system/account-list.html" class="fr">管理>></a>
                 </p>
                 <ul class="user-list clearfix">
+                    <div th:if="${subUserList.size() == 0 }">
+                        <p class="col2 tc important">您还未添加子帐号，子帐号可以一起使用主帐号的API</p>
+                        <p class="tc"><a class="appid-btn" href="/system/account-list.html">去添加</a></p>
+                    </div>
                     <li th:each="o : ${subUserList}">
                         <p><img src="/images/account-img.png" alt=""/></p>
                         <p th:text="${o.username}"></p>

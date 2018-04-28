@@ -41,8 +41,8 @@
 <div class="container mt20 mb20 bg-white">
     <div class="row development">
         <div class="col-lg-2 col-sm-2 col-md-2 pl0 pr0 important" id="myScrollspy">
-            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked" data-spy="affix"
-                data-offset-top="125" th:style="${trashList.size() != 0} ? '':'bottom:75%'">
+            <ul class="new-center-left development-menu nav-stacked nav nav-tabs nav-stacked " data-spy="affix"
+                data-offset-top="125" th:attrappend="${trashList.size() != 0} ? '':class=' garbage-none'">
                 <li><a href="#mms1">我的服务</a></li>
                 <li><a href="#mms2">服务提醒</a></li>
                 <li th:if="${trashList.size() != 0}"><a href="#mms3">回收站</a></li>
