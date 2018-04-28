@@ -24,5 +24,5 @@
     <dubbo:reference retries="0" timeout="5000" check="false" id="systemRpcService" url="dubbo://localhost:9901/"
                      interface="com.mingdong.core.service.SystemRpcService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="commonRpcService" url="dubbo://localhost:9901/"
-                     interface="com.mingdong.core.service.CommonRpcService"/>
+                     interface="com.mingdong.core.service.CommonRpcService" />
 </beans>
