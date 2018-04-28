@@ -11,7 +11,8 @@
     <dubbo:application name="METADATA-BACKEND" />
 
     <!-- 注册中心服务地址 -->
-    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${dubbo.registry.address}" />
+    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${dubbo.registry.address}"
+                    file="/data/app/metadata-backend/dubbo-registry.properties" />
 
     <!-- 用dubbo协议在指定端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" dispather="all" threadpool="cached" threads="5000" />
