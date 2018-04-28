@@ -113,6 +113,7 @@ public class ReportProcessor implements IProcessor<PersonVO>
         {
             reportBO.setRejecteeCode(ResCode.NOT_HIT);
         }
+        metadata.setData(reportBO);
         metadata.setHit(isHit);
         return metadata;
     }
