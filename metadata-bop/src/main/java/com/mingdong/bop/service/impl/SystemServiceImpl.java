@@ -538,6 +538,11 @@ public class SystemServiceImpl implements SystemService
                 clientIds.add(item.getClientId());
             }
         }
+        if(clientIds.size() == 0)
+        {
+            map.put(Field.PACIFY_COUNT, 0);
+            return map;
+        }
         ListDTO<WarningPacifyInfoResDTO> warningPacifyInfoList = backendWarningService.getWarningPacifyInfoList(
                 clientIds, null, TrueOrFalse.FALSE, null, null, new Page(1, 1));
         map.put(Field.PACIFY_COUNT, warningPacifyInfoList.getTotal());
@@ -999,6 +1004,7 @@ public class SystemServiceImpl implements SystemService
                 settingList.add(mapTemp);
                 mapTemp.put(Field.WARNING_CODE, item.getWarningCode());
                 mapTemp.put(Field.FILE_PATH, item.getFilePath());
+                mapTemp.put(Field.PLAY, item.getPlay());
             }
         }
         dataMap.put(Field.SETTING_LIST, settingList);

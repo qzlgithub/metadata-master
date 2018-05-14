@@ -22,12 +22,15 @@ function saveData() {
         isSubmit = false;
         return;
     }
+    var generalLimit = parseInt(generalLimit);
+    var severityLimit = parseInt(severityLimit);
+    var warningLimit = parseInt(warningLimit);
     if(generalLimit == severityLimit || generalLimit == warningLimit || severityLimit == warningLimit) {
         layer.msg("保存失败，预警阀值不能存在相同的数值！", {time: 3000});
         isSubmit = false;
         return;
     }
-    if(generalLimit >= severityLimit || generalLimit >= warningLimit || severityLimit >= warningLimit) {
+    if(generalLimit >= severityLimit || generalLimit >= warningLimit) {
         layer.msg("保存失败，预警阀值大小关系不匹配！", {time: 3000});
         isSubmit = false;
         return;

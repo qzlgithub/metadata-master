@@ -25,9 +25,9 @@ mybatis:
 
 mongodb:
   analysis:
-    uri: mongodb://metadata:123456@192.168.2.222:27017/metadata
-  transaction:
     uri: mongodb://matedata:123456@192.168.2.222:27017/matedata
+  transaction:
+    uri: mongodb://metadata:123456@192.168.2.222:27017/metadata
 
 dubbo:
   protocol:

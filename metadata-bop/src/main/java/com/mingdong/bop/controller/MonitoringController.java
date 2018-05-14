@@ -164,6 +164,24 @@ public class MonitoringController
         return res;
     }
 
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/setting")
+    public RestResp productSetting()
+    {
+        RestResp res = new RestListResp();
+        res.addAllData(systemService.getWarningSettingListByWarningType(WarningType.PRODUCT.getId()));
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/client/setting")
+    public RestResp clientSetting()
+    {
+        RestResp res = new RestListResp();
+        res.addAllData(systemService.getWarningSettingListByWarningType(WarningType.CLIENT.getId()));
+        return res;
+    }
+
     private List<Long> convertStringToList(String str)
     {
         List<Long> idList = new ArrayList<>();

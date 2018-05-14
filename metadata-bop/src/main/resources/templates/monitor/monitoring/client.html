@@ -92,10 +92,13 @@
                 <!--left end-->
                 <!--right-->
                 <div class="layui-col-md3">
-                    <audio th:each="o : ${settingList}" style="display:none" th:id="${o.warningCode}"
-                           th:if="${o.filePath != null}" controls="">
-                        <source th:src="${o.filePath}"/>
-                    </audio>
+                    <div th:each="o : ${settingList}" style="display:none">
+                        <input type="hidden" th:id="'play-'+${o.warningCode}" th:value="${o.play}"/>
+                        <audio th:id="${o.warningCode}"
+                               th:if="${o.filePath != null}" controls="">
+                            <source th:src="${o.filePath}"/>
+                        </audio>
+                    </div>
                     <dl class="grid-demo grid-demo-bg1  public-warp1">
                         <dt id="warning-icon"><em>警报</em><span class="cp icon icon3 fr" id="warningLabel"></span></dt>
                         <dd class="tc" style="overflow:hidden;height:233px;">

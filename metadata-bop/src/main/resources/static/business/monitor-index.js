@@ -209,6 +209,9 @@ function getWarningList() {
                     }
                     $("#third-list-id").html(htmlStr);
                     $(".third-have-class").show();
+                    if(warningThirdList.length > 6) {
+                        $(".third-have-more-class").show();
+                    }
                 }
                 else {
                     $(".third-none-class").show();
@@ -231,6 +234,9 @@ function getWarningList() {
                     }
                     $("#product-list-id").html(htmlStr);
                     $(".product-have-class").show();
+                    if(warningProductList.length > 6) {
+                        $(".product-have-more-class").show();
+                    }
                 }
                 else {
                     $(".product-none-class").show();
@@ -253,6 +259,9 @@ function getWarningList() {
                     }
                     $("#client-list-id").html(htmlStr);
                     $(".client-have-class").show();
+                    if(warningClientList.length > 6) {
+                        $(".client-have-more-class").show();
+                    }
                 }
                 else {
                     $(".client-none-class").show();

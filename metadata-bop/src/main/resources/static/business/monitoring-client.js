@@ -95,6 +95,26 @@ function timeReady() {
         catch(e) {
         }
     }, 3000);
+    setInterval(function() {
+        try {
+            getWarningSetting();
+        }
+        catch(e) {
+        }
+    }, 60000);
+}
+
+function getWarningSetting() {
+    $.get(
+        "/monitoring/client/setting",
+        {},
+        function(data) {
+            var settingList = data.data.settingList;
+            for(var i in settingList) {
+                $("#play-" + settingList[i].warningCode).val(settingList[i].play);
+            }
+        }
+    );
 }
 
 function getRequestList() {
@@ -244,8 +264,6 @@ function getWarningList() {
                         if(i == 0) {
                             if(alarmed_warning_id != list[i].id) {
                                 alarmed_warning_id = list[i].id;
-                                $("#warningLabel").removeClass("icon3");
-                                $("#warningLabel").addClass("icon3-close");
                                 var warningCode = list[i].warningCode;
                                 if(alarmed_warning_code != warningCode) {
                                     if(alarmed_warning_code != "") {
@@ -263,7 +281,9 @@ function getWarningList() {
                                 if($("#" + warningCode).length > 0) {
                                     var audio = document.getElementById(warningCode);
                                     if(audio !== null) {
-                                        if(audio.paused) {
+                                        if(audio.paused && $("#play-" + warningCode).val() == 1) {
+                                            $("#warningLabel").removeClass("icon3");
+                                            $("#warningLabel").addClass("icon3-close");
                                             audio.play();
                                         }
                                     }

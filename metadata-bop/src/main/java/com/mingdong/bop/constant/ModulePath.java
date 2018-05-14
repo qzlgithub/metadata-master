@@ -30,9 +30,9 @@ public enum ModulePath
     CLIENT_RECHARGE("/client/recharge.html", ModuleName.CLIENT_INDEX, ""),
     CLIENT_CONSUMPTION("/client/consumption.html", ModuleName.CLIENT_INDEX, ""),
 
-    CLIENT_PACIFY_INDEX("/pacify/index.html", ModuleName.CLIENT_PACIFY_INDEX, "31100"),
+    CLIENT_PACIFY_INDEX("/pacify/index.html", ModuleName.CLIENT_PACIFY_INDEX, "31200"),
     CLIENT_PACIFY_DETAIL("/pacify/detail.html", ModuleName.CLIENT_PACIFY_INDEX, ""),
-    CLIENT_REMIND_INDEX("/remind/index.html", ModuleName.CLIENT_REMIND_INDEX, "31100"),
+    CLIENT_REMIND_INDEX("/remind/index.html", ModuleName.CLIENT_REMIND_INDEX, "31300"),
 
     // 财务
     FINANCE_RECHARGE("/finance/recharge.html", ModuleName.FINANCE_RECHARGE, "51100"),
