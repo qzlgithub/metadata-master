@@ -8,9 +8,20 @@ public class Traffic
     private String corpName;
     private Long productId;
     private String productName;
+    private Long userId;
     private Long timestamp;
     private String host;
     private Integer payloadId;
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
 
     public Integer getStatus()
     {

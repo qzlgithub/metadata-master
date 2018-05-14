@@ -1,6 +1,7 @@
 $(function() {
     getLineChart(1);
     getProductPro();
+    getWarningList();
 });
 var isLock = false;
 var currPage = 1;
@@ -79,6 +80,7 @@ function getLineChart(page) {
                     series: [{
                         data: seriesData[i],
                         type: 'line',
+                        smooth: true,
                         areaStyle: {}
                     }]
                 };
@@ -176,6 +178,86 @@ function getProductPro() {
                 },
                 series: series
             });
+        }
+    );
+}
+
+function getWarningList() {
+    $.get(
+        "/diagram/index/warning",
+        {},
+        function(data) {
+            if(data.code === "000000") {
+                var warningThirdList = data.data.warningThirdList;
+                var warningProductList = data.data.warningProductList;
+                var warningClientList = data.data.warningClientList;
+                if(warningThirdList.length > 0) {
+                    /*<tr>
+                    <td>请求超时</td>
+                    <td>身份验证</td>
+                    <td>02/20 15:15:15</td>
+                    </tr>*/
+                    $("#third-list-id").empty();
+                    var htmlStr = '';
+                    for(var i in warningThirdList) {
+                        var obj = warningThirdList[i];
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + obj.warningName + '</td>';
+                        htmlStr += '<td>' + obj.name + '</td>';
+                        htmlStr += '<td>' + obj.warningAt + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#third-list-id").html(htmlStr);
+                    $(".third-have-class").show();
+                }
+                else {
+                    $(".third-none-class").show();
+                }
+                if(warningProductList.length > 0) {
+                    /*<tr>
+                    <td>请求超时</td>
+                    <td>身份验证</td>
+                    <td>02/20 15:15:15</td>
+                    </tr>*/
+                    $("#product-list-id").empty();
+                    var htmlStr = '';
+                    for(var i in warningProductList) {
+                        var obj = warningProductList[i];
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + obj.warningName + '</td>';
+                        htmlStr += '<td>' + obj.productName + '</td>';
+                        htmlStr += '<td>' + obj.warningAt + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#product-list-id").html(htmlStr);
+                    $(".product-have-class").show();
+                }
+                else {
+                    $(".product-none-class").show();
+                }
+                if(warningClientList.length > 0) {
+                    /* <tr>
+                     <td>请求超时</td>
+                     <td>身份验证</td>
+                     <td>02/20 15:15:15</td>
+                     </tr>*/
+                    $("#client-list-id").empty();
+                    var htmlStr = '';
+                    for(var i in warningClientList) {
+                        var obj = warningClientList[i];
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + obj.warningName + '</td>';
+                        htmlStr += '<td>' + obj.corpName + '</td>';
+                        htmlStr += '<td>' + obj.warningAt + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#client-list-id").html(htmlStr);
+                    $(".client-have-class").show();
+                }
+                else {
+                    $(".client-none-class").show();
+                }
+            }
         }
     );
 }

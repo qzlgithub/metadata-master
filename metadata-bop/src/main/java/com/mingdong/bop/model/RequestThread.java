@@ -19,6 +19,8 @@ public class RequestThread
     static
     {
         clientLinks.add(ModulePath.CLIENT_INDEX.getModuleId());
+        clientLinks.add(ModulePath.CLIENT_PACIFY_INDEX.getModuleId());
+        clientLinks.add(ModulePath.CLIENT_REMIND_INDEX.getModuleId());
         financeLinks.add(ModulePath.FINANCE_RECHARGE.getModuleId());
         financeLinks.add(ModulePath.FINANCE_CONSUMPTION.getModuleId());
         systemLinks.add(ModulePath.SETTING_USER.getModuleId());

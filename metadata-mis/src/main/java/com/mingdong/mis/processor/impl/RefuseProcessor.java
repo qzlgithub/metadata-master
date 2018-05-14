@@ -1,6 +1,7 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.RefuseBO;
@@ -30,53 +31,61 @@ public class RefuseProcessor implements IProcessor<PersonVO>
     private FinRefusePlatformDao finRefusePlatformDao;
 
     @Override
-    public Metadata<RefuseBO> process(PersonVO payload)
+    public Metadata<RefuseBO> process(PersonVO payload) throws Exception
     {
         Metadata<RefuseBO> metadata = new Metadata<>();
-        String personId = redisDao.findPersonByPhone(payload.getPhone());
-        personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
-        if(personId == null)
+        try
         {
-            metadata.setHit(false);
-            return metadata;
-        }
-        FinRefuseUser finRefuseUser = finRefuseUserDao.findByPerson(personId);
-        if(finRefuseUser != null)
-        {
-            RefuseBO bo = new RefuseBO();
-            bo.setRefuseAmountMax(finRefuseUser.getRefuseAmountMax());
-            bo.setRefuseEarliestDate(finRefuseUser.getRefuseEarliestDate());
-            bo.setRefuseLatestDate(finRefuseUser.getRefuseLatestDate());
-            bo.setRefusePlatformToday(finRefuseUser.getRefusePlatformToday());
-            bo.setRefusePlatformTotal(finRefuseUser.getRefusePlatformTotal());
-            bo.setRefusePlatform3Days(finRefuseUser.getRefusePlatform3Days());
-            bo.setRefusePlatform7Days(finRefuseUser.getRefusePlatform7Days());
-            bo.setRefusePlatform15Days(finRefuseUser.getRefusePlatform15Days());
-            bo.setRefusePlatform30Days(finRefuseUser.getRefusePlatform30Days());
-            bo.setRefusePlatform60Days(finRefuseUser.getRefusePlatform60Days());
-            bo.setRefusePlatform90Days(finRefuseUser.getRefusePlatform90Days());
-            List<FinRefusePlatform> opList = finRefusePlatformDao.findByPerson(personId);
-            if(!CollectionUtils.isEmpty(opList))
+
+            String personId = redisDao.findPersonByPhone(payload.getPhone());
+            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            if(personId == null)
             {
-                List<RefusePlatformBO> list = new ArrayList<>(opList.size());
-                RefusePlatformBO op;
-                for(FinRefusePlatform o : opList)
-                {
-                    op = new RefusePlatformBO();
-                    op.setPlatformCode(o.getPlatformCode());
-                    op.setPlatformType(o.getPlatformType());
-                    op.setRefuseEarliestDate(o.getRefuseEarliestDate());
-                    op.setRefuseLatestDate(o.getRefuseLatestDate());
-                    list.add(op);
-                }
-                bo.setRefusePlatforms(list);
+                metadata.setHit(false);
+                return metadata;
             }
-            metadata.setHit(true);
-            metadata.setData(bo);
+            FinRefuseUser finRefuseUser = finRefuseUserDao.findByPerson(personId);
+            if(finRefuseUser != null)
+            {
+                RefuseBO bo = new RefuseBO();
+                bo.setRefuseAmountMax(finRefuseUser.getRefuseAmountMax());
+                bo.setRefuseEarliestDate(finRefuseUser.getRefuseEarliestDate());
+                bo.setRefuseLatestDate(finRefuseUser.getRefuseLatestDate());
+                bo.setRefusePlatformToday(finRefuseUser.getRefusePlatformToday());
+                bo.setRefusePlatformTotal(finRefuseUser.getRefusePlatformTotal());
+                bo.setRefusePlatform3Days(finRefuseUser.getRefusePlatform3Days());
+                bo.setRefusePlatform7Days(finRefuseUser.getRefusePlatform7Days());
+                bo.setRefusePlatform15Days(finRefuseUser.getRefusePlatform15Days());
+                bo.setRefusePlatform30Days(finRefuseUser.getRefusePlatform30Days());
+                bo.setRefusePlatform60Days(finRefuseUser.getRefusePlatform60Days());
+                bo.setRefusePlatform90Days(finRefuseUser.getRefusePlatform90Days());
+                List<FinRefusePlatform> opList = finRefusePlatformDao.findByPerson(personId);
+                if(!CollectionUtils.isEmpty(opList))
+                {
+                    List<RefusePlatformBO> list = new ArrayList<>(opList.size());
+                    RefusePlatformBO op;
+                    for(FinRefusePlatform o : opList)
+                    {
+                        op = new RefusePlatformBO();
+                        op.setPlatformCode(o.getPlatformCode());
+                        op.setPlatformType(o.getPlatformType());
+                        op.setRefuseEarliestDate(o.getRefuseEarliestDate());
+                        op.setRefuseLatestDate(o.getRefuseLatestDate());
+                        list.add(op);
+                    }
+                    bo.setRefusePlatforms(list);
+                }
+                metadata.setHit(true);
+                metadata.setData(bo);
+            }
+            else
+            {
+                metadata.setHit(false);
+            }
         }
-        else
+        catch(Exception e)
         {
-            metadata.setHit(false);
+            throw new MetadataDataBaseException("mongo error");
         }
         return metadata;
     }

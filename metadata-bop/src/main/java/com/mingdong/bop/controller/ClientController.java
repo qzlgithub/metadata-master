@@ -347,10 +347,10 @@ public class ClientController
 
     @LoginRequired
     @PostMapping(value = "/client/remind")
-    public RestListResp clientRemind(@RequestParam(value = Field.ID) Long remindId,
+    public RestResp clientRemind(@RequestParam(value = Field.ID) Long remindId,
             @RequestParam(value = Field.REMARK) String remark)
     {
-        RestListResp resp = new RestListResp();
+        RestResp resp = new RestResp();
         clientService.updateClientRemind(remindId, remark, resp);
         return resp;
     }

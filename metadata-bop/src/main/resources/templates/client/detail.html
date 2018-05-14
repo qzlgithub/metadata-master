@@ -30,7 +30,10 @@
         </div>
         <div class="p20">
             <form class="layui-form" action="">
-                <div class="form-title mb20">基础信息<input type="hidden" id="client-id" th:value="${clientId}"/></div>
+                <div class="form-title mb20 clearfix flex">
+                    <em class="mt5 fl fb">基本信息</em><input type="hidden" id="client-id" th:value="${clientId}"/>
+                    <a href="javascript:history.back(-1);" class="layui-btn fr goback">返回</a>
+                </div>
                 <div class="m30 clearfix">
                     <div class="w30 fl">
                         <div class="layui-form-item">

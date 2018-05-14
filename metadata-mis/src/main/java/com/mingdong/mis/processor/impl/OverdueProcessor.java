@@ -1,6 +1,7 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.OverdueBO;
@@ -30,54 +31,61 @@ public class OverdueProcessor implements IProcessor<PersonVO>
     private FinOverduePlatformDao finOverduePlatformDao;
 
     @Override
-    public Metadata<OverdueBO> process(PersonVO payload)
+    public Metadata<OverdueBO> process(PersonVO payload) throws Exception
     {
         Metadata<OverdueBO> metadata = new Metadata<>();
-        String personId = redisDao.findPersonByPhone(payload.getPhone());
-        personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
-        if(personId == null)
+        try
         {
-            metadata.setHit(false);
-            return metadata;
-        }
-        FinOverdueUser finOverdueUser = finOverdueUserDao.findByPerson(personId);
-        if(finOverdueUser != null)
-        {
-            OverdueBO bo = new OverdueBO();
-            bo.setOverdueAmountMax(finOverdueUser.getOverdueAmountMax());
-            bo.setOverdueDaysMax(finOverdueUser.getOverdueDaysMax());
-            bo.setOverdueEarliestTime(finOverdueUser.getOverdueEarliestTime());
-            bo.setOverdueLatestTime(finOverdueUser.getOverdueLatestTime());
-            bo.setOverduePlatformToday(finOverdueUser.getOverduePlatformToday());
-            bo.setOverduePlatformTotal(finOverdueUser.getOverduePlatformTotal());
-            bo.setOverduePlatform3Days(finOverdueUser.getOverduePlatform3Days());
-            bo.setOverduePlatform7Days(finOverdueUser.getOverduePlatform7Days());
-            bo.setOverduePlatform15Days(finOverdueUser.getOverduePlatform15Days());
-            bo.setOverduePlatform30Days(finOverdueUser.getOverduePlatform30Days());
-            bo.setOverduePlatform60Days(finOverdueUser.getOverduePlatform60Days());
-            bo.setOverduePlatform90Days(finOverdueUser.getOverduePlatform90Days());
-            List<FinOverduePlatform> opList = finOverduePlatformDao.findByPerson(personId);
-            if(!CollectionUtils.isEmpty(opList))
+            String personId = redisDao.findPersonByPhone(payload.getPhone());
+            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            if(personId == null)
             {
-                List<OverduePlatformBO> list = new ArrayList<>(opList.size());
-                OverduePlatformBO op;
-                for(FinOverduePlatform o : opList)
-                {
-                    op = new OverduePlatformBO();
-                    op.setPlatformCode(o.getPlatformCode());
-                    op.setPlatformType(o.getPlatformType());
-                    op.setOverdueEarliestTime(o.getOverdueEarliestTime());
-                    op.setOverdueLatestTime(o.getOverdueLatestTime());
-                    list.add(op);
-                }
-                bo.setOverduePlatforms(list);
+                metadata.setHit(false);
+                return metadata;
             }
-            metadata.setHit(true);
-            metadata.setData(bo);
+            FinOverdueUser finOverdueUser = finOverdueUserDao.findByPerson(personId);
+            if(finOverdueUser != null)
+            {
+                OverdueBO bo = new OverdueBO();
+                bo.setOverdueAmountMax(finOverdueUser.getOverdueAmountMax());
+                bo.setOverdueDaysMax(finOverdueUser.getOverdueDaysMax());
+                bo.setOverdueEarliestTime(finOverdueUser.getOverdueEarliestTime());
+                bo.setOverdueLatestTime(finOverdueUser.getOverdueLatestTime());
+                bo.setOverduePlatformToday(finOverdueUser.getOverduePlatformToday());
+                bo.setOverduePlatformTotal(finOverdueUser.getOverduePlatformTotal());
+                bo.setOverduePlatform3Days(finOverdueUser.getOverduePlatform3Days());
+                bo.setOverduePlatform7Days(finOverdueUser.getOverduePlatform7Days());
+                bo.setOverduePlatform15Days(finOverdueUser.getOverduePlatform15Days());
+                bo.setOverduePlatform30Days(finOverdueUser.getOverduePlatform30Days());
+                bo.setOverduePlatform60Days(finOverdueUser.getOverduePlatform60Days());
+                bo.setOverduePlatform90Days(finOverdueUser.getOverduePlatform90Days());
+                List<FinOverduePlatform> opList = finOverduePlatformDao.findByPerson(personId);
+                if(!CollectionUtils.isEmpty(opList))
+                {
+                    List<OverduePlatformBO> list = new ArrayList<>(opList.size());
+                    OverduePlatformBO op;
+                    for(FinOverduePlatform o : opList)
+                    {
+                        op = new OverduePlatformBO();
+                        op.setPlatformCode(o.getPlatformCode());
+                        op.setPlatformType(o.getPlatformType());
+                        op.setOverdueEarliestTime(o.getOverdueEarliestTime());
+                        op.setOverdueLatestTime(o.getOverdueLatestTime());
+                        list.add(op);
+                    }
+                    bo.setOverduePlatforms(list);
+                }
+                metadata.setHit(true);
+                metadata.setData(bo);
+            }
+            else
+            {
+                metadata.setHit(false);
+            }
         }
-        else
+        catch(Exception e)
         {
-            metadata.setHit(false);
+            throw new MetadataDataBaseException("mongo error");
         }
         return metadata;
     }

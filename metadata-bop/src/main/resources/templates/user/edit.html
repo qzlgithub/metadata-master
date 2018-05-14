@@ -210,12 +210,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            客户管理
-                        </td>
+                        <td rowspan="3">客户管理</td>
+                        <td rowspan="3">客户管理</td>
                         <td>客户管理</td>
-                        <td>客户管理
-                        </td>
                         <td class="tl important">
                             <input type="checkbox" class="parent-privilege" id="p31100"/>全选
                             <input type="checkbox" class="privilege p31100" id="31101" p-id="p31100" checked=""
@@ -238,6 +235,26 @@
                                    th:checked="${#lists.contains(privilege,'31111')}"/>产品历史充值记录导出
                             <input type="checkbox" class="privilege p31100" id="31112" p-id="p31100" checked=""
                                    th:checked="${#lists.contains(privilege,'31112')}"/>产品消费明细导出
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>客户安抚</td>
+                        <td class="tl important">
+                            <input type="checkbox" class="parent-privilege" id="p31200"/>全选
+                            <input type="checkbox" class="privilege p31200" id="31201" p-id="p31200" checked=""
+                                   th:checked="${#lists.contains(privilege,'31201')}"/>查看
+                            <input type="checkbox" class="privilege p31200" id="31202" p-id="p31200" checked=""
+                                   th:checked="${#lists.contains(privilege,'31202')}"/>标记安抚
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>服务提醒</td>
+                        <td class="tl important">
+                            <input type="checkbox" class="parent-privilege" id="p31300"/>全选
+                            <input type="checkbox" class="privilege p31300" id="31301" p-id="p31300" checked=""
+                                   th:checked="${#lists.contains(privilege,'31301')}"/>查看
+                            <input type="checkbox" class="privilege p31300" id="31302" p-id="p31300" checked=""
+                                   th:checked="${#lists.contains(privilege,'31302')}"/>标记通知
                         </td>
                     </tr>
                     <tr>

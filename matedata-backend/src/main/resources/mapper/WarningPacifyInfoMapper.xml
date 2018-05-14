@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.backend.domain.mapper.WarningPacifyInfoMapper">
+    <resultMap id="BaseResultMap" type="WarningPacifyInfo">
+        <result column="pacify_id" property="pacifyId" jdbcType="BIGINT" />
+        <result column="warning_time" property="warningTime" jdbcType="TIMESTAMP" />
+        <result column="warning_dispose_time" property="warningDisposeTime" jdbcType="TIMESTAMP" />
+        <result column="pacify_dispose_time" property="pacifyDisposeTime" jdbcType="TIMESTAMP" />
+        <result column="warning_status" property="warningStatus" jdbcType="TINYINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="warning_user_id" property="warningUserId" jdbcType="BIGINT" />
+        <result column="pacify_user_id" property="pacifyUserId" jdbcType="BIGINT" />
+        <result column="dispose" property="dispose" jdbcType="TINYINT" />
+        <result column="warning_type" property="warningType" jdbcType="TINYINT" />
+        <result column="warning_code" property="warningCode" jdbcType="VARCHAR" />
+        <result column="warning_remark" property="warningRemark" jdbcType="VARCHAR" />
+        <result column="pacify_remark" property="pacifyRemark" jdbcType="VARCHAR" />
+    </resultMap>
+    <!-- @formatter:off -->
+    <select id="getListBy" resultMap="BaseResultMap">
+        select
+            wp.`id` as pacify_id,
+            wp.`client_id` as client_id,
+            wp.`user_id` as pacify_user_id,
+            wp.`dispose` as dispose,
+            wp.`dispose_time` as pacify_dispose_time,
+            wp.`remark` as pacify_remark,
+            wm.`create_time` as warning_time,
+            wm.`dispose` as warning_status,
+            wm.`dispose_time` as warning_dispose_time,
+            wm.`warning_code` as warning_code,
+            wm.`user_id` as warning_user_id,
+            wm.`remark` as warning_remark,
+            ws.`type` as warning_type
+        from warning_pacify wp left join warning_manage wm on wm.`id` = wp.`manage_id` left join warning_setting ws
+            on ws.`code` = wm.`warning_code`
+        <where>
+            <if test="errorStatus != null">wm.`dispose` = #{errorStatus}</if>
+            <if test="dispose != null">and wp.`dispose` = #{dispose}</if>
+            <if test="fromDate != null">and wm.`create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and wm.`create_time` &lt;= #{toDate}</if>
+            <if test="clientIds != null and clientIds.size() > 0">
+                and wp.`client_id`
+                <foreach collection="clientIds" item="itemId" open=" in (" close=")" separator=",">
+                    #{itemId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="countBy" resultType="Integer">
+        select
+            count(wp.`id`)
+        from warning_pacify wp left join warning_manage wm on wm.`id` = wp.`manage_id`
+        <where>
+            <if test="errorStatus != null">wm.`dispose` = #{errorStatus}</if>
+            <if test="dispose != null">and wp.`dispose` = #{dispose}</if>
+            <if test="fromDate != null">and wm.`create_time` >= #{fromDate}</if>
+            <if test="toDate != null">and wm.`create_time` &lt;= #{toDate}</if>
+            <if test="clientIds != null and clientIds.size() > 0">
+                and wp.`client_id`
+                <foreach collection="clientIds" item="itemId" open=" in (" close=")" separator=",">
+                    #{itemId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap" parameterType="Long">
+        select
+            wp.`id` as pacify_id,
+            wp.`client_id` as client_id,
+            wp.`user_id` as pacify_user_id,
+            wp.`dispose` as dispose,
+            wp.`dispose_time` as pacify_dispose_time,
+            wp.`remark` as pacify_remark,
+            wm.`create_time` as warning_time,
+            wm.`dispose` as warning_status,
+            wm.`dispose_time` as warning_dispose_time,
+            wm.`warning_code` as warning_code,
+            wm.`user_id` as warning_user_id,
+            wm.`remark` as warning_remark,
+            ws.`type` as warning_type
+        from warning_pacify wp left join warning_manage wm on wm.`id` = wp.`manage_id` left join warning_setting ws
+            on ws.`code` = wm.`warning_code`
+        where wp.`id` = #{id}
+    </select>
+    <!-- @formatter:on -->
+</mapper>

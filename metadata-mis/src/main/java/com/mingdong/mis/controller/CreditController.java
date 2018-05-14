@@ -28,7 +28,7 @@ public class CreditController
      */
     @AuthRequired
     @RequestMapping(value = "/credit/overdue")
-    public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    public MDResp getTargetOverdueInfo(@RequestBody RequestVO<PersonVO> requestVO) throws Exception
     {
         return revokeAPI(requestVO);
     }
@@ -38,7 +38,7 @@ public class CreditController
      */
     @AuthRequired
     @RequestMapping(value = "/credit/blacklist")
-    public MDResp checkPersonInBlacklist(@RequestBody RequestVO<PersonVO> requestVO)
+    public MDResp checkPersonInBlacklist(@RequestBody RequestVO<PersonVO> requestVO) throws Exception
     {
         return revokeAPI(requestVO);
     }
@@ -48,7 +48,7 @@ public class CreditController
      */
     @AuthRequired
     @RequestMapping(value = "/credit/multi-register")
-    public MDResp getTargetRegisterInfo(@RequestBody RequestVO<PersonVO> requestVO)
+    public MDResp getTargetRegisterInfo(@RequestBody RequestVO<PersonVO> requestVO) throws Exception
     {
         return revokeAPI(requestVO);
     }

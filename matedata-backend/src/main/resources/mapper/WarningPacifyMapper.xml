@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.backend.domain.mapper.WarningPacifyMapper">
+    <resultMap id="BaseResultMap" type="WarningPacify">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="manage_id" property="manageId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="dispose" property="dispose" jdbcType="INTEGER" />
+        <result column="dispose_time" property="disposeTime" jdbcType="TIMESTAMP" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="add" parameterType="WarningPacify" useGeneratedKeys="true" keyProperty="id">
+        insert into `warning_pacify`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="manageId != null">`manage_id`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="dispose != null">`dispose`,</if>
+            <if test="disposeTime != null">`dispose_time`,</if>
+            <if test="remark != null">`remark`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="manageId != null">#{manageId},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="dispose != null">#{dispose},</if>
+            <if test="disposeTime != null">#{disposeTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSkipNull" parameterType="WarningManage">
+        update `warning_pacify`
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="manageId != null">`manage_id` = #{manageId},</if>
+            <if test="clientId != null">`client_id` = #{clientId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="dispose != null">`dispose` = #{dispose},</if>
+            <if test="disposeTime != null">`dispose_time` = #{disposeTime},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <insert id="addAll" parameterType="List">
+        insert into `warning_pacify` (`create_time`, `update_time`, `manage_id`, `client_id`,`user_id`,
+        `dispose`,`dispose_time`,`remark`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.createTime},#{item.updateTime},#{item.manageId},#{item.clientId},#{item.userId},
+            #{item.dispose},#{item.disposeTime}, #{item.remark})
+        </foreach>
+    </insert>
+
+</mapper>

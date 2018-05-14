@@ -14,6 +14,28 @@ public class ManagerInfoResDTO implements Serializable
     private Date registerTime;
     private Integer enabled;
     private String groupName;
+    private Integer alarm;
+    private Integer pacify;
+
+    public Integer getAlarm()
+    {
+        return alarm;
+    }
+
+    public void setAlarm(Integer alarm)
+    {
+        this.alarm = alarm;
+    }
+
+    public Integer getPacify()
+    {
+        return pacify;
+    }
+
+    public void setPacify(Integer pacify)
+    {
+        this.pacify = pacify;
+    }
 
     public Long getManagerId()
     {

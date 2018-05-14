@@ -6,6 +6,7 @@ import com.mingdong.bop.component.Param;
 import com.mingdong.bop.component.RedisDao;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.model.ArticlesVO;
+import com.mingdong.bop.model.FileResVO;
 import com.mingdong.bop.model.RequestThread;
 import com.mingdong.bop.model.SistemVO;
 import com.mingdong.bop.model.WarningSettingVO;
@@ -16,8 +17,10 @@ import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.NumberUtils;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.QueryStatus;
 import com.mingdong.core.constant.RestResult;
 import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.constant.WarningCode;
 import com.mingdong.core.constant.WarningType;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.RestListResp;
@@ -28,13 +31,22 @@ import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.WarningManageReqDTO;
+import com.mingdong.core.model.dto.request.WarningPacifyReqDTO;
 import com.mingdong.core.model.dto.request.WarningSettingReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
+import com.mingdong.core.model.dto.response.ClientContactResDTO;
+import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
 import com.mingdong.core.model.dto.response.PrivilegeResDTO;
 import com.mingdong.core.model.dto.response.RechargeTypeResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
+import com.mingdong.core.model.dto.response.WarningManageDetailResDTO;
+import com.mingdong.core.model.dto.response.WarningManageResDTO;
+import com.mingdong.core.model.dto.response.WarningOutResDTO;
+import com.mingdong.core.model.dto.response.WarningPacifyInfoResDTO;
+import com.mingdong.core.model.dto.response.WarningPacifyProductResDTO;
 import com.mingdong.core.model.dto.response.WarningSettingResDTO;
 import com.mingdong.core.service.ClientRpcService;
 import com.mingdong.core.service.CommonRpcService;
@@ -390,10 +402,10 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void addArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
-        Map<String, String> map = null;
+        FileResVO fileResVO = null;
         try
         {
-            map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
+            fileResVO = FileUpload.fileUploadOne(upfile, param.getSaveFilePath(), null);
         }
         catch(Exception e)
         {
@@ -405,7 +417,8 @@ public class SystemServiceImpl implements SystemService
         articlesReqDTO.setContent(articlesVO.getContent());
         articlesReqDTO.setDeleted(TrueOrFalse.FALSE);
         articlesReqDTO.setPublished(articlesVO.getPublished());
-        articlesReqDTO.setImagePath(map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
+        articlesReqDTO.setImagePath(
+                fileResVO == null ? null : (param.getFileNginxUrl() + fileResVO.getFileOtherPath()));
         articlesReqDTO.setOrderId(articlesVO.getOrderId());
         articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
         articlesReqDTO.setTitle(articlesVO.getTitle());
@@ -418,7 +431,6 @@ public class SystemServiceImpl implements SystemService
             if(responseDTO.getResult() != RestResult.SUCCESS)
             {
                 resp.setError(responseDTO.getResult());
-                return;
             }
         }
         catch(Exception e)
@@ -431,12 +443,12 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void updateArticles(MultipartFile upfile, ArticlesVO articlesVO, RestResp resp)
     {
-        Map<String, String> map = null;
+        FileResVO fileResVO = null;
         if(upfile != null)
         {
             try
             {
-                map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
+                fileResVO = FileUpload.fileUploadOne(upfile, param.getSaveFilePath(), null);
             }
             catch(Exception e)
             {
@@ -448,7 +460,8 @@ public class SystemServiceImpl implements SystemService
         articlesReqDTO.setAuthor(articlesVO.getAuthor());
         articlesReqDTO.setContent(articlesVO.getContent());
         articlesReqDTO.setPublished(articlesVO.getPublished());
-        articlesReqDTO.setImagePath(map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
+        articlesReqDTO.setImagePath(
+                fileResVO == null ? null : (param.getFileNginxUrl() + fileResVO.getFileOtherPath()));
         articlesReqDTO.setOrderId(articlesVO.getOrderId());
         articlesReqDTO.setSynopsis(articlesVO.getSynopsis());
         articlesReqDTO.setTitle(articlesVO.getTitle());
@@ -514,15 +527,27 @@ public class SystemServiceImpl implements SystemService
         map.put(Field.AMOUNT, NumberUtils.formatAmount(amount));
         map.put(Field.CLIENT_COUNT_BY_DATE, clientCountByDate);
         map.put(Field.CLIENT_COUNT_ALL, allClientCount);
-
+        ListDTO<ClientInfoResDTO> clientInfoListBy = clientRpcService.getClientInfoListBy(null, null, null,
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), null);
+        List<Long> clientIds = new ArrayList<>();
+        List<ClientInfoResDTO> list = clientInfoListBy.getList();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            for(ClientInfoResDTO item : list)
+            {
+                clientIds.add(item.getClientId());
+            }
+        }
+        ListDTO<WarningPacifyInfoResDTO> warningPacifyInfoList = backendWarningService.getWarningPacifyInfoList(
+                clientIds, null, TrueOrFalse.FALSE, null, null, new Page(1, 1));
+        map.put(Field.PACIFY_COUNT, warningPacifyInfoList.getTotal());
         return map;
     }
 
     @Override
     public void getWarningSettingList(RestResp res)
     {
-        ListDTO<WarningSettingResDTO> listDTO = backendWarningService.getWarningSettingList();
-        List<WarningSettingResDTO> dataList = listDTO.getList();
+        List<WarningSettingResDTO> dataList = backendWarningService.getWarningSettingList();
         List<Map<String, Object>> product = new ArrayList<>();
         List<Map<String, Object>> client = new ArrayList<>();
         List<Map<String, Object>> other = new ArrayList<>();
@@ -548,7 +573,7 @@ public class SystemServiceImpl implements SystemService
             {
                 client.add(mapTemp);
             }
-            else if(WarningType.OTHER.equals(item.getType()))
+            else if(WarningType.THIRD.equals(item.getType()))
             {
                 other.add(mapTemp);
             }
@@ -581,12 +606,18 @@ public class SystemServiceImpl implements SystemService
     @Override
     public void updateWarningSetting(MultipartFile upfile, WarningSettingVO warningSettingVO, RestResp resp)
     {
-        Map<String, String> map = null;
+        WarningSettingResDTO warningSetting = backendWarningService.getWarningSetting(warningSettingVO.getId());
+        if(StringUtils.isNullBlank(warningSetting.getFileName()) && upfile == null)
+        {
+            resp.setError(RestResult.FILE_NOT_NULL);
+            return;
+        }
+        FileResVO fileResVO = null;
         if(upfile != null)
         {
             try
             {
-                map = FileUpload.fileUploadOne(upfile, param.getSaveFilePath());
+                fileResVO = FileUpload.fileUploadOne(upfile, param.getSaveFilePath(), new String[]{"mp3"});
             }
             catch(Exception e)
             {
@@ -595,9 +626,9 @@ public class SystemServiceImpl implements SystemService
         }
         WarningSettingReqDTO warningSettingReqDTO = new WarningSettingReqDTO();
         warningSettingReqDTO.setId(warningSettingVO.getId());
-        warningSettingReqDTO.setFileName(map == null ? null : map.get(Field.FILE_NAME));
+        warningSettingReqDTO.setFileName(fileResVO == null ? null : fileResVO.getFileName());
         warningSettingReqDTO.setFilePath(
-                map == null ? null : (param.getFileNginxUrl() + map.get(Field.FILE_OTHER_PATH)));
+                fileResVO == null ? null : (param.getFileNginxUrl() + fileResVO.getFileOtherPath()));
         warningSettingReqDTO.setSend(warningSettingVO.getSend());
         warningSettingReqDTO.setPlay(warningSettingVO.getPlay());
         warningSettingReqDTO.setGeneralLimit(warningSettingVO.getGeneralLimit());
@@ -631,6 +662,347 @@ public class SystemServiceImpl implements SystemService
     {
         SistemDTO sistemDTO = systemRpcService.getSystemSetting();
         return sistemDTO.getClientUserMax();
+    }
+
+    @Override
+    public void getWarningManageList(RestResp res)
+    {
+        Page page = new Page(1, 6);
+        ListDTO<WarningManageResDTO> productListDTO = backendWarningService.getWarningManageInfoListByType(
+                WarningType.PRODUCT.getId(), null, null, null, TrueOrFalse.FALSE, page);
+        List<WarningManageResDTO> productList = productListDTO.getList();
+        ListDTO<WarningManageResDTO> clientListDTO = backendWarningService.getWarningManageInfoListByType(
+                WarningType.CLIENT.getId(), null, null, null, TrueOrFalse.FALSE, page);
+        List<WarningManageResDTO> clientList = clientListDTO.getList();
+        ListDTO<WarningManageResDTO> thirdListDTO = new ListDTO<>();//TODO 第三方
+        List<WarningManageResDTO> thirdList = thirdListDTO.getList();
+        Map<String, Object> mapTemp;
+        List<Map<String, Object>> productMapList = new ArrayList<>();
+        List<Map<String, Object>> clientMapList = new ArrayList<>();
+        List<Map<String, Object>> thirdMapList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(productList))
+        {
+            for(WarningManageResDTO item : productList)
+            {
+                mapTemp = new HashMap<>();
+                productMapList.add(mapTemp);
+                mapTemp.put(Field.WARNING_NAME, WarningCode.findByCode(item.getWarningCode()).getName());
+                mapTemp.put(Field.PRODUCT_NAME, item.getProductName());
+                mapTemp.put(Field.WARNING_AT, DateUtils.format(item.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            }
+        }
+        if(!CollectionUtils.isEmpty(clientList))
+        {
+            for(WarningManageResDTO item : clientList)
+            {
+                mapTemp = new HashMap<>();
+                clientMapList.add(mapTemp);
+                mapTemp.put(Field.WARNING_NAME, WarningCode.findByCode(item.getWarningCode()).getName());
+                mapTemp.put(Field.CORP_NAME, item.getCorpName());
+                mapTemp.put(Field.WARNING_AT, DateUtils.format(item.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            }
+        }
+        if(!CollectionUtils.isEmpty(thirdList))
+        {
+            for(WarningManageResDTO item : thirdList)
+            {
+                mapTemp = new HashMap<>();
+                thirdMapList.add(mapTemp);
+                mapTemp.put(Field.WARNING_NAME, WarningCode.findByCode(item.getWarningCode()).getName());
+                mapTemp.put(Field.NAME, "");
+                mapTemp.put(Field.WARNING_AT, DateUtils.format(item.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            }
+        }
+        res.addData(Field.WARNING_PRODUCT_LIST, productMapList);
+        res.addData(Field.WARNING_CLIENT_LIST, clientMapList);
+        res.addData(Field.WARNING_THIRD_LIST, thirdMapList);
+    }
+
+    @Override
+    public void getWarningManageListByWarningType(Integer type, Long managerId, Date fromDate, Date toDate,
+            Integer dispose, RestListResp res, Page page)
+    {
+        ListDTO<WarningManageResDTO> productListDTO = backendWarningService.getWarningManageInfoListByType(type,
+                managerId, fromDate, toDate, dispose, page);
+        List<WarningManageResDTO> list = productListDTO.getList();
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> mapTemp;
+            WarningType warningTypeTemp;
+            for(WarningManageResDTO item : list)
+            {
+                mapTemp = new HashMap<>();
+                dataList.add(mapTemp);
+                mapTemp.put(Field.ID, item.getId() + "");
+                mapTemp.put(Field.WARNING_NAME, WarningType.findById(item.getWarningType()).getName() +
+                        WarningCode.findByCode(item.getWarningCode()).getName());
+                mapTemp.put(Field.WARNING_AT, DateUtils.format(item.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                mapTemp.put(Field.MANAGER_NAME, item.getUserName());
+                mapTemp.put(Field.WARNING_CODE, item.getWarningCode());
+                warningTypeTemp = WarningType.findById(item.getWarningType());
+                String name = "";
+                if(warningTypeTemp == WarningType.PRODUCT)
+                {
+                    name = item.getProductName();
+                }
+                else if(warningTypeTemp == WarningType.CLIENT)
+                {
+                    name = item.getCorpName();
+                }
+                else if(warningTypeTemp == WarningType.THIRD)
+                {
+                    //TODO 第三方
+                }
+                mapTemp.put(Field.NAME, name);
+            }
+        }
+        res.setTotal(productListDTO.getTotal());
+        res.setList(dataList);
+    }
+
+    @Override
+    public Map<String, Object> getWarningManageById(Long id)
+    {
+        Map<String, Object> map = new HashMap<>();
+        WarningManageResDTO warningManageResDTO = backendWarningService.getWarningManageInfoById(id);
+        map.put(Field.ID, warningManageResDTO.getId() + "");
+        map.put(Field.TYPE, warningManageResDTO.getWarningType());
+        map.put(Field.PRODUCT_NAME, warningManageResDTO.getProductName());
+        map.put(Field.CORP_NAME, warningManageResDTO.getCorpName());
+        map.put(Field.WARNING_NAME, WarningCode.findByCode(warningManageResDTO.getWarningCode()).getName());
+        map.put(Field.WARNING_AT, DateUtils.format(warningManageResDTO.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+        map.put(Field.DISPOSE, warningManageResDTO.getDispose());
+        map.put(Field.REMARK, warningManageResDTO.getRemark());
+        map.put(Field.MANAGER_NAME, warningManageResDTO.getUserName());
+        map.put(Field.WARNING_DISPOSE_TIME,
+                DateUtils.format(warningManageResDTO.getDisposeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+        return map;
+    }
+
+    @Override
+    public void getWarningDetailListByManageId(Long manageId, Page page, RestListResp res)
+    {
+        ListDTO<WarningManageDetailResDTO> listDTO = backendWarningService.getWarningDetailListByManageId(manageId,
+                page);
+        List<WarningManageDetailResDTO> list = listDTO.getList();
+        res.setTotal(listDTO.getTotal());
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> mapTemp;
+            for(WarningManageDetailResDTO item : list)
+            {
+                mapTemp = new HashMap<>();
+                dataList.add(mapTemp);
+                mapTemp.put(Field.WARNING_AT, DateUtils.format(item.getWarningAt(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                mapTemp.put(Field.HOST, item.getRequestIp());
+                mapTemp.put(Field.USERNAME, item.getUserName());
+                mapTemp.put(Field.PRODUCT_NAME, item.getProductId());
+                mapTemp.put(Field.CORP_NAME, item.getCorpName());
+                mapTemp.put(Field.ERROR_NAME, QueryStatus.getByCode(item.getErrorType()).getName());
+            }
+        }
+        res.setList(dataList);
+    }
+
+    @Override
+    public void updateWarningManageDispose(Long id, String remark, RestResp res)
+    {
+        WarningManageReqDTO warningManageReqDTO = new WarningManageReqDTO();
+        warningManageReqDTO.setId(id);
+        warningManageReqDTO.setDispose(TrueOrFalse.TRUE);
+        warningManageReqDTO.setRemark(remark);
+        warningManageReqDTO.setManagerId(RequestThread.getOperatorId());
+        warningManageReqDTO.setDisposeTime(new Date());
+        ResponseDTO responseDTO = backendWarningService.disposeWarningManage(warningManageReqDTO);
+        if(responseDTO.getResult() != RestResult.SUCCESS)
+        {
+            res.setError(responseDTO.getResult());
+            return;
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getWarningDisposeManagerList()
+    {
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        List<WarningManageResDTO> list = backendWarningService.getWarningDisposeManagerList();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> mapTemp;
+            for(WarningManageResDTO item : list)
+            {
+                mapTemp = new HashMap<>();
+                dataList.add(mapTemp);
+                mapTemp.put(Field.ID, item.getUserId());
+                mapTemp.put(Field.NAME, item.getUserName());
+            }
+        }
+        return dataList;
+    }
+
+    @Override
+    public void getWarningOutListByWarningType(Integer warningType, RestListResp res, Page page)
+    {
+        ListDTO<WarningOutResDTO> warningOutResDTOS = backendWarningService.getWarningOutListByWarningType(warningType,
+                page);
+        res.setTotal(warningOutResDTOS.getTotal());
+        List<WarningOutResDTO> list = warningOutResDTOS.getList();
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list))
+        {
+            Map<String, Object> mapTemp;
+            for(WarningOutResDTO item : list)
+            {
+                mapTemp = new HashMap<>();
+                dataList.add(mapTemp);
+                mapTemp.put(Field.ID, item.getId() + "");
+                mapTemp.put(Field.WARNING_NAME, WarningCode.findByCode(item.getWarningCode()).getName());
+                mapTemp.put(Field.PRODUCT_NAME, item.getProductName());
+                mapTemp.put(Field.LEVEL, item.getLevel());
+                mapTemp.put(Field.COUNT, item.getCount());
+                mapTemp.put(Field.LAST_TIME, DateUtils.format(item.getLastTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+            }
+        }
+        res.setList(dataList);
+    }
+
+    @Override
+    public void getWarningPacifyInfoList(String keyword, Integer errorStatus, Integer dispose, Date fromDate,
+            Date toDate, RestListResp res, Page page)
+    {
+        List<Long> clientIds = null;
+        if(!StringUtils.isNullBlank(keyword) || !RequestThread.isManager())
+        {
+            clientIds = new ArrayList<>();
+            ListDTO<ClientInfoResDTO> clientInfoListBy = clientRpcService.getClientInfoListBy(keyword, null, null,
+                    RequestThread.isManager() ? null : RequestThread.getOperatorId(), null);
+            List<ClientInfoResDTO> list = clientInfoListBy.getList();
+            if(!CollectionUtils.isEmpty(list))
+            {
+                for(ClientInfoResDTO item : list)
+                {
+                    clientIds.add(item.getClientId());
+                }
+            }
+        }
+        List<Map<String, Object>> list = new ArrayList<>();
+        res.setList(list);
+        if(clientIds != null && clientIds.size() == 0)
+        {
+            return;
+        }
+        ListDTO<WarningPacifyInfoResDTO> listDTO = backendWarningService.getWarningPacifyInfoList(clientIds,
+                errorStatus, dispose, fromDate, toDate, page);
+        res.setTotal(listDTO.getTotal());
+        List<WarningPacifyInfoResDTO> dataList = listDTO.getList();
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            Map<String, Object> mapTemp;
+            for(WarningPacifyInfoResDTO item : dataList)
+            {
+                mapTemp = new HashMap<>();
+                list.add(mapTemp);
+                mapTemp.put(Field.ID, item.getPacifyId() + "");
+                mapTemp.put(Field.CORP_NAME, item.getCorpName());
+                mapTemp.put(Field.LINK_NAME, item.getLinkName());
+                mapTemp.put(Field.PHONE, item.getPhone());
+                mapTemp.put(Field.PRODUCT_NAME, item.getProductName() +
+                        (item.getProductCount() > 1 ? ("（" + item.getProductCount() + "）") : ""));
+                mapTemp.put(Field.STATUS, item.getErrorStatus());
+                mapTemp.put(Field.ERROR_TIME, DateUtils.format(item.getErrorTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+                mapTemp.put(Field.DISPOSE, item.getDispose());
+            }
+        }
+    }
+
+    @Override
+    public void updatePacifyDispose(Long pacifyId, String remark, RestResp resp)
+    {
+        WarningPacifyReqDTO warningPacifyReqDTO = new WarningPacifyReqDTO();
+        warningPacifyReqDTO.setId(pacifyId);
+        warningPacifyReqDTO.setRemark(remark);
+        warningPacifyReqDTO.setDispose(TrueOrFalse.TRUE);
+        warningPacifyReqDTO.setDisposeTime(new Date());
+        warningPacifyReqDTO.setManagerId(RequestThread.getOperatorId());
+        ResponseDTO responseDTO = backendWarningService.disposeWarningPacify(warningPacifyReqDTO);
+        if(responseDTO.getResult() != RestResult.SUCCESS)
+        {
+            resp.setError(responseDTO.getResult());
+        }
+    }
+
+    @Override
+    public Map<String, Object> getWarningPacifyDetailById(Long id)
+    {
+        Map<String, Object> dataMap = new HashMap<>();
+        WarningPacifyInfoResDTO warningPacifyInfoResDTO = backendWarningService.getWarningPacifyInfoById(id);
+        dataMap.put(Field.ID, warningPacifyInfoResDTO.getPacifyId() + "");
+        dataMap.put(Field.CORP_NAME, warningPacifyInfoResDTO.getCorpName());
+        dataMap.put(Field.WARNING_NAME, WarningType.findById(warningPacifyInfoResDTO.getWarningType()).getName() +
+                WarningCode.findByCode(warningPacifyInfoResDTO.getWarningCode()).getName());
+        dataMap.put(Field.ERROR_TIME,
+                DateUtils.format(warningPacifyInfoResDTO.getErrorTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+        dataMap.put(Field.STATUS, warningPacifyInfoResDTO.getErrorStatus());
+        dataMap.put(Field.DISPOSE, warningPacifyInfoResDTO.getDispose());
+        dataMap.put(Field.WARNING_USER_NAME, warningPacifyInfoResDTO.getWarningUserName());
+        dataMap.put(Field.PACIFY_USER_NAME, warningPacifyInfoResDTO.getPacifyUserName());
+        dataMap.put(Field.WARNING_DISPOSE_TIME,
+                DateUtils.format(warningPacifyInfoResDTO.getWarningDisposeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+        dataMap.put(Field.PACIFY_DISPOSE_TIME,
+                DateUtils.format(warningPacifyInfoResDTO.getPacifyDisposeTime(), DateFormat.YYYY_MM_DD_HH_MM_SS));
+        dataMap.put(Field.WARNING_REMARK, warningPacifyInfoResDTO.getWarningRemark());
+        dataMap.put(Field.PACIFY_REMARK, warningPacifyInfoResDTO.getPacifyRemark());
+        List<Map<String, Object>> contactList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(warningPacifyInfoResDTO.getContacts()))
+        {
+            for(ClientContactResDTO o : warningPacifyInfoResDTO.getContacts())
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.NAME, o.getName());
+                m.put(Field.POSITION, o.getPosition());
+                m.put(Field.EMAIL, o.getEmail());
+                m.put(Field.PHONE, o.getPhone());
+                m.put(Field.IS_GENERAL, o.getGeneral());
+                contactList.add(m);
+            }
+        }
+        dataMap.put(Field.CONTACT_LIST, contactList);
+        List<Map<String, Object>> productList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(warningPacifyInfoResDTO.getPacifyProducts()))
+        {
+            for(WarningPacifyProductResDTO o : warningPacifyInfoResDTO.getPacifyProducts())
+            {
+                Map<String, Object> m = new HashMap<>();
+                m.put(Field.NAME, o.getProductName());
+                productList.add(m);
+            }
+        }
+        dataMap.put(Field.PRODUCT_LIST, productList);
+        return dataMap;
+    }
+
+    @Override
+    public Map<String, Object> getWarningSettingListByWarningType(Integer warningType)
+    {
+        Map<String, Object> dataMap = new HashMap<>();
+        List<WarningSettingResDTO> settingResDTOList = backendWarningService.getWarningSettingListByWarningType(
+                warningType);
+        List<Map<String, Object>> settingList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(settingResDTOList))
+        {
+            Map<String, Object> mapTemp;
+            for(WarningSettingResDTO item : settingResDTOList)
+            {
+                mapTemp = new HashMap<>();
+                settingList.add(mapTemp);
+                mapTemp.put(Field.WARNING_CODE, item.getWarningCode());
+                mapTemp.put(Field.FILE_PATH, item.getFilePath());
+            }
+        }
+        dataMap.put(Field.SETTING_LIST, settingList);
+        return dataMap;
     }
 
     private void cacheAllIndustryData()

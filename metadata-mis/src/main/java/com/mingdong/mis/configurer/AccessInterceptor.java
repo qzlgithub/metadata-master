@@ -85,10 +85,10 @@ public class AccessInterceptor extends HandlerInterceptorAdapter
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception
     {
-        // logger.info("request elapsed time: {}", System.currentTimeMillis() - RequestThread.getTimestamp());
         mqKit.userRequest(RequestThread.getHost(), RequestThread.getTimestamp(), RequestThread.getClientId(),
                 RequestThread.getCorpName(), RequestThread.getProductId(), RequestThread.getProductName(),
-                RequestThread.getPayloadId(), RequestThread.getQueryStatus(), RequestThread.getHit());
+                RequestThread.getUserId(), RequestThread.getPayloadId(), RequestThread.getQueryStatus(),
+                RequestThread.getHit());
         RequestThread.cleanup();
         super.afterCompletion(request, response, handler, ex);
     }

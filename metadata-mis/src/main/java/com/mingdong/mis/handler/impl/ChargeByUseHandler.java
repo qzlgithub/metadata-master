@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.QueryStatus;
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.constant.ResCode;
@@ -76,7 +77,14 @@ public class ChargeByUseHandler implements IChargeHandler
         }
         catch(Exception e)
         {
-            RequestThread.setQueryStatus(QueryStatus.INTERNAL_ERROR);
+            if(e instanceof MetadataDataBaseException)
+            {
+                RequestThread.setQueryStatus(QueryStatus.DATA_BASE_ERROR);
+            }
+            else
+            {
+                RequestThread.setQueryStatus(QueryStatus.OTHER_ERROR);
+            }
             resp.response(MDResult.SYSTEM_INTERNAL_ERROR);
             LOGGER.error("API request error, clientId:{}, productName:{}, payload:{}, message:{}",
                     RequestThread.getClientId(), RequestThread.getProductName(), JSON.toJSONString(payload),

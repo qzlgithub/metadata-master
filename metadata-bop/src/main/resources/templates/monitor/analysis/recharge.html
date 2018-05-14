@@ -29,25 +29,25 @@
                     <dt class="mt0 important">充值数据</dt>
                     <dd>
                         <ul class="public-data-list layui-row public-data-list1 col6">
-                            <li class="layui-col-md2 layui-col-list">
+                            <li class="layui-col-md2 layui-col-list" style="width: 23.33%;">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">今日充值(元)</p>
                                     <p class="col4 mt20 tc fz-24"><span th:text="${rechargeToday}"></span> </p>
                                 </div>
                             </li>
-                            <li class="layui-col-md2 layui-col-list ml30 mr30">
+                            <li class="layui-col-md2 layui-col-list ml30 mr30" style="width: 23.33%;">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">近7天充值(元)</p>
                                     <p class="col4 mt20 tc fz-24"><span th:text="${recharge7d}"></span> </p>
                                 </div>
                             </li>
-                            <li class="layui-col-md2 layui-col-list mr30">
+                            <li class="layui-col-md2 layui-col-list mr30" style="width: 23.33%;">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">当月充值(元)</p>
                                     <p class="col4 mt20 tc fz-24"><span th:text="${rechargeThisMonth}"></span> </p>
                                 </div>
                             </li>
-                            <li class="layui-col-md2 layui-col-list">
+                            <li class="layui-col-md2 layui-col-list" style="width: 23.33%;">
                                 <div class="fz-14">
                                     <p class="fz-16 mt10 tc">充值总量(元)</p>
                                     <p class="col4 mt20 tc fz-24"><span th:text="${rechargeTotal}"></span> </p>
@@ -91,10 +91,10 @@
                         </ul>
                         <div class="layui-row tc mt20 mb20" id="panel">
                             <div class="layui-col-md4 p30">
-                                <p class="tc" style="width:530px;height:450px;" id="charPie"></p>
+                                <p class="tc" style="width:100%;height:450px;" id="charPie"></p>
                             </div>
                             <div class="layui-col-md8 p30 tc">
-                                <p class="tc" style="width:1000px;height:450px;"  id="charBar"></p>
+                                <p class="tc" style="width:100%;height:450px;"  id="charBar"></p>
                             </div>
                         </div>
                     </dd>

@@ -18,6 +18,20 @@
                             <span th:text="${i_system.m31100}">客户管理</span>
                         </a>
                     </dd>
+                    <dd th:class="${i_module eq 'client-pacify-index'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'31200')}">
+                        <a href="/pacify/index.html">
+                            <i class="layui-icon">&#xe602;</i>
+                            <span th:text="${i_system.m31200}">客户安抚</span>
+                        </a>
+                    </dd>
+                    <dd th:class="${i_module eq 'client-remind-index'} ? 'layui-this':''"
+                        th:if="${#lists.contains(i_privilege,'31300')}">
+                        <a href="/remind/index.html">
+                            <i class="layui-icon">&#xe602;</i>
+                            <span th:text="${i_system.m31300}">服务提醒</span>
+                        </a>
+                    </dd>
                 </dl>
             </li>
         </ul>

@@ -40,6 +40,7 @@ import com.mingdong.core.model.dto.request.ClientReqDTO;
 import com.mingdong.core.model.dto.request.DisableClientReqDTO;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
+import com.mingdong.core.model.dto.response.ClientContactResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
@@ -463,7 +464,7 @@ public class ClientServiceImpl implements ClientService
         }
         map.put(Field.USER_LIST, userList);
         List<Map<String, Object>> contactList = new ArrayList<>();
-        for(ClientContactReqDTO o : dto.getContacts())
+        for(ClientContactResDTO o : dto.getContacts())
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.NAME, o.getName());
@@ -554,7 +555,7 @@ public class ClientServiceImpl implements ClientService
         data.put(Field.MANAGER_ID, dto.getManagerId());
         data.put(Field.ACCOUNT_TOTAL_QTY, dto.getAccountTotalQty());
         List<Map<String, Object>> contacts = new ArrayList<>(dto.getContacts().size());
-        for(ClientContactReqDTO o : dto.getContacts())
+        for(ClientContactResDTO o : dto.getContacts())
         {
             Map<String, Object> m = new HashMap<>();
             m.put(Field.ID, o.getId() + "");
@@ -850,83 +851,6 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public void getClientRemindForDate(Date date, Page page, RestListResp resp)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try
-        {
-            date = sdf.parse(sdf.format(date));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
-                RequestThread.isManager() ? null : RequestThread.getOperatorId(), ClientRemindType.DATE.getId(), date,
-                TrueOrFalse.FALSE, page);
-        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
-        resp.setTotal(listDTO.getTotal());
-        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            List<Map<String, Object>> list = new ArrayList<>();
-            for(ClientRemindResInfoDTO item : dataList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, item.getId() + "");
-                map.put(Field.CLIENT_ID, item.getClientId() + "");
-                map.put(Field.CORP_NAME, item.getCorpName());
-                map.put(Field.LINK_NAME, item.getLinkName());
-                map.put(Field.LINK_PHONE, item.getLinkPhone());
-                map.put(Field.PRODUCT_NAME,
-                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
-                map.put(Field.DAY, item.getDay());
-                map.put(Field.STATUS, item.getDispose());
-                list.add(map);
-            }
-            resp.setList(list);
-        }
-    }
-
-    @Override
-    public void getClientRemindForTimes(Date date, Page page, RestListResp resp)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try
-        {
-            date = sdf.parse(sdf.format(date));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
-                RequestThread.isManager() ? null : RequestThread.getOperatorId(), ClientRemindType.TIMES.getId(), date,
-                TrueOrFalse.FALSE, page);
-        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
-        resp.setTotal(listDTO.getTotal());
-        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
-        if(!CollectionUtils.isEmpty(dataList))
-        {
-            List<Map<String, Object>> list = new ArrayList<>();
-            for(ClientRemindResInfoDTO item : dataList)
-            {
-                Map<String, Object> map = new HashMap<>();
-                map.put(Field.ID, item.getId() + "");
-                map.put(Field.CLIENT_ID, item.getClientId() + "");
-                map.put(Field.CORP_NAME, item.getCorpName());
-                map.put(Field.LINK_NAME, item.getLinkName());
-                map.put(Field.LINK_PHONE, item.getLinkPhone());
-                map.put(Field.PRODUCT_NAME,
-                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
-                map.put(Field.STATUS, item.getDispose());
-                list.add(map);
-            }
-            resp.setList(list);
-        }
-    }
-
-    @Override
     public void updateClientRemind(Long remindId, String remark, RestResp resp)
     {
         ResponseDTO responseDTO = clientRpcService.updateClientRemind(remindId, remark);
@@ -1172,6 +1096,91 @@ public class ClientServiceImpl implements ClientService
         ResponseDTO responseDTO = backendTrafficService.getClientCityCache(date, 1);
         String jsonStr = responseDTO.getExtradata().get(Field.DATA);
         res.addData(Field.DATA, jsonStr);
+    }
+
+    @Override
+    public void getClientRemindForDate(Date date, String keyword, Integer dispose, Page page, RestListResp resp)
+    {
+        Date newDate = null;
+        if(date != null)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try
+            {
+                newDate = sdf.parse(sdf.format(date));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), keyword,
+                ClientRemindType.DATE.getId(), newDate, dispose, page);
+        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
+        resp.setTotal(listDTO.getTotal());
+        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(ClientRemindResInfoDTO item : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, item.getId() + "");
+                map.put(Field.CLIENT_ID, item.getClientId() + "");
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.LINK_NAME, item.getLinkName());
+                map.put(Field.LINK_PHONE, item.getLinkPhone());
+                map.put(Field.PRODUCT_NAME,
+                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
+                map.put(Field.DAY, item.getDay());
+                map.put(Field.STATUS, item.getDispose());
+                list.add(map);
+            }
+            resp.setList(list);
+        }
+    }
+
+    @Override
+    public void getClientRemindForTimes(Date date, String keyword, Integer dispose, Page page, RestListResp resp)
+    {
+        Date newDate = null;
+        if(date != null)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try
+            {
+                newDate = sdf.parse(sdf.format(date));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        ListDTO<ClientRemindResInfoDTO> listDTO = clientRpcService.getClientRemindList(
+                RequestThread.isManager() ? null : RequestThread.getOperatorId(), keyword,
+                ClientRemindType.TIMES.getId(), newDate, dispose, page);
+        List<ClientRemindResInfoDTO> dataList = listDTO.getList();
+        resp.setTotal(listDTO.getTotal());
+        resp.addData(Field.PAGES, page.getPages(listDTO.getTotal()));
+        if(!CollectionUtils.isEmpty(dataList))
+        {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for(ClientRemindResInfoDTO item : dataList)
+            {
+                Map<String, Object> map = new HashMap<>();
+                map.put(Field.ID, item.getId() + "");
+                map.put(Field.CLIENT_ID, item.getClientId() + "");
+                map.put(Field.CORP_NAME, item.getCorpName());
+                map.put(Field.LINK_NAME, item.getLinkName());
+                map.put(Field.LINK_PHONE, item.getLinkPhone());
+                map.put(Field.PRODUCT_NAME,
+                        item.getProductName() + (item.getCount() > 1 ? ("（" + item.getCount() + "）") : ""));
+                map.put(Field.STATUS, item.getDispose());
+                list.add(map);
+            }
+            resp.setList(list);
+        }
     }
 
     private EChartLine getRequestStatsBarOfRange(DateRange range, Long[] productIds, String clientName)

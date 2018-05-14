@@ -42,6 +42,20 @@ layui.config({
         $(this).parent().remove();
         refreshCheckbox();
     });
+    $("#warning-icon").on("click", ".icon3-close", function() {
+        if(alarmed_warning_code != "") {
+            if($("#" + alarmed_warning_code).length > 0) {
+                var audio = document.getElementById(alarmed_warning_code);
+                if(audio !== null) {
+                    if(!audio.paused) {
+                        audio.pause();
+                    }
+                }
+            }
+        }
+        $(this).removeClass("icon3-close");
+        $(this).addClass("icon3");
+    });
     initData();
     getLineChart(1);
 });
@@ -116,6 +130,7 @@ function getLineChart(page) {
                     series: [{
                         data: seriesData[i],
                         type: 'line',
+                        smooth: true,
                         areaStyle: {}
                     }]
                 };
@@ -138,6 +153,8 @@ function initData() {
     getRequestList();
     getScatterChart();
     timeReady();
+    getWarningOutList();
+    getWarningList();
 }
 
 function timeReady() {
@@ -154,6 +171,16 @@ function timeReady() {
         }
         try {
             getScatterChart();
+        }
+        catch(e) {
+        }
+        try {
+            getWarningOutList();
+        }
+        catch(e) {
+        }
+        try {
+            getWarningList();
         }
         catch(e) {
         }
@@ -321,6 +348,128 @@ function getScatterChart() {
                 },
                 series: series
             });
+        }
+    );
+}
+
+function getWarningOutList() {
+    $.get(
+        "/monitoring/product/out",
+        {},
+        function(data) {
+            if(data.code == "000000") {
+                var list = data.list;
+                /*<tr>
+                <td>请求超时</td>
+                <td>身份验证</td>
+                <td><span class="general">一般</span></td>
+                <td>20次</td>
+                <td>02/20 15:15:15</td>
+                </tr>*/
+                if(list.length > 0) {
+                    $("#product-ready-data").empty();
+                    var htmlStr = '';
+                    for(var i in list) {
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + list[i].warningName + '</td>';
+                        htmlStr += '<td>' + list[i].productName + '</td>';
+                        if(list[i].level == 1) {
+                            htmlStr += '<td><span class="general">一般</span></td>';
+                        }
+                        else if(list[i].level == 2) {
+                            htmlStr += '<td><span class="serious">严重</span></td>';
+                        }
+                        htmlStr += '<td>' + list[i].count + '</td>';
+                        htmlStr += '<td>' + list[i].lastTime + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#product-ready-data").html(htmlStr);
+                    $(".product-ready-class").show();
+                    $(".product-ready-none-class").hide();
+                }
+                else {
+                    $(".product-ready-class").hide();
+                    $(".product-ready-none-class").show();
+                }
+            }
+        }
+    );
+}
+
+var alarmed_warning_id = "";
+var alarmed_warning_code = "";
+
+function getWarningList() {
+    $.get(
+        "/monitoring/product/warning",
+        {},
+        function(data) {
+            if(data.code == "000000") {
+                var list = data.list;
+                /*<tr>
+                    <td>请求超时</td>
+                    <td>身份验证</td>
+                    <td>02/20 15:15:15</td>
+                </tr>*/
+                if(list.length > 0) {
+                    $("#product-data").empty();
+                    var htmlStr = '';
+                    for(var i in list) {
+                        if(i == 0) {
+                            if(alarmed_warning_id != list[i].id) {
+                                alarmed_warning_id = list[i].id;
+                                $("#warningLabel").removeClass("icon3");
+                                $("#warningLabel").addClass("icon3-close");
+                                var warningCode = list[i].warningCode;
+                                if(alarmed_warning_code != warningCode) {
+                                    if(alarmed_warning_code != "") {
+                                        if($("#" + alarmed_warning_code).length > 0) {
+                                            var audio = document.getElementById(alarmed_warning_code);
+                                            if(audio !== null) {
+                                                if(!audio.paused) {
+                                                    audio.pause();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    alarmed_warning_code = warningCode;
+                                }
+                                if($("#" + warningCode).length > 0) {
+                                    var audio = document.getElementById(warningCode);
+                                    if(audio !== null) {
+                                        if(audio.paused) {
+                                            audio.play();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + list[i].warningName + '</td>';
+                        htmlStr += '<td>' + list[i].name + '</td>';
+                        htmlStr += '<td>' + list[i].warningAt + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#product-data").html(htmlStr);
+                    $(".product-class").show();
+                    $(".product-none-class").hide();
+                }
+                else {
+                    $(".product-class").hide();
+                    $(".product-none-class").show();
+                    if(alarmed_warning_code != "") {
+                        if($("#" + alarmed_warning_code).length > 0) {
+                            var audio = document.getElementById(alarmed_warning_code);
+                            if(audio !== null) {
+                                if(!audio.paused) {
+                                    audio.pause();
+                                }
+                            }
+                        }
+                        alarmed_warning_code = "";
+                    }
+                }
+            }
         }
     );
 }

@@ -1,7 +1,5 @@
 package com.mingdong.core.model.dto.response;
 
-import com.mingdong.core.model.dto.request.ClientContactReqDTO;
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class ClientDetailResDTO extends ResponseDTO
     private Long industryId;
     private Integer accountTotalQty;
     private Integer enabled;
-    private List<ClientContactReqDTO> contacts;
+    private List<ClientContactResDTO> contacts;
     private List<ClientUserResDTO> users;
     private Date addTime;
     private Long managerId;
@@ -101,12 +99,12 @@ public class ClientDetailResDTO extends ResponseDTO
         this.enabled = enabled;
     }
 
-    public List<ClientContactReqDTO> getContacts()
+    public List<ClientContactResDTO> getContacts()
     {
         return contacts;
     }
 
-    public void setContacts(List<ClientContactReqDTO> contacts)
+    public void setContacts(List<ClientContactResDTO> contacts)
     {
         this.contacts = contacts;
     }

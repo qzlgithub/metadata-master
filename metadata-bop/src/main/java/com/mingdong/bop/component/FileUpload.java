@@ -1,27 +1,35 @@
 package com.mingdong.bop.component;
 
-import com.mingdong.bop.constant.Field;
+import com.mingdong.bop.model.FileResVO;
 import com.mingdong.common.util.StringUtils;
+import com.mingdong.core.constant.RestResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 public class FileUpload
 {
-    public static Map<String, String> fileUploadOne(MultipartFile upfile, String saveFilePath)
+    public static FileResVO fileUploadOne(MultipartFile upfile, String saveFilePath, String[] fileSuffixs)
     {
         if(upfile == null || StringUtils.isNullBlank(saveFilePath))
         {
             return null;
         }
-        Map<String, String> map = new HashMap<>();
         String fileName = upfile.getOriginalFilename();//文件名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));//后缀名
+        if(fileSuffixs != null && fileSuffixs.length > 0)
+        {
+            List<String> strings = Arrays.asList(fileSuffixs);
+            if(!strings.contains(suffixName.substring(1)))
+            {
+                return new FileResVO(RestResult.FILE_SUFFIX_ERROR);
+            }
+        }
         String fileOtherName = UUID.randomUUID() + suffixName;//随机文件名
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -43,9 +51,11 @@ public class FileUpload
             e.printStackTrace();
             return null;
         }
-        map.put(Field.FILE_NAME, fileName);
-        map.put(Field.FILE_OTHER_PATH, year + File.separator + month + File.separator + fileOtherName);
-        map.put(Field.FILE_REALITY_PATH, saveFilePathDir + fileOtherName);
-        return map;
+        FileResVO fileResVO = new FileResVO(RestResult.SUCCESS);
+        fileResVO.setFile(dest);
+        fileResVO.setFileName(fileName);
+        fileResVO.setFileOtherPath(year + File.separator + month + File.separator + fileOtherName);
+        fileResVO.setFileRealityPath(year + saveFilePathDir + fileOtherName);
+        return fileResVO;
     }
 }

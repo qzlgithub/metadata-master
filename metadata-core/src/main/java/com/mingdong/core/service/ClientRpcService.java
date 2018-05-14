@@ -12,6 +12,7 @@ import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
 import com.mingdong.core.model.dto.response.ClientRemindResInfoDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
+import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
@@ -180,8 +181,8 @@ public interface ClientRpcService
 
     int getClientIncrementFrom(Date date);
 
-    ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
-            Page page);
+    ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, String keyword, Integer type, Date date,
+            Integer dispose, Page page);
 
     void quartzClientRemind(Date date);
 
@@ -236,4 +237,10 @@ public interface ClientRpcService
     void statsRequestByDate(Date date);
 
     List<ClientInfoResDTO> getClientByCorpName(String corpName);
+
+    List<ClientInfoResDTO> getClientListByIds(List<Long> clientIds);
+
+    List<ClientUserResDTO> getClientUserListByIds(List<Long> clientUserIds);
+
+    List<ClientDetailResDTO> getClientDetailListByIds(List<Long> clientIds);
 }

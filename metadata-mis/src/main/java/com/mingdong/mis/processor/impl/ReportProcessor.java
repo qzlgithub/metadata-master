@@ -1,5 +1,6 @@
 package com.mingdong.mis.processor.impl;
 
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.model.Metadata;
@@ -36,85 +37,92 @@ public class ReportProcessor implements IProcessor<PersonVO>
     private RefuseProcessor refuseProcessor;
 
     @Override
-    public Metadata<ReportBO> process(PersonVO payload)
+    public Metadata<ReportBO> process(PersonVO payload) throws Exception
     {
         Metadata<ReportBO> metadata = new Metadata<>();
-        String personId = redisDao.findPersonByPhone(payload.getPhone());
-        personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
-        if(personId == null)
+        try
         {
-            metadata.setHit(false);
-            return metadata;
+            String personId = redisDao.findPersonByPhone(payload.getPhone());
+            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            if(personId == null)
+            {
+                metadata.setHit(false);
+                return metadata;
+            }
+            ReportBO reportBO = new ReportBO();
+            boolean isHit = false;
+            Metadata<OverdueBO> blacklistBOMetadata = blacklistProcessor.process(payload);
+            if(blacklistBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setBlacklistCode(ResCode.NORMAL);
+            }
+            else
+            {
+                reportBO.setBlacklistCode(ResCode.NOT_HIT);
+            }
+            Metadata<OverdueBO> overdueBOMetadata = overdueProcessor.process(payload);
+            if(overdueBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setOverdueCode(ResCode.NORMAL);
+                reportBO.setOverdueRes(overdueBOMetadata.getData());
+            }
+            else
+            {
+                reportBO.setOverdueCode(ResCode.NOT_HIT);
+            }
+            Metadata<MultiRegisterBO> multiRegisterBOMetadata = multiRegisterProcessor.process(payload);
+            if(multiRegisterBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setMultiRegisterCode(ResCode.NORMAL);
+                reportBO.setMultiRegisterRes(multiRegisterBOMetadata.getData());
+            }
+            else
+            {
+                reportBO.setMultiRegisterCode(ResCode.NOT_HIT);
+            }
+            Metadata<LoanBO> loanBOMetadata = loanProcessor.process(payload);
+            if(loanBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setCreditableCode(ResCode.NORMAL);
+                reportBO.setCreditableRes(loanBOMetadata.getData());
+            }
+            else
+            {
+                reportBO.setCreditableCode(ResCode.NOT_HIT);
+            }
+            Metadata<RepaymentBO> repaymentBOMetadata = repaymentProcessor.process(payload);
+            if(repaymentBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setFavourableCode(ResCode.NORMAL);
+                reportBO.setFavourableRes(repaymentBOMetadata.getData());
+            }
+            else
+            {
+                reportBO.setFavourableCode(ResCode.NOT_HIT);
+            }
+            Metadata<RefuseBO> refuseBOMetadata = refuseProcessor.process(payload);
+            if(refuseBOMetadata.isHit())
+            {
+                isHit = true;
+                reportBO.setRejecteeCode(ResCode.NORMAL);
+                reportBO.setRejecteeRes(refuseBOMetadata.getData());
+            }
+            else
+            {
+                reportBO.setRejecteeCode(ResCode.NOT_HIT);
+            }
+            metadata.setData(reportBO);
+            metadata.setHit(isHit);
         }
-        ReportBO reportBO = new ReportBO();
-        boolean isHit = false;
-        Metadata<OverdueBO> blacklistBOMetadata = blacklistProcessor.process(payload);
-        if(blacklistBOMetadata.isHit())
+        catch(Exception e)
         {
-            isHit = true;
-            reportBO.setBlacklistCode(ResCode.NORMAL);
+            throw new MetadataDataBaseException("mongo error");
         }
-        else
-        {
-            reportBO.setBlacklistCode(ResCode.NOT_HIT);
-        }
-        Metadata<OverdueBO> overdueBOMetadata = overdueProcessor.process(payload);
-        if(overdueBOMetadata.isHit())
-        {
-            isHit = true;
-            reportBO.setOverdueCode(ResCode.NORMAL);
-            reportBO.setOverdueRes(overdueBOMetadata.getData());
-        }
-        else
-        {
-            reportBO.setOverdueCode(ResCode.NOT_HIT);
-        }
-        Metadata<MultiRegisterBO> multiRegisterBOMetadata = multiRegisterProcessor.process(payload);
-        if(multiRegisterBOMetadata.isHit())
-        {
-            isHit = true;
-            reportBO.setMultiRegisterCode(ResCode.NORMAL);
-            reportBO.setMultiRegisterRes(multiRegisterBOMetadata.getData());
-        }
-        else
-        {
-            reportBO.setMultiRegisterCode(ResCode.NOT_HIT);
-        }
-        Metadata<LoanBO> loanBOMetadata = loanProcessor.process(payload);
-        if(loanBOMetadata.isHit())
-        {
-            isHit = true;
-            reportBO.setCreditableCode(ResCode.NORMAL);
-            reportBO.setCreditableRes(loanBOMetadata.getData());
-        }
-        else
-        {
-            reportBO.setCreditableCode(ResCode.NOT_HIT);
-        }
-        Metadata<RepaymentBO> repaymentBOMetadata = repaymentProcessor.process(payload);
-        if(repaymentBOMetadata.isHit())
-        {
-            isHit = true;
-            reportBO.setFavourableCode(ResCode.NORMAL);
-            reportBO.setFavourableRes(repaymentBOMetadata.getData());
-        }
-        else
-        {
-            reportBO.setFavourableCode(ResCode.NOT_HIT);
-        }
-        Metadata<RefuseBO> refuseBOMetadata = refuseProcessor.process(payload);
-        if(refuseBOMetadata.isHit())
-        {
-            isHit = true;
-            reportBO.setRejecteeCode(ResCode.NORMAL);
-            reportBO.setRejecteeRes(refuseBOMetadata.getData());
-        }
-        else
-        {
-            reportBO.setRejecteeCode(ResCode.NOT_HIT);
-        }
-        metadata.setData(reportBO);
-        metadata.setHit(isHit);
         return metadata;
     }
 }

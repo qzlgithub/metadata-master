@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+
+    <div th:include="common :: top"></div>
+    <div class="layui-side layui-bg-black kit-side" th:include="client :: left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="javascript:">客户管理</a>
+            <a href="javascript:">客户管理</a>
+            <a><cite>客户安抚</cite></a>
+        </div>
+        <div class="p20 layui-form">
+            <ul class="search-list clearfix border-b2 pb25">
+                <li>
+                    <input type="text" name="keyword" placeholder="请输入公司名称/公司简称/用户名" class="layui-input"
+                           style="width: 240px"/>
+                </li>
+                <li>
+                    出错时间：
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="dates"/>
+                        <input type="hidden" id="fromDate" name="fromDate"/>
+                        <input type="hidden" id="toDate" name="toDate"/>
+                    </div>
+                </li>
+                <li>
+                    错误状态：
+                    <div class="layui-inline" style="width: 120px">
+                        <select id="status" name="status">
+                            <option value="">全部</option>
+                            <option value="0">未处理</option>
+                            <option value="1">已处理</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    安抚状态：
+                    <div class="layui-inline" style="width: 120px">
+                        <select id="dispose" name="dispose">
+                            <option value="0">未安抚</option>
+                            <option value="1">已安抚</option>
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <a href="javascript:;" class="layui-btn" lay-submit="" lay-filter="search">查询</a>
+                </li>
+            </ul>
+            <div class="layui-form">
+                <table class="layui-table" id="data-table"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="notice-warp" class="modal">
+    <div class="layui-layer-title p0 important">标记已安抚</div>
+    <div class="mb30">
+        <div class="layui-form-item p30">
+            <div class="tl fz-14">备注:</div>
+            <div class="mt15">
+                <input type="hidden" id="pacifyId"/>
+                <textarea id="remark" placeholder="请输入内容" class="layui-textarea" maxlength="120"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <a href="javascript:" class="layui-btn" onclick="saveRemark()">保存</a>
+        </div>
+    </div>
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="common :: point"></div>
+
+<script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/business/pacify-list.js"></script>
+<script type="text/html" id="operation-bar">
+    {{# if(d.dispose === 0){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="detail" href="javascript:;"
+       th:if="${#lists.contains(i_privilege,'31202')}" onclick="showNotice('{{d.id}}')">标记安抚
+    </a>
+    {{# } }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/pacify/detail.html?id={{d.id}}"
+       th:if="${#lists.contains(i_privilege,'31201')}">查看</a>
+</script>
+<script type="text/html" id="errorStatus-tpl">
+    {{# if(d.status === 1){ }}
+    <div>已处理</div>
+    {{# } else { }}
+    <div>未处理</div>
+    {{# } }}
+</script>
+<script type="text/html" id="dispose-tpl">
+    {{# if(d.dispose === 1){ }}
+    <div>已安抚</div>
+    {{# } else { }}
+    <div>未安抚</div>
+    {{# } }}
+</script>
+</body>
+</html>

@@ -49,6 +49,7 @@ body {
 .icon1{background: url(../images/icon/icon1.png)no-repeat; background-size: 100%;}
 .icon2{background: url(../images/icon/icon2.png)no-repeat; background-size: 100%;}
 .icon3{background: url(../images/icon/icon3.png)no-repeat; background-size: 100%;}
+.icon3-close{background: url(../images/icon/icon3-close.png)no-repeat; background-size: 100%;}
 .icon4{background: url(../images/icon/icon4.png)no-repeat; background-size: 100%;}
 .icon5{background: url(../images/icon/icon5.png)no-repeat; background-size: 100%;}
 .icon6{background: url(../images/icon/jt.png)no-repeat; background-size: 100%;}
@@ -113,3 +114,6 @@ a:hover.key-button,a:hover.add-button{color: #fff}
 .layui-table {width: 100%;background-color: #021923; color: #fff;}
 .layui-form-checkbox[lay-skin=primary] span{font-size: 12px;}
 .kit-layout-admin .layui-body{bottom: 0px;}
+
+.layui-laypage a, .layui-laypage span{ color: #fff;}
+.layui-table-page{text-align: center; margin-top: 42px;}

@@ -146,4 +146,12 @@
                                                  = 0 and cur.`id` != ct.`primary_user_id` and
                    cur.`client_id` = #{clientId}
     </select>
+
+    <select id="getListByIds" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

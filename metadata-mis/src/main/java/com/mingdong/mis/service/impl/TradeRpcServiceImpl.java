@@ -6,6 +6,7 @@ import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.BillPlan;
 import com.mingdong.core.constant.MessageType;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.SMSType;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.dto.request.RechargeReqDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
@@ -188,12 +189,17 @@ public class TradeRpcServiceImpl implements TradeRpcService
                         }
                     }
                 }
-
             }
             // 保存客户充值消息
+            StringBuffer sbf = new StringBuffer();
+            sbf.append("尊敬的客户，您的产品");
+            sbf.append(product.getName());
+            sbf.append("已成功");
+            sbf.append(TrueOrFalse.TRUE.equals(reqDTO.getRenew()) ? "续费。" : "开通。");
             clientMessageService.sendMessage(messageType.getId(), reqDTO.getClientId(),
                     String.format(messageType.getContent(), product.getName(),
-                            NumberUtils.formatAmount(reqDTO.getAmount())), false, null);
+                            NumberUtils.formatAmount(reqDTO.getAmount())), true, sbf.toString(),
+                    SMSType.PRODUCT_RECHARGE.getId());
         }
         finally
         {

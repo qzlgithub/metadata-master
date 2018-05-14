@@ -5,5 +5,5 @@ import com.mingdong.mis.model.vo.AbsPayload;
 
 public interface IChargeHandler
 {
-    void work(AbsPayload payload, MDResp resp);
+    void work(AbsPayload payload, MDResp resp) throws Exception;
 }

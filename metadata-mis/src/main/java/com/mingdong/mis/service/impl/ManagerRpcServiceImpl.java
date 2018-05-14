@@ -492,6 +492,46 @@ public class ManagerRpcServiceImpl implements ManagerRpcService
         return responseDTO;
     }
 
+    @Override
+    public List<ManagerInfoResDTO> getAccountInfoList(List<Long> managerIds)
+    {
+        List<ManagerInfoResDTO> dataList = new ArrayList<>();
+        List<User> listByIds = userMapper.getListByIds(managerIds);
+        if(!CollectionUtils.isEmpty(listByIds))
+        {
+            ManagerInfoResDTO userResDTO;
+            for(User item : listByIds)
+            {
+                userResDTO = new ManagerInfoResDTO();
+                dataList.add(userResDTO);
+                userResDTO.setManagerId(item.getId());
+                userResDTO.setName(item.getName());
+                userResDTO.setUsername(item.getUsername());
+            }
+        }
+        return dataList;
+    }
+
+    @Override
+    public List<ManagerInfoResDTO> getAccountInfoListByAlarm(Integer alarm, Integer enabled)
+    {
+        List<ManagerInfoResDTO> userResDTOList = new ArrayList<>();
+        List<User> userList = userMapper.getListByAlarm(alarm, enabled);
+        if(!CollectionUtils.isEmpty(userList))
+        {
+            ManagerInfoResDTO managerInfoResDTO;
+            for(User item : userList)
+            {
+                managerInfoResDTO = new ManagerInfoResDTO();
+                userResDTOList.add(managerInfoResDTO);
+                managerInfoResDTO.setManagerId(item.getId());
+                managerInfoResDTO.setName(item.getName());
+                managerInfoResDTO.setPhone(item.getPhone());
+            }
+        }
+        return userResDTOList;
+    }
+
     /**
      * 查询指定角色已分配的模块名称列表
      */

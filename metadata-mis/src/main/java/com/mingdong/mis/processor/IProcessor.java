@@ -7,5 +7,5 @@ public interface IProcessor<T extends AbsPayload>
 {
     String DEFAULT_PERSON_ID = "0";
 
-    Metadata process(T payload);
+    Metadata process(T payload) throws Exception;
 }

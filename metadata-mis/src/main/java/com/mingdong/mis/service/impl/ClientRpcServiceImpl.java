@@ -24,6 +24,7 @@ import com.mingdong.core.model.dto.request.StatsDTO;
 import com.mingdong.core.model.dto.request.StatsRechargeDTO;
 import com.mingdong.core.model.dto.request.StatsRequestReqDTO;
 import com.mingdong.core.model.dto.response.AccessResDTO;
+import com.mingdong.core.model.dto.response.ClientContactResDTO;
 import com.mingdong.core.model.dto.response.ClientDetailResDTO;
 import com.mingdong.core.model.dto.response.ClientInfoResDTO;
 import com.mingdong.core.model.dto.response.ClientOperateLogResDTO;
@@ -31,6 +32,7 @@ import com.mingdong.core.model.dto.response.ClientRemindResInfoDTO;
 import com.mingdong.core.model.dto.response.ClientUserDictResDTO;
 import com.mingdong.core.model.dto.response.ClientUserResDTO;
 import com.mingdong.core.model.dto.response.CredentialResDTO;
+import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.MessageResDTO;
 import com.mingdong.core.model.dto.response.RechargeInfoResDTO;
 import com.mingdong.core.model.dto.response.RechargeResDTO;
@@ -600,29 +602,55 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
         }
         ListDTO<ClientInfoResDTO> dto = new ListDTO<>();
-        int total = clientMapper.countBy(keyword, industryIdList, enabled, managerId);
-        long pages = page.getPages(total);
-        dto.setTotal(total);
-        if(total > 0 && page.getPageNum() <= pages)
+        if(page != null)
         {
-            PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled, managerId);
-            List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
-            for(ClientInfo o : dataList)
+            int total = clientMapper.countBy(keyword, industryIdList, enabled, managerId);
+            long pages = page.getPages(total);
+            dto.setTotal(total);
+            if(total > 0 && page.getPageNum() <= pages)
             {
-                ClientInfoResDTO ci = new ClientInfoResDTO();
-                ci.setClientId(o.getClientId());
-                ci.setRegisterTime(o.getRegisterTime());
-                ci.setCorpName(o.getCorpName());
-                ci.setShortName(o.getShortName());
-                ci.setIndustryId(o.getIndustryId());
-                ci.setUsername(o.getUsername());
-                ci.setAccountQty(o.getAccountQty());
-                ci.setManagerName(o.getManagerName());
-                ci.setUserEnabled(o.getUserEnabled());
-                list.add(ci);
+                PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
+                List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled, managerId);
+                List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
+                for(ClientInfo o : dataList)
+                {
+                    ClientInfoResDTO ci = new ClientInfoResDTO();
+                    ci.setClientId(o.getClientId());
+                    ci.setRegisterTime(o.getRegisterTime());
+                    ci.setCorpName(o.getCorpName());
+                    ci.setShortName(o.getShortName());
+                    ci.setIndustryId(o.getIndustryId());
+                    ci.setUsername(o.getUsername());
+                    ci.setAccountQty(o.getAccountQty());
+                    ci.setManagerName(o.getManagerName());
+                    ci.setUserEnabled(o.getUserEnabled());
+                    list.add(ci);
+                }
+                dto.setList(list);
             }
-            dto.setList(list);
+        }
+        else
+        {
+            List<ClientInfo> dataList = clientInfoMapper.getListBy(keyword, industryIdList, enabled, managerId);
+            if(!CollectionUtils.isEmpty(dataList))
+            {
+                List<ClientInfoResDTO> list = new ArrayList<>(dataList.size());
+                for(ClientInfo o : dataList)
+                {
+                    ClientInfoResDTO ci = new ClientInfoResDTO();
+                    ci.setClientId(o.getClientId());
+                    ci.setRegisterTime(o.getRegisterTime());
+                    ci.setShortName(o.getShortName());
+                    ci.setCorpName(o.getCorpName());
+                    ci.setIndustryId(o.getIndustryId());
+                    ci.setUsername(o.getUsername());
+                    ci.setAccountQty(o.getAccountQty());
+                    ci.setManagerName(o.getManagerName());
+                    ci.setUserEnabled(o.getUserEnabled());
+                    list.add(ci);
+                }
+                dto.setList(list);
+            }
         }
         return dto;
     }
@@ -827,10 +855,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setIndustryId(client.getIndustryId());
         res.setAddTime(client.getCreateTime());
         res.setManagerName(manager.getName());
-        List<ClientContactReqDTO> contacts = new ArrayList<>();
+        List<ClientContactResDTO> contacts = new ArrayList<>();
         for(ClientContact o : clientContactList)
         {
-            ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+            ClientContactResDTO reqDTO = new ClientContactResDTO();
             reqDTO.setName(o.getName());
             reqDTO.setPosition(o.getPosition());
             reqDTO.setPhone(o.getPhone());
@@ -926,10 +954,10 @@ public class ClientRpcServiceImpl implements ClientRpcService
         res.setUsername(client.getUsername());
         res.setEnabled(client.getEnabled());
         List<ClientContact> clientContactList = clientContactMapper.getListByClient(clientId);
-        List<ClientContactReqDTO> contacts = new ArrayList<>();
+        List<ClientContactResDTO> contacts = new ArrayList<>();
         for(ClientContact o : clientContactList)
         {
-            ClientContactReqDTO reqDTO = new ClientContactReqDTO();
+            ClientContactResDTO reqDTO = new ClientContactResDTO();
             reqDTO.setId(o.getId());
             reqDTO.setName(o.getName());
             reqDTO.setPosition(o.getPosition());
@@ -1273,17 +1301,17 @@ public class ClientRpcServiceImpl implements ClientRpcService
     }
 
     @Override
-    public ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, Integer type, Date date, Integer dispose,
-            Page page)
+    public ListDTO<ClientRemindResInfoDTO> getClientRemindList(Long managerId, String keyword, Integer type, Date date,
+            Integer dispose, Page page)
     {
         ListDTO<ClientRemindResInfoDTO> listDTO = new ListDTO<>();
-        int total = clientRemindInfoMapper.countBy(managerId, type, date, dispose);
+        int total = clientRemindInfoMapper.countBy(managerId, keyword, type, date, dispose);
         long pages = page.getPages(total);
         listDTO.setTotal(total);
         if(total > 0 && page.getPageNum() <= pages)
         {
             PageHelper.startPage(page.getPageNum(), page.getPageSize(), false);
-            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getListBy(managerId, type, date, dispose);
+            List<ClientRemindInfo> dataList = clientRemindInfoMapper.getListBy(managerId, keyword, type, date, dispose);
             if(!CollectionUtils.isEmpty(dataList))
             {
                 List<ClientRemindResInfoDTO> list = new ArrayList<>(dataList.size());
@@ -1463,7 +1491,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         clientRemindProductMapper.addList(clientRemindProductsTemp);
                     }
                 }
-                saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.TRUE, null);
+                saveJobLog(JobType.CLIENT_REMIND, TrueOrFalse.TRUE,
+                        JobType.CLIENT_REMIND.getName() + ":" + longSdf.format(date));
             }
             catch(Exception e)
             {
@@ -1702,7 +1731,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         return;
                     }
                 }
-                saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE, null);
+                saveJobLog(JobType.STATS_ALL, TrueOrFalse.TRUE,
+                        JobType.STATS_ALL.getName() + ":" + longSdf.format(date));
             }
             catch(Exception e)
             {
@@ -1782,7 +1812,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                 {
                     logger.info("充值定时统计---" + longSdf.format(calendar.getTime()) + "没有数据可记录！");
                 }
-                saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.TRUE, null);
+                saveJobLog(JobType.STATS_RECHARGE, TrueOrFalse.TRUE,
+                        JobType.STATS_RECHARGE.getName() + ":" + longSdf.format(date));
             }
             catch(Exception e)
             {
@@ -1914,7 +1945,8 @@ public class ClientRpcServiceImpl implements ClientRpcService
                             JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
                     return;
                 }
-                saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.TRUE, null);
+                saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.TRUE,
+                        JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
             }
             catch(Exception e)
             {
@@ -1941,6 +1973,112 @@ public class ClientRpcServiceImpl implements ClientRpcService
             returnList.add(clientInfoResDTO);
         }
         return returnList;
+    }
+
+    @Override
+    public List<ClientInfoResDTO> getClientListByIds(List<Long> clientIds)
+    {
+        List<ClientInfoResDTO> list = new ArrayList<>();
+        List<Client> listByIdList = clientMapper.getListByIdList(clientIds);
+        if(!CollectionUtils.isEmpty(listByIdList))
+        {
+            Set<Long> managerIds = new HashSet<>();
+            for(Client item : listByIdList)
+            {
+                managerIds.add(item.getManagerId());
+            }
+            List<User> listByIds = userMapper.getListByIds(new ArrayList<>(managerIds));
+            Map<Long, User> userMap = new HashMap<>();
+            for(User item : listByIds)
+            {
+                userMap.put(item.getId(), item);
+            }
+            ClientInfoResDTO clientInfoResDTO;
+            User userItem;
+            ManagerInfoResDTO managerInfoResDTO;
+            for(Client item : listByIdList)
+            {
+                userItem = userMap.get(item.getManagerId());
+                clientInfoResDTO = new ClientInfoResDTO();
+                clientInfoResDTO.setClientId(item.getId());
+                clientInfoResDTO.setShortName(item.getShortName());
+                clientInfoResDTO.setCorpName(item.getCorpName());
+                managerInfoResDTO = new ManagerInfoResDTO();
+                clientInfoResDTO.setManagerInfoResDTO(managerInfoResDTO);
+                if(userItem != null)
+                {
+                    clientInfoResDTO.setManagerName(userItem.getName());
+                    managerInfoResDTO.setManagerId(userItem.getId());
+                    managerInfoResDTO.setName(userItem.getName());
+                    managerInfoResDTO.setPhone(userItem.getPhone());
+                    managerInfoResDTO.setAlarm(userItem.getAlarm());
+                    managerInfoResDTO.setPacify(userItem.getPacify());
+                }
+                list.add(clientInfoResDTO);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<ClientUserResDTO> getClientUserListByIds(List<Long> clientUserIds)
+    {
+        List<ClientUserResDTO> list = new ArrayList<>();
+        List<ClientUser> clientUserList = clientUserMapper.getListByIds(clientUserIds);
+        if(!CollectionUtils.isEmpty(clientUserList))
+        {
+            ClientUserResDTO clientUserResDTO;
+            for(ClientUser item : clientUserList)
+            {
+                clientUserResDTO = new ClientUserResDTO();
+                list.add(clientUserResDTO);
+                clientUserResDTO.setId(item.getId());
+                clientUserResDTO.setName(item.getName());
+                clientUserResDTO.setUsername(item.getUsername());
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<ClientDetailResDTO> getClientDetailListByIds(List<Long> clientIds)
+    {
+        List<ClientDetailResDTO> list = new ArrayList<>();
+        List<Client> clientList = clientMapper.getListByIdList(clientIds);
+        if(!CollectionUtils.isEmpty(clientList))
+        {
+            List<ClientContact> clientContactList = clientContactMapper.getListByClients(clientIds);
+            Map<Long, List<ClientContactResDTO>> clientContactMap = new HashMap<>();
+            List<ClientContactResDTO> clientContactListTemp;
+            if(!CollectionUtils.isEmpty(clientContactList))
+            {
+                ClientContactResDTO clientContactResDTO;
+                for(ClientContact item : clientContactList)
+                {
+                    clientContactResDTO = new ClientContactResDTO();
+                    clientContactResDTO.setId(item.getId());
+                    clientContactResDTO.setEmail(item.getEmail());
+                    clientContactResDTO.setGeneral(item.getGeneral());
+                    clientContactResDTO.setName(item.getName());
+                    clientContactResDTO.setPhone(item.getPhone());
+                    clientContactResDTO.setPosition(item.getPosition());
+                    clientContactListTemp = clientContactMap.computeIfAbsent(item.getClientId(),
+                            k -> new ArrayList<>());
+                    clientContactListTemp.add(clientContactResDTO);
+                }
+            }
+            ClientDetailResDTO clientDetailResDTO;
+            for(Client item : clientList)
+            {
+                clientDetailResDTO = new ClientDetailResDTO();
+                clientDetailResDTO.setClientId(item.getId());
+                clientDetailResDTO.setContacts(clientContactMap.get(item.getId()));
+                clientDetailResDTO.setCorpName(item.getCorpName());
+                clientDetailResDTO.setShortName(item.getShortName());
+                list.add(clientDetailResDTO);
+            }
+        }
+        return list;
     }
 
     /**

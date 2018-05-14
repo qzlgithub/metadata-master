@@ -150,4 +150,33 @@ public class ClientPageController
         view.addAllObjects(RequestThread.getMap());
         return view;
     }
+
+    @LoginRequired
+    @RequestMapping(value = "/pacify/index.html")
+    public ModelAndView pacifyList()
+    {
+        ModelAndView view = new ModelAndView("pacify/list");
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
+    @LoginRequired
+    @RequestMapping(value = "/pacify/detail.html")
+    public ModelAndView pacifyDetail(@RequestParam(value = Field.ID) Long id)
+    {
+        ModelAndView view = new ModelAndView("pacify/detail");
+        view.addAllObjects(RequestThread.getMap());
+        view.addAllObjects(systemService.getWarningPacifyDetailById(id));
+        return view;
+    }
+
+    @LoginRequired
+    @RequestMapping(value = "/remind/index.html")
+    public ModelAndView remindList()
+    {
+        ModelAndView view = new ModelAndView("remind/list");
+        view.addAllObjects(RequestThread.getMap());
+        return view;
+    }
+
 }

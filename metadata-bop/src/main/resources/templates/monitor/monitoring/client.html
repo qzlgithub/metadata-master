@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
@@ -91,18 +92,26 @@
                 <!--left end-->
                 <!--right-->
                 <div class="layui-col-md3">
+                    <audio th:each="o : ${settingList}" style="display:none" th:id="${o.warningCode}"
+                           th:if="${o.filePath != null}" controls="">
+                        <source th:src="${o.filePath}"/>
+                    </audio>
                     <dl class="grid-demo grid-demo-bg1  public-warp1">
-                        <dt><em>警报</em><span class="icon icon3-close fr"></span></dt>
-                        <dd style="overflow:hidden;height:233px;">
-                            <table class="public-table1">
+                        <dt id="warning-icon"><em>警报</em><span class="cp icon icon3 fr" id="warningLabel"></span></dt>
+                        <dd class="tc" style="overflow:hidden;height:233px;">
+                            <div class="mt40 product-none-class" style="display: none">
+                                <i class="layui-icon col6" style="font-size: 80px;">&#xe60c;</i>
+                                <p class="col6 mt10 fz-18">客户各指标正常</p>
+                            </div>
+                            <table class="public-table1 product-class" style="display: none">
                                 <thead>
                                 <tr>
                                     <th>警报类型</th>
-                                    <th>接口名称</th>
+                                    <th>客户名称</th>
                                     <th>最近时间</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="product-data">
                                 <!--<tr>
                                     <td>请求超时</td>
                                     <td>身份验证</td>
@@ -133,7 +142,7 @@
                     </dl>
                     <dl class="grid-demo grid-demo-bg1  public-warp1 mt10">
                         <dt><em>区域分布</em></dt>
-                        <dd  id="map-chart" style="width: 100%;height:270px;">
+                        <dd id="map-chart" style="width: 100%;height:270px;">
 
                         </dd>
                     </dl>
@@ -163,24 +172,27 @@
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/asset/map/js/china.js"></script>
-<script type="text/javascript" src="/static/business/monitoring-client.js"></script>
 <script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/business/monitoring-client.js"></script>
 <script>
     //无缝隙滚动
-    var speed=30;
-    var colee2=document.getElementById("colee2");
-    var colee1=document.getElementById("colee1");
-    var colee=document.getElementById("colee");
+    var speed = 30;
+    var colee2 = document.getElementById("colee2");
+    var colee1 = document.getElementById("colee1");
+    var colee = document.getElementById("colee");
+
     //colee2.innerHTML=colee1.innerHTML; //克隆colee1为colee2
-    function Marquee1(){
+    function Marquee1() {
         //当滚动至colee1与colee2交界时
-        if(colee2.offsetTop-colee.scrollTop==0){
-            colee.scrollTop-=colee1.offsetHeight; //colee跳到最顶端
-        }else{
+        if(colee2.offsetTop - colee.scrollTop == 0) {
+            colee.scrollTop -= colee1.offsetHeight; //colee跳到最顶端
+        }
+        else {
             colee.scrollTop++
         }
     }
-    setInterval(Marquee1,speed)//设置定时器
+
+    setInterval(Marquee1, speed)//设置定时器
 </script>
 </body>
 

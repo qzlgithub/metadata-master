@@ -3,6 +3,7 @@ package com.mingdong.mis.handler.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mingdong.core.constant.QueryStatus;
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.constant.MDResult;
 import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.handler.IChargeHandler;
@@ -57,7 +58,14 @@ public class ChargeByTimeHandler implements IChargeHandler
         }
         catch(Exception e)
         {
-            RequestThread.setQueryStatus(QueryStatus.INTERNAL_ERROR);
+            if(e instanceof MetadataDataBaseException)
+            {
+                RequestThread.setQueryStatus(QueryStatus.DATA_BASE_ERROR);
+            }
+            else
+            {
+                RequestThread.setQueryStatus(QueryStatus.OTHER_ERROR);
+            }
             resp.response(MDResult.SYSTEM_INTERNAL_ERROR);
             LOGGER.error("API request error, clientId:{}, productName:{}, payload:{}, message:{}",
                     RequestThread.getClientId(), RequestThread.getProductName(), JSON.toJSONString(payload),

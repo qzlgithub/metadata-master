@@ -7,6 +7,7 @@ public class WarningSetting
     private Long id;
     private Date createTime;
     private Date updateTime;
+    private String code;
     private String content;
     private Integer type;
     private Integer send;
@@ -17,6 +18,16 @@ public class WarningSetting
     private Integer severityLimit;
     private Integer warningLimit;
     private Integer enabled;
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
 
     public String getFileName()
     {

@@ -11,4 +11,8 @@ public interface WarningSettingMapper
     WarningSetting findById(Long id);
 
     List<WarningSetting> getListAll();
+
+    WarningSetting findByCode(String code);
+
+    List<WarningSetting> getListByWarningType(Integer warningType);
 }

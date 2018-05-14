@@ -15,6 +15,17 @@ public class ClientInfoResDTO implements Serializable
     private String managerName; // 商务经理
     private Integer accountQty; // 子账号（个）
     private Integer userEnabled; // 账号状态
+    private ManagerInfoResDTO managerInfoResDTO;
+
+    public ManagerInfoResDTO getManagerInfoResDTO()
+    {
+        return managerInfoResDTO;
+    }
+
+    public void setManagerInfoResDTO(ManagerInfoResDTO managerInfoResDTO)
+    {
+        this.managerInfoResDTO = managerInfoResDTO;
+    }
 
     public Long getClientId()
     {

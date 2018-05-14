@@ -1,6 +1,7 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.RepaymentBO;
@@ -30,53 +31,61 @@ public class RepaymentProcessor implements IProcessor<PersonVO>
     private FinRepaymentPlatformDao finRepaymentPlatformDao;
 
     @Override
-    public Metadata<RepaymentBO> process(PersonVO payload)
+    public Metadata<RepaymentBO> process(PersonVO payload) throws Exception
     {
         Metadata<RepaymentBO> metadata = new Metadata<>();
-        String personId = redisDao.findPersonByPhone(payload.getPhone());
-        personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
-        if(personId == null)
+        try
         {
-            metadata.setHit(false);
-            return metadata;
-        }
-        FinRepaymentUser finRepaymentUser = finRepaymentUserDao.findByPerson(personId);
-        if(finRepaymentUser != null)
-        {
-            RepaymentBO bo = new RepaymentBO();
-            bo.setRepaymentAmountMax(finRepaymentUser.getRepaymentAmountMax());
-            bo.setRepaymentEarliestDate(finRepaymentUser.getRepaymentEarliestDate());
-            bo.setRepaymentLatestDate(finRepaymentUser.getRepaymentLatestDate());
-            bo.setRepaymentPlatformToday(finRepaymentUser.getRepaymentPlatformToday());
-            bo.setRepaymentPlatformTotal(finRepaymentUser.getRepaymentPlatformTotal());
-            bo.setRepaymentPlatform3Days(finRepaymentUser.getRepaymentPlatform3Days());
-            bo.setRepaymentPlatform7Days(finRepaymentUser.getRepaymentPlatform7Days());
-            bo.setRepaymentPlatform15Days(finRepaymentUser.getRepaymentPlatform15Days());
-            bo.setRepaymentPlatform30Days(finRepaymentUser.getRepaymentPlatform30Days());
-            bo.setRepaymentPlatform60Days(finRepaymentUser.getRepaymentPlatform60Days());
-            bo.setRepaymentPlatform90Days(finRepaymentUser.getRepaymentPlatform90Days());
-            List<FinRepaymentPlatform> opList = finRepaymentPlatformDao.findByPerson(personId);
-            if(!CollectionUtils.isEmpty(opList))
+
+            String personId = redisDao.findPersonByPhone(payload.getPhone());
+            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            if(personId == null)
             {
-                List<RepaymentPlatformBO> list = new ArrayList<>(opList.size());
-                RepaymentPlatformBO op;
-                for(FinRepaymentPlatform o : opList)
-                {
-                    op = new RepaymentPlatformBO();
-                    op.setPlatformCode(o.getPlatformCode());
-                    op.setPlatformType(o.getPlatformType());
-                    op.setRepaymentEarliestDate(o.getRepaymentEarliestDate());
-                    op.setRepaymentLatestDate(o.getRepaymentLatestDate());
-                    list.add(op);
-                }
-                bo.setRepaymentPlatforms(list);
+                metadata.setHit(false);
+                return metadata;
             }
-            metadata.setHit(true);
-            metadata.setData(bo);
+            FinRepaymentUser finRepaymentUser = finRepaymentUserDao.findByPerson(personId);
+            if(finRepaymentUser != null)
+            {
+                RepaymentBO bo = new RepaymentBO();
+                bo.setRepaymentAmountMax(finRepaymentUser.getRepaymentAmountMax());
+                bo.setRepaymentEarliestDate(finRepaymentUser.getRepaymentEarliestDate());
+                bo.setRepaymentLatestDate(finRepaymentUser.getRepaymentLatestDate());
+                bo.setRepaymentPlatformToday(finRepaymentUser.getRepaymentPlatformToday());
+                bo.setRepaymentPlatformTotal(finRepaymentUser.getRepaymentPlatformTotal());
+                bo.setRepaymentPlatform3Days(finRepaymentUser.getRepaymentPlatform3Days());
+                bo.setRepaymentPlatform7Days(finRepaymentUser.getRepaymentPlatform7Days());
+                bo.setRepaymentPlatform15Days(finRepaymentUser.getRepaymentPlatform15Days());
+                bo.setRepaymentPlatform30Days(finRepaymentUser.getRepaymentPlatform30Days());
+                bo.setRepaymentPlatform60Days(finRepaymentUser.getRepaymentPlatform60Days());
+                bo.setRepaymentPlatform90Days(finRepaymentUser.getRepaymentPlatform90Days());
+                List<FinRepaymentPlatform> opList = finRepaymentPlatformDao.findByPerson(personId);
+                if(!CollectionUtils.isEmpty(opList))
+                {
+                    List<RepaymentPlatformBO> list = new ArrayList<>(opList.size());
+                    RepaymentPlatformBO op;
+                    for(FinRepaymentPlatform o : opList)
+                    {
+                        op = new RepaymentPlatformBO();
+                        op.setPlatformCode(o.getPlatformCode());
+                        op.setPlatformType(o.getPlatformType());
+                        op.setRepaymentEarliestDate(o.getRepaymentEarliestDate());
+                        op.setRepaymentLatestDate(o.getRepaymentLatestDate());
+                        list.add(op);
+                    }
+                    bo.setRepaymentPlatforms(list);
+                }
+                metadata.setHit(true);
+                metadata.setData(bo);
+            }
+            else
+            {
+                metadata.setHit(false);
+            }
         }
-        else
+        catch(Exception e)
         {
-            metadata.setHit(false);
+            throw new MetadataDataBaseException("mongo error");
         }
         return metadata;
     }

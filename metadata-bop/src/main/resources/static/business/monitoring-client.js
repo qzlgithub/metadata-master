@@ -42,6 +42,20 @@ layui.config({
         $(this).parent().remove();
         refreshCheckbox();
     });
+    $("#warning-icon").on("click", ".icon3-close", function() {
+        if(alarmed_warning_code != "") {
+            if($("#" + alarmed_warning_code).length > 0) {
+                var audio = document.getElementById(alarmed_warning_code);
+                if(audio !== null) {
+                    if(!audio.paused) {
+                        audio.pause();
+                    }
+                }
+            }
+        }
+        $(this).removeClass("icon3-close");
+        $(this).addClass("icon3");
+    });
     initData();
 });
 var index = 0;
@@ -55,6 +69,7 @@ function initData() {
     mapChartFun();
     getLineChart(1);
     timeReady();
+    getWarningList();
 }
 
 function timeReady() {
@@ -71,6 +86,11 @@ function timeReady() {
         }
         try {
             mapChartFun();
+        }
+        catch(e) {
+        }
+        try {
+            getWarningList();
         }
         catch(e) {
         }
@@ -176,6 +196,7 @@ function getLineChart(page) {
                     series: [{
                         data: seriesData[i],
                         type: 'line',
+                        smooth: true,
                         areaStyle: {}
                     }]
                 };
@@ -204,6 +225,79 @@ function refreshCheckbox() {
         });
     }
     form.render('checkbox');
+}
+
+var alarmed_warning_id = "";
+var alarmed_warning_code = "";
+
+function getWarningList() {
+    $.get(
+        "/monitoring/client/warning",
+        {},
+        function(data) {
+            if(data.code == "000000") {
+                var list = data.list;
+                if(list.length > 0) {
+                    $("#product-data").empty();
+                    var htmlStr = '';
+                    for(var i in list) {
+                        if(i == 0) {
+                            if(alarmed_warning_id != list[i].id) {
+                                alarmed_warning_id = list[i].id;
+                                $("#warningLabel").removeClass("icon3");
+                                $("#warningLabel").addClass("icon3-close");
+                                var warningCode = list[i].warningCode;
+                                if(alarmed_warning_code != warningCode) {
+                                    if(alarmed_warning_code != "") {
+                                        if($("#" + alarmed_warning_code).length > 0) {
+                                            var audio = document.getElementById(alarmed_warning_code);
+                                            if(audio !== null) {
+                                                if(!audio.paused) {
+                                                    audio.pause();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    alarmed_warning_code = warningCode;
+                                }
+                                if($("#" + warningCode).length > 0) {
+                                    var audio = document.getElementById(warningCode);
+                                    if(audio !== null) {
+                                        if(audio.paused) {
+                                            audio.play();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        htmlStr += '<tr>';
+                        htmlStr += '<td>' + list[i].warningName + '</td>';
+                        htmlStr += '<td>' + list[i].name + '</td>';
+                        htmlStr += '<td>' + list[i].warningAt + '</td>';
+                        htmlStr += '</tr>';
+                    }
+                    $("#product-data").html(htmlStr);
+                    $(".product-class").show();
+                    $(".product-none-class").hide();
+                }
+                else {
+                    $(".product-class").hide();
+                    $(".product-none-class").show();
+                    if(alarmed_warning_code != "") {
+                        if($("#" + alarmed_warning_code).length > 0) {
+                            var audio = document.getElementById(alarmed_warning_code);
+                            if(audio !== null) {
+                                if(!audio.paused) {
+                                    audio.pause();
+                                }
+                            }
+                        }
+                        alarmed_warning_code = "";
+                    }
+                }
+            }
+        }
+    );
 }
 
 function findCustomerAll() {
@@ -581,91 +675,4 @@ function mapChartFun() {
             });
         }
     );
-    /*var option = {
-        //浮层设置
-        tooltip: {
-            trigger: 'item',
-            formatter: function(params, ticket, callback) {
-                return params.data.name + ":" + params.data.value[2];
-            }
-        },
-        legend: {
-            orient: 'vertical',
-            y: 'bottom',
-            x: 'right',
-            data: ['请求量', '请求量前三'],
-            textStyle: {
-                color: '#fff'
-            }
-        },
-        geo: {
-            map: 'china',
-            label: {
-                emphasis: {
-                    show: false
-                }
-            },
-            roam: false,
-            itemStyle: {
-                normal: {
-                    areaColor: '#323c48',
-                    borderColor: '#111'
-                },
-                emphasis: {
-                    areaColor: '#2a333d'
-                }
-            }
-        },
-        series: [
-            {
-                name: '请求量',
-                type: 'scatter',
-                coordinateSystem: 'geo',
-                data: convertData(mapData),
-                label: {
-                    normal: {
-                        formatter: '{b}',
-                        position: 'right',
-                        show: false
-                    },
-                    emphasis: {
-                        show: true
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        color: '#ddb926'
-                    }
-                }
-            },
-            {
-                name: '请求量前三',
-                type: 'effectScatter',
-                coordinateSystem: 'geo',
-                data: convertData(mapData.sort(function(a, b) {
-                    return b.value - a.value;
-                }).slice(0, 3)),
-                showEffectOn: 'render',
-                rippleEffect: {
-                    brushType: 'stroke'
-                },
-                hoverAnimation: true,
-                label: {
-                    normal: {
-                        formatter: '{b}',
-                        position: 'right',
-                        show: true
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        color: '#f4e925',
-                        shadowBlur: 10,
-                        shadowColor: '#333'
-                    }
-                },
-                zlevel: 1
-            }
-        ]
-    };*/
 }

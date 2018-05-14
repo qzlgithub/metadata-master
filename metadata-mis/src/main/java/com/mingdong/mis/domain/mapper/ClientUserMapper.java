@@ -37,4 +37,7 @@ public interface ClientUserMapper
     List<ClientUser> getSubUserListByClient(Long clientId);
 
     int countSubUserListByClient(Long clientId);
+
+    List<ClientUser> getListByIds(@Param("ids") List<Long> clientUserIds);
+
 }

@@ -34,6 +34,8 @@
 .va{vertical-align: middle;}
 
 .tl.important {text-align: left !important;}
+.fl.important {float: left!important;}
+.fr.important {float: right!important;}
 
 .col1{color: #238efa}
 .col2{color: #999}
@@ -41,6 +43,7 @@
 .col4{color: #3c9fe2}
 .col5{color: #000}
 .col6{color: #fff}
+.col7{color: #037712}
 
 
 

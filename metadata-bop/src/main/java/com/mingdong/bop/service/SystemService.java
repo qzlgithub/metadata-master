@@ -9,6 +9,7 @@ import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -132,4 +133,28 @@ public interface SystemService
     void changeWarningSettingStatus(Long id, Integer status, RestResp resp);
 
     Integer getDefaultSubUserQty();
+
+    void getWarningManageList(RestResp res);
+
+    void getWarningManageListByWarningType(Integer type, Long managerId, Date fromDate, Date toDate, Integer dispose,
+            RestListResp res, Page page);
+
+    Map<String, Object> getWarningManageById(Long id);
+
+    void getWarningDetailListByManageId(Long manageId, Page page, RestListResp res);
+
+    void updateWarningManageDispose(Long id, String remark, RestResp res);
+
+    List<Map<String, Object>> getWarningDisposeManagerList();
+
+    void getWarningOutListByWarningType(Integer warningType, RestListResp res, Page page);
+
+    void getWarningPacifyInfoList(String keyword, Integer errorStatus, Integer dispose, Date fromDate, Date toDate,
+            RestListResp res, Page page);
+
+    void updatePacifyDispose(Long pacifyId, String remark, RestResp resp);
+
+    Map<String, Object> getWarningPacifyDetailById(Long id);
+
+    Map<String, Object> getWarningSettingListByWarningType(Integer warningType);
 }

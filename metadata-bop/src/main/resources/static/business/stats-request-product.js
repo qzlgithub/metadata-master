@@ -127,7 +127,10 @@ function refreshChart() {
             var list = res.data.list;
             var seriesData = [];
             for(var o in list) {
-                var s = {type: 'line', areaStyle: {}};
+                var s = {
+                    type: 'line',
+                    smooth: true
+                };
                 s.name = list[o].name;
                 s.data = list[o].data;
                 seriesData.push(s);
@@ -237,7 +240,7 @@ function refreshChart() {
             var list = res.data.list;
             var seriesData = [];
             for(var o in list) {
-                var s = {type: 'bar', areaStyle: {}};
+                var s = {type: 'bar'};
                 s.name = list[o].name;
                 s.data = list[o].data;
                 seriesData.push(s);

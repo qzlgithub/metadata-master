@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mingdong.backend.domain.mapper.WarningOutMapper">
+    <resultMap id="BaseResultMap" type="WarningOut">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="warning_code" property="warningCode" jdbcType="VARCHAR" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="client_id" property="clientId" jdbcType="BIGINT" />
+        <result column="third_code" property="thirdCode" jdbcType="VARCHAR" />
+        <result column="level" property="level" jdbcType="INTEGER" />
+        <result column="count" property="count" jdbcType="BIGINT" />
+        <result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="add" parameterType="WarningManage" useGeneratedKeys="true" keyProperty="id">
+        insert into `warning_out`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="warningCode != null">`warning_code`,</if>
+            <if test="productId != null">`product_id`,</if>
+            <if test="clientId != null">`client_id`,</if>
+            <if test="thirdCode != null">`third_code`,</if>
+            <if test="level != null">`level`,</if>
+            <if test="count != null">`count`,</if>
+            <if test="lastTime != null">`last_time`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="warningCode != null">#{warningCode},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="thirdCode != null">#{thirdCode},</if>
+            <if test="level != null">#{level},</if>
+            <if test="count != null">#{count},</if>
+            <if test="lastTime != null">#{lastTime},</if>
+        </trim>
+    </insert>
+
+    <select id="getListByWarningType" resultMap="BaseResultMap">
+        select
+            wo.`id`           as id,
+            wo.`create_time`  as create_time,
+            wo.`update_time`  as update_time,
+            wo.`warning_code` as warning_code,
+            wo.`product_id`   as product_id,
+            wo.`client_id`    as client_id,
+            wo.`third_code`   as third_code,
+            wo.`level`        as level,
+            wo.`count`        as count,
+            wo.`last_time`    as last_time
+        from warning_out wo left join warning_setting ws
+                on wo.`warning_code` = ws.`code`
+        where ws.`type` = #{warningType}
+        order by wo.`create_time` desc
+    </select>
+
+    <select id="countByWarningType" resultType="Integer">
+        select count(wo.`id`)
+        from warning_out wo left join warning_setting ws
+                on wo.`warning_code` = ws.`code`
+        where ws.`type` = #{warningType}
+    </select>
+
+</mapper>

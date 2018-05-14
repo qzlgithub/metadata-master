@@ -69,14 +69,14 @@ function fileChange(target) {
     }
     var size = fileSize / 1024;
     if(size > 1024 * 3) {
-        alert("附件不能大于3M");
+        layer.msg("附件不能大于3M", {time: 2000});
         target.value = "";
         return
     }
     var name = target.value;
     var fileName = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
     if(fileName != "mp3") {
-        alert("请选择mp3格式文件上传！");
+        layer.msg("请选择mp3格式文件上传！", {time: 2000});
         target.value = "";
         return
     }

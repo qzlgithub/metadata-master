@@ -15,6 +15,17 @@ public class WarningSettingResDTO implements Serializable
     private Integer severityLimit;
     private Integer warningLimit;
     private Integer enabled;
+    private String warningCode;
+
+    public String getWarningCode()
+    {
+        return warningCode;
+    }
+
+    public void setWarningCode(String warningCode)
+    {
+        this.warningCode = warningCode;
+    }
 
     public String getFileName()
     {

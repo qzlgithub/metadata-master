@@ -16,6 +16,8 @@ public interface ModuleName
     String STRING_ARTICLES = "setting-articles";
     // 客户
     String CLIENT_INDEX = "client-index";
+    String CLIENT_PACIFY_INDEX = "client-pacify-index";
+    String CLIENT_REMIND_INDEX = "client-remind-index";
     // 财务
     String FINANCE_CONSUMPTION = "finance-consumption";
     String FINANCE_RECHARGE = "finance-recharge";
@@ -27,7 +29,8 @@ public interface ModuleName
     String MONITORING_CUSTOMER = "monitoring-customer";
     String MONITORING_THIRD = "monitoring-third";
     //警报系统
-
+    String ALARM_WAIT = "alarm-wait";
+    String ALARM_ALREADY = "alarm-already";
     //运营统计
     String STATS_CLIENT = "stats-client";
     String STATS_RECHARGE = "stats-recharge";

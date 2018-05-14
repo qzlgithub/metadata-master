@@ -135,10 +135,6 @@ public interface ClientService
 
     void getClientRechargeBar(DateRange range, Date compareFrom, RangeUnit unit, RestResp resp);
 
-    void getClientRemindForDate(Date date, Page page, RestListResp resp);
-
-    void getClientRemindForTimes(Date date, Page page, RestListResp resp);
-
     void updateClientRemind(Long remindId, String remark, RestResp resp);
 
     void getAllClient(RestListResp res);
@@ -161,4 +157,8 @@ public interface ClientService
     void getClientTraffic24h(Page page, RestResp res);
 
     void getClientCity1h(RestResp res);
+
+    void getClientRemindForDate(Date date, String keyword, Integer dispose, Page page, RestListResp resp);
+
+    void getClientRemindForTimes(Date date, String keyword, Integer dispose, Page page, RestListResp resp);
 }

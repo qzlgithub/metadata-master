@@ -16,7 +16,7 @@ public class MQKit
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void userRequest(String ip, long timestamp, Long clientId, String corpName, Long productId,
-            String productName, int payloadId, QueryStatus status, Boolean hit)
+            String productName, Long userId, int payloadId, QueryStatus status, Boolean hit)
     {
         Traffic traffic = new Traffic();
         traffic.setHost(ip);
@@ -25,6 +25,7 @@ public class MQKit
         traffic.setCorpName(corpName);
         traffic.setProductId(productId);
         traffic.setProductName(productName);
+        traffic.setUserId(userId);
         traffic.setPayloadId(payloadId);
         traffic.setStatus(status != null ? status.getCode() : QueryStatus.SUCCESS.getCode());
         traffic.setHit(hit);

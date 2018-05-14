@@ -5,6 +5,7 @@ import com.mingdong.bop.constant.TimeScope;
 import com.mingdong.bop.model.ChartVO;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ProductService;
+import com.mingdong.bop.service.SystemService;
 import com.mingdong.bop.util.DateRangeUtils;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.DateUtils;
@@ -29,6 +30,8 @@ public class DiagramController
     private ClientService clientService;
     @Resource
     private ProductService productService;
+    @Resource
+    private SystemService systemService;
 
     @PostMapping(value = "/diagram/client/increment")
     public RestResp getClientIncrementDiagramData(@RequestBody ChartVO chartVO)
@@ -275,6 +278,15 @@ public class DiagramController
     {
         RestResp res = new RestResp();
         productService.getProductRatio1d(res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/diagram/index/warning")
+    public RestResp indexWarning()
+    {
+        RestResp res = new RestResp();
+        systemService.getWarningManageList(res);
         return res;
     }
 

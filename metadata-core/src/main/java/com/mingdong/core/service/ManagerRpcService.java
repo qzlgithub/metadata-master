@@ -11,6 +11,8 @@ import com.mingdong.core.model.dto.response.ManagerInfoResDTO;
 import com.mingdong.core.model.dto.response.ResponseDTO;
 import com.mingdong.core.model.dto.response.UserInfoResDTO;
 
+import java.util.List;
+
 public interface ManagerRpcService
 {
     /**
@@ -79,4 +81,8 @@ public interface ManagerRpcService
      * @param status 1-启用，0-禁用
      */
     ResponseDTO changeUserStatus(Long userId, Integer status);
+
+    List<ManagerInfoResDTO> getAccountInfoList(List<Long> managerIds);
+
+    List<ManagerInfoResDTO> getAccountInfoListByAlarm(Integer alarm, Integer enabled);
 }

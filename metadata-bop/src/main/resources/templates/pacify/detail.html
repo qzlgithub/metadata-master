@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div th:include="common :: top"></div>
+
+    <div class="layui-side layui-bg-black kit-side" th:include="client :: left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="javascript:">客户管理</a>
+            <a href="javascript:">客户管理</a>
+            <a><cite>客户安抚</cite></a>
+        </div>
+        <div class="p20">
+            <div class="form-title mb20 clearfix flex">
+                <em class="mt5 fl fb">基本信息</em>
+                <a href="javascript:history.back(-1);" class="layui-btn fr goback">返回</a>
+            </div>
+            <div class="m30 clearfix">
+                <div class="layui-form-item">
+                    <label class="layui-form-label fb">公司名称：</label>
+                    <div class="layui-input-block col2" th:text="${corpName}"></div>
+                </div>
+                <table class="layui-table w60">
+                    <thead>
+                    <tr>
+                        <th class="position-r">联系人</th>
+                        <th>职位</th>
+                        <th>联系电话</th>
+                        <th>联系邮箱</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="o : ${contactList}">
+                        <td>
+                            <span th:text="${o.name}"></span>
+                            <i class="chang-icon" th:if="${o.isGeneral == 1}"></i>
+                        </td>
+                        <td th:text="${o.position}"></td>
+                        <td th:text="${o.phone}"></td>
+                        <td th:text="${o.email}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-title mb20">错误信息</div>
+            <div class="bd" style="width: 1000px;">
+                <div class="pl20 pr20 pt15 pb15 fz-16">报错信息</div>
+                <div class="bd-bottom clearfix pl10 pr20 pb10">
+                    <ul class="search-list clearfix pl0">
+                        <li class="col3">
+                            错误说明：
+                            <div class="layui-inline" style="width: 180px" th:text="${warningName}"></div>
+                        </li>
+                        <li>
+                            出错时间：
+                            <div class="layui-inline" style="width: 180px" th:text="${errorTime}"></div>
+                        </li>
+                        <li class="col4 position-r">
+                            <span th:if="${status == 1}">
+                                <i class="icon dagou mr0 important"></i>已处理
+                                <i class="icon han ml5 disposed-hover cp" id="box1"></i>
+                            </span>
+                            <div class="cl-warp" id="box2">
+                                <div class="layui-form-item mb0 important">
+                                    <label class="layui-form-label pt0 pb0 important" style="width: 75px;">处理人：</label>
+                                    <div class="layui-input-block col2" style="line-height: 25px;
+                                    min-height:25px;margin-left: 98px;" th:text="${warningUserName}"></div>
+                                </div>
+                                <div class="layui-form-item mb0 important">
+                                    <label class="layui-form-label pt0 pb0 important" style="width: 75px;">处理时间：</label>
+                                    <div class="layui-input-block col2" style="line-height: 25px;
+                                    min-height:25px;margin-left: 98px;" th:text="${warningDisposeTime}"></div>
+                                </div>
+                                <div class="layui-form-item mb0 important">
+                                    <label class="layui-form-label pt0 pb0 important" style="width: 75px;">备注：</label>
+                                    <div class="layui-input-block col2 desc-inf" th:text="${warningRemark}"></div>
+                                </div>
+                            </div>
+                            <span th:if="${status == 0}">
+                                <i class="icon time"></i>待处理
+                            </span>
+                        </li>
+                        <li class="fr important" th:if="${dispose == 0}">
+                            <a href="javascript:;" class="add-button" onclick="showNotice()">标记已安抚</a>
+                        </li>
+                        <li class="fr important">
+                            <span th:if="${dispose == 1}" class="pr20">
+                                <span class="col7"><i class="icon dagou mr0 important"></i>已安抚</span>
+                            </span>
+                            <span th:if="${dispose == 1}">
+                                商务经理：
+                                <em class="layui-inline" style="width: 70px" th:text="${pacifyUserName}"></em>
+                                <a href="javascript:;" onclick="showRemark()" class="col4">详情</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="search-list clearfix border-b2 pb25 product-list-inf mt10">
+                    <li th:each="o : ${productList}" th:text="${o.name}"></li>
+                </ul>
+            </div>
+            <!--<div class="w30 fl">
+                <div class="layui-form-item">
+                    <label class="layui-form-label fb">错误说明：</label>
+                    <div class="layui-input-block col2" th:text="${warningName}"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label fb">出错时间：</label>
+                    <div class="layui-input-block col2" th:text="${errorTime}"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label fb">处理状态：</label>
+                    <div class="layui-input-block col2" th:if="${status == 1}">已处理</div>
+                    <div class="layui-input-block col2" th:if="${status == 0}">未处理</div>
+                </div>
+                <div class="layui-form-item" th:if="${status == 1}">
+                    <label class="layui-form-label fb">处理人：</label>
+                    <div class="layui-input-block col2" th:text="${warningUserName}"></div>
+                </div>
+                <div class="layui-form-item" th:if="${status == 1}">
+                    <label class="layui-form-label fb">处理时间：</label>
+                    <div class="layui-input-block col2" th:text="${warningDisposeTime}"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label fb">出错产品：</label>
+                    <div class="layui-input-block col2" th:each="o : ${productList}" th:text="${o.name}"></div>
+                </div>
+                <div class="layui-form-item" th:if="${dispose == 1}">
+                    <label class="layui-form-label fb">商务经理：</label>
+                    <div class="layui-input-block col2" th:text="${pacifyUserName}"></div>
+                </div>
+                <div class="layui-form-item" th:if="${dispose == 1}">
+                    <label class="layui-form-label fb">安抚时间：</label>
+                    <div class="layui-input-block col2" th:text="${pacifyDisposeTime}"></div>
+                </div>
+                <div class="layui-form-item" th:if="${dispose == 1}">
+                    <label class="layui-form-label fb">安抚备注：</label>
+                    <div class="layui-input-block col2" th:text="${pacifyRemark}"></div>
+                </div>
+                <div class="mt10 ml30"
+                     th:if="${dispose == 0}"><a href="javascript:;" class="add-button" onclick="showNotice()">标记已安抚</a>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="common :: point"></div>
+
+<div id="notice-warp" class="modal">
+    <div class="layui-layer-title p0 important">标记已安抚</div>
+    <div class="mb30">
+        <div class="layui-form-item p30">
+            <div class="tl fz-14">备注:</div>
+            <div class="mt15">
+                <input type="hidden" id="pacifyId" th:value="${id}"/>
+                <textarea id="remark" placeholder="请输入内容" class="layui-textarea" maxlength="120"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div>
+                <a href="javascript:" class="layui-btn" onclick="saveRemark()">保存</a>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div id="remark-div" class="modal">
+    <div class="layui-layer-title p0 important">安抚备注</div>
+    <div class="mb30 mt30">
+        <div class="layui-form-item mb0 important">
+            <label class="layui-form-label fb">时间:</label>
+            <div class="layui-input-block tl" th:text="${pacifyDisposeTime}"></div>
+        </div>
+        <div class="layui-form-item mb0 important">
+            <label class="layui-form-label fb">备注:</label>
+            <div class="layui-input-block tl" th:text="${pacifyRemark}"></div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/business/pacify-detail.js"></script>
+<script>
+    box1.onmouseover = function(){
+        box2.style.display = 'block';
+    }
+    box1.onmouseout = function() {
+        box2.style.display = 'none';
+    }
+</script>
+</body>
+</html>

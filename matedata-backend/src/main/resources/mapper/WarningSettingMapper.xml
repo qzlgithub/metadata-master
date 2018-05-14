@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
         <result column="content" property="content" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="TINYINT" />
         <result column="send" property="send" jdbcType="TINYINT" />
@@ -19,7 +20,7 @@
 
     <sql id="select_all">
         select
-            `id`, `create_time`, `update_time`, `content`, `type`, `send`, `play`, `file_name`, `file_path`,
+            `id`, `create_time`, `update_time`, `code`, `content`, `type`, `send`, `play`, `file_name`, `file_path`,
             `general_limit`, `severity_limit`, `warning_limit`, `enabled`
         from `warning_setting`
     </sql>
@@ -29,6 +30,7 @@
         <set>
             <if test="createTime != null">`create_time` = #{createTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="code != null">`code` = #{code},</if>
             <if test="content != null">`content` = #{content},</if>
             <if test="type != null">`type` = #{type},</if>
             <if test="send != null">`send` = #{send},</if>
@@ -50,6 +52,16 @@
 
     <select id="getListAll" resultMap="BaseResultMap">
         <include refid="select_all" />
+    </select>
+
+    <select id="findByCode" resultMap="BaseResultMap" parameterType="String">
+        <include refid="select_all" />
+        where `code` = #{code}
+    </select>
+
+    <select id="getListByWarningType" resultMap="BaseResultMap" parameterType="Integer">
+        <include refid="select_all" />
+        where `type` = #{warningType}
     </select>
 
 </mapper>

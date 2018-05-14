@@ -220,4 +220,25 @@ public interface Field
     String ACCOUNT_TOTAL_QTY = "accountTotalQty";
     String IS_ADMIN = "isAdmin";
     String MANAGER_DICT = "managerDict";
+    String WARNING_NAME = "warningName";
+    String WARNING_AT = "warningAt";
+    String WARNING_PRODUCT_LIST = "warningProductList";
+    String WARNING_CLIENT_LIST = "warningClientList";
+    String WARNING_THIRD_LIST = "warningThirdList";
+    String DISPOSE = "dispose";
+    String ERROR_NAME = "errorName";
+    String LEVEL = "level";
+    String COUNT = "count";
+    String LAST_TIME = "lastTime";
+    String ERROR_TIME = "errorTime";
+    String WARNING_DISPOSE_TIME = "warningDisposeTime";
+    String PACIFY_DISPOSE_TIME = "pacifyDisposeTime";
+    String WARNING_REMARK = "warningRemark";
+    String PACIFY_REMARK = "pacifyRemark";
+    String WARNING_USER_NAME = "warningUserName";
+    String PACIFY_USER_NAME = "pacifyUserName";
+    String PRODUCT_LIST = "productList";
+    String PACIFY_COUNT = "pacifyCount";
+    String WARNING_CODE = "warningCode";
+    String SETTING_LIST = "settingList";
 }

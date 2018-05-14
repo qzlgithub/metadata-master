@@ -18,4 +18,9 @@ public interface UserMapper
     int countBy(@Param("roleType") Integer roleType, @Param("enabled") Integer enabled);
 
     List<User> getListBy(@Param("roleType") Integer roleType, @Param("enabled") Integer enabled);
+
+    List<User> getListByIds(@Param("ids") List<Long> managerIds);
+
+    List<User> getListByAlarm(@Param("alarm") Integer alarm, @Param("enabled") Integer enabled);
+
 }

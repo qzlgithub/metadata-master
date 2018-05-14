@@ -3,9 +3,12 @@ package com.mingdong.bop.controller;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.service.ClientService;
 import com.mingdong.bop.service.ProductService;
+import com.mingdong.bop.service.SystemService;
 import com.mingdong.common.model.Page;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.annotation.LoginRequired;
+import com.mingdong.core.constant.TrueOrFalse;
+import com.mingdong.core.constant.WarningType;
 import com.mingdong.core.model.RestListResp;
 import com.mingdong.core.model.RestResp;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,8 @@ public class MonitoringController
     private ClientService clientService;
     @Resource
     private ProductService productService;
+    @Resource
+    private SystemService systemService;
 
     @LoginRequired
     @GetMapping(value = "/monitoring/client/allCustomer")
@@ -127,6 +132,35 @@ public class MonitoringController
     {
         RestResp res = new RestResp();
         productService.getProductTraffic7d(new Page(pageNum, pageSize), res);
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/out")
+    public RestListResp productOut()
+    {
+        RestListResp res = new RestListResp();
+        systemService.getWarningOutListByWarningType(WarningType.PRODUCT.getId(), res, new Page(1, 8));
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/product/warning")
+    public RestListResp productWarning()
+    {
+        RestListResp res = new RestListResp();
+        systemService.getWarningManageListByWarningType(WarningType.PRODUCT.getId(), null, null, null,
+                TrueOrFalse.FALSE, res, new Page(1, 4));
+        return res;
+    }
+
+    @LoginRequired
+    @GetMapping(value = "/monitoring/client/warning")
+    public RestListResp clientWarning()
+    {
+        RestListResp res = new RestListResp();
+        systemService.getWarningManageListByWarningType(WarningType.CLIENT.getId(), null, null, null, TrueOrFalse.FALSE,
+                res, new Page(1, 4));
         return res;
     }
 

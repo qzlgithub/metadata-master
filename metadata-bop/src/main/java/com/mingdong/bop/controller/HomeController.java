@@ -21,7 +21,7 @@ public class HomeController
     public RestListResp getListDate()
     {
         RestListResp resp = new RestListResp();
-        clientService.getClientRemindForDate(new Date(), new Page(1, 5), resp);
+        clientService.getClientRemindForDate(new Date(), null, null, new Page(1, 5), resp);
         return resp;
     }
 
@@ -30,7 +30,7 @@ public class HomeController
     public RestListResp getListTime()
     {
         RestListResp resp = new RestListResp();
-        clientService.getClientRemindForTimes(new Date(), new Page(1, 5), resp);
+        clientService.getClientRemindForTimes(new Date(), null, null, new Page(1, 5), resp);
         return resp;
     }
 

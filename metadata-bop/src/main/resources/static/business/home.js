@@ -1,9 +1,7 @@
 var table;
 layui.config({
     base: '../../static/build/js/'
-}).use(['app', 'table'], function() {
-    var app = layui.app;
-    app.set({type: 'iframe'}).init();
+}).use(['table'], function() {
     table = layui.table;
     getDateList();
 });
@@ -25,6 +23,7 @@ function saveNotice() {
         layer.msg("备注不能为空！", {
             time: 2000
         });
+        isSubmit = false;
         return;
     }
     var remindId = $("#remind-id").val();
@@ -38,7 +37,7 @@ function saveNotice() {
                     time: 1000
                 }, function() {
                     layer.closeAll();
-                    window.location.reload();
+                    table.reload('table-main');
                 });
             }
             else {
@@ -71,6 +70,7 @@ function getDateList() {
         elem: '#dataTable',
         page: false,
         url: '/home/list/date',
+        id:'table-main',
         cols: [[
             {field: 'corpName', title: '公司名称', width: '20%'},
             {field: 'linkName', title: '联系人', width: '15%'},
@@ -90,7 +90,9 @@ function getDateList() {
         done: function(res, curr, count) {
             var total = res.total;
             if(total - 5 > 0) {
-                $("#more-remind").html("还有" + (total - 5) + "个未查看，去查看>>");
+                if($("#more-remind").length > 0){
+                    $("#more-remind").html("<a href='/remind/index.html'>还有" + (total - 5) + "个未查看，去查看>></a>");
+                }
             }
         }
     });

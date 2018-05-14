@@ -4,7 +4,7 @@ public enum WarningType
 {
     PRODUCT(1, "产品"),
     CLIENT(2, "客户"),
-    OTHER(3, "第三方");
+    THIRD(3, "第三方");
 
     private int id;
     private String name;

@@ -36,7 +36,7 @@ public class RouteHandler
     @Resource
     private ReportProcessor reportProcessor;
 
-    public Metadata routeProcessor(AbsPayload payload)
+    public Metadata routeProcessor(AbsPayload payload) throws Exception
     {
         switch(RequestThread.getProduct())
         {

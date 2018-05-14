@@ -29,6 +29,11 @@ public enum ModulePath
     CLIENT_DETAIL("/client/detail.html", ModuleName.CLIENT_INDEX, ""),
     CLIENT_RECHARGE("/client/recharge.html", ModuleName.CLIENT_INDEX, ""),
     CLIENT_CONSUMPTION("/client/consumption.html", ModuleName.CLIENT_INDEX, ""),
+
+    CLIENT_PACIFY_INDEX("/pacify/index.html", ModuleName.CLIENT_PACIFY_INDEX, "31100"),
+    CLIENT_PACIFY_DETAIL("/pacify/detail.html", ModuleName.CLIENT_PACIFY_INDEX, ""),
+    CLIENT_REMIND_INDEX("/remind/index.html", ModuleName.CLIENT_REMIND_INDEX, "31100"),
+
     // 财务
     FINANCE_RECHARGE("/finance/recharge.html", ModuleName.FINANCE_RECHARGE, "51100"),
     FINANCE_CONSUMPTION("/finance/consumption.html", ModuleName.FINANCE_CONSUMPTION, "51200"),
@@ -40,7 +45,10 @@ public enum ModulePath
     MONITORING_CUSTOMER("/monitoring/client.html", ModuleName.MONITORING_CUSTOMER, ""),
     MONITORING_OTHER("/monitoring/third.html", ModuleName.MONITORING_THIRD, ""),
     //警报系统
-
+    ALARM_WAIT("/alarm/wait.html", ModuleName.ALARM_WAIT, ""),
+    ALARM_WAIT_DETAIL("/alarm/wait/detail.html", ModuleName.ALARM_WAIT, ""),
+    ALARM_ALREADY("/alarm/already.html", ModuleName.ALARM_ALREADY, ""),
+    ALARM_ALREADY_DETAIL("/alarm/already/detail.html", ModuleName.ALARM_ALREADY, ""),
     //运营统计
     STATS_CLIENT("/stats/client.html", ModuleName.STATS_CLIENT, ""),
     STATS_RECHARGE("/stats/recharge.html", ModuleName.STATS_RECHARGE, ""),

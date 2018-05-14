@@ -6,6 +6,7 @@ import com.mingdong.backend.component.RedisDao;
 import com.mingdong.backend.constant.KafkaTopic;
 import com.mingdong.backend.model.Traffic;
 import com.mingdong.backend.service.ClientRequestService;
+import com.mingdong.backend.service.WarningService;
 import com.mingdong.backend.util.HttpUtils;
 import com.mingdong.common.util.DateUtils;
 import com.mingdong.common.util.StringUtils;
@@ -31,6 +32,8 @@ public class RequestListener
     private RedisDao redisDao;
     @Resource
     private ClientRequestService clientRequestService;
+    @Resource
+    private WarningService warningService;
 
     @KafkaListener(topics = KafkaTopic.TRAFFIC)
     public void process(String msg)
@@ -63,12 +66,16 @@ public class RequestListener
         redisDao.cacheMetadata(traffic.getClientId(), traffic.getCorpName(), traffic.getProductId(),
                 traffic.getProductName());
         redisDao.realTimeTraffic(hourStr, traffic.getProductId(), traffic.getClientId(), city);
-        redisDao.requestMessage(traffic.getHost(), traffic.getProductName(), traffic.getCorpName(),
-                queryStatus.getName());
+        redisDao.requestMessage(traffic.getTimestamp(), traffic.getHost(), traffic.getProductName(),
+                traffic.getCorpName(), queryStatus.getName());
         if(queryStatus != QueryStatus.SUCCESS)
         {
-            clientRequestService.saveErrorRequest(traffic.getTimestamp(), traffic.getClientId(), traffic.getProductId(),
-                    queryStatus);
+            clientRequestService.saveErrorRequest(traffic, queryStatus);
+            warningService.verifyWarning(traffic, queryStatus);
+        }
+        else
+        {
+            redisDao.delWarning(traffic.getClientId(), traffic.getProductId());
         }
     }
 

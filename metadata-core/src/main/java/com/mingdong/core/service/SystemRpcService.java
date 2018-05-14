@@ -7,6 +7,7 @@ import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.SMSReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
@@ -109,4 +110,5 @@ public interface SystemRpcService
 
     ListDTO<ArticlesResDTO> getArticlesList(Integer type, Page page);
 
+    void sendSMS(List<SMSReqDTO> smsList);
 }

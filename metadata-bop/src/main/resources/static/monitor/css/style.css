@@ -147,7 +147,7 @@ img{width: 100%; display: inline-block;}
 .public-data dt{color: #fff; padding-bottom: 10px; font-size: 16px; font-weight: bold; padding-left: 10px; margin-top: 40px;}
 .public-data dd{padding: 15px;}
 .public-data-list{margin-top: 20px;}
-.public-data-list li{float: left; border: solid 1px #e5e9eb; padding: 20px;}
+.public-data-list li{float: left; border: solid 1px #e5e9eb; padding: 20px; width: 26.33%;height: 109px; overflow: hidden}
 .public-data-list li a{color: #ff8932;}
 .public-data-list li a:hover{color: #ff8932; text-decoration: underline;}
 

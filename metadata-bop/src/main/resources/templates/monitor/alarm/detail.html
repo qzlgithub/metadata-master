@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
@@ -22,9 +23,11 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div class="p20">
-            <div class="public-title3">警报信息详情<span class="fr">2018年2月10日   18:20 <a href=""
-                                                                                    class="return-btn ml10">返回</a></span>
+            <div class="public-title3">
+                警报信息详情<span class="fr"><a href="javascript:history.back(-1);" class="return-btn ml10">返回</a></span>
             </div>
+            <input type="hidden" id="manageId" th:value="${id}"/>
+            <input type="hidden" id="warningType" th:value="${type}"/>
             <div class="layui-row layui-col-space10 mt15">
                 <!--请求趋势-->
                 <dl class="grid-demo grid-demo-bg1  public-warp1">
@@ -35,55 +38,52 @@
                             <div class="layui-col-md8">
                                 <div class="layui-form from1 w60 col6">
                                     <div class="layui-form-item">
-                                        <label class="layui-form-label">警报位置：</label>
-                                        <div class="layui-input-block">
-                                            产品警报
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">影响客户：</label>
-                                        <div class="layui-input-block">
-                                            熊大基金、光大银行、择天投资
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">接口信息：</label>
-                                        <div class="layui-input-block">
-                                            身份验证
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
                                         <label class="layui-form-label">警报类型：</label>
                                         <div class="layui-input-block">
-                                            请求失败
+                                            <span th:text="${warningName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item" th:if="${type == 2}">
+                                        <label class="layui-form-label">客户：</label>
+                                        <div class="layui-input-block">
+                                            <span th:text="${corpName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">产品：</label>
+                                        <div class="layui-input-block">
+                                            <span th:text="${productName}"></span>
                                         </div>
                                     </div>
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">报警时间：</label>
                                         <div class="layui-input-block">
-                                            2018/02/20 15:24 - 2018/02/20 15:24
+                                            <span th:text="${warningAt}"></span>
                                         </div>
                                     </div>
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">处理状态：</label>
                                         <div class="layui-input-block">
-                                            未处理
+                                            <span th:if="${dispose == 1}">已处理</span>
+                                            <span th:if="${dispose == 0}">未处理</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="layui-col-md4">
-                                <div class="w80">
+                                <div class="w80" th:if="${dispose == 0}">
                                     <div><span class="return-btn cp" id="addclass">标记为已处理</span></div>
                                     <div class="stay-detail p30 mt30">系统会自动从告警恢复正常。但是产生的警告信息不会自动消失，需要工作人员进行标记处理；</div>
                                 </div>
-                                <div class="w80 layui-row stay-detail p30">
-                                    <div class="layui-col-md3 tc mt40"><i class="layui-icon fz-70 col4">&#xe616;</i>
+                                <div class="w80 layui-row stay-detail p30" th:if="${dispose == 1}">
+                                    <div class="layui-col-md3 tc mt40">
+                                        <i class="layui-icon fz-70 col4">&#xe616;</i>
                                     </div>
                                     <div class="layui-col-md9 col6">
                                         <p class="fz-18 col3">已处理</p>
-                                        <p class="mt10">处理人：丰田李</p>
-                                        <p>备注：这是一个很简单的问题已经处理完毕，处理完毕</p>
+                                        <p class="mt10">处理人：<span th:text="${managerName}"></span></p>
+                                        <p class="mt10">处理时间：<span th:text="${warningDisposeTime}"></span></p>
+                                        <p>备注：<span th:text="${remark}"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -91,8 +91,8 @@
                         <!--基本信息 end-->
 
                         <!--触发记录-->
-                        <div class="fz-18 col6 mt30 mb20 pl30 pr30">触发记录<span class="fr">共1560条</span></div>
-                        <table class="layui-hide" id="test" lay-filter="demo"></table>
+                        <div class="fz-18 col6 mt30 mb20 pl30 pr30">触发记录<span class="fr" id="total"></span></div>
+                        <table class="layui-hide" id="data-table"></table>
                         <script type="text/html" id="barDemo">
                             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
                         </script>
@@ -112,20 +112,18 @@
     <!--form-->
     <div class="layui-layer-title">填写信息</div>
     <div class="mb30">
-        <form class="layui-form" action="">
-            <div class="m30">
-                <label class="layui-form-label tl p0">备注说明：</label>
-                <div class="layui-form-item pt15">
-                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
-                </div>
+        <div class="m30">
+            <label class="layui-form-label tl p0">备注说明：</label>
+            <div class="layui-form-item pt15">
+                <textarea id="remark" placeholder="请输入内容" class="layui-textarea" maxlength="120"></textarea>
             </div>
-            <div class="layui-form-item">
-                <div class="tc">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1">确认已处理</button>
-                    <p class="fz-12 col3 tc mt10">标记后无法更改</p>
-                </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="tc">
+                <a href="javascript:;" class="layui-btn" onclick="doDispose()">确认已处理</a>
+                <p class="fz-12 col3 tc mt10">标记后无法更改</p>
             </div>
-        </form>
+        </div>
     </div>
     <!--form end-->
 </div>
@@ -137,55 +135,7 @@
 <script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
 <script type="text/javascript" src="/static/js/logout.js"></script>
-<script>
-    layui.config({
-        base: '../../js/'
-    });
-    layui.use(['laydate', 'laypage', 'layer', 'table', 'message'], function() {
-        var laydate = layui.laydate; //日期
-        laypage = layui.laypage; //分页
-        layer = layui.layer; //弹层
-        table = layui.table;//表格
-        message = layui.message;
-        //执行一个 table 实例
-        table.render({
-            elem: '#test'
-            , height: 332
-            , url: './../../js/demo.json' //数据接口
-            , page: true //开启分页
-            , cols: [[ //表头
-                {field: 'id', title: '警报类型', width: '10%', sort: true, fixed: 'left'}
-                , {field: 'username', title: '接口名称', width: '10%'}
-                , {field: 'sex', title: 'IP', width: '40%', sort: true}
-                , {field: 'city', title: '请求状态', width: '10%'}
-                , {field: 'sign', title: '返回量', width: '10%'}
-                , {field: 'experience', title: '请求时长', width: '10%', sort: true}
-                , {field: 'score', title: '发生时间', width: '10%', sort: true}
-            ]]
-        });
-        //分页
-        laypage.render({
-            elem: 'pageDemo' //分页容器的id
-            , count: 100 //总页数
-            , skin: '#1E9FFF' //自定义选中色值
-            //,skip: true //开启跳页
-            , jump: function(obj, first) {
-                if(!first) {
-                    layer.msg('第' + obj.curr + '页');
-                }
-            }
-        });
-        $('#addclass').on('click', function() {
-            layer.open({
-                title: false,
-                type: 1,
-                content: $('#add-manage'),
-                area: ['500px'],
-                shadeClose: true
-            });
-        });
-    });
-</script>
+<script type="text/javascript" src="/static/business/alarm-detail.js"></script>
 </body>
 
 </html>

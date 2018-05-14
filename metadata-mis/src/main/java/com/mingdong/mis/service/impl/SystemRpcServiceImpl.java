@@ -13,6 +13,7 @@ import com.mingdong.core.model.dto.request.ArticlesReqDTO;
 import com.mingdong.core.model.dto.request.IndustryReqDTO;
 import com.mingdong.core.model.dto.request.PrivilegeReqDTO;
 import com.mingdong.core.model.dto.request.RechargeTypeReqDTO;
+import com.mingdong.core.model.dto.request.SMSReqDTO;
 import com.mingdong.core.model.dto.response.ArticlesDetailResDTO;
 import com.mingdong.core.model.dto.response.ArticlesResDTO;
 import com.mingdong.core.model.dto.response.DictIndustryResDTO;
@@ -31,6 +32,7 @@ import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
 import com.mingdong.mis.domain.mapper.FunctionMapper;
 import com.mingdong.mis.domain.mapper.SistemMapper;
+import com.mingdong.mis.service.SMSService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -50,6 +52,8 @@ public class SystemRpcServiceImpl implements SystemRpcService
     private SistemMapper sistemMapper;
     @Resource
     private ArticlesMapper articlesMapper;
+    @Resource
+    private SMSService smsService;
 
     @Override
     public ListDTO<DictIndustryResDTO> getIndustryList(Long parentIndustryId, Integer enabled)
@@ -521,6 +525,27 @@ public class SystemRpcServiceImpl implements SystemRpcService
             listDTO.setList(list);
         }
         return listDTO;
+    }
+
+    @Override
+    public void sendSMS(List<SMSReqDTO> smsList)
+    {
+        new Thread(() -> {
+            if(!CollectionUtils.isEmpty(smsList))
+            {
+                for(SMSReqDTO item : smsList)
+                {
+                    try
+                    {
+                        smsService.sendSMS(item.getSmsType(), item.getContent(), item.getPhone());
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
 }

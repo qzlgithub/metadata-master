@@ -93,7 +93,10 @@ function refresh_chart() {
             var seriesData = [];
             for(var o in list) {
                 legendData.push(list[o].name);
-                var s = {type: 'line', areaStyle: {}};
+                var s = {
+                    type: 'line',
+                    smooth: true
+                };
                 s.name = list[o].name;
                 s.data = list[o].data;
                 seriesData.push(s);

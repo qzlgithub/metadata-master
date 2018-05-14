@@ -9,7 +9,8 @@
     <script src="http://cdn.static.runoob.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/monitor/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/style.css" media="all"/>
     <link rel="stylesheet" href="/static/monitor/css/base.css" media="all"/>
@@ -50,7 +51,7 @@
                                         <em class="pt50">（支持小于3M的mp3文件）</em>
                                     </div>
                                     <div class="pl20 mt10"><span th:text="${fileName}" id="showFileName"></span>
-                                        <i class="layui-icon fz-28 va" id="playButton" th:if="${filePath != null}"
+                                        <i class="layui-icon fz-28 va cp" id="playButton" th:if="${filePath != null}"
                                            onclick="bf()">&#xe645;
                                         </i>
                                         <audio style="display:none" id="music" th:if="${filePath != null}"
@@ -58,7 +59,6 @@
                                             <source th:src="${filePath}"/>
                                         </audio>
                                     </div>
-
                                 </div>
                                 <p class=" mt30 bg1 p10">二、设置阀值</p>
                                 <p class="edit-set p10 tc mt20">超过预警阀值将触发警报</p>
@@ -84,7 +84,7 @@
                             </form>
                             <div class="layui-form-item mt40 pb40">
                                 <div class="layui-input-block">
-                                    <a href="javascript:;" class="layui-btn" onclick="saveData()">立即提交</a>
+                                    <a href="javascript:;" class="layui-btn" onclick="saveData()">保存</a>
                                     <a href="/warning/setting/list.html" type="reset"
                                        class="layui-btn return-form">返回</a>
                                 </div>
@@ -103,7 +103,7 @@
 <script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
 <script type="text/javascript" src="/static/js/monitor-common.js"></script>
 <script type="text/javascript" src="/static/js/jquery.form.min.js"></script>
-<script type="text/javascript" src="/static/business/warning-edit.js"></script>
 <script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/business/warning-edit.js"></script>
 </body>
 </html>

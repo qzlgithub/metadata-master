@@ -29,9 +29,9 @@
                 <dl class="public-data">
                     <dt class="mt10 important">运营汇总</dt>
                     <dd>
-                        <ul class="public-data-list layui-row ml40">
-                            <li class="layui-col-md3">
-                                <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img1.png"/></span>
+                        <ul class="public-data-list ml40 clearfix">
+                            <li class="layui-row">
+                                <span class="layui-col-md3 mt5 pr10"><img src="/static/monitor/images/img1.png"/></span>
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">新增客户</p>
                                     <p class="col4 mt10">近30天：<span th:text="${clientInc30d}"></span>个 </p>
@@ -39,8 +39,8 @@
                                     <p class="mt10 tr fz-12"><a href="/stats/client.html">查看明细</a></p>
                                 </div>
                             </li>
-                            <li class="layui-col-md3 mr40 ml40">
-                                <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img2.png"/></span>
+                            <li class="layui-row mr40 ml40">
+                                <span class="layui-col-md3 mt5 pr10"><img src="/static/monitor/images/img2.png"/></span>
                                 <div class="layui-col-md9 fz-14">
                                     <p class="fz-16 mt10 col6">客户充值</p>
                                     <p class="col4 mt10">近7天充值：<span th:text="${recharge7d}"></span>元 </p>
@@ -48,19 +48,9 @@
                                     <p class="mt10 tr fz-12"><a href="/stats/recharge.html">查看明细</a></p>
                                 </div>
                             </li>
-                            <li class="layui-col-md3">
-                                <span class="layui-col-md3 mt25"><img src="/static/monitor/images/img3.png"/></span>
+                            <li class="layui-row">
+                                <span class="layui-col-md3 mt5 pr10"><img src="/static/monitor/images/img3.png"/></span>
                                 <div class="layui-col-md9 fz-14">
-                                    <!--<p class="fz-16 mt10 col6">平台收入</p>
-                                    <p class="col4 mt10">
-                                        今日收入：<span th:text="${profitToday}"></span>元/<span
-                                            th:text="${requestToday}"></span>次
-                                    </p>
-                                    <p class="mt10 col6">
-                                        昨日收入：<span th:text="${profitYesterday}"></span>元/<span
-                                            th:text="${requestYesterday}"></span>次
-                                    </p>
-                                    <p class="mt10 tr fz-12"><a href="javascript:;">查看明细</a></p>-->
                                     <p class="fz-16 mt10 col6">平台请求</p>
                                     <p class="col4 mt10">
                                         今日：<span th:text="${requestToday}"></span>次
@@ -149,7 +139,7 @@
                                 <span class="fr">请求失败：<i class="col3">772</i>次</span>
                             </p>-->
                             <div id="thirdReqDiagram" style="width: 100%; height: 400px;"></div>
-                            <p class="tr mt15"><a href="javascript:;" class="col6"> 查看历史记录>></a></p>
+                            <p class="tr mt15"><a href="javascript:;" class="col6"> &nbsp;<!--查看历史记录>>--></a></p>
                         </dd>
                     </dl>
                 </div>
@@ -203,54 +193,30 @@
             </dl>
             <!--客户状态 end-->
             <!--警报情况-->
-            <!--<dl class="public-data mt15">
+            <dl class="public-data mt15">
                 <dt class="mt20 important">警报情况</dt>
                 <dd class="layui-row layui-col-space10 p0 important">
                     <div class="layui-col-md4">
                         <dl class="public-data public-warp1">
-                            <dt class="mt10 important">第三方报警<i class="icon icon6 va ml10 mt5"></i> <span
-                                    class="icon icon3 fr"></span></dt>
-                            <dd style="height: 310px; overflow: hidden;">
-                                <table class="public-table1">
+                            <dt class="mt10 important">第三方报警<i class="icon icon6 va ml10 mt5"></i></dt>
+                            <dd style="height: 310px; overflow: hidden;" class="tc">
+                                <div class="mt40 third-none-class" style="display: none">
+                                    <i class="layui-icon col6" style="font-size: 80px;">&#xe60c;</i>
+                                    <p class="col6 mt10 fz-18">第三方各指标正常</p>
+                                </div>
+                                <table class="public-table1 third-have-class" style="display: none">
                                     <tr>
                                         <th>警报类型</th>
                                         <th>接口名称</th>
                                         <th>最近时间</th>
                                     </tr>
-                                    <tbody>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
+                                    <tbody id="third-list-id">
+
                                     </tbody>
                                 </table>
-                                <div class="mt10 tr"><a href="" class="col6">查看更多</a></div>
+                                <div class="mt10 tr third-have-class" style="display: none">
+                                    <a href="/alarm/wait.html" class="col6">查看更多</a>
+                                </div>
                             </dd>
                         </dl>
                     </div>
@@ -259,9 +225,22 @@
                         <dl class="public-data public-warp1">
                             <dt class="mt10 important">产品报警<i class="icon icon6 va ml10 mt5"></i></dt>
                             <dd style="height: 310px; overflow: hidden;" class="tc">
-                                <div class="mt40">
+                                <div class="mt40 product-none-class" style="display: none">
                                     <i class="layui-icon col6" style="font-size: 80px;">&#xe60c;</i>
-                                    <p class="col6 mt10 fz-18">客户各指标正常</p>
+                                    <p class="col6 mt10 fz-18">产品各指标正常</p>
+                                </div>
+                                <table class="public-table1 product-have-class" style="display: none">
+                                    <tr>
+                                        <th>警报类型</th>
+                                        <th>产品名称</th>
+                                        <th>最近时间</th>
+                                    </tr>
+                                    <tbody id="product-list-id">
+
+                                    </tbody>
+                                </table>
+                                <div class="mt10 tr product-have-class" style="display: none">
+                                    <a href="/alarm/wait.html" class="col6">查看更多</a>
                                 </div>
                             </dd>
                         </dl>
@@ -269,55 +248,31 @@
 
                     <div class="layui-col-md4">
                         <dl class="public-data public-warp1">
-                            <dt class="mt10 important">客户报警<i class="icon icon6 va ml10 mt5"></i> <span
-                                    class="icon icon3 fr"></span></dt>
-                            <dd style="height: 310px; overflow: hidden;">
-                                <table class="public-table1">
+                            <dt class="mt10 important">客户报警<i class="icon icon6 va ml10 mt5"></i></dt>
+                            <dd style="height: 310px; overflow: hidden;" class="tc">
+                                <div class="mt40 client-none-class" style="display: none">
+                                    <i class="layui-icon col6" style="font-size: 80px;">&#xe60c;</i>
+                                    <p class="col6 mt10 fz-18">客户各指标正常</p>
+                                </div>
+                                <table class="public-table1 client-have-class" style="display: none">
                                     <tr>
                                         <th>警报类型</th>
-                                        <th>接口名称</th>
+                                        <th>客户名称</th>
                                         <th>最近时间</th>
                                     </tr>
-                                    <tbody>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>请求超时</td>
-                                        <td>身份验证</td>
-                                        <td>02/20 15:15:15</td>
-                                    </tr>
+                                    <tbody id="client-list-id">
+
                                     </tbody>
                                 </table>
-                                <div class="mt10 tr"><a href="" class="col6">查看更多</a></div>
+                                <div class="mt10 tr client-have-class" style="display: none">
+                                    <a href="/alarm/wait.html" class="col6">查看更多</a>
+                                </div>
                             </dd>
                         </dl>
                     </div>
 
                 </dd>
-            </dl>-->
+            </dl>
             <!--警报情况 end-->
         </div>
     </div>
@@ -331,18 +286,7 @@
 <script type="text/javascript" src="/static/plugins/echarts/echarts.common.min.js"></script>
 <script type="text/javascript" src="/static/plugins/echarts/dark.js"></script>
 <script type="text/javascript" src="/static/business/monitor-index.js"></script>
-<script>
-    layui.config({
-        base: '../../static/build/js/'
-    }).use(['app'], function() {
-        var app = layui.app,
-            $ = layui.jquery;
-        //主入口
-        app.set({
-            type: 'iframe'
-        }).init();
-    });
-</script>
+
 </body>
 
 </html>

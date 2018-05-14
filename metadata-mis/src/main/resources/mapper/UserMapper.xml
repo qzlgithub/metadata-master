@@ -91,6 +91,14 @@
         where `username` = #{username}
     </select>
 
+    <select id="getListByAlarm" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        <where>
+            <if test="alarm != null">`alarm` = #{alarm}</if>
+            <if test="enabled != null">and `enabled` = #{enabled}</if>
+        </where>
+    </select>
+
     <select id="countBy" resultType="Integer">
         select count(*) from `user`
         <where>
@@ -105,5 +113,13 @@
             <if test="roleType != null">`role_type` = #{roleType}</if>
             <if test="enabled != null">and `enabled` = #{enabled}</if>
         </where>
+    </select>
+
+    <select id="getListByIds" resultMap="BaseResultMap">
+        <include refid="select_all" />
+        where `id` in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 </mapper>

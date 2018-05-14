@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>管理后台</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/style.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/base.css" media="all"/>
+    <link rel="stylesheet" href="/static/css/common.css" media="all"/>
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+
+    <div th:include="common :: top"></div>
+    <div class="layui-side layui-bg-black kit-side" th:include="client :: left"></div>
+
+    <div class="layui-body">
+        <div class="layui-breadcrumb breadcrumb-bg" style="visibility: visible;">
+            <a href="javascript:">客户管理</a>
+            <a href="javascript:">客户管理</a>
+            <a><cite>服务提醒</cite></a>
+        </div>
+        <div class="p20 layui-form">
+            <ul class="home-table-tab clearfix">
+                <li class="item active" onclick="getDateList()">时间服务</li>
+                <li class="item" onclick="getTimeList()">计次服务</li>
+            </ul>
+            <p class="mt5 col3 mt15" style="display: none;" id="tip">余额小于等于￥500</p>
+            <ul class="search-list clearfix border-b2 pb25 mt20">
+                <li>
+                    <input type="text" name="keyword" placeholder="请输入公司名称/公司简称/用户名" class="layui-input"
+                           style="width: 240px"/>
+                </li>
+                <li>
+                    状态：
+                    <div class="layui-inline" style="width: 120px">
+                        <select id="dispose" name="dispose">
+                            <option value="0">未通知</option>
+                            <option value="1">已通知</option>
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <a href="javascript:;" class="layui-btn" lay-submit="" lay-filter="search">查询</a>
+                </li>
+            </ul>
+            <div>
+                <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="notice-warp" class="modal">
+    <div class="layui-layer-title p0 important">标记已通知</div>
+    <div class="mb30">
+        <div class="layui-form-item p30">
+            <div class="tl fz-14">备注:</div>
+            <div class="mt15">
+                <input type="hidden" id="remindId"/>
+                <textarea id="remark" placeholder="请输入内容" class="layui-textarea" maxlength="120"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <a href="javascript:" class="layui-btn" onclick="saveRemark()">保存</a>
+        </div>
+    </div>
+</div>
+
+<div id="editpwd-manage" class="modal" th:include="common :: point"></div>
+
+<script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
+<script type="text/javascript" src="/static/js/logout.js"></script>
+<script type="text/javascript" src="/static/js/md5.js"></script>
+<script type="text/javascript" src="/static/js/password.js"></script>
+<script type="text/javascript" src="/static/business/remind-list.js"></script>
+<script type="text/html" id="operation-bar">
+    {{# if(d.status === 0){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="detail" href="javascript:;"
+       th:if="${#lists.contains(i_privilege,'31202')}" onclick="showNotice('{{d.id}}')">标记通知
+    </a>
+    {{# } }}
+    <a class="layui-btn layui-btn-xs" lay-event="detail" href="/client/detail.html?id={{d.clientId}}"
+       th:if="${#lists.contains(i_privilege,'31201')}">查看
+    </a>
+</script>
+<script type="text/html" id="status-tpl">
+    {{# if(d.status === 1){ }}
+    <div>已通知</div>
+    {{# } else { }}
+    <div>未通知</div>
+    {{# } }}
+</script>
+</body>
+</html>

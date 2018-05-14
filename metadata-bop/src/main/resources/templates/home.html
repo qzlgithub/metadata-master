@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -23,28 +24,35 @@
                 <dt class="mt0 pt20 important">首页</dt>
                 <dd class="p0 important">
                     <ul class="public-data-list layui-row home-list">
-                        <li>
+                        <li style="height: 80px;">
                             <div class="fz-14 tc">
                                 <p class="fz-16 mt10">本月充值</p>
                                 <p class="col4 mt10"><span th:text="${amount} + '元'"></span></p>
                             </div>
                         </li>
-                        <li>
+                        <li style="height: 80px;">
                             <div class="tc fz-14">
                                 <p class="fz-16 mt10">本月新增客户</p>
                                 <p class="col4 mt10"><span th:text="${clientCountByDate} + '个'"></span></p>
                             </div>
                         </li>
-                        <li>
+                        <li style="height: 80px;">
                             <div class="tc fz-14">
                                 <p class="fz-16 mt10">总客户</p>
                                 <p class="col4 mt10"><span th:text="${clientCountAll} + '个'"></span></p>
                             </div>
                         </li>
-                        <li>
+                        <li style="height: 80px;">
                             <div class="tc fz-14">
                                 <p class="fz-16 mt10">需安抚客户</p>
-                                <p class="col4 mt10"><span>当前无待安抚客户</span></p>
+                                <p class="col4 mt10" th:if="${pacifyCount == 0}"><span>当前无待安抚客户</span></p>
+                                <p class="col4 mt10"
+                                   th:if="${pacifyCount > 0}"><span>共<span
+                                        th:text="${pacifyCount}"></span>个客户需要安抚</span></p>
+                                <div class="tr mt10"
+                                     th:if="${pacifyCount > 0 and #lists.contains(i_privilege,'31200')}">
+                                    <a href="/pacify/index.html">去查看>></a>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -57,7 +65,7 @@
                 </ul>
                 <p class="mt5 col3 mt15" style="display: none;" id="tip">余额小于等于￥500</p>
                 <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
-                <div class="tr mt10" id="more-remind"></div>
+                <div class="tr mt10" id="more-remind" th:if="${#lists.contains(i_privilege,'31300')}"></div>
             </div>
         </div>
     </div>
@@ -65,7 +73,6 @@
 
 <div id="editpwd-manage" class="modal" th:include="common :: point"></div>
 
-<!--通知-->
 <div id="notice-warp" class="modal">
     <div class="layui-layer-title p0 important">标记已通知</div>
     <div class="mb30">
@@ -83,7 +90,6 @@
         </div>
     </div>
 </div>
-<!--通知 end-->
 
 <script type="text/javascript" src="https://oss.matedata.net/resource/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="https://oss.matedata.net/resource/layui-v2.2.5/layui.js"></script>
@@ -93,9 +99,12 @@
 <script type="text/javascript" src="/static/business/home.js"></script>
 
 <script type="text/html" id="operation-bar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" href="javascript:" onclick="showNotice('{{d.id}}')">标记</a>
+    {{# if(d.status === 0){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="javascript:"
+       th:if="${#lists.contains(i_privilege,'31302')}" onclick="showNotice('{{d.id}}')">标记通知</a>
+    {{# } }}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" href="/client/detail.html?id={{d.clientId}}"
-       th:if="${#lists.contains(i_privilege,'31101')}">查看
+       th:if="${#lists.contains(i_privilege,'31301')}">查看
     </a>
 </script>
 

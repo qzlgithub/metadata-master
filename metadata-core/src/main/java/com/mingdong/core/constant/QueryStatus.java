@@ -3,8 +3,8 @@ package com.mingdong.core.constant;
 public enum QueryStatus
 {
     SUCCESS(0, "请求成功"),
-    INTERNAL_ERROR(1, "系统内部错误"),
-    THIRD_API_ERROR(2, "第三方接口调用失败");
+    DATA_BASE_ERROR(1, "数据库错误"),
+    OTHER_ERROR(99, "其他错误");
 
     private final int code;
     private final String name;
