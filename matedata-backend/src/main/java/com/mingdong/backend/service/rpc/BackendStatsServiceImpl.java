@@ -633,7 +633,15 @@ public class BackendStatsServiceImpl implements BackendStatsService
         {
             productIds.add(item.getProductId());
         }
-        List<ProductResDTO> productResDTOS = productRpcService.getProductList(productIds);
+        List<ProductResDTO> productResDTOS;
+        if(!CollectionUtils.isEmpty(productIds))
+        {
+            productResDTOS = productRpcService.getProductList(productIds);
+        }
+        else
+        {
+            productResDTOS = new ArrayList<>();
+        }
         Map<Long, ProductResDTO> productResDTOMap = new HashMap<>();
         for(ProductResDTO item : productResDTOS)
         {

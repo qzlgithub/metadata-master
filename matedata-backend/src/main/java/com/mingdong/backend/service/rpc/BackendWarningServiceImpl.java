@@ -502,7 +502,15 @@ public class BackendWarningServiceImpl implements BackendWarningService
                 warningPacifyProductList.add(item);
                 productIdsSet.add(item.getProductId());
             }
-            List<ProductResDTO> productList = productRpcService.getProductList(new ArrayList<>(productIdsSet));
+            List<ProductResDTO> productList;
+            if(!CollectionUtils.isEmpty(productIdsSet))
+            {
+                productList = productRpcService.getProductList(new ArrayList<>(productIdsSet));
+            }
+            else
+            {
+                productList = new ArrayList<>();
+            }
             Map<Long, ProductResDTO> productMap = new HashMap<>();
             for(ProductResDTO item : productList)
             {
