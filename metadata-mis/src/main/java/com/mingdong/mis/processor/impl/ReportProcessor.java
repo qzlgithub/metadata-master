@@ -1,7 +1,6 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.core.exception.MetadataDataBaseException;
-import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.constant.ResCode;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.LoanBO;
@@ -19,8 +18,6 @@ import javax.annotation.Resource;
 @Component
 public class ReportProcessor implements IProcessor<PersonVO>
 {
-    @Resource
-    private RedisDao redisDao;
     @Resource
     private BaseProcessor baseProcessor;
     @Resource
@@ -42,87 +39,62 @@ public class ReportProcessor implements IProcessor<PersonVO>
         Metadata<ReportBO> metadata = new Metadata<>();
         try
         {
-            String personId = redisDao.findPersonByPhone(payload.getPhone());
-            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            String personId = baseProcessor.confirmPersonId(payload.getPhone());
             if(personId == null)
             {
                 metadata.setHit(false);
                 return metadata;
             }
-            ReportBO reportBO = new ReportBO();
-            boolean isHit = false;
-            Metadata<OverdueBO> blacklistBOMetadata = blacklistProcessor.process(payload);
-            if(blacklistBOMetadata.isHit())
+            ReportBO reportBO = search(personId);
+            if(reportBO == null)
             {
-                isHit = true;
-                reportBO.setBlacklistCode(ResCode.NORMAL);
+                metadata.setHit(false);
             }
             else
             {
-                reportBO.setBlacklistCode(ResCode.NOT_HIT);
+                metadata.setHit(true);
+                metadata.setData(reportBO);
             }
-            Metadata<OverdueBO> overdueBOMetadata = overdueProcessor.process(payload);
-            if(overdueBOMetadata.isHit())
-            {
-                isHit = true;
-                reportBO.setOverdueCode(ResCode.NORMAL);
-                reportBO.setOverdueRes(overdueBOMetadata.getData());
-            }
-            else
-            {
-                reportBO.setOverdueCode(ResCode.NOT_HIT);
-            }
-            Metadata<MultiRegisterBO> multiRegisterBOMetadata = multiRegisterProcessor.process(payload);
-            if(multiRegisterBOMetadata.isHit())
-            {
-                isHit = true;
-                reportBO.setMultiRegisterCode(ResCode.NORMAL);
-                reportBO.setMultiRegisterRes(multiRegisterBOMetadata.getData());
-            }
-            else
-            {
-                reportBO.setMultiRegisterCode(ResCode.NOT_HIT);
-            }
-            Metadata<LoanBO> loanBOMetadata = loanProcessor.process(payload);
-            if(loanBOMetadata.isHit())
-            {
-                isHit = true;
-                reportBO.setCreditableCode(ResCode.NORMAL);
-                reportBO.setCreditableRes(loanBOMetadata.getData());
-            }
-            else
-            {
-                reportBO.setCreditableCode(ResCode.NOT_HIT);
-            }
-            Metadata<RepaymentBO> repaymentBOMetadata = repaymentProcessor.process(payload);
-            if(repaymentBOMetadata.isHit())
-            {
-                isHit = true;
-                reportBO.setFavourableCode(ResCode.NORMAL);
-                reportBO.setFavourableRes(repaymentBOMetadata.getData());
-            }
-            else
-            {
-                reportBO.setFavourableCode(ResCode.NOT_HIT);
-            }
-            Metadata<RefuseBO> refuseBOMetadata = refuseProcessor.process(payload);
-            if(refuseBOMetadata.isHit())
-            {
-                isHit = true;
-                reportBO.setRejecteeCode(ResCode.NORMAL);
-                reportBO.setRejecteeRes(refuseBOMetadata.getData());
-            }
-            else
-            {
-                reportBO.setRejecteeCode(ResCode.NOT_HIT);
-            }
-            metadata.setData(reportBO);
-            metadata.setHit(isHit);
+            return metadata;
         }
         catch(Exception e)
         {
             throw new MetadataDataBaseException("mongo error");
         }
-        return metadata;
+    }
+
+    public ReportBO search(String personId)
+    {
+        // 1. 黑名单
+        boolean isHitBlacklist = blacklistProcessor.search(personId);
+        // 2. 常欠客
+        OverdueBO overdueBO = overdueProcessor.search(personId);
+        // 3. 多头客
+        MultiRegisterBO multiRegisterBO = multiRegisterProcessor.search(personId);
+        // 4. 通过客
+        LoanBO loanBO = loanProcessor.search(personId);
+        // 5. 优良客
+        RepaymentBO repaymentBO = repaymentProcessor.search(personId);
+        // 6. 拒贷客
+        RefuseBO refuseBO = refuseProcessor.search(personId);
+
+        if(!isHitBlacklist && overdueBO == null && multiRegisterBO == null && loanBO == null && repaymentBO == null &&
+                refuseBO == null)
+        {
+            return null;
+        }
+        ReportBO reportBO = new ReportBO();
+        reportBO.setBlacklistCode(isHitBlacklist ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setOverdueCode(overdueBO != null ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setOverdueRes(overdueBO);
+        reportBO.setMultiRegisterCode(multiRegisterBO != null ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setMultiRegisterRes(multiRegisterBO);
+        reportBO.setCreditableCode(loanBO != null ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setCreditableRes(loanBO);
+        reportBO.setFavourableCode(repaymentBO != null ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setFavourableRes(repaymentBO);
+        reportBO.setRejecteeCode(refuseBO != null ? ResCode.NORMAL : ResCode.NOT_HIT);
+        reportBO.setRejecteeRes(refuseBO);
+        return reportBO;
     }
 }

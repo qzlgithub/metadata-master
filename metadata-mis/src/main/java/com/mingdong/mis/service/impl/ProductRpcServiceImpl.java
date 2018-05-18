@@ -458,7 +458,7 @@ public class ProductRpcServiceImpl implements ProductRpcService
     @Override
     public List<ProductResDTO> getProductList(List<Long> productIds)
     {
-        List<Product> listByIds = productMapper.getListByIds(productIds); // TODO ERROR!!!
+        List<Product> listByIds = productMapper.getListByIds(productIds);
         List<ProductResDTO> productResDTOS = new ArrayList<>();
         ProductResDTO productResDTO;
         for(Product item : listByIds)

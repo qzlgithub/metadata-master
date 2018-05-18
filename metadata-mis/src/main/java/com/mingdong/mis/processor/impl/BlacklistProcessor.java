@@ -1,7 +1,6 @@
 package com.mingdong.mis.processor.impl;
 
 import com.mingdong.core.exception.MetadataDataBaseException;
-import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.model.Metadata;
 import com.mingdong.mis.model.metadata.OverdueBO;
 import com.mingdong.mis.model.vo.PersonVO;
@@ -16,8 +15,6 @@ import javax.annotation.Resource;
 public class BlacklistProcessor implements IProcessor<PersonVO>
 {
     @Resource
-    private RedisDao redisDao;
-    @Resource
     private FinBlacklistDao finBlacklistDao;
     @Resource
     private BaseProcessor baseProcessor;
@@ -28,20 +25,24 @@ public class BlacklistProcessor implements IProcessor<PersonVO>
         Metadata<OverdueBO> metadata = new Metadata<>();
         try
         {
-            String personId = redisDao.findPersonByPhone(payload.getPhone());
-            personId = baseProcessor.confirmPersonId(personId, payload.getPhone());
+            String personId = baseProcessor.confirmPersonId(payload.getPhone());
             if(personId == null)
             {
                 metadata.setHit(false);
                 return metadata;
             }
-            FinBlacklist finBlacklist = finBlacklistDao.findByPerson(personId);
-            metadata.setHit(finBlacklist != null);
+            metadata.setHit(search(personId));
         }
         catch(Exception e)
         {
             throw new MetadataDataBaseException("mongo error");
         }
         return metadata;
+    }
+
+    public boolean search(String personId)
+    {
+        FinBlacklist finBlacklist = finBlacklistDao.findByPerson(personId);
+        return finBlacklist != null;
     }
 }

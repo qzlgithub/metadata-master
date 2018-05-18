@@ -1,6 +1,5 @@
 package com.mingdong.mis.processor.impl;
 
-import com.mingdong.core.exception.MetadataDataBaseException;
 import com.mingdong.mis.component.RedisDao;
 import com.mingdong.mis.mongo.dao.PersonDao;
 import com.mingdong.mis.mongo.entity.Person;
@@ -17,33 +16,22 @@ public class BaseProcessor
     @Resource
     private RedisDao redisDao;
 
-    public String confirmPersonId(String personId, String phone) throws Exception
+    public String confirmPersonId(String phone)
     {
+        String personId = redisDao.findPersonByPhone(phone);
         if(personId == null)
         {
-            Person person;
-            try
-            {
-                person = personDao.findByMobile(phone);
-            }
-            catch(Exception e)
-            {
-                throw new MetadataDataBaseException("mongo error");
-            }
-            if(person == null)
-            {
-                redisDao.setPersonCache(phone, IProcessor.DEFAULT_PERSON_ID);
-            }
-            else
+            Person person = personDao.findByMobile(phone);
+            redisDao.setPersonCache(phone, person == null ? IProcessor.DEFAULT_PERSON_ID : person.getId());
+            if(person != null)
             {
                 personId = person.getId();
-                redisDao.setPersonCache(phone, personId);
             }
-            return personId;
         }
-        else
+        else if(IProcessor.DEFAULT_PERSON_ID.equals(personId))
         {
-            return IProcessor.DEFAULT_PERSON_ID.equals(personId) ? null : personId;
+            personId = null;
         }
+        return personId;
     }
 }
