@@ -28,8 +28,6 @@
     <dubbo:reference retries="0" timeout="5000" check="false" id="tradeRpcService" url="dubbo://localhost:9901/"
                      interface="com.mingdong.core.service.TradeRpcService" />
     <!-- backend -->
-    <dubbo:reference retries="0" timeout="5000" check="false" id="backendDiagramService" url="dubbo://localhost:9902/"
-                     interface="com.mingdong.backend.service.BackendDiagramService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="backendStatsService" url="dubbo://localhost:9902/"
                      interface="com.mingdong.backend.service.BackendStatsService" />
     <dubbo:reference retries="0" timeout="5000" check="false" id="backendTrafficService" url="dubbo://localhost:9902/"

@@ -18,13 +18,11 @@
 
     <!-- 声明需要暴露的服务接口 -->
     <!-- version="1.0" registry="zookeeper" owner="" -->
-    <dubbo:service interface="com.mingdong.backend.service.BackendDiagramService" ref="backendDiagramService" />
     <dubbo:service interface="com.mingdong.backend.service.BackendStatsService" ref="backendStatsService" />
     <dubbo:service interface="com.mingdong.backend.service.BackendTrafficService" ref="backendTrafficService" />
     <dubbo:service interface="com.mingdong.backend.service.BackendWarningService" ref="backendWarningService" />
 
     <!-- 具体服务接口的实现 -->
-    <bean id="backendDiagramService" class="com.mingdong.backend.service.rpc.BackendDiagramServiceImpl" />
     <bean id="backendStatsService" class="com.mingdong.backend.service.rpc.BackendStatsServiceImpl" />
     <bean id="backendTrafficService" class="com.mingdong.backend.service.rpc.BackendTrafficServiceImpl" />
     <bean id="backendWarningService" class="com.mingdong.backend.service.rpc.BackendWarningServiceImpl" />

@@ -1,7 +1,6 @@
 package com.mingdong.bop.manage.impl;
 
 import com.mingdong.backend.model.SummaryStatsDTO;
-import com.mingdong.backend.service.BackendDiagramService;
 import com.mingdong.backend.service.BackendStatsService;
 import com.mingdong.bop.constant.Field;
 import com.mingdong.bop.manage.StatisticsManage;
@@ -18,8 +17,6 @@ public class StatisticsManageImpl implements StatisticsManage
 {
     @Resource
     private BackendStatsService backendStatsService;
-    @Resource
-    private BackendDiagramService backendDiagramService;
 
     @Override
     public Map<String, Object> getSummaryStatistics()
