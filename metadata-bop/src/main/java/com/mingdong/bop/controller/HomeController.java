@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 @RestController
 public class HomeController
@@ -21,7 +20,7 @@ public class HomeController
     public RestListResp getListDate()
     {
         RestListResp resp = new RestListResp();
-        clientService.getClientRemindForDate(new Date(), null, null, new Page(1, 5), resp);
+        clientService.getClientRemindForDate(null, null, null, new Page(1, 5), resp);
         return resp;
     }
 
@@ -30,7 +29,7 @@ public class HomeController
     public RestListResp getListTime()
     {
         RestListResp resp = new RestListResp();
-        clientService.getClientRemindForTimes(new Date(), null, null, new Page(1, 5), resp);
+        clientService.getClientRemindForTimes(null, null, null, new Page(1, 5), resp);
         return resp;
     }
 

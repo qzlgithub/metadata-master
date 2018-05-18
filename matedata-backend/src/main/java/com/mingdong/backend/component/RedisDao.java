@@ -266,12 +266,14 @@ public class RedisDao extends RedisBaseDao
         requestDetailResDTO.setProductName(productName);
         requestDetailResDTO.setCorpName(corpName);
         requestDetailResDTO.setMsg(msg);
+        requestDetailResDTO.setTimestamp(timestamp);
         rPush(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL, JSON.toJSONString(requestDetailResDTO));
         lTrim(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL, 0, 999);
         rPush(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL, JSON.toJSONString(requestDetailResDTO));
         lTrim(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL, 0, 999);
         synchronized(this)
         {
+            //处理上一次请求时间和本次请求时间之间的间隔缓存数据
             Long lastTimestamp = getLastTimestamp5min();
             Long currentTimestamp5min = timestamp - timestamp % 300000;
             if(lastTimestamp != null)
@@ -311,7 +313,14 @@ public class RedisDao extends RedisBaseDao
         String value = lPop(DB.TRAFFIC_DETAIL, Key.PRODUCT_TRAFFIC_DETAIL);
         if(!StringUtils.isNullBlank(value))
         {
-            return JSON.parseObject(value, RequestDetailResDTO.class);
+            RequestDetailResDTO requestDetailResDTO = JSON.parseObject(value, RequestDetailResDTO.class);
+            Long timestamp = requestDetailResDTO.getTimestamp();
+            Date date = new Date();
+            if(timestamp == null || date.getTime() - timestamp > 60000)
+            {
+                return null;
+            }
+            return requestDetailResDTO;
         }
         return null;
     }
@@ -324,7 +333,14 @@ public class RedisDao extends RedisBaseDao
         String value = lPop(DB.TRAFFIC_DETAIL, Key.CLIENT_TRAFFIC_DETAIL);
         if(!StringUtils.isNullBlank(value))
         {
-            return JSON.parseObject(value, RequestDetailResDTO.class);
+            RequestDetailResDTO requestDetailResDTO = JSON.parseObject(value, RequestDetailResDTO.class);
+            Long timestamp = requestDetailResDTO.getTimestamp();
+            Date date = new Date();
+            if(timestamp == null || date.getTime() - timestamp > 60000)
+            {
+                return null;
+            }
+            return requestDetailResDTO;
         }
         return null;
     }

@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -88,11 +89,11 @@
                     <div class="layui-input-block layui-form">
                         <input type="radio" name="enabled" value="1" title="正常" th:checked="${enabled} == 1"/>
                         <div class="layui-unselect layui-form-radio layui-form-radioed">
-                            <i class="layui-anim layui-icon" ></i><span>正常</span>
+                            <i class="layui-anim layui-icon"></i><span>正常</span>
                         </div>
                         <input type="radio" name="enabled" value="0" title="禁用" th:checked="${enabled} == 0"/>
                         <div class="layui-unselect layui-form-radio">
-                            <i class="layui-anim layui-icon" ></i><span>禁用</span>
+                            <i class="layui-anim layui-icon"></i><span>禁用</span>
                         </div>
                     </div>
                 </div>
@@ -207,6 +208,8 @@
                                    th:checked="${#lists.contains(privilege,'12401')}"/>设置客服
                             <input type="checkbox" class="privilege p12400" id="12402" p-id="p12400" checked=""
                                    th:checked="${#lists.contains(privilege,'12402')}"/>设置子账号数量
+                            <input type="checkbox" class="privilege p12400" id="12403" p-id="p12400" checked=""
+                                   th:checked="${#lists.contains(privilege,'12403')}"/>设置测试token
                         </td>
                     </tr>
                     <tr>

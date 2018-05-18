@@ -27,6 +27,15 @@
         </div>
         <div class="p20">
             <div class="w60 m30">
+                <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12401')}">
+                    <label class="layui-form-label">官网客服QQ：</label>
+                    <div class="layui-input-block w40">
+                        <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="service-qq" th:value="${serviceQQ}"
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="20"/>
+                        <i class="col3 pl10" style="display: none"></i>
+                    </div>
+                </div>
                 <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12402')}">
                     <label class="layui-form-label">客户子账号数：</label>
                     <div class="layui-input-block w40">
@@ -36,12 +45,12 @@
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
-                <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12401')}">
-                    <label class="layui-form-label">官网客服QQ：</label>
+                <div class="layui-form-item" th:if="${#lists.contains(i_privilege,'12403')}">
+                    <label class="layui-form-label">测试token：</label>
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
-                               id="service-qq" th:value="${serviceQQ}"
-                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="20"/>
+                               id="test-token" th:value="${testToken}"
+                               onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" maxlength="30"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
@@ -87,6 +96,7 @@
     $("#setting-update").click(function() {
         var subUserQty = $("#sub-user-qty").val();
         var serviceQQ = $("#service-qq").val();
+        var testToken = $("#test-token").val();
         $.ajax({
             type: "post",
             url: "/setting/configuration",
@@ -94,7 +104,8 @@
             contentType: "application/json",
             data: JSON.stringify({
                 "clientUserMax": subUserQty,
-                "serviceQQ": serviceQQ
+                "serviceQQ": serviceQQ,
+                "testToken": testToken,
             }),
             success: function(res) {
                 if(res.code === '000000') {

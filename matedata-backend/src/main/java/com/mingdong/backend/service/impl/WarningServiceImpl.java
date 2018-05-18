@@ -118,11 +118,11 @@ public class WarningServiceImpl implements WarningService
         else if(warningSetting.getWarningLimit().equals(count.intValue()))
         {
             //警告
-            saveWarning(warningSetting,traffic, warningCode);
+            saveWarning(warningSetting, traffic, warningCode);
         }
     }
 
-    private void saveWarning(WarningSetting warningSetting,Traffic traffic, WarningCode warningCode)
+    private void saveWarning(WarningSetting warningSetting, Traffic traffic, WarningCode warningCode)
     {
         Date date = new Date();
         WarningManage warningManage = new WarningManage();
@@ -212,7 +212,8 @@ public class WarningServiceImpl implements WarningService
                 pacifyProductAddList.add(warningPacifyProductTemp);
             }
             warningPacifyProductMapper.addAll(pacifyProductAddList);
-            if(TrueOrFalse.TRUE.equals(warningSetting.getSend())){
+            if(TrueOrFalse.TRUE.equals(warningSetting.getSend()))
+            {
                 new Thread(() -> {
                     List<SMSReqDTO> smsList = new ArrayList<>();
                     if(!CollectionUtils.isEmpty(accountInfoListByAlarm))

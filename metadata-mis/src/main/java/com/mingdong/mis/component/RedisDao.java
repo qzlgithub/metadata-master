@@ -8,6 +8,7 @@ import com.mingdong.mis.model.UserAuth;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Set;
 
 @Repository
 public class RedisDao extends RedisBaseDao
@@ -103,6 +104,22 @@ public class RedisDao extends RedisBaseDao
         return get(DB.PERSON_POOL, phone);
     }
 
+    public Set getPersonKeys()
+    {
+        return keys(DB.PERSON_POOL, "*");
+    }
+
+    /**
+     * 缓存号码数量
+     */
+    public void cachePersonStats(String key, int phoneCount)
+    {
+        PersonStats personStats = new PersonStats();
+        personStats.setPhoneCount(phoneCount);
+        String str = JSON.toJSONString(personStats);
+        setEx(DB.SYSTEM, key, str, 3600L);
+    }
+
     interface DB
     {
         // 系统数据
@@ -117,5 +134,21 @@ public class RedisDao extends RedisBaseDao
     {
         String RECHARGE_NO_PREFIX = "recharge_no:";
         String REQUEST_NO_PREFIX = "request_no:";
+    }
+
+    class PersonStats
+    {
+        private int phoneCount;
+
+        public int getPhoneCount()
+        {
+            return phoneCount;
+        }
+
+        public void setPhoneCount(int phoneCount)
+        {
+            this.phoneCount = phoneCount;
+        }
+
     }
 }

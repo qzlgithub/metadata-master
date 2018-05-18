@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -89,8 +90,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">短信通知：</label>
                     <div class="layui-input-block layui-form">
-                        <input type="checkbox" id="alarm" />接收系统警报
-                        <input type="checkbox" id="pacify" />接收安抚名单
+                        <input type="checkbox" id="alarm"/>接收系统警报
+                        <input type="checkbox" id="pacify"/>接收安抚名单
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -197,6 +198,8 @@
                             <input type="checkbox" class="parent-privilege" id="p12400"/>全选
                             <input type="checkbox" class="privilege p12400" id="12401" p-id="p12400" checked=""/>设置客服
                             <input type="checkbox" class="privilege p12400" id="12402" p-id="p12400" checked=""/>设置子账号数量
+                            <input type="checkbox" class="privilege p12400" id="12403" p-id="p12400"
+                                   checked=""/>设置测试token
                         </td>
                     </tr>
                     <tr>
@@ -299,7 +302,7 @@
             <div class="layui-form-item mt40">
                 <div class="layui-input-block">
                     <a href="javascript:" class="layui-btn" onclick="saveManager()">保存</a>
-                    <a href="javascript:history.back(-1);" class="layui-btn" >返回</a>
+                    <a href="javascript:history.back(-1);" class="layui-btn">返回</a>
                 </div>
             </div>
         </div>

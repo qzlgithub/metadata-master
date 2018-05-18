@@ -4,6 +4,17 @@ public class SistemVO
 {
     private Integer clientUserMax;
     private String serviceQQ;
+    private String testToken;
+
+    public String getTestToken()
+    {
+        return testToken;
+    }
+
+    public void setTestToken(String testToken)
+    {
+        this.testToken = testToken;
+    }
 
     public Integer getClientUserMax()
     {

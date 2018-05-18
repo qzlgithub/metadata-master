@@ -1,5 +1,7 @@
 package com.mingdong.core.base;
 
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
@@ -313,6 +315,41 @@ public class RedisBaseDao<K extends Serializable, V extends Serializable>
             conn.select(db);
             byte[] k = serialize(key);
             conn.expire(k, seconds);
+            return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Set<String> keys(int db, String key)
+    {
+        return (Set<String>) redisTemplate.execute((RedisCallback) conn -> {
+            conn.select(db);
+            byte[] k = serialize(key);
+            Set<byte[]> value = conn.keys(k);
+            return value == null ? null : deserializeSet(value);
+        });
+    }
+
+    protected void subscribe(MessageListener messageListener, String channel)
+    {
+        redisTemplate.execute((RedisConnection conn) -> {
+            conn.subscribe(messageListener, serialize(channel));
+            return null;
+        });
+    }
+
+    protected void publish(String channel, String message)
+    {
+        redisTemplate.execute((RedisConnection conn) -> {
+            conn.publish(serialize(channel), serialize(message));
+            return null;
+        });
+    }
+
+    protected void unsubScribe(String channel)
+    {
+        redisTemplate.execute((RedisConnection conn) -> {
+            conn.getSubscription().unsubscribe(serialize(channel));
             return null;
         });
     }

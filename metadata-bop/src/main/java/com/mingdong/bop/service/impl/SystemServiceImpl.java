@@ -321,6 +321,7 @@ public class SystemServiceImpl implements SystemService
         SistemDTO sistemDTO = systemRpcService.getSystemSetting();
         map.put(Field.CLIENT_USER_MAX, sistemDTO.getClientUserMax());
         map.put(Field.SERVICE_QQ, sistemDTO.getServiceQQ());
+        map.put(Field.TEST_TOKEN, sistemDTO.getTestToken());
         return map;
     }
 
@@ -330,6 +331,7 @@ public class SystemServiceImpl implements SystemService
         SistemDTO sistemDTO = new SistemDTO();
         sistemDTO.setClientUserMax(sistemVO.getClientUserMax());
         sistemDTO.setServiceQQ(sistemVO.getServiceQQ());
+        sistemDTO.setTestToken(sistemVO.getTestToken());
         systemRpcService.editSystemSetting(sistemDTO);
     }
 
