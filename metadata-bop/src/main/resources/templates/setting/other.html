@@ -5,7 +5,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>管理后台</title>
-    <link rel="stylesheet" type="text/css" href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://oss.matedata.net/resource/font-awesome-4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://oss.matedata.net/resource/layui-v2.2.5/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/static/build/css/app.css" media="all"/>
     <link rel="stylesheet" href="/static/css/style.css" media="all"/>
@@ -50,7 +51,7 @@
                     <div class="layui-input-block w40">
                         <input type="text" placeholder="请输入" autocomplete="off" class="layui-input"
                                id="test-token" th:value="${testToken}"
-                               onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" maxlength="30"/>
+                               onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g,'')" maxlength="32"/>
                         <i class="col3 pl10" style="display: none"></i>
                     </div>
                 </div>
@@ -94,9 +95,9 @@
         });
     });
     $("#setting-update").click(function() {
-        var subUserQty = $("#sub-user-qty").val();
-        var serviceQQ = $("#service-qq").val();
-        var testToken = $("#test-token").val();
+        var subUserQty = $.trim($("#sub-user-qty").val());
+        var serviceQQ = $.trim($("#service-qq").val());
+        var testToken = $.trim($("#test-token").val());
         $.ajax({
             type: "post",
             url: "/setting/configuration",
