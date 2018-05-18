@@ -1909,7 +1909,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
                         }
                     }
                 }
-                Set<String> keys = productIdRequestNumberMap.keySet();
+                Set<String> keys = new HashSet<>(productIdRequestNumberMap.keySet());
                 keys.addAll(failedCountMap.keySet());
                 StatsRequestReqDTO statsRequestReqDTO;
                 ResponseDTO responseDTO = new ResponseDTO();
@@ -1940,7 +1940,7 @@ public class ClientRpcServiceImpl implements ClientRpcService
 
                 if(!RestResult.SUCCESS.equals(responseDTO.getResult()))
                 {
-                    logger.error(longSdf.format(date) + " statsByDate error!");
+                    logger.error(longSdf.format(date) + " statsRequestByDate error!");
                     saveJobLog(JobType.STATS_REQUEST, TrueOrFalse.FALSE,
                             JobType.STATS_REQUEST.getName() + ":" + longSdf.format(date));
                     return;
@@ -2079,6 +2079,15 @@ public class ClientRpcServiceImpl implements ClientRpcService
             }
         }
         return list;
+    }
+
+    @Override
+    public void statsCachePhone(Date date)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String key = sdf.format(date);
+        Set<String> keys = (Set<String>) redisDao.getPersonKeys();
+        redisDao.cachePersonStats(key, CollectionUtils.isEmpty(keys) ? 0 : keys.size());
     }
 
     /**

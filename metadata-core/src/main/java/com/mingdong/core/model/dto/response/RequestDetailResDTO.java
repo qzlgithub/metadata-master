@@ -8,6 +8,17 @@ public class RequestDetailResDTO implements Serializable
     private String productName;
     private String msg;
     private String corpName;
+    private Long timestamp;
+
+    public Long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp)
+    {
+        this.timestamp = timestamp;
+    }
 
     public String getCorpName()
     {

@@ -1,8 +1,10 @@
 package com.mingdong.mis.domain.mapper;
 
+import com.mingdong.mis.domain.entity.Sistem;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface SistemMapper
 {
@@ -14,4 +16,9 @@ public interface SistemMapper
 
     String getServiceQQ();
 
+    List<Sistem> getAllList();
+
+    void updateTestToken(@Param("testToken") String testToken, @Param("date") Date date);
+
+    String getTestToken();
 }

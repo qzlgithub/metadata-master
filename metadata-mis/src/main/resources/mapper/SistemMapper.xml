@@ -9,6 +9,12 @@
         <result column="value" property="value" jdbcType="VARCHAR" />
     </resultMap>
 
+    <select id="getAllList" resultMap="BaseResultMap">
+        select
+            `id`, `create_time`, `update_time`, `name`, `value`
+        from sistem
+    </select>
+
     <update id="updateClientUserMax">
         update `sistem`
         set `value` = #{clientUserMax}, `update_time` = #{date}
@@ -21,6 +27,12 @@
         where `name` = 'SERVICE_QQ'
     </update>
 
+    <update id="updateTestToken">
+        update `sistem`
+        set `value` = #{testToken}, `update_time` = #{date}
+        where `name` = 'TEST_TOKEN'
+    </update>
+
     <select id="getClientUserMax" resultType="String">
         select `value`
         from `sistem`
@@ -31,5 +43,11 @@
         select `value`
         from `sistem`
         where `name` = 'SERVICE_QQ'
+    </select>
+
+    <select id="getTestToken" resultType="String">
+        select `value`
+        from `sistem`
+        where `name` = 'TEST_TOKEN'
     </select>
 </mapper>

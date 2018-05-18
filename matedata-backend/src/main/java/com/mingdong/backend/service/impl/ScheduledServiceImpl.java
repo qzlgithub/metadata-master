@@ -37,4 +37,10 @@ public class ScheduledServiceImpl implements ScheduledService
         clientRpcService.statsRequestByDate(date);
     }
 
+    @Override
+    public void statsCachePhone(Date date)
+    {
+        clientRpcService.statsCachePhone(date);
+    }
+
 }

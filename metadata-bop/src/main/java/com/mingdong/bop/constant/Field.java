@@ -83,6 +83,7 @@ public interface Field
     String CLIENT_COUNT_BY_WEEK = "clientCountByWeek";
     String CLIENT_COUNT_BY_MONTH_FRIST = "clientCountByMonthFrist";
     String SERVICE_QQ = "serviceQQ";
+    String TEST_TOKEN = "testToken";
     String MODULE = "module";
     String STATUS = "status";
     String CONTACT_LIST = "contactList";

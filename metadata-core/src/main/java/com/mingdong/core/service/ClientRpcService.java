@@ -243,4 +243,6 @@ public interface ClientRpcService
     List<ClientUserResDTO> getClientUserListByIds(List<Long> clientUserIds);
 
     List<ClientDetailResDTO> getClientDetailListByIds(List<Long> clientIds);
+
+    void statsCachePhone(Date date);
 }

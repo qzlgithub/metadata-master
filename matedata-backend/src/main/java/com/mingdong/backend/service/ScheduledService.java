@@ -23,4 +23,6 @@ public interface ScheduledService
      * 统计请求量
      */
     void statsRequest(Date date);
+
+    void statsCachePhone(Date date);
 }

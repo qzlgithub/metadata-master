@@ -28,4 +28,10 @@ public class TaskManage
         scheduledService.quartzClientRemind(new Date());
     }
 
+    @Scheduled(cron = "0 * * * * *")
+    public void statsCache()
+    {
+        scheduledService.statsCachePhone(new Date());
+    }
+
 }

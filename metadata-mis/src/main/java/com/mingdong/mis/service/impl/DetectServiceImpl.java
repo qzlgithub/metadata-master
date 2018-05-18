@@ -1,7 +1,9 @@
 package com.mingdong.mis.service.impl;
 
 import com.mingdong.common.util.CollectionUtils;
+import com.mingdong.common.util.StringUtils;
 import com.mingdong.mis.constant.ResCode;
+import com.mingdong.mis.domain.mapper.SistemMapper;
 import com.mingdong.mis.model.MDResp;
 import com.mingdong.mis.model.metadata.LoanBO;
 import com.mingdong.mis.model.metadata.MultiRegisterBO;
@@ -44,11 +46,18 @@ public class DetectServiceImpl implements DetectService
     private LoanProcessor loanProcessor;
     @Resource
     private ReportProcessor reportProcessor;
+    @Resource
+    private SistemMapper sistemMapper;
 
     @Override
     public boolean isDetectionTokenValid(String token)
     {
-        return "6ojeU3YgA1OqsVwa3YmZqK5lMAV7nZhd".equals(token);
+        String testToken = sistemMapper.getTestToken();
+        if(StringUtils.isNullBlank(testToken))
+        {
+            return false;
+        }
+        return testToken.equals(token);
     }
 
     @Override

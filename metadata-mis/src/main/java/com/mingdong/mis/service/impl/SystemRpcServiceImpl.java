@@ -5,6 +5,7 @@ import com.mingdong.common.model.Page;
 import com.mingdong.common.util.CollectionUtils;
 import com.mingdong.common.util.StringUtils;
 import com.mingdong.core.constant.RestResult;
+import com.mingdong.core.constant.SysParam;
 import com.mingdong.core.constant.TrueOrFalse;
 import com.mingdong.core.model.Dict;
 import com.mingdong.core.model.dto.ListDTO;
@@ -27,6 +28,7 @@ import com.mingdong.mis.domain.entity.Articles;
 import com.mingdong.mis.domain.entity.DictIndustry;
 import com.mingdong.mis.domain.entity.DictRechargeType;
 import com.mingdong.mis.domain.entity.Function;
+import com.mingdong.mis.domain.entity.Sistem;
 import com.mingdong.mis.domain.mapper.ArticlesMapper;
 import com.mingdong.mis.domain.mapper.DictIndustryMapper;
 import com.mingdong.mis.domain.mapper.DictRechargeTypeMapper;
@@ -38,7 +40,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SystemRpcServiceImpl implements SystemRpcService
 {
@@ -377,10 +381,15 @@ public class SystemRpcServiceImpl implements SystemRpcService
     public SistemDTO getSystemSetting()
     {
         SistemDTO sistemDTO = new SistemDTO();
-        String clientUserMax = sistemMapper.getClientUserMax();
-        String serviceQQ = sistemMapper.getServiceQQ();
-        sistemDTO.setClientUserMax(Integer.valueOf(clientUserMax));
-        sistemDTO.setServiceQQ(serviceQQ);
+        List<Sistem> sistemList = sistemMapper.getAllList();
+        Map<String, Sistem> sistemMap = new HashMap<>();
+        for(Sistem item : sistemList)
+        {
+            sistemMap.put(item.getName(), item);
+        }
+        sistemDTO.setClientUserMax(Integer.valueOf(sistemMap.get(SysParam.CLIENT_SUB_USER_QTY).getValue()));
+        sistemDTO.setServiceQQ(sistemMap.get(SysParam.SERVICE_QQ).getValue());
+        sistemDTO.setTestToken(sistemMap.get(SysParam.TEST_TOKEN).getValue());
         return sistemDTO;
     }
 
@@ -391,6 +400,7 @@ public class SystemRpcServiceImpl implements SystemRpcService
         Date date = new Date();
         sistemMapper.updateClientUserMax(sistemDTO.getClientUserMax() + "", date);
         sistemMapper.updateServiceQQ(sistemDTO.getServiceQQ(), date);
+        sistemMapper.updateTestToken(sistemDTO.getTestToken(), date);
     }
 
     @Override
